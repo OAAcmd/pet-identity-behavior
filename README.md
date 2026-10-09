@@ -5,7 +5,8 @@ core analysis runs **on the phone**. A mobile web app (PWA) records or opens
 a clip, analyses it locally with downloaded models (no upload, works offline
 after the one-time download) and reports *observations* (animals found and
 tracked, sounds, movement, posture, owner-drawn places, interaction with a
-person, quality limits, all with timestamps), then *experimental,
+person, being on a bed, couch, chair or table, quality limits, all with
+timestamps), then *experimental,
 uncalibrated interpretations* tied to that evidence, abstaining whenever the
 evidence is insufficient. It does not translate animal language, read
 emotions, identify individual pets, or diagnose anything.
@@ -27,9 +28,10 @@ server (optional): accounts, pets, places, bundle distribution, device reports,
                    server analysis only when the user turns it on (Python engine, same result schema)
 ```
 
-Models: YAMNet (audio events), EfficientDet-Lite0 (cats, dogs, people),
-EfficientNet-Lite0 features with small heads trained here (false-positive
-verifier, posture, person-pet interaction); rule-based tracking, behavior
+Models: YAMNet (audio events), EfficientDet-Lite0 (cats, dogs, people,
+furniture), EfficientNet-Lite0 features and small heads trained here
+(false-positive verifier, posture, person-pet interaction, pet on
+furniture); rule-based tracking, behavior
 segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 
 ## Documents
@@ -38,7 +40,7 @@ segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
 | What each capability can and cannot do (data, model, evaluation, gaps) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E13) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Methods and measured results (E1-E15) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
 | Data, models, licences | [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
@@ -67,7 +69,7 @@ Analyse a file on the server engine from the command line:
 `uv run petperception analyze clip.mp4 --zones configs/zones.example.json --out result.json`.
 
 Experiments: `uv run petperception fetch-data <dataset>` then
-`uv run petperception evaluate --experiment e1 ... e13` (data sources,
+`uv run petperception evaluate --experiment e1 ... e15` (data sources,
 licences and blockers per experiment in the register). Tests:
 `uv run pytest -q`, `cd web && npm test && npx playwright test`
 ([TEST_REPORT.md](docs/TEST_REPORT.md)).

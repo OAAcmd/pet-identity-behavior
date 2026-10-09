@@ -71,7 +71,28 @@ def build_cases(settings: Settings) -> list[dict]:
                 subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-loop", "1", "-i", str(src), "-t", "3", "-r", "10", "-vf", "scale=640:-2",
                                 "-pix_fmt", "yuv420p", str(dst)], check=True)
             cases.append({"name": f"e13-{i}", "media": str(dst), "zones": None, "modalities": ["video"], "source": "Open Images test image with a person-pet relationship"})
-    big = data.parent / "e2e" / "big_cat_clip.mp4"
+    # Pet + furniture stills from the E15 test split, shown for 3 s: three with a pet on the
+    # furniture and one with a pet near it; exercises furniture detection and on-furniture segments.
+    obj = man / "oi_vrd_object_pairs.csv"
+    if obj.exists():
+        import csv
+        import subprocess
+
+        rows = [r for r in csv.DictReader(open(obj, newline="")) if r["split"] == "test"]
+        on = sorted({r["image_id"] for r in rows if r["on"] == "1"})
+        near = sorted({r["image_id"] for r in rows if r["on"] == "0"} - set(on))
+        for i, what in [(i, "on") for i in on[:3]] + [(i, "near") for i in near[:1]]:
+            src = data / "openimages_vrd" / "images" / f"{i}.jpg"
+            dst = data.parent / "cache" / "engine_parity" / f"e15-{i}.mp4"
+            if not src.exists():
+                continue
+            if not dst.exists():
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-loop", "1", "-i", str(src), "-t", "3", "-r", "10", "-vf", "scale=640:-2",
+                                "-pix_fmt", "yuv420p", str(dst)], check=True)
+            cases.append({"name": f"e15-{i}", "media": str(dst), "zones": None, "modalities": ["video"],
+                          "source": f"Open Images test image with a pet {what} furniture"})
+    big =data.parent / "e2e" / "big_cat_clip.mp4"
     if big.exists():
         cases.append({"name": "e2e-big-cat-clip", "media": str(big), "zones": None, "modalities": ["audio", "video"], "source": "E2E fixture"})
     return cases
@@ -177,8 +198,9 @@ def compare(out: Path) -> dict:
                               [(t["species"], t["first_seen_s"], t["last_seen_s"]) for t in _tracks(web)], 2 * tol_t)
         snd = _match_intervals([(e["label"], e["t_start_s"], e["t_end_s"]) for e in ref["observations"]["sound_events"] + ref["observations"]["context_sounds"]],
                                [(e["label"], e["t_start_s"], e["t_end_s"]) for e in web["observations"]["sound_events"] + web["observations"]["context_sounds"]], 0.5)
-        seg = _match_intervals([(b["kind"], b["t_start_s"], b["t_end_s"]) for t in _tracks(ref) for b in t["behavior_segments"]],
-                               [(b["kind"], b["t_start_s"], b["t_end_s"]) for t in _tracks(web) for b in t["behavior_segments"]], 2 * tol_t)
+        lab = lambda b: f"{b['kind']}:{b.get('related_object') or ''}"  # noqa: E731
+        seg = _match_intervals([(lab(b), b["t_start_s"], b["t_end_s"]) for t in _tracks(ref) for b in t["behavior_segments"]],
+                               [(lab(b), b["t_start_s"], b["t_end_s"]) for t in _tracks(web) for b in t["behavior_segments"]], 2 * tol_t)
         hyp = _match_intervals([(f"{h['name']}:{h['status']}", 0.0, 0.0) for h in ref["hypotheses"]],
                                [(f"{h['name']}:{h['status']}", 0.0, 0.0) for h in web["hypotheses"]], 0.1)
         for k, v in (("tracks", tr), ("sounds", snd), ("segments", seg), ("hypotheses", hyp)):

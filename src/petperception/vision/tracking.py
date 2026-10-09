@@ -31,6 +31,7 @@ class AnimalDetection:
     keypoints: object | None = field(default=None, repr=False)  # pose.KeypointSet when estimated
     posture: tuple[str, float] | None = None  # (label or "uncertain", uncalibrated top score)
     interaction: float | None = None  # max person-pet interaction score in this frame (E13), None without a person
+    on_furniture: tuple[float, str] | None = None  # best (score, object group) for 'on' in this frame (E15), None without furniture
 
     @property
     def species(self) -> str:

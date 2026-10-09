@@ -1,4 +1,4 @@
-# API contract (`/api/v1`, result schema 1.2.0)
+# API contract (`/api/v1`, result schema 1.3.0)
 
 Generated, always-current artifacts (CI fails if they are stale):
 
@@ -45,7 +45,7 @@ Outside `/api/v1`: `GET /ondevice/<path>` serves the checksummed on-device
 bundle (`manifest.json` → 503 `ondevice_bundle_missing` when not published;
 path traversal rejected); `/` serves the PWA.
 
-## Analysis result (schema 1.2.0)
+## Analysis result (schema 1.3.0)
 
 Top level: `schema_version`, `analysis_id`, `created_at`, `engine_version`,
 `engine` (runtime, model ids and versions, component states with reasons),
@@ -64,13 +64,16 @@ and a reason when no keypoint model is present).
 Behavior segment kinds: `stationary`, `moving`, `active_bout`,
 `pacing_candidate`, `approach_zone`, `enter_zone`, `dwell_zone`,
 `leave_zone`, `entered_view`, `left_view`, `vocal_bout`,
-`startle_candidate`, and (1.2.0) `person_interaction_candidate`. Each carries
-`reliability` and `validation_status`
-(`synthetic_and_semi_synthetic_only` or, for interaction candidates,
-`per_frame_model_public_still_images`).
+`startle_candidate`, (1.2.0) `person_interaction_candidate` and (1.3.0)
+`on_furniture_candidate`. Each carries `reliability` and `validation_status`
+(`synthetic_and_semi_synthetic_only` or, for interaction and on-furniture
+candidates, `per_frame_model_public_still_images`); on-furniture candidates
+name the object in `related_object` (`bed`, `couch`, `chair`, `table`; null
+for every other kind). Person and furniture boxes are not stored.
 
 Versioning: additive changes bump the minor version (1.1.0 added behavior
-segments, keypoints and verification; 1.2.0 added interaction candidates);
+segments, keypoints and verification; 1.2.0 added interaction candidates;
+1.3.0 added on-furniture candidates and `related_object`);
 readers accept older minor versions. Scores are never presented as
 probabilities: every score has a `score_kind` such as `detector_sigmoid_raw`
 or `posture_softmax_uncalibrated`.

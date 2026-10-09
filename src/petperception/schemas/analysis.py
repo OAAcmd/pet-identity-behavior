@@ -19,9 +19,10 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SCHEMA_VERSION = "1.2.0"
-# 1.1.0 is additive (behavior segments, keypoints, verification); 1.2.0 adds person_interaction_candidate.
-SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0"]
+SCHEMA_VERSION = "1.3.0"
+# 1.1.0 is additive (behavior segments, keypoints, verification); 1.2.0 adds person_interaction_candidate;
+# 1.3.0 adds on_furniture_candidate and BehaviorSegment.related_object.
+SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0", "1.3.0"]
 
 Modality = Literal["audio", "video"]
 ComponentState = Literal["ok", "unavailable", "disabled", "failed", "skipped", "not_applicable"]
@@ -154,7 +155,8 @@ class PoseFeature(_Model):
 
 
 BehaviorKind = Literal["stationary", "moving", "active_bout", "pacing_candidate", "approach_zone", "enter_zone", "dwell_zone", "leave_zone",
-                       "entered_view", "left_view", "vocal_bout", "startle_candidate", "person_interaction_candidate"]
+                       "entered_view", "left_view", "vocal_bout", "startle_candidate", "person_interaction_candidate",
+                       "on_furniture_candidate"]
 
 
 class BehaviorSegment(_Model):
@@ -170,6 +172,8 @@ class BehaviorSegment(_Model):
     measurements: dict[str, float] = Field(default_factory=dict)
     method: str
     validation_status: Literal["synthetic_and_semi_synthetic_only", "per_frame_model_public_still_images"] = "synthetic_and_semi_synthetic_only"
+    related_object: Literal["bed", "couch", "chair", "table"] | None = Field(
+        default=None, description="object the segment refers to (on_furniture_candidate); detector class 'dining table' is reported as 'table'")
 
 
 class KeypointFrame(_Model):

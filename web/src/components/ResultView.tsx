@@ -13,6 +13,7 @@ const BEHAVIOR_TEXT: Record<string, string> = {
   leave_zone: "Left a marked place", entered_view: "Came into view", left_view: "Left the view",
   vocal_bout: "Repeated vocalizations", startle_candidate: "Sudden movement right after a sound (possible)",
   person_interaction_candidate: "Held by or interacting with a person (possible)",
+  on_furniture_candidate: "On furniture (possible)",
 };
 
 const POSE_TEXT: Record<string, string> = {

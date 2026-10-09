@@ -56,7 +56,10 @@ unreachable from this environment.
 | 14 | Vocal context (e.g. meow while waiting for food / brushing / isolation) | cat | context labels | CatMeows (Zenodo) | planned E2 | - | no | **blocked** (zenodo.org) | Dataset context ≠ household intent; even with access it would be dataset-context classification. |
 | 14d | Vocal context / bark type | dog | context labels | Barkopedia (Hugging Face) | planned E3 | - | no | **blocked** (huggingface.co), terms unaudited | - |
 | 15 | Interaction with a person (holds / interacts with) | cat, dog | person-pet pair labels with reliable negatives | Open Images V7 visual relationships (exhaustive for annotated pairs; CC BY 4.0): 3,089 images, 11,598 pairs, positives train 2,219 / validation 47 / test 145 | logistic regression on detection-box geometry (E13; a union-crop embedding did not help) | E13 final (OI validation + test), pairs where both boxes are detected: AP 0.907 [0.86, 0.95] vs chance 0.47, precision 0.87, recall 0.68; only 249 of 531 annotated pairs scorable (person or pet undetected); end-to-end recall 0.42; 'boxes overlap' baseline F1 0.82 vs model 0.76 | yes (server and phone; `person_interaction_candidate` segments, identical on both engines in engine parity) | validated (public data), dogs only | Cats: 4 scorable final pairs - not evaluated. Still images only: no temporal interaction, nothing about the animal's response. Person detection coverage is the main limit. |
-| 16 | Interaction with objects / furniture (on bed, chair, table, sofa; inside car) | cat, dog | pet-object relation labels | Open Images V7 visual relationships (e.g. dog on dog bed 119, cat on bed 93, cat on table 76) | not trained (COCO detector already finds bed, couch, chair, dining table) | - | no | data available, not trained | Toys, bowls, litter boxes, doors, windows (COCO "bowl" is not validated for pet bowls). |
+| 16 | On furniture (bed, couch, chair, table) | cat, dog | pet-object relation labels with reliable negatives | Open Images V7 visual relationships (CC BY 4.0): 526 images, 1,125 pairs, split by photographer; furniture boxes from the product detector's COCO classes | logistic regression on detection-box geometry + species + object group (E15) | E15 test (79 photographers, scored once): AP 0.974 [0.90, 1.00] vs chance 0.67, precision 0.97, recall 1.00 on the 46 pairs where pet and furniture are detected (31 positives: 17 cat, 14 dog); end-to-end recall 0.40; a "pet box inside furniture box" rule is as good (AP 0.995) | yes (server and phone; `on_furniture_candidate` segments with `related_object`) | validated (public photos) | "In front of" vs "on" is the observed failure mode and is likely more common in home video; "on a table" rests on 1 scored positive; whether the animal is allowed there is not inferred. |
+| 16u | Under furniture (table, chair) | cat, dog | as row 16 | as row 16 (37 development, 8 test positives) | E15 head | cross-validated AP 0.18; no test positive scorable | no | **failed the E15 gate** | More data with hiding / under-furniture labels. |
+| 16v | Inside a car | cat, dog | as row 16 | as row 16 | E15 head | E15 test: AP 0.931 [0.75, 1.00], precision 0.88 on 15 scored positives (dogs only) | no | **failed the E15 gate** (< 20 scored positives) | More scored positives, cats. |
+| 16o | Other objects (toys, bowls, litter boxes, crates, cat trees, dog beds, doors, windows) | cat, dog | relation labels | Open Images has dog beds and cat furniture, but the detector has no class for them | - | - | no | **missing** | A detector for pet objects; COCO "bowl" is not validated for pet bowls. |
 | 17 | Interaction with other animals (play, chase, fight, groom) | cat, dog | pair/interval labels | MammalNet "fights against other animals" (dog, research only); Open Images relationships contain **no** pet-pet triplets | E11 class "fights" only | E11 | no | research only / **missing** | Multi-pet household video with labelled social interactions. |
 | 18 | Environmental context sounds (doorbell, knock, vacuum, TV, speech, thunder, fireworks, alarm, baby cry ...) | - | clip labels | none audited | YAMNet AudioSet classes | not evaluated in this repository | yes | pretrained, unevaluated | Household recordings with context labels. |
 | 19 | Scenario context: owner-drawn places, time stamps, view coverage | - | owner input | owner input | deterministic | unit and E2E tests | yes | deterministic | - |
@@ -78,28 +81,31 @@ unreachable from this environment.
 * **Interactions**: Open Images relationship annotations are exhaustive for
   annotated pairs, so they give reliable negatives for person-pet interaction
   in still images (E13: AP 0.91 on scored dog pairs, but two thirds of pairs
-  are not scorable because a box is missed). Pet-pet interactions have no
-  labelled source.
+  are not scorable because a box is missed) and for pets on furniture (E15:
+  "on" shipped; "under" and "inside a car" failed the pre-set gate). Pet-pet
+  interactions have no labelled source.
 * **No capability has household validation.** All public data are web photos,
   YouTube video or curated clips.
 
 ## 3. On-device equivalence of each shipped capability
 
-Engine parity (`results/ondevice/engine_parity_chromium.json`, 34 cases,
+Engine parity (`results/ondevice/engine_parity_chromium.json`, 38 cases,
 identical WebM/MP4 inputs, Python reference engine vs TypeScript engine in
 headless Chromium; decoders differ by design; default float32 bundle):
 
 | Output | Agreement |
 | --- | --- |
-| Decision state | 34/34 |
+| Decision state | 38/38 |
 | Tracks (species + interval within 1.1 s) | F1 0.96 |
 | Sound events | F1 1.00 |
-| Behavior segments (incl. person interaction) | F1 0.97 |
+| Behavior segments (kind, object and interval; incl. person interaction and on-furniture) | F1 0.97 |
 | Hypotheses (name + status) | F1 1.00 |
 | Posture | identical label whenever both engines report one; about one frame in five flips across the report gate (one engine just below 0.84) |
 
-With the opt-in int8 bundle (30 cases): tracks 0.84, segments 0.875,
-hypotheses 0.99, decisions 30/30 (`engine_parity_chromium_int8.json`).
+With the opt-in int8 bundle (38 cases): tracks 0.87, segments 0.83,
+hypotheses 0.99, decisions 38/38 (`engine_parity_chromium_int8.json`); with
+the TF Hub detector: tracks 0.91, segments 0.91, hypotheses 0.96, decisions
+38/38 (`engine_parity_chromium_tfhub_rawdecode.json`).
 
 Model-level parity on identical tensors is bit-exact or within 3e-8
 (`results/ondevice/runtime_parity_*.json`). The posture gate flips show that
@@ -107,6 +113,10 @@ frame-level posture labels are sensitive to small pixel differences (FFmpeg
 vs browser decoding), and by extension to real-world image noise. The result
 view therefore summarises posture per track as frame counts per label,
 including "uncertain", rather than presenting a single frame as a fact.
+On-furniture segments are identical on the four E15 clips; in one scenario
+clip a couch scored 0.34-0.37 against the 0.35 detector threshold, so the
+dog's on-couch segments appear only in the Python run - furniture near the
+threshold makes this output fragile.
 
 ## 4. Data acquisition priorities (what would change the matrix most)
 

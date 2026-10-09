@@ -59,6 +59,7 @@ class AnalysisEngine:
         self.pose = UnavailablePoseProvider()
         self.posture = None
         self.interaction = None
+        self.object_relation = None
         self._backbone = None
         self.release_notes: list[str] = []
         self.fusion = FusionEngine(settings.fusion)
@@ -115,6 +116,7 @@ class AnalysisEngine:
         self._load_pose()
         self._load_posture()
         self._load_interaction()
+        self._load_object_relation()
         self.status["behavior"] = S.ComponentStatus(name="behavior_segments", kind="behavior", state="ok" if (self.detector and s.behavior.enabled) else
                                                     ("disabled" if not s.behavior.enabled else "unavailable"), version="behavior-rules-v1",
                                                     reason="fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)")
@@ -229,6 +231,28 @@ class AnalysisEngine:
             name=name, kind="behavior", state="ok", model_id=s.vision.detector, version=self.interaction.version,
             reason="person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored")
 
+    def _load_object_relation(self) -> None:
+        s = self.settings
+        name = "object_relation"
+        if not s.object_relation.enabled:
+            self.status["object_relation"] = S.ComponentStatus(name=name, kind="behavior", state="disabled", reason="disabled by configuration")
+            return
+        path = REPO_ROOT / s.object_relation.model_file
+        decision = release_decision(s.release_profile, "pet_object_relation_v1")
+        reason = ("requires the visual detector" if self.detector is None else
+                  f"{path.name} not found; run: petperception evaluate --experiment e15" if not path.exists() else
+                  None if decision.allowed else decision.reason)
+        if reason:
+            self.status["object_relation"] = S.ComponentStatus(name=name, kind="behavior", state="unavailable", reason=reason)
+            return
+        from .vision.object_relation import ObjectRelationModel
+
+        self.object_relation = ObjectRelationModel.load(path)
+        self.status["object_relation"] = S.ComponentStatus(
+            name=name, kind="behavior", state="ok", model_id=s.vision.detector, version=self.object_relation.version,
+            reason="pet on bed / couch / chair / table from box geometry (E15, still images); furniture is detected but not stored; "
+                   "under-furniture and inside-car relations did not pass the E15 gate")
+
     def capabilities(self) -> dict:
         s = self.settings
         return {
@@ -337,7 +361,9 @@ class AnalysisEngine:
         else:
             tracker = make_tracker(s.vision.tracker.method, s.vision.tracker.iou_threshold, s.vision.tracker.max_gap_s)
             verify_s = pose_s = 0.0
-            classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes + (["person"] if self.interaction else [])))
+            object_classes = self.object_relation.detector_classes if self.object_relation is not None else []
+            classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes + (["person"] if self.interaction else [])
+                                         + object_classes))
             prev_gray, prev_t, prev_boxes = None, None, []
             detect_s = quality_s = 0.0
             report("video", 0.30)
@@ -367,6 +393,11 @@ class AnalysisEngine:
                         for a in adets:
                             if people:
                                 a.interaction = max(self.interaction.score(pb, a.box, fr.rgb.shape[:2], a.species) for pb in people)
+                    if self.object_relation is not None:
+                        objects = [(d.label, d.box) for d in dets if d.label in object_classes and d.score >= s.object_relation.min_object_score]
+                        for a in adets:
+                            if objects:
+                                a.on_furniture = self.object_relation.best(objects, a.box, fr.rgb.shape[:2], a.species).get("on")
                     if self.verifier is not None:
                         tv = time.perf_counter()
                         for a in sorted(adets, key=lambda x: -x.score)[: s.vision.verifier.max_checks_per_frame]:
@@ -484,6 +515,9 @@ class AnalysisEngine:
                 if self.interaction is not None:
                     segs += BH.interaction_segments(ts_, [d.interaction for d in tr.detections], self.interaction.threshold,
                                                     s.interaction.min_frames, s.vision.tracker.max_gap_s, tid)
+                if self.object_relation is not None and "on" in self.object_relation.heads:
+                    segs += BH.on_furniture_segments(ts_, [d.on_furniture for d in tr.detections], self.object_relation.heads["on"].threshold,
+                                                     s.object_relation.min_frames, s.vision.tracker.max_gap_s, tid)
                 segs.sort(key=lambda g: (g.t_start_s, g.kind))
             mean_score = float(np.mean([d.score for d in tr.detections]))
             track_rel = "high" if mean_score >= 0.6 and not ({"tiny_subject", "species_ambiguous"} & set(flags)) else ("medium" if mean_score >= 0.45 else "low")
@@ -722,7 +756,7 @@ class AnalysisEngine:
 def _segment(g: BH.Segment, sid: str) -> S.BehaviorSegment:
     return S.BehaviorSegment(segment_id=sid, kind=g.kind, track_id=g.track_id, t_start_s=round(g.t_start_s, 3), t_end_s=round(g.t_end_s, 3),
                              reliability=g.reliability, detail=g.detail, measurements={k: round(float(v), 4) for k, v in g.measurements.items()},
-                             method=g.method, validation_status=g.validation)
+                             method=g.method, validation_status=g.validation, related_object=g.related_object)
 
 
 def _safe_name(name: str) -> str:

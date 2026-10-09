@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14"]
-DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -143,6 +143,16 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         out = VR.fetch_images(root, man)
         print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
         return 0 if not out.get("errors") else 1
+    if args.dataset == "openimages-vrd-objects":
+        from .data import openimages_vrd as VR
+        from .data import openimages_vrd_objects as VO
+
+        if not (man / "oi_vrd_object_pairs.csv").exists():  # the 2.9 GB source files are needed only to rebuild
+            VR.fetch_annotations(root, man)
+            print(json.dumps(VO.build(root, man), indent=2))
+        out = VO.fetch_images(root, man)
+        print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
+        return 0 if not out.get("errors") else 1
     if args.dataset == "posture-weak":
         from .data import posture_weak as PW
 
@@ -216,6 +226,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e14_tfhub_rawdecode as E
 
         return E.run(s, out_dir)
+    if name == "e15":
+        from .eval import e15_object_relations as E
+
+        return E.run(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "object_relation")
     if name == "e13":
         from .eval import e13_interaction as E
 

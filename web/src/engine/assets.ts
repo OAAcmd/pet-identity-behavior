@@ -65,6 +65,13 @@ export interface InteractionAssets {
   min_person_score: number; min_frames: number;
 }
 
+export interface RelationHeadAssets { groups: string[]; mean_b64: string; scale_b64: string; coef_b64: string; intercept: number; threshold: number }
+
+export interface ObjectRelationAssets {
+  version: string; groups: string[]; detector_class: Record<string, string>; heads: Record<string, RelationHeadAssets>;
+  min_object_score: number; min_frames: number;
+}
+
 export interface BehaviorParams {
   enabled: boolean;
   moving_speed: number; active_speed: number; min_stationary_s: number; min_moving_s: number; min_active_s: number;
@@ -96,6 +103,7 @@ export interface EngineAssets {
   verifier?: VerifierAssets;
   posture?: PostureAssets;
   interaction?: InteractionAssets;
+  object_relation?: ObjectRelationAssets;
   vision: {
     sample_fps: number; max_side: number;
     quality: { low_light_luma: number; blur_laplacian_var: number; tiny_area_fraction: number; camera_motion_threshold: number; frame_gap_factor: number };

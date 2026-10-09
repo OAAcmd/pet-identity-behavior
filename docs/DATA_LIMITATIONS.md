@@ -23,6 +23,7 @@ for this project. Consequently:
 | Localized Narratives captions (E10) | weak posture labels for cats and dogs | posture accuracy (caption noise unmeasured); breed analysis (no breed metadata) |
 | MammalNet dog-breed segments (E11) | dog behavior classes in real (YouTube) video | product releases (no dataset licence); cats (none); household framing |
 | Open Images V7 relationships (E13) | person-pet "holds / interacts with" in still images with reliable negatives | interaction over time; the animal's response; cats (4 scorable final pairs); pet-pet interaction (no such relations) |
+| Open Images V7 relationships (E15) | pet on a bed / couch / chair / table in still images, split by photographer | home camera angles (few "in front of" cases in web photos); under-furniture and inside-car (too few positives); objects without a detector class (dog beds, cat trees, crates, bowls); whether the animal is allowed there |
 | CatMeows (blocked) | would support cat recording-context classification with cat/owner grouping | not fetched; labels are recording contexts (brushing, isolation, waiting for food), not emotions or verified needs; 8 kHz audio |
 | Barkopedia (blocked, unreviewed) | potentially dog activity/environment context | provenance, splits and animal/source grouping unverified; no cross-dog claims |
 

@@ -459,8 +459,9 @@ CIs are wide: 47 cat and 111 dog verified-negative images.)
 * Browser: int8 detector and int8 backbone run bit-exact in LiteRT.js once the
   backbone's int8 feature outputs are exposed through in-graph DEQUANTIZE ops
   (LiteRT.js 2.5.3 rejects INT8 graph outputs).
-* Engine parity with int8 on both sides is lower than with float32 (tracks F1
-  0.84 vs 0.95, segments 0.875 vs 0.96; decisions 30/30 either way): quantized
+* Engine parity with int8 on both sides is lower than with float32 (38 cases
+  after E15: tracks F1 0.87 vs 0.96, segments 0.83 vs 0.97; decisions 38/38
+  either way): quantized
   models amplify the small pixel differences between FFmpeg and browser
   decoding. Recorded in `results/ondevice/engine_parity_chromium*.json`.
 * **Individual decisions diverge although the aggregates match.** On the
@@ -518,20 +519,70 @@ refitted):
 | TF Hub, raw decoding (E14, runs on phones) | 0.885 | 0.660 [0.52, 0.79] | 0.866 | 0.919 [0.86, 0.97] | 0.833 / 0.748 |
 | MediaPipe float32 (default) | 0.906 | 0.702 [0.57, 0.83] | 0.872 | 0.865 [0.80, 0.92] | 0.847 / 0.758 |
 
-Engine parity with this detector in the bundle (34 cases): decisions 34/34,
-tracks 0.89, segments 0.925, hypotheses 0.96 - lower than the MediaPipe
+Engine parity with this detector in the bundle (38 cases, after E15):
+decisions 38/38, tracks 0.91, segments 0.91, hypotheses 0.96 - lower than the MediaPipe
 float32 bundle, as with the int8 builds (the TF Hub build is internally
 uint8-quantized). A commercial bundle can now technically include a
 detector with a primary-source weight licence; it still requires the
 recorded legal sign-off (COCO training-data question), as do YAMNet and the
 backbone.
 
+### E15 - Pet on furniture (Open Images relationships) - COMPLETED, one relation shipped
+
+Same annotation source as E13, for (cat or dog, object) pairs: **on** a bed,
+couch, chair or table; **under** a table or chair; **inside** a car - the
+object classes the product detector already reports, so no extra model is
+downloaded. 526 images, 1,125 pairs. Duplicate object boxes (for example
+"Couch" and "Loveseat" on one sofa) are merged; a pair is a negative only
+for triplets in the annotation vocabulary. Splits by **photographer**
+(Flickr author): fit 369 images / development 52 / test 105 (79
+photographers, none shared). Model selection by 5-fold cross-validation
+grouped by photographer on fit + development; the test split was scored once.
+The shipping gate was fixed before scoring: >= 20 test positives scored, AP
+lower bound above chance, precision >= 0.70.
+
+| Relation (test split) | Pairs / scored | Positives scored | AP [95 % CI] (chance) | Precision / recall | End-to-end recall | Gate |
+| --- | --- | --- | --- | --- | --- | --- |
+| on bed / couch / chair / table | 189 / 46 | 31 (17 cat, 14 dog) | 0.974 [0.90, 1.00] (0.67) | 0.97 [0.90, 1.00] / 1.00 | 0.40 | **shipped** |
+| inside a car | 57 / 26 | 15 (dogs only) | 0.931 [0.75, 1.00] (0.58) | 0.88 / 1.00 | 0.52 | not shipped (< 20 positives) |
+| under a table / chair | 149 / 20 | 0 | - | - | 0 | not shipped (cross-validated AP 0.18) |
+
+* The learned head is not better than a one-number rule: the fraction of the
+  pet box inside the object box reaches AP 0.995 for "on" on the same pairs.
+  Whenever the pet and the furniture are both detected, "on" is nearly
+  separable by 2-D containment in these photos.
+* Coverage is the main limit, as in E13. Per pet box in the test split, the
+  product detector + verifier finds 86 % of cats on furniture but 65 % of
+  dogs; missed pets are small (median 4.7 % of the image vs 12.8 % for
+  found ones) and mostly below the detector threshold (27 of 49), rarely
+  rejected by the verifier (7). In another 55 of the 189 test pairs the pet
+  was found but the furniture was not.
+* Manual audit of every test false positive: the labels were right and the
+  errors were the model's - a cat sitting on the floor *in front of* a bed,
+  a dog standing in front of a car, a cat inside one car paired with
+  another car seen through the window. "In front of" versus "on" is the
+  expected failure mode in home videos taken from standing height, and these
+  photos contain few such cases, so precision at home is likely lower than
+  0.97.
+* Per object, the shipped "on" relation rests on 19 scored bed positives, 6
+  chair, 5 couch and 1 table - "on a table" is effectively unvalidated.
+* In video each sampled frame is scored and runs of >= 2 frames above the
+  threshold become `on_furniture_candidate` segments (reliability low,
+  `per_frame_model_public_still_images`). Furniture detection often hovers
+  near the 0.35 detector threshold, so a frame without detected furniture is
+  treated as unknown (it neither extends nor ends a run). The temporal
+  grouping is not validated, and nothing is inferred about whether the
+  animal is allowed on the furniture.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
 YAMNet, the float and int8 detectors and both backbones are bit-identical or
 within 3e-8 of Python LiteRT on identical inputs (float16 detector: 3e-8).
-Engine-level parity with the default (float32) bundle on 34 identical media
-files (including 4 person + dog clips): decision 34/34, tracks F1 0.96,
-sounds 1.00, segments 0.97 (interaction segments identical), hypotheses 1.00.
-With the int8 bundle (30 files): 0.84 / 1.00 / 0.875 / 0.99. Details: [ON_DEVICE.md](ON_DEVICE.md).
+Engine-level parity with the default (float32) bundle on 38 identical media
+files (including 4 person + dog clips and 4 pet + furniture clips): decision
+38/38, tracks F1 0.96, sounds 1.00, segments 0.97 (interaction and
+on-furniture segments identical on their clips), hypotheses 1.00; every
+phone result validates against the server result schema. With the int8
+bundle: 0.87 / 1.00 / 0.83 / 0.99; with the TF Hub detector: 0.91 / 1.00 /
+0.91 / 0.96. Details: [ON_DEVICE.md](ON_DEVICE.md).

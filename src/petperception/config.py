@@ -174,6 +174,17 @@ class InteractionConfig(_Strict):
     min_frames: int = 2  # consecutive sampled frames above the threshold (2 fps: >= 0.5 s)
 
 
+class ObjectRelationConfig(_Strict):
+    """Pet-on-furniture candidates from box geometry (E15). Furniture (bed, couch, chair,
+    dining table) is detected on the analysing device with the same detector; object boxes
+    are not stored in results. Only relations that passed the E15 gate are in the model."""
+
+    enabled: bool = True
+    model_file: str = "artifacts/object_relation/pet_object_relation_v1.npz"
+    min_object_score: float = 0.35
+    min_frames: int = 2
+
+
 class PostureConfig(_Strict):
     """Coarse posture from weak caption labels (E10); cats and dogs."""
 
@@ -322,6 +333,7 @@ class Settings(_Strict):
     behavior: BehaviorConfig = Field(default_factory=BehaviorConfig)
     posture: PostureConfig = Field(default_factory=PostureConfig)
     interaction: InteractionConfig = Field(default_factory=InteractionConfig)
+    object_relation: ObjectRelationConfig = Field(default_factory=ObjectRelationConfig)
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)

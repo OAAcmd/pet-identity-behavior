@@ -12,9 +12,9 @@ advance.
 
 | Layer | Question | Current evidence |
 | --- | --- | --- |
-| Observations | Are cats, dogs and people found, tracked and measured correctly in household recordings? | web photos (E4, E7, E13), semi-synthetic video (E8) |
+| Observations | Are cats, dogs, people and furniture found, tracked and measured correctly in household recordings? | web photos (E4, E7, E13, E15), semi-synthetic video (E8) |
 | Body cues | Posture, ears, tail (dogs), vocalization type | weak labels (E10), research-only dog data (E9), none for vocal types |
-| Temporal behavior | Are activity, zone, interaction and vocal-bout segments correct in time? | semi-synthetic only (E8) |
+| Temporal behavior | Are activity, zone, interaction, on-furniture and vocal-bout segments correct in time? | semi-synthetic only (E8); interaction and on-furniture per frame on web photos (E13, E15) |
 | Interpretation | When the app proposes "possibly food-related" (or abstains), is that right, and is abstention used where it should be? | none (E5 synthetic checks only) |
 | Device | Does the phone produce the same result as the reference engine on the same recording? | desktop Chromium only |
 
@@ -40,7 +40,9 @@ independent labels for what happened.
 * **Independent annotation** by two trained annotators per recording, blind
   to the app's output: timestamped animal presence and identity (which pet),
   activity intervals, vocalization events and types, posture per sampled
-  frame, person interaction intervals, and the hypothesis labels with an
+  frame, person interaction intervals, on-furniture intervals (which piece,
+  with "in front of / beside" marked separately because 2-D boxes confuse it
+  with "on", E15), and the hypothesis labels with an
   explicit "cannot tell" option. Disagreements are adjudicated; agreement
   (Cohen's kappa per label) is reported because it bounds what any model can
   achieve.
@@ -76,6 +78,7 @@ All with 95 % confidence intervals from household-level bootstrap.
 | Vocalization | event F1 (cat, dog); type accuracy where the type is annotated | event F1 ≥ 0.80 |
 | Posture | agreement with adjudicated posture on reported frames; coverage | agreement ≥ 0.80 at the shipped gate |
 | Person interaction | interval F1 | ≥ 0.70 |
+| On furniture | interval F1 per object; false "on" rate on "in front of / beside" intervals | F1 ≥ 0.70; false "on" ≤ 0.20 |
 | Hypotheses | precision of each non-abstained hypothesis; coverage; risk-coverage curve; calibration error after fitting calibration on development households | precision ≥ 0.70 per hypothesis at the shipped abstention setting, coverage reported as is |
 | On-device vs reference | decision agreement and segment F1 between phone and server analysis of the same file | decision agreement ≥ 0.95 |
 

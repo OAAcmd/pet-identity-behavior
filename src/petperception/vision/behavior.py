@@ -58,6 +58,7 @@ class Segment:
     measurements: dict[str, float] = field(default_factory=dict)
     method: str = ""
     validation: str = "synthetic_and_semi_synthetic_only"
+    related_object: str | None = None
 
 
 @dataclass
@@ -351,5 +352,42 @@ def interaction_segments(times: list[float], scores: list[float | None], thresho
             continue
         close()
         run = [i] if v is not None and v >= threshold else []
+    close()
+    return segs
+
+
+def on_furniture_segments(times: list[float], values: list[tuple[float, str] | None], threshold: float, min_frames: int,
+                          max_gap_s: float, track_id: str) -> list[Segment]:
+    """Runs of sampled frames whose pet-on-furniture score (E15) is >= threshold, per object group.
+
+    ``values`` holds the best (score, object group) of each frame, None when no furniture was
+    detected in it. Furniture does not move and its detection flickers near the threshold, so
+    a frame without furniture is unknown: it neither extends nor ends a run. A run ends at a
+    frame with furniture scored below the threshold, when the object group changes, or when
+    the time between hits exceeds max_gap_s. The per-frame model was evaluated on public still
+    images (E15); grouping frames over time is not validated. Same rules in
+    web/src/engine/behavior.ts."""
+    segs: list[Segment] = []
+    run: list[int] = []
+
+    def close() -> None:
+        if len(run) >= min_frames:
+            sc = [values[i][0] for i in run]  # type: ignore[index]
+            obj = values[run[0]][1]  # type: ignore[index]
+            segs.append(Segment("on_furniture_candidate", times[run[0]], times[run[-1]], "low",
+                                f"box geometry consistent with the animal being on the {obj} in {len(run)} sampled frames (max score {max(sc):.2f})",
+                                track_id, {"frames": float(len(run)), "max_score": float(max(sc)), "threshold": float(threshold)},
+                                f"E15 still-image pair model on detection boxes, runs of >= {min_frames} sampled frames",
+                                "per_frame_model_public_still_images", obj))
+
+    for i, (t, v) in enumerate(zip(times, values)):
+        if v is None:
+            continue
+        hit = v[0] >= threshold
+        if hit and (not run or (t - times[run[-1]] <= max_gap_s and values[run[-1]][1] == v[1])):  # type: ignore[index]
+            run.append(i)
+            continue
+        close()
+        run = [i] if hit else []
     close()
     return segs

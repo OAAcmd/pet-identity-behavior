@@ -25,6 +25,7 @@ the analysis engine and `petperception export-ondevice`.
 | `verifier/verifier_efficientdet_lite0_tfhub_rawdecode_v1.json` | see below | `petperception evaluate --experiment e14` (crop set, E7 procedure) | OI test split (tuning) | yes, when the bundle uses the licence-confirmed detector (commercial) | all profiles (backbone terms apply) |
 | `behavior_video/dog_behavior_video_v1.npz` | see below | `petperception evaluate --experiment e11` | MammalNet dog-breed videos (third-party YouTube uploads, no dataset licence) | not wired into analysis | **research only** |
 | `interaction/person_pet_interaction_v1.npz` | see below | `petperception evaluate --experiment e13` | Open Images V7 relationships (CC BY 4.0), images CC BY 2.0 | see docs/ON_DEVICE_AUDIT.md | all profiles |
+| `object_relation/pet_object_relation_v1.npz` | see below | `petperception evaluate --experiment e15` (contains only relations that passed the E15 gate: "on") | Open Images V7 relationships (CC BY 4.0), images CC BY 2.0 | yes: on-furniture candidates (server and phone) | all profiles |
 
 Full digests:
 
@@ -43,6 +44,7 @@ aa9bc30c15285c1a9b76e336bf4d5bef11b1ef1b0027e654497816829dd14d72  posture/postur
 a7f9e8f5a539d156138007a7dedf79c12b54edcdeb0ba92f409828d6750f32e4  behavior_video/dog_behavior_video_v1.npz
 7997042681687e864b731c1b518b40940cd73b3e90dfdcb93c3936736e8bca3d  interaction/person_pet_interaction_v1.npz
 e98c1b1649d62a1fa94b3e08bd14054423e681da7ee731a440a7a0d72bf70219  verifier/verifier_efficientdet_lite0_tfhub_rawdecode_v1.json
+1aecfeadd21d821fecbdb00ce74e42cc52009f7cd263e336aba424a667f62d21  object_relation/pet_object_relation_v1.npz
 ```
 
 The phone does not read these files directly: `petperception export-ondevice`

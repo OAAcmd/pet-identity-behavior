@@ -10,8 +10,8 @@ readiness are not. Every open item names what blocks it.
 
 | Dimension | What "accepted" requires | Status | Evidence | Blocking |
 | --- | --- | --- | --- | --- |
-| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 94 Python tests, 16 TypeScript unit tests, 17 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 34/34 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
-| **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E4, E7, E9-E13 ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md)); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
+| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 97 Python tests, 19 TypeScript unit tests, 17 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 38/38 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
+| **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E4, E7, E9-E13, E15 ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md)); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
 | **C. On-device compatibility and performance** | the bundle runs offline on tier-B phones of both platforms within the budgets | **not met (pending)** | desktop headless Chromium only: device check passes, budgets measured there ([DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md)) | physical phones and testers ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) |
 | **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided with legal sign-off, operations in place, A-C met | **not met** | image builds in CI, compose stack (bundle step verified in the image), runbook, release gating implemented | host/domain/TLS, legal review of weights and data terms, A-C |
 
@@ -30,7 +30,7 @@ what prevents the next status.
 
 | # | Requirement | Impl | Test | Valid | Blocked by / notes |
 | --- | --- | --- | --- | --- | --- |
-| D1 | Core analysis runs on the phone (audio events, detection, verification, tracking, posture, behavior segments, interaction candidates, fusion, explanations) | yes | engine parity, E2E | no | real phones |
+| D1 | Core analysis runs on the phone (audio events, detection, verification, tracking, posture, behavior segments, person-interaction and on-furniture candidates, fusion, explanations) | yes | engine parity, E2E | no | real phones |
 | D2 | Works offline after the one-time model download | yes | E2E offline test (desktop Chromium; runtime cache asserted) | no | real phones (airplane-mode protocol) |
 | D3 | No media upload in the default path; server analysis only by explicit setting | yes | E2E asserts no upload request | - | - |
 | D4 | Capabilities that still need a server are listed | yes | - | - | [ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md) |
@@ -60,11 +60,11 @@ what prevents the next status.
 | M4 | Ear and tail cues | dogs, research profile | E9 | public photos | dog keypoint data is Research-Only; no cat data |
 | M5 | Posture and temporal actions | posture (cats, dogs); rule segments; dog actions (research) | E10, E8, E11 | weak labels / semi-synthetic / YouTube | household video with labels; cat action data |
 | M6 | Vocalizations | presence (YAMNet), types scored but unevaluated | E1 | ESC-50 clips | CatMeows and Barkopedia blocked (zenodo.org, huggingface.co); type-labelled pet audio |
-| M7 | Interactions with people / animals / objects | people (E13, still images); animals: dog fights (research); objects: not trained | E13, E11 | public photos | interaction video; pet-pet data; object relations data exists but not trained |
+| M7 | Interactions with people / animals / objects | people (E13, still images); objects: pet on bed / couch / chair / table (E15, still images; "under" and "inside a car" failed the pre-set gate); animals: dog fights (research) | E13, E15, E11 | public photos | interaction video; pet-pet data; detector classes for pet objects (bowls, beds, cat trees, litter boxes) |
 | M8 | Environmental / scenario context | context sounds (unevaluated), owner zones | unit, E8 | no | household context labels |
 | M9 | Multimodal interpretation with uncertainty and abstention | yes (rule-based) | E5 synthetic checks | **no** | real paired recordings |
 | M10 | Splits by identity / household / source / breed where metadata supports; no invented metadata | yes | split tests (ESC-50 sources), protocols in each experiment | - | - |
-| M11 | Real training with preserved configs, checkpoints, seeds, learning curves, independent evaluation | yes (E7, E9-E13) | experiments reproduce from commands | - | - |
+| M11 | Real training with preserved configs, checkpoints, seeds, learning curves, independent evaluation | yes (E7, E9-E13, E15) | experiments reproduce from commands | - | - |
 | M12 | Compute requirements and reproducible jobs where CPU is insufficient | specified | - | - | GPU jobs G1-G5 not run ([TRAINING_PROGRAM.md](TRAINING_PROGRAM.md)) |
 | M13 | Synthetic data only as integration/behavior checks | yes | E5, E8 labelled as such | - | - |
 | M14 | Evaluation plan for real paired data | yes | - | - | [EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md); not started |
@@ -100,7 +100,8 @@ what prevents the next status.
 2. No cat keypoints, facial cues, cat video actions; no licensed dog
    keypoint data for product releases.
 3. Vocal context datasets blocked by network policy.
-4. No pet-pet interaction data; object relations not trained.
+4. No pet-pet interaction data; pet-object relations limited to "on furniture"
+   (under-furniture and inside-car failed the gate; no detector for pet objects).
 5. No real-phone results.
 6. Commercial profile: every model still needs the recorded legal sign-off
    (training-data terms); the technical blocker (no browser-compatible
@@ -117,5 +118,5 @@ From `manifests/resources.json` (`petperception release-check` per profile):
 | EfficientDet-Lite0 TF Hub build (raw decoding runs in the browser, E14) | suitable | suitable | legal review |
 | EfficientNet-Lite0 (float32 / int8) | suitable | suitable | legal review |
 | Audio thresholds (ESC-50 derived) | suitable | suitable | not permitted |
-| Verifier, posture, interaction artifacts | suitable | suitable | suitable (backbone terms apply) |
+| Verifier, posture, interaction, on-furniture artifacts | suitable | suitable | suitable (backbone terms apply) |
 | Dog keypoint head, dog behavior video head | suitable | not permitted | not permitted |

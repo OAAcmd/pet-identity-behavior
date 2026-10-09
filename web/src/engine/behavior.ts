@@ -6,6 +6,7 @@ export interface Segment {
   kind: string; t_start_s: number; t_end_s: number; reliability: string; detail: string;
   track_id: string | null; measurements: Record<string, number>; method: string;
   validation?: string; // default "synthetic_and_semi_synthetic_only"
+  related_object?: string; // on_furniture_candidate: bed, couch, chair or table
 }
 
 export interface StepSeries { t0: number[]; t1: number[]; speed: number[]; raw: number[]; pos: [number, number][]; times: number[] }
@@ -253,6 +254,34 @@ export function interactionSegments(times: number[], scores: (number | null)[], 
     const v = scores[i];
     const hit = v !== null && v >= threshold;
     if (hit && (!run.length || times[i] - times[run[run.length - 1]] <= maxGap)) { run.push(i); continue; }
+    close();
+    run = hit ? [i] : [];
+  }
+  close();
+  return segs;
+}
+
+/** Runs of sampled frames whose pet-on-furniture score (E15) is >= threshold, per object group.
+ * A frame without detected furniture (null) is unknown and neither extends nor ends a run; a run
+ * ends at a frame scored below the threshold, when the object group changes or the gap between
+ * hits exceeds maxGap. Mirrors vision/behavior.py on_furniture_segments. */
+export function onFurnitureSegments(times: number[], values: ([number, string] | null)[], threshold: number, minFrames: number, maxGap: number, tid: string): Segment[] {
+  const segs: Segment[] = [];
+  let run: number[] = [];
+  const close = () => {
+    if (run.length < minFrames) return;
+    const sc = run.map((i) => values[i]![0]);
+    const mx = Math.max(...sc), obj = values[run[0]]![1];
+    segs.push({ kind: "on_furniture_candidate", t_start_s: times[run[0]], t_end_s: times[run[run.length - 1]], reliability: "low",
+      detail: `box geometry consistent with the animal being on the ${obj} in ${run.length} sampled frames (max score ${f(mx, 2)})`, track_id: tid,
+      measurements: { frames: run.length, max_score: mx, threshold }, method: `E15 still-image pair model on detection boxes, runs of >= ${minFrames} sampled frames`,
+      validation: "per_frame_model_public_still_images", related_object: obj });
+  };
+  for (let i = 0; i < times.length; i++) {
+    const v = values[i];
+    if (v === null) continue;
+    const hit = v[0] >= threshold;
+    if (hit && (!run.length || (times[i] - times[run[run.length - 1]] <= maxGap && values[run[run.length - 1]]![1] === v[1]))) { run.push(i); continue; }
     close();
     run = hit ? [i] : [];
   }

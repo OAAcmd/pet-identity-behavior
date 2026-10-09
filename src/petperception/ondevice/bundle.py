@@ -39,7 +39,7 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 # Format of engine_assets.json as consumed by the TypeScript engine. Change the
 # major.minor only together with SUPPORTED_BUNDLE_ENGINE in web/src/engine/modelstore.ts:
 # the app refuses bundles whose major.minor it does not support.
-ENGINE_ASSET_FORMAT = "0.2.0"  # 0.2: quantized model inputs/outputs (input_quant, output_quant)
+ENGINE_ASSET_FORMAT = "0.2.1"  # 0.2: quantized model inputs/outputs (input_quant, output_quant); 0.2.1: optional object_relation
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
 WEB_DETECTORS = ("efficientdet_lite0_mediapipe_v1", "efficientdet_lite0_mediapipe_int8_v1", "efficientdet_lite0_mediapipe_f16_v1",
@@ -209,6 +209,18 @@ def export_bundle(settings: Settings, out: Path) -> dict:
                                      "intercept": float(np.ravel(z["intercept"])[0]), "threshold": float(z["threshold"]),
                                      "version": str(z["version"]), "min_person_score": settings.interaction.min_person_score,
                                      "min_frames": settings.interaction.min_frames}
+    # Pet on furniture (E15): box geometry only; only the relations that passed the E15 gate are in the file.
+    om = REPO_ROOT / settings.object_relation.model_file
+    if "detector" in assets and settings.object_relation.enabled and om.exists() and allowed("pet_object_relation_v1"):
+        from ..vision.object_relation import DETECTOR_CLASS, GROUPS
+
+        with np.load(om) as z:
+            heads = {r: {"groups": [str(g) for g in z[f"{r}_groups"]], "mean_b64": _b64(z[f"{r}_mean"]), "scale_b64": _b64(z[f"{r}_scale"]),
+                         "coef_b64": _b64(z[f"{r}_coef"]), "intercept": float(np.ravel(z[f"{r}_intercept"])[0]), "threshold": float(z[f"{r}_threshold"])}
+                     for r in [str(v) for v in z["relations"]]}
+            assets["object_relation"] = {"version": str(z["version"]), "groups": list(GROUPS), "detector_class": DETECTOR_CLASS, "heads": heads,
+                                         "min_object_score": settings.object_relation.min_object_score,
+                                         "min_frames": settings.object_relation.min_frames}
     assets["vision"] = {"sample_fps": settings.vision.sample_fps, "max_side": settings.vision.max_side, "quality": settings.vision.quality.model_dump(),
                         "tracker": settings.vision.tracker.model_dump(), "camera_motion_compensation": settings.vision.camera_motion_compensation}
     assets["behavior"] = settings.behavior.model_dump()

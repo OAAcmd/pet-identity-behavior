@@ -8,6 +8,8 @@ export function AboutPage() {
         <li>Detects cat and dog sounds (meows, barks, growl-like sounds) and some household sounds.</li>
         <li>Measures apparent movement and time spent in places you marked (bowl, door, bed).</li>
         <li>Estimates coarse posture (lying, sitting, standing) frame by frame; experimental, often "uncertain".</li>
+        <li>Notes when a person may be holding or interacting with the animal, and when the animal may be on a bed, couch, chair or table.
+          Both are judged from where the boxes are in single frames, so an animal in front of a sofa can be reported as on it.</li>
         <li>Reports everything with timestamps and quality limits such as low light or camera movement.</li>
       </ul>
       <h2>Where the analysis runs</h2>
@@ -41,6 +43,9 @@ export function AboutPage() {
         <li>Cat/dog detection on Open Images photos: average precision about 0.92 (cats) and 0.84 (dogs); other animals such as foxes are sometimes mistaken for dogs or cats.</li>
         <li>A second check rejects many false detections: on photos verified to contain no dog, a dog was still reported in about 13% of them (44% without the check); for cats 30% (38% without).</li>
         <li>Posture agrees with labels derived from photo captions about 65% of the time; when it is confident, about 85%.</li>
+        <li>On furniture: when both the pet and the furniture are found in a photo, about 97% of "on" reports were right, but only about 40% of
+          pets on furniture were found at all (small dogs are often missed). Under furniture and inside a car are not reported: there was too
+          little data to check them.</li>
       </ul>
       <p class="muted">See the project documentation for the full evaluation and its limits.</p>
     </section>

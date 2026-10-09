@@ -8,20 +8,20 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 94,
-    "typescript_unit_tests": 16,
+    "python_tests": 97,
+    "typescript_unit_tests": 19,
     "e2e_tests": 17,
     "ci": "green on every push",
     "model_parity_browser": "bit-exact or <= 3e-8 (float32, int8, float16 builds)",
     "engine_parity": {
-     "cases": 34,
+     "cases": 38,
      "decision_agreement": 1.0,
-     "tracks_f1": 0.958,
+     "tracks_f1": 0.964,
      "sounds_f1": 1.0,
-     "segments_f1": 0.969,
+     "segments_f1": 0.968,
      "hypotheses_f1": 1.0
     },
-    "phone_results_valid_against_server_schema": "34/34"
+    "phone_results_valid_against_server_schema": "38/38"
    },
    "open": [
     "Safari/WebKit never tested",
@@ -30,7 +30,7 @@
   },
   "behavioral_model_validity": {
    "status": "not_met",
-   "evidence": "public-data evaluations E1, E4, E7, E9-E13; semi-synthetic E8; synthetic E5",
+   "evidence": "public-data evaluations E1, E4, E7, E9-E13, E15; semi-synthetic E8; synthetic E5",
    "blocking": [
     "real paired household recordings (docs/EVALUATION_PLAN_REAL_PAIRED.md)",
     "cat keypoint / face / video-action data",
@@ -81,6 +81,10 @@
   "person_pet_interaction": {
    "phone": true,
    "validation": "E13 web photos, dogs only"
+  },
+  "pet_on_furniture": {
+   "phone": true,
+   "validation": "E15 web photos (on bed / couch / chair / table); under-furniture and inside-car failed the gate"
   },
   "vocalization_presence": {
    "phone": true,

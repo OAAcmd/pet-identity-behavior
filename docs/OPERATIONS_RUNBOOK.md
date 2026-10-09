@@ -66,5 +66,6 @@ passwords are not logged (tested).
   `max_retain_media_days`). Users can export (`GET /api/v1/export`) and delete
   their account (`POST /api/v1/auth/delete-account`), which removes their
   analyses, media, feedback, backed-up on-device results and device reports.
-* Person detection used for interaction candidates runs on the analysing
-  device; person boxes are not stored in results.
+* Person and furniture detection used for interaction and on-furniture
+  candidates runs on the analysing device; person and furniture boxes are
+  not stored in results.

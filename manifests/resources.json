@@ -889,6 +889,53 @@
       },
       "release_note": "Weights Apache-2.0 per embedded metadata; COCO training-data question needs legal sign-off for commercial use.",
       "decode": "strip_postprocess"
+    },
+    {
+      "id": "openimages_v7_vrd_pet_object",
+      "kind": "dataset",
+      "role": "pet-object relation pairs: on / under furniture, inside a car (E15)",
+      "name": "Open Images V7 visual relationships: pet-furniture and pet-car box pairs",
+      "canonical_url": "https://storage.googleapis.com/openimages/web/index.html",
+      "status": "available",
+      "profiles": [
+        "research",
+        "personal_noncommercial",
+        "commercial"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [],
+      "manifests": [
+        "manifests/oi_vrd_sources_sha256.csv",
+        "manifests/oi_vrd_object_images.csv",
+        "manifests/oi_vrd_object_pairs.csv",
+        "manifests/oi_vrd_object_sha256.csv"
+      ],
+      "terms": {
+        "annotations": "CC BY 4.0 (Google)",
+        "images": "CC BY 2.0 per image (author and source URL in the manifest)"
+      },
+      "use_restrictions": [
+        "Images never committed; only IDs, attribution and checksums."
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "CC BY 4.0 annotations, CC BY 2.0 images with attribution."
+    },
+    {
+      "id": "pet_object_relation_v1",
+      "kind": "derived_artifact",
+      "name": "artifacts/object_relation/pet_object_relation_v1.npz",
+      "role": "pet on bed / couch / chair / table from box geometry (E15)",
+      "status": "available",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Fitted on CC BY 4.0 annotations / CC BY 2.0 images; geometry, species and object-group features only (no backbone needed)."
     }
   ]
 }

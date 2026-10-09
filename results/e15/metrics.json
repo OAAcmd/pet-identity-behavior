@@ -1,0 +1,624 @@
+{
+  "experiment": "E15",
+  "title": "Pet-object relations (on / under furniture, inside a car) in still images, Open Images relationships",
+  "protocol": [
+    "E15: pet-object relations (on / under furniture, inside a car) in still images.",
+    "",
+    "Data: Open Images V7 visual relationships (data/openimages_vrd_objects.py).",
+    "Units are (pet, object) pairs of annotated boxes; for every relation the",
+    "pair's label is positive, negative (triplet in the annotation vocabulary but",
+    "not listed) or unknown (pair not used for that relation).",
+    "",
+    "Pipeline (what the phone computes): the product detector runs with the",
+    "product threshold (0.35) for cats, dogs and the object classes (bed, couch,",
+    "chair, dining table, car); pet detections pass the product verifier. Each",
+    "annotated pet box is matched to an accepted detection of the same species and",
+    "each annotated object to a detection of its detector class (greedy, IoU >=",
+    "0.5). A pair is scored only when both are detected; coverage is reported and",
+    "end-to-end recall counts undetected positives as misses. Features from the",
+    "detection boxes: 12 geometry values, species, object group",
+    "(vision/object_relation.py). Model: logistic regression per relation.",
+    "",
+    "Splits (by photographer, from the data builder): fit and development are",
+    "pooled for model selection by 5-fold cross-validation grouped by photographer",
+    "(regularisation by out-of-fold average precision; operating threshold by",
+    "out-of-fold F1); the model is then refitted on fit + development and the test",
+    "split (20 % of photographers, never used before) is scored once. Confidence",
+    "intervals resample photographers.",
+    "",
+    "Shipping gate, fixed before the test split was scored: a relation is put in",
+    "the product artifact only if (a) at least 20 test positives are scored, (b)",
+    "the lower bound of the test AP 95 % interval is above the test positive rate",
+    "(chance AP), and (c) test precision at the chosen threshold is >= 0.70.",
+    "Baseline reported for comparison (not gated): the fraction of the pet box",
+    "inside the object box used as a score.",
+    "",
+    "What this does not show: relations in video or household camera views,",
+    "whether the animal is allowed on the furniture, objects the detector has no",
+    "class for (dog beds, cat trees, crates), relations other than the three."
+  ],
+  "gate": {
+    "min_test_positives": 20,
+    "min_precision": 0.7
+  },
+  "images_missing": 0,
+  "relations": {
+    "on": {
+      "object_groups": [
+        "bed",
+        "couch",
+        "chair",
+        "table"
+      ],
+      "pairs": {
+        "development": 592,
+        "test": 189
+      },
+      "pairs_scored": {
+        "development": 200,
+        "test": 46
+      },
+      "positives": {
+        "development": 298,
+        "test": 77
+      },
+      "coverage_reasons": {
+        "development": {
+          "null": 200,
+          "object_not_detected": 177,
+          "pet_not_detected": 215
+        },
+        "test": {
+          "null": 46,
+          "object_not_detected": 55,
+          "pet_not_detected": 88
+        }
+      },
+      "cross_validation_ap_by_C": {
+        "0.003": 0.9923548304551743,
+        "0.01": 0.9930775014467819,
+        "0.03": 0.993974201519495,
+        "0.1": 0.9948673588310988,
+        "0.3": 0.9943880348953992,
+        "1.0": 0.9910517037838553,
+        "3.0": 0.988316882960041
+      },
+      "selected": {
+        "C": 0.1,
+        "threshold": 0.4794447435531439
+      },
+      "development_out_of_fold": {
+        "average_precision": 0.9948673588310988
+      },
+      "test": {
+        "pairs_scored": 46,
+        "positives_scored": 31,
+        "average_precision": 0.9739699074556712,
+        "ap_ci95": {
+          "ci_low": 0.8948568594909059,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 32,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.6739130434782609,
+        "threshold": 0.4794447435531439,
+        "precision": 0.96875,
+        "recall": 1.0,
+        "precision_ci95": {
+          "ci_low": 0.9031451612903225,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 32,
+          "unit": "group"
+        },
+        "recall_ci95": {
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 32,
+          "unit": "group"
+        },
+        "f1": 0.9841269841269841,
+        "end_to_end_recall_all_annotated_positives": 0.4025974025974026,
+        "by_species": {
+          "cat": {
+            "pairs": 23,
+            "positives": 17,
+            "average_precision": 0.9720452509812371,
+            "precision_recall": [
+              0.9444444444444444,
+              1.0
+            ]
+          },
+          "dog": {
+            "pairs": 23,
+            "positives": 14,
+            "average_precision": 1.0,
+            "precision_recall": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "by_object": {
+          "bed": {
+            "pairs": 20,
+            "positives": 19,
+            "average_precision": 0.9695861940912452,
+            "precision_recall": [
+              0.95,
+              1.0
+            ]
+          },
+          "couch": {
+            "pairs": 6,
+            "positives": 5,
+            "average_precision": 1.0,
+            "precision_recall": [
+              1.0,
+              1.0
+            ]
+          },
+          "chair": {
+            "pairs": 18,
+            "positives": 6,
+            "average_precision": 1.0,
+            "precision_recall": [
+              1.0,
+              1.0
+            ]
+          },
+          "table": {
+            "pairs": 2,
+            "positives": 1,
+            "average_precision": 1.0,
+            "precision_recall": [
+              1.0,
+              1.0
+            ]
+          }
+        }
+      },
+      "baseline_test_pet_inside_object_fraction": {
+        "average_precision": 0.9948167671910899,
+        "ap_ci95": {
+          "ci_low": 0.9819071633804743,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 32,
+          "unit": "group"
+        },
+        "precision_recall_at_0.5": [
+          0.967741935483871,
+          0.967741935483871
+        ]
+      },
+      "gate": {
+        "test_positives_scored": true,
+        "ap_lower_bound_above_chance": true,
+        "precision_at_threshold": true
+      },
+      "shipped": true,
+      "test_false_positives_for_audit": [
+        {
+          "image_id": "7b504000cda9e142",
+          "pet": "cat",
+          "object": "bed",
+          "object_classes": "Bed",
+          "score": 0.9581609680662797,
+          "det_pet": [
+            0.7230129837989807,
+            0.22900423407554626,
+            0.9933721423149109,
+            0.5282166004180908
+          ],
+          "det_object": [
+            0.0,
+            0.03328526020050049,
+            0.9574389457702637,
+            0.9981139898300171
+          ]
+        }
+      ]
+    },
+    "under": {
+      "object_groups": [
+        "table",
+        "chair"
+      ],
+      "pairs": {
+        "development": 447,
+        "test": 149
+      },
+      "pairs_scored": {
+        "development": 101,
+        "test": 20
+      },
+      "positives": {
+        "development": 37,
+        "test": 8
+      },
+      "coverage_reasons": {
+        "development": {
+          "null": 101,
+          "object_not_detected": 166,
+          "pet_not_detected": 180
+        },
+        "test": {
+          "null": 20,
+          "object_not_detected": 51,
+          "pet_not_detected": 78
+        }
+      },
+      "cross_validation_ap_by_C": {
+        "0.003": 0.1671942483113858,
+        "0.01": 0.1792746854798511,
+        "0.03": 0.17743069998743422,
+        "0.1": 0.17744049949448557,
+        "0.3": 0.16425915498120466,
+        "1.0": 0.16669481228245728,
+        "3.0": 0.1682984983766234
+      },
+      "selected": {
+        "C": 0.01,
+        "threshold": 0.5233175018029921
+      },
+      "development_out_of_fold": {
+        "average_precision": 0.1792746854798511
+      },
+      "test": {
+        "pairs_scored": 20,
+        "positives_scored": 0,
+        "average_precision": NaN,
+        "ap_ci95": {
+          "ci_low": NaN,
+          "ci_high": NaN,
+          "n_boot": 1000,
+          "n_groups": 13,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.0,
+        "threshold": 0.5233175018029921,
+        "precision": 0.0,
+        "recall": 0.0,
+        "precision_ci95": {
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_boot": 1000,
+          "n_groups": 13,
+          "unit": "group"
+        },
+        "recall_ci95": {
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_boot": 1000,
+          "n_groups": 13,
+          "unit": "group"
+        },
+        "f1": 0.0,
+        "end_to_end_recall_all_annotated_positives": 0.0
+      },
+      "baseline_test_pet_inside_object_fraction": {
+        "average_precision": NaN,
+        "ap_ci95": {
+          "ci_low": NaN,
+          "ci_high": NaN,
+          "n_boot": 1000,
+          "n_groups": 13,
+          "unit": "group"
+        },
+        "precision_recall_at_0.5": [
+          0.0,
+          0.0
+        ]
+      },
+      "gate": {
+        "test_positives_scored": false,
+        "ap_lower_bound_above_chance": false,
+        "precision_at_threshold": false
+      },
+      "shipped": false,
+      "test_false_positives_for_audit": [
+        {
+          "image_id": "3d179dfa2b45d219",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5958517688025572,
+          "det_pet": [
+            0.021260231733322144,
+            0.4977901875972748,
+            0.5283958911895752,
+            0.9932072162628174
+          ],
+          "det_object": [
+            0.10279088467359543,
+            0.0004855692386627197,
+            0.3262987732887268,
+            0.5271246433258057
+          ]
+        },
+        {
+          "image_id": "3d179dfa2b45d219",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.581518851852754,
+          "det_pet": [
+            0.5393338203430176,
+            0.5475900769233704,
+            0.9880058765411377,
+            0.8193342089653015
+          ],
+          "det_object": [
+            0.10279088467359543,
+            0.0004855692386627197,
+            0.3262987732887268,
+            0.5271246433258057
+          ]
+        },
+        {
+          "image_id": "3e0dae991cd0eb5b",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5367015277525629,
+          "det_pet": [
+            0.42556729912757874,
+            0.4193781018257141,
+            0.6364846229553223,
+            0.660770833492279
+          ],
+          "det_object": [
+            0.39916470646858215,
+            0.48391464352607727,
+            0.7228108644485474,
+            0.9940955638885498
+          ]
+        },
+        {
+          "image_id": "d73a01195758f670",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5347882802393875,
+          "det_pet": [
+            0.6443371772766113,
+            0.4090569019317627,
+            0.9109021425247192,
+            0.6648247241973877
+          ],
+          "det_object": [
+            0.12948769330978394,
+            0.04618707299232483,
+            0.9857854247093201,
+            0.9900563955307007
+          ]
+        },
+        {
+          "image_id": "3e0dae991cd0eb5b",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5302536392881215,
+          "det_pet": [
+            0.511055588722229,
+            0.3823840916156769,
+            0.6546618938446045,
+            0.5657674074172974
+          ],
+          "det_object": [
+            0.39916470646858215,
+            0.48391464352607727,
+            0.7228108644485474,
+            0.9940955638885498
+          ]
+        },
+        {
+          "image_id": "de71730ddcab4394",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5256859504478204,
+          "det_pet": [
+            0.366870254278183,
+            0.4309495687484741,
+            0.625533938407898,
+            0.7450542449951172
+          ],
+          "det_object": [
+            0.0,
+            0.30623435974121094,
+            0.25070858001708984,
+            0.837601900100708
+          ]
+        },
+        {
+          "image_id": "de71730ddcab4394",
+          "pet": "dog",
+          "object": "chair",
+          "object_classes": "Chair",
+          "score": 0.5243859355449927,
+          "det_pet": [
+            0.26275989413261414,
+            0.44665420055389404,
+            0.4015692174434662,
+            0.7695834636688232
+          ],
+          "det_object": [
+            0.0,
+            0.30623435974121094,
+            0.25070858001708984,
+            0.837601900100708
+          ]
+        }
+      ]
+    },
+    "inside_of": {
+      "object_groups": [
+        "car"
+      ],
+      "pairs": {
+        "development": 242,
+        "test": 57
+      },
+      "pairs_scored": {
+        "development": 102,
+        "test": 26
+      },
+      "positives": {
+        "development": 95,
+        "test": 29
+      },
+      "coverage_reasons": {
+        "development": {
+          "null": 102,
+          "object_not_detected": 80,
+          "pet_not_detected": 60
+        },
+        "test": {
+          "null": 26,
+          "object_not_detected": 9,
+          "pet_not_detected": 22
+        }
+      },
+      "cross_validation_ap_by_C": {
+        "0.003": 1.0,
+        "0.01": 1.0,
+        "0.03": 1.0,
+        "0.1": 1.0,
+        "0.3": 1.0,
+        "1.0": 1.0,
+        "3.0": 1.0
+      },
+      "selected": {
+        "C": 0.003,
+        "threshold": 0.5781476954868988
+      },
+      "development_out_of_fold": {
+        "average_precision": 1.0
+      },
+      "test": {
+        "pairs_scored": 26,
+        "positives_scored": 15,
+        "average_precision": 0.9313872619754971,
+        "ap_ci95": {
+          "ci_low": 0.7473271163529206,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 15,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.5769230769230769,
+        "threshold": 0.5781476954868988,
+        "precision": 0.8823529411764706,
+        "recall": 1.0,
+        "precision_ci95": {
+          "ci_low": 0.6666666666666666,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 15,
+          "unit": "group"
+        },
+        "recall_ci95": {
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 15,
+          "unit": "group"
+        },
+        "f1": 0.9375,
+        "end_to_end_recall_all_annotated_positives": 0.5172413793103449,
+        "by_species": {
+          "dog": {
+            "pairs": 25,
+            "positives": 15,
+            "average_precision": 0.94747520997521,
+            "precision_recall": [
+              0.9375,
+              1.0
+            ]
+          }
+        },
+        "by_object": {
+          "car": {
+            "pairs": 26,
+            "positives": 15,
+            "average_precision": 0.9313872619754971,
+            "precision_recall": [
+              0.8823529411764706,
+              1.0
+            ]
+          }
+        }
+      },
+      "baseline_test_pet_inside_object_fraction": {
+        "average_precision": 1.0,
+        "ap_ci95": {
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 15,
+          "unit": "group"
+        },
+        "precision_recall_at_0.5": [
+          0.8823529411764706,
+          1.0
+        ]
+      },
+      "gate": {
+        "test_positives_scored": false,
+        "ap_lower_bound_above_chance": true,
+        "precision_at_threshold": true
+      },
+      "shipped": false,
+      "test_false_positives_for_audit": [
+        {
+          "image_id": "9e5fd54401946261",
+          "pet": "dog",
+          "object": "car",
+          "object_classes": "Car",
+          "score": 0.6223966911953305,
+          "det_pet": [
+            0.36089110374450684,
+            0.4122489094734192,
+            0.9903240203857422,
+            0.9879006743431091
+          ],
+          "det_object": [
+            0.003957897424697876,
+            0.05558571219444275,
+            0.975266695022583,
+            0.8779480457305908
+          ]
+        },
+        {
+          "image_id": "24ed93a1a502f187",
+          "pet": "cat",
+          "object": "car",
+          "object_classes": "Car",
+          "score": 0.6114993941446826,
+          "det_pet": [
+            0.007463663816452026,
+            0.0006852149963378906,
+            0.541461706161499,
+            0.695877194404602
+          ],
+          "det_object": [
+            0.00790068507194519,
+            0.22743326425552368,
+            0.9907571077346802,
+            0.7983327507972717
+          ]
+        }
+      ]
+    }
+  },
+  "shipped_relations": [
+    "on"
+  ],
+  "terms": "Open Images annotations CC BY 4.0, images CC BY 2.0 (attribution in manifests/oi_vrd_object_images.csv).",
+  "created_at": "2026-10-09T10:09:28+00:00",
+  "artifact_sha256": "1aecfeadd21d821fecbdb00ce74e42cc52009f7cd263e336aba424a667f62d21"
+}

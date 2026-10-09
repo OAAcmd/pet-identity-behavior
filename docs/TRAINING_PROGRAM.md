@@ -43,6 +43,7 @@ selected hyperparameters and metrics to `results/<exp>/metrics.json`.
 | `artifacts/behavior_video/dog_behavior_video_v1.npz` | E11 | MammalNet annotations (see register) | multinomial logistic regression on segment features | MammalNet validation | MammalNet test, once | n/a | ~1 h (video streaming dominates) |
 | quantized-variant verifiers / posture refits | E12 | as E7 / E10 | as E7 / E10 | as E7 / E10 | as E7 / E10 | as E7 / E10 | ~30 min |
 | `artifacts/interaction/person_pet_interaction_v1.npz` | E13 | `openimages-vrd` | logistic regression on pair geometry (+ union-crop embedding) | 10 % image hold-out of OI train (seed 20261013) | OI validation + test, once | 20261013 | ~15 min |
+| `artifacts/object_relation/pet_object_relation_v1.npz` | E15 | `openimages-vrd-objects` | logistic regression per relation on pair geometry + species + object group; only gated relations exported | 5-fold CV grouped by photographer on fit + development | test split (20 % of photographers), once; gate fixed beforehand | split seed 20261015 | ~5 min (detection on 526 images) |
 
 Checkpoints: for the heads above the final parameters are the checkpoint;
 they are small enough to commit (numeric JSON / NPZ without pickle). E9 keeps

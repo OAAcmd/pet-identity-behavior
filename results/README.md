@@ -21,6 +21,7 @@ what each result does and does not show: [docs/CAPABILITY_MATRIX.md](../docs/CAP
 | `e12/` | completed | as E7 and E10 | `metrics.json` (quantized builds: detection, rejection, posture, agreement, latency, decision), `e7_<pair>.json` (full E7 protocol per detector/backbone pair) |
 | `e13/` | completed | Open Images V7 relationships (person-pet pairs) | `metrics.json`: interaction AP/F1, coverage, baselines |
 | `e14/` | completed | as E7 | `metrics.json` (TF Hub detector with raw decoding vs in-graph post-processing), `e7_tfhub_rawdecode.json` (full E7 protocol) |
+| `e15/` | completed | Open Images V7 relationships (pet-object pairs, split by photographer) | `metrics.json`: per relation (on / under / inside a car) cross-validated selection, test AP/precision/recall with CIs, coverage, rule baseline, pre-set gate and whether it shipped, test false positives listed for audit |
 | `ondevice/` | completed in **desktop headless Chromium only** | parity fixtures, scenario media | `runtime_parity_*.json` (model level: browser LiteRT.js vs Python LiteRT), `engine_parity_chromium.json` (engine level, Python vs TypeScript engine on identical files; `_int8` for the compact bundle), `device_check_desktop_chromium.json` (device-check report from an automated browser, **not a phone**) |
 
 No metric from different datasets is combined into a product-level number.

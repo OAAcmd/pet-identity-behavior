@@ -11,6 +11,7 @@ import type { LoadedModel } from "./runtime";
 import { detectionFlags, estimateCameraMotion, firstT, lastT, makeTracker, mergeSpecies, movementSummary, score as detScore, species,
   speciesSummary, trackSpecies, type Track } from "./tracking";
 import { Interaction } from "./interaction";
+import { ObjectRelation } from "./objectrelation";
 import { Backbone, Posture, Verifier } from "./verifier";
 import { occupancy, type ZoneConfig } from "./zones";
 
@@ -41,6 +42,7 @@ export class LocalEngine {
   readonly verifier?: Verifier;
   readonly posture?: Posture;
   readonly interaction?: Interaction;
+  readonly objectRelation?: ObjectRelation;
   readonly fusion: FusionEngine;
   constructor(readonly a: EngineAssets, readonly m: LocalModels, readonly info: EngineInfo) {
     if (a.detector && m.detector) this.detector = new Detector(m.detector, a.detector);
@@ -50,6 +52,7 @@ export class LocalEngine {
       if (a.posture) this.posture = new Posture(bb, a.posture);
     }
     if (a.interaction && this.detector) this.interaction = new Interaction(a.interaction);
+    if (a.object_relation && this.detector) this.objectRelation = new ObjectRelation(a.object_relation);
     this.fusion = new FusionEngine(a.fusion);
   }
 
@@ -63,6 +66,7 @@ export class LocalEngine {
       { name: "pose", kind: "pose", state: "unavailable", model_id: null, version: null, reason: "no keypoint model in the on-device bundle (dog keypoints are research-only; no cat keypoint data)" },
       { name: "posture", kind: "pose", state: this.posture ? "ok" : "unavailable", model_id: this.posture ? "efficientnet_lite0_mediapipe_v1" : null, version: a.posture?.version ?? null, reason: this.posture ? "coarse lying/sitting/standing from weak caption labels (E10); uncalibrated" : "posture model not in the on-device bundle" },
       { name: "person_interaction", kind: "behavior", state: this.interaction ? "ok" : "unavailable", model_id: this.interaction ? (a.detector?.model_id ?? null) : null, version: a.interaction?.version ?? null, reason: this.interaction ? "person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored" : "interaction model not in the on-device bundle" },
+      { name: "object_relation", kind: "behavior", state: this.objectRelation ? "ok" : "unavailable", model_id: this.objectRelation ? (a.detector?.model_id ?? null) : null, version: a.object_relation?.version ?? null, reason: this.objectRelation ? "pet on bed / couch / chair / table from box geometry (E15, still images); furniture is detected but not stored; under-furniture and inside-car relations did not pass the E15 gate" : "object relation model not in the on-device bundle" },
       { name: "behavior_segments", kind: "behavior", state: this.detector && a.behavior.enabled ? "ok" : "unavailable", model_id: null, version: "behavior-rules-v1", reason: "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)" },
       { name: "fusion", kind: "fusion", state: "ok", model_id: null, version: this.fusion.scorer.revision, reason: "experimental; not validated on paired data" },
       { name: "runtime", kind: "ingest", state: "ok", model_id: null, version: `${this.info.runtime}/${this.info.accelerator}`, reason: `on-device bundle ${this.info.bundle_version}` },
@@ -159,15 +163,20 @@ export class LocalEngine {
         if (lapVar < v.quality.blur_laplacian_var) blurry.push(fr.t_s);
         qMs += tick() - tq;
         let td = tick();
-        const classes = this.interaction ? [...this.a.detector!.target_classes, "person"] : this.a.detector!.target_classes;
+        const objectClasses = this.objectRelation ? this.objectRelation.detectorClasses : [];
+        const classes = [...new Set([...this.a.detector!.target_classes, ...(this.interaction ? ["person"] : []), ...objectClasses])];
         const all = await this.detector.detect(fr.rgb, classes, this.a.detector!.score_threshold, this.a.detector!.nms_iou, this.a.detector!.max_detections_per_frame);
         detMs += tick() - td;
-        const dets = all.filter((d) => d.label !== "person");
+        const dets = all.filter((d) => this.a.detector!.target_classes.includes(d.label));
         const adets = mergeSpecies(dets, fr.t_s, fr.index);
         detectionFlags(adets, v.quality.tiny_area_fraction);
         if (this.interaction) {
           const people = all.filter((d) => d.label === "person" && d.score >= this.a.interaction!.min_person_score).map((d) => d.box);
           if (people.length) for (const d of adets) d.interaction = Math.max(...people.map((pb) => this.interaction!.score(pb, d.box, fr.rgb.width, fr.rgb.height, species(d))));
+        }
+        if (this.objectRelation) {
+          const objects = all.filter((d) => objectClasses.includes(d.label) && d.score >= this.a.object_relation!.min_object_score);
+          if (objects.length) for (const d of adets) d.on_furniture = this.objectRelation.best(objects, d.box, fr.rgb.width, fr.rgb.height, species(d)).get("on") ?? null;
         }
         if (this.verifier) {
           td = tick();
@@ -260,6 +269,7 @@ export class LocalEngine {
           ...BH.zoneSegments(times, boxes, opts.zones, frameSize[0], frameSize[1], bp, a.vision.tracker.max_gap_s, tid, brel),
           ...BH.viewSegments(times, boxes, 0, mediaEnd, bp, tid, brel),
           ...(this.interaction ? BH.interactionSegments(times, tr.detections.map((d) => d.interaction), this.a.interaction!.threshold, this.a.interaction!.min_frames, a.vision.tracker.max_gap_s, tid) : []),
+          ...(this.objectRelation?.heads.has("on") ? BH.onFurnitureSegments(times, tr.detections.map((d) => d.on_furniture), this.objectRelation.heads.get("on")!.threshold, this.a.object_relation!.min_frames, a.vision.tracker.max_gap_s, tid) : []),
         ].sort((x, y) => x.t_start_s - y.t_start_s || (x.kind < y.kind ? -1 : 1));
       }
       const meanScore = tr.detections.reduce((s, d) => s + detScore(d), 0) / tr.detections.length;
@@ -301,7 +311,7 @@ export class LocalEngine {
         movement: { ...mv, reliability: mvRel }, zones: zoneOcc,
         pose_features: POSE_FEATURES.map((name) => ({ name, available: false, value: null, units: null, reason: poseReason })),
         quality_flags: flags, evidence_ids: evIds,
-        behavior_segments: segs.map(({ validation, ...g }, k) => ({ segment_id: `beh-${tid}-${k + 1}`, ...g, validation_status: validation ?? "synthetic_and_semi_synthetic_only" })),
+        behavior_segments: segs.map(({ validation, related_object, ...g }, k) => ({ segment_id: `beh-${tid}-${k + 1}`, ...g, validation_status: validation ?? "synthetic_and_semi_synthetic_only", related_object: related_object ?? null })),
         keypoints: [],
         posture: tr.detections.filter((d) => d.posture).map((d) => ({ t_s: d.t_s, label: d.posture!.label, score: Math.round(d.posture!.score * 1000) / 1000, score_kind: "posture_softmax_uncalibrated" })),
         verification: tr.verification ? { verifier_id: "verifier-v1:crop", checked_detections: tr.verification.checked, median_score: tr.verification.median,
@@ -351,7 +361,7 @@ export class LocalEngine {
 
     const behaviorEvents = bp.enabled ? [...BH.vocalBouts(soundModels.map((m) => [m.label as string, m.t_start_s as number, m.t_end_s as number]), bp),
       ...BH.startleCandidates(series, contextModels.map((m) => [(m.label as string).replace("context:", ""), m.t_start_s as number]), bp)]
-      .sort((x, y) => x.t_start_s - y.t_start_s || (x.kind < y.kind ? -1 : 1)).map((g, k) => ({ segment_id: `beh-${k + 1}`, ...g, validation_status: "synthetic_and_semi_synthetic_only" })) : [];
+      .sort((x, y) => x.t_start_s - y.t_start_s || (x.kind < y.kind ? -1 : 1)).map((g, k) => ({ segment_id: `beh-${k + 1}`, ...g, validation_status: "synthetic_and_semi_synthetic_only", related_object: null })) : [];
 
     const scene = evidence.filter((e) => e.item.kind === "context_object" || e.item.kind === "context_sound");
     const expanded: Ev[] = [];
@@ -397,7 +407,7 @@ export class LocalEngine {
     if (videoOk && nFrames) avail.push("video");
     report("done", 1);
     return {
-      schema_version: "1.2.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
+      schema_version: "1.3.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
       config_profile: "ondevice", config_hash: this.info.bundle_version,
       media: { analysis_filename: opts.name.replace(/[^A-Za-z0-9._-]/g, "_").slice(0, 120) || "recording", size_bytes: file.size, sha256: digest, container: p.mime,
         duration_s: p.duration_s, start_time_s: 0,

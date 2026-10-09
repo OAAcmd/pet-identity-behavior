@@ -35,6 +35,7 @@ the effective state. Unknown keys are rejected.
 | `pose` | dog keypoints (E9) | research profile only; `provider: none` elsewhere |
 | `posture` | coarse posture (E10) | `backbone` must match the features the parameters were validated on |
 | `interaction` | person-pet interaction candidates (E13): model file, minimum person score, minimum consecutive frames | persons are detected but never stored in results |
+| `object_relation` | on-furniture candidates (E15): model file, minimum furniture detection score (0.35, the value E15 was evaluated with), minimum consecutive frames | furniture is detected but never stored in results |
 | `behavior` | operational definitions of behavior segments (speeds, durations, pacing, zones, vocal bouts, startle) | a-priori thresholds; validated only on semi-synthetic video (E8) |
 | `fusion` | experimental hypothesis scoring and abstention | unfitted; not validated on paired data |
 | `serve` | host/port, static PWA directory, on-device bundle directory, trusted proxy hops, accepted extensions | behind a proxy set `trusted_proxy_hops: 1` |

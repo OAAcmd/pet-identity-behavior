@@ -148,12 +148,16 @@ an E2E test). Server analysis exists only as an explicit setting.
 | Device check (automated, not a phone) | E2E test "device check passes ..." | `results/ondevice/device_check_desktop_chromium.json` |
 | Real phones | [DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md) | **pending** |
 
-Engine-parity summary (34 cases, default float32 bundle): decision 34/34;
+Engine-parity summary (38 cases, default float32 bundle): decision 38/38;
 tracks F1 0.96; sounds 1.00; behavior segments 0.97 (person-interaction
-segments identical on the 4 person + dog clips); hypotheses 1.00; posture
+segments identical on the 4 person + dog clips, on-furniture segments - kind,
+object and score within 1e-4 - identical on the 4 pet + furniture clips;
+in one scenario clip a couch detected at 0.34-0.37 against the 0.35
+threshold gives the dog on-couch segments only in the Python run);
+hypotheses 1.00; posture
 labels identical whenever both engines report one, with about one frame in
 five flipping across the report gate. With the int8 bundle on both sides: tracks
-0.84, segments 0.875, hypotheses 0.99, decisions 30/30
+0.87, segments 0.83, hypotheses 0.99, decisions 38/38
 (`results/ondevice/engine_parity_chromium_int8.json`). Media are decoded differently by design (FFmpeg vs browser), so
 pixel-level differences propagate into small score differences.
 
