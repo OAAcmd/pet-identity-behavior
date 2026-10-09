@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "dog-pose", "posture-weak", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -163,7 +163,7 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
 
 def _run_experiment(name: str, args: argparse.Namespace) -> dict:
     s = _settings(args)
-    out_dir = s.paths.resolve("results_root") / name
+    out_dir = s.paths.resolve("results_root") / name.split("-")[0]
     out_dir.mkdir(parents=True, exist_ok=True)
     if name == "e1":
         from .eval import e1_audio_events as E
@@ -198,6 +198,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e8_behavior_sequences as E
 
         return E.run(s, out_dir)
+    if name == "e9-breeds":
+        from .eval import e9_dog_keypoints as E
+
+        return E.breed_breakdown(s, out_dir, REPO_ROOT / "artifacts" / "keypoints" / "dog_keypoints_head_v1.npz")
     if name == "e11":
         from .eval import e11_dog_behavior_video as E
 
@@ -217,7 +221,7 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
     names = EXPERIMENTS if args.experiment == "all" else [args.experiment]
     for n in names:
         r = _run_experiment(n, args)
-        print(json.dumps({"experiment": n, "status": r.get("status", "completed"), "results_dir": f"results/{n}"}))
+        print(json.dumps({"experiment": n, "status": r.get("status", "completed"), "results_dir": f"results/{n.split('-')[0]}"}))
     return 0
 
 

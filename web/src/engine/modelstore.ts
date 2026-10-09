@@ -13,6 +13,8 @@ export interface BundleManifest {
 }
 
 const CACHE = "pp-ondevice-models-v1";
+/** Bundle engine-asset format this app understands (bundle.py ENGINE_VERSION major.minor). */
+export const SUPPORTED_BUNDLE_ENGINE = "0.1";
 const ACTIVE_KEY = "/__ondevice__/active-manifest.json";
 
 async function sha256(buf: ArrayBuffer): Promise<string> {
@@ -38,12 +40,22 @@ export async function fetchRemoteManifest(base: string): Promise<BundleManifest>
   if (!r.ok) throw new Error(`model manifest unavailable (HTTP ${r.status})`);
   const m = (await r.json()) as BundleManifest;
   if (m.schema !== "petperception.ondevice_bundle/1") throw new Error(`unsupported bundle schema ${m.schema}`);
+  if (!bundleCompatible(m)) {
+    throw new Error(`model bundle format ${m.engine_version} needs a newer app version (this app supports ${SUPPORTED_BUNDLE_ENGINE}.x); reload the app while online`);
+  }
   return m;
+}
+
+export function bundleCompatible(m: Pick<BundleManifest, "engine_version">): boolean {
+  return m.engine_version.split(".").slice(0, 2).join(".") === SUPPORTED_BUNDLE_ENGINE;
 }
 
 export interface InstallProgress { done_bytes: number; total_bytes: number; file: string }
 
-export async function install(base: string, m: BundleManifest, onProgress?: (p: InstallProgress) => void, signal?: AbortSignal): Promise<void> {
+/** Downloads and verifies every file, runs ``beforeActivate`` (e.g. starting the engine from the new
+ * files), and only then switches the active version. Any failure leaves the previous version active. */
+export async function install(base: string, m: BundleManifest, onProgress?: (p: InstallProgress) => void, signal?: AbortSignal,
+  beforeActivate?: () => Promise<void>): Promise<void> {
   if (!storageAvailable()) throw new Error("this browser cannot store models (Cache Storage / Web Crypto unavailable; a secure https context is required)");
   try { await navigator.storage?.persist?.(); } catch { /* best effort */ }
   const c = await caches.open(CACHE);
@@ -65,7 +77,8 @@ export async function install(base: string, m: BundleManifest, onProgress?: (p: 
     done += f.bytes;
     onProgress?.({ done_bytes: done, total_bytes: m.total_bytes, file: f.path });
   }
-  // Switch only after every file verified, then drop files no longer referenced.
+  // Switch only after every file verified (and the engine started), then drop files no longer referenced.
+  if (beforeActivate) await beforeActivate();
   await c.put(ACTIVE_KEY, new Response(JSON.stringify(m), { headers: { "content-type": "application/json" } }));
   const keep = new Set(m.files.map((f) => new URL(keyFor(f), location.href).href));
   for (const req of await c.keys()) {

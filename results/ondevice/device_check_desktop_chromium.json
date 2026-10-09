@@ -1,7 +1,7 @@
 {
- "schema": "petperception.device_check/1",
- "created_at": "2026-10-09T08:01:27.677Z",
- "bundle_version": "f46ecd0431b1bb97",
+ "schema": "petperception.device_check/2",
+ "created_at": "2026-10-09T08:32:25.219Z",
+ "bundle_version": "9eaaaa596ae7709f",
  "environment": {
   "user_agent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Mobile Safari/537.36",
   "platform": "Android",
@@ -25,6 +25,12 @@
   },
   "screen": "412x839@2.625"
  },
+ "tester": {
+  "device_model": null,
+  "tier": "B",
+  "tier_guess_from_browser": "B",
+  "mode": "quick"
+ },
  "integrity": {
   "device_check/ATTRIBUTION.json": true,
   "device_check/clip.mp4": true,
@@ -36,27 +42,27 @@
   "models/efficientnet_lite0_features_v1.tflite": true,
   "models/yamnet.tflite": true
  },
- "engine_load_ms": 949.8999999994412,
+ "engine_load_ms": 0.6600000001490116,
  "models": {
   "yamnet": {
-   "median_ms": 4.955000000074506,
-   "min_ms": 3.025000000372529,
+   "median_ms": 2.830000000074506,
+   "min_ms": 2.6349999997764826,
    "max_abs_diff_first_values": 0,
-   "mean_abs_relative_diff": 2.9802321664662564e-09,
+   "mean_abs_relative_diff": 2.9802321664662564e-9,
    "argmax_equal": true
   },
   "detector_float": {
-   "median_ms": 160.74500000011176,
-   "min_ms": 69.97499999962747,
+   "median_ms": 48.77999999932945,
+   "min_ms": 46.29999999888241,
    "max_abs_diff_first_values": 0,
-   "mean_abs_relative_diff": 2.4793600293289583e-08,
+   "mean_abs_relative_diff": 2.4793600293289583e-8,
    "argmax_equal": true
   },
   "backbone": {
-   "median_ms": 47.20999999996275,
-   "min_ms": 46.269999999552965,
+   "median_ms": 18.77000000141561,
+   "min_ms": 13.609999999403954,
    "max_abs_diff_first_values": 0,
-   "mean_abs_relative_diff": 6.018626370215246e-08,
+   "mean_abs_relative_diff": 6.018626370215246e-8,
    "argmax_equal": true
   }
  },
@@ -79,16 +85,17 @@
   "runs": [
    {
     "run": 1,
-    "wall_ms": 4437.2249999996275,
+    "wall_ms": 3792.0800000000745,
+    "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 18.34,
-     "decode_audio": 5.24,
-     "video_decode_detect_track": 4407.46,
-     "video_detector_inference": 1994.86,
-     "video_verifier": 810.43,
-     "video_posture": 0,
-     "video_quality_and_camera_motion": 519.11,
-     "fusion_and_behavior": 3.15
+     "probe_and_hash": 11.15,
+     "decode_audio": 1.96,
+     "video_decode_detect_track": 3774.75,
+     "video_detector_inference": 1242.65,
+     "video_verifier": 533.38,
+     "video_posture": 610.66,
+     "video_quality_and_camera_motion": 495.61,
+     "fusion_and_behavior": 1.92
     },
     "tracks": 1,
     "species": [
@@ -104,16 +111,17 @@
    },
    {
     "run": 2,
-    "wall_ms": 4465.975000000559,
+    "wall_ms": 3372.929999999702,
+    "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 16.36,
-     "decode_audio": 1.93,
-     "video_decode_detect_track": 4446.48,
-     "video_detector_inference": 1965.33,
-     "video_verifier": 764.65,
-     "video_posture": 0,
-     "video_quality_and_camera_motion": 515,
-     "fusion_and_behavior": 0.55
+     "probe_and_hash": 12.41,
+     "decode_audio": 1.37,
+     "video_decode_detect_track": 3357.96,
+     "video_detector_inference": 1111.84,
+     "video_verifier": 476.91,
+     "video_posture": 526.34,
+     "video_quality_and_camera_motion": 385.32,
+     "fusion_and_behavior": 0.66
     },
     "tracks": 1,
     "species": [
@@ -129,16 +137,17 @@
    },
    {
     "run": 3,
-    "wall_ms": 3692.6550000002608,
+    "wall_ms": 3301.9799999985844,
+    "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 14.49,
-     "decode_audio": 1.53,
-     "video_decode_detect_track": 3676.02,
-     "video_detector_inference": 1627,
-     "video_verifier": 650.12,
-     "video_posture": 0,
-     "video_quality_and_camera_motion": 393.79,
-     "fusion_and_behavior": 0.31
+     "probe_and_hash": 8.25,
+     "decode_audio": 1.42,
+     "video_decode_detect_track": 3291.05,
+     "video_detector_inference": 1131.99,
+     "video_verifier": 453.73,
+     "video_posture": 516.91,
+     "video_quality_and_camera_motion": 349.87,
+     "fusion_and_behavior": 0.82
     },
     "tracks": 1,
     "species": [
@@ -154,15 +163,124 @@
    }
   ],
   "online_during_test": true,
-  "sustained_slowdown": 0.8321991785407706
+  "wall_ms_median": 3372.929999999702,
+  "realtime_factor": 0.30115446428568765,
+  "sustained_slowdown": null,
+  "battery": {
+   "start": {
+    "level": 1,
+    "charging": true
+   },
+   "end": {
+    "level": 1,
+    "charging": true
+   },
+   "pct_per_media_minute": null,
+   "note": "1 % resolution; only meaningful unplugged and in sustained mode"
+  }
  },
  "js_heap": {
-  "used": 68900314,
+  "used": 66414421,
   "limit": 4294705152
  },
+ "page_memory_bytes": null,
  "storage": {
-  "usage": 46961722,
-  "quota": 888397761
+  "usage": 46996258,
+  "quota": 843853407
+ },
+ "download_bytes": {
+  "bundle": 37188873,
+  "runtime": 9763309
+ },
+ "budgets": {
+  "tier": "B",
+  "tier_description": {
+   "name": "mid-range (reference tier)",
+   "examples": "2021-2023 mid-range phones, 4-8 GB RAM (for example Pixel 6a/7a, Galaxy A54, iPhone 12)"
+  },
+  "status_note": "Budget limits are assumptions until measured on physical phones of this tier.",
+  "results": [
+   {
+    "id": "download_mb",
+    "label": "One-time model download (bundle + runtime)",
+    "unit": "MB",
+    "value": 44.777090072631836,
+    "limit": 50,
+    "status": "pass",
+    "assumption": true,
+    "note": "bundle files plus the LiteRT.js WebAssembly runtime"
+   },
+   {
+    "id": "storage_mb",
+    "label": "Storage used by the app (origin total)",
+    "unit": "MB",
+    "value": 44.81912422180176,
+    "limit": 120,
+    "status": "pass",
+    "assumption": true,
+    "note": "navigator.storage.estimate(); includes cached app shell and local results"
+   },
+   {
+    "id": "engine_load_ms",
+    "label": "Model load from cache (cold)",
+    "unit": "ms",
+    "value": 0.6600000001490116,
+    "limit": 4000,
+    "status": "pass",
+    "assumption": true,
+    "note": "read, verify and compile all models"
+   },
+   {
+    "id": "realtime_factor",
+    "label": "Analysis time / recording duration (audio + video, 2 frames per second)",
+    "unit": "x",
+    "value": 0.30115446428568765,
+    "limit": 1,
+    "status": "pass",
+    "assumption": true,
+    "note": "median over the runs; 1.0 means a 60 s clip takes 60 s"
+   },
+   {
+    "id": "detector_ms",
+    "label": "Detector inference, one frame (median)",
+    "unit": "ms",
+    "value": 48.77999999932945,
+    "limit": 160,
+    "status": "pass",
+    "assumption": true,
+    "note": "EfficientDet-Lite0 320x320, WebAssembly CPU"
+   },
+   {
+    "id": "memory_mb",
+    "label": "Peak memory of the page",
+    "unit": "MB",
+    "value": null,
+    "limit": 300,
+    "status": "not_measured",
+    "assumption": true,
+    "note": "performance.measureUserAgentSpecificMemory() (Chromium, cross-origin isolated); not available in Safari"
+   },
+   {
+    "id": "sustained_slowdown",
+    "label": "Sustained slowdown (last runs / first runs)",
+    "unit": "x",
+    "value": null,
+    "limit": 1.25,
+    "status": "not_measured",
+    "assumption": true,
+    "note": "proxy for thermal throttling; only measured by the sustained check (10 consecutive analyses)"
+   },
+   {
+    "id": "battery_pct_per_media_min",
+    "label": "Battery used per minute of analysed recording",
+    "unit": "%",
+    "value": null,
+    "limit": 1.5,
+    "status": "not_measured",
+    "assumption": true,
+    "note": "Battery Status API (Chromium on Android only), 1 % resolution, unplugged phone; sustained check only"
+   }
+  ]
  },
  "passed": true,
  "test_environment": "AUTOMATED: Playwright headless Chromium on a 4-core cloud VM with Pixel 7 emulation (user agent, viewport and touch only). NOT a physical phone."

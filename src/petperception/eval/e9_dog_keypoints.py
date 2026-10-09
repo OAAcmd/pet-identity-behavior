@@ -415,3 +415,67 @@ def run(settings: Settings, out_dir: Path, artifact_dir: Path | None = None) -> 
     write_json(out_dir / "metrics.json", summary)
     (out_dir / "training_log.json").write_text(json.dumps(log, indent=1))
     return summary
+
+
+REGIONS = {"ears": ("left_ear_base", "right_ear_base", "left_ear_tip", "right_ear_tip"), "tail": ("tail_start", "tail_end"),
+           "head": ("nose", "chin"), "legs": tuple(k for k in KP.DOG_KEYPOINTS if k.startswith(("front_", "rear_")))}
+MIN_BREED_INSTANCES = 10
+N_PERMUTATIONS = 2000
+
+
+def breed_breakdown(settings: Settings, out_dir: Path, head: Path) -> dict:
+    """Per-breed PCK@0.1 of the committed head on the untouched dog-pose ``val`` split.
+
+    Breed is the Stanford Dogs WordNet synset in the file name (the only breed
+    metadata the source provides; names are not resolved here). Heterogeneity
+    test: the spread of per-breed PCK is compared with the spread obtained when
+    breed labels are permuted across instances (same group sizes).
+    """
+    root = settings.paths.resolve("data_root") / "dog_pose" / "extracted"
+    val = read_split(root, "val")
+    d = settings.paths.resolve("data_root").parent / "cache" / "e9" / "val"
+    with np.load(head) as z:
+        params = {k: z[k] for k in z.files if k != "version"}
+    data = _load(d)
+    gt, lab = np.asarray(data["xy"]), np.asarray(data["lab"])
+    pxy, _, _ = predict_dir(params, d)
+    hit = (np.linalg.norm(pxy - gt, axis=-1) * KP.CROP_SCALE <= 0.1) & lab
+    breeds = np.array([r["breed"] for r in val])
+
+    def per_breed(b: np.ndarray, cols: np.ndarray | slice = slice(None)) -> dict[str, float]:
+        out = {}
+        for g in np.unique(b):
+            ix = b == g
+            n = lab[ix][:, cols].sum()
+            if ix.sum() >= MIN_BREED_INSTANCES and n:
+                out[str(g)] = float(hit[ix][:, cols].sum() / n)
+        return out
+
+    obs = per_breed(breeds)
+    rng = np.random.default_rng(SEED)
+    null_sd = np.array([np.std(list(per_breed(rng.permutation(breeds)).values())) for _ in range(N_PERMUTATIONS)])
+    regions = {}
+    for name, keys in REGIONS.items():
+        cols = np.array([KP.DOG_KEYPOINTS.index(k) for k in keys])
+        v = per_breed(breeds, cols)
+        regions[name] = {"min": min(v.values()), "median": float(np.median(list(v.values()))), "max": max(v.values()),
+                         "worst_5": sorted(v.items(), key=lambda kv: kv[1])[:5]}
+    vals = np.array(list(obs.values()))
+    counts = {str(g): int((breeds == g).sum()) for g in np.unique(breeds)}
+    summary = {
+        "experiment": "E9-breeds", "title": "Dog keypoints: per-breed PCK@0.1 on the dog-pose val split",
+        "protocol": breed_breakdown.__doc__.strip().splitlines(),
+        "head_sha256": sha256_file(head), "val_instances": len(val), "breeds_in_val": len(counts),
+        "breeds_reported": len(obs), "min_instances_per_breed": MIN_BREED_INSTANCES,
+        "pck@0.1_per_breed": {"min": float(vals.min()), "p10": float(np.percentile(vals, 10)), "median": float(np.median(vals)),
+                              "p90": float(np.percentile(vals, 90)), "max": float(vals.max()),
+                              "worst_10": sorted(obs.items(), key=lambda kv: kv[1])[:10], "best_5": sorted(obs.items(), key=lambda kv: -kv[1])[:5]},
+        "heterogeneity": {"observed_sd": float(vals.std()), "permutation_null_sd_mean": float(null_sd.mean()),
+                          "permutation_null_sd_p95": float(np.percentile(null_sd, 95)),
+                          "p_value": float((1 + (null_sd >= vals.std()).sum()) / (1 + N_PERMUTATIONS)), "permutations": N_PERMUTATIONS},
+        "by_region": regions, "instances_per_breed": counts, "per_breed": obs,
+        "caveat": "Breed groups are Stanford Dogs synsets; morphology (ear carriage, tail type, coat) is not in the metadata and is not inferred.",
+        "created_at": utc_now().isoformat(timespec="seconds"),
+    }
+    write_json(out_dir / "breed_breakdown.json", summary)
+    return summary

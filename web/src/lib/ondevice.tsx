@@ -4,9 +4,12 @@ import { createContext, type ComponentChildren } from "preact";
 import { useCallback, useContext, useEffect, useState } from "preact/hooks";
 import type { LocalEngine } from "../engine/engine";
 import { buildEngine } from "../engine/local";
-import { activeManifest, fetchRemoteManifest, install, readFile, storageAvailable, uninstall, type BundleManifest, type InstallProgress } from "../engine/modelstore";
+import { runtimeVariant } from "../engine/runtime";
+import { activeManifest, bundleCompatible, fetchRemoteManifest, install, readFile, storageAvailable, uninstall, type BundleManifest, type InstallProgress } from "../engine/modelstore";
 
 export const BUNDLE_BASE = "/ondevice/";
+/** Progress "file" value while the freshly installed engine is started once. */
+export const WARMUP = "#warmup";
 
 export type OnDeviceState = "unsupported" | "checking" | "not_installed" | "installing" | "ready" | "error";
 
@@ -17,6 +20,8 @@ export interface OnDeviceStatus {
   progress: InstallProgress | null;
   error: string | null;
   crossOriginIsolated: boolean;
+  /** Runtime build actually loaded on this device (known after the first engine start). */
+  runtime: "threads" | "single-thread" | null;
 }
 
 interface Ctx {
@@ -39,19 +44,27 @@ export function unsupportedReason(): string | null {
 }
 
 export function OnDeviceProvider({ children }: { children: ComponentChildren }) {
-  const [status, setStatus] = useState<OnDeviceStatus>({ state: "checking", installed: null, remote: null, progress: null, error: null,
+  const [status, setStatus] = useState<OnDeviceStatus>({ state: "checking", installed: null, remote: null, progress: null, error: null, runtime: runtimeVariant(),
     crossOriginIsolated: typeof self !== "undefined" && (self as unknown as { crossOriginIsolated?: boolean }).crossOriginIsolated === true });
 
   const checkForUpdate = useCallback(async () => {
-    const remote = await fetchRemoteManifest(BUNDLE_BASE).catch(() => null);
-    setStatus((s) => ({ ...s, remote }));
+    let note: string | null = null;
+    const remote = await fetchRemoteManifest(BUNDLE_BASE).catch((e) => {
+      // Offline or server unreachable: silently keep the installed version. A format the app
+      // cannot use is reported, because only reloading the app (online) resolves it.
+      if (e instanceof Error && e.message.includes("needs a newer app version")) note = `A model update is available but ${e.message}.`;
+      return null;
+    });
+    setStatus((s) => ({ ...s, remote, error: note ?? s.error }));
   }, []);
 
   useEffect(() => {
     const why = unsupportedReason();
     if (why) { setStatus((s) => ({ ...s, state: "unsupported", error: why })); return; }
     activeManifest().then((installed) => {
-      setStatus((s) => ({ ...s, installed, state: installed ? "ready" : "not_installed" }));
+      if (installed && !bundleCompatible(installed)) {
+        setStatus((s) => ({ ...s, installed, state: "error", error: `The installed models (format ${installed.engine_version}) do not match this app version. Update the models in Settings.` }));
+      } else setStatus((s) => ({ ...s, installed, state: installed ? "ready" : "not_installed" }));
       if (navigator.onLine !== false) checkForUpdate().catch(() => undefined);
     }).catch((e) => setStatus((s) => ({ ...s, state: "error", error: String(e) })));
   }, [checkForUpdate]);
@@ -60,14 +73,26 @@ export function OnDeviceProvider({ children }: { children: ComponentChildren }) 
     setStatus((s) => ({ ...s, state: "installing", error: null, progress: { done_bytes: 0, total_bytes: 1, file: "" } }));
     try {
       const remote = await fetchRemoteManifest(BUNDLE_BASE);
-      await install(BUNDLE_BASE, remote, (progress) => setStatus((s) => ({ ...s, progress })));
-      engineCache = null;
-      setStatus((s) => ({ ...s, state: "ready", installed: remote, remote, progress: null }));
+      // Before switching versions, start the engine once from the new files: proves the models
+      // compile on this device and makes the service worker cache the WebAssembly runtime,
+      // which offline analysis needs. If this fails, the previous version stays active.
+      let engine: Promise<LocalEngine> | null = null;
+      await install(BUNDLE_BASE, remote, (progress) => setStatus((s) => ({ ...s, progress })), undefined, async () => {
+        setStatus((s) => ({ ...s, progress: { done_bytes: 1, total_bytes: 1, file: WARMUP } }));
+        engine = buildEngine(remote, (p) => readFile(remote, p));
+        try {
+          await engine;
+        } catch (e) {
+          throw new Error(`the models could not be started on this device (${e instanceof Error ? e.message : String(e)})`);
+        }
+      });
+      engineCache = engine ? { version: remote.bundle_version, engine } : null;
+      setStatus((s) => ({ ...s, state: "ready", installed: remote, remote, progress: null, runtime: runtimeVariant() }));
     } catch (e) {
       // The previously installed version (if any) stays active.
       const installed = await activeManifest().catch(() => null);
       setStatus((s) => ({ ...s, state: installed ? "ready" : "error", installed, progress: null,
-        error: `Model download failed: ${e instanceof Error ? e.message : String(e)}. ${installed ? "The previous version is still in use." : "Try again when you have a stable connection."}` }));
+        error: `Model installation failed: ${e instanceof Error ? e.message : String(e)}. ${installed ? "The previous version is still in use." : "Try again when you have a stable connection."}` }));
     }
   }, []);
 
@@ -82,7 +107,7 @@ export function OnDeviceProvider({ children }: { children: ComponentChildren }) 
     if (!m) throw new Error("On-device models are not installed yet.");
     if (!engineCache || engineCache.version !== m.bundle_version) {
       engineCache = { version: m.bundle_version, engine: buildEngine(m, (p) => readFile(m, p)) };
-      engineCache.engine.catch(() => { engineCache = null; });
+      engineCache.engine.then(() => setStatus((s) => ({ ...s, runtime: runtimeVariant() })), () => { engineCache = null; });
     }
     return engineCache.engine;
   }, [status.installed]);

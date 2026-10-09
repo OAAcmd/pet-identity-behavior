@@ -203,3 +203,7 @@ details summary { cursor: pointer; min-height: 44px; display: flex; align-items:
 .seg-list { margin: 0.25rem 0 0.5rem; padding-left: 1.1rem; }
 .seg-list li { margin: 0.15rem 0; }
 .report { max-height: 50vh; overflow: auto; font-size: 0.75rem; background: var(--surface-2, #f4f4f4); padding: 0.5rem; white-space: pre-wrap; word-break: break-word; }
+
+.budget { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; font-size: 0.85rem; }
+.budget caption { text-align: left; font-weight: 600; margin-bottom: 0.25rem; }
+.budget th, .budget td { text-align: left; padding: 0.35rem 0.4rem; border-bottom: 1px solid var(--border); vertical-align: top; }

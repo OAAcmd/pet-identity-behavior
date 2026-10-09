@@ -5,10 +5,22 @@ import { loadAndCompile, loadLiteRt, Tensor, type CompiledModel, type TypedArray
 export type Accel = "wasm" | "webgpu";
 
 let ready: Promise<unknown> | null = null;
+let variant: "threads" | "single-thread" | null = null;
 
+/** Loads the runtime once per page. Multi-threading needs cross-origin isolation AND
+ * relaxed SIMD (LiteRT.js throws otherwise, e.g. on browsers without relaxed SIMD);
+ * in that case the single-threaded build is loaded instead of failing. */
 export function initRuntime(wasmBase: string, opts: { threads?: boolean } = {}): Promise<unknown> {
-  if (!ready) ready = loadLiteRt(wasmBase, { threads: opts.threads ?? false });
+  if (!ready) {
+    const single = () => loadLiteRt(wasmBase, { threads: false }).then((r) => { variant = "single-thread"; return r; });
+    ready = (opts.threads ? loadLiteRt(wasmBase, { threads: true }).then((r) => { variant = "threads"; return r; }, single) : single())
+      .catch((e) => { ready = null; throw e; });
+  }
   return ready;
+}
+
+export function runtimeVariant(): "threads" | "single-thread" | null {
+  return variant;
 }
 
 export interface LoadedModel {

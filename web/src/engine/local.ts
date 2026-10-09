@@ -2,7 +2,7 @@
 import type { EngineAssets } from "./assets";
 import { LocalEngine, type LocalModels } from "./engine";
 import type { BundleManifest } from "./modelstore";
-import { compileModel, initRuntime, type Accel } from "./runtime";
+import { compileModel, initRuntime, runtimeVariant, type Accel } from "./runtime";
 
 export const LITERT_WASM_BASE = "/litert/";
 
@@ -17,7 +17,7 @@ export async function buildEngine(m: BundleManifest, read: (path: string) => Pro
   if (assets.detector) models.detector = await compileModel("detector", await read(assets.detector.model_file), accel);
   if (assets.backbone) models.backbone = await compileModel("backbone", await read(assets.backbone.model_file), accel);
   const info = {
-    bundle_version: m.bundle_version, runtime: `litertjs-${m.runtime.litertjs_core}${threads ? "-threads" : ""}`, accelerator: accel,
+    bundle_version: m.bundle_version, runtime: `litertjs-${m.runtime.litertjs_core}-${runtimeVariant() ?? "unknown"}`, accelerator: accel,
     models: m.files.filter((f) => f.kind === "model").map((f) => ({ model_id: f.resource_id ?? f.path, sha256: f.sha256, file: f.path })),
   };
   return new LocalEngine(assets, models, info);

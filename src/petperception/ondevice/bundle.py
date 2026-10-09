@@ -28,7 +28,6 @@ from pathlib import Path
 
 import numpy as np
 
-from .. import __version__
 from ..config import REPO_ROOT, Settings
 from ..registry import check_model, model_dir, release_decision
 from ..utils import sha256_file, utc_now
@@ -36,6 +35,10 @@ from ..vision.tflite_meta import associated_files, input_normalization, mediapip
 from .tflite_patch import add_outputs
 
 BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
+# Format of engine_assets.json as consumed by the TypeScript engine. Change the
+# major.minor only together with SUPPORTED_BUNDLE_ENGINE in web/src/engine/modelstore.ts:
+# the app refuses bundles whose major.minor it does not support.
+ENGINE_ASSET_FORMAT = "0.1.0"
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
 WEB_DETECTORS = {"efficientdet_lite0_mediapipe_v1", "efficientdet_lite2_mediapipe_v1"}
@@ -109,7 +112,7 @@ def export_bundle(settings: Settings, out: Path) -> dict:
             notes.append(d.reason or rid)
         return d.allowed
 
-    assets: dict = {"schema": "petperception.ondevice_assets/1", "engine_version": __version__, "release_profile": profile}
+    assets: dict = {"schema": "petperception.ondevice_assets/1", "engine_version": ENGINE_ASSET_FORMAT, "release_profile": profile}
     # Audio
     ymid = settings.audio.yamnet.model_id
     if settings.audio.enabled and allowed(ymid) and check_model(settings, ymid).ready:
@@ -164,7 +167,7 @@ def export_bundle(settings: Settings, out: Path) -> dict:
     (out / "engine_assets.json").write_text(json.dumps(assets))
     add("engine_assets.json", "assets", None)
     version = hashlib.sha256("".join(f["sha256"] for f in sorted(files, key=lambda f: f["path"])).encode()).hexdigest()[:16]
-    manifest = {"schema": BUNDLE_SCHEMA, "bundle_version": version, "engine_version": __version__, "release_profile": profile,
+    manifest = {"schema": BUNDLE_SCHEMA, "bundle_version": version, "engine_version": ENGINE_ASSET_FORMAT, "release_profile": profile,
                 "created_at": utc_now().isoformat(timespec="seconds"), "runtime": {"litertjs_core": LITERT_JS_VERSION, "accelerator": "wasm"},
                 "files": sorted(files, key=lambda f: f["path"]), "total_bytes": sum(f["bytes"] for f in files), "notes": notes}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))

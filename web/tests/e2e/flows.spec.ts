@@ -261,6 +261,15 @@ test("offline end-to-end: after installing models, analysis works with the netwo
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Upload file" }).click();
+  // Playwright's offline switch is not guaranteed to cover service-worker fetches, so assert
+  // directly that everything offline analysis needs is already in Cache Storage.
+  const cached = await page.evaluate(async () => {
+    const paths: string[] = [];
+    for (const k of await caches.keys()) for (const r of await (await caches.open(k)).keys()) paths.push(new URL(r.url).pathname);
+    return paths;
+  });
+  expect(cached.some((p) => /^\/litert\/litert_wasm.*\.wasm$/.test(p)), `runtime cached: ${cached.join(", ")}`).toBe(true);
+  expect(cached.some((p) => /^\/litert\/litert_wasm.*\.js$/.test(p))).toBe(true);
   await context.setOffline(true);
   await page.reload();
   await expect(page.getByText(/You are offline/)).toBeVisible();
@@ -271,6 +280,37 @@ test("offline end-to-end: after installing models, analysis works with the netwo
   await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
   await expect(page.getByRole("heading", { name: /Cat seen/ }).first()).toBeVisible();
   await context.setOffline(false);
+});
+
+test("a corrupt model update is rejected and the installed version keeps working; incompatible bundles are refused", async ({ page }) => {
+  await signIn(page);
+  await installModels(page);
+  const installed = (await page.getByText(/Installed: model bundle/).innerText()).match(/model bundle (\w+)/)![1];
+  // Serve a "new" bundle whose detector bytes do not match the manifest checksum.
+  const real = JSON.parse(fs.readFileSync(path.join(FIX, "../ondevice/bundle/manifest.json"), "utf8"));
+  const bad = { ...real, bundle_version: "ffffffffffffffff", files: real.files.map((f: { path: string; sha256: string }) =>
+    f.path === "models/efficientdet_lite0.tflite" ? { ...f, path: "models/tampered.tflite" } : f) };
+  await page.route("**/ondevice/manifest.json", (r) => r.fulfill({ json: bad }));
+  await page.route("**/ondevice/models/tampered.tflite", (r) => r.fulfill({ body: Buffer.from("not a model") }));
+  await page.reload();
+  await page.getByRole("button", { name: "Update models" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: /checksum mismatch/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(/previous version is still in use/)).toBeVisible();
+  await expect(page.getByText(/Installed: model bundle/)).toContainText(`model bundle ${installed} `);
+  // A bundle in a format this app does not understand is refused before any download.
+  await page.unroute("**/ondevice/manifest.json");
+  await page.route("**/ondevice/manifest.json", (r) => r.fulfill({ json: { ...real, bundle_version: "eeeeeeeeeeeeeeee", engine_version: "9.0.0" } }));
+  await page.reload();
+  await expect(page.getByText(/needs a newer app version/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Update models" })).toHaveCount(0);
+  await expect(page.getByText(/Installed: model bundle/)).toContainText(`model bundle ${installed} `);
+  await page.unroute("**/ondevice/manifest.json");
+  // The installed version still analyses.
+  await page.goto("/#/capture");
+  await page.getByRole("tab", { name: "Upload file" }).click();
+  await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.webm"));
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
 });
 
 test("device check passes in desktop Chromium (not a phone)", async ({ page }) => {

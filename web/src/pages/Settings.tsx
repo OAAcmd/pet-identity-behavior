@@ -3,7 +3,7 @@ import { ConfirmDialog, ErrorBanner, Field, InfoBanner, ProgressBar } from "../c
 import { api } from "../lib/api";
 import { fmtBytes, fmtDate } from "../lib/format";
 import { localAnalyses } from "../lib/localstore";
-import { serverAnalysisEnabled, setServerAnalysis, useOnDevice } from "../lib/ondevice";
+import { serverAnalysisEnabled, setServerAnalysis, useOnDevice, WARMUP } from "../lib/ondevice";
 import type { Me } from "../lib/types";
 import { offlineCache, useApp } from "../state";
 
@@ -109,10 +109,10 @@ function OnDeviceCard() {
       {status.state === "unsupported" && <InfoBanner tone="warn">{status.error}</InfoBanner>}
       {inst ? (
         <p>Installed: model bundle <strong>{inst.bundle_version}</strong> ({fmtBytes(inst.total_bytes)}, built {fmtDate(inst.created_at)}).
-          {status.crossOriginIsolated ? " Multi-threaded runtime available." : " Single-threaded runtime (slower)."}</p>
+          {status.runtime === "threads" ? " Multi-threaded runtime." : status.runtime === "single-thread" ? " Single-threaded runtime (slower on this browser)." : ""}</p>
       ) : status.state !== "unsupported" && <p class="muted">Not installed. The download is about {status.remote ? fmtBytes(status.remote.total_bytes) : "40 MB"} and is needed once (and for updates).</p>}
       {update && <InfoBanner tone="info">An update ({status.remote!.bundle_version}, {fmtBytes(status.remote!.total_bytes)}) is available. The current version stays in use until the update is fully downloaded and verified.</InfoBanner>}
-      {status.state === "installing" && <ProgressBar value={p && p.total_bytes ? p.done_bytes / p.total_bytes : 0} label={`Downloading and verifying ${p?.file ?? ""}`} />}
+      {status.state === "installing" && <ProgressBar value={p && p.total_bytes ? p.done_bytes / p.total_bytes : 0} label={p?.file === WARMUP ? "Starting the models on this device" : `Downloading and verifying ${p?.file ?? ""}`} />}
       {status.error && status.state !== "unsupported" && <p class="field-error" role="alert">{status.error}</p>}
       <div class="row wrap">
         {status.state !== "unsupported" && (!inst || update) && (

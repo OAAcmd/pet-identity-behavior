@@ -121,7 +121,7 @@ def compare(out: Path) -> dict:
     errs: dict[str, list[float]] = {k: [] for k in agg}
     decisions = 0
     compared = 0
-    posture = {"ref_frames": 0, "web_frames": 0, "matched": 0, "same_label": 0, "abs_score_diff": []}
+    posture = {"ref_frames": 0, "web_frames": 0, "matched": 0, "same_label": 0, "both_reported": 0, "both_reported_same": 0, "gate_flips": 0, "abs_score_diff": []}
     for c in cases:
         ref_p, web_p = out / "reference" / f"{c['name']}.json", out / "web" / f"{c['name']}.json"
         if not (ref_p.exists() and web_p.exists()):
@@ -154,6 +154,11 @@ def compare(out: Path) -> dict:
         for k in pr.keys() & pw.keys():
             posture["matched"] += 1
             posture["same_label"] += int(pr[k]["label"] == pw[k]["label"])
+            rep = (pr[k]["label"] != "uncertain", pw[k]["label"] != "uncertain")
+            if all(rep):
+                posture["both_reported"] += 1
+                posture["both_reported_same"] += int(pr[k]["label"] == pw[k]["label"])
+            posture["gate_flips"] += int(rep[0] != rep[1])
             posture["abs_score_diff"].append(abs(pr[k]["score"] - pw[k]["score"]))
         same_decision = ref["decision"]["state"] == web["decision"]["state"]
         decisions += int(same_decision)
@@ -167,6 +172,9 @@ def compare(out: Path) -> dict:
                           "median_boundary_error_s": float(np.median(errs[k])) if errs[k] else None} for k, v in agg.items()},
         "posture": {"reference_frames": posture["ref_frames"], "web_frames": posture["web_frames"], "frames_matched_by_species_and_time": posture["matched"],
                     "label_agreement": posture["same_label"] / posture["matched"] if posture["matched"] else None,
+                    "both_reported": posture["both_reported"],
+                    "label_agreement_when_both_reported": posture["both_reported_same"] / posture["both_reported"] if posture["both_reported"] else None,
+                    "gate_flips_one_side_uncertain": posture["gate_flips"],
                     "median_abs_score_diff": float(np.median(posture["abs_score_diff"])) if posture["abs_score_diff"] else None},
         "rows": rows,
         "tolerances": {"tracks_s": 2 * (1.0 / 2.0 + 0.05), "sounds_s": 0.5, "segments_s": 2 * (1.0 / 2.0 + 0.05)},
