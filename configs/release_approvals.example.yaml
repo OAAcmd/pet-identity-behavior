@@ -1,0 +1,11 @@
+# Legal approvals for assets marked "requires_legal_review" in manifests/resources.json.
+# Copy to configs/release_approvals.yaml ONLY after a person with legal authority has
+# reviewed the asset's terms for the named release profile. Code never writes this file.
+# Assets marked "not_permitted" cannot be approved here; replace them instead.
+approvals:
+  # efficientdet_lite0_tfhub_v1:
+  #   commercial:
+  #     approved_by: "Name, role"
+  #     reference: "ticket or memo id"
+  #     date: "YYYY-MM-DD"
+  #     scope: "weights Apache-2.0 (embedded metadata); COCO training-data question reviewed"

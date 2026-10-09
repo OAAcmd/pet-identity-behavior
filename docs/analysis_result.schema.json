@@ -94,6 +94,38 @@
           },
           "title": "Evidence Ids",
           "type": "array"
+        },
+        "behavior_segments": {
+          "items": {
+            "$ref": "#/$defs/BehaviorSegment"
+          },
+          "title": "Behavior Segments",
+          "type": "array"
+        },
+        "keypoints": {
+          "items": {
+            "$ref": "#/$defs/KeypointFrame"
+          },
+          "title": "Keypoints",
+          "type": "array"
+        },
+        "posture": {
+          "items": {
+            "$ref": "#/$defs/PostureFrame"
+          },
+          "title": "Posture",
+          "type": "array"
+        },
+        "verification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TrackVerification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -262,6 +294,95 @@
       "title": "AudioSummary",
       "type": "object"
     },
+    "BehaviorSegment": {
+      "additionalProperties": false,
+      "description": "Operationally defined, timestamped observation (never a mental state).",
+      "properties": {
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "stationary",
+            "moving",
+            "active_bout",
+            "pacing_candidate",
+            "approach_zone",
+            "enter_zone",
+            "dwell_zone",
+            "leave_zone",
+            "entered_view",
+            "left_view",
+            "vocal_bout",
+            "startle_candidate"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Track Id"
+        },
+        "t_start_s": {
+          "title": "T Start S",
+          "type": "number"
+        },
+        "t_end_s": {
+          "title": "T End S",
+          "type": "number"
+        },
+        "reliability": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Reliability",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "measurements": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Measurements",
+          "type": "object"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "validation_status": {
+          "const": "synthetic_and_semi_synthetic_only",
+          "default": "synthetic_and_semi_synthetic_only",
+          "title": "Validation Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "kind",
+        "t_start_s",
+        "t_end_s",
+        "reliability",
+        "detail",
+        "method"
+      ],
+      "title": "BehaviorSegment",
+      "type": "object"
+    },
     "ComponentStatus": {
       "additionalProperties": false,
       "properties": {
@@ -274,8 +395,10 @@
             "ingest",
             "audio_event",
             "visual_detector",
+            "visual_verifier",
             "tracker",
             "pose",
+            "behavior",
             "context",
             "fusion",
             "explanation",
@@ -742,6 +865,47 @@
       "title": "Hypothesis",
       "type": "object"
     },
+    "KeypointFrame": {
+      "additionalProperties": false,
+      "properties": {
+        "t_s": {
+          "title": "T S",
+          "type": "number"
+        },
+        "points": {
+          "additionalProperties": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "description": "name -> (x, y, visibility score); normalized image coords; score uncalibrated",
+          "title": "Points",
+          "type": "object"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t_s",
+        "points",
+        "provider"
+      ],
+      "title": "KeypointFrame",
+      "type": "object"
+    },
     "MediaInfo": {
       "additionalProperties": false,
       "properties": {
@@ -1127,6 +1291,13 @@
             }
           ],
           "title": "Sample Fps"
+        },
+        "behavior_events": {
+          "items": {
+            "$ref": "#/$defs/BehaviorSegment"
+          },
+          "title": "Behavior Events",
+          "type": "array"
         }
       },
       "required": [
@@ -1197,6 +1368,42 @@
         "available"
       ],
       "title": "PoseFeature",
+      "type": "object"
+    },
+    "PostureFrame": {
+      "additionalProperties": false,
+      "properties": {
+        "t_s": {
+          "title": "T S",
+          "type": "number"
+        },
+        "label": {
+          "enum": [
+            "lying",
+            "sitting",
+            "standing",
+            "uncertain"
+          ],
+          "title": "Label",
+          "type": "string"
+        },
+        "score": {
+          "title": "Score",
+          "type": "number"
+        },
+        "score_kind": {
+          "const": "posture_softmax_uncalibrated",
+          "default": "posture_softmax_uncalibrated",
+          "title": "Score Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t_s",
+        "label",
+        "score"
+      ],
+      "title": "PostureFrame",
       "type": "object"
     },
     "Provenance": {
@@ -1473,6 +1680,53 @@
       "title": "Suggestion",
       "type": "object"
     },
+    "TrackVerification": {
+      "additionalProperties": false,
+      "properties": {
+        "verifier_id": {
+          "title": "Verifier Id",
+          "type": "string"
+        },
+        "checked_detections": {
+          "title": "Checked Detections",
+          "type": "integer"
+        },
+        "median_score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Median Score"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "number"
+        },
+        "accepted": {
+          "title": "Accepted",
+          "type": "boolean"
+        },
+        "score_kind": {
+          "const": "verifier_rejection_score_uncalibrated",
+          "default": "verifier_rejection_score_uncalibrated",
+          "title": "Score Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verifier_id",
+        "checked_detections",
+        "median_score",
+        "threshold",
+        "accepted"
+      ],
+      "title": "TrackVerification",
+      "type": "object"
+    },
     "UsageRestrictions": {
       "additionalProperties": false,
       "properties": {
@@ -1619,8 +1873,11 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0.0",
-      "default": "1.0.0",
+      "default": "1.1.0",
+      "enum": [
+        "1.0.0",
+        "1.1.0"
+      ],
       "title": "Schema Version",
       "type": "string"
     },

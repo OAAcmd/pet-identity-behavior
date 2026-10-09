@@ -18,26 +18,30 @@ from .context.zones import ZoneConfig, occupancy
 from .explain.templates import explain_hypothesis, suggestions_for
 from .fusion.engine import Ev, FusionContext, FusionEngine
 from .ingest import media as M
-from .registry import check_model, model_dir, model_terms_summary
+from .registry import check_model, model_dir, model_terms_summary, release_decision
 from .schemas import analysis as S
 from .utils import StageTimer, sha256_file, utc_now
-from .vision.detector import EfficientDetDetector
+from .vision import behavior as BH
+from .vision.detector import Detection, EfficientDetDetector, PostprocessedDetector, load_detector
 from .vision.pose import UnavailablePoseProvider, compute_features
 from .vision.quality import detection_flags, frame_quality
-from .vision.tracking import IouTracker, Track, estimate_camera_motion, merge_species, movement_summary
+from .vision.tracking import Track, estimate_camera_motion, make_tracker, merge_species, movement_summary
+from .vision.verifier import CropClassifier, DetectionVerifier
 
 log = logging.getLogger("petperception.pipeline")
 
 REQUEST_LIKE = {"meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_dog"}
 SUBTYPE_MIN = 0.3
 STATIC_LIMITATIONS = [
-    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal "
+    "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal "
     "language, readings of thoughts or emotions, or medical assessments.",
     "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
     "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
     "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
-    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable "
-    "(no verified animal pose model).",
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; a second-stage verifier reduces but does not remove "
+    "false detections (E7, web photos).",
+    "Behavior segments (stillness, movement, zone visits, back-and-forth, startle candidates) use fixed thresholds checked "
+    "only on synthetic and semi-synthetic sequences; they are not validated against labelled household behavior.",
     "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
 ]
 
@@ -50,8 +54,12 @@ class AnalysisEngine:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.audio_backend: YamnetBackend | None = None
-        self.detector: EfficientDetDetector | None = None
+        self.detector: EfficientDetDetector | PostprocessedDetector | None = None
+        self.verifier: DetectionVerifier | None = None
         self.pose = UnavailablePoseProvider()
+        self.posture = None
+        self._backbone = None
+        self.release_notes: list[str] = []
         self.fusion = FusionEngine(settings.fusion)
         self.status: dict[str, S.ComponentStatus] = {}
         self.thresholds: dict[str, float] = {}
@@ -68,10 +76,17 @@ class AnalysisEngine:
         else:
             mid = s.audio.yamnet.model_id
             r = check_model(s, mid)
-            if r.ready:
+            rd = release_decision(s.release_profile, mid)
+            if r.ready and not rd.allowed:
+                self.status["audio_event"] = S.ComponentStatus(name="audio_event", kind="audio_event", state="unavailable", model_id=None, reason=rd.reason)
+            elif r.ready:
                 self.audio_backend = YamnetBackend(model_dir(s, mid), s.runtime.num_threads)
                 self._groups = build_groups(self.audio_backend)
                 th_path = s.audio.yamnet.thresholds_file
+                td = release_decision(s.release_profile, "audio_event_thresholds_esc50")
+                if th_path and not td.allowed:
+                    self.release_notes.append(f"ESC-50-derived thresholds not used under the '{s.release_profile}' profile; unfitted defaults apply.")
+                    th_path = None
                 self.thresholds, self.threshold_source = load_thresholds(
                     (REPO_ROOT / th_path) if th_path and not Path(th_path).is_absolute() else (Path(th_path) if th_path else None),
                     s.audio.yamnet.default_thresholds)
@@ -83,20 +98,113 @@ class AnalysisEngine:
         else:
             mid = s.vision.detector
             r = check_model(s, mid)
-            if r.ready:
+            rd = release_decision(s.release_profile, mid)
+            if r.ready and rd.allowed:
                 fname = next(iter(r.files.values()))
-                self.detector = EfficientDetDetector(Path(fname), s.runtime.num_threads)
+                self.detector = load_detector(Path(fname), s.runtime.num_threads)
                 self.status["visual_detector"] = S.ComponentStatus(name="visual_detector", kind="visual_detector", state="ok", model_id=mid, version=mid)
             else:
-                self.status["visual_detector"] = S.ComponentStatus(name="visual_detector", kind="visual_detector", state="unavailable", model_id=mid, reason=r.reason)
-        self.status["tracker"] = S.ComponentStatus(name="iou_tracker", kind="tracker", state="ok" if self.detector else "unavailable",
-                                                   version="iou-hungarian-v1", reason=None if self.detector else "requires the visual detector")
-        self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="unavailable", reason=self.pose.unavailable_reason)
+                self.status["visual_detector"] = S.ComponentStatus(name="visual_detector", kind="visual_detector", state="unavailable",
+                                                                   model_id=None if r.ready else mid, reason=r.reason if not r.ready else rd.reason)
+        self._load_verifier()
+        tm = s.vision.tracker.method
+        self.status["tracker"] = S.ComponentStatus(name=f"{tm}_tracker", kind="tracker", state="ok" if self.detector else "unavailable",
+                                                   version="iou-hungarian-v1" if tm == "iou" else "kalman-cv-sort-v1",
+                                                   reason=None if self.detector else "requires the visual detector")
+        self._load_pose()
+        self._load_posture()
+        self.status["behavior"] = S.ComponentStatus(name="behavior_segments", kind="behavior", state="ok" if (self.detector and s.behavior.enabled) else
+                                                    ("disabled" if not s.behavior.enabled else "unavailable"), version="behavior-rules-v1",
+                                                    reason="fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)")
         self.status["fusion"] = S.ComponentStatus(name="fusion", kind="fusion", state="ok", version=self.fusion.scorer.revision,
                                                   reason="experimental; not validated on paired data")
         self.status["vlm"] = S.ComponentStatus(name="vlm", kind="vlm", state="disabled", reason="optional local VLM adapter is disabled by default (Phase 1)")
         self.model_load_ms = (time.perf_counter() - t0) * 1000.0
         return self
+
+    def _load_verifier(self) -> None:
+        s, v = self.settings, self.settings.vision.verifier
+        name = "detection_verifier"
+        if not v.enabled:
+            self.status["visual_verifier"] = S.ComponentStatus(name=name, kind="visual_verifier", state="disabled", reason="disabled by configuration")
+            return
+        if self.detector is None:
+            self.status["visual_verifier"] = S.ComponentStatus(name=name, kind="visual_verifier", state="unavailable", reason="requires the visual detector")
+            return
+        params_path = REPO_ROOT / v.params_dir / f"verifier_{s.vision.detector}.json"
+        rc = check_model(s, v.classifier)
+        blocked = [d for d in (release_decision(s.release_profile, v.classifier), release_decision(s.release_profile, "detection_verifier_v1")) if not d.allowed]
+        reason = None
+        if not params_path.exists():
+            reason = f"no verifier parameters for detector '{s.vision.detector}' ({params_path.name}); run: petperception evaluate --experiment e7"
+        elif not rc.ready:
+            reason = rc.reason
+        elif blocked:
+            reason = blocked[0].reason
+        if reason:
+            self.status["visual_verifier"] = S.ComponentStatus(name=name, kind="visual_verifier", state="unavailable", reason=reason)
+            return
+        import json as _json
+
+        params = _json.loads(params_path.read_text())
+        clf = CropClassifier(Path(next(iter(rc.files.values()))), s.runtime.num_threads)
+        self.verifier = DetectionVerifier(self.detector, clf, params, s.vision.target_classes)
+        self.status["visual_verifier"] = S.ComponentStatus(name=name, kind="visual_verifier", state="ok", model_id=v.classifier,
+                                                           version=f"verifier-v1:{s.vision.detector}",
+                                                           reason="track-level median of per-detection rejection scores; thresholds from E7 tuning")
+
+    def _load_pose(self) -> None:
+        s = self.settings
+        if s.pose.provider == "none":
+            self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="unavailable", reason=self.pose.unavailable_reason)
+            return
+        from .vision.keypoints import DogKeypointModel, DogPoseProvider
+
+        head = REPO_ROOT / s.pose.head_file
+        rb = check_model(s, s.pose.backbone)
+        blocked = [d for d in (release_decision(s.release_profile, s.pose.backbone), release_decision(s.release_profile, "dog_keypoints_head_v1")) if not d.allowed]
+        reason = None if head.exists() else f"{head.name} not found; run: petperception evaluate --experiment e9"
+        reason = reason or (rb.reason if not rb.ready else None) or (blocked[0].reason if blocked else None)
+        if reason:
+            self.pose = UnavailablePoseProvider(unavailable_reason=reason)
+            self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="unavailable", reason=reason)
+            return
+        import json as _json
+
+        meta_path = head.with_suffix(".json")
+        gates = _json.loads(meta_path.read_text()).get("gates", {}) if meta_path.exists() else {}
+        model = DogKeypointModel.load(Path(next(iter(rb.files.values()))), head, s.runtime.num_threads)
+        self._backbone = model.backbone
+        self.pose = DogPoseProvider(model, min_visible=float(gates.get("min_visible", 0.5)), min_peak=float(gates.get("min_peak", 0.2)))
+        self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="ok", model_id=s.pose.backbone, version=model.version,
+                                                reason="dogs only (research profile); no cat keypoint model is available")
+
+    def _load_posture(self) -> None:
+        s = self.settings
+        name = "posture"
+        if not s.posture.enabled:
+            self.status["posture"] = S.ComponentStatus(name=name, kind="pose", state="disabled", reason="disabled by configuration")
+            return
+        if self.detector is None:
+            self.status["posture"] = S.ComponentStatus(name=name, kind="pose", state="unavailable", reason="requires the visual detector")
+            return
+        from .vision.posture import PostureModel
+
+        path = REPO_ROOT / s.posture.model_file
+        rb = check_model(s, s.posture.backbone)
+        blocked = [d for d in (release_decision(s.release_profile, s.posture.backbone), release_decision(s.release_profile, "posture_v1")) if not d.allowed]
+        reason = None if path.exists() else f"{path.name} not found; run: petperception evaluate --experiment e10"
+        reason = reason or (rb.reason if not rb.ready else None) or (blocked[0].reason if blocked else None)
+        if reason:
+            self.status["posture"] = S.ComponentStatus(name=name, kind="pose", state="unavailable", reason=reason)
+            return
+        self.posture = PostureModel.load(path)
+        if self._backbone is None:
+            from .vision.keypoints import Backbone
+
+            self._backbone = Backbone(Path(next(iter(rb.files.values()))), s.runtime.num_threads)
+        self.status["posture"] = S.ComponentStatus(name=name, kind="pose", state="ok", model_id=s.posture.backbone, version=self.posture.version,
+                                                   reason="coarse lying/sitting/standing from weak caption labels (E10); uncalibrated")
 
     def capabilities(self) -> dict:
         s = self.settings
@@ -110,7 +218,8 @@ class AnalysisEngine:
             "context_object_classes": s.vision.context_object_classes,
             "fusion": {"mode": "experimental", "method": s.fusion.method, "validated": False, "multimodal_accuracy": "not_evaluated"},
             "limits": s.limits.model_dump(),
-            "research_only": True,
+            "release_profile": s.release_profile,
+            "research_only": s.release_profile == "research",
         }
 
     # -- analysis ------------------------------------------------------------
@@ -203,7 +312,8 @@ class AnalysisEngine:
             video_state = "present"
             qflags.append(S.QualityFlag(code="visual_model_unavailable", severity="limiting", detail=self.status["visual_detector"].reason))
         else:
-            tracker = IouTracker(s.vision.tracker.iou_threshold, s.vision.tracker.max_gap_s)
+            tracker = make_tracker(s.vision.tracker.method, s.vision.tracker.iou_threshold, s.vision.tracker.max_gap_s)
+            verify_s = pose_s = 0.0
             classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes))
             prev_gray, prev_t, prev_boxes = None, None, []
             detect_s = quality_s = 0.0
@@ -229,6 +339,29 @@ class AnalysisEngine:
                             persons.append((fr.t_s, d.box, d.score))
                     adets = merge_species(animal, fr.t_s, fr.index)
                     detection_flags(adets, s.vision.quality)
+                    if self.verifier is not None:
+                        tv = time.perf_counter()
+                        for a in sorted(adets, key=lambda x: -x.score)[: s.vision.verifier.max_checks_per_frame]:
+                            cs = a.source.class_scores if a.source is not None else None
+                            vr = self.verifier.verify(fr.rgb, Detection(a.species, a.score, a.box, cs))
+                            a.verify_score = vr[0] if vr is not None else None
+                        verify_s += time.perf_counter() - tv
+                    if self._backbone is not None and (self.pose.available or self.posture is not None):
+                        from .vision.keypoints import square_crop
+
+                        tp = time.perf_counter()
+                        lo = min(s.pose.min_detection_score, s.posture.min_detection_score)
+                        for a in sorted((x for x in adets if x.score >= lo), key=lambda x: -x.score)[: max(s.pose.max_per_frame, s.posture.max_per_frame)]:
+                            need_kp = self.pose.available and a.species in self.pose.species and a.score >= s.pose.min_detection_score
+                            need_po = self.posture is not None and a.score >= s.posture.min_detection_score
+                            if not (need_kp or need_po):
+                                continue
+                            feats = self._backbone.features(square_crop(fr.rgb, a.box)[0])
+                            if need_kp:
+                                a.keypoints = self.pose.estimate(fr.rgb, a.box, fr.t_s, feats)
+                            if need_po:
+                                a.posture = self.posture.predict(feats["pooled"], a.box, fr.rgb.shape[:2], a.species)
+                        pose_s += time.perf_counter() - tp
                     shift = (0.0, 0.0)
                     if prev_gray is not None and not mp.video.is_still_image:
                         tq = time.perf_counter()
@@ -247,9 +380,27 @@ class AnalysisEngine:
                     prev_gray, prev_t, prev_boxes = gray, fr.t_s, [a.box for a in adets]
                     frame_size = (fr.rgb.shape[1], fr.rgb.shape[0])
             timer.timings_ms["video_detector_inference"] = detect_s * 1000.0
+            timer.timings_ms["video_verifier"] = verify_s * 1000.0
+            timer.timings_ms["video_pose"] = pose_s * 1000.0
             timer.timings_ms["video_quality_and_camera_motion"] = quality_s * 1000.0
             min_hits = s.vision.tracker.min_hits if n_frames >= 2 * s.vision.tracker.min_hits else 1
             tracks = tracker.tracks(min_hits)
+            if self.verifier is not None:
+                kept, rejected = [], []
+                for tr in tracks:
+                    vs = [d.verify_score for d in tr.detections if d.verify_score is not None]
+                    cv = self.verifier.per_class.get(tr.species)
+                    if cv is None or not vs:
+                        kept.append(tr)
+                        continue
+                    med = float(np.median(vs))
+                    tr.verification = (len(vs), med, cv.tau, med >= cv.tau)
+                    (kept if med >= cv.tau else rejected).append(tr)
+                tracks = kept
+                if rejected:
+                    qflags.append(S.QualityFlag(code="detections_rejected_by_verifier", severity="info",
+                                                t_start_s=min(t.first_t for t in rejected), t_end_s=max(t.last_t for t in rejected),
+                                                detail=f"{len(rejected)} animal-like track(s) did not pass the second-stage check and are not reported as animals"))
             video_state = "present" if n_frames > 0 else ("corrupt" if frame_report.decode_warnings else "no_decodable_frames")
             if frame_report.decode_warnings:
                 qflags.append(S.QualityFlag(code="video_decode_warnings", severity="warning", detail="; ".join(frame_report.decode_warnings[:3])))
@@ -273,6 +424,11 @@ class AnalysisEngine:
         evidence: list[Ev] = []
         track_models: list[S.AnimalTrack] = []
         is_still = bool(mp.video and mp.video.is_still_image)
+        bparams = BH.BehaviorParams(**s.behavior.model_dump(exclude={"enabled"}))
+        step_series: dict[str, BH.StepSeries] = {}
+        tb = time.perf_counter()
+        media_start = mp.video.start_time_s if mp.video else 0.0
+        media_end = (mp.video.start_time_s + mp.video.duration_s) if (mp.video and mp.video.duration_s) else mp.duration_s
         for tr in tracks:
             tid = tr.track_id
             flags = sorted({f for d in tr.detections for f in d.flags})
@@ -281,7 +437,23 @@ class AnalysisEngine:
             span_dark = any(tr.first_t <= t <= tr.last_t for t in low_light_times)
             mv_rel = "low" if (not mv.get("available") or len(tr.detections) < 3 or span_dark) else ("medium" if span_camera or camera_unknown else "high")
             zone_occ = occupancy([d.t_s for d in tr.detections], [d.box for d in tr.detections], zones, s.vision.tracker.max_gap_s) if zones else []
-            pose_feats = compute_features(self.pose, [], s.pose.min_keypoint_visibility)
+            kp_series = [d.keypoints for d in tr.detections if d.keypoints is not None]
+            if tr.species in self.pose.species:
+                pose_feats = compute_features(self.pose, kp_series, s.pose.min_keypoint_visibility)
+            else:
+                why = (f"no {tr.species} keypoint model is available" if self.pose.available else self.pose.unavailable_reason)
+                pose_feats = compute_features(UnavailablePoseProvider(unavailable_reason=why), [], s.pose.min_keypoint_visibility)
+            segs: list[BH.Segment] = []
+            if s.behavior.enabled and not is_still and len(tr.detections) >= 2 and frame_size[0]:
+                ts_, bx_ = [d.t_s for d in tr.detections], [d.box for d in tr.detections]
+                ss = BH.step_series(ts_, bx_, frame_size[0], frame_size[1], camera_shift if s.vision.camera_motion_compensation else None,
+                                    s.vision.tracker.max_gap_s)
+                step_series[tid] = ss
+                brel = "low" if (span_dark or len(tr.detections) < 3) else "medium"
+                segs = (BH.motion_segments(ss, bparams, tid, brel) + BH.pacing_segments(ss, bparams, tid)
+                        + BH.zone_segments(ts_, bx_, zones, frame_size[0], frame_size[1], bparams, s.vision.tracker.max_gap_s, tid, brel)
+                        + BH.view_segments(ts_, bx_, media_start, media_end, bparams, tid, brel))
+                segs.sort(key=lambda g: (g.t_start_s, g.kind))
             mean_score = float(np.mean([d.score for d in tr.detections]))
             track_rel = "high" if mean_score >= 0.6 and not ({"tiny_subject", "species_ambiguous"} & set(flags)) else ("medium" if mean_score >= 0.45 else "low")
             if span_dark:
@@ -326,7 +498,16 @@ class AnalysisEngine:
                 movement=S.MovementSummary(**{k: v for k, v in mv.items()}, reliability=mv_rel),
                 zones=[S.ZoneOccupancy(**z) for z in zone_occ],
                 pose_features=[S.PoseFeature(name=f.name, available=f.available, value=f.value, units=f.units, reason=f.reason) for f in pose_feats],
-                quality_flags=flags, evidence_ids=ev_ids))
+                quality_flags=flags, evidence_ids=ev_ids,
+                behavior_segments=[_segment(g, f"beh-{tid}-{k}") for k, g in enumerate(segs, start=1)],
+                keypoints=[S.KeypointFrame(t_s=ks.t_s, provider=self.pose.name,
+                                           points={n: (round(float(ks.xy[i][0]), 4), round(float(ks.xy[i][1]), 4), round(float(ks.visibility[i]), 3))
+                                                   for i, n in enumerate(ks.names) if n in self.pose.keypoint_vocabulary})
+                           for ks in kp_series[:120]],
+                posture=[S.PostureFrame(t_s=d.t_s, label=d.posture[0], score=round(d.posture[1], 3)) for d in tr.detections if d.posture is not None],
+                verification=(S.TrackVerification(verifier_id=self.status["visual_verifier"].version or "verifier", checked_detections=tr.verification[0],
+                                                  median_score=tr.verification[1], threshold=tr.verification[2], accepted=tr.verification[3])
+                              if tr.verification else None)))
         if persons:
             ts = sorted(t for t, _, _ in persons)
             e_p = S.EvidenceItem(evidence_id="ev-person-1", kind="context_object", t_start_s=ts[0], t_end_s=ts[-1],
@@ -385,6 +566,15 @@ class AnalysisEngine:
             attributed = att.candidate_track_ids[0] if att.status == "single_visible_candidate" else None
             e = Ev(item, "audio:yamnet", frozenset(tags), 1.0, attributed_track=attributed)
             evidence.append(e)
+
+        behavior_events: list[S.BehaviorSegment] = []
+        if s.behavior.enabled:
+            vocal = [(m.label, m.t_start_s, m.t_end_s) for m in sound_models]
+            onsets = [(m.label.replace("context:", ""), m.t_start_s) for m in context_models]
+            bev = BH.vocal_bouts(vocal, bparams) + BH.startle_candidates(step_series, onsets, bparams)
+            bev.sort(key=lambda g: (g.t_start_s, g.kind))
+            behavior_events = [_segment(g, f"beh-{k}") for k, g in enumerate(bev, start=1)]
+        timer.timings_ms["behavior_segments"] = (time.perf_counter() - tb) * 1000.0
 
         # Scene-level evidence (person visible, environmental sounds) applies to every subject.
         scene = [e for e in evidence if e.item.kind in ("context_object", "context_sound")]
@@ -451,12 +641,18 @@ class AnalysisEngine:
         suggestions = suggestions_for(hyps, qcodes, len(tracks), pet_sound)
 
         limitations = list(STATIC_LIMITATIONS)
+        if self.pose.available:
+            limitations.append("Dog keypoints come from a research-only model evaluated on web photos (E9), not household video; "
+                               "no cat keypoint model is available, so cat ear/tail features are unavailable.")
+        else:
+            limitations.append(f"Ear, tail and keypoint-based features are unavailable for this analysis: {self.pose.unavailable_reason}.")
+        limitations += self.release_notes
         if is_still:
             limitations.append("Single still image: movement, dwell time and temporal co-occurrence cannot be measured.")
         if bandwidth_limited:
             limitations.append("Low-sample-rate audio: frequency content above the Nyquist limit is missing.")
         models = [S.ModelInfo(**{k: (v if k != "terms" else {kk: str(vv) for kk, vv in v.items()}) for k, v in model_terms_summary(c.model_id).items()})
-                  for c in components.values() if c.model_id and c.state == "ok"]
+                  for c in {c.model_id: c for c in components.values() if c.model_id and c.state == "ok"}.values()]
         av = []
         if audio_state == "present":
             av.append("audio")
@@ -478,17 +674,24 @@ class AnalysisEngine:
             components=list(components.values()),
             observations=S.Observations(animal_tracks=track_models, sound_events=sound_models, context_sounds=context_models,
                                         audio_summary=audio_summary, evidence=[e.item for e in evidence], sampled_frames=n_frames,
-                                        sample_fps=s.vision.sample_fps if n_frames else None),
+                                        sample_fps=s.vision.sample_fps if n_frames else None, behavior_events=behavior_events),
             quality_flags=qflags, hypotheses=hyps, decision=decision, suggestions=suggestions, limitations=limitations,
             fusion=S.FusionInfo(method=s.fusion.method, note="Experimental fusion; weights/temperature are unfitted configuration values."),
             timings_ms={**{k: round(v, 2) for k, v in timer.timings_ms.items()}, "model_load_ms_engine_startup": round(self.model_load_ms, 2)},
             models=models,
-            usage_restrictions=S.UsageRestrictions(research_only=True, notices=[
-                "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
-                "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
-                "Do not assume commercial permission for any bundled model or dataset."]),
+            usage_restrictions=S.UsageRestrictions(research_only=s.release_profile == "research", notices=[
+                f"Release profile '{s.release_profile}': only assets permitted for this profile were loaded (manifests/resources.json).",
+                "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+                *(["Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial use."] if self.thresholds and s.release_profile != "commercial" else []),
+                "Do not assume commercial permission for any asset without a recorded legal approval."]),
         )
         return result
+
+
+def _segment(g: BH.Segment, sid: str) -> S.BehaviorSegment:
+    return S.BehaviorSegment(segment_id=sid, kind=g.kind, track_id=g.track_id, t_start_s=round(g.t_start_s, 3), t_end_s=round(g.t_end_s, 3),
+                             reliability=g.reliability, detail=g.detail, measurements={k: round(float(v), 4) for k, v in g.measurements.items()},
+                             method=g.method)
 
 
 def _safe_name(name: str) -> str:

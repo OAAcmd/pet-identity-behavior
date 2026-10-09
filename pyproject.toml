@@ -32,6 +32,10 @@ dev = [
     "httpx>=0.27",
     "ruff==0.16.8",
 ]
+train = [
+    "jax[cpu]>=0.7",
+    "optax>=0.2",
+]
 
 [project.scripts]
 petperception = "petperception.cli:main"

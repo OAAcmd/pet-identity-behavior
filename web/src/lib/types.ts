@@ -133,11 +133,13 @@ export interface AnimalTrack {
   detections: Detection[];
   movement: { available: boolean; units: string; reason?: string | null; median_speed?: number | null; moving_fraction?: number | null; steps?: number | null; reliability: string };
   zones: { zone_id: string; semantic_tag: string; label: string; intervals_s: [number, number][]; dwell_s: number }[];
-  pose_features: { name: string; available: boolean; reason?: string | null }[];
+  pose_features: { name: string; available: boolean; value?: number | boolean | null; units?: string | null; reason?: string | null }[];
   quality_flags: string[];
   evidence_ids: string[];
   behavior_segments?: BehaviorSegment[];
   posture?: PostureEstimate[];
+  keypoints?: { t_s: number; points: Record<string, [number, number, number]>; provider: string }[];
+  verification?: { verifier_id: string; checked_detections: number; median_score: number | null; threshold: number; accepted: boolean } | null;
 }
 
 export interface BehaviorSegment {
@@ -147,6 +149,9 @@ export interface BehaviorSegment {
   t_end_s: number;
   reliability: string;
   detail?: string | null;
+  track_id?: string | null;
+  measurements?: Record<string, number>;
+  method?: string;
 }
 
 export interface PostureEstimate {

@@ -83,6 +83,7 @@ class AudioConfig(BaseModel):
 
 
 class TrackerConfig(BaseModel):
+    method: Literal["iou", "kalman"] = "iou"
     iou_threshold: float = 0.3
     max_gap_s: float = 1.5
     min_hits: int = 2
@@ -94,6 +95,15 @@ class VisionQualityConfig(BaseModel):
     tiny_area_fraction: float = 0.004
     camera_motion_threshold: float = 0.01
     frame_gap_factor: float = 2.5
+
+
+class VerifierConfig(BaseModel):
+    """Second-stage false-positive rejection (E7). Parameters are per detector."""
+
+    enabled: bool = True
+    classifier: str = "efficientnet_lite0_mediapipe_v1"
+    params_dir: str = "artifacts/verifier"  # verifier_<detector id>.json, exported by E7
+    max_checks_per_frame: int = 3
 
 
 class VisionConfig(BaseModel):
@@ -111,11 +121,50 @@ class VisionConfig(BaseModel):
     tracker: TrackerConfig = Field(default_factory=TrackerConfig)
     quality: VisionQualityConfig = Field(default_factory=VisionQualityConfig)
     camera_motion_compensation: bool = True
+    verifier: VerifierConfig = Field(default_factory=VerifierConfig)
 
 
 class PoseConfig(BaseModel):
-    provider: Literal["none"] = "none"
+    # "dog_keypoints_v1": E9 head on EfficientNet-Lite0 features (dogs only, research profile).
+    provider: Literal["none", "dog_keypoints_v1"] = "none"
     min_keypoint_visibility: float = 0.5
+    head_file: str = "artifacts/keypoints/dog_keypoints_head_v1.npz"
+    backbone: str = "efficientnet_lite0_mediapipe_v1"
+    max_per_frame: int = 2
+    min_detection_score: float = 0.45
+
+
+class PostureConfig(BaseModel):
+    """Coarse posture from weak caption labels (E10); cats and dogs."""
+
+    enabled: bool = True
+    model_file: str = "artifacts/posture/posture_v1.npz"
+    backbone: str = "efficientnet_lite0_mediapipe_v1"
+    max_per_frame: int = 2
+    min_detection_score: float = 0.45
+
+
+class BehaviorConfig(BaseModel):
+    """A-priori thresholds for vision/behavior.py (checked on synthetic data only, E8)."""
+
+    enabled: bool = True
+    moving_speed: float = 0.05
+    active_speed: float = 0.25
+    min_stationary_s: float = 2.0
+    min_moving_s: float = 1.0
+    min_active_s: float = 1.0
+    pacing_min_amplitude: float = 0.08
+    pacing_min_reversals: int = 3
+    pacing_max_leg_s: float = 10.0
+    pacing_min_span_s: float = 4.0
+    approach_min_drop: float = 0.05
+    approach_min_s: float = 1.0
+    approach_lookback_s: float = 10.0
+    view_edge_margin_s: float = 1.0
+    vocal_max_gap_s: float = 2.0
+    startle_max_lag_s: float = 1.5
+    startle_baseline_s: float = 3.0
+    startle_ratio: float = 3.0
 
 
 class FusionConfig(BaseModel):
@@ -228,6 +277,8 @@ class Settings(BaseModel):
     audio: AudioConfig = Field(default_factory=AudioConfig)
     vision: VisionConfig = Field(default_factory=VisionConfig)
     pose: PoseConfig = Field(default_factory=PoseConfig)
+    behavior: BehaviorConfig = Field(default_factory=BehaviorConfig)
+    posture: PostureConfig = Field(default_factory=PostureConfig)
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)

@@ -19,7 +19,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
+SchemaVersion = Literal["1.0.0", "1.1.0"]  # 1.1.0 is additive (behavior segments, keypoints, verification)
 
 Modality = Literal["audio", "video"]
 ComponentState = Literal["ok", "unavailable", "disabled", "failed", "skipped", "not_applicable"]
@@ -74,7 +75,7 @@ class ModalityStatus(_Model):
 
 class ComponentStatus(_Model):
     name: str
-    kind: Literal["ingest", "audio_event", "visual_detector", "tracker", "pose", "context", "fusion", "explanation", "vlm"]
+    kind: Literal["ingest", "audio_event", "visual_detector", "visual_verifier", "tracker", "pose", "behavior", "context", "fusion", "explanation", "vlm"]
     state: ComponentState
     model_id: str | None = None
     version: str | None = None
@@ -151,6 +152,47 @@ class PoseFeature(_Model):
     reason: str | None = None
 
 
+BehaviorKind = Literal["stationary", "moving", "active_bout", "pacing_candidate", "approach_zone", "enter_zone", "dwell_zone", "leave_zone",
+                       "entered_view", "left_view", "vocal_bout", "startle_candidate"]
+
+
+class BehaviorSegment(_Model):
+    """Operationally defined, timestamped observation (never a mental state)."""
+
+    segment_id: str
+    kind: BehaviorKind
+    track_id: str | None = None
+    t_start_s: float
+    t_end_s: float
+    reliability: Literal["high", "medium", "low"]
+    detail: str
+    measurements: dict[str, float] = Field(default_factory=dict)
+    method: str
+    validation_status: Literal["synthetic_and_semi_synthetic_only"] = "synthetic_and_semi_synthetic_only"
+
+
+class KeypointFrame(_Model):
+    t_s: float
+    points: dict[str, tuple[float, float, float]] = Field(description="name -> (x, y, visibility score); normalized image coords; score uncalibrated")
+    provider: str
+
+
+class PostureFrame(_Model):
+    t_s: float
+    label: Literal["lying", "sitting", "standing", "uncertain"]
+    score: float
+    score_kind: Literal["posture_softmax_uncalibrated"] = "posture_softmax_uncalibrated"
+
+
+class TrackVerification(_Model):
+    verifier_id: str
+    checked_detections: int
+    median_score: float | None
+    threshold: float
+    accepted: bool
+    score_kind: Literal["verifier_rejection_score_uncalibrated"] = "verifier_rejection_score_uncalibrated"
+
+
 class AnimalTrack(_Model):
     track_id: str
     identity_note: Literal["per-analysis track label; not a verified pet identity"] = "per-analysis track label; not a verified pet identity"
@@ -168,6 +210,10 @@ class AnimalTrack(_Model):
     pose_features: list[PoseFeature] = Field(default_factory=list)
     quality_flags: list[str] = Field(default_factory=list)
     evidence_ids: list[str] = Field(default_factory=list)
+    behavior_segments: list[BehaviorSegment] = Field(default_factory=list)
+    keypoints: list[KeypointFrame] = Field(default_factory=list)
+    posture: list[PostureFrame] = Field(default_factory=list)
+    verification: TrackVerification | None = None
 
 
 class Attribution(_Model):
@@ -213,6 +259,7 @@ class Observations(_Model):
     evidence: list[EvidenceItem]
     sampled_frames: int
     sample_fps: float | None
+    behavior_events: list[BehaviorSegment] = Field(default_factory=list)
 
 
 class Scorer(_Model):
@@ -279,7 +326,7 @@ class UsageRestrictions(_Model):
 
 
 class AnalysisResult(_Model):
-    schema_version: Literal["1.0.0"] = SCHEMA_VERSION
+    schema_version: SchemaVersion = SCHEMA_VERSION
     analysis_id: str
     created_at: datetime
     engine_version: str
@@ -301,7 +348,7 @@ class AnalysisResult(_Model):
 
 
 class AnalysisError(_Model):
-    schema_version: Literal["1.0.0"] = SCHEMA_VERSION
+    schema_version: SchemaVersion = SCHEMA_VERSION
     analysis_id: str | None = None
     error_code: str
     message: str

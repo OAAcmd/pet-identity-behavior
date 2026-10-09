@@ -38,21 +38,36 @@ def test_human_pose_vocabulary_does_not_produce_animal_features():
     p = FakeProvider(COCO_HUMAN)
     ks = KeypointSet(0.0, list(COCO_HUMAN), np.full((len(COCO_HUMAN), 2), 0.5), np.ones(len(COCO_HUMAN)))
     feats = {f.name: f for f in compute_features(p, [ks])}
-    assert not feats["tail_height"].available and "tail_base" in feats["tail_height"].reason
-    assert not feats["ear_angle_deg"].available
+    assert not feats["tail_elevation"].available and "tail_start" in feats["tail_elevation"].reason
+    assert not feats["ear_tip_elevation"].available
 
 
 @pytest.mark.synthetic
 def test_pose_features_only_from_visible_declared_keypoints():
-    vocab = ("tail_base", "tail_tip", "withers")
+    vocab = ("tail_start", "tail_end", "nose")
     p = FakeProvider(vocab)
-    xy = np.array([[0.5, 0.5], [0.6, 0.3], [0.2, 0.5]])
+    xy = np.array([[0.5, 0.5], [0.6, 0.3], [0.1, 0.5]])
     visible = KeypointSet(0.0, list(vocab), xy, np.ones(3))
     hidden = KeypointSet(0.0, list(vocab), xy, np.array([1.0, 0.1, 1.0]))
     f = {x.name: x for x in compute_features(p, [visible])}
-    assert f["tail_height"].available and f["tail_height"].value == pytest.approx(0.2 / 0.3)
+    assert f["tail_elevation"].available and f["tail_elevation"].value == pytest.approx(0.2 / 0.4)
     f2 = {x.name: x for x in compute_features(p, [hidden])}
-    assert not f2["tail_height"].available
+    assert not f2["tail_elevation"].available
+    assert not f["ear_tip_elevation"].available  # ear points not declared by this provider
+
+
+@pytest.mark.synthetic
+def test_play_bow_candidate_geometry():
+    vocab = ("front_left_paw", "front_right_paw", "front_left_elbow", "front_right_elbow",
+             "rear_left_paw", "rear_right_paw", "rear_left_elbow", "rear_right_elbow")
+    p = FakeProvider(vocab)
+    # Forelegs folded (elbows almost at paw height), hind legs extended.
+    bow = np.array([[0.2, 0.9], [0.25, 0.9], [0.22, 0.86], [0.27, 0.86], [0.7, 0.9], [0.75, 0.9], [0.7, 0.55], [0.75, 0.55]])
+    stand = bow.copy()
+    stand[2:4, 1] = 0.6
+    f = {x.name: x for x in compute_features(p, [KeypointSet(0.0, list(vocab), bow, np.ones(8))])}
+    g = {x.name: x for x in compute_features(p, [KeypointSet(0.0, list(vocab), stand, np.ones(8))])}
+    assert f["play_bow_candidate"].value is True and g["play_bow_candidate"].value is False
 
 
 @pytest.mark.synthetic
@@ -74,7 +89,9 @@ def test_zone_validation_rejects_bad_input():
 
 def test_schema_forbids_extra_fields_and_fixes_version():
     schema = AnalysisResult.model_json_schema()
-    assert schema["properties"]["schema_version"]["const"] == "1.0.0"
+    # 1.1.0 is additive; results stored under 1.0.0 remain valid.
+    assert schema["properties"]["schema_version"]["enum"] == ["1.0.0", "1.1.0"]
+    assert schema["properties"]["schema_version"]["default"] == "1.1.0"
     with pytest.raises(ValidationError):
         Hypothesis.model_validate({"hypothesis_id": "h", "name": "fear", "semantic_type": "state", "status": "abstained",
                                    "supporting_evidence_ids": [], "conflicting_evidence_ids": [], "independent_provenance_roots": [],

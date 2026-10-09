@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6"]
-DATASETS = ["esc50", "openimages-catdog", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "dog-pose", "posture-weak", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -120,6 +120,29 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         print(json.dumps({"annotations": {k: v.get("sha256") for k, v in ann.items()}, "images": {k: v for k, v in out.items() if k != "errors"},
                           "errors": list(out["errors"].items())[:10]}, indent=2))
         return 0 if not out["errors"] else 1
+    if args.dataset == "openimages-tuning":
+        from .data import openimages_tuning as OT
+
+        OT.fetch_annotations(root)
+        if not (man / "oi_test_tuning_images.csv").exists():
+            print(json.dumps(OT.build(root, man), indent=2))
+        out = OT.fetch_images(root, man)
+        print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
+        return 0 if not out.get("errors") else 1
+    if args.dataset == "posture-weak":
+        from .data import posture_weak as PW
+
+        PW.fetch_captions(root)
+        if not (man / "posture_weak_images.csv").exists():
+            print(json.dumps(PW.build(root, man), indent=2))
+        out = PW.fetch_images(root, man)
+        print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
+        return 0 if not out.get("errors") else 1
+    if args.dataset == "dog-pose":
+        from .data import dog_pose
+
+        print(json.dumps(dog_pose.fetch(root), indent=2))
+        return 0
     if args.dataset == "catmeows":
         from .data import catmeows
 
@@ -167,6 +190,22 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e6_runtime as E
 
         return E.run(s, out_dir)
+    if name == "e7":
+        from .eval import e7_fp_rejection as E
+
+        return E.run(s, out_dir, params_out=REPO_ROOT / "artifacts" / "verifier")
+    if name == "e8":
+        from .eval import e8_behavior_sequences as E
+
+        return E.run(s, out_dir)
+    if name == "e10":
+        from .eval import e10_posture as E
+
+        return E.run(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "posture")
+    if name == "e9":
+        from .eval import e9_dog_keypoints as E
+
+        return E.run(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "keypoints")
     raise ValueError(name)
 
 

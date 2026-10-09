@@ -200,3 +200,5 @@ details summary { cursor: pointer; min-height: 44px; display: flex; align-items:
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+.seg-list { margin: 0.25rem 0 0.5rem; padding-left: 1.1rem; }
+.seg-list li { margin: 0.15rem 0; }

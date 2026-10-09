@@ -8,9 +8,15 @@ import { useApp } from "../state";
 import { Chip, ErrorBanner, InfoBanner } from "./ui";
 
 const BEHAVIOR_TEXT: Record<string, string> = {
-  stationary: "Mostly still", moving: "Moving", active_bout: "Active bout (fast, varied movement)", pacing: "Back-and-forth movement",
-  approach_zone: "Approached a marked place", leave_zone: "Left a marked place", dwell_zone: "Stayed in a marked place",
-  vocal_bout: "Repeated vocalizations", startle_candidate: "Sudden movement right after a loud sound", out_of_view: "Out of view",
+  stationary: "Still", moving: "Moving", active_bout: "Fast movement", pacing_candidate: "Back-and-forth movement (possible)",
+  approach_zone: "Approached a marked place", enter_zone: "Entered a marked place", dwell_zone: "Stayed in a marked place",
+  leave_zone: "Left a marked place", entered_view: "Came into view", left_view: "Left the view",
+  vocal_bout: "Repeated vocalizations", startle_candidate: "Sudden movement right after a sound (possible)",
+};
+
+const POSE_TEXT: Record<string, string> = {
+  ear_tip_elevation: "Ear tips relative to ear bases", tail_elevation: "Tail end relative to tail start",
+  play_bow_candidate: "Play-bow-like position (possible)", tail_lateral_oscillation: "Tail side-to-side swings",
 };
 
 const ACTUAL_BEHAVIORS = ["eating or waiting for food", "wanting to go out", "seeking attention", "playing", "resting or sleeping",
@@ -44,7 +50,8 @@ export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis
   const other = result.hypotheses.filter((h) => h.status !== "experimental_hypothesis");
   const tracks = result.observations.animal_tracks;
   const sounds = result.observations.sound_events;
-  const behaviors = result.observations.behavior_events ?? tracks.flatMap((t) => t.behavior_segments ?? []);
+  const behaviors = [...tracks.flatMap((t) => t.behavior_segments ?? []), ...(result.observations.behavior_events ?? [])]
+    .sort((a, b) => a.t_start_s - b.t_start_s);
 
   return (
     <div class="result">
@@ -111,13 +118,29 @@ export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis
               <p class="muted">Movement not measured: {t.movement.reason}</p>
             )}
             {t.zones.map((z) => <p key={z.zone_id}>In "{z.label}" ({z.semantic_tag.replace(/_/g, " ")}) for {z.dwell_s.toFixed(1)} s.</p>)}
+            {(t.behavior_segments ?? []).length > 0 && (
+              <ul class="seg-list" aria-label="Behavior segments">
+                {t.behavior_segments!.map((b) => (
+                  <li key={b.segment_id}>
+                    <button type="button" class="btn btn-link" onClick={() => seek(b.t_start_s)}>{fmtSpan(b.t_start_s, b.t_end_s)}</button>{" "}
+                    {BEHAVIOR_TEXT[b.kind] ?? b.kind}: {b.detail}{b.reliability === "low" ? " (low reliability)" : ""}
+                  </li>
+                ))}
+              </ul>
+            )}
             {(t.posture ?? []).length > 0 && (
-              <p>Posture estimate (experimental, image-based): {summarizePosture(t.posture!)}</p>
+              <p>Posture estimate (experimental, from single frames; not a probability): {summarizePosture(t.posture!)}</p>
+            )}
+            {t.verification && (
+              <p class="muted">Second check: {t.verification.accepted ? "passed" : "not passed"} in {t.verification.checked_detections} checked frames.</p>
             )}
             {t.quality_flags.length > 0 && <p class="muted">Limits: {t.quality_flags.map((f) => f.replace(/_/g, " ")).join(", ")}</p>}
             <details>
               <summary>Body language details</summary>
-              <ul>{t.pose_features.map((p) => <li key={p.name}>{p.name.replace(/_/g, " ")}: {p.available ? "available" : `not available - ${p.reason}`}</li>)}</ul>
+              <ul>{t.pose_features.map((p) => (
+                <li key={p.name}>{POSE_TEXT[p.name] ?? p.name.replace(/_/g, " ")}: {p.available ? poseValue(p) : `not available - ${p.reason}`}</li>
+              ))}</ul>
+              {(t.keypoints ?? []).length > 0 && <p class="muted">Body points estimated in {t.keypoints!.length} frames (dogs only; research model tested on web photos, not home video).</p>}
             </details>
           </div>
         ))}
@@ -171,6 +194,15 @@ export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis
       <FeedbackForm analysisId={analysis.id} />
     </div>
   );
+}
+
+function poseValue(p: { name: string; value?: number | boolean | null; units?: string | null }): string {
+  if (typeof p.value === "boolean") return p.value ? "seen in at least one frame" : "not seen";
+  if (typeof p.value !== "number") return "measured";
+  if (p.name === "ear_tip_elevation") return p.value > 0 ? "tips above bases (depends strongly on ear type)" : "tips at or below bases (depends strongly on ear type)";
+  if (p.name === "tail_elevation") return p.value > 0.05 ? "tail end higher than its start" : p.value < -0.05 ? "tail end lower than its start" : "tail roughly level";
+  if (p.name === "tail_lateral_oscillation") return `${p.value} side changes`;
+  return `${p.value.toFixed(2)} ${p.units ?? ""}`;
 }
 
 function summarizePosture(p: { label: string }[]): string {

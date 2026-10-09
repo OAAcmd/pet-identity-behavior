@@ -82,18 +82,27 @@ def _match(dets: list[tuple[float, np.ndarray]], gts: list[np.ndarray], ign: lis
 
 
 def evaluate_detector(det: EfficientDetDetector, images: list[dict], boxes: list[OI.GtBox], img_dir: Path, op_thr: float) -> dict:
-    by_img: dict[str, list[OI.GtBox]] = defaultdict(list)
-    for b in boxes:
-        by_img[b.image_id].append(b)
     preds: dict[str, list] = {}
     t0 = time.perf_counter()
     for r in images:
         rgb = cv2.cvtColor(cv2.imread(str(img_dir / f"{r['image_id']}.jpg")), cv2.COLOR_BGR2RGB)
         preds[r["image_id"]] = det.detect(rgb, CLASSES, 0.05, 0.5, 50)
     infer_s = time.perf_counter() - t0
+    out = score_predictions(preds, images, boxes, op_thr)
+    out = {"inference_ms_per_image_including_jpeg_decode": 1000 * infer_s / len(images), **out}
+    out["per_image_predictions"] = {i: [(d.label, round(d.score, 4), [round(float(v), 4) for v in d.box]) for d in preds[i] if d.score >= 0.2] for i in preds}
+    return out
+
+
+def score_predictions(preds: dict[str, list], images: list[dict], boxes: list[OI.GtBox], op_thr: float, n_boot: int = 1000,
+                      extra_ci: bool = False) -> dict:
+    """Score per-image detections with the E4 protocol (shared with E7)."""
+    by_img: dict[str, list[OI.GtBox]] = defaultdict(list)
+    for b in boxes:
+        by_img[b.image_id].append(b)
     status = {r["image_id"]: {"cat": r["cat_status"], "dog": r["dog_status"]} for r in images}
     author = {r["image_id"]: r["author_profile_url"] or r["author"] for r in images}
-    out: dict = {"inference_ms_per_image_including_jpeg_decode": 1000 * infer_s / len(images), "classes": {}}
+    out: dict = {"classes": {}}
     for c in CLASSES:
         ev_imgs = [i for i in status if status[i][c] in ("pos", "neg")]
         rows = []  # (image, score, status)
@@ -152,8 +161,16 @@ def evaluate_detector(det: EfficientDetDetector, images: list[dict], boxes: list
             a, b, cc = np.sum(t & p), np.sum(~t & p), np.sum(t & ~p)
             return float(2 * a / max(2 * a + b + cc, 1))
 
-        ap_ci = M.group_bootstrap(lambda ix: ap_for(list(idx_imgs[ix])), groups, 1000, 0)
-        f1_ci = M.group_bootstrap(f1_img, groups, 1000, 0)
+        def spec_img(ix: np.ndarray) -> float:
+            t, p = y_true[ix], y_pred[ix]
+            return float(np.sum(~t & ~p) / max(np.sum(~t), 1))
+
+        def rec_img(ix: np.ndarray) -> float:
+            t, p = y_true[ix], y_pred[ix]
+            return float(np.sum(t & p) / max(np.sum(t), 1))
+
+        ap_ci = M.group_bootstrap(lambda ix: ap_for(list(idx_imgs[ix])), groups, n_boot, 0)
+        f1_ci = M.group_bootstrap(f1_img, groups, n_boot, 0)
         # In-sample diagnostic only: threshold maximizing box-level F1 on this set.
         cand = sorted({round(s, 3) for _, s, _, _ in scored})
         best = max(((2 * sum(1 for _, s, k, _ in scored if k == "tp" and s >= t) /
@@ -170,7 +187,9 @@ def evaluate_detector(det: EfficientDetDetector, images: list[dict], boxes: list
             "f1_at_op": 2 * prec * rec / max(prec + rec, 1e-12), "tp_at_op": tp_op, "fp_at_op": fp_op,
             "image_level": {"tp": tp_i, "fp": fp_i, "fn": fn_i, "tn": tn_i,
                             "precision": tp_i / max(tp_i + fp_i, 1), "recall": tp_i / max(tp_i + fn_i, 1),
-                            "specificity_on_verified_negatives": tn_i / max(tn_i + fp_i, 1), "f1": f1_img(np.arange(len(ev_imgs))), "f1_ci95": f1_ci},
+                            "specificity_on_verified_negatives": tn_i / max(tn_i + fp_i, 1), "f1": f1_img(np.arange(len(ev_imgs))), "f1_ci95": f1_ci,
+                            **({"specificity_ci95": M.group_bootstrap(spec_img, groups, n_boot, 0),
+                                "recall_ci95": M.group_bootstrap(rec_img, groups, n_boot, 0)} if extra_ci else {})},
             "recall_breakdown_at_op": breakdown,
             "in_sample_best_box_f1_threshold_diagnostic": {"f1": best[0], "threshold": best[1], "note": "chosen on the test set itself; NOT used for deployment"},
             "verified_negative_images_with_detection_at_op": neg_hits,
@@ -178,7 +197,6 @@ def evaluate_detector(det: EfficientDetDetector, images: list[dict], boxes: list
                                          "with_this_species_detection_at_op": int(cross),
                                          "note": "this species is often unverified on these images; not a verified false-positive rate"},
         }
-    out["per_image_predictions"] = {i: [(d.label, round(d.score, 4), [round(float(v), 4) for v in d.box]) for d in preds[i] if d.score >= 0.2] for i in preds}
     return out
 
 

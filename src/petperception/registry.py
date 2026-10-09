@@ -118,3 +118,74 @@ def model_terms_summary(model_id: str) -> dict[str, Any]:
         "terms": r.get("terms", {}),
         "use_restrictions": r.get("use_restrictions", []),
     }
+
+
+# ---------------------------------------------------------------------------
+# Release profiles: which assets may be loaded for a given release.
+# ---------------------------------------------------------------------------
+APPROVALS_PATH = REPO_ROOT / "configs" / "release_approvals.yaml"
+
+
+@dataclass
+class ReleaseDecision:
+    resource_id: str
+    profile: str
+    allowed: bool
+    status: str  # suitable | approved | requires_legal_review | not_permitted | unknown
+    reason: str | None = None
+
+
+def load_approvals(path: Path | None = None) -> dict[str, Any]:
+    """Legal approvals recorded by a person with authority (never written by code)."""
+    p = path or APPROVALS_PATH
+    if not p.exists():
+        return {}
+    import yaml
+
+    data = yaml.safe_load(p.read_text()) or {}
+    return data.get("approvals", {}) if isinstance(data, dict) else {}
+
+
+def release_decision(profile: str, resource_id: str, approvals: dict[str, Any] | None = None) -> ReleaseDecision:
+    try:
+        r = resource(resource_id)
+    except KeyError:
+        return ReleaseDecision(resource_id, profile, False, "unknown", f"'{resource_id}' is not in the register")
+    st = r.get("release_suitability", {}).get(profile)
+    note = r.get("release_note", "")
+    if st == "suitable":
+        return ReleaseDecision(resource_id, profile, True, "suitable")
+    if st == "requires_legal_review":
+        appr = (approvals if approvals is not None else load_approvals()).get(resource_id, {}).get(profile, {})
+        if isinstance(appr, dict) and appr.get("approved_by") and appr.get("reference"):
+            return ReleaseDecision(resource_id, profile, True, "approved", f"approved by {appr['approved_by']} ({appr['reference']})")
+        return ReleaseDecision(resource_id, profile, False, "requires_legal_review",
+                               f"{resource_id} requires legal review for the '{profile}' profile: {note} Record an approval in configs/release_approvals.yaml.")
+    if st == "not_permitted":
+        return ReleaseDecision(resource_id, profile, False, "not_permitted", f"{resource_id} is not permitted under the '{profile}' profile: {note}")
+    return ReleaseDecision(resource_id, profile, False, "unknown", f"{resource_id} has no release assessment for the '{profile}' profile")
+
+
+def configured_resources(settings: Settings) -> list[str]:
+    """Resources the analysis engine would load with this configuration."""
+    out = []
+    if settings.audio.enabled and settings.audio.event_backend == "yamnet":
+        out.append(settings.audio.yamnet.model_id)
+        if settings.audio.yamnet.thresholds_file:
+            out.append("audio_event_thresholds_esc50")
+    if settings.vision.enabled:
+        out.append(settings.vision.detector)
+        if settings.vision.verifier.enabled:
+            out += [settings.vision.verifier.classifier, "detection_verifier_v1"]
+    if settings.pose.provider == "dog_keypoints_v1":
+        out += [settings.pose.backbone, "dog_keypoints_head_v1"]
+    if settings.posture.enabled:
+        out += [settings.posture.backbone, "posture_v1"]
+    return list(dict.fromkeys(out))
+
+
+def release_report(settings: Settings) -> dict[str, Any]:
+    approvals = load_approvals()
+    decisions = [release_decision(settings.release_profile, rid, approvals) for rid in configured_resources(settings)]
+    return {"release_profile": settings.release_profile, "all_allowed": all(d.allowed for d in decisions),
+            "decisions": [d.__dict__ for d in decisions]}

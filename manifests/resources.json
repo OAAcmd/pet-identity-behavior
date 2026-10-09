@@ -49,8 +49,17 @@
         "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
       },
       "attribution": "YAMNet by Manoj Plakal and Dan Ellis (Google); AudioSet ontology by Google Inc. (CC BY-SA 4.0).",
-      "use_restrictions": ["Weights are fetched from Google, never committed.", "Do not assume commercial permission until weights terms are re-verified."],
-      "contamination_notes": "Trained on AudioSet YouTube clips. ESC-50 clips come from Freesound; overlap is unlikely but unverified."
+      "use_restrictions": [
+        "Weights are fetched from Google, never committed.",
+        "Do not assume commercial permission until weights terms are re-verified."
+      ],
+      "contamination_notes": "Trained on AudioSet YouTube clips. ESC-50 clips come from Freesound; overlap is unlikely but unverified.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Weights released under Apache-2.0 in the YAMNet project; no primary statement for this MediaPipe build; AudioSet (YouTube) training data. Commercial use needs legal sign-off."
     },
     {
       "id": "efficientdet_lite0_mediapipe_v1",
@@ -86,7 +95,13 @@
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
       "use_restrictions": ["Weights fetched from Google, never committed.", "Do not assume commercial permission."],
-      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited."
+      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
     },
     {
       "id": "efficientdet_lite2_mediapipe_v1",
@@ -107,9 +122,19 @@
         }
       ],
       "task": "Same as EfficientDet-Lite0, 448x448 input.",
-      "terms": {"code": "Apache-2.0", "weights": "Same status as EfficientDet-Lite0.", "training_data": "COCO 2017"},
+      "terms": {
+        "code": "Apache-2.0",
+        "weights": "Same status as EfficientDet-Lite0.",
+        "training_data": "COCO 2017"
+      },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
-      "use_restrictions": ["Research profile only."]
+      "use_restrictions": ["Research profile only."],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "As efficientdet_lite0_mediapipe_v1."
     },
     {
       "id": "ast_audioset_candidate",
@@ -120,10 +145,24 @@
       "status": "blocked",
       "profiles": [],
       "retrieved_at": null,
-      "errors": ["2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; model card, label map, preprocessing and weight revision could not be verified."],
-      "terms": {"code": "unverified", "weights": "unverified", "data": "AudioSet"},
-      "use_restrictions": ["Do not implement or ingest until the model card, preprocessing (10.24 s input, normalization), label map and revision are verified."],
-      "next_command": "uv run petperception fetch-models --only ast_audioset_candidate  # after huggingface.co is allowed; adapter still to be written"
+      "errors": [
+        "2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; model card, label map, preprocessing and weight revision could not be verified."
+      ],
+      "terms": {
+        "code": "unverified",
+        "weights": "unverified",
+        "data": "AudioSet"
+      },
+      "use_restrictions": [
+        "Do not implement or ingest until the model card, preprocessing (10.24 s input, normalization), label map and revision are verified."
+      ],
+      "next_command": "uv run petperception fetch-models --only ast_audioset_candidate  # after huggingface.co is allowed; adapter still to be written",
+      "release_suitability": {
+        "research": "requires_legal_review",
+        "personal_noncommercial": "requires_legal_review",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Blocked; terms unverified."
     },
     {
       "id": "esc50",
@@ -134,16 +173,51 @@
       "status": "available",
       "profiles": ["research"],
       "retrieved_at": "2026-10-09",
-      "retrieval": {"method": "git", "url": "https://github.com/karolpiczak/esc-50", "revision": "33c8ce9eb2cf0b1c2f8bcf322eb349b6be34dbb6"},
-      "integrity": {"file_manifest": "manifests/esc50_files.csv", "files": 2000, "bytes": 882088000, "aggregate_sha256": "2bcd3b1c5d39f93f16449f6e79fc5e51bfa89d35798c235a6f013cc70797fb79", "aggregate_rule": "sha256 over sorted lines '<filename>:<sha256>\\n'"},
+      "retrieval": {
+        "method": "git",
+        "url": "https://github.com/karolpiczak/esc-50",
+        "revision": "33c8ce9eb2cf0b1c2f8bcf322eb349b6be34dbb6"
+      },
+      "integrity": {
+        "file_manifest": "manifests/esc50_files.csv",
+        "files": 2000,
+        "bytes": 882088000,
+        "aggregate_sha256": "2bcd3b1c5d39f93f16449f6e79fc5e51bfa89d35798c235a6f013cc70797fb79",
+        "aggregate_rule": "sha256 over sorted lines '<filename>:<sha256>\\n'"
+      },
       "task": "Environmental sound classification, 50 classes, 5 s clips. Used for cat/dog/other sound-event evaluation only; not an intent dataset.",
-      "observed_counts": {"clips": 2000, "categories": 50, "cat": 40, "dog": 40, "other": 1920, "per_fold": "8 cat, 8 dog, 384 other in each of 5 folds", "source_groups": 1524, "esc10_clips": 400, "sample_rate_hz": 44100, "channels": 1},
+      "observed_counts": {
+        "clips": 2000,
+        "categories": 50,
+        "cat": 40,
+        "dog": 40,
+        "other": 1920,
+        "per_fold": "8 cat, 8 dog, 384 other in each of 5 folds",
+        "source_groups": 1524,
+        "esc10_clips": 400,
+        "sample_rate_hz": 44100,
+        "channels": 1
+      },
       "grouping_fields": ["fold", "src_file (Freesound recording ID)", "take"],
-      "grouping_findings": ["Verified: 4 Freesound source recordings appear in two folds each, always under different classes (clock_tick/clock_alarm: 131943, 209698; hen/rooster: 134049, 234879). No cat or dog source spans folds."],
+      "grouping_findings": [
+        "Verified: 4 Freesound source recordings appear in two folds each, always under different classes (clock_tick/clock_alarm: 131943, 209698; hen/rooster: 134049, 234879). No cat or dog source spans folds."
+      ],
       "label_provenance": "Manual clip-level labels by the dataset author; clips extracted from Freesound recordings.",
-      "terms": {"data": "CC BY-NC 3.0 for the collection; ESC-10 subset CC BY 3.0; per-clip Freesound licenses (CC0 869, CC-BY 901, CC-BY-NC 169, CC-Sampling+ 60) parsed into manifests/esc50_files.csv", "code": "Repository code: see upstream repository"},
+      "terms": {
+        "data": "CC BY-NC 3.0 for the collection; ESC-10 subset CC BY 3.0; per-clip Freesound licenses (CC0 869, CC-BY 901, CC-BY-NC 169, CC-Sampling+ 60) parsed into manifests/esc50_files.csv",
+        "code": "Repository code: see upstream repository"
+      },
       "attribution": "K. J. Piczak, ESC: Dataset for Environmental Sound Classification, ACM MM 2015; per-clip Freesound authors in manifests/esc50_files.csv.",
-      "use_restrictions": ["Non-commercial research use; trained artifacts inherit CC BY-NC 3.0 obligations.", "Audio is not committed to Git."]
+      "use_restrictions": [
+        "Non-commercial research use; trained artifacts inherit CC BY-NC 3.0 obligations.",
+        "Audio is not committed to Git."
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "CC BY-NC 3.0 collection: artifacts derived from it (audio-event thresholds) are non-commercial."
     },
     {
       "id": "openimages_v7_val_catdog",
@@ -155,19 +229,62 @@
       "profiles": ["research"],
       "retrieved_at": "2026-10-09",
       "files": [
-        {"name": "validation-annotations-bbox.csv", "url": "https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv", "bytes": 25105048, "sha256": "d8bbd59410af14835d7733165a7bb8a3f0213981b22dd5077b0b9f7878991ff2"},
-        {"name": "oidv7-val-annotations-human-imagelabels.csv", "url": "https://storage.googleapis.com/openimages/v7/oidv7-val-annotations-human-imagelabels.csv", "bytes": 28392297, "sha256": "92ddbdfceb3626e044df5e89100b24f6c22a79c1888a4bddd00a6f231d86d56a"},
-        {"name": "oidv7-class-descriptions-boxable.csv", "url": "https://storage.googleapis.com/openimages/v7/oidv7-class-descriptions-boxable.csv", "bytes": 12064, "sha256": "1839e0e7e84130ae281f7f67413768601b031581c0c42e7fc17527b8e2a99aa9"},
-        {"name": "validation-images-with-rotation.csv", "url": "https://storage.googleapis.com/openimages/2018_04/validation/validation-images-with-rotation.csv", "bytes": 15245485, "sha256": "ed93a0e121fe345effdfc7359b848dbc64a1ff6778c8c73563157cb500b33a17"}
+        {
+          "name": "validation-annotations-bbox.csv",
+          "url": "https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv",
+          "bytes": 25105048,
+          "sha256": "d8bbd59410af14835d7733165a7bb8a3f0213981b22dd5077b0b9f7878991ff2"
+        },
+        {
+          "name": "oidv7-val-annotations-human-imagelabels.csv",
+          "url": "https://storage.googleapis.com/openimages/v7/oidv7-val-annotations-human-imagelabels.csv",
+          "bytes": 28392297,
+          "sha256": "92ddbdfceb3626e044df5e89100b24f6c22a79c1888a4bddd00a6f231d86d56a"
+        },
+        {
+          "name": "oidv7-class-descriptions-boxable.csv",
+          "url": "https://storage.googleapis.com/openimages/v7/oidv7-class-descriptions-boxable.csv",
+          "bytes": 12064,
+          "sha256": "1839e0e7e84130ae281f7f67413768601b031581c0c42e7fc17527b8e2a99aa9"
+        },
+        {
+          "name": "validation-images-with-rotation.csv",
+          "url": "https://storage.googleapis.com/openimages/2018_04/validation/validation-images-with-rotation.csv",
+          "bytes": 15245485,
+          "sha256": "ed93a0e121fe345effdfc7359b848dbc64a1ff6778c8c73563157cb500b33a17"
+        }
       ],
-      "integrity": {"subset_images": "manifests/openimages_catdog_images.csv", "subset_boxes": "manifests/openimages_catdog_boxes.csv", "image_sha256": "manifests/openimages_catdog_sha256.csv"},
+      "integrity": {
+        "subset_images": "manifests/openimages_catdog_images.csv",
+        "subset_boxes": "manifests/openimages_catdog_boxes.csv",
+        "image_sha256": "manifests/openimages_catdog_sha256.csv"
+      },
       "task": "Cat/dog bounding-box detection evaluation with human-verified positives and negatives.",
-      "observed_counts": {"validation_images_with_cat_boxes": 345, "validation_images_with_dog_boxes": 1586, "subset_images": 823, "subset_cat_positive": 339, "subset_dog_positive": 350, "subset_verified_negative": 134, "excluded_for_rotation": 16, "subset_boxes": 820},
+      "observed_counts": {
+        "validation_images_with_cat_boxes": 345,
+        "validation_images_with_dog_boxes": 1586,
+        "subset_images": 823,
+        "subset_cat_positive": 339,
+        "subset_dog_positive": 350,
+        "subset_verified_negative": 134,
+        "excluded_for_rotation": 16,
+        "subset_boxes": 820
+      },
       "grouping_fields": ["image_id", "Author / AuthorProfileURL (bootstrap group)"],
       "label_provenance": "Human-verified image-level labels and human-drawn boxes (Google Open Images team).",
-      "terms": {"annotations": "CC BY 4.0", "images": "Per-image license recorded in the subset manifest (all CC BY 2.0 in validation metadata)", "code": "n/a"},
+      "terms": {
+        "annotations": "CC BY 4.0",
+        "images": "Per-image license recorded in the subset manifest (all CC BY 2.0 in validation metadata)",
+        "code": "n/a"
+      },
       "attribution": "Open Images Dataset V7 (Kuznetsova et al., 2020; Benenson & Ferrari 2022); per-image Flickr authors in manifests/openimages_catdog_images.csv.",
-      "use_restrictions": ["Images are not committed to Git; attribution must accompany any reproduced image."]
+      "use_restrictions": ["Images are not committed to Git; attribution must accompany any reproduced image."],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Evaluation data only (never shipped). CC BY 4.0 annotations, CC BY 2.0 images with attribution."
     },
     {
       "id": "catmeows",
@@ -189,8 +306,18 @@
       },
       "grouping_fields": ["cat_id", "owner_id", "recording_session"],
       "label_provenance": "Recording context assigned by experimental protocol (stimulus), not by a behavioral interpretation.",
-      "use_restrictions": ["Research-only, non-commercial.", "extra.zip kept separate and excluded from context training.", "'isolation' is a recording context, not a fear label."],
-      "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate e2"
+      "use_restrictions": [
+        "Research-only, non-commercial.",
+        "extra.zip kept separate and excluded from context training.",
+        "'isolation' is a recording context, not a fear label."
+      ],
+      "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate e2",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Blocked; terms discrepancy (research/non-commercial vs CC BY 4.0) treated as research-only."
     },
     {
       "id": "barkopedia_dog_act_env",
@@ -201,22 +328,287 @@
       "status": "blocked_pending_review",
       "profiles": [],
       "retrieved_at": null,
-      "errors": ["2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; card, archives, CSVs, media provenance and splits could not be inspected."],
-      "terms": {"card_claim": "MIT (per card, as reported in the task brief; unverified here)", "media_provenance": "unreviewed"},
-      "use_restrictions": ["Importer disabled until media provenance, animal/source grouping, and split formats are audited.", "Activity labels remain activity/context labels, never mental states."],
-      "next_command": "uv run petperception fetch-data barkopedia --audit-only"
+      "errors": [
+        "2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; card, archives, CSVs, media provenance and splits could not be inspected."
+      ],
+      "terms": {
+        "card_claim": "MIT (per card, as reported in the task brief; unverified here)",
+        "media_provenance": "unreviewed"
+      },
+      "use_restrictions": [
+        "Importer disabled until media provenance, animal/source grouping, and split formats are audited.",
+        "Activity labels remain activity/context labels, never mental states."
+      ],
+      "next_command": "uv run petperception fetch-data barkopedia --audit-only",
+      "release_suitability": {
+        "research": "requires_legal_review",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Blocked pending provenance review."
     },
     {
       "id": "ultralytics_dog_pose",
       "kind": "dataset",
-      "role": "optional dog pose",
-      "name": "Ultralytics Dog-pose dataset",
+      "role": "dog keypoint training/evaluation data (E9)",
+      "name": "Ultralytics dog-pose (Stanford Dogs images, 24 keypoint slots)",
       "canonical_url": "https://docs.ultralytics.com/datasets/pose/dog-pose/",
-      "status": "blocked",
+      "status": "available",
       "profiles": [],
-      "retrieved_at": null,
-      "errors": ["2026-10-09: docs.ultralytics.com:443 CONNECT rejected with HTTP 403; github.com release assets are not served to this session. Image terms (Stanford Dogs / ImageNet-derived) and code/config terms (AGPL-3.0 for Ultralytics) unverified; no verified dog-pose checkpoint exists."],
-      "use_restrictions": ["No pose features are produced; ear/tail/play-bow features report 'unavailable'."]
+      "retrieved_at": "2026-10-09",
+      "errors": [],
+      "use_restrictions": [
+        "Research profile only; the trained keypoint head inherits this restriction.",
+        "Images never committed.",
+        "Keypoint names taken from ultralytics/cfg/datasets/dog-pose.yaml (main branch); ordering checked against anatomy (ear tips above bases for erect-eared breeds)."
+      ],
+      "files": [
+        {
+          "name": "dog-pose.zip",
+          "url": "https://github.com/ultralytics/assets/releases/download/v0.0.0/dog-pose.zip",
+          "bytes": 353152125,
+          "sha256": "0396a35f20d9c1fdf91a692e89467d909280c4058d5367a51f8dcba2aad4d667",
+          "revision": "GitHub release asset, Last-Modified 2025-08-21"
+        }
+      ],
+      "observed_counts": {
+        "train_images": 6773,
+        "val_images": 1703,
+        "keypoint_slots": 24,
+        "never_annotated_slots": ["left_eye", "right_eye", "withers", "throat"]
+      },
+      "terms": {
+        "data": "Documented as 'Research-Only' (docs source in the ultralytics GitHub repository; license URL points to the ImageNet download terms). The archive ships the Ultralytics AGPL-3.0 licence text. Keypoint annotation provenance (likely StanfordExtra, Biggs et al. 2020) is not stated by Ultralytics.",
+        "images": "Stanford Dogs (ImageNet-derived): non-commercial research."
+      },
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Research-Only data."
+    },
+    {
+      "id": "efficientdet_lite0_tfhub_v1",
+      "kind": "model",
+      "role": "license-confirmed cat/dog detector candidate (TF Lite Task Library build)",
+      "name": "EfficientDet-Lite0 (TensorFlow Lite Task Library object detection build with metadata, version 1)",
+      "canonical_url": "https://www.tensorflow.org/lite/examples/object_detection/overview",
+      "status": "available",
+      "profiles": ["research", "personal_noncommercial", "commercial"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "lite-model_efficientdet_lite0_detection_metadata_1.tflite",
+          "url": "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/object_detection/android/lite-model_efficientdet_lite0_detection_metadata_1.tflite",
+          "revision": "GCS object generation 1665774609357381 (Last-Modified 2022-10-14)",
+          "bytes": 4563519,
+          "sha256": "2e04c53bfeac0ac2a30c057c7e2a777594ce39baaac35a92f74fb1e8c4fc4e0b"
+        }
+      ],
+      "task": "COCO object detection with in-graph TFLite_Detection_PostProcess; only 'cat' and 'dog' are used.",
+      "verified_interface": {
+        "input": "[1, 320, 320, 3] uint8 RGB (quantization scale 1/128, zero point 127: raw pixel values)",
+        "output": "boxes [1, 25, 4] (ymin, xmin, ymax, xmax normalized), class indices [1, 25], scores [1, 25], count [1]; class-agnostic in-graph NMS, one class per box",
+        "label_map": "Embedded labelmap.txt (90 COCO slots, '???' placeholders); index 16 = cat, 17 = dog."
+      },
+      "training_data": "COCO 2017 (EfficientDet-Lite release).",
+      "terms": {
+        "code": "Apache-2.0 (TensorFlow Lite Task Library)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the file ('Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.'), read from the pinned file on 2026-10-09.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms. Whether training-data terms constrain use of the weights is a legal question not settled here."
+      },
+      "attribution": "EfficientDet (Tan, Pang, Le, 2020); TensorFlow Lite Model Maker / Task Library by Google.",
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release: weight license is primary-source Apache-2.0; training-data question requires legal sign-off."
+      ],
+      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Weights Apache-2.0 per embedded metadata; COCO training-data question needs legal sign-off for commercial use."
+    },
+    {
+      "id": "efficientnet_lite0_mediapipe_v1",
+      "kind": "model",
+      "role": "ImageNet crop classifier used by the detection verifier (false-positive rejection)",
+      "name": "EfficientNet-Lite0 (MediaPipe Image Classifier float32 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/image_classifier",
+      "status": "available",
+      "profiles": ["research", "personal_noncommercial", "commercial"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientnet_lite0.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/1/efficientnet_lite0.tflite",
+          "revision": "GCS object generation 1682480007106905 (Last-Modified 2023-04-26)",
+          "bytes": 18582189,
+          "sha256": "6c7ab0a6e5dcbf38a8c33b960996a55a3b4300b36a018c4545801de3a3c8bde0"
+        }
+      ],
+      "task": "ImageNet-1k classification (1000 classes, softmax output).",
+      "verified_interface": {
+        "input": "[1, 224, 224, 3] float32 RGB normalized (x - 127) / 128 (embedded NormalizationOptions)",
+        "output": "[1, 1000] softmax; embedded labels_without_background.txt; group index ranges checked by label name at load time"
+      },
+      "training_data": "ImageNet-1k (ILSVRC 2012).",
+      "terms": {
+        "code": "Apache-2.0 (MediaPipe)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the file, read from the pinned file on 2026-10-09.",
+        "training_data": "ImageNet images are provided for non-commercial research/education under the ImageNet terms of access. Whether those terms constrain use of trained weights is a legal question not settled here."
+      },
+      "attribution": "EfficientNet-Lite (Tan and Le; TensorFlow TPU reference models); MediaPipe by Google.",
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release requires legal sign-off on the ImageNet training-data question."
+      ],
+      "contamination_notes": "ImageNet is Flickr/web-sourced; overlap with Open Images photos is possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Weights Apache-2.0 per embedded metadata; ImageNet training-data terms need legal sign-off for commercial use."
+    },
+    {
+      "id": "openimages_v7_test_tuning",
+      "kind": "dataset",
+      "role": "tuning data for false-positive rejection (fit + threshold selection only)",
+      "name": "Open Images V7 test split: cat/dog positives, verified negatives and confusable-animal images",
+      "canonical_url": "https://storage.googleapis.com/openimages/web/index.html",
+      "status": "available",
+      "profiles": ["research", "personal_noncommercial", "commercial"],
+      "retrieved_at": "2026-10-09",
+      "manifests": [
+        "manifests/oi_test_tuning_images.csv",
+        "manifests/oi_test_tuning_boxes.csv",
+        "manifests/oi_test_tuning_sha256.csv"
+      ],
+      "selection": "seed 20261010, rotation-safe images: 500 cat-positive, 500 dog-positive, all 411 verified negatives, 700 confusable-animal images (see src/petperception/data/openimages_tuning.py); asserts zero overlap with the E4 validation subset.",
+      "annotation_files": {
+        "test-annotations-bbox.csv": "fe22e579b9453875601576859d14ef3304058165de139c66b725e599202bd7b1",
+        "oidv7-test-annotations-human-imagelabels.csv": "917d3ca8c0a2e09d652fb3148e9264df6117bfcaccf425a60a29b23269487953",
+        "test-images-with-rotation.csv": "de55c6b8cbda32a79f4a20f28572d54e9c49d527a4006725675764074a51a36d"
+      },
+      "terms": {
+        "annotations": "CC BY 4.0 (Google)",
+        "images": "CC BY 2.0 per image (author and source URL in the manifest)"
+      },
+      "use_restrictions": ["Images are never committed; only IDs, attribution and checksums.", "Not used for any final metric."],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Used to fit the verifier (CC BY 4.0 annotations, CC BY 2.0 images, attribution in manifest)."
+    },
+    {
+      "id": "localized_narratives_captions",
+      "kind": "dataset",
+      "status": "available",
+      "role": "weak posture labels (E10)",
+      "name": "Localized Narratives captions for Open Images (train/test/validation)",
+      "canonical_url": "https://google.github.io/localized-narratives/",
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "open_images_train_v6_captions.jsonl",
+          "url": "https://storage.googleapis.com/localized-narratives/annotations/open_images_train_v6_captions.jsonl",
+          "bytes": 138522519,
+          "sha256": "a3ad02e46a9916f3fa513a9bdf8eeb4e3d6e4d108688ac3a6d7440e80b917f92"
+        },
+        {
+          "name": "open_images_test_captions.jsonl",
+          "url": "https://storage.googleapis.com/localized-narratives/annotations/open_images_test_captions.jsonl",
+          "bytes": 31058347,
+          "sha256": "382d1c59be20cddf336444166b69cd2e66dc16b57478de51744584d4c92370b1"
+        },
+        {
+          "name": "open_images_validation_captions.jsonl",
+          "url": "https://storage.googleapis.com/localized-narratives/annotations/open_images_validation_captions.jsonl",
+          "bytes": 10125320,
+          "sha256": "01c5eb64af111c546c8b0fec7ea1fee7f74ea9c0449c493e49c0bb749c2d618a"
+        }
+      ],
+      "terms": {
+        "annotations": "CC BY 4.0 (Pont-Tuset et al., 2020)",
+        "images": "Open Images, CC BY 2.0 per image"
+      },
+      "use_restrictions": ["Captions are weak posture labels, not posture annotation.", "Images never committed."],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "CC BY 4.0 / CC BY 2.0 with attribution."
+    },
+    {
+      "id": "audio_event_thresholds_esc50",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "per-group audio-event thresholds selected on ESC-50 (E1)",
+      "name": "artifacts/audio_event_thresholds.json",
+      "files": [
+        {
+          "name": "audio_event_thresholds.json",
+          "path": "artifacts/audio_event_thresholds.json"
+        }
+      ],
+      "derived_from": ["esc50", "yamnet_mediapipe_v1"],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Derived from CC BY-NC 3.0 data; commercial builds fall back to unfitted config defaults."
+    },
+    {
+      "id": "detection_verifier_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "per-detector false-positive verifier parameters (E7)",
+      "name": "artifacts/verifier/verifier_<detector>.json",
+      "files": [],
+      "derived_from": ["openimages_v7_test_tuning", "efficientnet_lite0_mediapipe_v1"],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Fitted on CC BY data; runtime also needs the crop classifier, whose own suitability applies."
+    },
+    {
+      "id": "dog_keypoints_head_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "dog keypoint head on EfficientNet-Lite0 features (E9)",
+      "name": "artifacts/keypoints/dog_keypoints_head_v1.npz",
+      "files": [],
+      "derived_from": ["ultralytics_dog_pose", "efficientnet_lite0_mediapipe_v1"],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Trained on Research-Only data."
+    },
+    {
+      "id": "posture_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "coarse posture classifier (E10)",
+      "name": "artifacts/posture/posture_v1.npz",
+      "files": [],
+      "derived_from": ["localized_narratives_captions", "efficientnet_lite0_mediapipe_v1"],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Fitted on CC BY 4.0 captions / CC BY 2.0 images; the backbone's own suitability applies at runtime."
     }
   ]
 }

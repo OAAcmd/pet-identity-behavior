@@ -1,0 +1,61 @@
+image_id,indoor_classes,download_url
+00a55e292e46550a,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/00a55e292e46550a.jpg
+01681d52ad599ab4,Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/01681d52ad599ab4.jpg
+023b447cac3b3557,Cupboard;Shelf;Wardrobe,https://open-images-dataset.s3.amazonaws.com/test/023b447cac3b3557.jpg
+0bed6510c64eb0ef,Bed;Couch;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/0bed6510c64eb0ef.jpg
+10085be0a892b552,Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/10085be0a892b552.jpg
+12cc240b8f3bd455,Bed;Chair,https://open-images-dataset.s3.amazonaws.com/test/12cc240b8f3bd455.jpg
+163fe17e4667e76b,Chair;Couch,https://open-images-dataset.s3.amazonaws.com/test/163fe17e4667e76b.jpg
+1a3c88a7bf3516c3,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/1a3c88a7bf3516c3.jpg
+1bb9354b5ab7b139,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/1bb9354b5ab7b139.jpg
+1d8a44d774dd3082,Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/1d8a44d774dd3082.jpg
+1f1a4b3b93e99082,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/1f1a4b3b93e99082.jpg
+22544ddbf28eb989,Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/22544ddbf28eb989.jpg
+249e8d9825f59a0d,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/249e8d9825f59a0d.jpg
+24e3ee52ac1821a9,Chair;Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/24e3ee52ac1821a9.jpg
+24f0338f385a4482,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/24f0338f385a4482.jpg
+27968a68055e31fe,Chair;Couch,https://open-images-dataset.s3.amazonaws.com/test/27968a68055e31fe.jpg
+2924756d0c31e5b1,Cupboard;Wardrobe,https://open-images-dataset.s3.amazonaws.com/test/2924756d0c31e5b1.jpg
+2c9a27402bd4b84d,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/2c9a27402bd4b84d.jpg
+31780c088d1708b4,Cupboard;Shelf;Wardrobe,https://open-images-dataset.s3.amazonaws.com/test/31780c088d1708b4.jpg
+36592d159076687c,Chair;Shelf,https://open-images-dataset.s3.amazonaws.com/test/36592d159076687c.jpg
+36f7d183dc2d9984,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/36f7d183dc2d9984.jpg
+449fc06d9e0ecebc,Bed;Chair;Shelf,https://open-images-dataset.s3.amazonaws.com/test/449fc06d9e0ecebc.jpg
+4d93eeb1403977d7,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/4d93eeb1403977d7.jpg
+4dbe5ad77f68388e,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/4dbe5ad77f68388e.jpg
+554982b1d8234ceb,Cupboard;Wardrobe,https://open-images-dataset.s3.amazonaws.com/test/554982b1d8234ceb.jpg
+5890451826dd9d32,Chair;Kitchen & dining room table;Stairs,https://open-images-dataset.s3.amazonaws.com/test/5890451826dd9d32.jpg
+5c616182914efa80,Bed;Chair;Shelf,https://open-images-dataset.s3.amazonaws.com/test/5c616182914efa80.jpg
+6946df09fdf50b9e,Chair;Couch,https://open-images-dataset.s3.amazonaws.com/test/6946df09fdf50b9e.jpg
+69b2a3bd238c5ff8,Countertop;Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/69b2a3bd238c5ff8.jpg
+6bcbb7a4cdc162f3,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/6bcbb7a4cdc162f3.jpg
+6c60ea8475096198,Bed;Chair,https://open-images-dataset.s3.amazonaws.com/test/6c60ea8475096198.jpg
+7a2973a595f678d6,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/7a2973a595f678d6.jpg
+81ad10298ce57667,Bed;Chair,https://open-images-dataset.s3.amazonaws.com/test/81ad10298ce57667.jpg
+892b1c9821e1be83,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/892b1c9821e1be83.jpg
+89878d47328f3ace,Countertop;Shelf,https://open-images-dataset.s3.amazonaws.com/test/89878d47328f3ace.jpg
+89d9811d8adcefd1,Chair;Countertop,https://open-images-dataset.s3.amazonaws.com/test/89d9811d8adcefd1.jpg
+9338bbe507fe8b33,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/9338bbe507fe8b33.jpg
+935027091b243ed9,Couch;Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/935027091b243ed9.jpg
+9501d4e0b32749e5,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/9501d4e0b32749e5.jpg
+9dee94777bb1b356,Countertop;Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/9dee94777bb1b356.jpg
+a11fe213e122692a,Chair;Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/a11fe213e122692a.jpg
+a94188250ef87f76,Chair;Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/a94188250ef87f76.jpg
+b567f64f682fbebb,Countertop;Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/b567f64f682fbebb.jpg
+b6748985e452473a,Countertop;Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/b6748985e452473a.jpg
+b6883b00da87a422,Chair;Shelf,https://open-images-dataset.s3.amazonaws.com/test/b6883b00da87a422.jpg
+ba5626df841394f9,Chair;Couch,https://open-images-dataset.s3.amazonaws.com/test/ba5626df841394f9.jpg
+bc069bedbbaf5442,Chair;Couch,https://open-images-dataset.s3.amazonaws.com/test/bc069bedbbaf5442.jpg
+bd81ced89073ff3a,Countertop;Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/bd81ced89073ff3a.jpg
+bfd2cbc2847ead5c,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/bfd2cbc2847ead5c.jpg
+c00205af50959af3,Bed;Couch;Shelf,https://open-images-dataset.s3.amazonaws.com/test/c00205af50959af3.jpg
+c887afffea2a16dd,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/c887afffea2a16dd.jpg
+cbbe1baa3e94a9ab,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/cbbe1baa3e94a9ab.jpg
+d4e1dc2f2326a8b0,Chair;Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/d4e1dc2f2326a8b0.jpg
+d83dcdb92fa65c56,Countertop;Cupboard,https://open-images-dataset.s3.amazonaws.com/test/d83dcdb92fa65c56.jpg
+db8bc5b8ef40187a,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/db8bc5b8ef40187a.jpg
+e0d0b03f54b85336,Chair;Kitchen & dining room table,https://open-images-dataset.s3.amazonaws.com/test/e0d0b03f54b85336.jpg
+e28993f8e28d4ceb,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/e28993f8e28d4ceb.jpg
+e3fafac44b004f13,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/e3fafac44b004f13.jpg
+f025604d77d99373,Sofa bed;Studio couch,https://open-images-dataset.s3.amazonaws.com/test/f025604d77d99373.jpg
+fcd3f2a941ea250f,Cupboard;Shelf,https://open-images-dataset.s3.amazonaws.com/test/fcd3f2a941ea250f.jpg

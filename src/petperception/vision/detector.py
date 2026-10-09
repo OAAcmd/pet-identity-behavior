@@ -14,7 +14,7 @@ Class map: COCO category slots from the embedded labels.txt (90 slots with
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import cv2
@@ -29,6 +29,9 @@ class Detection:
     label: str
     score: float
     box: np.ndarray  # normalized x1, y1, x2, y2
+    # Raw-anchor builds only: all class scores of the anchor that produced the box
+    # (used by the false-positive verifier; empty for post-processed builds).
+    class_scores: np.ndarray | None = field(default=None, repr=False)
 
     @property
     def area(self) -> float:
@@ -116,6 +119,91 @@ class EfficientDetDetector:
             if cand.size == 0:
                 continue
             keep = nms(boxes[cand], s[cand], iou_thr, max_per_class)
-            out.extend(Detection(cls, float(s[cand[k]]), boxes[cand[k]].copy()) for k in keep)
+            out.extend(Detection(cls, float(s[cand[k]]), boxes[cand[k]].copy(), scores[cand[k]].copy()) for k in keep)
         out.sort(key=lambda d: -d.score)
         return out
+
+
+class PostprocessedDetector:
+    """TFLite Task Library detector with in-graph ``TFLite_Detection_PostProcess``.
+
+    Used for the TF Hub ``lite-model_efficientdet_lite0_detection_metadata_1``
+    build, whose embedded model metadata states the Apache-2.0 license.
+    Interface (verified on the file): uint8 RGB input (quantization scale
+    1/128, zero point 127, i.e. raw pixel values), outputs boxes
+    ``[1, N, 4]`` as (ymin, xmin, ymax, xmax), class indices, scores and a
+    detection count. The in-graph NMS is class-agnostic with one class per
+    box and N = 25, so low-scoring alternatives for the same region are not
+    available (lower AP resolution than the raw-anchor builds).
+    """
+
+    name = "efficientdet_lite0_tfhub_postprocessed"
+
+    def __init__(self, model_path: Path, num_threads: int = 2):
+        from ai_edge_litert.interpreter import Interpreter
+
+        data = model_path.read_bytes()
+        self.model_path = model_path
+        files = associated_files(data)
+        lab = files.get("labelmap.txt") or files.get("labels.txt")
+        if lab is None:
+            raise RuntimeError("label map missing from model metadata")
+        self.labels = [l.strip() for l in lab.decode().splitlines()]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.interp = Interpreter(model_path=str(model_path), num_threads=num_threads)
+        self.interp.allocate_tensors()
+        inp = self.interp.get_input_details()[0]
+        if inp["dtype"] != np.uint8:
+            raise RuntimeError(f"expected uint8 input, got {inp['dtype']}")
+        self.in_idx = inp["index"]
+        self.in_h, self.in_w = int(inp["shape"][1]), int(inp["shape"][2])
+        outs = self.interp.get_output_details()
+        self.box_idx = next(o["index"] for o in outs if len(o["shape"]) == 3 and o["shape"][-1] == 4)
+        flat = [o for o in outs if len(o["shape"]) == 2]
+        count = [o for o in outs if len(o["shape"]) == 1]
+        if len(flat) != 2 or len(count) != 1:
+            raise RuntimeError("unexpected output layout for a post-processed detector")
+        self.count_idx = count[0]["index"]
+        # Class and score tensors share a shape; the Task Library metadata order is
+        # (location, category, score, count), which maps to the names :3, :2, :1, :0.
+        flat.sort(key=lambda o: o["name"], reverse=True)
+        self.class_idx, self.score_idx = flat[0]["index"], flat[1]["index"]
+
+    def class_map(self) -> dict[int, str]:
+        return {i: l for i, l in enumerate(self.labels) if l != "???"}
+
+    def detect(self, rgb: np.ndarray, classes: list[str], score_threshold: float, iou_thr: float = 0.5,
+               max_per_class: int = 10) -> list[Detection]:
+        img = cv2.resize(rgb, (self.in_w, self.in_h), interpolation=cv2.INTER_LINEAR)
+        self.interp.set_tensor(self.in_idx, np.ascontiguousarray(img[None], dtype=np.uint8))
+        self.interp.invoke()
+        n = int(self.interp.get_tensor(self.count_idx)[0])
+        boxes = self.interp.get_tensor(self.box_idx)[0][:n]
+        cls = self.interp.get_tensor(self.class_idx)[0][:n].astype(int)
+        scores = self.interp.get_tensor(self.score_idx)[0][:n]
+        for c in classes:
+            if c not in self.labels:
+                raise ValueError(f"class '{c}' not in detector label map")
+        want = {self.labels.index(c): c for c in classes}
+        out: list[Detection] = []
+        per: dict[str, int] = {}
+        for b, k, s in zip(boxes, cls, scores):
+            if k in want and s >= score_threshold and per.get(want[k], 0) < max_per_class:
+                ymin, xmin, ymax, xmax = (float(v) for v in b)
+                out.append(Detection(want[k], float(s), np.clip(np.array([xmin, ymin, xmax, ymax]), 0.0, 1.0)))
+                per[want[k]] = per.get(want[k], 0) + 1
+        out.sort(key=lambda d: -d.score)
+        return out
+
+
+def load_detector(model_path: Path, num_threads: int = 2) -> EfficientDetDetector | PostprocessedDetector:
+    """Pick the decoder that matches the model's output layout."""
+    from ai_edge_litert.interpreter import Interpreter
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        probe = Interpreter(model_path=str(model_path))
+    n_out = len(probe.get_output_details())
+    del probe
+    return PostprocessedDetector(model_path, num_threads) if n_out == 4 else EfficientDetDetector(model_path, num_threads)

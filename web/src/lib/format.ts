@@ -101,7 +101,7 @@ export const QUALITY_TEXT: Record<string, string> = {
   video_decode_warnings: "Video decoding warnings",
   audio_decode_warnings: "Audio decoding warnings",
   visual_model_unavailable: "Visual model unavailable",
-  detector_verifier_rejections: "Some detections were rejected as other animals",
+  detections_rejected_by_verifier: "Something animal-like did not pass the second check (not reported as a pet)",
 };
 
 export function soundLabel(label: string): string {
