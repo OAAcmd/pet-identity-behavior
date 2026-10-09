@@ -1,0 +1,1678 @@
+{
+  "experiment": "E7",
+  "title": "False-positive rejection for cat/dog detection: tuning on Open Images test split, final evaluation on the E4 validation subset",
+  "protocol": [
+    "E7: false-positive rejection for cat/dog detection, with its cost in recall.",
+    "",
+    "Data separation (enforced in code):",
+    "* **Tuning** (fit + every selection decision): Open Images V7 *test* split",
+    "  subset ``openimages_v7_test_tuning`` (manifests/oi_test_tuning_*.csv).",
+    "* **Final evaluation**: the unchanged E4 Open Images V7 *validation* subset.",
+    "  It is touched once per configuration, after all choices are frozen.",
+    "The builder asserts the two subsets share no image IDs; this module checks it",
+    "again.",
+    "",
+    "Stage 1 candidates: detections with score >= 0.20 from each detector.",
+    "Stage 2 verifier feature sets (per detection):",
+    "* ``crop``: EfficientNet-Lite0 ImageNet group masses on the box crop;",
+    "* ``redetect``: the same detector re-run on the zoomed crop (same-class and",
+    "  other-class maximum scores) - no extra model;",
+    "* ``anchor``: the detector's own 90-class score vector at the anchor that",
+    "  produced the box (raw-anchor builds only);",
+    "plus detector score and box geometry in every set. A per-class logistic",
+    "regression is fitted per feature set.",
+    "",
+    "Tuning labels: on images where the class is verified, greedy IoU>=0.5",
+    "matching to non-depiction, non-group boxes gives 1/0 (matches to",
+    "depiction/group boxes are skipped); on unverified images, a detection",
+    "overlapping (IoU>=0.5) a box of a confusable class or of the other species,",
+    "and no box of its own class, is a negative; anything else is skipped.",
+    "",
+    "Selection rule (fixed before looking at E4): operating rule = detector score",
+    ">= 0.35 (Phase 1 threshold) AND verifier score >= tau. tau is the largest",
+    "value that keeps at least 98% of the detector-only true-positive detections at",
+    "the operating threshold, measured with out-of-fold verifier scores",
+    "(5-fold grouped by Flickr author) on the tuning set. The baseline",
+    "alternative - simply raising the detector threshold - gets the same 98%",
+    "budget. The feature set used by the product is the one with the best",
+    "out-of-fold tuning specificity on verified-negative images; all are",
+    "reported on E4."
+  ],
+  "tested_distributions": {
+    "tuning": {
+      "split": "Open Images V7 test",
+      "images": 2111,
+      "roles": {
+        "cat_positive": 500,
+        "confusable_animal": 700,
+        "dog_positive": 500,
+        "verified_negative": 411
+      },
+      "confusable_boxes_by_class": {
+        "alpaca": 17,
+        "bear": 7,
+        "brown_bear": 8,
+        "cattle": 128,
+        "cheetah": 24,
+        "deer": 81,
+        "doll": 22,
+        "fox": 52,
+        "goat": 140,
+        "hamster": 40,
+        "hedgehog": 9,
+        "horse": 141,
+        "jaguar": 28,
+        "kangaroo": 12,
+        "koala": 10,
+        "leopard": 37,
+        "lion": 22,
+        "lynx": 39,
+        "monkey": 82,
+        "mouse": 45,
+        "otter": 27,
+        "panda": 15,
+        "pig": 30,
+        "polar_bear": 27,
+        "rabbit": 59,
+        "raccoon": 21,
+        "red_panda": 8,
+        "sculpture": 124,
+        "sea_lion": 37,
+        "sheep": 89,
+        "skunk": 12,
+        "squirrel": 23,
+        "teddy_bear": 32,
+        "tiger": 17,
+        "toy": 262
+      }
+    },
+    "final_evaluation": {
+      "split": "Open Images V7 validation (E4 subset, unchanged)",
+      "images": 823,
+      "cat_status": {
+        "neg": 47,
+        "pos": 339,
+        "unverified": 437
+      },
+      "dog_status": {
+        "neg": 111,
+        "pos": 352,
+        "unverified": 360
+      }
+    },
+    "not_tested": [
+      "household camera footage",
+      "night/IR video",
+      "motion blur from moving pets",
+      "fisheye or ceiling cameras",
+      "other species common in homes (rabbits, ferrets, birds) as primary subjects"
+    ]
+  },
+  "overlap_between_tuning_and_evaluation": 0,
+  "results": {
+    "efficientdet_lite0_mediapipe_int8_v1": {
+      "tuning_detections": 2002,
+      "e4_detections": 1123,
+      "collect_seconds_incl_cache": 0.0,
+      "tuning": {
+        "cat": {
+          "labelled_detections": 855,
+          "positives": 490,
+          "negatives": 365,
+          "negatives_on_verified_negative_images": 105,
+          "detector_only@0.35": {
+            "verified_negative_images": 142,
+            "with_detection": 62,
+            "specificity": 0.5633802816901409
+          },
+          "raised_threshold": {
+            "threshold": 0.40625,
+            "verified_negative_images": 142,
+            "with_detection": 58,
+            "specificity": 0.5915492957746479
+          },
+          "verifier": {
+            "crop": {
+              "tau": 0.17831333913089137,
+              "oof_ap_detection": 0.966262244582257,
+              "verified_negative_images": 142,
+              "with_detection": 34,
+              "specificity": 0.7605633802816901
+            },
+            "redetect": {
+              "tau": 0.19201544250748778,
+              "oof_ap_detection": 0.9142107873337788,
+              "verified_negative_images": 142,
+              "with_detection": 55,
+              "specificity": 0.6126760563380282
+            },
+            "anchor": {
+              "tau": 0.14666730841831424,
+              "oof_ap_detection": 0.917356481419784,
+              "verified_negative_images": 142,
+              "with_detection": 58,
+              "specificity": 0.5915492957746479
+            },
+            "crop+redetect": {
+              "tau": 0.16829462089832406,
+              "oof_ap_detection": 0.964408080775813,
+              "verified_negative_images": 142,
+              "with_detection": 34,
+              "specificity": 0.7605633802816901
+            },
+            "all": {
+              "tau": 0.14318796304691053,
+              "oof_ap_detection": 0.9634711715889398,
+              "verified_negative_images": 142,
+              "with_detection": 35,
+              "specificity": 0.7535211267605634
+            }
+          },
+          "selected_feature_set": "crop"
+        },
+        "dog": {
+          "labelled_detections": 1042,
+          "positives": 511,
+          "negatives": 531,
+          "negatives_on_verified_negative_images": 197,
+          "detector_only@0.35": {
+            "verified_negative_images": 306,
+            "with_detection": 114,
+            "specificity": 0.6274509803921569
+          },
+          "raised_threshold": {
+            "threshold": 0.40625,
+            "verified_negative_images": 306,
+            "with_detection": 100,
+            "specificity": 0.673202614379085
+          },
+          "verifier": {
+            "crop": {
+              "tau": 0.28286441586760663,
+              "oof_ap_detection": 0.9637002999256795,
+              "verified_negative_images": 306,
+              "with_detection": 29,
+              "specificity": 0.9052287581699346
+            },
+            "redetect": {
+              "tau": 0.23755518065164385,
+              "oof_ap_detection": 0.8745751796369167,
+              "verified_negative_images": 306,
+              "with_detection": 92,
+              "specificity": 0.6993464052287581
+            },
+            "anchor": {
+              "tau": 0.2569387115461286,
+              "oof_ap_detection": 0.8929317206136628,
+              "verified_negative_images": 306,
+              "with_detection": 79,
+              "specificity": 0.7418300653594772
+            },
+            "crop+redetect": {
+              "tau": 0.2868153532309651,
+              "oof_ap_detection": 0.9623663624190065,
+              "verified_negative_images": 306,
+              "with_detection": 29,
+              "specificity": 0.9052287581699346
+            },
+            "all": {
+              "tau": 0.2550444863771382,
+              "oof_ap_detection": 0.9627331276064536,
+              "verified_negative_images": 306,
+              "with_detection": 31,
+              "specificity": 0.8986928104575164
+            }
+          },
+          "selected_feature_set": "crop"
+        }
+      },
+      "e4": {
+        "detector_only@0.35": {
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.85660727192811,
+              "ap50_ci95": {
+                "ci_low": 0.8119876251674504,
+                "ci_high": 0.89278379065257,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9022346368715084,
+              "recall_at_op": 0.8729729729729729,
+              "f1_at_op": 0.8873626373626373,
+              "tp_at_op": 323,
+              "fp_at_op": 35,
+              "image_level": {
+                "tp": 311,
+                "fp": 17,
+                "fn": 28,
+                "tn": 30,
+                "precision": 0.948170731707317,
+                "recall": 0.9174041297935103,
+                "specificity_on_verified_negatives": 0.6382978723404256,
+                "f1": 0.9325337331334332,
+                "f1_ci95": {
+                  "ci_low": 0.9124276889891166,
+                  "ci_high": 0.9505910060817582,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.4997448979591837,
+                  "ci_high": 0.7777777777777778,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8885548559599793,
+                  "ci_high": 0.9444484936831875,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.8913649025069638
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.5957446808510638
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9333333333333333
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "198649872a9ba7dd",
+                "1f06a194de23d992",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "44b2830387bfa1c0",
+                "4cfe753ffc7e6cfb",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "746b596e2148b044",
+                "a46114e788ec79f9",
+                "a515ce6dd79c9771",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1",
+                "f438a90b12c1ab0c"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 21,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7629399873261693,
+              "ap50_ci95": {
+                "ci_low": 0.7038650689932925,
+                "ci_high": 0.8139730966901715,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.8105515587529976,
+              "recall_at_op": 0.8105515587529976,
+              "f1_at_op": 0.8105515587529976,
+              "tp_at_op": 338,
+              "fp_at_op": 79,
+              "image_level": {
+                "tp": 313,
+                "fp": 38,
+                "fn": 39,
+                "tn": 73,
+                "precision": 0.8917378917378918,
+                "recall": 0.8892045454545454,
+                "specificity_on_verified_negatives": 0.6576576576576577,
+                "f1": 0.8904694167852063,
+                "f1_ci95": {
+                  "ci_low": 0.8655281373586711,
+                  "ci_high": 0.912981455064194,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.5566017227235439,
+                  "ci_high": 0.7433898721730581,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8550631735414345,
+                  "ci_high": 0.9207664294985818,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.08333333333333333
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.525
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8657534246575342
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.5365853658536586
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8253012048192772
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "037f9ee89944439f",
+                "1733b082861a2632",
+                "189ab5b940b2c867",
+                "1f3e4ab382d65abe",
+                "2192e031f570a4d5",
+                "43c5a0c05ef7a66b",
+                "45b8dfed22ec2d10",
+                "4db9e5402ba67d18",
+                "5088db320f662d3b",
+                "52f06ef1143df4be",
+                "5b7e40de768a5e98",
+                "716a9214e2ada5dd",
+                "72bb815a4d158146",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "837b3d11ff02f116",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "89e4426851714e0f",
+                "968ef44452396c60",
+                "96a82122b283ae52",
+                "984127def1f87734",
+                "9c07af2c2414c4ae",
+                "a5a331a4eaa9ee53",
+                "ab5fdf508731f851",
+                "b6585fd1736860f4",
+                "ba619b3d04e4777d",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "ccda1c38b54c5655",
+                "d455705ae29769a2",
+                "d960a2defb08da31",
+                "e039a6b738ffea33",
+                "e12888925373b254",
+                "eb4080cf2c22073d",
+                "f1289343e71bddfb",
+                "f4866ab80625a9f6",
+                "f6db0f9883154a31"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 24,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "raised_threshold": {
+          "thresholds": {
+            "cat": 0.40625,
+            "dog": 0.40625
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8541619694828075,
+              "ap50_ci95": {
+                "ci_low": 0.8077196963862086,
+                "ci_high": 0.8916904635585713,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9096045197740112,
+              "recall_at_op": 0.8702702702702703,
+              "f1_at_op": 0.8895027624309393,
+              "tp_at_op": 322,
+              "fp_at_op": 32,
+              "image_level": {
+                "tp": 310,
+                "fp": 16,
+                "fn": 29,
+                "tn": 31,
+                "precision": 0.950920245398773,
+                "recall": 0.9144542772861357,
+                "specificity_on_verified_negatives": 0.6595744680851063,
+                "f1": 0.9323308270676691,
+                "f1_ci95": {
+                  "ci_low": 0.9118999074522111,
+                  "ci_high": 0.9503774742979899,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.5160463192721257,
+                  "ci_high": 0.7960204081632652,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8840528390195838,
+                  "ci_high": 0.9413532609627686,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.8885793871866295
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.5957446808510638
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9333333333333333
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "198649872a9ba7dd",
+                "1f06a194de23d992",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "44b2830387bfa1c0",
+                "4cfe753ffc7e6cfb",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "746b596e2148b044",
+                "a46114e788ec79f9",
+                "a515ce6dd79c9771",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 17,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7530810865527546,
+              "ap50_ci95": {
+                "ci_low": 0.6915520580826664,
+                "ci_high": 0.8057358699131648,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.8409090909090909,
+              "recall_at_op": 0.7985611510791367,
+              "f1_at_op": 0.8191881918819188,
+              "tp_at_op": 333,
+              "fp_at_op": 63,
+              "image_level": {
+                "tp": 309,
+                "fp": 32,
+                "fn": 43,
+                "tn": 79,
+                "precision": 0.906158357771261,
+                "recall": 0.8778409090909091,
+                "specificity_on_verified_negatives": 0.7117117117117117,
+                "f1": 0.8917748917748918,
+                "f1_ci95": {
+                  "ci_low": 0.8670374436116018,
+                  "ci_high": 0.9158064483267967,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.6203373015873016,
+                  "ci_high": 0.7920970475425921,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8434439359267735,
+                  "ci_high": 0.9101504079892827,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.08333333333333333
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.475
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8575342465753425
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.5365853658536586
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8192771084337349
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "037f9ee89944439f",
+                "1733b082861a2632",
+                "189ab5b940b2c867",
+                "1f3e4ab382d65abe",
+                "2192e031f570a4d5",
+                "43c5a0c05ef7a66b",
+                "45b8dfed22ec2d10",
+                "4db9e5402ba67d18",
+                "5088db320f662d3b",
+                "52f06ef1143df4be",
+                "5b7e40de768a5e98",
+                "716a9214e2ada5dd",
+                "72bb815a4d158146",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "89e4426851714e0f",
+                "968ef44452396c60",
+                "96a82122b283ae52",
+                "984127def1f87734",
+                "ab5fdf508731f851",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "ccda1c38b54c5655",
+                "e039a6b738ffea33",
+                "e12888925373b254",
+                "eb4080cf2c22073d",
+                "f1289343e71bddfb",
+                "f4866ab80625a9f6",
+                "f6db0f9883154a31"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 20,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "verifier[crop]": {
+          "tau": {
+            "cat": 0.17831333913089137,
+            "dog": 0.28286441586760663
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8514386127114221,
+              "ap50_ci95": {
+                "ci_low": 0.8074229717215438,
+                "ci_high": 0.8895430871637068,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9221902017291066,
+              "recall_at_op": 0.8648648648648649,
+              "f1_at_op": 0.892608089260809,
+              "tp_at_op": 320,
+              "fp_at_op": 27,
+              "image_level": {
+                "tp": 308,
+                "fp": 10,
+                "fn": 31,
+                "tn": 37,
+                "precision": 0.9685534591194969,
+                "recall": 0.9085545722713865,
+                "specificity_on_verified_negatives": 0.7872340425531915,
+                "f1": 0.9375951293759512,
+                "f1_ci95": {
+                  "ci_low": 0.9186702137704422,
+                  "ci_high": 0.954820702022062,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.6665,
+                  "ci_high": 0.8979591836734694,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8782537525879918,
+                  "ci_high": 0.9380843653250773,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.883008356545961
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.574468085106383
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9277777777777778
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "a46114e788ec79f9",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "f438a90b12c1ab0c"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 3,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7501084819351393,
+              "ap50_ci95": {
+                "ci_low": 0.6863622744824911,
+                "ci_high": 0.8053515120380009,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.8858695652173914,
+              "recall_at_op": 0.7817745803357314,
+              "f1_at_op": 0.8305732484076433,
+              "tp_at_op": 326,
+              "fp_at_op": 42,
+              "image_level": {
+                "tp": 304,
+                "fp": 12,
+                "fn": 48,
+                "tn": 99,
+                "precision": 0.9620253164556962,
+                "recall": 0.8636363636363636,
+                "specificity_on_verified_negatives": 0.8918918918918919,
+                "f1": 0.9101796407185628,
+                "f1_ci95": {
+                  "ci_low": 0.8868153418951753,
+                  "ci_high": 0.9311882031874065,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.8285714285714286,
+                  "ci_high": 0.9464520676691729,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8266922024734524,
+                  "ci_high": 0.8965564092953523,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.0
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.425
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8465753424657534
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.4878048780487805
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8072289156626506
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "1f3e4ab382d65abe",
+                "4db9e5402ba67d18",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "984127def1f87734",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "eb4080cf2c22073d",
+                "f4866ab80625a9f6"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 2,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "verifier[redetect]": {
+          "tau": {
+            "cat": 0.19201544250748778,
+            "dog": 0.23755518065164385
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8492605055919129,
+              "ap50_ci95": {
+                "ci_low": 0.8001384869429415,
+                "ci_high": 0.8899600594169654,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9065155807365439,
+              "recall_at_op": 0.8648648648648649,
+              "f1_at_op": 0.8852005532503457,
+              "tp_at_op": 320,
+              "fp_at_op": 33,
+              "image_level": {
+                "tp": 308,
+                "fp": 16,
+                "fn": 31,
+                "tn": 31,
+                "precision": 0.9506172839506173,
+                "recall": 0.9085545722713865,
+                "specificity_on_verified_negatives": 0.6595744680851063,
+                "f1": 0.9291101055806938,
+                "f1_ci95": {
+                  "ci_low": 0.9077155824508321,
+                  "ci_high": 0.9469142990218911,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.5106274424663482,
+                  "ci_high": 0.790757818765036,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8768153467232505,
+                  "ci_high": 0.9375,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.883008356545961
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.5957446808510638
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9277777777777778
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "198649872a9ba7dd",
+                "1f06a194de23d992",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "44b2830387bfa1c0",
+                "4cfe753ffc7e6cfb",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "a46114e788ec79f9",
+                "a515ce6dd79c9771",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1",
+                "f438a90b12c1ab0c"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 9,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7461667118821171,
+              "ap50_ci95": {
+                "ci_low": 0.6837343819860354,
+                "ci_high": 0.8012573834138296,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.8612565445026178,
+              "recall_at_op": 0.7889688249400479,
+              "f1_at_op": 0.823529411764706,
+              "tp_at_op": 329,
+              "fp_at_op": 53,
+              "image_level": {
+                "tp": 309,
+                "fp": 27,
+                "fn": 43,
+                "tn": 84,
+                "precision": 0.9196428571428571,
+                "recall": 0.8778409090909091,
+                "specificity_on_verified_negatives": 0.7567567567567568,
+                "f1": 0.8982558139534884,
+                "f1_ci95": {
+                  "ci_low": 0.8733192215202951,
+                  "ci_high": 0.9213490895001938,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.6694927536231884,
+                  "ci_high": 0.8363947163947163,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8420936872974224,
+                  "ci_high": 0.9107166988416988,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.08333333333333333
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.425
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.852054794520548
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.5121951219512195
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8132530120481928
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "1733b082861a2632",
+                "189ab5b940b2c867",
+                "1f3e4ab382d65abe",
+                "2192e031f570a4d5",
+                "43c5a0c05ef7a66b",
+                "45b8dfed22ec2d10",
+                "4db9e5402ba67d18",
+                "5088db320f662d3b",
+                "5b7e40de768a5e98",
+                "716a9214e2ada5dd",
+                "72bb815a4d158146",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "96a82122b283ae52",
+                "984127def1f87734",
+                "ab5fdf508731f851",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "ccda1c38b54c5655",
+                "d455705ae29769a2",
+                "e039a6b738ffea33",
+                "e12888925373b254",
+                "eb4080cf2c22073d",
+                "f4866ab80625a9f6"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 12,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "verifier[anchor]": {
+          "tau": {
+            "cat": 0.14666730841831424,
+            "dog": 0.2569387115461286
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8517035788888239,
+              "ap50_ci95": {
+                "ci_low": 0.8039450659768804,
+                "ci_high": 0.8900563671785262,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9067796610169492,
+              "recall_at_op": 0.8675675675675676,
+              "f1_at_op": 0.8867403314917127,
+              "tp_at_op": 321,
+              "fp_at_op": 33,
+              "image_level": {
+                "tp": 309,
+                "fp": 15,
+                "fn": 30,
+                "tn": 32,
+                "precision": 0.9537037037037037,
+                "recall": 0.911504424778761,
+                "specificity_on_verified_negatives": 0.6808510638297872,
+                "f1": 0.9321266968325792,
+                "f1_ci95": {
+                  "ci_low": 0.9107973997833153,
+                  "ci_high": 0.9497115384615384,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.5333333333333333,
+                  "ci_high": 0.8095238095238095,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.881159420289855,
+                  "ci_high": 0.9393085479068138,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.8857938718662952
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.5957446808510638
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9333333333333333
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "198649872a9ba7dd",
+                "1f06a194de23d992",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "44b2830387bfa1c0",
+                "4cfe753ffc7e6cfb",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "a46114e788ec79f9",
+                "a515ce6dd79c9771",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 17,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7265245436217702,
+              "ap50_ci95": {
+                "ci_low": 0.6660191572878674,
+                "ci_high": 0.7808464423324032,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.862533692722372,
+              "recall_at_op": 0.7673860911270983,
+              "f1_at_op": 0.8121827411167514,
+              "tp_at_op": 320,
+              "fp_at_op": 51,
+              "image_level": {
+                "tp": 299,
+                "fp": 23,
+                "fn": 53,
+                "tn": 88,
+                "precision": 0.9285714285714286,
+                "recall": 0.8494318181818182,
+                "specificity_on_verified_negatives": 0.7927927927927928,
+                "f1": 0.887240356083086,
+                "f1_ci95": {
+                  "ci_low": 0.8605341246290801,
+                  "ci_high": 0.9106925247861923,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.7093023255813954,
+                  "ci_high": 0.8666981132075472,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8112069813176008,
+                  "ci_high": 0.8847319629695748,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.08333333333333333
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.4
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8301369863013699
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.5121951219512195
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.7831325301204819
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "1733b082861a2632",
+                "1f3e4ab382d65abe",
+                "2192e031f570a4d5",
+                "43c5a0c05ef7a66b",
+                "5088db320f662d3b",
+                "5b7e40de768a5e98",
+                "716a9214e2ada5dd",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "96a82122b283ae52",
+                "984127def1f87734",
+                "9c07af2c2414c4ae",
+                "ab5fdf508731f851",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "d455705ae29769a2",
+                "e12888925373b254",
+                "eb4080cf2c22073d",
+                "f4866ab80625a9f6",
+                "f6db0f9883154a31"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 10,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "verifier[crop+redetect]": {
+          "tau": {
+            "cat": 0.16829462089832406,
+            "dog": 0.2868153532309651
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8511632704304285,
+              "ap50_ci95": {
+                "ci_low": 0.8071418330480205,
+                "ci_high": 0.8886786789129657,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9195402298850575,
+              "recall_at_op": 0.8648648648648649,
+              "f1_at_op": 0.8913649025069639,
+              "tp_at_op": 320,
+              "fp_at_op": 28,
+              "image_level": {
+                "tp": 308,
+                "fp": 11,
+                "fn": 31,
+                "tn": 36,
+                "precision": 0.9655172413793104,
+                "recall": 0.9085545722713865,
+                "specificity_on_verified_negatives": 0.7659574468085106,
+                "f1": 0.9361702127659575,
+                "f1_ci95": {
+                  "ci_low": 0.9161671997619668,
+                  "ci_high": 0.9540754332313965,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.639948275862069,
+                  "ci_high": 0.88,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8782537525879918,
+                  "ci_high": 0.9380843653250773,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.883008356545961
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.574468085106383
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9277777777777778
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "a46114e788ec79f9",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1",
+                "f438a90b12c1ab0c"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 3,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7517069582067044,
+              "ap50_ci95": {
+                "ci_low": 0.6911073453242079,
+                "ci_high": 0.8063341340374799,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.8861788617886179,
+              "recall_at_op": 0.7841726618705036,
+              "f1_at_op": 0.8320610687022901,
+              "tp_at_op": 327,
+              "fp_at_op": 42,
+              "image_level": {
+                "tp": 305,
+                "fp": 11,
+                "fn": 47,
+                "tn": 100,
+                "precision": 0.9651898734177216,
+                "recall": 0.8664772727272727,
+                "specificity_on_verified_negatives": 0.9009009009009009,
+                "f1": 0.9131736526946108,
+                "f1_ci95": {
+                  "ci_low": 0.8899217790873057,
+                  "ci_high": 0.9337217472074689,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.8402801120448179,
+                  "ci_high": 0.9528301886792453,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8295314558629776,
+                  "ci_high": 0.9003065849106905,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.0
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.45
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8465753424657534
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.4878048780487805
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8072289156626506
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "1f3e4ab382d65abe",
+                "4db9e5402ba67d18",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "984127def1f87734",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "f4866ab80625a9f6"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 2,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        },
+        "verifier[all]": {
+          "tau": {
+            "cat": 0.14318796304691053,
+            "dog": 0.2550444863771382
+          },
+          "classes": {
+            "cat": {
+              "eval_images": 386,
+              "verified_positive_images": 339,
+              "verified_negative_images": 47,
+              "gt_boxes_scored": 370,
+              "ignored_gt_boxes_depiction_or_groupof": 10,
+              "ap50": 0.8538100818124934,
+              "ap50_ci95": {
+                "ci_low": 0.8102757908441728,
+                "ci_high": 0.8922534216784782,
+                "n_boot": 1000,
+                "n_groups": 365,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.9197707736389685,
+              "recall_at_op": 0.8675675675675676,
+              "f1_at_op": 0.8929068150208624,
+              "tp_at_op": 321,
+              "fp_at_op": 28,
+              "image_level": {
+                "tp": 309,
+                "fp": 11,
+                "fn": 30,
+                "tn": 36,
+                "precision": 0.965625,
+                "recall": 0.911504424778761,
+                "specificity_on_verified_negatives": 0.7659574468085106,
+                "f1": 0.9377845220030349,
+                "f1_ci95": {
+                  "ci_low": 0.9181818181818182,
+                  "ci_high": 0.9557251908396946,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.639948275862069,
+                  "ci_high": 0.88,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8819971723307326,
+                  "ci_high": 0.9408371040723982,
+                  "n_boot": 1000,
+                  "n_groups": 365,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 0,
+                  "recall": null
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 11,
+                  "recall": 0.2727272727272727
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 359,
+                  "recall": 0.8857938718662952
+                },
+                "occluded": {
+                  "gt_boxes": 47,
+                  "recall": 0.5957446808510638
+                },
+                "truncated": {
+                  "gt_boxes": 180,
+                  "recall": 0.9277777777777778
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "17bb574353e439ed",
+                "217a79d30eb9e89a",
+                "3054a71a8cfb16b2",
+                "4f2085466d0e849d",
+                "57526047b2188e8b",
+                "6b574f783c9da5bd",
+                "a46114e788ec79f9",
+                "c72bea210f0841a5",
+                "e12d9f435b9503e4",
+                "e4b914c42fa9e6b1",
+                "f438a90b12c1ab0c"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 350,
+                "with_this_species_detection_at_op": 3,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            },
+            "dog": {
+              "eval_images": 463,
+              "verified_positive_images": 352,
+              "verified_negative_images": 111,
+              "gt_boxes_scored": 417,
+              "ignored_gt_boxes_depiction_or_groupof": 23,
+              "ap50": 0.7498467402002996,
+              "ap50_ci95": {
+                "ci_low": 0.6873655455586689,
+                "ci_high": 0.8025926395533747,
+                "n_boot": 1000,
+                "n_groups": 433,
+                "unit": "group"
+              },
+              "operating_threshold": 0.35,
+              "precision_at_op": 0.888283378746594,
+              "recall_at_op": 0.7817745803357314,
+              "f1_at_op": 0.8316326530612245,
+              "tp_at_op": 326,
+              "fp_at_op": 41,
+              "image_level": {
+                "tp": 305,
+                "fp": 14,
+                "fn": 47,
+                "tn": 97,
+                "precision": 0.9561128526645768,
+                "recall": 0.8664772727272727,
+                "specificity_on_verified_negatives": 0.8738738738738738,
+                "f1": 0.9090909090909091,
+                "f1_ci95": {
+                  "ci_low": 0.8854961832061069,
+                  "ci_high": 0.93109162145871,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "specificity_ci95": {
+                  "ci_low": 0.8055494100294985,
+                  "ci_high": 0.9333490566037735,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                },
+                "recall_ci95": {
+                  "ci_low": 0.8305072569647379,
+                  "ci_high": 0.9010710293362337,
+                  "n_boot": 1000,
+                  "n_groups": 433,
+                  "unit": "group"
+                }
+              },
+              "recall_breakdown_at_op": {
+                "area_lt_1pct": {
+                  "gt_boxes": 12,
+                  "recall": 0.0
+                },
+                "area_1_to_10pct": {
+                  "gt_boxes": 40,
+                  "recall": 0.425
+                },
+                "area_ge_10pct": {
+                  "gt_boxes": 365,
+                  "recall": 0.8465753424657534
+                },
+                "occluded": {
+                  "gt_boxes": 41,
+                  "recall": 0.43902439024390244
+                },
+                "truncated": {
+                  "gt_boxes": 166,
+                  "recall": 0.8132530120481928
+                }
+              },
+              "verified_negative_images_with_detection_at_op": [
+                "1f3e4ab382d65abe",
+                "4db9e5402ba67d18",
+                "76fb6ff054ffbc10",
+                "7fa03cf6e86daaae",
+                "8463707f014b7681",
+                "84a60c2bf148ad59",
+                "984127def1f87734",
+                "b6585fd1736860f4",
+                "c226529f5ffc0cbe",
+                "cb07b03730d452f2",
+                "d455705ae29769a2",
+                "e039a6b738ffea33",
+                "eb4080cf2c22073d",
+                "f4866ab80625a9f6"
+              ],
+              "cross_species_diagnostic": {
+                "images_where_other_species_positive_and_this_not_positive": 337,
+                "with_this_species_detection_at_op": 4,
+                "note": "this species is often unverified on these images; not a verified false-positive rate"
+              }
+            }
+          }
+        }
+      },
+      "selected": {
+        "cat": "crop",
+        "dog": "crop"
+      }
+    }
+  },
+  "created_at": "2026-10-09T09:00:48+00:00",
+  "classifier": "efficientnet_lite0_mediapipe_int8_v1"
+}

@@ -42,7 +42,7 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 ENGINE_ASSET_FORMAT = "0.2.0"  # 0.2: quantized model inputs/outputs (input_quant, output_quant)
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
-WEB_DETECTORS = {"efficientdet_lite0_mediapipe_v1", "efficientdet_lite2_mediapipe_v1"}
+WEB_DETECTORS = ("efficientdet_lite0_mediapipe_v1", "efficientdet_lite0_mediapipe_int8_v1", "efficientdet_lite0_mediapipe_f16_v1")  # raw-anchor builds; browser parity measured
 
 
 def _b64(a: np.ndarray) -> str:
@@ -233,6 +233,10 @@ def add_device_check(settings: Settings, out: Path) -> dict:
     (dc / "reference_outputs.json").write_text(json.dumps(refs))
     # Reference clip: a real Open Images cat crop walking across a real indoor background (CC BY 2.0 sources).
     data, man = settings.paths.resolve("data_root"), settings.paths.resolve("manifests_root")
+    from ..data import openimages as OI
+
+    # Backgrounds: E8's pinned indoor images (fetched here if absent; checksums in e8_backgrounds_sha256.csv).
+    OI.fetch_images(data, man, image_dir=data / "openimages_test" / "images", images_csv="e8_backgrounds.csv", sums_csv="e8_backgrounds_sha256.csv")
     imgs = {r["image_id"]: r for r in csv.DictReader(open(man / "oi_test_tuning_images.csv", newline="", encoding="utf-8"))}
     bgs = list(csv.DictReader(open(man / "e8_backgrounds.csv", newline="", encoding="utf-8")))
     boxes = [r for r in csv.DictReader(open(man / "oi_test_tuning_boxes.csv", newline="", encoding="utf-8")) if r["label"] == "cat"

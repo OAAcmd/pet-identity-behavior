@@ -12,6 +12,8 @@
 #   the compose "models" service) or mounted read-only.
 # * Persistent state (SQLite database, retained media) lives in the
 #   /var/lib/petperception volume. Container files are otherwise disposable.
+# * The on-device model bundle (served at /ondevice/) lives in the /bundle
+#   volume: exported by the compose "bundle" service or mounted from a release.
 ARG REGISTRY=mirror.gcr.io/library
 ARG NODE_IMAGE=${REGISTRY}/node:22-bookworm-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392
 ARG UBUNTU_IMAGE=${REGISTRY}/ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55
@@ -65,10 +67,10 @@ ENV PATH=/opt/venv/bin:$PATH \
     PETPERCEPTION_MODELS_ROOT=/models
 
 RUN useradd --create-home --uid 10001 app \
- && mkdir -p /models /var/lib/petperception \
- && chown -R app /models /var/lib/petperception
+ && mkdir -p /models /var/lib/petperception /bundle \
+ && chown -R app /models /var/lib/petperception /bundle
 USER app
-VOLUME ["/var/lib/petperception", "/models"]
+VOLUME ["/var/lib/petperception", "/models", "/bundle"]
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
   CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4).status==200 else 1)"

@@ -21,7 +21,9 @@ the analysis engine and `petperception export-ondevice`.
 | `verifier/verifier_<detector>_e7selected.json` | see below | same | same | no (protocol-selected feature set, for comparison) | same |
 | `keypoints/dog_keypoints_head_v1.npz` + `.json` | `814b0348...7a` | `petperception evaluate --experiment e9` | Ultralytics dog-pose (Stanford Dogs images) | server, research profile only | **research only** |
 | `posture/posture_v1.npz` | `aa9bc30c...14` | `petperception evaluate --experiment e10` | Open Images V7 train images (CC BY 2.0) with weak labels from Localized Narratives captions (CC BY 4.0) | yes: coarse posture (server and phone) | all profiles (backbone weights need legal review for commercial use) |
-| `behavior_video/dog_behavior_video_v1.npz` | in `results/e11/metrics.json` | `petperception evaluate --experiment e11` | MammalNet dog-breed videos (third-party YouTube uploads, no dataset licence) | not wired into analysis | **research only** |
+| `verifier/verifier_efficientdet_lite0_mediapipe_int8_v1__efficientnet_lite0_mediapipe_int8_v1.json` | see below | E12 run, then `E7.export_feature_set` (crop set, same procedure as E7) | OI test split (tuning) | yes: verifier of the int8 phone bundle | all profiles (backbone terms apply) |
+| `behavior_video/dog_behavior_video_v1.npz` | see below | `petperception evaluate --experiment e11` | MammalNet dog-breed videos (third-party YouTube uploads, no dataset licence) | not wired into analysis | **research only** |
+| `interaction/person_pet_interaction_v1.npz` | see below | `petperception evaluate --experiment e13` | Open Images V7 relationships (CC BY 4.0), images CC BY 2.0 | see docs/ON_DEVICE_AUDIT.md | all profiles |
 
 Full digests:
 
@@ -36,6 +38,9 @@ a513230c6b0a744a8917ea5a52d99f42681e7fe0131138f571e0e2f089260075  verifier/verif
 86014d8b688c4d9ffa9e13bb755f28abb0d9369e6e4c601f9fd7a7378cf51288  verifier/verifier_efficientdet_lite2_mediapipe_v1_e7selected.json
 814b0348575624f0a28d573064bbce5216c75d78f2a8f26fbad0b5eb16e5567a  keypoints/dog_keypoints_head_v1.npz
 aa9bc30c15285c1a9b76e336bf4d5bef11b1ef1b0027e654497816829dd14d72  posture/posture_v1.npz
+2a5d747eb5e27e7b7edfb9cd435c05af0d28e37a937fa2fdde248918d30d52d0  verifier/verifier_efficientdet_lite0_mediapipe_int8_v1__efficientnet_lite0_mediapipe_int8_v1.json
+a7f9e8f5a539d156138007a7dedf79c12b54edcdeb0ba92f409828d6750f32e4  behavior_video/dog_behavior_video_v1.npz
+7997042681687e864b731c1b518b40940cd73b3e90dfdcb93c3936736e8bca3d  interaction/person_pet_interaction_v1.npz
 ```
 
 The phone does not read these files directly: `petperception export-ondevice`

@@ -1,0 +1,1465 @@
+{
+ "cases_compared": 30,
+ "decision_agreement": 1.0,
+ "agreement": {
+  "tracks": {
+   "matched": 19,
+   "only_reference": 4,
+   "only_web": 3,
+   "f1": 0.8444444444444444,
+   "median_boundary_error_s": 0.0
+  },
+  "sounds": {
+   "matched": 9,
+   "only_reference": 0,
+   "only_web": 0,
+   "f1": 1.0,
+   "median_boundary_error_s": 0.0
+  },
+  "segments": {
+   "matched": 49,
+   "only_reference": 8,
+   "only_web": 6,
+   "f1": 0.875,
+   "median_boundary_error_s": 0.0
+  },
+  "hypotheses": {
+   "matched": 33,
+   "only_reference": 0,
+   "only_web": 1,
+   "f1": 0.9850746268656716,
+   "median_boundary_error_s": 0.0
+  }
+ },
+ "posture": {
+  "reference_frames": 330,
+  "web_frames": 333,
+  "frames_matched_by_species_and_time": 324,
+  "label_agreement": 0.8981481481481481,
+  "both_reported": 134,
+  "label_agreement_when_both_reported": 1.0,
+  "gate_flips_one_side_uncertain": 33,
+  "median_abs_score_diff": 0.026000000000000023
+ },
+ "rows": [
+  {
+   "name": "s01_food_zone_meow",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 27.38,
+    "decode_audio": 56.7,
+    "audio_inference": 67.64,
+    "video_decode_detect_track": 2313.35,
+    "video_detector_inference": 659.54,
+    "video_verifier": 295.54,
+    "video_posture": 359.01,
+    "video_quality_and_camera_motion": 313.55,
+    "fusion_and_behavior": 2.22
+   },
+   "ref_timings_ms": {
+    "probe": 72.21,
+    "hash": 0.64,
+    "decode_audio": 180.51,
+    "audio_inference": 45.38,
+    "video_decode_detect_track": 753.84,
+    "video_detector_inference": 241.34,
+    "video_verifier": 83.41,
+    "video_pose": 99.81,
+    "video_quality_and_camera_motion": 219.39,
+    "frame_gap_check": 62.66,
+    "behavior_segments": 0.29,
+    "fusion": 0.52
+   }
+  },
+  {
+   "name": "s02_food_zone_silent",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 5.89,
+    "decode_audio": 23.2,
+    "video_decode_detect_track": 2070.27,
+    "video_detector_inference": 616.84,
+    "video_verifier": 280.42,
+    "video_posture": 338.51,
+    "video_quality_and_camera_motion": 242.69,
+    "fusion_and_behavior": 0.34
+   },
+   "ref_timings_ms": {
+    "probe": 64.18,
+    "hash": 0.18,
+    "decode_audio": 148.98,
+    "video_decode_detect_track": 706.82,
+    "video_detector_inference": 232.81,
+    "video_verifier": 83.24,
+    "video_pose": 102.15,
+    "video_quality_and_camera_motion": 208.18,
+    "frame_gap_check": 65.3,
+    "behavior_segments": 0.02,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "s03_two_animals_bark",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    2,
+    2
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    4,
+    4
+   ],
+   "hypotheses": [
+    6,
+    0,
+    1
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.81,
+    "decode_audio": 24.03,
+    "audio_inference": 40.6,
+    "video_decode_detect_track": 3294.37,
+    "video_detector_inference": 710.27,
+    "video_verifier": 752.16,
+    "video_posture": 730.54,
+    "video_quality_and_camera_motion": 287.4,
+    "fusion_and_behavior": 7.43
+   },
+   "ref_timings_ms": {
+    "probe": 67.42,
+    "hash": 0.39,
+    "decode_audio": 183.4,
+    "audio_inference": 49.35,
+    "video_decode_detect_track": 1044.88,
+    "video_detector_inference": 238.71,
+    "video_verifier": 217.73,
+    "video_pose": 209.59,
+    "video_quality_and_camera_motion": 240.57,
+    "frame_gap_check": 66.23,
+    "behavior_segments": 5.44,
+    "fusion": 0.42
+   }
+  },
+  {
+   "name": "s04_no_pet_vacuum",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 9.81,
+    "decode_audio": 25.17,
+    "audio_inference": 40.21,
+    "video_decode_detect_track": 1815.05,
+    "video_detector_inference": 740.36,
+    "video_verifier": 0.07,
+    "video_posture": 0.03,
+    "video_quality_and_camera_motion": 313.45,
+    "fusion_and_behavior": 0.25
+   },
+   "ref_timings_ms": {
+    "probe": 60.14,
+    "hash": 0.25,
+    "decode_audio": 159.91,
+    "audio_inference": 36.02,
+    "video_decode_detect_track": 506.37,
+    "video_detector_inference": 229.72,
+    "video_verifier": 0.07,
+    "video_pose": 0.19,
+    "video_quality_and_camera_motion": 188.65,
+    "frame_gap_check": 81.61,
+    "behavior_segments": 0.16,
+    "fusion": 0.03
+   }
+  },
+  {
+   "name": "s05_dog_visible_meow",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    4,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 7.11,
+    "decode_audio": 21.28,
+    "audio_inference": 36.16,
+    "video_decode_detect_track": 2371.95,
+    "video_detector_inference": 648.88,
+    "video_verifier": 319.19,
+    "video_posture": 389.24,
+    "video_quality_and_camera_motion": 252.95,
+    "fusion_and_behavior": 0.78
+   },
+   "ref_timings_ms": {
+    "probe": 79.27,
+    "hash": 0.33,
+    "decode_audio": 198.38,
+    "audio_inference": 46.39,
+    "video_decode_detect_track": 705.29,
+    "video_detector_inference": 219.89,
+    "video_verifier": 87.93,
+    "video_pose": 87.78,
+    "video_quality_and_camera_motion": 193.06,
+    "frame_gap_check": 75.26,
+    "behavior_segments": 1.49,
+    "fusion": 0.28
+   }
+  },
+  {
+   "name": "s06_rest_zone_growl",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 7.04,
+    "decode_audio": 23.04,
+    "audio_inference": 44.21,
+    "video_decode_detect_track": 2476.96,
+    "video_detector_inference": 705.82,
+    "video_verifier": 310.76,
+    "video_posture": 388.06,
+    "video_quality_and_camera_motion": 309.09,
+    "fusion_and_behavior": 0.44
+   },
+   "ref_timings_ms": {
+    "probe": 70.65,
+    "hash": 0.44,
+    "decode_audio": 190.9,
+    "audio_inference": 41.12,
+    "video_decode_detect_track": 742.51,
+    "video_detector_inference": 243.85,
+    "video_verifier": 92.97,
+    "video_pose": 92.69,
+    "video_quality_and_camera_motion": 222.07,
+    "frame_gap_check": 70.1,
+    "behavior_segments": 0.23,
+    "fusion": 0.3
+   }
+  },
+  {
+   "name": "s07_audio_only_meow",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 21.2,
+    "decode_audio": 9.29,
+    "audio_inference": 31.15,
+    "fusion_and_behavior": 0.24
+   },
+   "ref_timings_ms": {
+    "probe": 61.03,
+    "hash": 0.75,
+    "decode_audio": 111.22,
+    "audio_inference": 18.32,
+    "behavior_segments": 0.18,
+    "fusion": 0.21
+   }
+  },
+  {
+   "name": "s08_video_only_cat",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.94,
+    "decode_audio": 3.24,
+    "video_decode_detect_track": 2133.34,
+    "video_detector_inference": 687.6,
+    "video_verifier": 292.02,
+    "video_posture": 397.6,
+    "video_quality_and_camera_motion": 292.35,
+    "fusion_and_behavior": 0.05
+   },
+   "ref_timings_ms": {
+    "probe": 63.81,
+    "hash": 0.14,
+    "video_decode_detect_track": 630.68,
+    "video_detector_inference": 211.11,
+    "video_verifier": 74.67,
+    "video_pose": 85.27,
+    "video_quality_and_camera_motion": 181.67,
+    "frame_gap_check": 67.54,
+    "behavior_segments": 0.01,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "s09_camera_pan_cat",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 8.37,
+    "decode_audio": 23.93,
+    "video_decode_detect_track": 2933.59,
+    "video_detector_inference": 720.27,
+    "video_verifier": 659.83,
+    "video_posture": 489.88,
+    "video_quality_and_camera_motion": 194.09,
+    "fusion_and_behavior": 0.05
+   },
+   "ref_timings_ms": {
+    "probe": 56.86,
+    "hash": 0.14,
+    "decode_audio": 152.33,
+    "video_decode_detect_track": 674.29,
+    "video_detector_inference": 205.87,
+    "video_verifier": 158.41,
+    "video_pose": 103.07,
+    "video_quality_and_camera_motion": 125.48,
+    "frame_gap_check": 58.85,
+    "behavior_segments": 0.03,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "s10_moving_cat_play_zone",
+   "decision_ref": "experimental_hypothesis",
+   "decision_web": "experimental_hypothesis",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 8.54,
+    "decode_audio": 24.33,
+    "video_decode_detect_track": 2339.71,
+    "video_detector_inference": 666.41,
+    "video_verifier": 248.76,
+    "video_posture": 263.97,
+    "video_quality_and_camera_motion": 296.41,
+    "fusion_and_behavior": 1.81
+   },
+   "ref_timings_ms": {
+    "probe": 55.99,
+    "hash": 0.38,
+    "decode_audio": 152.52,
+    "video_decode_detect_track": 616.5,
+    "video_detector_inference": 213.49,
+    "video_verifier": 80.46,
+    "video_pose": 67.36,
+    "video_quality_and_camera_motion": 169.83,
+    "frame_gap_check": 48.63,
+    "behavior_segments": 5.01,
+    "fusion": 0.14
+   }
+  },
+  {
+   "name": "s11_corrupt",
+   "reference_error": "corrupt_input",
+   "web_rejected_too": true
+  },
+  {
+   "name": "s12_meow_8khz",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 9.12,
+    "decode_audio": 7.66,
+    "audio_inference": 28.01,
+    "fusion_and_behavior": 0.23
+   },
+   "ref_timings_ms": {
+    "probe": 54.16,
+    "hash": 0.16,
+    "decode_audio": 125.38,
+    "audio_inference": 20.33,
+    "behavior_segments": 0.14,
+    "fusion": 0.24
+   }
+  },
+  {
+   "name": "s13_low_light_cat",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.55,
+    "decode_audio": 28.29,
+    "audio_inference": 41.23,
+    "video_decode_detect_track": 1860.38,
+    "video_detector_inference": 678.19,
+    "video_verifier": 0.05,
+    "video_posture": 0.05,
+    "video_quality_and_camera_motion": 388.54,
+    "fusion_and_behavior": 0.49
+   },
+   "ref_timings_ms": {
+    "probe": 54.63,
+    "hash": 0.63,
+    "decode_audio": 151.51,
+    "audio_inference": 37.2,
+    "video_decode_detect_track": 340.87,
+    "video_detector_inference": 184.82,
+    "video_verifier": 0.05,
+    "video_pose": 0.13,
+    "video_quality_and_camera_motion": 81.4,
+    "frame_gap_check": 65.1,
+    "behavior_segments": 0.13,
+    "fusion": 0.2
+   }
+  },
+  {
+   "name": "s14_rest_zone_silent",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.45,
+    "decode_audio": 20.29,
+    "video_decode_detect_track": 2168.14,
+    "video_detector_inference": 641.86,
+    "video_verifier": 290,
+    "video_posture": 341.75,
+    "video_quality_and_camera_motion": 279.32,
+    "fusion_and_behavior": 0.06
+   },
+   "ref_timings_ms": {
+    "probe": 65.21,
+    "hash": 0.14,
+    "decode_audio": 175.21,
+    "video_decode_detect_track": 591.56,
+    "video_detector_inference": 194.28,
+    "video_verifier": 74.06,
+    "video_pose": 78.07,
+    "video_quality_and_camera_motion": 165.13,
+    "frame_gap_check": 64.09,
+    "behavior_segments": 0.01,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "e8-still_walk_still-1000",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 9.23,
+    "video_decode_detect_track": 4134.51,
+    "video_detector_inference": 1239.39,
+    "video_verifier": 526.96,
+    "video_posture": 610.81,
+    "video_quality_and_camera_motion": 536.04,
+    "fusion_and_behavior": 1.11
+   },
+   "ref_timings_ms": {
+    "probe": 67.01,
+    "hash": 0.38,
+    "video_decode_detect_track": 1364.67,
+    "video_detector_inference": 400.42,
+    "video_verifier": 147.32,
+    "video_pose": 154.28,
+    "video_quality_and_camera_motion": 551.89,
+    "frame_gap_check": 68.42,
+    "behavior_segments": 1.86,
+    "fusion": 0.04
+   }
+  },
+  {
+   "name": "e8-still_walk_still-1008",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 9.43,
+    "video_decode_detect_track": 2881.22,
+    "video_detector_inference": 1166.5,
+    "video_verifier": 0.05,
+    "video_posture": 0.06,
+    "video_quality_and_camera_motion": 598.44,
+    "fusion_and_behavior": 0.04
+   },
+   "ref_timings_ms": {
+    "probe": 60.66,
+    "hash": 0.26,
+    "video_decode_detect_track": 810.81,
+    "video_detector_inference": 340.46,
+    "video_verifier": 4.25,
+    "video_pose": 0.28,
+    "video_quality_and_camera_motion": 355.92,
+    "frame_gap_check": 73.94,
+    "behavior_segments": 0.01,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "e8-run_burst-1001",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    4,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.65,
+    "video_decode_detect_track": 2603.94,
+    "video_detector_inference": 770.77,
+    "video_verifier": 338.66,
+    "video_posture": 441.55,
+    "video_quality_and_camera_motion": 374.33,
+    "fusion_and_behavior": 0.95
+   },
+   "ref_timings_ms": {
+    "probe": 69.58,
+    "hash": 0.21,
+    "video_decode_detect_track": 801.01,
+    "video_detector_inference": 253.69,
+    "video_verifier": 97.6,
+    "video_pose": 110.61,
+    "video_quality_and_camera_motion": 240.6,
+    "frame_gap_check": 56.47,
+    "behavior_segments": 2.4,
+    "fusion": 0.05
+   }
+  },
+  {
+   "name": "e8-run_burst-1009",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.61,
+    "video_decode_detect_track": 2495.57,
+    "video_detector_inference": 781,
+    "video_verifier": 344.03,
+    "video_posture": 429.25,
+    "video_quality_and_camera_motion": 317.19,
+    "fusion_and_behavior": 0.03
+   },
+   "ref_timings_ms": {
+    "probe": 64.63,
+    "hash": 0.28,
+    "video_decode_detect_track": 800.14,
+    "video_detector_inference": 242.78,
+    "video_verifier": 95.85,
+    "video_pose": 97.8,
+    "video_quality_and_camera_motion": 258.61,
+    "frame_gap_check": 68.94,
+    "behavior_segments": 0.02,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "e8-pacing-1002",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.79,
+    "video_decode_detect_track": 3805.86,
+    "video_detector_inference": 996.71,
+    "video_verifier": 513.74,
+    "video_posture": 576.06,
+    "video_quality_and_camera_motion": 464.06,
+    "fusion_and_behavior": 0.59
+   },
+   "ref_timings_ms": {
+    "probe": 64.38,
+    "hash": 0.28,
+    "video_decode_detect_track": 1127.44,
+    "video_detector_inference": 343.67,
+    "video_verifier": 140.1,
+    "video_pose": 144.53,
+    "video_quality_and_camera_motion": 382.78,
+    "frame_gap_check": 62.09,
+    "behavior_segments": 1.9,
+    "fusion": 0.03
+   }
+  },
+  {
+   "name": "e8-pacing-1010",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 7.52,
+    "video_decode_detect_track": 4907.21,
+    "video_detector_inference": 1362.67,
+    "video_verifier": 632.22,
+    "video_posture": 696.62,
+    "video_quality_and_camera_motion": 551.76,
+    "fusion_and_behavior": 0.54
+   },
+   "ref_timings_ms": {
+    "probe": 55.83,
+    "hash": 0.61,
+    "video_decode_detect_track": 1447.66,
+    "video_detector_inference": 469.51,
+    "video_verifier": 175.39,
+    "video_pose": 190.67,
+    "video_quality_and_camera_motion": 495.36,
+    "frame_gap_check": 61.16,
+    "behavior_segments": 2.37,
+    "fusion": 0.04
+   }
+  },
+  {
+   "name": "e8-zone_visit-1003",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    8,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 7.72,
+    "video_decode_detect_track": 4603.34,
+    "video_detector_inference": 1306.19,
+    "video_verifier": 633.12,
+    "video_posture": 758.2,
+    "video_quality_and_camera_motion": 587.26,
+    "fusion_and_behavior": 1.25
+   },
+   "ref_timings_ms": {
+    "probe": 58.47,
+    "hash": 0.37,
+    "video_decode_detect_track": 1398.24,
+    "video_detector_inference": 436.12,
+    "video_verifier": 172.74,
+    "video_pose": 190.13,
+    "video_quality_and_camera_motion": 492.25,
+    "frame_gap_check": 71.36,
+    "behavior_segments": 2.42,
+    "fusion": 0.14
+   }
+  },
+  {
+   "name": "e8-zone_visit-1011",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    7,
+    0,
+    1
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 8.08,
+    "video_decode_detect_track": 4568.41,
+    "video_detector_inference": 1272.12,
+    "video_verifier": 607.48,
+    "video_posture": 712.79,
+    "video_quality_and_camera_motion": 547.73,
+    "fusion_and_behavior": 0.78
+   },
+   "ref_timings_ms": {
+    "probe": 81.2,
+    "hash": 0.67,
+    "video_decode_detect_track": 1469.23,
+    "video_detector_inference": 458.05,
+    "video_verifier": 180.17,
+    "video_pose": 191.25,
+    "video_quality_and_camera_motion": 504.68,
+    "frame_gap_check": 63.08,
+    "behavior_segments": 2.82,
+    "fusion": 0.16
+   }
+  },
+  {
+   "name": "e8-exit_return-1004",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    1,
+    1
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    4,
+    2,
+    1
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 10.41,
+    "video_decode_detect_track": 4154.42,
+    "video_detector_inference": 1489.44,
+    "video_verifier": 288.55,
+    "video_posture": 97.71,
+    "video_quality_and_camera_motion": 782.45,
+    "fusion_and_behavior": 4.87
+   },
+   "ref_timings_ms": {
+    "probe": 61.93,
+    "hash": 0.42,
+    "video_decode_detect_track": 1200.41,
+    "video_detector_inference": 446.65,
+    "video_verifier": 53.34,
+    "video_pose": 33.63,
+    "video_quality_and_camera_motion": 556.05,
+    "frame_gap_check": 66.98,
+    "behavior_segments": 2.74,
+    "fusion": 0.17
+   }
+  },
+  {
+   "name": "e8-exit_return-1012",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    5,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 9.05,
+    "video_decode_detect_track": 4262.38,
+    "video_detector_inference": 1418.11,
+    "video_verifier": 294.91,
+    "video_posture": 332.15,
+    "video_quality_and_camera_motion": 659.64,
+    "fusion_and_behavior": 1.02
+   },
+   "ref_timings_ms": {
+    "probe": 72.87,
+    "hash": 0.72,
+    "video_decode_detect_track": 1385.56,
+    "video_detector_inference": 472.01,
+    "video_verifier": 87.4,
+    "video_pose": 82.92,
+    "video_quality_and_camera_motion": 626.69,
+    "frame_gap_check": 67.45,
+    "behavior_segments": 1.86,
+    "fusion": 0.05
+   }
+  },
+  {
+   "name": "e8-two_cross-1005",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    1,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    1,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 10.64,
+    "video_decode_detect_track": 3235.89,
+    "video_detector_inference": 780.02,
+    "video_verifier": 603.18,
+    "video_posture": 518.16,
+    "video_quality_and_camera_motion": 347.21,
+    "fusion_and_behavior": 0.3
+   },
+   "ref_timings_ms": {
+    "probe": 62.18,
+    "hash": 0.91,
+    "video_decode_detect_track": 918.16,
+    "video_detector_inference": 244.28,
+    "video_verifier": 143.9,
+    "video_pose": 116.69,
+    "video_quality_and_camera_motion": 308.68,
+    "frame_gap_check": 83.02,
+    "behavior_segments": 2.84,
+    "fusion": 0.05
+   }
+  },
+  {
+   "name": "e8-two_cross-1013",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    1,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 10.15,
+    "video_decode_detect_track": 3102.06,
+    "video_detector_inference": 699.63,
+    "video_verifier": 585.37,
+    "video_posture": 730.95,
+    "video_quality_and_camera_motion": 303.01,
+    "fusion_and_behavior": 0.69
+   },
+   "ref_timings_ms": {
+    "probe": 80.89,
+    "hash": 0.43,
+    "video_decode_detect_track": 1012.08,
+    "video_detector_inference": 261.69,
+    "video_verifier": 190.7,
+    "video_pose": 190.42,
+    "video_quality_and_camera_motion": 268.43,
+    "frame_gap_check": 76.91,
+    "behavior_segments": 2.52,
+    "fusion": 0.06
+   }
+  },
+  {
+   "name": "e8-occlusion-1006",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 7.92,
+    "video_decode_detect_track": 1604.94,
+    "video_detector_inference": 609.3,
+    "video_verifier": 48.5,
+    "video_posture": 59.2,
+    "video_quality_and_camera_motion": 313.48,
+    "fusion_and_behavior": 0.25
+   },
+   "ref_timings_ms": {
+    "probe": 79.48,
+    "hash": 0.39,
+    "video_decode_detect_track": 615.09,
+    "video_detector_inference": 209.37,
+    "video_verifier": 15.93,
+    "video_pose": 15.63,
+    "video_quality_and_camera_motion": 275.87,
+    "frame_gap_check": 62.55,
+    "behavior_segments": 1.03,
+    "fusion": 0.06
+   }
+  },
+  {
+   "name": "e8-occlusion-1014",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 6.9,
+    "video_decode_detect_track": 2064.24,
+    "video_detector_inference": 680.85,
+    "video_verifier": 239.63,
+    "video_posture": 274.1,
+    "video_quality_and_camera_motion": 308.21,
+    "fusion_and_behavior": 0.17
+   },
+   "ref_timings_ms": {
+    "probe": 60.17,
+    "hash": 0.2,
+    "video_decode_detect_track": 691.72,
+    "video_detector_inference": 209.95,
+    "video_verifier": 66.09,
+    "video_pose": 75.97,
+    "video_quality_and_camera_motion": 234.03,
+    "frame_gap_check": 84.25,
+    "behavior_segments": 1.32,
+    "fusion": 0.04
+   }
+  },
+  {
+   "name": "e8-camera_pan-1007",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 8.08,
+    "video_decode_detect_track": 2268.4,
+    "video_detector_inference": 598.93,
+    "video_verifier": 332.11,
+    "video_posture": 371.5,
+    "video_quality_and_camera_motion": 306.2,
+    "fusion_and_behavior": 0.88
+   },
+   "ref_timings_ms": {
+    "probe": 69.24,
+    "hash": 0.27,
+    "video_decode_detect_track": 965.63,
+    "video_detector_inference": 271.62,
+    "video_verifier": 111.5,
+    "video_pose": 106.71,
+    "video_quality_and_camera_motion": 344.15,
+    "frame_gap_check": 66.75,
+    "behavior_segments": 1.87,
+    "fusion": 0.17
+   }
+  },
+  {
+   "name": "e8-camera_pan-1015",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 5.93,
+    "video_decode_detect_track": 2164.45,
+    "video_detector_inference": 757.66,
+    "video_verifier": 158.17,
+    "video_posture": 62.97,
+    "video_quality_and_camera_motion": 363.57,
+    "fusion_and_behavior": 0.03
+   },
+   "ref_timings_ms": {
+    "probe": 72.29,
+    "hash": 0.22,
+    "video_decode_detect_track": 732.33,
+    "video_detector_inference": 253.16,
+    "video_verifier": 58.84,
+    "video_pose": 17.61,
+    "video_quality_and_camera_motion": 299.56,
+    "frame_gap_check": 76.78,
+    "behavior_segments": 0.02,
+    "fusion": 0.02
+   }
+  },
+  {
+   "name": "e2e-big-cat-clip",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ],
+   "web_timings_ms": {
+    "probe_and_hash": 74.71,
+    "decode_audio": 32.51,
+    "audio_inference": 47.26,
+    "video_decode_detect_track": 7480.55,
+    "video_detector_inference": 805.8,
+    "video_verifier": 26.27,
+    "video_posture": 0.06,
+    "video_quality_and_camera_motion": 416.92,
+    "fusion_and_behavior": 0.67
+   },
+   "ref_timings_ms": {
+    "probe": 87.72,
+    "hash": 13.2,
+    "decode_audio": 201.16,
+    "audio_inference": 40.65,
+    "video_decode_detect_track": 669.82,
+    "video_detector_inference": 266.39,
+    "video_verifier": 5.58,
+    "video_pose": 0.16,
+    "video_quality_and_camera_motion": 250.36,
+    "frame_gap_check": 82.12,
+    "behavior_segments": 0.17,
+    "fusion": 0.23
+   }
+  }
+ ],
+ "tolerances": {
+  "tracks_s": 1.1,
+  "sounds_s": 0.5,
+  "segments_s": 1.1
+ },
+ "note": "Desktop headless Chromium (LiteRT.js WASM) vs Python LiteRT; media decoded by the browser vs FFmpeg.",
+ "created_at": "2026-10-09T09:09:54+00:00",
+ "bundle": {
+  "variant": "int8 detector + int8 backbone (E12; opt-in compact bundle)",
+  "bundle_version": "4e76c2f66291375b"
+ }
+}

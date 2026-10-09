@@ -41,9 +41,11 @@ tester confirms or overrides it.
 Why these numbers (assumptions):
 
 * **Download 50 MB**: one-time, prompted, Wi-Fi recommended in the UI. The
-  current bundle is dominated by two float32 models (detector 13.8 MB,
-  backbone 18.6 MB). int8 builds would cut this to roughly a quarter; E12
-  measures whether accuracy and rejection behaviour survive.
+  default bundle is dominated by two float32 models (detector 13.8 MB,
+  backbone 18.6 MB). The int8 variant evaluated in E12 is 14.8 MB in total and
+  roughly halves CPU latency; it is opt-in because individual verifier
+  decisions can differ strongly from float32 (see E12 in
+  [ALGORITHM_REPORT.md](ALGORITHM_REPORT.md)).
 * **Real-time factor 1.0 on tier B**: a 60 s recording finishes in about a
   minute, which keeps the "record, then see the result" flow usable. Analysis
   processes 2 frames per second, so the per-frame work (decode + detector +
@@ -67,8 +69,8 @@ behaviour < 10 ms. Seeking the video element frame by frame is the largest
 single cost and depends on the browser's decoder; a high-bitrate 6 Mbit/s clip
 took 7.4 s for 8 s of video on the same VM.
 
-Levers if a tier misses its budget (in order of preference): int8 models
-(E12), fewer verifier/posture crops per frame (configurable), sampling 1 frame
+Levers if a tier misses its budget (in order of preference): the int8
+bundle (E12, evaluated, opt-in), fewer verifier/posture crops per frame (configurable), sampling 1 frame
 per second for long clips (configurable, lowers temporal resolution and is
 reported in the result), WebGPU acceleration (available in LiteRT.js, not yet
 validated for these models).

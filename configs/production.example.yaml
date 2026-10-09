@@ -118,6 +118,7 @@ serve:
   port: 8000
   trusted_proxy_hops: 1          # the reverse proxy sets X-Forwarded-For
   static_dir: web/dist           # built PWA, served from the same origin
+  ondevice_dir: ${PETPERCEPTION_ONDEVICE_DIR:-/bundle/current}   # on-device model bundle served at /ondevice/
 
 app:
   log_format: json

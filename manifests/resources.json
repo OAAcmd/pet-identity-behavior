@@ -747,6 +747,101 @@
         "commercial": "requires_legal_review"
       },
       "release_note": "Weights Apache-2.0 per embedded metadata; ImageNet training-data terms need legal sign-off for commercial use."
+    },
+    {
+      "id": "mammalnet_dog_segments",
+      "kind": "dataset",
+      "role": "dog behavior from real video (E11)",
+      "name": "MammalNet temporal behavior annotations, domestic-dog breed videos",
+      "canonical_url": "https://mammal-net.github.io/",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "annotation.tar",
+          "url": "https://mammalnet.s3.amazonaws.com/annotation.tar",
+          "bytes": 1512456,
+          "sha256": "055af7e2ae5184af1a292bd1605d7dd09d4937d25d2e81c1b333c654b97caee0"
+        }
+      ],
+      "terms": {
+        "code": "MIT (MammalNet repository)",
+        "data": "No dataset licence published; videos are third-party YouTube uploads, streamed frame by frame during E11 and never stored."
+      },
+      "use_restrictions": [
+        "Research profile only; anything trained on it inherits this.",
+        "Videos are never downloaded to disk or committed."
+      ],
+      "contamination_notes": "YouTube videos; overlap with other web-sourced datasets unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "No dataset licence; research only."
+    },
+    {
+      "id": "openimages_v7_vrd_person_pet",
+      "kind": "dataset",
+      "role": "person-pet interaction pairs (E13)",
+      "name": "Open Images V7 visual relationships: person-pet box pairs",
+      "canonical_url": "https://storage.googleapis.com/openimages/web/index.html",
+      "status": "available",
+      "profiles": [
+        "research",
+        "personal_noncommercial",
+        "commercial"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [],
+      "manifests": [
+        "manifests/oi_vrd_sources_sha256.csv",
+        "manifests/oi_vrd_interaction_images.csv",
+        "manifests/oi_vrd_interaction_pairs.csv",
+        "manifests/oi_vrd_interaction_sha256.csv"
+      ],
+      "terms": {
+        "annotations": "CC BY 4.0 (Google)",
+        "images": "CC BY 2.0 per image (author and source URL in the manifest)"
+      },
+      "use_restrictions": [
+        "Images never committed; only IDs, attribution and checksums."
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "CC BY 4.0 annotations, CC BY 2.0 images with attribution."
+    },
+    {
+      "id": "dog_behavior_video_v1",
+      "kind": "derived_artifact",
+      "name": "artifacts/behavior_video/dog_behavior_video_v1.npz",
+      "role": "dog behavior classes from video segments (E11)",
+      "status": "available",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Trained on MammalNet (no dataset licence); research only. Not wired into the product."
+    },
+    {
+      "id": "person_pet_interaction_v1",
+      "kind": "derived_artifact",
+      "name": "artifacts/interaction/person_pet_interaction_v1.npz",
+      "role": "person-pet interaction from box geometry (E13)",
+      "status": "available",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Fitted on CC BY 4.0 annotations / CC BY 2.0 images; geometry features only (no backbone needed)."
     }
   ]
 }

@@ -406,23 +406,106 @@ detector + verifier; features: pooled crop embedding + box shape + species.
   decoders differ slightly. The app shows posture as per-track frame counts
   including "uncertain".
 
-### E11 - Dog behavior from real video (MammalNet, research only)
+### E11 - Dog behavior from real video (MammalNet, research only) - COMPLETED
 
-See `results/e11/metrics.json` (filled in below when the run completes).
+MammalNet temporal annotations for domestic-dog breeds (813 segments from
+YouTube videos, streamed at 2 fps and never stored; MammalNet has no domestic
+cats). Five household-relevant classes: sleeps, eats food, drinks water,
+fights (with other animals), eliminates. Features as on the phone: largest
+accepted dog detection → backbone embedding of the crop (mean and max over the
+segment) + whole-frame embedding + box motion; multinomial logistic
+regression; MammalNet's own video-level splits (595 / 64 / 154 segments).
 
-### E12 - Quantized models for phones
+* Test macro-F1 0.638 [0.537, 0.716] (accuracy 0.714) vs majority 0.113 and a
+  motion-only model 0.369. Per class F1: sleeps 0.86, fights 0.77, eats 0.58,
+  drinks 0.53, eliminates 0.46 (eating vs drinking vs eliminating are mostly
+  confused with each other).
+* Breed (MammalNet keyword) accuracy on test ranges 0.50-0.75 with 5-49
+  segments per breed: too few to claim breed effects.
+* A dog was detected in 61 % of sampled frames: YouTube framing and
+  partial views limit the detector-crop features.
+* Research profile only (no dataset licence); not wired into the product.
 
-See `results/e12/metrics.json` (filled in below when the run completes).
+### E12 - Quantized models for phones - COMPLETED
 
-### E13 - Person-pet interaction (Open Images relationships)
+Re-runs the E7 protocol (detection + rejection) for every (detector,
+classifier) build pair, the E10 posture protocol for the int8 backbone, and
+measures agreement on identical detections. The replacement rule (recall
+drop ≤ 0.02, specificity drop ≤ 0.03 per class, posture macro-F1 drop ≤ 0.03)
+was fixed before the results.
 
-See `results/e13/metrics.json` (filled in below when the run completes).
+| Pair (detector / backbone) | Cat recall | Cat specificity | Dog recall | Dog specificity | Rule |
+| --- | --- | --- | --- | --- | --- |
+| float32 / float32 (shipped before) | 0.906 | 0.702 | 0.872 | 0.865 | reference |
+| float16 / float32 | 0.903 | 0.723 | 0.869 | 0.865 | met |
+| int8 / float32 | 0.903 | 0.787 | 0.864 | 0.928 | met |
+| float32 / int8 | 0.900 | 0.745 | 0.872 | 0.874 | met |
+| int8 / int8 (opt-in compact phone bundle) | 0.909 | 0.787 | 0.864 | 0.892 | met |
+
+(E4 final split, verifier refitted per pair on the tuning split; specificity
+CIs are wide: 47 cat and 111 dog verified-negative images.)
+
+* **Refitting is required.** Using the float-trained verifier unchanged on
+  int8 backbone features drops dog recall to 0.807 (int8 / int8) - outside
+  the rule; on identical detections 50 of 472 dog accept/reject decisions flip
+  (mean verifier score change 0.19).
+* Posture: posture_v1 applied unchanged to int8 features gives macro-F1 0.653
+  (float 0.648); top-label agreement 96.5 %; when both report a label it is the
+  same (85/85). A refit on int8 features reaches 0.671; the unchanged model is
+  shipped (one artifact for both builds).
+* Size and speed: detector 4.6 MB (from 13.8), backbone 5.4 MB (from 18.6);
+  Python CPU latency 16 ms vs 29 ms (detector, 1 thread) and 4.8 ms vs 11.7 ms
+  (backbone). An int8 phone bundle is 14.8 MB instead of 37.2 MB.
+* Browser: int8 detector and int8 backbone run bit-exact in LiteRT.js once the
+  backbone's int8 feature outputs are exposed through in-graph DEQUANTIZE ops
+  (LiteRT.js 2.5.3 rejects INT8 graph outputs).
+* Engine parity with int8 on both sides is lower than with float32 (tracks F1
+  0.84 vs 0.95, segments 0.875 vs 0.96; decisions 30/30 either way): quantized
+  models amplify the small pixel differences between FFmpeg and browser
+  decoding. Recorded in `results/ondevice/engine_parity_chromium*.json`.
+* **Individual decisions diverge although the aggregates match.** On the
+  product's scenario cat (one real Open Images cat photo), the same detection
+  box gets verifier score 0.41 from the float32 stack (accepted, tau 0.20) and
+  0.03 from the int8 stack (rejected, tau 0.18). On the 30-case parity media
+  set the int8 reference engine finds 23 animal tracks vs 30 for float32;
+  those media were screened with the float32 stack when they were built, so
+  this comparison is biased toward float32 and is not evidence that int8 is
+  worse in general - but it is not resolved either.
+* **Product decision:** the default phone bundle stays float32 (the
+  configuration E4-E10, engine parity and the E2E suite were measured with,
+  and the same builds as the server engine). The int8 bundle is an evaluated
+  opt-in variant for constrained phones (tier C) until real-phone and
+  household evaluation can decide between them
+  (`export-ondevice --detector efficientdet_lite0_mediapipe_int8_v1 --backbone
+  efficientnet_lite0_mediapipe_int8_v1`).
+
+### E13 - Person-pet interaction (Open Images relationships) - COMPLETED
+
+Open Images V7 relationship annotations are exhaustive for the pairs they
+cover, so (person, pet) box pairs without a relationship are reliable
+negatives. 3,089 images, 11,598 pairs; positives are "holds" or "interacts
+with". Protocol: product detector + verifier boxes matched to the annotated
+boxes; fit on Open Images train, selection on a 10 % image hold-out, final on
+validation + test once.
+
+* Coverage is the main limit: in two thirds of annotated pairs the person or
+  the pet is not detected (crowded scenes, a pet held against a body), so only
+  249 of 531 final pairs are scored; end-to-end recall of all annotated
+  positives is 0.42.
+* On scored pairs (final): the selected geometry-only model has AP 0.907
+  [0.86, 0.95] (chance 0.47), precision 0.87, recall 0.68 at the development
+  threshold. Adding the union-crop embedding does not help (AP 0.88).
+* Baseline "boxes overlap": AP 0.69 but F1 0.82 (precision 0.70, recall 0.98)
+  versus the model's F1 0.76; the model trades recall for precision.
+* Cats: only 4 cat pairs were scorable in the final split - cat interaction is
+  **not evaluated**. Still images only: says nothing about the animal's
+  response or about interaction over time.
 
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
-YAMNet, both detectors that the web runtime supports, and the backbone are
-bit-identical or within 3e-8 of Python LiteRT on identical inputs; the int8
-detector and int8 backbone are bit-exact. Engine-level parity on 30 identical
-media files: decision 30/30, tracks F1 0.95, sounds 1.00, segments 0.96,
-hypotheses 1.00. Details: [ON_DEVICE.md](ON_DEVICE.md).
+YAMNet, the float and int8 detectors and both backbones are bit-identical or
+within 3e-8 of Python LiteRT on identical inputs (float16 detector: 3e-8).
+Engine-level parity on 30 identical media files with the default (float32)
+bundle: decision 30/30, tracks F1 0.95, sounds 1.00, segments 0.96,
+hypotheses 1.00 (int8 bundle: 0.84 / 1.00 / 0.875 / 0.99). Details: [ON_DEVICE.md](ON_DEVICE.md).

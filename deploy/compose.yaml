@@ -15,18 +15,36 @@ services:
     volumes: [models:/models]
     restart: "no"
 
+  # One-shot export of the on-device model bundle (the core analysis runs on the
+  # phone). Without the datasets in the container, the device-check reference
+  # clip is omitted; publish a release bundle instead to include it
+  # (docs/DEPLOYMENT.md, "On-device bundle").
+  bundle:
+    image: petperception:${PETPERCEPTION_TAG:-local}
+    depends_on:
+      models: {condition: service_completed_successfully}
+    command: ["export-ondevice", "--out", "/bundle/current", "--no-device-check", "--fetch-missing"]
+    environment:
+      PETPERCEPTION_RELEASE_PROFILE: ${PETPERCEPTION_RELEASE_PROFILE:-personal_noncommercial}
+      PETPERCEPTION_DETECTOR: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}
+    volumes: [models:/models, bundle:/bundle]
+    restart: "no"
+
   app:
     image: petperception:${PETPERCEPTION_TAG:-local}
     depends_on:
       models: {condition: service_completed_successfully}
+      bundle: {condition: service_completed_successfully}
     environment:
       PETPERCEPTION_RELEASE_PROFILE: ${PETPERCEPTION_RELEASE_PROFILE:-personal_noncommercial}
       PETPERCEPTION_DETECTOR: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}
       PETPERCEPTION_WORKERS: ${PETPERCEPTION_WORKERS:-2}
       PETPERCEPTION_NUM_THREADS: ${PETPERCEPTION_NUM_THREADS:-2}
+      PETPERCEPTION_ONDEVICE_DIR: /bundle/current
     volumes:
       - data:/var/lib/petperception
       - models:/models:ro
+      - bundle:/bundle:ro
     expose: ["8000"]
     restart: unless-stopped
     stop_grace_period: 60s   # running analyses are cancelled and re-queued on restart
@@ -52,5 +70,6 @@ services:
 volumes:
   data: {}
   models: {}
+  bundle: {}
   caddy_data: {}
   caddy_config: {}

@@ -1,0 +1,308 @@
+{
+  "experiment": "E13",
+  "title": "Person-pet interaction (holds / interacts with) in still images, Open Images relationships",
+  "protocol": [
+    "E13: person-pet interaction (\"holds\" / \"interacts with\") in still images.",
+    "",
+    "Data: Open Images V7 visual relationships (data/openimages_vrd.py). Units are",
+    "(person, pet) pairs of annotated boxes; the relationship annotation protocol",
+    "makes unrelated pairs reliable negatives.",
+    "",
+    "Pipeline (what the phone computes): the product detector runs on the image",
+    "with the product thresholds; pet detections pass the product verifier. Each",
+    "annotated person box is matched to a COCO \"person\" detection and each pet box",
+    "to an accepted cat/dog detection of the same species (greedy, IoU >= 0.5).",
+    "A pair is scored only when both boxes are detected; coverage is reported and",
+    "end-to-end recall counts undetected positives as misses.",
+    "Features from the detection boxes: 12 geometry values (overlaps, offsets,",
+    "size ratio, aspect ratios, gap, containment), the species indicator, and the",
+    "pooled EfficientNet-Lite0 embedding of the square crop around the union box.",
+    "Models: logistic regression on geometry only, and on geometry + embedding.",
+    "",
+    "Splits: fit on Open Images train minus a seeded 10 % image hold-out",
+    "(development: regularisation, feature set and the operating threshold, which",
+    "maximises development F1); final evaluation once on Open Images validation +",
+    "test. Confidence intervals resample images. Baselines: positive rate",
+    "(chance AP) and \"boxes overlap\" (IoU > 0).",
+    "",
+    "What this does not show: interaction in video, the animal's response or",
+    "state, interactions with other animals or objects, household camera views."
+  ],
+  "pairs": {
+    "fit": 10129,
+    "dev": 938,
+    "final": 531
+  },
+  "pairs_scored": {
+    "fit": 3375,
+    "dev": 331,
+    "final": 249
+  },
+  "positives": {
+    "fit": 2029,
+    "dev": 190,
+    "final": 192
+  },
+  "coverage_reasons": {
+    "fit": {
+      "null": 3375,
+      "person_not_detected": 3642,
+      "pet_not_detected": 3112
+    },
+    "dev": {
+      "null": 331,
+      "person_not_detected": 288,
+      "pet_not_detected": 319
+    },
+    "final": {
+      "null": 249,
+      "person_not_detected": 157,
+      "pet_not_detected": 125
+    }
+  },
+  "images_missing": 0,
+  "development_ap_by_features_and_C": {
+    "geometry@0.003": 0.8210689778902613,
+    "geometry@0.01": 0.8255090881923534,
+    "geometry@0.03": 0.8323057196776485,
+    "geometry@0.1": 0.8419135328128737,
+    "geometry@0.3": 0.8450748227032253,
+    "geometry@1.0": 0.8489193907406967,
+    "geometry+embedding@0.003": 0.8463549478054749,
+    "geometry+embedding@0.01": 0.83802570080668,
+    "geometry+embedding@0.03": 0.8210505049947976,
+    "geometry+embedding@0.1": 0.7965302093320094,
+    "geometry+embedding@0.3": 0.7710842358352578,
+    "geometry+embedding@1.0": 0.7523479128961252
+  },
+  "selected_on_development": {
+    "features": "geometry",
+    "C": 1.0
+  },
+  "results": {
+    "geometry": {
+      "C": 1.0,
+      "dev": {
+        "pairs_scored": 331,
+        "positives_scored": 101,
+        "average_precision": 0.8489193907406967,
+        "ap_ci95": {
+          "ci_low": 0.7841971643093086,
+          "ci_high": 0.9074058358952092,
+          "n_boot": 1000,
+          "n_groups": 186,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.30513595166163143,
+        "threshold": 0.686,
+        "precision": 0.7685185185185185,
+        "recall": 0.8217821782178217,
+        "f1": 0.7942583732057416,
+        "f1_ci95": {
+          "ci_low": 0.7391101178382771,
+          "ci_high": 0.8518790849673202,
+          "n_boot": 1000,
+          "n_groups": 186,
+          "unit": "group"
+        },
+        "cat": {
+          "pairs": 22,
+          "positives": 11,
+          "average_precision": 0.85425357470812,
+          "precision_recall": [
+            0.9090909090909091,
+            0.9090909090909091
+          ]
+        },
+        "dog": {
+          "pairs": 309,
+          "positives": 90,
+          "average_precision": 0.8441075475684335,
+          "precision_recall": [
+            0.7525773195876289,
+            0.8111111111111111
+          ]
+        },
+        "end_to_end_recall_all_annotated_positives": 0.4368421052631579
+      },
+      "final": {
+        "pairs_scored": 249,
+        "positives_scored": 118,
+        "average_precision": 0.9072438373575029,
+        "ap_ci95": {
+          "ci_low": 0.8601422223710943,
+          "ci_high": 0.9469141458212321,
+          "n_boot": 1000,
+          "n_groups": 114,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.4738955823293173,
+        "threshold": 0.686,
+        "precision": 0.8695652173913043,
+        "recall": 0.6779661016949152,
+        "f1": 0.7619047619047619,
+        "f1_ci95": {
+          "ci_low": 0.6880590596330275,
+          "ci_high": 0.828588850174216,
+          "n_boot": 1000,
+          "n_groups": 114,
+          "unit": "group"
+        },
+        "cat": {
+          "pairs": 4,
+          "positives": 4,
+          "average_precision": 1.0,
+          "precision_recall": [
+            1.0,
+            1.0
+          ]
+        },
+        "dog": {
+          "pairs": 245,
+          "positives": 114,
+          "average_precision": 0.9006182905005726,
+          "precision_recall": [
+            0.8636363636363636,
+            0.6666666666666666
+          ]
+        },
+        "end_to_end_recall_all_annotated_positives": 0.4166666666666667
+      }
+    },
+    "geometry+embedding": {
+      "C": 0.003,
+      "dev": {
+        "pairs_scored": 331,
+        "positives_scored": 101,
+        "average_precision": 0.8463549478054749,
+        "ap_ci95": {
+          "ci_low": 0.7872078087961283,
+          "ci_high": 0.9012607650955335,
+          "n_boot": 1000,
+          "n_groups": 186,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.30513595166163143,
+        "threshold": 0.503,
+        "precision": 0.6870229007633588,
+        "recall": 0.8910891089108911,
+        "f1": 0.7758620689655173,
+        "f1_ci95": {
+          "ci_low": 0.721125,
+          "ci_high": 0.827005805653374,
+          "n_boot": 1000,
+          "n_groups": 186,
+          "unit": "group"
+        },
+        "cat": {
+          "pairs": 22,
+          "positives": 11,
+          "average_precision": 0.8637232716778172,
+          "precision_recall": [
+            0.9090909090909091,
+            0.9090909090909091
+          ]
+        },
+        "dog": {
+          "pairs": 309,
+          "positives": 90,
+          "average_precision": 0.8448633855977529,
+          "precision_recall": [
+            0.6666666666666666,
+            0.8888888888888888
+          ]
+        },
+        "end_to_end_recall_all_annotated_positives": 0.47368421052631576
+      },
+      "final": {
+        "pairs_scored": 249,
+        "positives_scored": 118,
+        "average_precision": 0.8817714881569813,
+        "ap_ci95": {
+          "ci_low": 0.8309034175042195,
+          "ci_high": 0.9250731901809618,
+          "n_boot": 1000,
+          "n_groups": 114,
+          "unit": "group"
+        },
+        "chance_ap_positive_rate": 0.4738955823293173,
+        "threshold": 0.503,
+        "precision": 0.7815126050420168,
+        "recall": 0.788135593220339,
+        "f1": 0.7848101265822784,
+        "f1_ci95": {
+          "ci_low": 0.7228809511172444,
+          "ci_high": 0.8426121151271753,
+          "n_boot": 1000,
+          "n_groups": 114,
+          "unit": "group"
+        },
+        "cat": {
+          "pairs": 4,
+          "positives": 4,
+          "average_precision": 1.0,
+          "precision_recall": [
+            1.0,
+            1.0
+          ]
+        },
+        "dog": {
+          "pairs": 245,
+          "positives": 114,
+          "average_precision": 0.8732415130150332,
+          "precision_recall": [
+            0.7739130434782608,
+            0.7807017543859649
+          ]
+        },
+        "end_to_end_recall_all_annotated_positives": 0.484375
+      }
+    }
+  },
+  "baseline_final_boxes_overlap_rule": {
+    "pairs_scored": 249,
+    "positives_scored": 118,
+    "average_precision": 0.6899331972515038,
+    "ap_ci95": {
+      "ci_low": 0.6063721663545565,
+      "ci_high": 0.8164360464443604,
+      "n_boot": 1000,
+      "n_groups": 114,
+      "unit": "group"
+    },
+    "chance_ap_positive_rate": 0.4738955823293173,
+    "threshold": 0.5,
+    "precision": 0.7012195121951219,
+    "recall": 0.9745762711864406,
+    "f1": 0.8156028368794326,
+    "f1_ci95": {
+      "ci_low": 0.7641138335179033,
+      "ci_high": 0.8669268357889733,
+      "n_boot": 1000,
+      "n_groups": 114,
+      "unit": "group"
+    },
+    "cat": {
+      "pairs": 4,
+      "positives": 4,
+      "average_precision": 1.0,
+      "precision_recall": [
+        1.0,
+        1.0
+      ]
+    },
+    "dog": {
+      "pairs": 245,
+      "positives": 114,
+      "average_precision": 0.6809805401104889,
+      "precision_recall": [
+        0.69375,
+        0.9736842105263158
+      ]
+    },
+    "end_to_end_recall_all_annotated_positives": 0.5989583333333334
+  },
+  "terms": "Open Images annotations CC BY 4.0, images CC BY 2.0 (attribution in manifests/oi_vrd_interaction_images.csv).",
+  "created_at": "2026-10-09T09:04:13+00:00",
+  "artifact_sha256": "7997042681687e864b731c1b518b40940cd73b3e90dfdcb93c3936736e8bca3d"
+}

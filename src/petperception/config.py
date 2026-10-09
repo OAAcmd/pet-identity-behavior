@@ -97,6 +97,9 @@ class VisionQualityConfig(BaseModel):
     frame_gap_factor: float = 2.5
 
 
+E7_CLASSIFIER = "efficientnet_lite0_mediapipe_v1"
+
+
 class VerifierConfig(BaseModel):
     """Second-stage false-positive rejection (E7). Parameters are per detector."""
 
@@ -106,10 +109,25 @@ class VerifierConfig(BaseModel):
     max_checks_per_frame: int = 3
 
     def params_file(self, detector: str) -> str:
-        """Verifier parameters are specific to the (detector, classifier) pair they were fitted on."""
-        default = VerifierConfig.model_fields["classifier"].default
-        suffix = "" if self.classifier == default else f"__{self.classifier}"
+        """Verifier parameters are specific to the (detector, classifier) pair they were fitted on.
+        E7 fitted with the float32 classifier (no suffix); other classifiers carry a suffix (E12)."""
+        suffix = "" if self.classifier == E7_CLASSIFIER else f"__{self.classifier}"
         return f"{self.params_dir}/verifier_{detector}{suffix}.json"
+
+
+class OnDeviceConfig(BaseModel):
+    """Model builds exported into the phone bundle (export-ondevice).
+
+    Default: the float32 builds, i.e. the configuration E4-E10 and engine parity were
+    measured with. The int8 builds (efficientdet_lite0_mediapipe_int8_v1 +
+    efficientnet_lite0_mediapipe_int8_v1, with their refitted verifier) are an evaluated
+    compact alternative (E12: within the replacement rule on held-out photos, 14.8 MB
+    instead of 37.2 MB), but individual verifier decisions can diverge strongly from
+    float32, so they are opt-in until real-phone and household evaluation."""
+
+    detector: str = "efficientdet_lite0_mediapipe_v1"
+    backbone: str = "efficientnet_lite0_mediapipe_v1"
+    posture_model: str = "artifacts/posture/posture_v1.npz"
 
 
 class VisionConfig(BaseModel):
@@ -290,6 +308,7 @@ class Settings(BaseModel):
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)
+    ondevice: OnDeviceConfig = Field(default_factory=OnDeviceConfig)
     app: AppConfig = Field(default_factory=AppConfig)
     runtime: RuntimeConfig = Field(default_factory=RuntimeConfig)
 

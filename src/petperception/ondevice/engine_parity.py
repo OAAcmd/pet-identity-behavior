@@ -26,9 +26,10 @@ def reference_settings(base: Settings) -> Settings:
     s = load_settings(overrides={"pose": {"provider": "none"}})
     s.paths = base.paths
     s.release_profile = base.release_profile
-    s.vision.detector = base.vision.detector
-    s.vision.verifier.classifier = base.vision.verifier.classifier
-    s.posture.backbone, s.posture.model_file = base.posture.backbone, base.posture.model_file
+    s.ondevice = base.ondevice
+    s.vision.detector = base.ondevice.detector
+    s.vision.verifier.classifier = s.posture.backbone = base.ondevice.backbone
+    s.posture.model_file = base.ondevice.posture_model
     return s
 
 

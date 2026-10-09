@@ -35,6 +35,9 @@ listed in [ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md#capabilities-that-still-requir
 | YAMNet (MediaPipe build, float32) | runs; output bit-identical to Python on identical input |
 | EfficientDet-Lite0 (MediaPipe build, float32, raw anchor outputs) | runs; max abs diff 3e-8 |
 | EfficientNet-Lite0 backbone with 4 exposed intermediate tensors | runs; bit-identical |
+| EfficientDet-Lite0 (MediaPipe int8 build) | runs; bit-exact |
+| EfficientDet-Lite0 (MediaPipe float16 build) | runs; max abs diff 3e-8 |
+| EfficientNet-Lite0 int8 backbone (int8 feature outputs exposed through appended DEQUANTIZE operators) | runs; bit-exact. Without the DEQUANTIZE ops LiteRT.js 2.5.3 refuses the model ("Element type INT8 is not supported") |
 | EfficientDet-Lite0 (TF Hub build, uint8, in-graph `TFLite_Detection_PostProcess`) | **crashes** LiteRT.js 2.5.3 ("memory access out of bounds"); not shipped. Fix path: strip the post-processing op and decode in TypeScript |
 
 Evidence: `results/ondevice/runtime_parity_*.json` (headless Chromium,
@@ -72,7 +75,12 @@ device_check/              reference clip (WebM + MP4), expected result, referen
 * Release gating happens at export: an asset not allowed in the chosen
   profile (`manifests/resources.json` + approvals file) is not written into the
   bundle, and the TypeScript engine reports that component as unavailable.
-* Current size: 37.2 MB (personal_noncommercial profile) + 9.8 MB runtime.
+* Current size: 37.2 MB (personal_noncommercial profile, default float32
+  builds) + 9.8 MB runtime. The opt-in int8 bundle (E12) is 14.8 MB.
+* Quantized builds: `engine_assets.json` carries each model's input and
+  output quantization (`input_quant`, `output_quant`); the TypeScript engine
+  encodes inputs with NumPy-identical float32 arithmetic and dequantizes
+  outputs, so both runtimes see identical bytes (asset format 0.2).
 
 ## Install, integrity, versioning and update recovery
 
@@ -136,10 +144,12 @@ an E2E test). Server analysis exists only as an explicit setting.
 | Device check (automated, not a phone) | E2E test "device check passes ..." | `results/ondevice/device_check_desktop_chromium.json` |
 | Real phones | [DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md) | **pending** |
 
-Engine-parity summary (30 cases): decision 30/30; tracks F1 0.95; sounds
-1.00; behavior segments 0.96; hypotheses 1.00; posture labels identical when
-both engines report one (139/139), with 79/423 frames flipping across the
-report gate. Media are decoded differently by design (FFmpeg vs browser), so
+Engine-parity summary (30 cases, default float32 bundle): decision 30/30;
+tracks F1 0.95; sounds 1.00; behavior segments 0.96; hypotheses 1.00; posture
+labels identical when both engines report one (139/139), with 78/423 frames
+flipping across the report gate. With the int8 bundle on both sides: tracks
+0.84, segments 0.875, hypotheses 0.99, decisions 30/30
+(`results/ondevice/engine_parity_chromium_int8.json`). Media are decoded differently by design (FFmpeg vs browser), so
 pixel-level differences propagate into small score differences.
 
 ## Differences between the phone engine and the server engine

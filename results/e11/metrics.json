@@ -1,0 +1,593 @@
+{
+  "experiment": "E11",
+  "title": "Dog behavior recognition from real video segments (MammalNet, dog breeds)",
+  "protocol": [
+    "E11: dog behavior recognition from real video (MammalNet, dog breeds only).",
+    "",
+    "Data: MammalNet detection annotations (temporal behavior segments in YouTube",
+    "videos; genus Canis, domestic-dog breed keywords only - wolves and wolfdogs",
+    "excluded). MammalNet code is MIT; no dataset licence is published and the",
+    "videos are third-party YouTube uploads, so data and the trained head are",
+    "research-profile only. There are no domestic cats in MammalNet (only wild",
+    "Felis species), so this experiment covers dogs only.",
+    "",
+    "Classes (household-relevant, enough examples): sleeps, eats_food,",
+    "drinks_water, fights (against other animals), eliminates (pees or poops).",
+    "Other MammalNet behaviors are excluded from training and evaluation.",
+    "",
+    "Pipeline (identical to what the phone computes): frames at 2 fps inside each",
+    "annotated segment (streamed with FFmpeg HTTP range reads, never stored),",
+    "product detector -> largest dog box -> EfficientNet-Lite0 pooled embedding of",
+    "the square crop, plus the pooled embedding of the whole frame; segment",
+    "features = mean/max of crop embeddings, mean of frame embeddings, box motion.",
+    "Model: multinomial logistic regression.",
+    "",
+    "Splits: MammalNet's own training / validation / testing subsets (video",
+    "level). Regularisation is chosen on validation; testing is used once.",
+    "Confidence intervals resample videos. Breed-stratified results use the",
+    "MammalNet keyword (bulldog, terrier, malamute, hound, ...)."
+  ],
+  "segments": {
+    "training": 595,
+    "validation": 64,
+    "testing": 154
+  },
+  "segments_requested": 813,
+  "segments_unavailable": 0,
+  "label_counts": {
+    "training": {
+      "drinks_water": 76,
+      "fights": 125,
+      "sleeps": 277,
+      "eliminates": 44,
+      "eats_food": 73
+    },
+    "validation": {
+      "sleeps": 33,
+      "eats_food": 8,
+      "eliminates": 3,
+      "fights": 13,
+      "drinks_water": 7
+    },
+    "testing": {
+      "fights": 36,
+      "sleeps": 61,
+      "eliminates": 18,
+      "eats_food": 20,
+      "drinks_water": 19
+    }
+  },
+  "breeds": {
+    "bulldog": 276,
+    "hound": 90,
+    "terrier": 234,
+    "malamute": 144,
+    "shepherd dog": 24,
+    "husky dog": 26,
+    "eskimo dog": 16,
+    "foxhound": 3
+  },
+  "frames_with_dog_fraction": 0.6060915806610724,
+  "results": {
+    "full": {
+      "C": 0.01,
+      "validation_macro_f1_by_C": {
+        "0.003": 0.6146029258098225,
+        "0.01": 0.6228787878787879,
+        "0.03": 0.6228787878787879,
+        "0.1": 0.6228787878787879,
+        "0.3": 0.6228787878787879
+      },
+      "validation": {
+        "n": 64,
+        "macro_f1": 0.6228787878787879,
+        "accuracy": 0.75,
+        "per_class": {
+          "sleeps": {
+            "precision": 0.8787878787878788,
+            "recall": 0.8787878787878788,
+            "f1": 0.8787878787878788,
+            "support": 33,
+            "tp": 29,
+            "fp": 4,
+            "fn": 4
+          },
+          "eats_food": {
+            "precision": 0.375,
+            "recall": 0.375,
+            "f1": 0.375,
+            "support": 8,
+            "tp": 3,
+            "fp": 5,
+            "fn": 5
+          },
+          "drinks_water": {
+            "precision": 1.0,
+            "recall": 0.5714285714285714,
+            "f1": 0.7272727272727273,
+            "support": 7,
+            "tp": 4,
+            "fp": 0,
+            "fn": 3
+          },
+          "fights": {
+            "precision": 0.6470588235294118,
+            "recall": 0.8461538461538461,
+            "f1": 0.7333333333333334,
+            "support": 13,
+            "tp": 11,
+            "fp": 6,
+            "fn": 2
+          },
+          "eliminates": {
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "support": 3,
+            "tp": 1,
+            "fp": 1,
+            "fn": 2
+          }
+        },
+        "confusion_rows_true_cols_pred": [
+          [
+            29,
+            1,
+            0,
+            3,
+            0
+          ],
+          [
+            1,
+            3,
+            0,
+            3,
+            1
+          ],
+          [
+            1,
+            2,
+            4,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            1
+          ]
+        ],
+        "macro_f1_ci95": {
+          "ci_low": 0.4507936157204134,
+          "ci_high": 0.7860016793608343,
+          "n_boot": 1000,
+          "n_groups": 63,
+          "unit": "group"
+        },
+        "by_breed": {
+          "bulldog": {
+            "n": 24,
+            "accuracy": 0.75
+          },
+          "eskimo dog": {
+            "n": 1,
+            "accuracy": 0.0
+          },
+          "hound": {
+            "n": 7,
+            "accuracy": 1.0
+          },
+          "malamute": {
+            "n": 11,
+            "accuracy": 0.7272727272727273
+          },
+          "shepherd dog": {
+            "n": 1,
+            "accuracy": 1.0
+          },
+          "terrier": {
+            "n": 20,
+            "accuracy": 0.7
+          }
+        }
+      },
+      "test": {
+        "n": 154,
+        "macro_f1": 0.637755928282244,
+        "accuracy": 0.7142857142857143,
+        "per_class": {
+          "sleeps": {
+            "precision": 0.8793103448275862,
+            "recall": 0.8360655737704918,
+            "f1": 0.8571428571428572,
+            "support": 61,
+            "tp": 51,
+            "fp": 7,
+            "fn": 10
+          },
+          "eats_food": {
+            "precision": 0.6111111111111112,
+            "recall": 0.55,
+            "f1": 0.5789473684210527,
+            "support": 20,
+            "tp": 11,
+            "fp": 7,
+            "fn": 9
+          },
+          "drinks_water": {
+            "precision": 0.5263157894736842,
+            "recall": 0.5263157894736842,
+            "f1": 0.5263157894736842,
+            "support": 19,
+            "tp": 10,
+            "fp": 9,
+            "fn": 9
+          },
+          "fights": {
+            "precision": 0.7142857142857143,
+            "recall": 0.8333333333333334,
+            "f1": 0.7692307692307692,
+            "support": 36,
+            "tp": 30,
+            "fp": 12,
+            "fn": 6
+          },
+          "eliminates": {
+            "precision": 0.47058823529411764,
+            "recall": 0.4444444444444444,
+            "f1": 0.45714285714285713,
+            "support": 18,
+            "tp": 8,
+            "fp": 9,
+            "fn": 10
+          }
+        },
+        "confusion_rows_true_cols_pred": [
+          [
+            51,
+            1,
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            11,
+            2,
+            1,
+            3
+          ],
+          [
+            1,
+            2,
+            10,
+            1,
+            5
+          ],
+          [
+            3,
+            2,
+            1,
+            30,
+            0
+          ],
+          [
+            0,
+            2,
+            3,
+            5,
+            8
+          ]
+        ],
+        "macro_f1_ci95": {
+          "ci_low": 0.5374638868096796,
+          "ci_high": 0.7160309633111533,
+          "n_boot": 1000,
+          "n_groups": 142,
+          "unit": "group"
+        },
+        "by_breed": {
+          "bulldog": {
+            "n": 49,
+            "accuracy": 0.7346938775510204
+          },
+          "eskimo dog": {
+            "n": 5,
+            "accuracy": 0.6
+          },
+          "hound": {
+            "n": 16,
+            "accuracy": 0.75
+          },
+          "husky dog": {
+            "n": 8,
+            "accuracy": 0.625
+          },
+          "malamute": {
+            "n": 28,
+            "accuracy": 0.7142857142857143
+          },
+          "shepherd dog": {
+            "n": 6,
+            "accuracy": 0.5
+          },
+          "terrier": {
+            "n": 42,
+            "accuracy": 0.7380952380952381
+          }
+        }
+      }
+    },
+    "motion_only": {
+      "C": 0.1,
+      "validation_macro_f1_by_C": {
+        "0.003": 0.3879250161603103,
+        "0.01": 0.39106227106227104,
+        "0.03": 0.3880165045682287,
+        "0.1": 0.40362090017262425,
+        "0.3": 0.39712202270600494
+      },
+      "validation": {
+        "n": 64,
+        "macro_f1": 0.40362090017262425,
+        "accuracy": 0.546875,
+        "per_class": {
+          "sleeps": {
+            "precision": 0.7,
+            "recall": 0.6363636363636364,
+            "f1": 0.6666666666666666,
+            "support": 33,
+            "tp": 21,
+            "fp": 9,
+            "fn": 12
+          },
+          "eats_food": {
+            "precision": 1.0,
+            "recall": 0.125,
+            "f1": 0.2222222222222222,
+            "support": 8,
+            "tp": 1,
+            "fp": 0,
+            "fn": 7
+          },
+          "drinks_water": {
+            "precision": 0.2857142857142857,
+            "recall": 0.2857142857142857,
+            "f1": 0.2857142857142857,
+            "support": 7,
+            "tp": 2,
+            "fp": 5,
+            "fn": 5
+          },
+          "fights": {
+            "precision": 0.625,
+            "recall": 0.7692307692307693,
+            "f1": 0.6896551724137931,
+            "support": 13,
+            "tp": 10,
+            "fp": 6,
+            "fn": 3
+          },
+          "eliminates": {
+            "precision": 0.1,
+            "recall": 0.3333333333333333,
+            "f1": 0.15384615384615383,
+            "support": 3,
+            "tp": 1,
+            "fp": 9,
+            "fn": 2
+          }
+        },
+        "confusion_rows_true_cols_pred": [
+          [
+            21,
+            0,
+            4,
+            4,
+            4
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            2
+          ],
+          [
+            5,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            10,
+            3
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "macro_f1_ci95": {
+          "ci_low": 0.27146543272481405,
+          "ci_high": 0.5181717975651798,
+          "n_boot": 1000,
+          "n_groups": 63,
+          "unit": "group"
+        },
+        "by_breed": {
+          "bulldog": {
+            "n": 24,
+            "accuracy": 0.5416666666666666
+          },
+          "eskimo dog": {
+            "n": 1,
+            "accuracy": 0.0
+          },
+          "hound": {
+            "n": 7,
+            "accuracy": 1.0
+          },
+          "malamute": {
+            "n": 11,
+            "accuracy": 0.5454545454545454
+          },
+          "shepherd dog": {
+            "n": 1,
+            "accuracy": 0.0
+          },
+          "terrier": {
+            "n": 20,
+            "accuracy": 0.45
+          }
+        }
+      },
+      "test": {
+        "n": 154,
+        "macro_f1": 0.369371921182266,
+        "accuracy": 0.45454545454545453,
+        "per_class": {
+          "sleeps": {
+            "precision": 0.6818181818181818,
+            "recall": 0.4918032786885246,
+            "f1": 0.5714285714285714,
+            "support": 61,
+            "tp": 30,
+            "fp": 14,
+            "fn": 31
+          },
+          "eats_food": {
+            "precision": 0.3,
+            "recall": 0.15,
+            "f1": 0.2,
+            "support": 20,
+            "tp": 3,
+            "fp": 7,
+            "fn": 17
+          },
+          "drinks_water": {
+            "precision": 0.2,
+            "recall": 0.10526315789473684,
+            "f1": 0.13793103448275862,
+            "support": 19,
+            "tp": 2,
+            "fp": 8,
+            "fn": 17
+          },
+          "fights": {
+            "precision": 0.5681818181818182,
+            "recall": 0.6944444444444444,
+            "f1": 0.625,
+            "support": 36,
+            "tp": 25,
+            "fp": 19,
+            "fn": 11
+          },
+          "eliminates": {
+            "precision": 0.21739130434782608,
+            "recall": 0.5555555555555556,
+            "f1": 0.3125,
+            "support": 18,
+            "tp": 10,
+            "fp": 36,
+            "fn": 8
+          }
+        },
+        "confusion_rows_true_cols_pred": [
+          [
+            30,
+            4,
+            2,
+            9,
+            16
+          ],
+          [
+            9,
+            3,
+            1,
+            3,
+            4
+          ],
+          [
+            4,
+            1,
+            2,
+            4,
+            8
+          ],
+          [
+            0,
+            0,
+            3,
+            25,
+            8
+          ],
+          [
+            1,
+            2,
+            2,
+            3,
+            10
+          ]
+        ],
+        "macro_f1_ci95": {
+          "ci_low": 0.2973471945702732,
+          "ci_high": 0.44056870805529413,
+          "n_boot": 1000,
+          "n_groups": 142,
+          "unit": "group"
+        },
+        "by_breed": {
+          "bulldog": {
+            "n": 49,
+            "accuracy": 0.46938775510204084
+          },
+          "eskimo dog": {
+            "n": 5,
+            "accuracy": 0.4
+          },
+          "hound": {
+            "n": 16,
+            "accuracy": 0.5
+          },
+          "husky dog": {
+            "n": 8,
+            "accuracy": 0.75
+          },
+          "malamute": {
+            "n": 28,
+            "accuracy": 0.39285714285714285
+          },
+          "shepherd dog": {
+            "n": 6,
+            "accuracy": 0.16666666666666666
+          },
+          "terrier": {
+            "n": 42,
+            "accuracy": 0.4523809523809524
+          }
+        }
+      }
+    }
+  },
+  "baseline_majority_test_macro_f1": 0.11348837209302327,
+  "terms": "MammalNet videos are third-party YouTube uploads without a published dataset licence: research profile only.",
+  "created_at": "2026-10-09T09:06:18+00:00",
+  "artifact_sha256": "a7f9e8f5a539d156138007a7dedf79c12b54edcdeb0ba92f409828d6750f32e4"
+}

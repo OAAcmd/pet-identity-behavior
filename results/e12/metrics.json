@@ -1,0 +1,915 @@
+{
+  "experiment": "E12",
+  "title": "Quantized (int8 / float16) detector and backbone builds re-evaluated against float32",
+  "protocol": [
+    "E12: quantized model builds for phones, re-evaluated against float32.",
+    "",
+    "Variants (MediaPipe builds of the same networks, pinned in manifests/resources.json):",
+    "* detector: EfficientDet-Lite0 float32 (shipped), float16 weights, int8;",
+    "* crop classifier / feature backbone: EfficientNet-Lite0 float32 (shipped), int8.",
+    "Quantized inputs are the quantized encoding of the float input defined by the",
+    "model metadata; quantized outputs and intermediate tensors are dequantized",
+    "(vision/tflite_io.py).",
+    "",
+    "Evaluations, each re-running the protocol of the experiment it replaces:",
+    "1. Detection and false-positive rejection, E7 protocol (fit and every",
+    "   selection on the Open Images test-split tuning subset; final evaluation once",
+    "   on the E4 validation subset) for each (detector, classifier) pair. The",
+    "   verifier is refitted per pair, as it would be for a quantized release.",
+    "   The shipped float-trained verifier is also applied unchanged (\"no refit\")",
+    "   to show the drift caused by swapping models alone.",
+    "2. Posture, E10 protocol: boxes come from the float product engine (identical",
+    "   for all variants), features from each backbone. posture_v1 is applied",
+    "   unchanged to int8 features, and refitted on int8 features (C and gate on",
+    "   development, final on validation).",
+    "3. Agreement on identical detections (same float detector, float vs int8",
+    "   classifier): verifier score differences and accept/reject flips at tau;",
+    "   posture gated-label flips. This is the uncertainty / rejection behaviour.",
+    "4. Model size and single-image CPU latency (Python LiteRT on this VM).",
+    "",
+    "Replacement rule, fixed before the results were seen: a quantized variant may",
+    "replace float32 in the phone bundle only if, on the final evaluation with its",
+    "refitted verifier and per class, image-level recall drops by at most 0.02 and",
+    "specificity on verified negatives by at most 0.03 (point estimates), and",
+    "posture final macro-F1 drops by at most 0.03. Confidence intervals are",
+    "reported; with 47 verified-negative cat images they are wide, so a pass under",
+    "this rule is not evidence of equivalence."
+  ],
+  "detection_and_rejection_final_e4": {
+    "detector_float32__classifier_float32": {
+      "detector": "efficientdet_lite0_mediapipe_v1",
+      "classifier": "efficientnet_lite0_mediapipe_v1",
+      "e4_detections": 1127,
+      "detector_only@0.35": {
+        "cat": {
+          "ap50": 0.8601927299741895,
+          "box_precision": 0.9178470254957507,
+          "box_recall": 0.8756756756756757,
+          "image_recall": 0.9262536873156342,
+          "image_recall_ci95": [
+            0.8965442710921196,
+            0.9544107488256424
+          ],
+          "specificity_on_verified_negatives": 0.6170212765957447,
+          "specificity_ci95": [
+            0.47058823529411764,
+            0.760047619047619
+          ]
+        },
+        "dog": {
+          "ap50": 0.7591169027225076,
+          "box_precision": 0.782608695652174,
+          "box_recall": 0.8201438848920863,
+          "image_recall": 0.8920454545454546,
+          "image_recall_ci95": [
+            0.8592782744370414,
+            0.9230823863636364
+          ],
+          "specificity_on_verified_negatives": 0.5585585585585585,
+          "specificity_ci95": [
+            0.463403342366757,
+            0.646578407224959
+          ]
+        }
+      },
+      "verifier_crop_refit": {
+        "cat": {
+          "ap50": 0.8470421193780369,
+          "box_precision": 0.9271137026239067,
+          "box_recall": 0.8594594594594595,
+          "image_recall": 0.9056047197640118,
+          "image_recall_ci95": [
+            0.8746353509420826,
+            0.9352988614800759
+          ],
+          "specificity_on_verified_negatives": 0.7021276595744681,
+          "specificity_ci95": [
+            0.5651895206243032,
+            0.8261078595317726
+          ]
+        },
+        "dog": {
+          "ap50": 0.7582701132553323,
+          "box_precision": 0.8776595744680851,
+          "box_recall": 0.7913669064748201,
+          "image_recall": 0.8721590909090909,
+          "image_recall_ci95": [
+            0.8362068965517241,
+            0.9046388271600091
+          ],
+          "specificity_on_verified_negatives": 0.8648648648648649,
+          "specificity_ci95": [
+            0.7964411456846513,
+            0.9230769230769231
+          ]
+        }
+      },
+      "verifier_crop_refit_tau": {
+        "cat": 0.20421544398139585,
+        "dog": 0.25423940146121626
+      },
+      "verifier_crop_shipped_no_refit": {
+        "cat": {
+          "ap50": 0.8470421193780369,
+          "box_precision": 0.9271137026239067,
+          "box_recall": 0.8594594594594595,
+          "image_recall": 0.9056047197640118,
+          "image_recall_ci95": [
+            0.8746353509420826,
+            0.9352988614800759
+          ],
+          "specificity_on_verified_negatives": 0.7021276595744681,
+          "specificity_ci95": [
+            0.5651895206243032,
+            0.8261078595317726
+          ]
+        },
+        "dog": {
+          "ap50": 0.7582701132553323,
+          "box_precision": 0.8776595744680851,
+          "box_recall": 0.7913669064748201,
+          "image_recall": 0.8721590909090909,
+          "image_recall_ci95": [
+            0.8362068965517241,
+            0.9046388271600091
+          ],
+          "specificity_on_verified_negatives": 0.8648648648648649,
+          "specificity_ci95": [
+            0.7964411456846513,
+            0.9230769230769231
+          ]
+        }
+      },
+      "tuning_selected_feature_set": {
+        "cat": "crop+redetect",
+        "dog": "all"
+      }
+    },
+    "detector_float16__classifier_float32": {
+      "detector": "efficientdet_lite0_mediapipe_f16_v1",
+      "classifier": "efficientnet_lite0_mediapipe_v1",
+      "e4_detections": 1128,
+      "detector_only@0.35": {
+        "cat": {
+          "ap50": 0.8602712265770588,
+          "box_precision": 0.9178470254957507,
+          "box_recall": 0.8756756756756757,
+          "image_recall": 0.9262536873156342,
+          "image_recall_ci95": [
+            0.8965442710921196,
+            0.9544107488256424
+          ],
+          "specificity_on_verified_negatives": 0.6170212765957447,
+          "specificity_ci95": [
+            0.47058823529411764,
+            0.760047619047619
+          ]
+        },
+        "dog": {
+          "ap50": 0.7588870016147318,
+          "box_precision": 0.782608695652174,
+          "box_recall": 0.8201438848920863,
+          "image_recall": 0.8920454545454546,
+          "image_recall_ci95": [
+            0.8592782744370414,
+            0.9230823863636364
+          ],
+          "specificity_on_verified_negatives": 0.5585585585585585,
+          "specificity_ci95": [
+            0.463403342366757,
+            0.646578407224959
+          ]
+        }
+      },
+      "verifier_crop_refit": {
+        "cat": {
+          "ap50": 0.8449870152958099,
+          "box_precision": 0.9296187683284457,
+          "box_recall": 0.8567567567567568,
+          "image_recall": 0.9026548672566371,
+          "image_recall_ci95": [
+            0.8713450292397661,
+            0.9331443798449612
+          ],
+          "specificity_on_verified_negatives": 0.723404255319149,
+          "specificity_ci95": [
+            0.5882033248081842,
+            0.8461538461538461
+          ]
+        },
+        "dog": {
+          "ap50": 0.7555282760087807,
+          "box_precision": 0.8773333333333333,
+          "box_recall": 0.7889688249400479,
+          "image_recall": 0.8693181818181818,
+          "image_recall_ci95": [
+            0.8347452424800491,
+            0.9032258064516129
+          ],
+          "specificity_on_verified_negatives": 0.8648648648648649,
+          "specificity_ci95": [
+            0.7964411456846513,
+            0.9230769230769231
+          ]
+        }
+      },
+      "verifier_crop_refit_tau": {
+        "cat": 0.23317168602837737,
+        "dog": 0.26989367289742555
+      },
+      "verifier_crop_shipped_no_refit": {
+        "cat": {
+          "ap50": 0.844533360381144,
+          "box_precision": 0.9269005847953217,
+          "box_recall": 0.8567567567567568,
+          "image_recall": 0.9026548672566371,
+          "image_recall_ci95": [
+            0.8713450292397661,
+            0.9331443798449612
+          ],
+          "specificity_on_verified_negatives": 0.7021276595744681,
+          "specificity_ci95": [
+            0.5651895206243032,
+            0.8261078595317726
+          ]
+        },
+        "dog": {
+          "ap50": 0.7579254743383501,
+          "box_precision": 0.8753315649867374,
+          "box_recall": 0.7913669064748201,
+          "image_recall": 0.8721590909090909,
+          "image_recall_ci95": [
+            0.8362068965517241,
+            0.9046388271600091
+          ],
+          "specificity_on_verified_negatives": 0.8558558558558559,
+          "specificity_ci95": [
+            0.7818039772727273,
+            0.9166881443298969
+          ]
+        }
+      },
+      "tuning_selected_feature_set": {
+        "cat": "all",
+        "dog": "crop"
+      }
+    },
+    "detector_int8__classifier_float32": {
+      "detector": "efficientdet_lite0_mediapipe_int8_v1",
+      "classifier": "efficientnet_lite0_mediapipe_v1",
+      "e4_detections": 1123,
+      "detector_only@0.35": {
+        "cat": {
+          "ap50": 0.85660727192811,
+          "box_precision": 0.9022346368715084,
+          "box_recall": 0.8729729729729729,
+          "image_recall": 0.9174041297935103,
+          "image_recall_ci95": [
+            0.8885548559599793,
+            0.9444484936831875
+          ],
+          "specificity_on_verified_negatives": 0.6382978723404256,
+          "specificity_ci95": [
+            0.4997448979591837,
+            0.7777777777777778
+          ]
+        },
+        "dog": {
+          "ap50": 0.7629399873261693,
+          "box_precision": 0.8105515587529976,
+          "box_recall": 0.8105515587529976,
+          "image_recall": 0.8892045454545454,
+          "image_recall_ci95": [
+            0.8550631735414345,
+            0.9207664294985818
+          ],
+          "specificity_on_verified_negatives": 0.6576576576576577,
+          "specificity_ci95": [
+            0.5566017227235439,
+            0.7433898721730581
+          ]
+        }
+      },
+      "verifier_crop_refit": {
+        "cat": {
+          "ap50": 0.8487004985465609,
+          "box_precision": 0.9246376811594202,
+          "box_recall": 0.8621621621621621,
+          "image_recall": 0.9026548672566371,
+          "image_recall_ci95": [
+            0.8708708708708709,
+            0.9315543831168831
+          ],
+          "specificity_on_verified_negatives": 0.7872340425531915,
+          "specificity_ci95": [
+            0.6599634146341464,
+            0.8975
+          ]
+        },
+        "dog": {
+          "ap50": 0.7499844661854882,
+          "box_precision": 0.8904109589041096,
+          "box_recall": 0.7793764988009593,
+          "image_recall": 0.8636363636363636,
+          "image_recall_ci95": [
+            0.827076060385964,
+            0.8988656690461599
+          ],
+          "specificity_on_verified_negatives": 0.9279279279279279,
+          "specificity_ci95": [
+            0.8749718468468468,
+            0.9734571495109454
+          ]
+        }
+      },
+      "verifier_crop_refit_tau": {
+        "cat": 0.185708410514683,
+        "dog": 0.30021297195673813
+      },
+      "verifier_crop_shipped_no_refit": {
+        "cat": {
+          "ap50": 0.843174923141961,
+          "box_precision": 0.9188405797101449,
+          "box_recall": 0.8567567567567568,
+          "image_recall": 0.8997050147492626,
+          "image_recall_ci95": [
+            0.8678665734700217,
+            0.9292241801904074
+          ],
+          "specificity_on_verified_negatives": 0.7659574468085106,
+          "specificity_ci95": [
+            0.6326262083780881,
+            0.8810215946843853
+          ]
+        },
+        "dog": {
+          "ap50": 0.7634533883366714,
+          "box_precision": 0.8847184986595175,
+          "box_recall": 0.7913669064748201,
+          "image_recall": 0.8693181818181818,
+          "image_recall_ci95": [
+            0.8328288017374598,
+            0.904005633802817
+          ],
+          "specificity_on_verified_negatives": 0.918918918918919,
+          "specificity_ci95": [
+            0.8648481815148482,
+            0.9674252717391304
+          ]
+        }
+      },
+      "tuning_selected_feature_set": {
+        "cat": "crop",
+        "dog": "all"
+      }
+    },
+    "detector_float32__classifier_int8": {
+      "detector": "efficientdet_lite0_mediapipe_v1",
+      "classifier": "efficientnet_lite0_mediapipe_int8_v1",
+      "e4_detections": 1127,
+      "detector_only@0.35": {
+        "cat": {
+          "ap50": 0.8601927299741895,
+          "box_precision": 0.9178470254957507,
+          "box_recall": 0.8756756756756757,
+          "image_recall": 0.9262536873156342,
+          "image_recall_ci95": [
+            0.8965442710921196,
+            0.9544107488256424
+          ],
+          "specificity_on_verified_negatives": 0.6170212765957447,
+          "specificity_ci95": [
+            0.47058823529411764,
+            0.760047619047619
+          ]
+        },
+        "dog": {
+          "ap50": 0.7591169027225076,
+          "box_precision": 0.782608695652174,
+          "box_recall": 0.8201438848920863,
+          "image_recall": 0.8920454545454546,
+          "image_recall_ci95": [
+            0.8592782744370414,
+            0.9230823863636364
+          ],
+          "specificity_on_verified_negatives": 0.5585585585585585,
+          "specificity_ci95": [
+            0.463403342366757,
+            0.646578407224959
+          ]
+        }
+      },
+      "verifier_crop_refit": {
+        "cat": {
+          "ap50": 0.8431996325218187,
+          "box_precision": 0.9321533923303835,
+          "box_recall": 0.8540540540540541,
+          "image_recall": 0.8997050147492626,
+          "image_recall_ci95": [
+            0.8668726264920759,
+            0.9303063241106719
+          ],
+          "specificity_on_verified_negatives": 0.7446808510638298,
+          "specificity_ci95": [
+            0.6122448979591837,
+            0.8605221158230734
+          ]
+        },
+        "dog": {
+          "ap50": 0.7606991210026166,
+          "box_precision": 0.8853333333333333,
+          "box_recall": 0.7961630695443646,
+          "image_recall": 0.8721590909090909,
+          "image_recall_ci95": [
+            0.8375936329588015,
+            0.9046353963928896
+          ],
+          "specificity_on_verified_negatives": 0.8738738738738738,
+          "specificity_ci95": [
+            0.8017128971076339,
+            0.9339871912870072
+          ]
+        }
+      },
+      "verifier_crop_refit_tau": {
+        "cat": 0.32726265753712636,
+        "dog": 0.25584238378172797
+      },
+      "verifier_crop_shipped_no_refit": {
+        "cat": {
+          "ap50": 0.84348988055804,
+          "box_precision": 0.9376854599406528,
+          "box_recall": 0.8540540540540541,
+          "image_recall": 0.8997050147492626,
+          "image_recall_ci95": [
+            0.8668726264920759,
+            0.9303063241106719
+          ],
+          "specificity_on_verified_negatives": 0.7872340425531915,
+          "specificity_ci95": [
+            0.6666666666666666,
+            0.8980102040816326
+          ]
+        },
+        "dog": {
+          "ap50": 0.6986719088214817,
+          "box_precision": 0.888235294117647,
+          "box_recall": 0.7242206235011991,
+          "image_recall": 0.8068181818181818,
+          "image_recall_ci95": [
+            0.7676470588235295,
+            0.8477011494252874
+          ],
+          "specificity_on_verified_negatives": 0.9009009009009009,
+          "specificity_ci95": [
+            0.8415841584158416,
+            0.9500103305785124
+          ]
+        }
+      },
+      "tuning_selected_feature_set": {
+        "cat": "crop",
+        "dog": "all"
+      }
+    },
+    "detector_int8__classifier_int8": {
+      "detector": "efficientdet_lite0_mediapipe_int8_v1",
+      "classifier": "efficientnet_lite0_mediapipe_int8_v1",
+      "e4_detections": 1123,
+      "detector_only@0.35": {
+        "cat": {
+          "ap50": 0.85660727192811,
+          "box_precision": 0.9022346368715084,
+          "box_recall": 0.8729729729729729,
+          "image_recall": 0.9174041297935103,
+          "image_recall_ci95": [
+            0.8885548559599793,
+            0.9444484936831875
+          ],
+          "specificity_on_verified_negatives": 0.6382978723404256,
+          "specificity_ci95": [
+            0.4997448979591837,
+            0.7777777777777778
+          ]
+        },
+        "dog": {
+          "ap50": 0.7629399873261693,
+          "box_precision": 0.8105515587529976,
+          "box_recall": 0.8105515587529976,
+          "image_recall": 0.8892045454545454,
+          "image_recall_ci95": [
+            0.8550631735414345,
+            0.9207664294985818
+          ],
+          "specificity_on_verified_negatives": 0.6576576576576577,
+          "specificity_ci95": [
+            0.5566017227235439,
+            0.7433898721730581
+          ]
+        }
+      },
+      "verifier_crop_refit": {
+        "cat": {
+          "ap50": 0.8514386127114221,
+          "box_precision": 0.9221902017291066,
+          "box_recall": 0.8648648648648649,
+          "image_recall": 0.9085545722713865,
+          "image_recall_ci95": [
+            0.8782537525879918,
+            0.9380843653250773
+          ],
+          "specificity_on_verified_negatives": 0.7872340425531915,
+          "specificity_ci95": [
+            0.6665,
+            0.8979591836734694
+          ]
+        },
+        "dog": {
+          "ap50": 0.7501084819351393,
+          "box_precision": 0.8858695652173914,
+          "box_recall": 0.7817745803357314,
+          "image_recall": 0.8636363636363636,
+          "image_recall_ci95": [
+            0.8266922024734524,
+            0.8965564092953523
+          ],
+          "specificity_on_verified_negatives": 0.8918918918918919,
+          "specificity_ci95": [
+            0.8285714285714286,
+            0.9464520676691729
+          ]
+        }
+      },
+      "verifier_crop_refit_tau": {
+        "cat": 0.17831333913089137,
+        "dog": 0.28286441586760663
+      },
+      "verifier_crop_shipped_no_refit": {
+        "cat": {
+          "ap50": 0.8461007777233414,
+          "box_precision": 0.9323529411764706,
+          "box_recall": 0.8567567567567568,
+          "image_recall": 0.8967551622418879,
+          "image_recall_ci95": [
+            0.8650966949354046,
+            0.9264759789546317
+          ],
+          "specificity_on_verified_negatives": 0.851063829787234,
+          "specificity_ci95": [
+            0.7498546511627907,
+            0.9428571428571428
+          ]
+        },
+        "dog": {
+          "ap50": 0.7054102329593552,
+          "box_precision": 0.9121212121212121,
+          "box_recall": 0.7218225419664268,
+          "image_recall": 0.8039772727272727,
+          "image_recall_ci95": [
+            0.7643637343260188,
+            0.8436578171091446
+          ],
+          "specificity_on_verified_negatives": 0.954954954954955,
+          "specificity_ci95": [
+            0.9122807017543859,
+            0.9905682419326397
+          ]
+        }
+      },
+      "tuning_selected_feature_set": {
+        "cat": "crop",
+        "dog": "crop"
+      }
+    }
+  },
+  "verifier_agreement_float_vs_int8_classifier": {
+    "cat": {
+      "detections_at_op": 375,
+      "mean_abs_score_diff": 0.04339642800551243,
+      "p95_abs_score_diff": 0.16909628031285032,
+      "accept_reject_flips": 7,
+      "rejected_float": 26,
+      "rejected_int8": 31
+    },
+    "dog": {
+      "detections_at_op": 472,
+      "mean_abs_score_diff": 0.18682094584186415,
+      "p95_abs_score_diff": 0.5374642953466322,
+      "accept_reject_flips": 50,
+      "rejected_float": 85,
+      "rejected_int8": 121
+    }
+  },
+  "posture": {
+    "samples": {
+      "train": 1309,
+      "test": 581,
+      "validation": 229
+    },
+    "dropped": {
+      "missing_image": 0,
+      "no_single_accepted_detection": 712
+    },
+    "shipped_posture_v1_on_float32_features": {
+      "n": 229,
+      "macro_f1": 0.6478401137668045,
+      "accuracy": 0.6506550218340611,
+      "confusion_rows_true_cols_pred": [
+        [
+          45,
+          17,
+          13
+        ],
+        [
+          14,
+          44,
+          20
+        ],
+        [
+          6,
+          10,
+          60
+        ]
+      ],
+      "per_class": {
+        "lying": {
+          "precision": 0.6923076923076923,
+          "recall": 0.6,
+          "f1": 0.6428571428571429,
+          "support": 75,
+          "tp": 45,
+          "fp": 20,
+          "fn": 30
+        },
+        "sitting": {
+          "precision": 0.6197183098591549,
+          "recall": 0.5641025641025641,
+          "f1": 0.5906040268456376,
+          "support": 78,
+          "tp": 44,
+          "fp": 27,
+          "fn": 34
+        },
+        "standing": {
+          "precision": 0.6451612903225806,
+          "recall": 0.7894736842105263,
+          "f1": 0.7100591715976331,
+          "support": 76,
+          "tp": 60,
+          "fp": 33,
+          "fn": 16
+        }
+      },
+      "macro_f1_ci95": {
+        "ci_low": 0.5840469616660022,
+        "ci_high": 0.704356353594961,
+        "n_boot": 1000,
+        "n_groups": 229,
+        "unit": "group"
+      },
+      "cat_macro_f1": 0.7490514905149052,
+      "cat_n": 41,
+      "dog_macro_f1": 0.6079436056833538,
+      "dog_n": 188,
+      "gated": {
+        "gate": 0.84,
+        "coverage": 0.37554585152838427,
+        "agreement_on_reported": 0.8488372093023255
+      }
+    },
+    "shipped_posture_v1_on_int8_features": {
+      "n": 229,
+      "macro_f1": 0.6532463492709853,
+      "accuracy": 0.6550218340611353,
+      "confusion_rows_true_cols_pred": [
+        [
+          46,
+          17,
+          12
+        ],
+        [
+          15,
+          45,
+          18
+        ],
+        [
+          5,
+          12,
+          59
+        ]
+      ],
+      "per_class": {
+        "lying": {
+          "precision": 0.696969696969697,
+          "recall": 0.6133333333333333,
+          "f1": 0.652482269503546,
+          "support": 75,
+          "tp": 46,
+          "fp": 20,
+          "fn": 29
+        },
+        "sitting": {
+          "precision": 0.6081081081081081,
+          "recall": 0.5769230769230769,
+          "f1": 0.5921052631578947,
+          "support": 78,
+          "tp": 45,
+          "fp": 29,
+          "fn": 33
+        },
+        "standing": {
+          "precision": 0.6629213483146067,
+          "recall": 0.7763157894736842,
+          "f1": 0.7151515151515152,
+          "support": 76,
+          "tp": 59,
+          "fp": 30,
+          "fn": 17
+        }
+      },
+      "macro_f1_ci95": {
+        "ci_low": 0.5919060390779626,
+        "ci_high": 0.7121460853158517,
+        "n_boot": 1000,
+        "n_groups": 229,
+        "unit": "group"
+      },
+      "cat_macro_f1": 0.7490514905149052,
+      "cat_n": 41,
+      "dog_macro_f1": 0.6156318873300005,
+      "dog_n": 188,
+      "gated": {
+        "gate": 0.84,
+        "coverage": 0.39737991266375544,
+        "agreement_on_reported": 0.8571428571428571
+      }
+    },
+    "refit_on_int8_features": {
+      "C": 0.01,
+      "gate": 0.8,
+      "dev_macro_f1_by_C": {
+        "0.01": 0.6461936061120844,
+        "0.03": 0.6336733904980956,
+        "0.1": 0.635714206829908,
+        "0.3": 0.6340800585279373,
+        "1.0": 0.6316632223367974
+      },
+      "final_validation": {
+        "n": 229,
+        "macro_f1": 0.6710894044227378,
+        "accuracy": 0.6724890829694323,
+        "confusion_rows_true_cols_pred": [
+          [
+            46,
+            19,
+            10
+          ],
+          [
+            14,
+            48,
+            16
+          ],
+          [
+            5,
+            11,
+            60
+          ]
+        ],
+        "per_class": {
+          "lying": {
+            "precision": 0.7076923076923077,
+            "recall": 0.6133333333333333,
+            "f1": 0.657142857142857,
+            "support": 75,
+            "tp": 46,
+            "fp": 19,
+            "fn": 29
+          },
+          "sitting": {
+            "precision": 0.6153846153846154,
+            "recall": 0.6153846153846154,
+            "f1": 0.6153846153846154,
+            "support": 78,
+            "tp": 48,
+            "fp": 30,
+            "fn": 30
+          },
+          "standing": {
+            "precision": 0.6976744186046512,
+            "recall": 0.7894736842105263,
+            "f1": 0.7407407407407408,
+            "support": 76,
+            "tp": 60,
+            "fp": 26,
+            "fn": 16
+          }
+        },
+        "macro_f1_ci95": {
+          "ci_low": 0.606305307622548,
+          "ci_high": 0.727823646994267,
+          "n_boot": 1000,
+          "n_groups": 229,
+          "unit": "group"
+        },
+        "cat_macro_f1": 0.7490514905149052,
+        "cat_n": 41,
+        "dog_macro_f1": 0.6372112735749099,
+        "dog_n": 188,
+        "gated": {
+          "gate": 0.8,
+          "coverage": 0.4279475982532751,
+          "agreement_on_reported": 0.8367346938775511
+        }
+      }
+    },
+    "agreement_float_vs_int8_shipped_model": {
+      "validation_animals": 229,
+      "argmax_agreement": 0.9650655021834061,
+      "median_abs_top_score_diff": 0.019881119029158456,
+      "gate_flips": 7,
+      "both_reported_same_label": 85,
+      "both_reported": 85
+    }
+  },
+  "size_and_cpu_latency_python_litert": {
+    "efficientdet_lite0_mediapipe_v1": {
+      "bytes": 13836895,
+      "median_ms_1_thread": 28.500393500507926,
+      "median_ms_4_thread": 22.378441999535426
+    },
+    "efficientdet_lite0_mediapipe_f16_v1": {
+      "bytes": 7254339,
+      "median_ms_1_thread": 29.92794350029726,
+      "median_ms_4_thread": 22.170957500748045
+    },
+    "efficientdet_lite0_mediapipe_int8_v1": {
+      "bytes": 4602795,
+      "median_ms_1_thread": 16.197072499380738,
+      "median_ms_4_thread": 12.355757499790343
+    },
+    "efficientnet_lite0_mediapipe_v1": {
+      "bytes": 18582189,
+      "median_ms_1_thread": 11.673170501126151,
+      "median_ms_4_thread": 6.7062850002912455
+    },
+    "efficientnet_lite0_mediapipe_int8_v1": {
+      "bytes": 5434517,
+      "median_ms_1_thread": 4.801129500265233,
+      "median_ms_4_thread": 4.4186860004629125
+    }
+  },
+  "replacement_rule": {
+    "max_recall_drop": 0.02,
+    "max_specificity_drop": 0.03,
+    "max_posture_macro_f1_drop": 0.03
+  },
+  "decision": {
+    "detector_float16__classifier_float32": {
+      "drops_vs_float32": {
+        "cat_recall_drop": 0.002949852507374673,
+        "cat_specificity_drop": -0.021276595744680882,
+        "dog_recall_drop": 0.0028409090909091717,
+        "dog_specificity_drop": 0.0
+      },
+      "meets_replacement_rule": true
+    },
+    "detector_int8__classifier_float32": {
+      "drops_vs_float32": {
+        "cat_recall_drop": 0.002949852507374673,
+        "cat_specificity_drop": -0.08510638297872342,
+        "dog_recall_drop": 0.008522727272727293,
+        "dog_specificity_drop": -0.06306306306306297
+      },
+      "meets_replacement_rule": true
+    },
+    "detector_float32__classifier_int8": {
+      "drops_vs_float32": {
+        "cat_recall_drop": 0.005899705014749235,
+        "cat_specificity_drop": -0.04255319148936165,
+        "dog_recall_drop": 0.0,
+        "dog_specificity_drop": -0.009009009009008917,
+        "posture_macro_f1_drop_refit": -0.023249290655933286,
+        "posture_macro_f1_drop_no_refit": -0.005406235504180845
+      },
+      "meets_replacement_rule": true
+    },
+    "detector_int8__classifier_int8": {
+      "drops_vs_float32": {
+        "cat_recall_drop": -0.002949852507374673,
+        "cat_specificity_drop": -0.08510638297872342,
+        "dog_recall_drop": 0.008522727272727293,
+        "dog_specificity_drop": -0.027027027027026973,
+        "posture_macro_f1_drop_refit": -0.023249290655933286,
+        "posture_macro_f1_drop_no_refit": -0.005406235504180845
+      },
+      "meets_replacement_rule": true
+    }
+  },
+  "not_measured_here": [
+    "browser (LiteRT.js) compatibility and latency of the quantized builds: web/tests/runtime",
+    "household footage",
+    "phones"
+  ],
+  "runtime_s": 445.0,
+  "created_at": "2026-10-09T09:05:38+00:00"
+}
