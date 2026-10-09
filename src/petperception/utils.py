@@ -11,9 +11,10 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
-from datetime import date, datetime, timezone
+from collections.abc import Iterator
+from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 USER_AGENT = "petperception-fetch/0.1 (+research; explicit fetch only)"
 
@@ -34,7 +35,7 @@ def sha256_bytes(data: bytes) -> str:
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def today_iso() -> str:

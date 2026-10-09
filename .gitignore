@@ -38,3 +38,10 @@ data_local/
 # Secrets
 .env
 *.token
+
+# Web app
+web/node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
+!web/public/icons/*.png

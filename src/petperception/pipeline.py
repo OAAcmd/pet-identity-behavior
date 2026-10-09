@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 import time
 import uuid
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 import numpy as np
 
@@ -60,7 +60,7 @@ class AnalysisEngine:
         self._groups = None
 
     # -- model loading -----------------------------------------------------
-    def load(self) -> "AnalysisEngine":
+    def load(self) -> AnalysisEngine:
         t0 = time.perf_counter()
         s = self.settings
         if not s.audio.enabled or s.audio.event_backend == "none":

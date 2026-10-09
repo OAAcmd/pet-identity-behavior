@@ -23,10 +23,11 @@ import json
 import re
 import subprocess
 import threading
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from math import gcd
 from pathlib import Path
-from typing import Iterator, Literal
+from typing import Literal
 
 import numpy as np
 from scipy.signal import resample_poly

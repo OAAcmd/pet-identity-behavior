@@ -25,8 +25,8 @@ import os
 import socket
 import threading
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 from ..config import Settings
 from ..context.zones import ZoneConfig

@@ -205,14 +205,14 @@ def read_subset(manifest_dir: Path) -> tuple[list[dict[str, str]], list[GtBox]]:
     return images, boxes
 
 
-def fetch_images(data_root: Path, manifest_dir: Path, workers: int = 4, retries: int = 4) -> dict[str, object]:
+def fetch_images(data_root: Path, manifest_dir: Path, workers: int = 4, retries: int = 4, image_dir: Path | None = None) -> dict[str, object]:
     """Download subset images and record their SHA-256 in a checksum manifest.
 
     The S3 copies are re-encoded relative to the Flickr originals, so the
     ``OriginalMD5`` field cannot be used; first retrieval pins our own digest.
     """
-    images, _ = read_subset(manifest_dir)
-    img_dir = dataset_dir(data_root) / "images"
+    images = list(_rows(manifest_dir / "openimages_catdog_images.csv"))
+    img_dir = image_dir or dataset_dir(data_root) / "images"
     sums_path = manifest_dir / "openimages_catdog_sha256.csv"
     pinned: dict[str, str] = {}
     pinned_bytes: dict[str, int] = {}

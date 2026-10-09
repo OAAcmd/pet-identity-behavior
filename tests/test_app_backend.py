@@ -12,7 +12,7 @@ import json
 import logging
 import threading
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import numpy as np
 import pytest
@@ -31,7 +31,7 @@ PW = "correct horse battery"
 
 def minimal_result(aid: str) -> S.AnalysisResult:
     return S.AnalysisResult(
-        analysis_id=aid, created_at=datetime.now(timezone.utc), engine_version=__version__, config_profile="test", config_hash="x",
+        analysis_id=aid, created_at=datetime.now(UTC), engine_version=__version__, config_profile="test", config_hash="x",
         media=S.MediaInfo(analysis_filename="x.wav", size_bytes=1, sha256="0" * 64, container="wav", duration_s=1.0, start_time_s=0.0, audio=None, video=None),
         modalities=S.ModalityStatus(requested=["audio"], available=[], audio_state="silent", video_state="absent"),
         components=[], observations=S.Observations(animal_tracks=[], sound_events=[], context_sounds=[], audio_summary=S.AudioSummary(state="silent"),

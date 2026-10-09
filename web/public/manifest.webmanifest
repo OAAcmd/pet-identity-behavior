@@ -1,0 +1,16 @@
+{
+  "name": "Pet Observer",
+  "short_name": "Pet Observer",
+  "description": "Record or upload clips of your cat or dog and get timestamped observations with clearly marked, uncertain interpretations.",
+  "start_url": "/#/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f6f2",
+  "theme_color": "#1d5c4f",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -9,11 +9,11 @@ import time
 
 import pytest
 from fastapi.testclient import TestClient
+from test_app_backend import login, make, register, start
 
 from petperception.app.main import create_app
 from petperception.config import REPO_ROOT
 
-from test_app_backend import login, make, register, start
 
 @pytest.mark.integration
 def test_real_engine_end_to_end_with_inprocess_worker(app_settings, models_ready, esc50_root):

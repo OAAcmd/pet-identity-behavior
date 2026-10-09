@@ -41,9 +41,8 @@ class JsonFormatter(logging.Formatter):
 
 def configure(fmt: str = "json", level: str = "INFO") -> None:
     root = logging.getLogger()
-    for h in list(root.handlers):
-        if getattr(h, "_petperception", False):
-            root.removeHandler(h)
+    for h in list(root.handlers):  # one structured handler only (drops basicConfig/uvicorn defaults)
+        root.removeHandler(h)
     h = logging.StreamHandler(sys.stderr)
     h._petperception = True  # type: ignore[attr-defined]
     h.setFormatter(JsonFormatter() if fmt == "json" else logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))

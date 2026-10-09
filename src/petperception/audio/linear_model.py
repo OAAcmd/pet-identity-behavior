@@ -9,9 +9,10 @@ explicitly *uncalibrated*.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -62,7 +63,7 @@ class LinearModel:
         })
 
     @classmethod
-    def from_json(cls, path: Path) -> "LinearModel":
+    def from_json(cls, path: Path) -> LinearModel:
         d = read_json(path)
         if d.get("format") != "petperception.linear_model/1":
             raise ValueError(f"{path}: unsupported model format")

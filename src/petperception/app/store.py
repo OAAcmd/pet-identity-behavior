@@ -400,7 +400,7 @@ class Store:
             except MediaError as exc:
                 msg, action = MEDIA_ERROR_TEXT.get(exc.code, (str(exc), None))
                 self._abort_upload_row(user_id, upload_id, up["path"])
-                raise ApiError(422, exc.code, msg, action)
+                raise ApiError(422, exc.code, msg, action) from exc
             aid, ts = security.new_id(), now_iso()
             media = self.user_dir(user_id) / f"analysis-{aid}{up['ext']}"
             os.replace(up["path"], media)
