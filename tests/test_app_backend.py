@@ -405,3 +405,40 @@ def test_health_ready_headers_and_log_hygiene(app_settings, caplog, tmp_path):
         assert c.get("/").json()["error"]["code"] == "frontend_not_built"
     text = "\n".join(r.getMessage() + json.dumps({k: str(v) for k, v in r.__dict__.items()}) for r in caplog.records)
     assert "secret-family-name" not in text and PW not in text
+
+
+def test_device_reports_and_ondevice_bundle_route(app_settings, tmp_path):
+    bundle = tmp_path / "bundle"
+    (bundle / "models").mkdir(parents=True)
+    (bundle / "manifest.json").write_text('{"schema": "petperception.ondevice_bundle/1"}')
+    (bundle / "models" / "m.tflite").write_bytes(b"\x00" * 16)
+    app_settings.serve.ondevice_dir = str(bundle)
+    app, _, _ = make(app_settings)
+    with TestClient(app) as c:
+        r = c.get("/ondevice/manifest.json")
+        assert r.status_code == 200 and r.headers["Cache-Control"] == "no-cache"
+        assert r.headers["Cross-Origin-Embedder-Policy"] == "require-corp" and "'wasm-unsafe-eval'" in r.headers["Content-Security-Policy"]
+        assert c.get("/ondevice/models/m.tflite").content == b"\x00" * 16
+        # Encoded traversal must not escape the bundle directory.
+        r = c.get("/ondevice/%2E%2E/%2E%2E/pyproject.toml")
+        assert r.status_code == 404 and b"[project]" not in r.content
+        assert c.get("/ondevice/nope.bin").status_code == 404
+        # Device reports: authenticated, per-user, size-limited, never media.
+        assert c.post("/api/v1/device-reports", json={"report": {}}).status_code in (401, 403)
+        csrf = register(c, "alice")
+        h = {"X-CSRF-Token": csrf}
+        rep = {"bundle_version": "abc", "passed": True, "environment": {"user_agent": "UA"}}
+        assert c.post("/api/v1/device-reports", json={"report": rep}, headers=h).status_code == 201
+        assert c.post("/api/v1/device-reports", json={"report": {"x": "y" * 300_000}}, headers=h).status_code == 413
+        rows = c.get("/api/v1/device-reports").json()
+        assert len(rows) == 1 and rows[0]["passed"] is True and rows[0]["bundle_version"] == "abc"
+        c.post("/api/v1/auth/logout", headers=h)
+        csrf_b = register(c, "bob") if c.get("/api/v1/auth/status").json()["registration_open"] else None
+        if csrf_b:
+            assert c.get("/api/v1/device-reports").json() == []
+    missing = tmp_path / "none"
+    app_settings.serve.ondevice_dir = str(missing)
+    app2, _, _ = make(app_settings)
+    with TestClient(app2) as c:
+        r = c.get("/ondevice/manifest.json")
+        assert r.status_code == 503 and r.json()["error"]["code"] == "ondevice_bundle_missing"
