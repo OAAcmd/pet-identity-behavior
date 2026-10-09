@@ -11,6 +11,8 @@ const PATTERNS: [string, RegExp, string[]][] = [
   ["home", /^\/?$/, []],
   ["capture", /^\/capture$/, []],
   ["analysis", /^\/analyses\/([A-Za-z0-9]+)$/, ["id"]],
+  ["local", /^\/local\/([A-Za-z0-9]+)$/, ["id"]],
+  ["device", /^\/device-check$/, []],
   ["history", /^\/history$/, []],
   ["pets", /^\/pets$/, []],
   ["places", /^\/places$/, []],

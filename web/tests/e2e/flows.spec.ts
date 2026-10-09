@@ -2,6 +2,7 @@
 // Media come from var/e2e (real public photo/audio composites; see docs/TEST_REPORT.md).
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -30,6 +31,17 @@ async function ensurePet(page: Page, name: string) {
   await page.getByLabel("Cat").check();
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText(name, { exact: true })).toBeVisible();
+}
+
+/** Opt in to server analysis (off by default) for tests of the upload path. */
+async function useServerAnalysis(page: Page) {
+  await page.addInitScript(() => localStorage.setItem("pp.serverAnalysis", "on"));
+}
+
+async function installModels(page: Page) {
+  await page.goto("/#/settings");
+  await page.getByRole("button", { name: "Install models" }).click();
+  await expect(page.getByText(/Installed: model bundle/)).toBeVisible({ timeout: 120_000 });
 }
 
 async function waitForResult(page: Page) {
@@ -71,7 +83,8 @@ test("pet profile and place with a drawn food-bowl zone", async ({ page }) => {
   expect(places[0].zones.zones[0].semantic_tag).toBe("food_area");
 });
 
-test("upload an existing clip, see observations and clearly-marked hypotheses, give feedback, delete", async ({ page }) => {
+test("[server analysis] upload an existing clip, see observations and clearly-marked hypotheses, give feedback, delete", async ({ page }) => {
+  await useServerAnalysis(page);
   await signIn(page);
   await ensurePet(page, "Milo");
   await page.goto("/#/capture");
@@ -82,7 +95,7 @@ test("upload an existing clip, see observations and clearly-marked hypotheses, g
   await page.getByLabel("Place (optional)").selectOption({ label: "Kitchen camera" });
   const puts: string[] = [];
   page.on("request", (r) => { if (r.method() === "PUT" && r.url().includes("/api/v1/uploads/")) puts.push(r.url()); });
-  await page.getByRole("button", { name: "Analyze" }).click();
+  await page.getByRole("button", { name: "Upload and analyze" }).click();
   await waitForResult(page);
   expect(puts.length, "a 6.6 MB file is sent in several resumable chunks").toBeGreaterThanOrEqual(3);
   await expect(page.getByText("You said: Milo")).toBeVisible();
@@ -104,8 +117,9 @@ test("upload an existing clip, see observations and clearly-marked hypotheses, g
   expect((await page.request.get(`/api/v1/analyses/${id}`)).status()).toBe(404);
 });
 
-test("record video with the (fake) camera and analyze it", async ({ page }) => {
+test("record video with the (fake) camera and analyze it on the device", async ({ page }) => {
   await signIn(page);
+  await installModels(page);
   await page.goto("/#/capture");
   await expect(page.getByRole("button", { name: "Start recording" })).toBeEnabled({ timeout: 20_000 });
   await page.getByRole("button", { name: "Start recording" }).click();
@@ -113,25 +127,27 @@ test("record video with the (fake) camera and analyze it", async ({ page }) => {
   await page.getByRole("button", { name: "Stop recording" }).click();
   await expect(page.getByRole("heading", { name: "Review" })).toBeVisible();
   await expect(page.locator("text=/recording-.*\\.(webm|mp4)/")).toBeVisible();
-  await page.getByRole("button", { name: "Analyze" }).click();
-  await waitForResult(page);
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
   await expect(page.getByRole("heading", { name: /Cat seen/ }).first()).toBeVisible();
 });
 
-test("record sound only and analyze it", async ({ page }) => {
+test("record sound only and analyze it on the device", async ({ page }) => {
   await signIn(page);
+  await installModels(page);
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Sound only" }).click();
   await expect(page.getByRole("button", { name: "Start recording" })).toBeEnabled({ timeout: 20_000 });
   await page.getByRole("button", { name: "Start recording" }).click();
   await page.waitForTimeout(3500);
   await page.getByRole("button", { name: "Stop recording" }).click();
-  await page.getByRole("button", { name: "Analyze" }).click();
-  await waitForResult(page);
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
   await expect(page.locator(".decision")).toBeVisible();
 });
 
-test("an interrupted chunk upload resumes from the server offset", async ({ page }) => {
+test("[server analysis] an interrupted chunk upload resumes from the server offset", async ({ page }) => {
+  await useServerAnalysis(page);
   await signIn(page);
   let aborted = 0;
   await page.route(/\/api\/v1\/uploads\/[a-f0-9]+\?offset=[1-9]/, async (route) => {
@@ -144,12 +160,13 @@ test("an interrupted chunk upload resumes from the server offset", async ({ page
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Upload file" }).click();
   await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.mp4"));
-  await page.getByRole("button", { name: "Analyze" }).click();
+  await page.getByRole("button", { name: "Upload and analyze" }).click();
   await waitForResult(page);
   expect(aborted).toBe(1);
 });
 
-test("going offline mid-upload pauses and resumes automatically", async ({ page, context }) => {
+test("[server analysis] going offline mid-upload pauses and resumes automatically", async ({ page, context }) => {
+  await useServerAnalysis(page);
   await signIn(page);
   let tripped = false;
   await page.route(/\/api\/v1\/uploads\/[a-f0-9]+\?offset=[1-9]/, async (route) => {
@@ -163,29 +180,31 @@ test("going offline mid-upload pauses and resumes automatically", async ({ page,
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Upload file" }).click();
   await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.mp4"));
-  await page.getByRole("button", { name: "Analyze" }).click();
+  await page.getByRole("button", { name: "Upload and analyze" }).click();
   await expect(page.getByText(/You are offline/)).toBeVisible();
   await page.waitForTimeout(2500);
   await context.setOffline(false);
   await waitForResult(page);
 });
 
-test("a corrupt file produces an actionable error", async ({ page }) => {
+test("[server analysis] a corrupt file produces an actionable error", async ({ page }) => {
+  await useServerAnalysis(page);
   await signIn(page);
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Upload file" }).click();
   await page.locator("#file").setInputFiles(path.join(FIX, "broken.mp4"));
-  await page.getByRole("button", { name: "Analyze" }).click();
+  await page.getByRole("button", { name: "Upload and analyze" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "could not be read" })).toBeVisible();
   await expect(page.getByRole("alert").filter({ hasText: "different file" })).toBeVisible();
 });
 
-test("a long analysis can be cancelled", async ({ page }) => {
+test("[server analysis] a long analysis can be cancelled", async ({ page }) => {
+  await useServerAnalysis(page);
   await signIn(page);
   await page.goto("/#/capture");
   await page.getByRole("tab", { name: "Upload file" }).click();
   await page.locator("#file").setInputFiles(path.join(EX, "e6_long_64s.mp4"));
-  await page.getByRole("button", { name: "Analyze" }).click();
+  await page.getByRole("button", { name: "Upload and analyze" }).click();
   await expect(page).toHaveURL(/#\/analyses\//, { timeout: 60_000 });
   await page.getByRole("button", { name: "Cancel" }).click();
   await expect(page.getByText("This analysis was cancelled.")).toBeVisible({ timeout: 60_000 });
@@ -209,4 +228,60 @@ test("denied camera permission (simulated) shows guidance and the upload alterna
   await page.getByRole("button", { name: "Upload a file instead" }).click();
   await expect(page.locator("#file")).toBeAttached();
   await context.close();
+});
+
+test("on-device analysis of an existing file uploads no media", async ({ page }) => {
+  await signIn(page);
+  await installModels(page);
+  const sent: string[] = [];
+  page.on("request", (r) => { if (/\/api\/v1\/(uploads|analyses)/.test(r.url()) && r.method() !== "GET") sent.push(`${r.method()} ${r.url()}`); });
+  await page.goto("/#/capture");
+  await page.getByRole("tab", { name: "Upload file" }).click();
+  await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.webm"));
+  await expect(page.getByText("Analysed on this device; the recording is not uploaded.")).toBeVisible();
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
+  await expect(page.getByText(/Analysed on this device\. The recording and the result stay on this device/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Cat seen/ }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Timeline" })).toBeVisible();
+  await page.getByLabel("What was your pet actually doing?").selectOption("resting or sleeping");
+  await page.getByRole("button", { name: "Save feedback" }).click();
+  await expect(page.getByText(/Saved feedback \(1\)/)).toBeVisible();
+  expect(sent, "no upload or server-analysis request").toEqual([]);
+  await page.goto("/#/history");
+  await expect(page.getByRole("list", { name: "Analysed on this device" }).getByText("big_cat_clip.webm")).toBeVisible();
+});
+
+test("offline end-to-end: after installing models, analysis works with the network off (desktop Chromium)", async ({ page, context }) => {
+  await signIn(page);
+  await installModels(page);
+  // Let the service worker take control and cache the app shell and runtime.
+  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await page.goto("/#/capture");
+  await page.getByRole("tab", { name: "Upload file" }).click();
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByText(/You are offline/)).toBeVisible();
+  await page.goto("/#/capture");
+  await page.getByRole("tab", { name: "Upload file" }).click();
+  await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.webm"));
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
+  await expect(page.getByRole("heading", { name: /Cat seen/ }).first()).toBeVisible();
+  await context.setOffline(false);
+});
+
+test("device check passes in desktop Chromium (not a phone)", async ({ page }) => {
+  await signIn(page);
+  await installModels(page);
+  await page.goto("/#/device-check");
+  await page.getByRole("button", { name: "Run device check" }).click();
+  await expect(page.getByRole("heading", { name: /^(Passed|Not passed)$/ })).toBeVisible({ timeout: 240_000 });
+  const report = JSON.parse(await page.getByLabel("Device check report").innerText());
+  report.test_environment = "AUTOMATED: Playwright headless Chromium on a 4-core cloud VM with Pixel 7 emulation (user agent, viewport and touch only). NOT a physical phone.";
+  fs.mkdirSync(path.join(FIX, "../../results/ondevice"), { recursive: true });
+  fs.writeFileSync(path.join(FIX, "../../results/ondevice/device_check_desktop_chromium.json"), JSON.stringify(report, null, 1));
+  expect(report.passed, JSON.stringify(report.end_to_end ?? report.error)).toBe(true);
 });

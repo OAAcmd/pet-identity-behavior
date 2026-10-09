@@ -1,19 +1,22 @@
 import { render } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { Spinner } from "./components/ui";
-import { api } from "./lib/api";
+import { ApiError, api } from "./lib/api";
+import { OnDeviceProvider } from "./lib/ondevice";
 import { navigate, useRoute } from "./lib/router";
 import type { Me } from "./lib/types";
 import { AboutPage } from "./pages/About";
 import { AnalysisPage } from "./pages/Analysis";
 import { AuthPage } from "./pages/Auth";
 import { CapturePage } from "./pages/Capture";
+import { DeviceCheckPage } from "./pages/DeviceCheck";
 import { HistoryPage } from "./pages/History";
 import { HomePage } from "./pages/Home";
+import { LocalAnalysisPage } from "./pages/LocalAnalysis";
 import { PetsPage } from "./pages/Pets";
 import { PlacesPage } from "./pages/Places";
 import { SettingsPage } from "./pages/Settings";
-import { AppProvider, useApp } from "./state";
+import { AppProvider, offlineCache, useApp } from "./state";
 import "./styles.css";
 
 const NAV = [
@@ -30,7 +33,15 @@ function Shell() {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    api.get<Me>("/auth/me").then(setMe).catch(() => setMe(null)).finally(() => setChecked(true));
+    api.get<Me>("/auth/me")
+      .then((m) => { setMe(m); offlineCache.save("me", { ...m, csrf_token: null }); })
+      .catch((e) => {
+        // Offline: keep using the last signed-in account on this device (on-device analysis works without the server).
+        const cached = e instanceof ApiError && e.isNetwork ? offlineCache.load<Me>("me") : null;
+        if (!cached) offlineCache.clear();
+        setMe(cached);
+      })
+      .finally(() => setChecked(true));
   }, [setMe]);
 
   useEffect(() => {
@@ -47,6 +58,8 @@ function Shell() {
     case "home": page = <HomePage />; break;
     case "capture": page = <CapturePage />; break;
     case "analysis": page = <AnalysisPage id={route.params.id} />; break;
+    case "local": page = <LocalAnalysisPage id={route.params.id} />; break;
+    case "device": page = <DeviceCheckPage />; break;
     case "history": page = <HistoryPage />; break;
     case "pets": page = <PetsPage />; break;
     case "places": page = <PlacesPage />; break;
@@ -67,7 +80,7 @@ function Shell() {
         <a href="#/" class="brand">Pet Observer</a>
         <span class="badge-exp" title="Interpretations are experimental and unvalidated">Research preview</span>
       </header>
-      {!online && <div class="offline" role="status">You are offline. Recordings stay on this device and upload when you reconnect.</div>}
+      {!online && <div class="offline" role="status">You are offline. On-device analysis still works once the models are installed; anything waiting to sync stays on this device.</div>}
       <main id="main" class="main">{page}</main>
       <nav class="bottomnav" aria-label="Main">
         {NAV.map((n) => (
@@ -88,7 +101,9 @@ function Shell() {
 
 render(
   <AppProvider>
-    <Shell />
+    <OnDeviceProvider>
+      <Shell />
+    </OnDeviceProvider>
   </AppProvider>,
   document.getElementById("app")!,
 );

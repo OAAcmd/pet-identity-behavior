@@ -14,6 +14,8 @@ from pydantic import BaseModel, Field
 from .. import __version__
 from ..context.zones import ZoneConfig
 from ..schemas.analysis import SCHEMA_VERSION
+from . import security
+from .db import now_iso
 from .errors import ApiError, ErrorBody
 from .store import Principal, Store
 
@@ -113,6 +115,10 @@ class AnalysisIn(BaseModel):
     zones: ZoneConfig | None = None
     modalities: list[Literal["audio", "video"]] = Field(default_factory=lambda: ["audio", "video"])
     note: str = Field("", max_length=500)
+
+
+class DeviceReportIn(BaseModel):
+    report: dict[str, Any]
 
 
 class FeedbackIn(BaseModel):
@@ -372,6 +378,26 @@ def build_router(store: Store, engine_caps, readiness) -> APIRouter:
     def add_feedback(analysis_id: str, body: FeedbackIn, p: Principal = Depends(principal)) -> dict:
         return store.add_feedback(p.user_id, analysis_id, body.target_type, body.target_id, body.verdict, body.actual_behavior, body.note,
                                   body.consent_research_use)
+
+    @r.post("/device-reports", tags=["device"], status_code=201)
+    def add_device_report(body: DeviceReportIn, p: Principal = Depends(principal)) -> dict:
+        """Store a device-check report the user chose to send (no media; size-limited)."""
+        blob = json.dumps(body.report)
+        if len(blob) > 200_000:
+            raise ApiError(413, "report_too_large", "The report is too large.", "Send the report file instead.")
+        rid = security.new_id()
+        rep = body.report
+        env = rep.get("environment") if isinstance(rep.get("environment"), dict) else {}
+        with store.db.tx(immediate=True) as c:
+            c.execute("INSERT INTO device_reports (id, user_id, created_at, bundle_version, passed, user_agent, report_json) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                      (rid, p.user_id, now_iso(), str(rep.get("bundle_version", ""))[:64], int(bool(rep.get("passed"))), str(env.get("user_agent", ""))[:400], blob))
+        return {"id": rid}
+
+    @r.get("/device-reports", tags=["device"])
+    def list_device_reports(p: Principal = Depends(principal)) -> list[dict]:
+        rows = store.db.query("SELECT id, created_at, bundle_version, passed, user_agent FROM device_reports WHERE user_id = ? ORDER BY created_at DESC LIMIT 50",
+                            (p.user_id,))
+        return [dict(r) | {"passed": bool(r["passed"])} for r in rows]
 
     @r.delete("/feedback/{feedback_id}", tags=["feedback"], status_code=204)
     def delete_feedback(feedback_id: str, p: Principal = Depends(principal)) -> Response:

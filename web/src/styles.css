@@ -202,3 +202,4 @@ details summary { cursor: pointer; min-height: 44px; display: flex; align-items:
 }
 .seg-list { margin: 0.25rem 0 0.5rem; padding-left: 1.1rem; }
 .seg-list li { margin: 0.15rem 0; }
+.report { max-height: 50vh; overflow: auto; font-size: 0.75rem; background: var(--surface-2, #f4f4f4); padding: 0.5rem; white-space: pre-wrap; word-break: break-word; }

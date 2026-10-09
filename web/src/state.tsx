@@ -30,6 +30,19 @@ interface AppState {
 
 const Ctx = createContext<AppState | null>(null);
 
+/** Small, non-secret account data kept on the device for offline use (no tokens). */
+export const offlineCache = {
+  save(key: string, v: unknown): void {
+    try { localStorage.setItem(`pp.cache.${key}`, JSON.stringify(v)); } catch { /* storage full or private mode */ }
+  },
+  load<T>(key: string): T | null {
+    try { const s = localStorage.getItem(`pp.cache.${key}`); return s ? (JSON.parse(s) as T) : null; } catch { return null; }
+  },
+  clear(): void {
+    try { for (const k of ["me", "pets", "places"]) localStorage.removeItem(`pp.cache.${k}`); } catch { /* ignore */ }
+  },
+};
+
 export function useApp(): AppState {
   const v = useContext(Ctx);
   if (!v) throw new Error("AppProvider missing");
@@ -59,8 +72,27 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 6000);
   }, []);
 
-  const refreshPets = useCallback(async () => setPets(await api.get<Pet[]>("/pets")), []);
-  const refreshPlaces = useCallback(async () => setPlaces(await api.get<Place[]>("/places")), []);
+  // Pets and places are cached on the device so offline (on-device) analysis can use them.
+  const refreshPets = useCallback(async () => {
+    try {
+      const v = await api.get<Pet[]>("/pets");
+      setPets(v);
+      offlineCache.save("pets", v);
+    } catch (e) {
+      if (e instanceof ApiError && e.isNetwork) setPets(offlineCache.load<Pet[]>("pets") ?? []);
+      else throw e;
+    }
+  }, []);
+  const refreshPlaces = useCallback(async () => {
+    try {
+      const v = await api.get<Place[]>("/places");
+      setPlaces(v);
+      offlineCache.save("places", v);
+    } catch (e) {
+      if (e instanceof ApiError && e.isNetwork) setPlaces(offlineCache.load<Place[]>("places") ?? []);
+      else throw e;
+    }
+  }, []);
   const refreshPending = useCallback(async () => {
     if (!pendingStore.available || !me) return;
     const all = await pendingStore.all().catch(() => [] as PendingUpload[]);

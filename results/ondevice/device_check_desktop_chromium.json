@@ -1,0 +1,169 @@
+{
+ "schema": "petperception.device_check/1",
+ "created_at": "2026-10-09T08:01:27.677Z",
+ "bundle_version": "f46ecd0431b1bb97",
+ "environment": {
+  "user_agent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Mobile Safari/537.36",
+  "platform": "Android",
+  "mobile": true,
+  "hardware_concurrency": 4,
+  "device_memory_gb": 8,
+  "cross_origin_isolated": true,
+  "webgpu": true,
+  "online": true,
+  "standalone_pwa": false,
+  "media_recorder_types": [
+   "video/webm;codecs=vp9,opus",
+   "video/webm",
+   "video/mp4",
+   "audio/webm;codecs=opus",
+   "audio/mp4"
+  ],
+  "can_play": {
+   "webm_vp9": "probably",
+   "mp4_h264": ""
+  },
+  "screen": "412x839@2.625"
+ },
+ "integrity": {
+  "device_check/ATTRIBUTION.json": true,
+  "device_check/clip.mp4": true,
+  "device_check/clip.webm": true,
+  "device_check/expected.json": true,
+  "device_check/reference_outputs.json": true,
+  "engine_assets.json": true,
+  "models/efficientdet_lite0.tflite": true,
+  "models/efficientnet_lite0_features_v1.tflite": true,
+  "models/yamnet.tflite": true
+ },
+ "engine_load_ms": 949.8999999994412,
+ "models": {
+  "yamnet": {
+   "median_ms": 4.955000000074506,
+   "min_ms": 3.025000000372529,
+   "max_abs_diff_first_values": 0,
+   "mean_abs_relative_diff": 2.9802321664662564e-09,
+   "argmax_equal": true
+  },
+  "detector_float": {
+   "median_ms": 160.74500000011176,
+   "min_ms": 69.97499999962747,
+   "max_abs_diff_first_values": 0,
+   "mean_abs_relative_diff": 2.4793600293289583e-08,
+   "argmax_equal": true
+  },
+  "backbone": {
+   "median_ms": 47.20999999996275,
+   "min_ms": 46.269999999552965,
+   "max_abs_diff_first_values": 0,
+   "mean_abs_relative_diff": 6.018626370215246e-08,
+   "argmax_equal": true
+  }
+ },
+ "end_to_end": {
+  "clip": "device_check/clip.webm",
+  "expected": {
+   "file": "device_check/clip.webm",
+   "mime": "video/webm; codecs=\"vp9\"",
+   "tracks": 1,
+   "species": [
+    "cat"
+   ],
+   "segment_kinds": [
+    "moving",
+    "stationary"
+   ],
+   "decision": "supported_observation",
+   "sound_labels": []
+  },
+  "runs": [
+   {
+    "run": 1,
+    "wall_ms": 4437.2249999996275,
+    "timings_ms": {
+     "probe_and_hash": 18.34,
+     "decode_audio": 5.24,
+     "video_decode_detect_track": 4407.46,
+     "video_detector_inference": 1994.86,
+     "video_verifier": 810.43,
+     "video_posture": 0,
+     "video_quality_and_camera_motion": 519.11,
+     "fusion_and_behavior": 3.15
+    },
+    "tracks": 1,
+    "species": [
+     "cat"
+    ],
+    "segment_kinds": [
+     "moving",
+     "stationary"
+    ],
+    "decision": "supported_observation",
+    "sound_labels": [],
+    "matches_expected": true
+   },
+   {
+    "run": 2,
+    "wall_ms": 4465.975000000559,
+    "timings_ms": {
+     "probe_and_hash": 16.36,
+     "decode_audio": 1.93,
+     "video_decode_detect_track": 4446.48,
+     "video_detector_inference": 1965.33,
+     "video_verifier": 764.65,
+     "video_posture": 0,
+     "video_quality_and_camera_motion": 515,
+     "fusion_and_behavior": 0.55
+    },
+    "tracks": 1,
+    "species": [
+     "cat"
+    ],
+    "segment_kinds": [
+     "moving",
+     "stationary"
+    ],
+    "decision": "supported_observation",
+    "sound_labels": [],
+    "matches_expected": true
+   },
+   {
+    "run": 3,
+    "wall_ms": 3692.6550000002608,
+    "timings_ms": {
+     "probe_and_hash": 14.49,
+     "decode_audio": 1.53,
+     "video_decode_detect_track": 3676.02,
+     "video_detector_inference": 1627,
+     "video_verifier": 650.12,
+     "video_posture": 0,
+     "video_quality_and_camera_motion": 393.79,
+     "fusion_and_behavior": 0.31
+    },
+    "tracks": 1,
+    "species": [
+     "cat"
+    ],
+    "segment_kinds": [
+     "moving",
+     "stationary"
+    ],
+    "decision": "supported_observation",
+    "sound_labels": [],
+    "matches_expected": true
+   }
+  ],
+  "online_during_test": true,
+  "sustained_slowdown": 0.8321991785407706
+ },
+ "js_heap": {
+  "used": 68900314,
+  "limit": 4294705152
+ },
+ "storage": {
+  "usage": 46961722,
+  "quota": 888397761
+ },
+ "passed": true,
+ "test_environment": "AUTOMATED: Playwright headless Chromium on a 4-core cloud VM with Pixel 7 emulation (user agent, viewport and touch only). NOT a physical phone."
+}

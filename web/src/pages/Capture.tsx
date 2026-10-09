@@ -8,6 +8,10 @@ import { navigate } from "../lib/router";
 import type { SubjectMode } from "../lib/types";
 import { fmtBytes } from "../lib/format";
 import { newLocalId } from "../lib/uploader";
+import { AnalysisCancelled } from "../engine/engine";
+import { localAnalyses, newLocalAnalysisId } from "../lib/localstore";
+import { serverAnalysisEnabled, useOnDevice } from "../lib/ondevice";
+import type { AnalysisResult } from "../lib/types";
 import { useApp } from "../state";
 
 type Source = "video" | "audio" | "photo" | "file";
@@ -20,7 +24,11 @@ interface Clip {
 }
 
 export function CapturePage() {
-  const { me, pets, places, caps, startPending, progress, refreshPending } = useApp();
+  const { me, pets, places, caps, startPending, progress, refreshPending, toast } = useApp();
+  const ondevice = useOnDevice();
+  const useServer = serverAnalysisEnabled();
+  const [localRun, setLocalRun] = useState<{ stage: string; frac: number } | null>(null);
+  const cancelLocal = useRef(false);
   const [source, setSource] = useState<Source>("video");
   const [facing, setFacing] = useState<"environment" | "user">("environment");
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -118,7 +126,38 @@ export function CapturePage() {
   const togglePet = (id: string) => setPetIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]));
   const subjectValid = subject === "unknown" ? true : subject === "single_known" ? petIds.length === 1 : petIds.length >= 2;
 
+  const analyzeOnDevice = async () => {
+    if (!clip || !me) return;
+    if (ondevice.status.state !== "ready" || !ondevice.status.installed) {
+      setError({ message: "The on-device models are not installed yet.", action: "Install them below (one-time download), then tap Analyze again.", code: "models_not_installed" });
+      return;
+    }
+    stopStream(stream);
+    setError(null);
+    cancelLocal.current = false;
+    setLocalRun({ stage: "loading models", frac: 0 });
+    try {
+      const engine = await ondevice.getEngine();
+      const id = newLocalAnalysisId();
+      const place = places.find((p) => p.id === placeId);
+      const modalities: ("audio" | "video")[] = clip.kind === "audio" ? ["audio"] : clip.kind === "image" ? ["video"] : ["audio", "video"];
+      const result = await engine.analyze(clip.blob, { name: clip.filename, zones: (place?.zones as never) ?? null, modalities, analysisId: id,
+        progress: (stage, frac) => setLocalRun({ stage, frac }), shouldCancel: () => cancelLocal.current });
+      await localAnalyses.put({ id, userId: me.id, createdAt: Date.now(), filename: clip.filename, kind: clip.kind, subject_mode: subject,
+        pet_ids: subject === "unknown" ? [] : petIds, place_id: placeId || null, note, bundle_version: ondevice.status.installed.bundle_version,
+        result: result as unknown as AnalysisResult, media: clip.blob, synced_at: null });
+      navigate(`/local/${id}`);
+    } catch (e) {
+      if (e instanceof AnalysisCancelled) toast("Analysis cancelled.");
+      else setError({ message: `The on-device analysis could not finish: ${e instanceof Error ? e.message : String(e)}`,
+        action: "Try a shorter clip or a different file. Nothing was uploaded.", code: "local_analysis_failed" });
+    } finally {
+      setLocalRun(null);
+    }
+  };
+
   const analyze = async () => {
+    if (!useServer) return analyzeOnDevice();
     if (!clip || !me) return;
     const item: PendingUpload = {
       localId: newLocalId(), userId: me.id, blob: clip.blob, filename: clip.filename, sha256: null, uploadId: null,
@@ -250,18 +289,48 @@ export function CapturePage() {
             <input id="note" maxLength={500} value={note} onInput={(e) => setNote((e.target as HTMLInputElement).value)} placeholder="e.g. before dinner" />
           </Field>
 
+          {useServer ? (
+            <InfoBanner tone="warn">Server analysis is on (Settings): this recording will be uploaded to your server for analysis.</InfoBanner>
+          ) : (
+            <OnDeviceNotice />
+          )}
           {pr && <ProgressBar value={pr.total ? pr.sent / pr.total : 0} label={pr.phase === "hashing" ? "Preparing" : pr.phase === "starting" ? "Starting analysis" : "Uploading"} />}
           {pr?.message && <p class="muted" role="status">{pr.message}</p>}
+          {localRun && <ProgressBar value={localRun.frac} label={`Analysing on this device: ${localRun.stage}`} />}
           <div class="row">
-            <button type="button" class="btn btn-primary" onClick={analyze} disabled={!subjectValid || busyId !== null}>
-              {busyId ? "Uploading..." : "Analyze"}
+            <button type="button" class="btn btn-primary" onClick={analyze}
+              disabled={!subjectValid || busyId !== null || localRun !== null || (!useServer && ondevice.status.state !== "ready")}>
+              {busyId ? "Uploading..." : localRun ? "Analysing..." : useServer ? "Upload and analyze" : "Analyze on this device"}
             </button>
-            <button type="button" class="btn btn-secondary" disabled={busyId !== null} onClick={() => { setClip(null); if (source !== "file") setSource(source); }}>
-              Discard
-            </button>
+            {localRun ? (
+              <button type="button" class="btn btn-secondary" onClick={() => { cancelLocal.current = true; }}>Cancel</button>
+            ) : (
+              <button type="button" class="btn btn-secondary" disabled={busyId !== null} onClick={() => { setClip(null); if (source !== "file") setSource(source); }}>
+                Discard
+              </button>
+            )}
           </div>
         </div>
       )}
     </section>
+  );
+}
+
+function OnDeviceNotice() {
+  const { status, installOrUpdate } = useOnDevice();
+  if (status.state === "ready") return <p class="hint">Analysed on this device; the recording is not uploaded.</p>;
+  if (status.state === "unsupported") return <InfoBanner tone="warn">On-device analysis is not available in this browser: {status.error}</InfoBanner>;
+  if (status.state === "installing") {
+    const p = status.progress;
+    return <ProgressBar value={p && p.total_bytes ? p.done_bytes / p.total_bytes : 0} label="Downloading on-device models" />;
+  }
+  const size = status.remote ? ` (${fmtBytes(status.remote.total_bytes)})` : "";
+  return (
+    <div class="banner banner-info" role="status">
+      <p class="banner-title">Install the on-device models to analyse here{size}.</p>
+      <p>One-time download; afterwards analysis works without a connection and recordings stay on this device.</p>
+      {status.error && <p class="field-error">{status.error}</p>}
+      <button type="button" class="btn btn-secondary" onClick={() => void installOrUpdate()} disabled={navigator.onLine === false}>Install models</button>
+    </div>
   );
 }

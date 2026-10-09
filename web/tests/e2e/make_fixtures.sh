@@ -20,6 +20,8 @@ ff -i "$EX/s01_food_zone_meow.mp4" -t 8 -pix_fmt yuv420p -r 15 cat_camera.y4m
 ff -i "$EX/s07_audio_only_meow.wav" -ar 48000 -ac 1 meow_mic.wav
 # ~6.6 MB clip (temporal noise defeats compression) so uploads need several chunks.
 ff -i "$EX/s01_food_zone_meow.mp4" -vf "noise=alls=25:allf=t" -c:v libx264 -b:v 6M -maxrate 6M -bufsize 12M -preset veryfast -c:a aac big_cat_clip.mp4
+# WebM copy for on-device tests: open-source Chromium (Playwright) has no H.264/AAC decoder.
+ff -i big_cat_clip.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 -deadline realtime -cpu-used 8 -c:a libopus big_cat_clip.webm
 # Truncated container: must be rejected with an actionable error.
 head -c 6000 "$EX/s01_food_zone_meow.mp4" > broken.mp4
 # 64 s clip used by the cancellation test (same recipe as E6).

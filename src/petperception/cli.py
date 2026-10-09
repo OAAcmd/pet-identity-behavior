@@ -346,6 +346,12 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
     if args.release_profile:
         s.release_profile = args.release_profile
     m = export_bundle(s, Path(args.out))
+    if not args.no_device_check:
+        from .ondevice.bundle import add_device_check
+
+        dc = add_device_check(s, Path(args.out))
+        print(json.dumps({"device_check": {k: v for k, v in dc.items() if k != "expected"}}))
+        m = json.loads((Path(args.out) / "manifest.json").read_text())
     print(json.dumps({k: m[k] for k in ("bundle_version", "release_profile", "total_bytes", "notes")} | {"files": [f["path"] for f in m["files"]]}, indent=2))
     return 0
 
@@ -519,6 +525,7 @@ def build_parser() -> argparse.ArgumentParser:
     od = sub.add_parser("export-ondevice", help="write the on-device model bundle (models, assets, checksummed manifest)")
     od.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice" / "bundle"))
     od.add_argument("--release-profile", choices=["research", "personal_noncommercial", "commercial"])
+    od.add_argument("--no-device-check", action="store_true", help="skip the device-check reference clip and outputs")
     od.set_defaults(func=cmd_export_ondevice)
     ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))

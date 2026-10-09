@@ -1,8 +1,11 @@
 import { useEffect, useState } from "preact/hooks";
-import { ConfirmDialog, ErrorBanner, Field, InfoBanner } from "../components/ui";
+import { ConfirmDialog, ErrorBanner, Field, InfoBanner, ProgressBar } from "../components/ui";
 import { api } from "../lib/api";
+import { fmtBytes, fmtDate } from "../lib/format";
+import { localAnalyses } from "../lib/localstore";
+import { serverAnalysisEnabled, setServerAnalysis, useOnDevice } from "../lib/ondevice";
 import type { Me } from "../lib/types";
-import { useApp } from "../state";
+import { offlineCache, useApp } from "../state";
 
 export function SettingsPage() {
   const { me, setMe, caps, toast } = useApp();
@@ -34,6 +37,7 @@ export function SettingsPage() {
     <section>
       <h1 tabIndex={-1}>Settings</h1>
       <ErrorBanner error={error} />
+      <OnDeviceCard />
 
       <form class="card" onSubmit={(e) => { e.preventDefault(); void run(async () => setMe(await api.patch<Me>("/settings", { retain_media_days: Number(days), feedback_research_consent: consent })), "Settings saved."); }}>
         <h2>Privacy</h2>
@@ -72,7 +76,7 @@ export function SettingsPage() {
 
       <div class="card">
         <h2>Session</h2>
-        <button type="button" class="btn btn-secondary" onClick={() => run(async () => { await api.post("/auth/logout"); setMe(null); }, "Signed out.")}>Sign out</button>
+        <button type="button" class="btn btn-secondary" onClick={() => run(async () => { await api.post("/auth/logout"); offlineCache.clear(); setMe(null); }, "Signed out.")}>Sign out</button>
       </div>
 
       <div class="card danger-zone">
@@ -83,8 +87,53 @@ export function SettingsPage() {
       </div>
       <ConfirmDialog open={confirmDelete} title="Delete your account permanently?" danger confirmLabel="Delete everything" body={<p>All your data on this server will be removed.</p>}
         onCancel={() => setConfirmDelete(false)}
-        onConfirm={() => { setConfirmDelete(false); void run(async () => { await api.post("/auth/delete-account", { password: delPw, confirm: "DELETE" }); setMe(null); }, "Account deleted."); }} />
+        onConfirm={() => { setConfirmDelete(false); void run(async () => { await api.post("/auth/delete-account", { password: delPw, confirm: "DELETE" });
+          if (me) for (const a of await localAnalyses.all(me.id)) await localAnalyses.remove(a.id);
+          offlineCache.clear(); setMe(null); }, "Account deleted."); }} />
       <p class="muted"><a href="#/about">About this app and its limits</a> - <a href="#/places">Places</a></p>
     </section>
+  );
+}
+
+function OnDeviceCard() {
+  const { status, installOrUpdate, remove, checkForUpdate } = useOnDevice();
+  const [server, setServer] = useState(serverAnalysisEnabled());
+  const [confirm, setConfirm] = useState(false);
+  const inst = status.installed;
+  const update = inst && status.remote && status.remote.bundle_version !== inst.bundle_version;
+  const p = status.progress;
+  return (
+    <div class="card">
+      <h2>On-device analysis</h2>
+      <p>Recordings are analysed on this device with downloaded models. They are not uploaded for analysis.</p>
+      {status.state === "unsupported" && <InfoBanner tone="warn">{status.error}</InfoBanner>}
+      {inst ? (
+        <p>Installed: model bundle <strong>{inst.bundle_version}</strong> ({fmtBytes(inst.total_bytes)}, built {fmtDate(inst.created_at)}).
+          {status.crossOriginIsolated ? " Multi-threaded runtime available." : " Single-threaded runtime (slower)."}</p>
+      ) : status.state !== "unsupported" && <p class="muted">Not installed. The download is about {status.remote ? fmtBytes(status.remote.total_bytes) : "40 MB"} and is needed once (and for updates).</p>}
+      {update && <InfoBanner tone="info">An update ({status.remote!.bundle_version}, {fmtBytes(status.remote!.total_bytes)}) is available. The current version stays in use until the update is fully downloaded and verified.</InfoBanner>}
+      {status.state === "installing" && <ProgressBar value={p && p.total_bytes ? p.done_bytes / p.total_bytes : 0} label={`Downloading and verifying ${p?.file ?? ""}`} />}
+      {status.error && status.state !== "unsupported" && <p class="field-error" role="alert">{status.error}</p>}
+      <div class="row wrap">
+        {status.state !== "unsupported" && (!inst || update) && (
+          <button type="button" class="btn btn-primary" disabled={status.state === "installing" || navigator.onLine === false} onClick={() => void installOrUpdate()}>
+            {inst ? "Update models" : "Install models"}
+          </button>
+        )}
+        {inst && <button type="button" class="btn btn-secondary" onClick={() => void checkForUpdate()}>Check for updates</button>}
+        {inst && <a class="btn btn-secondary" href="#/device-check">Run device check</a>}
+        {inst && <button type="button" class="btn btn-secondary" onClick={() => setConfirm(true)}>Remove models</button>}
+      </div>
+      <fieldset class="field">
+        <legend>Server analysis</legend>
+        <label class="check">
+          <input type="checkbox" checked={server} onChange={() => { setServerAnalysis(!server); setServer(!server); }} />
+          Upload recordings to my server for analysis instead (off by default)
+        </label>
+        <p class="hint">When on, each recording you analyse is uploaded to your server. When off, nothing is uploaded for analysis.</p>
+      </fieldset>
+      <ConfirmDialog open={confirm} title="Remove on-device models?" body="Analysis on this device will need the models to be downloaded again. Your stored results are kept."
+        confirmLabel="Remove" onCancel={() => setConfirm(false)} onConfirm={() => { setConfirm(false); void remove(); }} />
+    </div>
   );
 }

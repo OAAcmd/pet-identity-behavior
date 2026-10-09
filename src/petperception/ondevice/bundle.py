@@ -169,3 +169,92 @@ def export_bundle(settings: Settings, out: Path) -> dict:
                 "files": sorted(files, key=lambda f: f["path"]), "total_bytes": sum(f["bytes"] for f in files), "notes": notes}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
     return manifest
+
+
+def add_device_check(settings: Settings, out: Path) -> dict:
+    """Reference outputs for the on-device numerical self-check and a reference clip
+    (MP4/H.264 and WebM/VP9) with the Python engine's expected summary."""
+    import csv
+    import subprocess
+
+    from ..eval import e8_behavior_sequences as E8
+    from ..pipeline import AnalysisEngine
+    from .engine_parity import reference_settings
+    from .parity import CASES, _run
+
+    dc = out / "device_check"
+    dc.mkdir(parents=True, exist_ok=True)
+    m = json.loads((out / "manifest.json").read_text())
+    by_res = {f["resource_id"]: f["path"] for f in m["files"] if f["kind"] == "model"}
+    refs = {}
+    pick = {"yamnet": (settings.audio.yamnet.model_id, 521), "detector_float": (settings.vision.detector, None),
+            "backbone": (settings.vision.verifier.classifier, 1000)}
+    for case, (rid, size) in pick.items():
+        if rid not in by_res:
+            continue
+        outs = _run((out / by_res[rid]).read_bytes(), CASES[case]())
+        if size is None:  # detector: the box tensor
+            size = next(o.size for o in outs if o.shape[-1] == 4)
+        o = next(x for x in outs if x.size == size).astype(np.float32).ravel()
+        refs[case] = {"input": case, "elements": int(o.size), "first": [float(v) for v in o[:64]], "mean_abs": float(np.abs(o).mean()), "argmax": int(o.argmax())}
+    (dc / "reference_outputs.json").write_text(json.dumps(refs))
+    # Reference clip: a real Open Images cat crop walking across a real indoor background (CC BY 2.0 sources).
+    data, man = settings.paths.resolve("data_root"), settings.paths.resolve("manifests_root")
+    imgs = {r["image_id"]: r for r in csv.DictReader(open(man / "oi_test_tuning_images.csv", newline="", encoding="utf-8"))}
+    bgs = list(csv.DictReader(open(man / "e8_backgrounds.csv", newline="", encoding="utf-8")))
+    boxes = [r for r in csv.DictReader(open(man / "oi_test_tuning_boxes.csv", newline="", encoding="utf-8")) if r["label"] == "cat"
+             and imgs[r["image_id"]]["role"] == "cat_positive" and not any(int(r[k]) for k in ("is_occluded", "is_group_of", "is_depiction"))
+             and 0.15 <= (float(r["xmax"]) - float(r["xmin"])) * (float(r["ymax"]) - float(r["ymin"])) <= 0.5]
+    import cv2
+
+    eng = AnalysisEngine(reference_settings(settings)).load()
+    chosen = None
+    for b in sorted(boxes, key=lambda r: r["image_id"])[:40]:
+        im = cv2.imread(str(data / "openimages_test" / "images" / f"{b['image_id']}.jpg"))
+        if im is None:
+            continue
+        h, w = im.shape[:2]
+        crop = cv2.cvtColor(im[int(float(b["ymin"]) * h): int(float(b["ymax"]) * h), int(float(b["xmin"]) * w): int(float(b["xmax"]) * w)], cv2.COLOR_BGR2RGB)
+        bg_row = bgs[0]
+        bg = cv2.cvtColor(cv2.imread(str(data / "openimages_test" / "images" / f"{bg_row['image_id']}.jpg")), cv2.COLOR_BGR2RGB)
+        path = [(0.3, 0.55)] * 40 + E8._move((0.3, 0.55), (0.7, 0.55), 0.1) + [(0.7, 0.55)] * 40
+        seq = E8.Sequence("device-check", "still_walk_still", 0, bg, [E8.Actor(crop, "cat", path, [True] * len(path), 0.45)], len(path))
+        mp4 = dc / "clip.mp4"
+        E8.render(seq, mp4)
+        r = eng.analyze(mp4, modalities=("audio", "video"))
+        if len(r.observations.animal_tracks) == 1 and r.observations.animal_tracks[0].species == "cat":
+            chosen = (b["image_id"], bg_row["image_id"])
+            break
+    if chosen is None:
+        return {"status": "no suitable clip"}
+    webm = dc / "clip.webm"
+    subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(dc / "clip.mp4"), "-c:v", "libvpx-vp9", "-crf", "24", "-b:v", "0",
+                    "-deadline", "realtime", "-cpu-used", "8", str(webm)], check=True)
+    expected = []
+    for f, mime in (("device_check/clip.webm", 'video/webm; codecs="vp9"'), ("device_check/clip.mp4", 'video/mp4; codecs="avc1.64001f"')):
+        r = eng.analyze(out / f, modalities=("audio", "video"))
+        tr = r.observations.animal_tracks
+        expected.append({"file": f, "mime": mime, "tracks": len(tr), "species": [t.species for t in tr],
+                         "segment_kinds": sorted({b.kind for t in tr for b in t.behavior_segments}), "decision": r.decision.state,
+                         "sound_labels": [s.label for s in r.observations.sound_events]})
+    (dc / "expected.json").write_text(json.dumps(expected, indent=1))
+
+    def attribution(image_id: str) -> dict:
+        row = imgs.get(image_id) or {}
+        return {"image_id": image_id, "author": row.get("author"), "license": row.get("license"), "source": row.get("original_landing_url")}
+
+    bg_meta = next((r for r in csv.DictReader(open(man / "e8_backgrounds.csv", newline="", encoding="utf-8")) if r["image_id"] == chosen[1]), {})
+    (dc / "ATTRIBUTION.json").write_text(json.dumps({"clip": "semi-synthetic: real Open Images cat crop moved along a scripted path on a real Open Images background",
+                                                     "animal": attribution(chosen[0]),
+                                                     "background": {"image_id": chosen[1], "license": "CC BY 2.0 (Open Images; see the Open Images metadata for the author)",
+                                                                    "source": bg_meta.get("download_url")}}, indent=1))
+    # Re-register files in the manifest (content hash changes the bundle version).
+    for rel, kind in (("device_check/reference_outputs.json", "device_check"), ("device_check/expected.json", "device_check"),
+                      ("device_check/ATTRIBUTION.json", "device_check"), ("device_check/clip.webm", "device_check"), ("device_check/clip.mp4", "device_check")):
+        p = out / rel
+        m["files"] = [f for f in m["files"] if f["path"] != rel] + [{"path": rel, "sha256": sha256_file(p), "bytes": p.stat().st_size, "kind": kind, "resource_id": None}]
+    m["files"].sort(key=lambda f: f["path"])
+    m["total_bytes"] = sum(f["bytes"] for f in m["files"])
+    m["bundle_version"] = hashlib.sha256("".join(f["sha256"] for f in m["files"]).encode()).hexdigest()[:16]
+    (out / "manifest.json").write_text(json.dumps(m, indent=1))
+    return {"status": "ok", "animal_image": chosen[0], "background_image": chosen[1], "expected": expected}
