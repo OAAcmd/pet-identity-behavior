@@ -143,6 +143,37 @@ export function toFloat(img: RGBImage, mean: number, std: number): Float32Array 
   return out;
 }
 
+export type Quant = [number, number] | null; // [scale, zero point]
+
+/** NumPy's np.round (round half to even). */
+function roundHalfEven(v: number): number {
+  const r = Math.round(v);
+  return Math.abs(v % 1) === 0.5 && r % 2 !== 0 ? r - 1 : r;
+}
+
+/** Model input from pixels: float models take (p - mean) / std; quantized inputs hold the quantized
+ * encoding of that value with the tensor's scale and zero point. Float32 steps mirror
+ * vision/tflite_io.py (NumPy float32 arithmetic) so both runtimes see identical input bytes. */
+export function encodeImage(img: RGBImage, mean: number, std: number, dtype: string, q: Quant): Float32Array | Uint8Array | Int8Array {
+  if (dtype === "float32") return toFloat(img, mean, std);
+  if (!q) throw new Error(`quantized ${dtype} input without quantization parameters`);
+  const f = Math.fround, m = f(mean), sd = f(std), sc = f(q[0]), zp = q[1];
+  const [lo, hi, out] = dtype === "uint8" ? [0, 255, new Uint8Array(img.data.length)] : [-128, 127, new Int8Array(img.data.length)];
+  for (let i = 0; i < out.length; i++) {
+    const x = f(f(img.data[i] - m) / sd);
+    out[i] = Math.min(hi, Math.max(lo, roundHalfEven(f(f(x / sc) + zp))));
+  }
+  return out;
+}
+
+export function dequantize(a: ArrayLike<number>, q: Quant): Float32Array {
+  const out = new Float32Array(a.length);
+  if (!q) { for (let i = 0; i < a.length; i++) out[i] = a[i]; return out; }
+  const sc = Math.fround(q[0]);
+  for (let i = 0; i < a.length; i++) out[i] = Math.fround(a[i] - q[1]) * sc;
+  return out;
+}
+
 /** cv2.cvtColor(RGB2GRAY) 8-bit fixed point. */
 export function grayscale(img: RGBImage): Uint8Array {
   const n = img.width * img.height;

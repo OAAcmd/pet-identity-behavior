@@ -181,7 +181,8 @@ def _cache_rows(path: Path, fn) -> list[dict]:
     return rows
 
 
-def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, params_out: Path | None = None) -> dict:
+def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, params_out: Path | None = None,
+        classifier: str = CLASSIFIER, filename: str = "metrics.json") -> dict:
     man = settings.paths.resolve("manifests_root")
     data = settings.paths.resolve("data_root")
     cache = data.parent / "cache" / "e7"
@@ -194,9 +195,10 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
     e4_dir = OI.dataset_dir(data) / "images"
     n_tune = _verify_images(tune_dir, man / "oi_test_tuning_sha256.csv")
     n_e4 = _verify_images(e4_dir, man / "openimages_catdog_sha256.csv")
-    rc = check_model(settings, CLASSIFIER)
+    rc = check_model(settings, classifier)
     if not rc.ready:
-        raise RuntimeError(f"{CLASSIFIER}: {rc.reason}")
+        raise RuntimeError(f"{classifier}: {rc.reason}")
+    suffix = "" if classifier == CLASSIFIER else f"__{classifier}"
     clf_path = Path(next(iter(rc.files.values())))
     clf = V.CropClassifier(clf_path, settings.runtime.num_threads)
     author_t = {r["image_id"]: r["author_profile_url"] or r["author"] for r in tune_imgs}
@@ -209,8 +211,8 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
             continue
         det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads)
         t0 = time.perf_counter()
-        trows = _cache_rows(cache / f"{mid}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir))
-        erows = _cache_rows(cache / f"{mid}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir))
+        trows = _cache_rows(cache / f"{mid}{suffix}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir))
+        erows = _cache_rows(cache / f"{mid}{suffix}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir))
         collect_s = time.perf_counter() - t0
         tlab = label_tuning(trows, tune_imgs, tune_boxes, tune_conf)
         fsets = [f for f in FEATURE_SETS if trows and (trows[0]["anchor"] is not None or "anchor" not in f and f != "all")]
@@ -290,7 +292,8 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
         "results": results,
         "created_at": utc_now().isoformat(timespec="seconds"),
     }
-    write_json(out_dir / "metrics.json", summary)
+    summary["classifier"] = classifier
+    write_json(out_dir / filename, summary)
     if params_out is not None:
         _export_params(frozen, results, params_out)
     return summary
@@ -329,7 +332,7 @@ def _export_params(frozen: dict, results: dict, out: Path) -> None:
             "created_at": utc_now().isoformat(timespec="seconds")})
 
 
-def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Path, e7_metrics: Path) -> dict:
+def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Path, e7_metrics: Path, classifier: str = CLASSIFIER) -> dict:
     """Refit the per-class verifier for one feature set from the cached tuning features
     (identical procedure and data as E7) and export it with E7's E4 numbers for that set.
 
@@ -340,7 +343,8 @@ def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Pat
     man = settings.paths.resolve("manifests_root")
     cache = settings.paths.resolve("data_root").parent / "cache" / "e7"
     tune_imgs, tune_boxes, tune_conf = _tuning_subset(man)
-    trows = json.loads((cache / f"{detector_id}_tuning.json").read_text())
+    suffix = "" if classifier == CLASSIFIER else f"__{classifier}"
+    trows = json.loads((cache / f"{detector_id}{suffix}_tuning.json").read_text())
     tlab = label_tuning(trows, tune_imgs, tune_boxes, tune_conf)
     author_t = {r["image_id"]: r["author_profile_url"] or r["author"] for r in tune_imgs}
     e4 = json.loads(e7_metrics.read_text())["results"][detector_id]["e4"]
@@ -356,7 +360,7 @@ def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Pat
         scl, lr = m.named_steps["standardscaler"], m.named_steps["logisticregression"]
         classes[c] = {"feature_set": fset, "mean": scl.mean_.tolist(), "scale": scl.scale_.tolist(), "coef": lr.coef_[0].tolist(),
                       "intercept": float(lr.intercept_[0]), "tau": tau, "e4_final": _e4_digest(e4, fset, c)}
-    doc = {"schema": "petperception.verifier/1", "detector_id": detector_id, "classifier_id": CLASSIFIER, "operating_threshold": OP,
+    doc = {"schema": "petperception.verifier/1", "detector_id": detector_id, "classifier_id": classifier, "operating_threshold": OP,
            "retain_target": RETAIN, "classes": classes, "variant": f"{fset} (deployment variant; evaluated in E7 as verifier[{fset}])",
            "fitted_on": "openimages_v7_test_tuning (manifests/oi_test_tuning_images.csv)",
            "note": "Verification scores are rejection scores fitted on the tuning distribution, not calibrated probabilities.",

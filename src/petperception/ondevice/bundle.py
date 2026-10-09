@@ -32,7 +32,7 @@ from ..config import REPO_ROOT, Settings
 from ..registry import check_model, model_dir, release_decision
 from ..utils import sha256_file, utc_now
 from ..vision.tflite_meta import associated_files, input_normalization, mediapipe_detector_options
-from .tflite_patch import add_outputs
+from .tflite_patch import expose_outputs
 
 BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 # Format of engine_assets.json as consumed by the TypeScript engine. Change the
@@ -72,6 +72,16 @@ def _audio_assets(settings: Settings, notes: list[str]) -> dict:
     }
 
 
+def _quant(d: dict) -> list | None:
+    scale, zero = d["quantization"]
+    return [float(scale), int(zero)] if np.dtype(d["dtype"]).kind in "iu" and scale else None
+
+
+def _quant_io(inp: dict, outs: list[dict]) -> dict:
+    """Quantization of the input and of each output, in the model's output order (null = float)."""
+    return {"input_quant": _quant(inp), "output_quant": [_quant(o) for o in outs]}
+
+
 def _detector_assets(path: Path, settings: Settings, mid: str) -> dict:
     data = path.read_bytes()
     dec = mediapipe_detector_options(data)
@@ -84,7 +94,7 @@ def _detector_assets(path: Path, settings: Settings, mid: str) -> dict:
     outs = it.get_output_details()
     return {
         "model_id": mid, "input_hw": [int(inp["shape"][1]), int(inp["shape"][2])],
-        "norm_mean": float(norm[0][0]), "norm_std": float(norm[1][0]), "labels": labels,
+        "norm_mean": float(norm[0][0]), "norm_std": float(norm[1][0]), **_quant_io(inp, outs), "labels": labels,
         "output_order": ["scores" if o["shape"][-1] == dec.num_classes else "boxes" for o in outs],
         "decoding": {"anchors_b64": _b64(dec.anchors), "num_boxes": dec.num_boxes, "num_classes": dec.num_classes,
                      "x_scale": dec.x_scale, "y_scale": dec.y_scale, "w_scale": dec.w_scale, "h_scale": dec.h_scale,
@@ -133,7 +143,11 @@ def export_bundle(settings: Settings, out: Path) -> dict:
     bb = settings.vision.verifier.classifier
     if "detector" in assets and allowed(bb) and check_model(settings, bb).ready:
         src = Path(next(iter(check_model(settings, bb).files.values())))
-        (out / "models" / "efficientnet_lite0_features_v1.tflite").write_bytes(add_outputs(src.read_bytes(), BACKBONE_OUTPUTS))
+        patched = expose_outputs(src.read_bytes(), BACKBONE_OUTPUTS)
+        (out / "models" / "efficientnet_lite0_features_v1.tflite").write_bytes(patched)
+        from ai_edge_litert.interpreter import Interpreter
+
+        pit = Interpreter(model_content=patched)
         add("models/efficientnet_lite0_features_v1.tflite", "model", bb)
         from ..vision.verifier import _ANIMAL_END, _RANGES, _TEDDY, GROUPS
 
@@ -141,15 +155,18 @@ def export_bundle(settings: Settings, out: Path) -> dict:
         norm = input_normalization(data)
         assets["backbone"] = {"model_file": "models/efficientnet_lite0_features_v1.tflite", "source_sha256": sha256_file(src),
                               "norm_mean": float(norm[0][0]), "norm_std": float(norm[1][0]), "input_hw": [224, 224],
+                              **_quant_io(pit.get_input_details()[0], pit.get_output_details()),
                               "outputs": ["softmax_1000", "f28", "f14", "f7", "head_7x7x1280"]}
-        vp = REPO_ROOT / settings.vision.verifier.params_dir / f"verifier_{det}.json"
+        vp = REPO_ROOT / settings.vision.verifier.params_file(det)
         if settings.vision.verifier.enabled and vp.exists() and allowed("detection_verifier_v1"):
             v = json.loads(vp.read_text())
             assets["verifier"] = {"params": v, "groups": GROUPS, "ranges": {g: [a, b] for g, (a, b, _, _) in _RANGES.items()},
                                   "teddy_index": _TEDDY[0], "animal_end": _ANIMAL_END, "margin": 0.15, "eps": 1e-4,
                                   "max_checks_per_frame": settings.vision.verifier.max_checks_per_frame}
         pm = REPO_ROOT / settings.posture.model_file
-        if settings.posture.enabled and pm.exists() and allowed("posture_v1"):
+        if settings.posture.backbone != bb:
+            notes.append(f"posture model fitted on {settings.posture.backbone} features, bundle backbone is {bb}: posture not bundled")
+        elif settings.posture.enabled and pm.exists() and allowed("posture_v1"):
             with np.load(pm) as z:
                 assets["posture"] = {"mean_b64": _b64(z["mean"]), "scale_b64": _b64(z["scale"]), "coef_b64": _b64(z["coef"]),
                                      "coef_shape": list(z["coef"].shape), "intercept": z["intercept"].astype(float).tolist(),

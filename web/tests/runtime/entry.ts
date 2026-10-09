@@ -9,6 +9,9 @@ function jsInput(name: string): Typed[] {
   if (name === "detector_float") return [normalize(syntheticImage(320), 127.5, 127.5)];
   if (name === "detector_uint8") return [syntheticImage(320)];
   if (name === "backbone") return [normalize(syntheticImage(224), 127, 128)];
+  if (name === "detector_f16") return [normalize(syntheticImage(320), 127.5, 127.5)];
+  if (name === "detector_int8") return [syntheticImage(320)];
+  if (name === "backbone_int8") return [syntheticImage(224)];
   throw new Error(name);
 }
 

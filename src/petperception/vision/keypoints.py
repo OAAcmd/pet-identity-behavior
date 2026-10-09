@@ -27,6 +27,7 @@ import cv2
 import numpy as np
 
 from .pose import KeypointSet
+from .tflite_io import dequantize, encode_image
 from .tflite_meta import input_normalization
 
 DOG_KEYPOINTS = [
@@ -73,7 +74,9 @@ class Backbone:
             warnings.simplefilter("ignore")
             self.interp = Interpreter(model_path=str(model_path), num_threads=num_threads, experimental_preserve_all_tensors=True)
         self.interp.allocate_tensors()
-        self.in_idx = self.interp.get_input_details()[0]["index"]
+        self.in_detail = self.interp.get_input_details()[0]
+        self.in_idx = self.in_detail["index"]
+        self.quant = {d["index"]: d["quantization"] for d in self.interp.get_tensor_details()}
         # Pick the last tensor of each required shape (block outputs feeding the next stage).
         self.idx: dict[str, int] = {}
         for name, (g, c) in FEATURE_TENSORS.items():
@@ -90,11 +93,10 @@ class Backbone:
 
     def features(self, crop_rgb: np.ndarray) -> dict[str, np.ndarray]:
         """Keypoint feature maps plus the pooled 1280-d head embedding ('pooled')."""
-        x = ((crop_rgb.astype(np.float32) - self.mean) / self.std)[None]
-        self.interp.set_tensor(self.in_idx, x)
+        self.interp.set_tensor(self.in_idx, encode_image(crop_rgb, self.in_detail, self.mean, self.std))
         self.interp.invoke()
-        out = {k: self.interp.get_tensor(i)[0].copy() for k, i in self.idx.items()}
-        out["pooled"] = self.interp.get_tensor(self.head_idx)[0].mean(axis=(0, 1))
+        out = {k: dequantize(self.interp.get_tensor(i)[0], self.quant[i]).copy() for k, i in self.idx.items()}
+        out["pooled"] = dequantize(self.interp.get_tensor(self.head_idx)[0], self.quant[self.head_idx]).mean(axis=(0, 1))
         return out
 
 

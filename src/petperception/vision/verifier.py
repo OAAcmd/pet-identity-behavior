@@ -26,6 +26,7 @@ import numpy as np
 
 from ..eval.metrics import iou_xyxy
 from .detector import Detection
+from .tflite_io import dequantize, encode_image
 from .tflite_meta import associated_files, input_normalization
 
 # Group index ranges in ImageNet-1k order (labels without background). The
@@ -79,8 +80,10 @@ class CropClassifier:
             self.interp = Interpreter(model_path=str(model_path), num_threads=num_threads)
         self.interp.allocate_tensors()
         inp = self.interp.get_input_details()[0]
+        self.in_detail = inp
         self.in_idx, self.in_h, self.in_w = inp["index"], int(inp["shape"][1]), int(inp["shape"][2])
-        self.out_idx = self.interp.get_output_details()[0]["index"]
+        out = self.interp.get_output_details()[0]
+        self.out_idx, self.out_q = out["index"], out["quantization"]
         self.margin = margin
         masks = {g: np.zeros(1000, bool) for g in GROUPS}
         for g, (a, b, _, _) in _RANGES.items():
@@ -105,10 +108,9 @@ class CropClassifier:
         return cv2.resize(c, (self.in_w, self.in_h), interpolation=cv2.INTER_AREA if min(c.shape[:2]) > self.in_h else cv2.INTER_LINEAR)
 
     def scores(self, rgb: np.ndarray, box: np.ndarray) -> CropScores:
-        x = ((self.crop(rgb, box).astype(np.float32) - self.mean) / self.std)[None]
-        self.interp.set_tensor(self.in_idx, x)
+        self.interp.set_tensor(self.in_idx, encode_image(self.crop(rgb, box), self.in_detail, self.mean, self.std))
         self.interp.invoke()
-        p = self.interp.get_tensor(self.out_idx)[0].astype(np.float64)
+        p = dequantize(self.interp.get_tensor(self.out_idx)[0], self.out_q).astype(np.float64)
         p = p / max(p.sum(), 1e-12)
         return CropScores({g: float(p[m].sum()) for g, m in self.masks.items()}, float(p.max()))
 

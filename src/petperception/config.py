@@ -102,8 +102,14 @@ class VerifierConfig(BaseModel):
 
     enabled: bool = True
     classifier: str = "efficientnet_lite0_mediapipe_v1"
-    params_dir: str = "artifacts/verifier"  # verifier_<detector id>.json, exported by E7
+    params_dir: str = "artifacts/verifier"  # verifier_<detector id>[__<classifier id>].json, exported by E7 / E12
     max_checks_per_frame: int = 3
+
+    def params_file(self, detector: str) -> str:
+        """Verifier parameters are specific to the (detector, classifier) pair they were fitted on."""
+        default = VerifierConfig.model_fields["classifier"].default
+        suffix = "" if self.classifier == default else f"__{self.classifier}"
+        return f"{self.params_dir}/verifier_{detector}{suffix}.json"
 
 
 class VisionConfig(BaseModel):

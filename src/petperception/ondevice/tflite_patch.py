@@ -63,3 +63,53 @@ def add_outputs(model: bytes, tensor_indices: list[int]) -> bytes:
     b += struct.pack(f"<I{len(new)}i", len(new), *new)
     struct.pack_into("<I", b, out_field, pos - out_field)
     return bytes(b)
+
+
+def expose_outputs(model: bytes, tensor_indices: list[int]) -> bytes:
+    """Expose tensors as graph outputs; integer-quantized tensors are exposed through an
+    appended DEQUANTIZE operator as float32 (LiteRT.js 2.5.3 rejects INT8 graph outputs).
+
+    Float tensors use the byte-level ``add_outputs`` (weights, operators and offsets
+    untouched). Quantized tensors need new operators, so the model is rebuilt with the
+    TFLite schema object API: the original operators, tensors and weight buffers are
+    kept unchanged; one DEQUANTIZE operator and one float32 tensor are appended per
+    exposed tensor. Bytes after the flatbuffer (the metadata zip with label files) are
+    not carried over; read labels and normalization from the source model.
+    """
+    from ai_edge_litert import schema_py_generated as S
+
+    m = S.ModelT.InitFromPackedBuf(model, 0)
+    if m.signatureDefs:
+        raise ValueError("models with SignatureDefs are not supported")
+    sg = m.subgraphs[0]
+    quantized = [i for i in tensor_indices if sg.tensors[i].type != S.TensorType.FLOAT32]
+    if not quantized:
+        return add_outputs(model, tensor_indices)
+    import flatbuffers
+
+    op = next((k for k, c in enumerate(m.operatorCodes) if max(c.builtinCode, c.deprecatedBuiltinCode) == S.BuiltinOperator.DEQUANTIZE), None)
+    if op is None:
+        code = S.OperatorCodeT()
+        code.builtinCode = code.deprecatedBuiltinCode = S.BuiltinOperator.DEQUANTIZE
+        code.version = 2  # int8 inputs
+        m.operatorCodes.append(code)
+        op = len(m.operatorCodes) - 1
+    outputs = list(sg.outputs)
+    for i in tensor_indices:
+        src = sg.tensors[i]
+        if src.type == S.TensorType.FLOAT32:
+            outputs.append(i)
+            continue
+        m.buffers.append(S.BufferT())
+        t = S.TensorT()
+        t.shape, t.type, t.buffer = list(src.shape), S.TensorType.FLOAT32, len(m.buffers) - 1
+        t.name = (src.name or b"") + b"/dequantized" if isinstance(src.name, bytes) else f"{src.name}/dequantized"
+        sg.tensors.append(t)
+        o = S.OperatorT()
+        o.opcodeIndex, o.inputs, o.outputs = op, [i], [len(sg.tensors) - 1]
+        sg.operators.append(o)
+        outputs.append(len(sg.tensors) - 1)
+    sg.outputs = outputs
+    b = flatbuffers.Builder(len(model) + 1024)
+    b.Finish(m.Pack(b), file_identifier=b"TFL3")
+    return bytes(b.Output())

@@ -11,7 +11,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../../..");
 const parityDir = path.join(root, "var/ondevice/parity");
 const wasmDir = path.join(here, "../../node_modules/@litertjs/core/wasm");
-const modelDirs = [path.join(root, "var/ondevice/models"), ...fs.readdirSync(path.join(root, "var/models")).map((d) => path.join(root, "var/models", d))];
+// export-parity writes one uniquely named copy per case here (several builds share upstream file names).
+const modelDirs = [path.join(root, "var/ondevice/models")];
 const outDir = path.join(root, "results/ondevice");
 
 let bundle = "";

@@ -14,8 +14,14 @@ export async function buildEngine(m: BundleManifest, read: (path: string) => Pro
   const accel = opts.accel ?? "wasm";
   const models: LocalModels = {};
   if (assets.audio) models.yamnet = await compileModel("yamnet", await read(assets.audio.model_file), accel);
-  if (assets.detector) models.detector = await compileModel("detector", await read(assets.detector.model_file), accel);
-  if (assets.backbone) models.backbone = await compileModel("backbone", await read(assets.backbone.model_file), accel);
+  if (assets.detector) {
+    models.detector = await compileModel("detector", await read(assets.detector.model_file), accel);
+    models.detector.outputQuant = assets.detector.output_quant;
+  }
+  if (assets.backbone) {
+    models.backbone = await compileModel("backbone", await read(assets.backbone.model_file), accel);
+    models.backbone.outputQuant = assets.backbone.output_quant;
+  }
   const info = {
     bundle_version: m.bundle_version, runtime: `litertjs-${m.runtime.litertjs_core}-${runtimeVariant() ?? "unknown"}`, accelerator: accel,
     models: m.files.filter((f) => f.kind === "model").map((f) => ({ model_id: f.resource_id ?? f.path, sha256: f.sha256, file: f.path })),

@@ -64,6 +64,10 @@ CASES = {
     "detector_float": lambda: [((synthetic_image(320).astype(np.float32) - 127.5) / 127.5)[None]],
     "detector_uint8": lambda: [synthetic_image(320)[None]],
     "backbone": lambda: [((synthetic_image(224).astype(np.float32) - 127.0) / 128.0)[None]],
+    # Quantized / reduced-precision builds (E12). Quantized inputs take the raw uint8 pattern.
+    "detector_f16": lambda: [((synthetic_image(320).astype(np.float32) - 127.5) / 127.5)[None]],
+    "detector_int8": lambda: [synthetic_image(320)[None]],
+    "backbone_int8": lambda: [synthetic_image(224)[None]],
 }
 
 

@@ -131,7 +131,7 @@ class AnalysisEngine:
         if self.detector is None:
             self.status["visual_verifier"] = S.ComponentStatus(name=name, kind="visual_verifier", state="unavailable", reason="requires the visual detector")
             return
-        params_path = REPO_ROOT / v.params_dir / f"verifier_{s.vision.detector}.json"
+        params_path = REPO_ROOT / v.params_file(s.vision.detector)
         rc = check_model(s, v.classifier)
         blocked = [d for d in (release_decision(s.release_profile, v.classifier), release_decision(s.release_profile, "detection_verifier_v1")) if not d.allowed]
         reason = None

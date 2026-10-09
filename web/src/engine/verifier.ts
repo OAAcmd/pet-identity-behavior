@@ -3,7 +3,7 @@
 // Mirrors src/petperception/vision/verifier.py, keypoints.py and posture.py.
 import { f32FromB64, type PostureAssets, type VerifierAssets } from "./assets";
 import type { Detection } from "./detector";
-import { cropBox, resizeArea, resizeBilinear, squareCrop, toFloat, type RGBImage } from "./imageops";
+import { cropBox, encodeImage, resizeArea, resizeBilinear, squareCrop, type RGBImage } from "./imageops";
 import { runModel, type LoadedModel } from "./runtime";
 
 export interface BackboneOut {
@@ -12,10 +12,10 @@ export interface BackboneOut {
 }
 
 export class Backbone {
-  constructor(readonly model: LoadedModel, readonly mean: number, readonly std: number) {}
+  constructor(readonly model: LoadedModel, readonly mean: number, readonly std: number, readonly inputQuant: [number, number] | null = null) {}
 
   async run(crop224: RGBImage): Promise<BackboneOut> {
-    const outs = await runModel(this.model, [toFloat(crop224, this.mean, this.std)]);
+    const outs = await runModel(this.model, [encodeImage(crop224, this.mean, this.std, this.model.inputs[0].dtype, this.inputQuant)]);
     const bySize = (n: number) => outs.find((o) => o.length === n) as Float32Array;
     const head = bySize(7 * 7 * 1280);
     const pooled = new Float32Array(1280);

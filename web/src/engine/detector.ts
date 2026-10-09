@@ -1,7 +1,7 @@
 // EfficientDet-Lite (MediaPipe raw-anchor build) decoding + per-class NMS.
 // Mirrors src/petperception/vision/detector.py (EfficientDetDetector).
 import { f32FromB64, type DetectorAssets } from "./assets";
-import { resizeBilinear, toFloat, type RGBImage } from "./imageops";
+import { encodeImage, resizeBilinear, type RGBImage } from "./imageops";
 import { runModel, type LoadedModel } from "./runtime";
 
 export interface Detection {
@@ -26,7 +26,7 @@ export class Detector {
 
   async detect(img: RGBImage, classes: string[], scoreThreshold: number, iouThr: number, maxPerClass: number): Promise<Detection[]> {
     const [h, w] = this.a.input_hw;
-    const x = toFloat(resizeBilinear(img, w, h), this.a.norm_mean, this.a.norm_std);
+    const x = encodeImage(resizeBilinear(img, w, h), this.a.norm_mean, this.a.norm_std, this.model.inputs[0].dtype, this.a.input_quant ?? null);
     const outs = await runModel(this.model, [x]);
     const scores = outs[this.a.output_order.indexOf("scores")] as Float32Array;
     const raw = outs[this.a.output_order.indexOf("boxes")] as Float32Array;

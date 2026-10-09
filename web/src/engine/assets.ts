@@ -24,6 +24,9 @@ export interface DetectorAssets {
   input_hw: [number, number];
   norm_mean: number;
   norm_std: number;
+  /** Quantized builds: input [scale, zero point] and per-output [scale, zero point] (null = float). */
+  input_quant?: [number, number] | null;
+  output_quant?: ([number, number] | null)[];
   labels: string[];
   output_order: ("scores" | "boxes")[];
   decoding: {
@@ -83,7 +86,8 @@ export interface EngineAssets {
   release_profile: string;
   audio?: AudioAssets;
   detector?: DetectorAssets;
-  backbone?: { model_file: string; norm_mean: number; norm_std: number; input_hw: [number, number]; outputs: string[] };
+  backbone?: { model_file: string; norm_mean: number; norm_std: number; input_hw: [number, number]; outputs: string[];
+    input_quant?: [number, number] | null; output_quant?: ([number, number] | null)[] };
   verifier?: VerifierAssets;
   posture?: PostureAssets;
   vision: {

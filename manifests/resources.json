@@ -609,6 +609,144 @@
         "commercial": "suitable"
       },
       "release_note": "Fitted on CC BY 4.0 captions / CC BY 2.0 images; the backbone's own suitability applies at runtime."
+    },
+    {
+      "id": "efficientdet_lite0_mediapipe_int8_v1",
+      "kind": "model",
+      "role": "Quantized (int8) cat/dog detector evaluated for phones (E12)",
+      "name": "EfficientDet-Lite0 (MediaPipe Object Detector int8 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
+      "status": "available",
+      "profiles": [
+        "default",
+        "research"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientdet_lite0.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/1/efficientdet_lite0.tflite",
+          "revision": "GCS object generation 1682636013497226 (Last-Modified 2023-04-27)",
+          "bytes": 4602795,
+          "sha256": "0720bf247bd76e6594ea28fa9c6f7c5242be774818997dbbeffc4da460c723bb"
+        }
+      ],
+      "task": "COCO 80-class object detection; only 'cat' and 'dog' are used by default.",
+      "verified_interface": {
+        "input": "[1, 320, 320, 3] uint8 (scale 1/128, zero point 127: the quantized encoding of (x - 127.5) / 127.5)",
+        "output": "raw anchors, float32: [1, 19206, 4] box regressions and [1, 19206, 90] class logits (same decoding as the float32 build)"
+      },
+      "class_map_notes": "COCO has no door, leash, litter box, or pet-bowl classes. 'bowl', 'frisbee', 'sports ball' and 'teddy bear' exist but are not validated for pet contexts.",
+      "training_data": "COCO 2017 (per MediaPipe documentation).",
+      "terms": {
+        "code": "Apache-2.0 (google-ai-edge/mediapipe)",
+        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
+      },
+      "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Do not assume commercial permission."
+      ],
+      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
+    },
+    {
+      "id": "efficientdet_lite0_mediapipe_f16_v1",
+      "kind": "model",
+      "role": "float16-weight cat/dog detector evaluated for phones (E12)",
+      "name": "EfficientDet-Lite0 (MediaPipe Object Detector float16 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
+      "status": "available",
+      "profiles": [
+        "default",
+        "research"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientdet_lite0.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite",
+          "revision": "GCS object generation 1682636011592726 (Last-Modified 2023-04-27)",
+          "bytes": 7254339,
+          "sha256": "4b59100025bea1235a84c1038879a6cccc9f6c49f5e41144e91e74d99e780993"
+        }
+      ],
+      "task": "COCO 80-class object detection; only 'cat' and 'dog' are used by default.",
+      "verified_interface": {
+        "input": "[1, 320, 320, 3] float32 RGB normalized (x - 127.5) / 127.5",
+        "output": "raw anchors, float32 (same as the float32 build); weights stored as float16"
+      },
+      "class_map_notes": "COCO has no door, leash, litter box, or pet-bowl classes. 'bowl', 'frisbee', 'sports ball' and 'teddy bear' exist but are not validated for pet contexts.",
+      "training_data": "COCO 2017 (per MediaPipe documentation).",
+      "terms": {
+        "code": "Apache-2.0 (google-ai-edge/mediapipe)",
+        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
+      },
+      "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Do not assume commercial permission."
+      ],
+      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "not_permitted"
+      },
+      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
+    },
+    {
+      "id": "efficientnet_lite0_mediapipe_int8_v1",
+      "kind": "model",
+      "role": "Quantized (int8) crop classifier / feature backbone evaluated for phones (E12)",
+      "name": "EfficientNet-Lite0 (MediaPipe Image Classifier int8 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/image_classifier",
+      "status": "available",
+      "profiles": [
+        "research",
+        "personal_noncommercial",
+        "commercial"
+      ],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientnet_lite0.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/int8/1/efficientnet_lite0.tflite",
+          "revision": "GCS object generation 1682480006900522 (Last-Modified 2023-04-26)",
+          "bytes": 5434517,
+          "sha256": "bc2ffe19c1118de0c0c2a9088992da5589722656e0fba81421385300a4a34b16"
+        }
+      ],
+      "task": "ImageNet-1k classification (1000 classes, softmax output).",
+      "verified_interface": {
+        "input": "[1, 224, 224, 3] uint8 (scale 0.012566, zero point 131); embedded NormalizationOptions mean 127 / std 128 define the float input",
+        "output": "[1, 1000] uint8 softmax (scale 1/256); intermediate tensors 118/140/158/159 int8 with per-tensor scale and zero point (same indices as the float32 build)"
+      },
+      "training_data": "ImageNet-1k (ILSVRC 2012).",
+      "terms": {
+        "code": "Apache-2.0 (MediaPipe)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the int8 file, read on 2026-10-09.",
+        "training_data": "ImageNet images are provided for non-commercial research/education under the ImageNet terms of access. Whether those terms constrain use of trained weights is a legal question not settled here."
+      },
+      "attribution": "EfficientNet-Lite (Tan and Le; TensorFlow TPU reference models); MediaPipe by Google.",
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release requires legal sign-off on the ImageNet training-data question."
+      ],
+      "contamination_notes": "ImageNet is Flickr/web-sourced; overlap with Open Images photos is possible and unaudited.",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Weights Apache-2.0 per embedded metadata; ImageNet training-data terms need legal sign-off for commercial use."
     }
   ]
 }

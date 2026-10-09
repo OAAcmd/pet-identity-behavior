@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "dog-pose", "posture-weak", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -198,6 +198,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e8_behavior_sequences as E
 
         return E.run(s, out_dir)
+    if name == "e12":
+        from .eval import e12_quantization as E
+
+        return E.run(s, out_dir)
     if name == "e9-breeds":
         from .eval import e9_dog_keypoints as E
 
@@ -367,17 +371,25 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
 def cmd_export_parity(args: argparse.Namespace) -> int:
     from .ondevice.bundle import BACKBONE_OUTPUTS
     from .ondevice.parity import export
-    from .ondevice.tflite_patch import add_outputs
+    from .ondevice.tflite_patch import expose_outputs
     from .registry import check_model
 
     s = _settings(args)
     out = Path(args.out)
     (out / "models").mkdir(parents=True, exist_ok=True)
     path = lambda mid: Path(next(iter(check_model(s, mid).files.values())))  # noqa: E731
-    bb = out / "models" / "efficientnet_lite0_features_v1.tflite"
-    bb.write_bytes(add_outputs(path("efficientnet_lite0_mediapipe_v1").read_bytes(), BACKBONE_OUTPUTS))
-    m = export({"yamnet": path("yamnet_mediapipe_v1"), "detector_float": path("efficientdet_lite0_mediapipe_v1"),
-                "detector_uint8": path("efficientdet_lite0_tfhub_v1"), "backbone": bb}, out / "parity")
+    sources = {"yamnet": ("yamnet_mediapipe_v1", False), "detector_float": ("efficientdet_lite0_mediapipe_v1", False),
+               "detector_uint8": ("efficientdet_lite0_tfhub_v1", False), "backbone": ("efficientnet_lite0_mediapipe_v1", True),
+               "detector_f16": ("efficientdet_lite0_mediapipe_f16_v1", False), "detector_int8": ("efficientdet_lite0_mediapipe_int8_v1", False),
+               "backbone_int8": ("efficientnet_lite0_mediapipe_int8_v1", True)}
+    models = {}
+    for case, (mid, patch) in sources.items():
+        # One uniquely named copy per case: several builds share the upstream file name.
+        data = path(mid).read_bytes()
+        dst = out / "models" / f"parity_{case}.tflite"
+        dst.write_bytes(expose_outputs(data, BACKBONE_OUTPUTS) if patch else data)
+        models[case] = dst
+    m = export(models, out / "parity")
     print(json.dumps({k: [o["shape"] for o in v["outputs"]] for k, v in m["cases"].items()}))
     return 0
 

@@ -28,3 +28,13 @@ describe("bundle compatibility", () => {
     expect(bundleCompatible({ engine_version: "9.9.0" })).toBe(false);
   });
 });
+
+describe("quantized input encoding", () => {
+  it("matches the Python reference (tests/test_quantization.py) bit for bit", async () => {
+    const { encodeImage, dequantize } = await import("../../src/engine/imageops");
+    const img = { width: 3, height: 1, data: new Uint8ClampedArray([0, 1, 2, 127, 128, 129, 200, 254, 255]) };
+    expect(Array.from(encodeImage(img as never, 127, 128, "uint8", [0.012566016986966133, 131]))).toEqual([52, 53, 53, 131, 132, 132, 176, 210, 211]);
+    expect(Array.from(encodeImage(img as never, 127.5, 127.5, "int8", [0.0078125, -1]))).toEqual([-128, -128, -127, -2, 0, 1, 72, 126, 127]);
+    expect(Array.from(dequantize(new Int8Array([-128, 0, 127]), [0.5, -128]))).toEqual([0, 64, 127.5]);
+  });
+});

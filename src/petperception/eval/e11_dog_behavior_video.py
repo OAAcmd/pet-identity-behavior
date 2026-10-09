@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import json
 import subprocess
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -133,14 +133,24 @@ def build_features(settings: Settings, segs: list[dict], cache: Path, workers: i
     def fetch(s):
         return s, stream_frames(s["video"], s["t0"], s["t1"])
 
-    with ThreadPoolExecutor(max_workers=workers) as ex:
-        for s, frames in ex.map(fetch, todo):
-            p = cache / f"{s['video']}_{s['t0']:.2f}.npz"
-            f = featurize(eng, backbone, frames) if frames else None
-            if f is None:
-                np.savez(p, missing=np.array(1))
-                continue
+    def store(s: dict, frames: list[np.ndarray]) -> None:
+        p = cache / f"{s['video']}_{s['t0']:.2f}.npz"
+        f = featurize(eng, backbone, frames) if frames else None
+        if f is None:
+            np.savez(p, missing=np.array(1))
+        else:
             np.savez(p, **f)
+
+    # Bounded prefetch: at most 2 x workers decoded segments in memory (Executor.map would
+    # submit every download at once and buffer all decoded frames).
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        pending: deque = deque()
+        for s in todo:
+            pending.append(ex.submit(fetch, s))
+            if len(pending) >= 2 * workers:
+                store(*pending.popleft().result())
+        while pending:
+            store(*pending.popleft().result())
     out = []
     for s in segs:
         with np.load(cache / f"{s['video']}_{s['t0']:.2f}.npz") as z:

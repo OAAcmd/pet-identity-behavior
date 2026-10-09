@@ -43,7 +43,7 @@ export class LocalEngine {
   constructor(readonly a: EngineAssets, readonly m: LocalModels, readonly info: EngineInfo) {
     if (a.detector && m.detector) this.detector = new Detector(m.detector, a.detector);
     if (a.backbone && m.backbone) {
-      const bb = new Backbone(m.backbone, a.backbone.norm_mean, a.backbone.norm_std);
+      const bb = new Backbone(m.backbone, a.backbone.norm_mean, a.backbone.norm_std, a.backbone.input_quant ?? null);
       if (a.verifier) this.verifier = new Verifier(bb, a.verifier);
       if (a.posture) this.posture = new Posture(bb, a.posture);
     }

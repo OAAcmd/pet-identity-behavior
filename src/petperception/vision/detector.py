@@ -21,6 +21,7 @@ import cv2
 import numpy as np
 
 from ..eval.metrics import iou_xyxy
+from .tflite_io import dequantize, encode_image
 from .tflite_meta import associated_files, input_normalization, mediapipe_detector_options
 
 
@@ -74,11 +75,14 @@ class EfficientDetDetector:
             self.interp = Interpreter(model_path=str(model_path), num_threads=num_threads)
         self.interp.allocate_tensors()
         inp = self.interp.get_input_details()[0]
+        self.in_detail = inp
         self.in_idx = inp["index"]
         self.in_h, self.in_w = int(inp["shape"][1]), int(inp["shape"][2])
         outs = self.interp.get_output_details()
-        self.box_idx = next(o["index"] for o in outs if o["shape"][-1] == self.decoding.num_coords)
-        self.score_idx = next(o["index"] for o in outs if o["shape"][-1] == self.decoding.num_classes)
+        box_o = next(o for o in outs if o["shape"][-1] == self.decoding.num_coords)
+        score_o = next(o for o in outs if o["shape"][-1] == self.decoding.num_classes)
+        self.box_idx, self.score_idx = box_o["index"], score_o["index"]
+        self.box_q, self.score_q = box_o["quantization"], score_o["quantization"]
         if len(self.decoding.anchors) != self.decoding.num_boxes:
             raise RuntimeError("anchor count does not match num_boxes")
 
@@ -101,11 +105,10 @@ class EfficientDetDetector:
     def detect(self, rgb: np.ndarray, classes: list[str], score_threshold: float, iou_thr: float = 0.5,
                max_per_class: int = 10) -> list[Detection]:
         img = cv2.resize(rgb, (self.in_w, self.in_h), interpolation=cv2.INTER_LINEAR)
-        x = ((img.astype(np.float32) - self.norm_mean) / self.norm_std)[None]
-        self.interp.set_tensor(self.in_idx, x)
+        self.interp.set_tensor(self.in_idx, encode_image(img, self.in_detail, self.norm_mean, self.norm_std))
         self.interp.invoke()
-        raw_boxes = self.interp.get_tensor(self.box_idx)[0]
-        scores = self.interp.get_tensor(self.score_idx)[0]
+        raw_boxes = dequantize(self.interp.get_tensor(self.box_idx)[0], self.box_q)
+        scores = dequantize(self.interp.get_tensor(self.score_idx)[0], self.score_q)
         if self.decoding.sigmoid_score:
             scores = 1.0 / (1.0 + np.exp(-scores))
         boxes = np.clip(self._decode(raw_boxes), 0.0, 1.0)

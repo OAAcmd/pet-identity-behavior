@@ -1,6 +1,7 @@
 // LiteRT.js wrapper: one runtime per page, models compiled for WASM (XNNPACK)
 // or WebGPU. Same .tflite files as the Python reference (ai_edge_litert).
 import { loadAndCompile, loadLiteRt, Tensor, type CompiledModel, type TypedArray } from "@litertjs/core";
+import { dequantize } from "./imageops";
 
 export type Accel = "wasm" | "webgpu";
 
@@ -29,6 +30,8 @@ export interface LoadedModel {
   accel: Accel;
   inputs: { name: string; shape: number[]; dtype: string }[];
   outputs: { name: string; shape: number[]; dtype: string }[];
+  /** Per-output [scale, zero point] for quantized outputs (from the bundle); dequantized by runModel. */
+  outputQuant?: ([number, number] | null)[];
 }
 
 export async function compileModel(name: string, bytes: Uint8Array, accel: Accel = "wasm", numThreads?: number): Promise<LoadedModel> {
@@ -38,7 +41,7 @@ export async function compileModel(name: string, bytes: Uint8Array, accel: Accel
   return { name, model, accel, inputs: info(model.getInputDetails()), outputs: info(model.getOutputDetails()) };
 }
 
-export type Typed = Float32Array | Uint8Array | Int32Array;
+export type Typed = Float32Array | Uint8Array | Int8Array | Int32Array;
 
 /** Run with positional inputs; returns outputs copied to plain typed arrays. */
 export async function runModel(m: LoadedModel, inputs: Typed[]): Promise<Typed[]> {
@@ -46,8 +49,10 @@ export async function runModel(m: LoadedModel, inputs: Typed[]): Promise<Typed[]
   try {
     const outs = await m.model.run(ts);
     const res: Typed[] = [];
-    for (const o of outs) {
-      res.push(((await o.data()) as Typed).slice());
+    for (const [i, o] of outs.entries()) {
+      const d = (await o.data()) as Typed;
+      const q = m.outputQuant?.[i];
+      res.push(q && !(d instanceof Float32Array) ? dequantize(d, q) : d.slice());
       o.delete();
     }
     return res;
