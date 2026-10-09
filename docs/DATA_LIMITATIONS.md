@@ -18,6 +18,11 @@ for this project. Consequently:
 | --- | --- | --- |
 | ESC-50 | clip-level cat/dog/other sound detection on curated Freesound clips | event timing, household acoustics, cat/dog intent, cross-animal claims (no animal IDs); 4 non-pet sources span two folds |
 | Open Images V7 val subset | still-image cat/dog box detection with verified labels | video tracking, behaviour, pose, household camera angles; hard negatives over-represent other animals; possible Flickr overlap with COCO training data |
+| Open Images V7 test-split tuning subset (E7) | fitting and thresholding the false-positive verifier | any final metric (never used for one) |
+| Ultralytics dog-pose (E9) | dog keypoints on web photos, 112 breeds (Stanford Dogs synsets) | product releases (Research-Only); cats; household frames; puppies; eyes/withers/throat (never annotated) |
+| Localized Narratives captions (E10) | weak posture labels for cats and dogs | posture accuracy (caption noise unmeasured); breed analysis (no breed metadata) |
+| MammalNet dog-breed segments (E11) | dog behavior classes in real (YouTube) video | product releases (no dataset licence); cats (none); household framing |
+| Open Images V7 relationships (E13) | person-pet "holds / interacts with" in still images with reliable negatives | interaction over time; the animal's response; cats (4 scorable final pairs); pet-pet interaction (no such relations) |
 | CatMeows (blocked) | would support cat recording-context classification with cat/owner grouping | not fetched; labels are recording contexts (brushing, isolation, waiting for food), not emotions or verified needs; 8 kHz audio |
 | Barkopedia (blocked, unreviewed) | potentially dog activity/environment context | provenance, splits and animal/source grouping unverified; no cross-dog claims |
 

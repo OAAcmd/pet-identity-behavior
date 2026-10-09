@@ -1,0 +1,130 @@
+{
+ "schema": "petperception.status/1",
+ "date": "2026-10-09",
+ "branch": "claude/dreamy-davinci-49d6ng",
+ "product_complete": false,
+ "summary": "Core analysis runs on the phone (PWA, LiteRT.js) with server/phone parity; validated only on public data and in desktop Chromium. Behavioral validity, real-phone execution and production deployment are open.",
+ "acceptance": {
+  "software_correctness": {
+   "status": "met_in_automated_environments",
+   "evidence": {
+    "python_tests": 92,
+    "typescript_unit_tests": 16,
+    "e2e_tests": 16,
+    "ci": "green on every push",
+    "model_parity_browser": "bit-exact or <= 3e-8 (float32, int8, float16 builds)",
+    "engine_parity": {
+     "cases": 34,
+     "decision_agreement": 1.0,
+     "tracks_f1": 0.958,
+     "sounds_f1": 1.0,
+     "segments_f1": 0.969,
+     "hypotheses_f1": 1.0
+    }
+   },
+   "open": [
+    "Safari/WebKit never tested",
+    "real phones never tested"
+   ]
+  },
+  "behavioral_model_validity": {
+   "status": "not_met",
+   "evidence": "public-data evaluations E1, E4, E7, E9-E13; semi-synthetic E8; synthetic E5",
+   "blocking": [
+    "real paired household recordings (docs/EVALUATION_PLAN_REAL_PAIRED.md)",
+    "cat keypoint / face / video-action data",
+    "licensed dog keypoint data",
+    "vocal-context datasets blocked by network policy (zenodo.org, huggingface.co)"
+   ]
+  },
+  "on_device_compatibility_and_performance": {
+   "status": "pending",
+   "evidence": "desktop headless Chromium only (device check passes; budgets measured there)",
+   "blocking": [
+    "physical tier-B phones (iOS Safari, Android Chrome) and testers (docs/DEVICE_TEST_PROTOCOL.md)"
+   ]
+  },
+  "complete_product_readiness": {
+   "status": "not_met",
+   "evidence": "image builds in CI; compose stack with bundle service tested locally; runbook and configuration docs",
+   "blocking": [
+    "public host, domain, DNS, TLS",
+    "release-profile decision and legal sign-off for assets marked requires_legal_review",
+    "commercial profile lacks a browser-compatible detector with confirmed weight licence",
+    "behavioral validity",
+    "real-phone acceptance"
+   ]
+  }
+ },
+ "capabilities": {
+  "animal_detection": {
+   "phone": true,
+   "validation": "E4/E7 web photos"
+  },
+  "false_positive_rejection": {
+   "phone": true,
+   "validation": "E7 web photos"
+  },
+  "tracking": {
+   "phone": true,
+   "validation": "E8 semi-synthetic"
+  },
+  "behavior_segments": {
+   "phone": true,
+   "validation": "E8 semi-synthetic"
+  },
+  "posture": {
+   "phone": true,
+   "validation": "E10 weak caption labels"
+  },
+  "person_pet_interaction": {
+   "phone": true,
+   "validation": "E13 web photos, dogs only"
+  },
+  "vocalization_presence": {
+   "phone": true,
+   "validation": "E1 ESC-50"
+  },
+  "vocalization_type": {
+   "phone": "scores only",
+   "validation": "none"
+  },
+  "dog_ears_tail_keypoints": {
+   "phone": false,
+   "validation": "E9 (research-only data)"
+  },
+  "dog_actions_from_video": {
+   "phone": false,
+   "validation": "E11 MammalNet (research-only data)"
+  },
+  "cat_keypoints_face_actions": {
+   "phone": false,
+   "validation": "no data"
+  },
+  "facial_cues": {
+   "phone": false,
+   "validation": "no data"
+  },
+  "multimodal_hypotheses": {
+   "phone": true,
+   "validation": "none on real data (E5 synthetic checks)"
+  },
+  "result_sync": {
+   "implemented": false
+  }
+ },
+ "decisions": [
+  "Default phone bundle uses float32 builds; int8 bundle (14.8 MB) is an evaluated opt-in because per-image verifier decisions diverge (E12).",
+  "Dog keypoints and MammalNet-trained heads stay research-only (data terms).",
+  "Server analysis is opt-in; the default path never uploads media."
+ ],
+ "resources_needed": [
+  "Physical phones (tier B iOS and Android at minimum) for the offline acceptance protocol",
+  "Real paired household recordings with consent and annotation (plan in docs/EVALUATION_PLAN_REAL_PAIRED.md)",
+  "Network access to zenodo.org and huggingface.co (CatMeows, Barkopedia)",
+  "Licensed cat and dog keypoint / facial / video-action datasets",
+  "GPU compute for jobs G1-G5 (docs/TRAINING_PROGRAM.md) once data exists",
+  "Hosting, domain, DNS and TLS for deployment",
+  "Legal review of model weights and training-data terms per release profile"
+ ]
+}

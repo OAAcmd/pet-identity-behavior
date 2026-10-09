@@ -1,12 +1,15 @@
-# Model Card - Pet Perception Engine, Phase 1 (engine 0.1.0, result schema 1.0.0)
+# Model card - Pet Observer analysis engine (result schema 1.2.0)
 
 ## Summary
 
-A modular, CPU-only research engine that turns a local audio/video/image file
-into timestamped **observations** of cats and dogs (visual tracks, sound events,
-movement, owner-zone occupancy, quality limits) and, only when independent
-co-occurring evidence exists, **experimental, uncalibrated hypotheses** about
-possible needs, activities, states or signals. It abstains by default.
+Two implementations of one analysis engine - TypeScript in the phone's
+browser (default) and Python on the server (opt-in server analysis) - turn a
+short audio/video clip into timestamped **observations** of cats and dogs
+(tracks, sounds, movement, posture, behavior segments, owner-place
+occupancy, person interaction candidates, quality limits) and, only when
+independent co-occurring evidence exists, **experimental, uncalibrated
+hypotheses** about possible needs, activities, states or signals. It
+abstains by default.
 
 It is **not** a pet translator, emotion detector, identity recognizer or
 diagnostic tool. Track IDs are per-analysis labels. No hypothesis has been
@@ -14,62 +17,78 @@ validated against household outcomes.
 
 ## Components
 
-| Component | Model / method | Trained here? | Evaluated here |
-| --- | --- | --- | --- |
-| Sound events | YAMNet (MediaPipe TFLite, AudioSet-trained), frozen; ontology-derived cat/dog groups; thresholds from ESC-50 | thresholds only | E1 (ESC-50, clip level) |
-| CPU audio baseline | MFCC/spectral stats + logistic regression | yes (ESC-50) | E1 |
-| Visual detection | EfficientDet-Lite0 (MediaPipe TFLite, COCO-trained), frozen | no | E4 (Open Images V7 val subset) |
-| Tracking | IoU + Hungarian, time-gap limit, camera-translation compensation | no (rules) | functional only (E5 scenarios) |
-| Pose | interface only; no verified animal pose model | - | not evaluated |
-| Fusion | rule baseline, weighted average, context-gated PoE (unfitted) | no | behavior checks only (E5); accuracy not evaluated |
+| Component | Model / method | Trained here? | Evaluated here | On the phone |
+| --- | --- | --- | --- | --- |
+| Sound events | YAMNet (AudioSet), ontology-derived cat/dog groups; thresholds from ESC-50 | thresholds | E1 (ESC-50) | yes |
+| Detection (cats, dogs, people) | EfficientDet-Lite0 (COCO), frozen | no | E4, E7, E12 | yes |
+| False-positive verifier | EfficientNet-Lite0 ImageNet group masses + per-class logistic regression | yes (E7) | E7, E12 | yes |
+| Tracking | Kalman (SORT-style) with camera-motion compensation | no (rules; selected on E8) | E8 (semi-synthetic) | yes |
+| Behavior segments | operational definitions with a-priori thresholds | no | E8 (semi-synthetic) | yes |
+| Posture (lying / sitting / standing) | logistic regression on EfficientNet-Lite0 crop embedding | yes (E10, weak labels) | E10, E12 | yes |
+| Person-pet interaction | logistic regression on box geometry | yes (E13) | E13 (dogs) | yes |
+| Dog keypoints (ears, tail, limbs) | JAX head on frozen EfficientNet-Lite0 features | yes (E9) | E9 | no (research-only data) |
+| Dog actions from video | logistic regression on segment features | yes (E11) | E11 | no (research-only data) |
+| Fusion and abstention | rule baseline (unfitted) | no | E5 synthetic checks only | yes |
+| Explanations | deterministic templates; no language model | no | tests | yes |
 
 ## Intended use
 
-- Research and prototyping of an observation-first interface (Phase 2 PWA).
-- Offline analysis of short clips supplied by an owner, with optional zones.
+- Owners recording short clips of their own cat or dog at home, to see what
+  was observable and, cautiously, what it might relate to.
 - Out of scope: medical or welfare decisions, claims about what an animal
-  "says" or "feels", identity verification, surveillance of people, commercial
-  deployment (third-party terms not cleared).
+  "says" or "feels", identity verification, surveillance of people,
+  commercial deployment without the recorded legal sign-off.
 
-## Measured performance (see docs/ALGORITHM_REPORT.md)
+## Measured performance (public data; none of it household)
 
-- E1 cat/dog/other on ESC-50 (5 source-preserving folds, nested thresholds):
-  YAMNet tags macro-F1 0.895 [0.846, 0.935]; cat F1 0.79, dog F1 0.90.
-  CPU MFCC baseline 0.617 [0.551, 0.677]; majority 0.327.
-- E4 detection on Open Images V7 validation subset (Lite0, threshold 0.35):
-  cat AP@0.5 0.923 [0.897, 0.947], dog 0.842 [0.789, 0.886]; specificity on
-  human-verified hard negatives cat 0.62, dog 0.56 (foxes, lions and other
-  animals trigger detections).
-- E6 runtime: 8 s 640x480 video in 0.95 s on 4 vCPUs (real-time factor 0.12).
-- Not measured: household audio, cat-context (CatMeows blocked), dog context,
-  tracking accuracy, pose, multimodal/hypothesis accuracy, calibration of any
-  hypothesis score.
+- Sound events, ESC-50: macro-F1 0.895 [0.846, 0.935].
+- Detection, Open Images: AP50 cat 0.92, dog 0.84; with the verifier,
+  specificity on verified-negative photos cat 0.70, dog 0.87 at image recall
+  0.91 / 0.87.
+- Tracking, semi-synthetic: IDF1 0.86.
+- Posture vs caption-derived labels: macro-F1 0.65 (38 % of animals reported
+  at 85 % agreement with the gate).
+- Person-pet interaction, Open Images (dogs, scored pairs): AP 0.91;
+  end-to-end recall 0.42 because people or pets are often not detected.
+- Dog keypoints (research): PCK@0.1 0.85; dog actions from video (research):
+  macro-F1 0.64.
+- Phone vs server on identical files (desktop browser): decisions 34/34,
+  segments F1 0.97.
+- Not measured: anything in real homes, on real phones, cat interaction,
+  vocalization types, hypothesis accuracy, calibration.
 
 ## Known failure modes
 
 - Sound tags: snoring, crying babies, door creaks and farm animals can trigger
-  cat/dog events; TV/speaker audio is indistinguishable from a present animal
-  unless a visible-animal check fails (`no_visible_animal`).
-- 8 kHz or heavily compressed audio is out of domain (flagged).
-- Small (< 10% of frame), occluded, or poorly lit animals are often missed;
-  foxes and other carnivores are confused with dogs/cats.
-- Camera motion compensation is translation-only; zooms, rotation and parallax
-  leave residual apparent motion.
-- Zone membership uses the box bottom-center; perspective can place an animal
-  "in" a floor zone it is behind.
-- Event boundaries are quantized to 0.975 s windows (onsets up to ~0.5 s early).
+  cat/dog events; TV audio is indistinguishable from a present animal unless
+  no animal is visible.
+- Small, occluded or poorly lit animals are often missed; foxes and other
+  carnivores can be confused with dogs or cats (the verifier rejects many,
+  and rejects some real pets - reported as a quality flag).
+- Posture labels are unstable near the report gate (about one frame in five
+  flips between the phone and server decoders).
+- Interaction candidates are still-image judgements per frame; a person
+  standing next to a pet can trigger them; most held pets are missed when
+  the detector does not separate the person and the animal.
+- Quantized (int8) builds can make different per-image verification
+  decisions than float32 builds (E12); the default uses float32.
+- Camera-motion compensation is approximate; zone membership uses the box
+  bottom centre.
 
 ## Ethical considerations
 
-- Outputs are phrased as observations; hypotheses are labelled experimental with
-  reasons; suggestions avoid diagnoses and advise professional help for concerns.
-- Uploaded media is deleted after analysis; results are deletable on demand.
-- People appearing in frames are not analysed unless `person` context detection
-  is explicitly enabled (off by default); no face or identity processing.
+- Analysis runs on the user's phone by default; media are uploaded only
+  through an explicit server-analysis setting.
+- People in frames are detected as boxes to find interaction candidates on
+  the analysing device; person boxes are not stored in results, and there is
+  no face or identity processing.
+- Outputs are observations first; interpretations are labelled experimental
+  with their evidence; suggestions avoid diagnoses and point to a
+  veterinarian for health concerns.
 
 ## Licensing and restrictions
 
-Research profile. YAMNet and EfficientDet weights are third-party (Apache-2.0
-claimed; EfficientDet MediaPipe build lacks a standalone model card). Thresholds
-and the MFCC model derive from ESC-50 (CC BY-NC 3.0). See
-docs/DATA_AND_MODEL_REGISTER.md. Do not assume commercial permission.
+Per-asset terms and release-profile suitability are in
+[DATA_AND_MODEL_REGISTER.md](DATA_AND_MODEL_REGISTER.md) and enforced in
+code. Research-only data (dog keypoints, MammalNet) never enters product
+profiles.

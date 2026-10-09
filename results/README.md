@@ -15,10 +15,12 @@ what each result does and does not show: [docs/CAPABILITY_MATRIX.md](../docs/CAP
 | `e6/` | completed | runtime on the cloud workspace (server path) | `metrics.json`, `run.log` |
 | `e7/` | completed | Open Images V7 test split (tuning) and the E4 validation subset (final) | `metrics.json`: false-positive verifier, recall/specificity trade-off per detector and feature set |
 | `e8/` | completed | semi-synthetic sequences (real animal pixels, scripted motion) | `metrics.json`: tracking (IDF1, ID switches) and behavior-segment detection |
-| `e9/` | completed | Ultralytics dog-pose (Research-Only) | `metrics.json` (PCK, ear/tail cue agreement, gates), `training_log.json` (learning curves, seeds) |
+| `e9/` | completed | Ultralytics dog-pose (Research-Only) | `metrics.json` (PCK, ear/tail cue agreement, gates), `training_log.json` (learning curves, seeds), `breed_breakdown.json` (per-breed PCK, heterogeneity test) |
 | `e10/` | completed | Open Images V7 + Localized Narratives caption-derived weak labels | `metrics.json`: coarse posture agreement with weak labels, per species |
-| `e11/` | see `metrics.json` | MammalNet dog-breed video segments (research only) | `metrics.json`: dog behavior classes from video, breed breakdown |
-| `ondevice/` | completed in **desktop headless Chromium only** | parity fixtures, scenario media | `runtime_parity_*.json` (model level: browser LiteRT.js vs Python LiteRT), `engine_parity_chromium.json` (engine level, Python vs TypeScript engine on identical files), `device_check_desktop_chromium.json` (device-check report from an automated browser, **not a phone**) |
+| `e11/` | completed | MammalNet dog-breed video segments (research only) | `metrics.json`: dog behavior classes from video, breed breakdown |
+| `e12/` | completed | as E7 and E10 | `metrics.json` (quantized builds: detection, rejection, posture, agreement, latency, decision), `e7_<pair>.json` (full E7 protocol per detector/backbone pair) |
+| `e13/` | completed | Open Images V7 relationships (person-pet pairs) | `metrics.json`: interaction AP/F1, coverage, baselines |
+| `ondevice/` | completed in **desktop headless Chromium only** | parity fixtures, scenario media | `runtime_parity_*.json` (model level: browser LiteRT.js vs Python LiteRT), `engine_parity_chromium.json` (engine level, Python vs TypeScript engine on identical files; `_int8` for the compact bundle), `device_check_desktop_chromium.json` (device-check report from an automated browser, **not a phone**) |
 
 No metric from different datasets is combined into a product-level number.
 Multimodal / hypothesis accuracy on real household recordings is

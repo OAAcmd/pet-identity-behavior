@@ -1,124 +1,97 @@
 # pet-identity-behavior
 
-Personal experiments in pet identification and everyday behavior observation.
+**Pet Observer** - an observation-first behavior app for cats and dogs whose
+core analysis runs **on the phone**. A mobile web app (PWA) records or opens
+a clip, analyses it locally with downloaded models (no upload, works offline
+after the one-time download) and reports *observations* (animals found and
+tracked, sounds, movement, posture, owner-drawn places, interaction with a
+person, quality limits, all with timestamps), then *experimental,
+uncalibrated interpretations* tied to that evidence, abstaining whenever the
+evidence is insufficient. It does not translate animal language, read
+emotions, identify individual pets, or diagnose anything.
 
-**Phase 1: Pet Perception and Intent Research Engine** - an observation-first,
-CPU-only engine for cats and dogs. Given a local audio, video or image file it
-reports *observations* (detected animals, sound events, movement, owner-zone
-occupancy, timestamps, quality limits), then *experimental, uncalibrated
-hypotheses* tied to evidence, then *restrained suggestions*. It abstains by
-default. It does not translate animal language, read emotions, identify
-individual pets, or diagnose anything.
+> **Status: not complete.** Software correctness is established in
+> automated environments; behavioral validity on real household recordings,
+> execution on physical phones and a production deployment are not. See
+> [docs/REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md) for the
+> acceptance status and what blocks each open item.
 
-| Document | Content |
+## Architecture
+
+```
+phone browser (PWA) ── one-time model download (/ondevice/, SHA-256 verified) ──┐
+  capture / file ─► TypeScript engine + LiteRT.js (WebAssembly) ─► result (IndexedDB, on the phone)
+                                                                    │
+server (optional): accounts, pets, places, bundle distribution, device reports,
+                   server analysis only when the user turns it on (Python engine, same result schema)
+```
+
+Models: YAMNet (audio events), EfficientDet-Lite0 (cats, dogs, people),
+EfficientNet-Lite0 features with small heads trained here (false-positive
+verifier, posture, person-pet interaction); rule-based tracking, behavior
+segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
+
+## Documents
+
+| Topic | Document |
 | --- | --- |
-| [docs/ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md) | methods, protocols, measured results (E1-E6), error analysis |
-| [docs/DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md) | every dataset/model: URL, revision, checksums, counts, terms, blockers |
-| [docs/API_CONTRACT.md](docs/API_CONTRACT.md) | HTTP API, result schema field guide, security posture |
-| [docs/MODEL_CARD.md](docs/MODEL_CARD.md), [docs/DATA_LIMITATIONS.md](docs/DATA_LIMITATIONS.md) | intended use, failure modes, data limits |
-| [docs/PROGRESS.md](docs/PROGRESS.md), [docs/PHASE1_ACCEPTANCE.json](docs/PHASE1_ACCEPTANCE.json) | what was done, verified, blocked; phase gate |
-| [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) | workspace hardware/network report |
+| Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
+| What each capability can and cannot do (data, model, evaluation, gaps) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
+| Methods and measured results (E1-E13) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
+| Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
+| Data, models, licences | [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
+| Training and reproduction, GPU jobs | [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md) |
+| Validation still needed | [EVALUATION_PLAN_REAL_PAIRED.md](docs/EVALUATION_PLAN_REAL_PAIRED.md) |
+| Tests | [TEST_REPORT.md](docs/TEST_REPORT.md) |
+| API | [API_CONTRACT.md](docs/API_CONTRACT.md), [openapi.json](docs/openapi.json) |
+| Deploy and operate | [DEPLOYMENT.md](docs/DEPLOYMENT.md), [OPERATIONS_RUNBOOK.md](docs/OPERATIONS_RUNBOOK.md), [CONFIGURATION.md](docs/CONFIGURATION.md) |
+| Intended use and limits | [MODEL_CARD.md](docs/MODEL_CARD.md), [DATA_LIMITATIONS.md](docs/DATA_LIMITATIONS.md) |
+| Phase 1 record | [PROGRESS.md](docs/PROGRESS.md), [PHASE1_ACCEPTANCE.json](docs/PHASE1_ACCEPTANCE.json), [ENVIRONMENT.md](docs/ENVIRONMENT.md) |
 
-## Install
+## Development quick start
 
-Requirements: Linux, Python 3.11-3.12 (3.12 tested), FFmpeg/ffprobe on `PATH`,
-[uv](https://docs.astral.sh/uv/). No GPU needed.
-
-```bash
-uv sync --extra dev                       # creates .venv from uv.lock (reproducible)
-uv run petperception doctor               # environment, models, datasets (add --network to probe hosts)
-uv run petperception fetch-models         # YAMNet + EfficientDet-Lite0, SHA-256 verified (~18 MB)
-uv run petperception fetch-models --include-optional   # also EfficientDet-Lite2 (E4 comparison)
-```
-
-`requirements.lock.txt` is a hash-pinned export of `uv.lock` (used by the Dockerfile).
-Models go to `var/models/`, datasets to `var/data/` (both git-ignored; override with
-`PETPERCEPTION_MODELS_ROOT` / `PETPERCEPTION_DATA_ROOT`). Inference never downloads.
-
-## Analyze a file
+Requirements: Linux, Python 3.12, FFmpeg, [uv](https://docs.astral.sh/uv/),
+Node.js 22. No GPU needed.
 
 ```bash
-uv run petperception analyze clip.mp4 --zones configs/zones.example.json \
-    --out result.json --report report.md
-uv run petperception analyze meow.wav --modalities audio
-uv run petperception analyze clip.mp4 --fusion-method product_of_experts   # experimental scorer
+uv sync --extra dev --extra train                 # locked Python environment
+uv run petperception fetch-models                 # SHA-256-verified model downloads
+uv run petperception export-ondevice --release-profile personal_noncommercial   # phone bundle
+cd web && npm ci && npm run build && cd ..        # PWA
+uv run petperception serve                        # http://127.0.0.1:8000 (the PWA needs HTTPS off localhost)
 ```
 
-Zones are optional owner-drawn polygons in normalized image coordinates with a
-fixed vocabulary (`food_area`, `exit_door`, `rest_area`, `play_area`, ...); see
-[`configs/zones.example.json`](configs/zones.example.json). Output follows
-schema 1.0.0 ([docs/analysis_result.schema.json](docs/analysis_result.schema.json)).
-Worked examples (synthetic pairings of real public media):
-[`examples/offline/`](examples/offline/).
+Analyse a file on the server engine from the command line:
+`uv run petperception analyze clip.mp4 --zones configs/zones.example.json --out result.json`.
 
-## Serve the API
+Experiments: `uv run petperception fetch-data <dataset>` then
+`uv run petperception evaluate --experiment e1 ... e13` (data sources,
+licences and blockers per experiment in the register). Tests:
+`uv run pytest -q`, `cd web && npm test && npx playwright test`
+([TEST_REPORT.md](docs/TEST_REPORT.md)).
 
-```bash
-uv run petperception serve                              # 127.0.0.1:8000, loopback only
-PETPERCEPTION_API_TOKEN=change-me uv run petperception serve --host 0.0.0.0   # non-loopback requires a token
-uv run petperception export-openapi                     # docs/openapi.json + result JSON schema
-```
-
-Endpoints: `GET /v1/health`, `GET /v1/capabilities`, `GET /v1/schema/analysis-result`,
-`POST /v1/analyses`, `GET /v1/analyses/{id}`, `GET /v1/analyses/{id}/result`,
-`DELETE /v1/analyses/{id}`. Details: [docs/API_CONTRACT.md](docs/API_CONTRACT.md).
-
-## Reproduce the experiments
-
-```bash
-uv run petperception fetch-data esc50                   # git clone @33c8ce9e + checksum check (~880 MB)
-uv run petperception fetch-data openimages-catdog       # annotations + 823 images, pinned SHA-256 (~260 MB)
-uv run petperception evaluate --experiment e1           # ESC-50 cat/dog sound events (also: train --experiment e1)
-uv run petperception evaluate --experiment e4           # Open Images cat/dog detection (Lite0 + Lite2)
-uv run petperception evaluate --experiment e5           # fusion/abstention scenarios (builds var/examples)
-uv run petperception evaluate --experiment e6           # runtime (needs e5 media)
-uv run petperception evaluate --experiment e2           # CatMeows: writes 'blocked' status until data is fetched
-uv run petperception evaluate --experiment e3           # Barkopedia: 'pending' until audited
-uv run petperception make-examples                      # regenerate examples/offline/
-uv run pytest                                           # 54 tests; markers: synthetic, integration
-uv run pytest -m "not integration"                      # without fetched models/data
-```
-
-Blocked in the Phase 1 workspace (network policy): CatMeows (`zenodo.org`),
-AST and Barkopedia (`huggingface.co`), Ultralytics dog-pose. Continuation
-commands are in [docs/PHASE1_ACCEPTANCE.json](docs/PHASE1_ACCEPTANCE.json).
-
-Configuration: [`configs/cpu.yaml`](configs/cpu.yaml) (default, bounded CPU) and
-[`configs/accelerator.example.yaml`](configs/accelerator.example.yaml)
-(larger CPU host; no GPU path was available or tested). Select with
-`--config` or `PETPERCEPTION_CONFIG`.
-
-## Docker (CPU)
-
-```bash
-docker build -t pet-perception:phase1 .                 # behind a TLS proxy add: --network host --secret id=extra_ca,src=ca.pem
-docker run --rm -v $PWD/var/models:/models:ro pet-perception:phase1 doctor
-docker run --rm -e PETPERCEPTION_API_TOKEN=change-me -p 127.0.0.1:8000:8000 \
-    -v $PWD/var/models:/models:ro pet-perception:phase1   # serve
-```
-
-Built and tested in the Phase 1 workspace (doctor, analyze, token-protected
-serve round-trip). Models are mounted, not baked in (or build with
-`--build-arg FETCH_MODELS=1`).
+Deployment with Docker Compose and TLS: [DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 
 ```
-src/petperception/   ingest/ audio/ vision/ context/ fusion/ schemas/ explain/ eval/ serve/ data/ pipeline.py cli.py
-configs/             cpu.yaml, accelerator.example.yaml, zones.example.json
-manifests/           resources.json (register), per-file dataset manifests and pinned checksums
-artifacts/           small fitted artifacts (numeric JSON) with terms
-results/e1..e6/      metrics, predictions, logs per experiment
-examples/offline/    example inputs (zones), JSON results and Markdown reports
-docs/                reports, register, API contract, OpenAPI, acceptance
-tests/               pytest suite (synthetic vs integration markers)
+src/petperception/  ingest/ audio/ vision/ context/ fusion/ schemas/ explain/ ondevice/ app/ data/ eval/ pipeline.py cli.py
+web/                PWA (Preact + TypeScript); web/src/engine = on-device engine; tests (unit, runtime parity, E2E)
+configs/ deploy/    configuration files; compose stack and Caddy TLS proxy
+manifests/          resource register, dataset manifests and pinned checksums
+artifacts/          small models trained here (numeric JSON / NPZ, no pickle)
+results/            metrics per experiment and on-device parity reports
+docs/               documents listed above
 ```
 
-Raw datasets, media, model weights, caches and credentials are never committed.
+Raw datasets, media, third-party model weights, caches and credentials are
+never committed.
 
-## License and terms
+## Licence and terms
 
-Project code: private research code. Third-party data and model terms (ESC-50
-CC BY-NC 3.0; Open Images CC BY 4.0 / CC BY 2.0 per image; YAMNet/EfficientDet
-Apache-2.0 as stated or claimed) are listed in the register. Research use only;
-commercial permission is not assumed.
+Project code: private. Third-party data and model terms differ per asset and
+per release profile (research / personal non-commercial / commercial); they
+are recorded in the register and enforced by `petperception release-check`,
+the engines and the bundle export. Commercial use is not assumed for any
+asset without the recorded legal sign-off.
