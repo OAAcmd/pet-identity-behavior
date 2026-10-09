@@ -82,6 +82,9 @@ device_check/              reference clip (WebM + MP4), expected result, referen
   output quantization (`input_quant`, `output_quant`); the TypeScript engine
   encodes inputs with NumPy-identical float32 arithmetic and dequantizes
   outputs, so both runtimes see identical bytes (asset format 0.2).
+  Asset format 0.2.1 adds the optional `object_relation` block (E15); a
+  0.2 app without it ignores the block (seen in the E2E run with a stale
+  app build) and reports no on-furniture candidates.
 
 ## Install, integrity, versioning and update recovery
 
