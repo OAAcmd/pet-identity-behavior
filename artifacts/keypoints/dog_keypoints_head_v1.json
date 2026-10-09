@@ -1,0 +1,41 @@
+{
+  "file": "dog_keypoints_head_v1.npz",
+  "sha256": "814b0348575624f0a28d573064bbce5216c75d78f2a8f26fbad0b5eb16e5567a",
+  "backbone": "efficientnet_lite0_mediapipe_v1",
+  "keypoints": [
+    "front_left_paw",
+    "front_left_knee",
+    "front_left_elbow",
+    "rear_left_paw",
+    "rear_left_knee",
+    "rear_left_elbow",
+    "front_right_paw",
+    "front_right_knee",
+    "front_right_elbow",
+    "rear_right_paw",
+    "rear_right_knee",
+    "rear_right_elbow",
+    "tail_start",
+    "tail_end",
+    "left_ear_base",
+    "right_ear_base",
+    "nose",
+    "chin",
+    "left_ear_tip",
+    "right_ear_tip",
+    "left_eye",
+    "right_eye",
+    "withers",
+    "throat"
+  ],
+  "gates": {
+    "min_visible": 0.5,
+    "min_peak": 0.2,
+    "dev_precision": 0.0,
+    "dev_coverage_of_labelled": 0.0,
+    "rule": "precision >= 0.90, max coverage"
+  },
+  "trained_on": "Ultralytics dog-pose train split minus dev hold-out",
+  "terms": "Research-Only (dog-pose data; Stanford Dogs / ImageNet terms). Do not use in commercial releases.",
+  "created_at": "2026-10-09T08:03:52+00:00"
+}

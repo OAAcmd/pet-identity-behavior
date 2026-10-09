@@ -1,0 +1,562 @@
+{
+  "experiment": "E9",
+  "title": "Dog keypoints (ears, tail, limbs): frozen EfficientNet-Lite0 features + trained head, Ultralytics dog-pose",
+  "protocol": [
+    "E9: dog keypoints (ears, tail, limbs) on the Ultralytics dog-pose data.",
+    "",
+    "Data: Ultralytics dog-pose (Stanford Dogs images, 24 keypoints; documented",
+    "as Research-Only, archive ships an AGPL-3.0 licence text). Splits:",
+    "* fit: dog-pose ``train`` minus a development hold-out;",
+    "* development (model selection, gates): 10% of ``train`` images, seed 20261011;",
+    "* final evaluation: dog-pose ``val`` (1,703 images), used once.",
+    "Breed (the Stanford Dogs synset prefix of the file name) is recorded so",
+    "confidence intervals resample breeds, not images.",
+    "",
+    "Protocol: top-down with the annotated box (as in the dataset) and, separately,",
+    "end-to-end with the configured detector's box (IoU >= 0.5 with the annotation).",
+    "Metrics: PCK@{0.05, 0.1, 0.2} of max(box w, h) over labelled points; per-point",
+    "PCK; visibility ranking AUC; precision/recall of the gated \"visible\" output;",
+    "derived features (ear-tip elevation sign, tail elevation) compared with the",
+    "same features computed from the annotation.",
+    "",
+    "What this does not show: accuracy on household video frames, motion blur,",
+    "night/IR footage, puppies, or cats (no cat keypoint data was available)."
+  ],
+  "splits": {
+    "fit_instances": 6096,
+    "fit_instances_with_flips": 12192,
+    "dev_instances": 677,
+    "val_instances": 1703,
+    "dev_images": 677,
+    "seed": 20261011
+  },
+  "training": {
+    "epochs": 30,
+    "batch": 128,
+    "hidden": 128,
+    "log": [
+      {
+        "epoch": 1,
+        "train_loss": 3.920947844783465,
+        "dev_pck@0.1": 0.8063460909388289,
+        "seconds": 44.6
+      },
+      {
+        "epoch": 2,
+        "train_loss": 3.4197516640027366,
+        "dev_pck@0.1": 0.8286991603969033,
+        "seconds": 41.2
+      },
+      {
+        "epoch": 3,
+        "train_loss": 3.335606209933758,
+        "dev_pck@0.1": 0.8365499945480318,
+        "seconds": 40.6
+      },
+      {
+        "epoch": 4,
+        "train_loss": 3.289714323977629,
+        "dev_pck@0.1": 0.8451641042416312,
+        "seconds": 38.8
+      },
+      {
+        "epoch": 5,
+        "train_loss": 3.2584879448016486,
+        "dev_pck@0.1": 0.8500708755860866,
+        "seconds": 47.2
+      },
+      {
+        "epoch": 6,
+        "train_loss": 3.2295827716588974,
+        "dev_pck@0.1": 0.8498527968596663,
+        "seconds": 40.3
+      },
+      {
+        "epoch": 7,
+        "train_loss": 3.2078160420060158,
+        "dev_pck@0.1": 0.8527968596663396,
+        "seconds": 40.5
+      },
+      {
+        "epoch": 8,
+        "train_loss": 3.1923780168096223,
+        "dev_pck@0.1": 0.8488714425907753,
+        "seconds": 40.9
+      },
+      {
+        "epoch": 9,
+        "train_loss": 3.177335431178411,
+        "dev_pck@0.1": 0.8526878203031294,
+        "seconds": 44.6
+      },
+      {
+        "epoch": 10,
+        "train_loss": 3.1647920111815133,
+        "dev_pck@0.1": 0.85323301711918,
+        "seconds": 43.0
+      },
+      {
+        "epoch": 11,
+        "train_loss": 3.1519587337970734,
+        "dev_pck@0.1": 0.8543234107512813,
+        "seconds": 43.7
+      },
+      {
+        "epoch": 12,
+        "train_loss": 3.140216308335463,
+        "dev_pck@0.1": 0.8511612692181878,
+        "seconds": 39.9
+      },
+      {
+        "epoch": 13,
+        "train_loss": 3.129313906033834,
+        "dev_pck@0.1": 0.8562861192890634,
+        "seconds": 37.8
+      },
+      {
+        "epoch": 14,
+        "train_loss": 3.119600810110569,
+        "dev_pck@0.1": 0.8536691745720205,
+        "seconds": 43.7
+      },
+      {
+        "epoch": 15,
+        "train_loss": 3.1096178417404494,
+        "dev_pck@0.1": 0.855959001199433,
+        "seconds": 40.9
+      },
+      {
+        "epoch": 16,
+        "train_loss": 3.1021932860215506,
+        "dev_pck@0.1": 0.8525787809399193,
+        "seconds": 46.6
+      },
+      {
+        "epoch": 17,
+        "train_loss": 3.0942365378141403,
+        "dev_pck@0.1": 0.8530149383927598,
+        "seconds": 55.1
+      },
+      {
+        "epoch": 18,
+        "train_loss": 3.0866698399186134,
+        "dev_pck@0.1": 0.8501799149492967,
+        "seconds": 50.3
+      },
+      {
+        "epoch": 19,
+        "train_loss": 3.0782437846064568,
+        "dev_pck@0.1": 0.8542143713880711,
+        "seconds": 62.5
+      },
+      {
+        "epoch": 20,
+        "train_loss": 3.071376917262872,
+        "dev_pck@0.1": 0.852251662850289,
+        "seconds": 52.4
+      },
+      {
+        "epoch": 21,
+        "train_loss": 3.0657572423418364,
+        "dev_pck@0.1": 0.8544324501144913,
+        "seconds": 59.7
+      },
+      {
+        "epoch": 22,
+        "train_loss": 3.0601887106895447,
+        "dev_pck@0.1": 0.8530149383927598,
+        "seconds": 56.8
+      },
+      {
+        "epoch": 23,
+        "train_loss": 3.055814574162165,
+        "dev_pck@0.1": 0.8517064660342384,
+        "seconds": 54.4
+      },
+      {
+        "epoch": 24,
+        "train_loss": 3.0512663101156554,
+        "dev_pck@0.1": 0.8518155053974484,
+        "seconds": 46.6
+      },
+      {
+        "epoch": 25,
+        "train_loss": 3.047475293278694,
+        "dev_pck@0.1": 0.8512703085813978,
+        "seconds": 47.3
+      },
+      {
+        "epoch": 26,
+        "train_loss": 3.04357652614514,
+        "dev_pck@0.1": 0.8511612692181878,
+        "seconds": 48.5
+      },
+      {
+        "epoch": 27,
+        "train_loss": 3.0411056205630302,
+        "dev_pck@0.1": 0.8508341511285574,
+        "seconds": 49.4
+      },
+      {
+        "epoch": 28,
+        "train_loss": 3.03968737522761,
+        "dev_pck@0.1": 0.8512703085813978,
+        "seconds": 47.8
+      },
+      {
+        "epoch": 29,
+        "train_loss": 3.038176660736402,
+        "dev_pck@0.1": 0.8517064660342384,
+        "seconds": 48.4
+      },
+      {
+        "epoch": 30,
+        "train_loss": 3.037068374454975,
+        "dev_pck@0.1": 0.8520335841238688,
+        "seconds": 54.7
+      }
+    ],
+    "extract_seconds": 0.0,
+    "train_seconds": 1417.6,
+    "selected_epoch_by_dev_pck@0.1": 13
+  },
+  "gates": {
+    "min_visible": 0.5,
+    "min_peak": 0.2,
+    "dev_precision": 0.0,
+    "dev_coverage_of_labelled": 0.0,
+    "rule": "precision >= 0.90, max coverage"
+  },
+  "dev": {
+    "instances": 677,
+    "labelled_points": 9171,
+    "breeds": 110,
+    "pck@0.05": 0.6268672990949733,
+    "pck@0.05_ci95": {
+      "ci_low": 0.6110673074529349,
+      "ci_high": 0.6428317582845305,
+      "n_boot": 1000,
+      "n_groups": 110,
+      "unit": "group"
+    },
+    "pck@0.1": 0.8562861192890634,
+    "pck@0.1_ci95": {
+      "ci_low": 0.8437695467227987,
+      "ci_high": 0.8688260867630503,
+      "n_boot": 1000,
+      "n_groups": 110,
+      "unit": "group"
+    },
+    "pck@0.2": 0.9438447279467888,
+    "pck@0.2_ci95": {
+      "ci_low": 0.9361247704058806,
+      "ci_high": 0.9510383877966251,
+      "n_boot": 1000,
+      "n_groups": 110,
+      "unit": "group"
+    },
+    "per_keypoint_pck@0.1": {
+      "front_left_paw": [
+        0.8202054794520548,
+        584
+      ],
+      "front_left_knee": [
+        0.8330464716006885,
+        581
+      ],
+      "front_left_elbow": [
+        0.8628884826325411,
+        547
+      ],
+      "rear_left_paw": [
+        0.7612732095490716,
+        377
+      ],
+      "rear_left_knee": [
+        0.7794561933534743,
+        331
+      ],
+      "rear_left_elbow": [
+        0.7871621621621622,
+        296
+      ],
+      "front_right_paw": [
+        0.8447971781305115,
+        567
+      ],
+      "front_right_knee": [
+        0.8637992831541219,
+        558
+      ],
+      "front_right_elbow": [
+        0.8681732580037664,
+        531
+      ],
+      "rear_right_paw": [
+        0.7853107344632768,
+        354
+      ],
+      "rear_right_knee": [
+        0.82,
+        300
+      ],
+      "rear_right_elbow": [
+        0.7854406130268199,
+        261
+      ],
+      "tail_start": [
+        0.8858131487889274,
+        289
+      ],
+      "tail_end": [
+        0.6986754966887417,
+        302
+      ],
+      "left_ear_base": [
+        0.9187817258883249,
+        591
+      ],
+      "right_ear_base": [
+        0.9298561151079137,
+        556
+      ],
+      "nose": [
+        0.963855421686747,
+        664
+      ],
+      "chin": [
+        0.9458544839255499,
+        591
+      ],
+      "left_ear_tip": [
+        0.8552338530066815,
+        449
+      ],
+      "right_ear_tip": [
+        0.8574660633484162,
+        442
+      ],
+      "left_eye": [
+        null,
+        0
+      ],
+      "right_eye": [
+        null,
+        0
+      ],
+      "withers": [
+        null,
+        0
+      ],
+      "throat": [
+        null,
+        0
+      ]
+    },
+    "visibility_average_precision": 0.923282546697845,
+    "gated_output": {
+      "gate_visible": 0.5,
+      "gate_peak": 0.2,
+      "reported_points": 9792,
+      "reported_that_are_labelled": 0.8358864379084967,
+      "reported_and_within_0.1": 0.7334558823529411,
+      "labelled_points_reported": 0.8924871878748228
+    },
+    "derived_features": {
+      "ear_tip_elevation": {
+        "n": 398,
+        "available_rate_where_gt_available": 0.9476190476190476,
+        "sign_agreement": 0.9346733668341709,
+        "spearman": 0.828640751150689,
+        "mae": 0.3768234002448077
+      },
+      "tail_elevation": {
+        "n": 164,
+        "available_rate_where_gt_available": 0.6666666666666666,
+        "sign_agreement": 0.8658536585365854,
+        "spearman": 0.8764980343612693,
+        "mae": 0.0995412775269179
+      },
+      "play_bow_candidate": {
+        "n": 27,
+        "available_rate_where_gt_available": 0.3333333333333333,
+        "gt_positive": 1,
+        "pred_positive": 1,
+        "agreement": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    }
+  },
+  "final_val": {
+    "instances": 1703,
+    "labelled_points": 23165,
+    "breeds": 109,
+    "pck@0.05": 0.6324627671055472,
+    "pck@0.05_ci95": {
+      "ci_low": 0.6180718843118113,
+      "ci_high": 0.6455988516031214,
+      "n_boot": 1000,
+      "n_groups": 109,
+      "unit": "group"
+    },
+    "pck@0.1": 0.8534858622922512,
+    "pck@0.1_ci95": {
+      "ci_low": 0.8432763502138833,
+      "ci_high": 0.8633433478526478,
+      "n_boot": 1000,
+      "n_groups": 109,
+      "unit": "group"
+    },
+    "pck@0.2": 0.9443125404705375,
+    "pck@0.2_ci95": {
+      "ci_low": 0.9380326370070345,
+      "ci_high": 0.9504621547132919,
+      "n_boot": 1000,
+      "n_groups": 109,
+      "unit": "group"
+    },
+    "per_keypoint_pck@0.1": {
+      "front_left_paw": [
+        0.8370672097759674,
+        1473
+      ],
+      "front_left_knee": [
+        0.8539703903095559,
+        1486
+      ],
+      "front_left_elbow": [
+        0.8653846153846154,
+        1404
+      ],
+      "rear_left_paw": [
+        0.7719869706840391,
+        921
+      ],
+      "rear_left_knee": [
+        0.7956989247311828,
+        837
+      ],
+      "rear_left_elbow": [
+        0.76775956284153,
+        732
+      ],
+      "front_right_paw": [
+        0.8291139240506329,
+        1422
+      ],
+      "front_right_knee": [
+        0.8588567395906845,
+        1417
+      ],
+      "front_right_elbow": [
+        0.8607498087222647,
+        1307
+      ],
+      "rear_right_paw": [
+        0.7687074829931972,
+        882
+      ],
+      "rear_right_knee": [
+        0.7945205479452054,
+        803
+      ],
+      "rear_right_elbow": [
+        0.7984962406015037,
+        665
+      ],
+      "tail_start": [
+        0.866225165562914,
+        755
+      ],
+      "tail_end": [
+        0.685069008782936,
+        797
+      ],
+      "left_ear_base": [
+        0.923972602739726,
+        1460
+      ],
+      "right_ear_base": [
+        0.9131371141421393,
+        1393
+      ],
+      "nose": [
+        0.9597355769230769,
+        1664
+      ],
+      "chin": [
+        0.9530112508272667,
+        1511
+      ],
+      "left_ear_tip": [
+        0.849290780141844,
+        1128
+      ],
+      "right_ear_tip": [
+        0.8402527075812274,
+        1108
+      ],
+      "left_eye": [
+        null,
+        0
+      ],
+      "right_eye": [
+        null,
+        0
+      ],
+      "withers": [
+        null,
+        0
+      ],
+      "throat": [
+        null,
+        0
+      ]
+    },
+    "visibility_average_precision": 0.9252346656113078,
+    "gated_output": {
+      "gate_visible": 0.5,
+      "gate_peak": 0.2,
+      "reported_points": 24668,
+      "reported_that_are_labelled": 0.8432787416896383,
+      "reported_and_within_0.1": 0.737757418517918,
+      "labelled_points_reported": 0.8979926613425426
+    },
+    "derived_features": {
+      "ear_tip_elevation": {
+        "n": 976,
+        "available_rate_where_gt_available": 0.9268755935422602,
+        "sign_agreement": 0.9323770491803278,
+        "spearman": 0.8420147890768896,
+        "mae": 0.43631684636586654
+      },
+      "tail_elevation": {
+        "n": 465,
+        "available_rate_where_gt_available": 0.7077625570776256,
+        "sign_agreement": 0.886021505376344,
+        "spearman": 0.8660049932091036,
+        "mae": 0.11417774523953099
+      },
+      "play_bow_candidate": {
+        "n": 70,
+        "available_rate_where_gt_available": 0.3211009174311927,
+        "gt_positive": 1,
+        "pred_positive": 0,
+        "agreement": 0.9857142857142858,
+        "recall": 0.0,
+        "precision": null
+      }
+    }
+  },
+  "end_to_end_val_with_detector": {
+    "images_with_one_dog": 1703,
+    "detector_found_iou50": 1479,
+    "detector": "efficientdet_lite0_mediapipe_v1",
+    "pck@0.1": 0.844408507301774,
+    "pck@0.2": 0.9328138782710967
+  },
+  "head_sha256": "814b0348575624f0a28d573064bbce5216c75d78f2a8f26fbad0b5eb16e5567a",
+  "terms": "Research-Only data; the trained head inherits that restriction.",
+  "created_at": "2026-10-09T08:03:52+00:00"
+}
