@@ -48,7 +48,7 @@ import numpy as np
 
 from ..config import Settings
 from ..data import openimages as OI
-from ..registry import check_model
+from ..registry import check_model, resource
 from ..utils import sha256_file, utc_now, write_json
 from ..vision import verifier as V
 from ..vision.detector import Detection, load_detector
@@ -209,7 +209,7 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
         if not r.ready:
             results[mid] = {"status": "unavailable", "reason": r.reason}
             continue
-        det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads)
+        det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads, decode=resource(mid).get("decode"))
         t0 = time.perf_counter()
         trows = _cache_rows(cache / f"{mid}{suffix}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir))
         erows = _cache_rows(cache / f"{mid}{suffix}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir))

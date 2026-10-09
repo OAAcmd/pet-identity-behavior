@@ -12,6 +12,7 @@ function jsInput(name: string): Typed[] {
   if (name === "detector_f16") return [normalize(syntheticImage(320), 127.5, 127.5)];
   if (name === "detector_int8") return [syntheticImage(320)];
   if (name === "backbone_int8") return [syntheticImage(224)];
+  if (name === "detector_tfhub_raw") return [syntheticImage(320)];
   throw new Error(name);
 }
 

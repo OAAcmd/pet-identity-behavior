@@ -9,3 +9,9 @@ approvals:
   #     reference: "ticket or memo id"
   #     date: "YYYY-MM-DD"
   #     scope: "weights Apache-2.0 (embedded metadata); COCO training-data question reviewed"
+  # efficientdet_lite0_tfhub_rawdecode_v1:   # same weights as above, post-processing decoded outside the graph (E14);
+  #   commercial:                            # this is the variant the phone can run
+  #     approved_by: "Name, role"
+  #     reference: "ticket or memo id"
+  #     date: "YYYY-MM-DD"
+  #     scope: "weights Apache-2.0 (embedded metadata); COCO training-data question reviewed"

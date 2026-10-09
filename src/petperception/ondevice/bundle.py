@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 
 from ..config import REPO_ROOT, Settings
-from ..registry import check_model, model_dir, release_decision
+from ..registry import check_model, model_dir, release_decision, resource
 from ..utils import sha256_file, utc_now
 from ..vision.tflite_io import dequantize
 from ..vision.tflite_meta import associated_files, input_normalization, mediapipe_detector_options
@@ -42,7 +42,8 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 ENGINE_ASSET_FORMAT = "0.2.0"  # 0.2: quantized model inputs/outputs (input_quant, output_quant)
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
-WEB_DETECTORS = ("efficientdet_lite0_mediapipe_v1", "efficientdet_lite0_mediapipe_int8_v1", "efficientdet_lite0_mediapipe_f16_v1")  # raw-anchor builds; browser parity measured
+WEB_DETECTORS = ("efficientdet_lite0_mediapipe_v1", "efficientdet_lite0_mediapipe_int8_v1", "efficientdet_lite0_mediapipe_f16_v1",
+                 "efficientdet_lite0_tfhub_rawdecode_v1")  # raw-anchor builds; browser parity measured
 
 
 def _b64(a: np.ndarray) -> str:
@@ -105,6 +106,21 @@ def _detector_assets(path: Path, settings: Settings, mid: str) -> dict:
     }
 
 
+def _detector_assets_from(d, settings: Settings, mid: str) -> dict:
+    """Assets for a detector object built in Python (e.g. the raw-decode TF Hub build)."""
+    dec = d.decoding
+    outs = d.interp.get_output_details()
+    return {
+        "model_id": mid, "input_hw": [d.in_h, d.in_w], "norm_mean": d.norm_mean, "norm_std": d.norm_std, **_quant_io(d.in_detail, outs),
+        "labels": d.labels, "output_order": ["scores" if o["shape"][-1] == dec.num_classes else "boxes" for o in outs],
+        "decoding": {"anchors_b64": _b64(dec.anchors), "num_boxes": dec.num_boxes, "num_classes": dec.num_classes,
+                     "x_scale": dec.x_scale, "y_scale": dec.y_scale, "w_scale": dec.w_scale, "h_scale": dec.h_scale,
+                     "apply_exponential_on_box_size": dec.apply_exponential_on_box_size, "sigmoid_score": dec.sigmoid_score},
+        "score_threshold": settings.vision.score_threshold, "nms_iou": settings.vision.nms_iou,
+        "max_detections_per_frame": settings.vision.max_detections_per_frame, "target_classes": settings.vision.target_classes,
+    }
+
+
 def export_bundle(settings: Settings, out: Path) -> dict:
     profile = settings.release_profile
     notes: list[str] = []
@@ -137,9 +153,19 @@ def export_bundle(settings: Settings, out: Path) -> dict:
                      "no detector in this bundle")
     elif allowed(det) and check_model(settings, det).ready:
         src = Path(next(iter(check_model(settings, det).files.values())))
-        shutil.copy(src, out / "models" / src.name)
-        add(f"models/{src.name}", "model", det)
-        assets["detector"] = {**_detector_assets(src, settings, det), "model_file": f"models/{src.name}"}
+        if resource(det).get("decode") == "strip_postprocess":
+            # In-graph post-processing removed; raw outputs decoded by the TypeScript detector.
+            from ..vision.detector import EfficientDetDetector
+
+            d = EfficientDetDetector.from_postprocessed(src, 1)
+            name = "efficientdet_lite0_rawdecode.tflite"
+            (out / "models" / name).write_bytes(d.model_bytes)
+            assets["detector"] = {**_detector_assets_from(d, settings, det), "model_file": f"models/{name}"}
+        else:
+            name = src.name
+            shutil.copy(src, out / "models" / name)
+            assets["detector"] = {**_detector_assets(src, settings, det), "model_file": f"models/{name}"}
+        add(f"models/{name}", "model", det)
     # Backbone (verifier classifier + posture/keypoint features)
     bb = settings.vision.verifier.classifier
     if "detector" in assets and allowed(bb) and check_model(settings, bb).ready:

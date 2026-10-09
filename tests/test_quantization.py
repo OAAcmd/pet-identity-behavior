@@ -67,3 +67,22 @@ def test_configuration_rejects_unknown_keys():
 
     with pytest.raises(ValidationError):
         load_settings(overrides={"vision": {"detecor": "typo"}})
+
+
+TFHUB = Path(__file__).resolve().parents[1] / "var/models/efficientdet_lite0_tfhub_v1/lite-model_efficientdet_lite0_detection_metadata_1.tflite"
+
+
+@pytest.mark.skipif(not TFHUB.exists(), reason="TF Hub detector not fetched (petperception fetch-models)")
+def test_stripped_postprocess_exposes_raw_float_outputs_and_anchor_table():
+    from ai_edge_litert.interpreter import Interpreter
+
+    from petperception.ondevice.tflite_patch import strip_detection_postprocess
+
+    data, anchors, opt = strip_detection_postprocess(TFHUB.read_bytes())
+    it = Interpreter(model_content=data)
+    it.allocate_tensors()
+    outs = sorted(tuple(int(v) for v in d["shape"]) for d in it.get_output_details())
+    assert outs == [(1, 19206, 4), (1, 19206, 90)]
+    assert all(d["dtype"] == np.float32 for d in it.get_output_details())
+    assert anchors.shape == (19206, 4) and opt["num_classes"] == 90
+    assert np.all(anchors[:, 2:] > 0) and np.all((anchors[:, :2] >= 0) & (anchors[:, :2] <= 1))

@@ -79,12 +79,14 @@ docker compose -f deploy/compose.yaml --env-file deploy/.env run --rm app releas
 
 Exit code 3 means a configured asset is not allowed; the engine and the
 bundle export already leave such assets out and the result says so.
-`commercial` additionally needs (a) legal sign-off recorded in an approvals
-file (`configs/release_approvals.example.yaml`) for assets marked
-`requires_legal_review`, and (b) a detector the browser runtime can execute
-with a confirmed licence: the licence-confirmed TF Hub build currently
-crashes LiteRT.js, so **a commercial bundle has no on-device detector today**
-(fix path in [ON_DEVICE.md](ON_DEVICE.md)).
+`commercial` additionally needs legal sign-off recorded in an approvals
+file (`configs/release_approvals.example.yaml`) for every asset marked
+`requires_legal_review`, and the detector must be
+`efficientdet_lite0_tfhub_rawdecode_v1` (Apache-2.0 in its embedded
+metadata; runs on phones with its post-processing decoded outside the graph,
+evaluated in E14): set `PETPERCEPTION_DETECTOR` and add `--detector
+efficientdet_lite0_tfhub_rawdecode_v1` to the bundle export. Without the
+approvals the commercial bundle contains no models and says why.
 
 ## On-device bundle
 

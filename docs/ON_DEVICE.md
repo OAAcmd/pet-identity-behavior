@@ -38,7 +38,8 @@ listed in [ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md#capabilities-that-still-requir
 | EfficientDet-Lite0 (MediaPipe int8 build) | runs; bit-exact |
 | EfficientDet-Lite0 (MediaPipe float16 build) | runs; max abs diff 3e-8 |
 | EfficientNet-Lite0 int8 backbone (int8 feature outputs exposed through appended DEQUANTIZE operators) | runs; bit-exact. Without the DEQUANTIZE ops LiteRT.js 2.5.3 refuses the model ("Element type INT8 is not supported") |
-| EfficientDet-Lite0 (TF Hub build, uint8, in-graph `TFLite_Detection_PostProcess`) | **crashes** LiteRT.js 2.5.3 ("memory access out of bounds"); not shipped. Fix path: strip the post-processing op and decode in TypeScript |
+| EfficientDet-Lite0 (TF Hub build, uint8, in-graph `TFLite_Detection_PostProcess`) | **crashes** LiteRT.js 2.5.3 ("memory access out of bounds") |
+| Same TF Hub build with the post-processing op removed (`efficientdet_lite0_tfhub_rawdecode_v1`, E14), raw outputs decoded in TypeScript | runs; bit-exact |
 
 Evidence: `results/ondevice/runtime_parity_*.json` (headless Chromium,
 single- and multi-threaded).

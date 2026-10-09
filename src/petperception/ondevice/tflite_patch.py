@@ -16,6 +16,8 @@ from __future__ import annotations
 
 import struct
 
+import numpy as np
+
 
 def _u32(b: bytes | bytearray, off: int) -> int:
     return struct.unpack_from("<I", b, off)[0]
@@ -113,3 +115,38 @@ def expose_outputs(model: bytes, tensor_indices: list[int]) -> bytes:
     b = flatbuffers.Builder(len(model) + 1024)
     b.Finish(m.Pack(b), file_identifier=b"TFL3")
     return bytes(b.Output())
+
+
+def strip_detection_postprocess(model: bytes) -> tuple[bytes, np.ndarray, dict]:
+    """Remove a final ``TFLite_Detection_PostProcess`` custom op so its raw float inputs
+    (box encodings ``[1, N, 4]`` and class scores ``[1, N, C]``) become the graph outputs.
+
+    LiteRT.js 2.5.3 crashes inside this custom op; decoding the raw tensors outside the
+    graph (same anchor decoding as the MediaPipe builds) avoids it. Returns the new model
+    bytes, the op's constant anchor table ``[N, 4]`` as stored (y_center, x_center, h, w)
+    and the op's options (scales, number of classes, NMS settings).
+    """
+    from ai_edge_litert import schema_py_generated as S
+    from flatbuffers import flexbuffers
+
+    m = S.ModelT.InitFromPackedBuf(model, 0)
+    if m.signatureDefs:
+        raise ValueError("models with SignatureDefs are not supported")
+    sg = m.subgraphs[0]
+    idx = [i for i, o in enumerate(sg.operators) if m.operatorCodes[o.opcodeIndex].customCode == b"TFLite_Detection_PostProcess"]
+    if len(idx) != 1 or idx[0] != len(sg.operators) - 1:
+        raise ValueError("expected exactly one TFLite_Detection_PostProcess as the last operator")
+    op = sg.operators[idx[0]]
+    boxes_t, scores_t, anchors_t = (int(v) for v in op.inputs)
+    for t in (boxes_t, scores_t, anchors_t):
+        if sg.tensors[t].type != S.TensorType.FLOAT32:
+            raise ValueError("post-processing inputs are not float32")
+    anchors = np.frombuffer(bytes(m.buffers[sg.tensors[anchors_t].buffer].data), dtype="<f4").reshape(-1, 4).copy()
+    options = dict(flexbuffers.Loads(bytes(op.customOptions)))
+    sg.operators.pop(idx[0])
+    sg.outputs = [boxes_t, scores_t]
+    import flatbuffers
+
+    b = flatbuffers.Builder(len(model) + 1024)
+    b.Finish(m.Pack(b), file_identifier=b"TFL3")
+    return bytes(b.Output()), anchors, options

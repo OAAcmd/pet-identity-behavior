@@ -18,7 +18,7 @@ from .context.zones import ZoneConfig, occupancy
 from .explain.templates import explain_hypothesis, suggestions_for
 from .fusion.engine import Ev, FusionContext, FusionEngine
 from .ingest import media as M
-from .registry import check_model, model_dir, model_terms_summary, release_decision
+from .registry import check_model, model_dir, model_terms_summary, release_decision, resource
 from .schemas import analysis as S
 from .utils import StageTimer, sha256_file, utc_now
 from .vision import behavior as BH
@@ -102,7 +102,7 @@ class AnalysisEngine:
             rd = release_decision(s.release_profile, mid)
             if r.ready and rd.allowed:
                 fname = next(iter(r.files.values()))
-                self.detector = load_detector(Path(fname), s.runtime.num_threads)
+                self.detector = load_detector(Path(fname), s.runtime.num_threads, decode=resource(s.vision.detector).get("decode"))
                 self.status["visual_detector"] = S.ComponentStatus(name="visual_detector", kind="visual_detector", state="ok", model_id=mid, version=mid)
             else:
                 self.status["visual_detector"] = S.ComponentStatus(name="visual_detector", kind="visual_detector", state="unavailable",

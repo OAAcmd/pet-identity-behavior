@@ -50,9 +50,9 @@
    "blocking": [
     "public host, domain, DNS, TLS",
     "release-profile decision and legal sign-off for assets marked requires_legal_review",
-    "commercial profile lacks a browser-compatible detector with confirmed weight licence",
     "behavioral validity",
-    "real-phone acceptance"
+    "real-phone acceptance",
+    "commercial profile: legal sign-off for every model (browser-compatible licence-confirmed detector available since E14)"
    ]
   }
  },
@@ -116,7 +116,8 @@
  "decisions": [
   "Default phone bundle uses float32 builds; int8 bundle (14.8 MB) is an evaluated opt-in because per-image verifier decisions diverge (E12).",
   "Dog keypoints and MammalNet-trained heads stay research-only (data terms).",
-  "Server analysis is opt-in; the default path never uploads media."
+  "Server analysis is opt-in; the default path never uploads media.",
+  "Commercial bundles must use efficientdet_lite0_tfhub_rawdecode_v1 (E14) once legal sign-off is recorded."
  ],
  "resources_needed": [
   "Physical phones (tier B iOS and Android at minimum) for the offline acceptance protocol",

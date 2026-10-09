@@ -13,7 +13,7 @@ readiness are not. Every open item names what blocks it.
 | **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 92 Python tests, 16 TypeScript unit tests, 16 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 34/34 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
 | **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E4, E7, E9-E13 ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md)); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
 | **C. On-device compatibility and performance** | the bundle runs offline on tier-B phones of both platforms within the budgets | **not met (pending)** | desktop headless Chromium only: device check passes, budgets measured there ([DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md)) | physical phones and testers ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) |
-| **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided with legal sign-off, operations in place, A-C met | **not met** | image builds in CI, compose stack, runbook, release gating implemented | host/domain/TLS, legal review of weights and data terms, A-C |
+| **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided with legal sign-off, operations in place, A-C met | **not met** | image builds in CI, compose stack (bundle step verified in the image), runbook, release gating implemented | host/domain/TLS, legal review of weights and data terms, A-C |
 
 The Phase 2 brief's dimensions map onto these: app-development readiness →
 A; algorithm completeness → B (plus the capability gaps in section 3);
@@ -87,7 +87,7 @@ what prevents the next status.
 | B2 | Server analysis with resumable chunked uploads, jobs, cancellation, retention | yes (opt-in) | backend tests, E2E | - | - |
 | B3 | Health, readiness (incl. bundle), structured logs without personal data | yes | backend tests | - | - |
 | W1 | Mobile PWA: capture (camera/microphone/file), on-device analysis, results timeline, history, settings, device check, accessibility | yes | E2E (3 viewports, axe checks) | no | real phones, Safari |
-| R1 | Licence-confirmed assets before production; release profiles enforced | yes | release-check in CI | - | legal sign-off for `requires_legal_review` items; commercial bundle lacks a browser-compatible licence-confirmed detector |
+| R1 | Licence-confirmed assets before production; release profiles enforced | yes | release-check in CI | - | legal sign-off for `requires_legal_review` items (a browser-compatible licence-confirmed detector now exists: E14) |
 | R2 | Locked dependencies, checksum-verified model retrieval | yes | CI (`uv sync --frozen`, `npm ci`, `fetch-models`) | - | - |
 | R3 | Database migrations | yes | backend tests | - | - |
 | R4 | CI | yes | green on every push | - | - |
@@ -103,9 +103,9 @@ what prevents the next status.
 4. No pet-pet interaction data; object relations not trained.
 5. No real-phone results.
 6. Result sync not implemented.
-7. Commercial profile: no browser-compatible detector with a confirmed
-   weight licence (TF Hub build needs its post-processing removed and
-   decoded in TypeScript).
+7. Commercial profile: every model still needs the recorded legal sign-off
+   (training-data terms); the technical blocker (no browser-compatible
+   licence-confirmed detector) is resolved by E14.
 
 ## 4. Asset release suitability (summary)
 
@@ -115,7 +115,7 @@ From `manifests/resources.json` (`petperception release-check` per profile):
 | --- | --- | --- | --- |
 | YAMNet | suitable | suitable | legal review |
 | EfficientDet-Lite0 MediaPipe builds (float32 / int8 / float16) | suitable | suitable | not permitted |
-| EfficientDet-Lite0 TF Hub build | suitable | suitable | legal review (does not run in the browser) |
+| EfficientDet-Lite0 TF Hub build (raw decoding runs in the browser, E14) | suitable | suitable | legal review |
 | EfficientNet-Lite0 (float32 / int8) | suitable | suitable | legal review |
 | Audio thresholds (ESC-50 derived) | suitable | suitable | not permitted |
 | Verifier, posture, interaction artifacts | suitable | suitable | suitable (backbone terms apply) |

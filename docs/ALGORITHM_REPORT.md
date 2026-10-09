@@ -501,6 +501,31 @@ validation + test once.
   **not evaluated**. Still images only: says nothing about the animal's
   response or about interaction over time.
 
+### E14 - Licence-confirmed detector on the phone - COMPLETED
+
+The TF Hub EfficientDet-Lite0 build states Apache-2.0 in its embedded
+metadata but crashes LiteRT.js 2.5.3 inside its `TFLite_Detection_PostProcess`
+op. Removing that op (its inputs are float box encodings, sigmoid class
+scores and a constant anchor table) and decoding outside the graph with the
+same decoder as the MediaPipe builds makes it run in the browser **bit-exact**
+against Python. The change in NMS (per class instead of class-agnostic
+top-25) changes detections, so E7 was re-run for this decoding (verifier
+refitted):
+
+| Final E4 split, with crop verifier | Cat recall | Cat specificity | Dog recall | Dog specificity | AP50 cat / dog |
+| --- | --- | --- | --- | --- | --- |
+| TF Hub, in-graph post-processing (E7) | 0.873 | 0.851 [0.75, 0.94] | 0.815 | 0.910 [0.85, 0.96] | 0.825 / 0.709 |
+| TF Hub, raw decoding (E14, runs on phones) | 0.885 | 0.660 [0.52, 0.79] | 0.866 | 0.919 [0.86, 0.97] | 0.833 / 0.748 |
+| MediaPipe float32 (default) | 0.906 | 0.702 [0.57, 0.83] | 0.872 | 0.865 [0.80, 0.92] | 0.847 / 0.758 |
+
+Engine parity with this detector in the bundle (34 cases): decisions 34/34,
+tracks 0.89, segments 0.925, hypotheses 0.96 - lower than the MediaPipe
+float32 bundle, as with the int8 builds (the TF Hub build is internally
+uint8-quantized). A commercial bundle can now technically include a
+detector with a primary-source weight licence; it still requires the
+recorded legal sign-off (COCO training-data question), as do YAMNet and the
+backbone.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

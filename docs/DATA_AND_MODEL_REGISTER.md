@@ -202,6 +202,7 @@ recorded by a person in a separate approvals file
 | `efficientdet_lite0_tfhub_v1` | licence-confirmed detector candidate (TF Lite Task Library build) | 4,563,519, `2e04c53b` | Apache-2.0 in the embedded ModelMetadata; COCO training-data question open | suitable / suitable / legal review |
 | `efficientdet_lite0_mediapipe_int8_v1` | int8 detector evaluated for phones (E12) | 4,602,795, `0720bf24` | as the float MediaPipe build: no primary-source weight licence (none embedded; checked) | suitable / suitable / not permitted |
 | `efficientdet_lite0_mediapipe_f16_v1` | float16-weight detector evaluated for phones (E12) | 7,254,339, `4b591000` | as above | suitable / suitable / not permitted |
+| `efficientdet_lite0_tfhub_rawdecode_v1` | the TF Hub build above with its `TFLite_Detection_PostProcess` op removed and raw outputs decoded outside the graph, so it runs in LiteRT.js (E14) | same file as `efficientdet_lite0_tfhub_v1` | Apache-2.0 in the embedded ModelMetadata; COCO training-data question open | suitable / suitable / legal review |
 | `efficientnet_lite0_mediapipe_int8_v1` | int8 backbone evaluated for phones (E12) | 5,434,517, `bc2ffe19` | Apache-2.0 in the embedded ModelMetadata | suitable / suitable / legal review |
 
 Interfaces of the quantized builds (verified by inspection): the int8 detector

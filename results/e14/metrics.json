@@ -1,0 +1,124 @@
+{
+  "experiment": "E14",
+  "title": "Licence-confirmed TF Hub detector with post-processing removed (runs in LiteRT.js)",
+  "protocol": [
+    "E14: a licence-confirmed detector that runs on the phone.",
+    "",
+    "The TF Hub EfficientDet-Lite0 build (Apache-2.0 stated in its embedded",
+    "metadata) cannot run in LiteRT.js 2.5.3 because of its in-graph",
+    "``TFLite_Detection_PostProcess`` op. E14 removes that op and decodes the raw",
+    "box encodings and class scores outside the graph with the op's own anchor",
+    "table - the same decoder the phone uses for the MediaPipe builds. NMS becomes",
+    "per class (as for the MediaPipe builds) instead of the op's class-agnostic",
+    "top-25, so detections change and everything downstream is re-evaluated with",
+    "the E7 protocol (tuning on the Open Images test split, final on the E4",
+    "validation subset, verifier refitted; crop feature set exported for",
+    "deployment). The in-graph variant's E7 numbers are reported alongside."
+  ],
+  "raw_decode": {
+    "detector_only@0.35": {
+      "cat": {
+        "ap50": 0.8430437564415879,
+        "box_recall": 0.8567567567567568,
+        "box_precision": 0.9057142857142857,
+        "image_recall": 0.8967551622418879,
+        "specificity_on_verified_negatives": 0.6170212765957447,
+        "specificity_ci95": [
+          0.47914402173913045,
+          0.7446912807676261
+        ]
+      },
+      "dog": {
+        "ap50": 0.7584002473623946,
+        "box_recall": 0.8129496402877698,
+        "box_precision": 0.8129496402877698,
+        "image_recall": 0.8892045454545454,
+        "specificity_on_verified_negatives": 0.6666666666666666,
+        "specificity_ci95": [
+          0.5726190476190476,
+          0.75
+        ]
+      }
+    },
+    "verifier[crop]": {
+      "cat": {
+        "ap50": 0.8332378361846358,
+        "box_recall": 0.845945945945946,
+        "box_precision": 0.9125364431486881,
+        "image_recall": 0.8849557522123894,
+        "specificity_on_verified_negatives": 0.6595744680851063,
+        "specificity_ci95": [
+          0.5208333333333334,
+          0.7906976744186046
+        ]
+      },
+      "dog": {
+        "ap50": 0.7480733863594016,
+        "box_recall": 0.7817745803357314,
+        "box_precision": 0.888283378746594,
+        "image_recall": 0.8664772727272727,
+        "specificity_on_verified_negatives": 0.918918918918919,
+        "specificity_ci95": [
+          0.8645706917475728,
+          0.965819209039548
+        ]
+      }
+    },
+    "tuning_selected": {
+      "cat": "crop+redetect",
+      "dog": "crop"
+    }
+  },
+  "in_graph_post_processing_e7": {
+    "detector_only@0.35": {
+      "cat": {
+        "ap50": 0.8385037090084532,
+        "box_recall": 0.8513513513513513,
+        "box_precision": 0.9183673469387755,
+        "image_recall": 0.8908554572271387,
+        "specificity_on_verified_negatives": 0.6808510638297872,
+        "specificity_ci95": [
+          0.5399259259259259,
+          0.8049484052532833
+        ]
+      },
+      "dog": {
+        "ap50": 0.71386130368818,
+        "box_recall": 0.7577937649880095,
+        "box_precision": 0.8404255319148937,
+        "image_recall": 0.8238636363636364,
+        "specificity_on_verified_negatives": 0.7477477477477478,
+        "specificity_ci95": [
+          0.6595202915681638,
+          0.8261078595317726
+        ]
+      }
+    },
+    "verifier[crop]": {
+      "cat": {
+        "ap50": 0.8254578786256451,
+        "box_recall": 0.8351351351351352,
+        "box_precision": 0.9420731707317073,
+        "image_recall": 0.8731563421828908,
+        "specificity_on_verified_negatives": 0.851063829787234,
+        "specificity_ci95": [
+          0.75,
+          0.9400294117647058
+        ]
+      },
+      "dog": {
+        "ap50": 0.7094651524934662,
+        "box_recall": 0.7386091127098321,
+        "box_precision": 0.9005847953216374,
+        "image_recall": 0.8153409090909091,
+        "specificity_on_verified_negatives": 0.9099099099099099,
+        "specificity_ci95": [
+          0.8521658615136876,
+          0.9626168224299065
+        ]
+      }
+    }
+  },
+  "verifier_params": "artifacts/verifier/verifier_efficientdet_lite0_tfhub_rawdecode_v1.json",
+  "created_at": "2026-10-09T09:39:05+00:00"
+}

@@ -68,6 +68,7 @@ CASES = {
     "detector_f16": lambda: [((synthetic_image(320).astype(np.float32) - 127.5) / 127.5)[None]],
     "detector_int8": lambda: [synthetic_image(320)[None]],
     "backbone_int8": lambda: [synthetic_image(224)[None]],
+    "detector_tfhub_raw": lambda: [synthetic_image(320)[None]],  # TF Hub build without in-graph post-processing (E14)
 }
 
 

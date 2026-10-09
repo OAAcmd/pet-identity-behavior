@@ -1,0 +1,69 @@
+{
+ "initMs": 420.75500000081956,
+ "accel": "wasm",
+ "threads": true,
+ "crossOriginIsolated": true,
+ "hardwareConcurrency": 4,
+ "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36",
+ "cases": {
+  "detector_tfhub_raw": {
+   "compileMs": 163.0149999987334,
+   "inputs": [
+    {
+     "name": "serving_default_images:0",
+     "shape": [
+      1,
+      320,
+      320,
+      3
+     ],
+     "dtype": "uint8"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tfl.dequantize",
+     "shape": [
+      1,
+      19206,
+      4
+     ],
+     "dtype": "float32"
+    },
+    {
+     "name": "Sigmoid1",
+     "shape": [
+      1,
+      19206,
+      90
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 49.669999999925494,
+   "minMs": 36.505000000819564,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 76824,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 1.7905420064926147,
+     "argmaxEqual": true
+    },
+    {
+     "ref": 1,
+     "matchedOutput": 1,
+     "elements": 1728540,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 0.109375,
+     "argmaxEqual": true
+    }
+   ]
+  }
+ }
+}

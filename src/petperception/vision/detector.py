@@ -22,7 +22,7 @@ import numpy as np
 
 from ..eval.metrics import iou_xyxy
 from .tflite_io import dequantize, encode_image
-from .tflite_meta import associated_files, input_normalization, mediapipe_detector_options
+from .tflite_meta import DetectorDecoding, associated_files, input_normalization, mediapipe_detector_options
 
 
 @dataclass
@@ -57,22 +57,51 @@ class EfficientDetDetector:
     name = "efficientdet_lite_mediapipe"
 
     def __init__(self, model_path: Path, num_threads: int = 2):
-        from ai_edge_litert.interpreter import Interpreter
-
         data = model_path.read_bytes()
-        self.model_path = model_path
-        self.decoding = mediapipe_detector_options(data)
         norm = input_normalization(data)
         if norm is None:
             raise RuntimeError("input NormalizationOptions missing from model metadata")
-        self.norm_mean, self.norm_std = float(norm[0][0]), float(norm[1][0])
         files = associated_files(data)
         if "labels.txt" not in files:
             raise RuntimeError("labels.txt missing from model metadata")
-        self.labels = [l.strip() for l in files["labels.txt"].decode().splitlines()]
+        self._setup(model_path, data, mediapipe_detector_options(data), [l.strip() for l in files["labels.txt"].decode().splitlines()], norm, num_threads)
+
+    @classmethod
+    def from_postprocessed(cls, model_path: Path, num_threads: int = 2) -> EfficientDetDetector:
+        """A detector with in-graph ``TFLite_Detection_PostProcess`` (TF Hub build), with that op
+        removed and its raw outputs decoded here - the same path the phone uses (LiteRT.js
+        cannot run the op). NMS is then per class like the MediaPipe builds, not the op's
+        class-agnostic top-25, so results differ from the in-graph variant (evaluated in E14)."""
+        from ..ondevice.tflite_patch import strip_detection_postprocess
+
+        src = model_path.read_bytes()
+        data, anchors, opt = strip_detection_postprocess(src)
+        norm = input_normalization(src)
+        if norm is None:
+            raise RuntimeError("input NormalizationOptions missing from model metadata")
+        files = associated_files(src)
+        lab = files.get("labelmap.txt") or files.get("labels.txt")
+        if lab is None:
+            raise RuntimeError("label map missing from model metadata")
+        dec = DetectorDecoding(anchors=anchors[:, [1, 0, 3, 2]].astype(np.float32),  # (y, x, h, w) -> (x, y, w, h)
+                               num_classes=int(opt["num_classes"]), num_boxes=int(anchors.shape[0]), num_coords=4,
+                               x_scale=float(opt["x_scale"]), y_scale=float(opt["y_scale"]), w_scale=float(opt["w_scale"]),
+                               h_scale=float(opt["h_scale"]), apply_exponential_on_box_size=True, sigmoid_score=False)
+        det = cls.__new__(cls)
+        det._setup(model_path, data, dec, [l.strip() for l in lab.decode().splitlines()], norm, num_threads)
+        det.model_bytes = data
+        return det
+
+    def _setup(self, model_path: Path, data: bytes, decoding, labels: list[str], norm, num_threads: int) -> None:
+        from ai_edge_litert.interpreter import Interpreter
+
+        self.model_path = model_path
+        self.decoding = decoding
+        self.norm_mean, self.norm_std = float(norm[0][0]), float(norm[1][0])
+        self.labels = labels
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            self.interp = Interpreter(model_path=str(model_path), num_threads=num_threads)
+            self.interp = Interpreter(model_content=data, num_threads=num_threads)
         self.interp.allocate_tensors()
         inp = self.interp.get_input_details()[0]
         self.in_detail = inp
@@ -200,8 +229,12 @@ class PostprocessedDetector:
         return out
 
 
-def load_detector(model_path: Path, num_threads: int = 2) -> EfficientDetDetector | PostprocessedDetector:
-    """Pick the decoder that matches the model's output layout."""
+def load_detector(model_path: Path, num_threads: int = 2, decode: str | None = None) -> EfficientDetDetector | PostprocessedDetector:
+    """Pick the decoder that matches the model's output layout. ``decode="strip_postprocess"``
+    (set per model in manifests/resources.json) removes in-graph post-processing and decodes
+    the raw tensors, as on the phone."""
+    if decode == "strip_postprocess":
+        return EfficientDetDetector.from_postprocessed(model_path, num_threads)
     from ai_edge_litert.interpreter import Interpreter
 
     with warnings.catch_warnings():
