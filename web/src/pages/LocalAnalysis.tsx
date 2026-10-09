@@ -3,6 +3,7 @@ import { ResultView, type FeedbackSink } from "../components/ResultView";
 import { ConfirmDialog, ErrorBanner, InfoBanner, Spinner } from "../components/ui";
 import { fmtDate } from "../lib/format";
 import { localAnalyses, localFeedback, type LocalAnalysis } from "../lib/localstore";
+import { deleteSynced, pushResult, syncEnabled, syncSoon } from "../lib/sync";
 import { navigate } from "../lib/router";
 import type { Feedback } from "../lib/types";
 import { useApp } from "../state";
@@ -14,7 +15,13 @@ export function LocalAnalysisPage({ id }: { id: string }) {
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
-    localAnalyses.get(id).then((x) => setA(x ?? null)).catch(setError);
+    localAnalyses.get(id).then((x) => {
+      setA(x ?? null);
+      // Opt-in backup: push a result that is not backed up yet (new, changed, or sent while offline).
+      if (x && !x.synced_at && syncEnabled() && navigator.onLine !== false) {
+        pushResult(x).then(() => localAnalyses.get(id)).then((y) => { if (y) setA(y); }).catch(() => undefined);
+      }
+    }).catch(setError);
   }, [id]);
 
   const mediaUrl = useMemo(() => (a?.media ? URL.createObjectURL(a.media) : null), [a?.media]);
@@ -28,6 +35,13 @@ export function LocalAnalysisPage({ id }: { id: string }) {
         target_id: body.target_id ?? null, verdict: body.verdict, actual_behavior: body.actual_behavior ?? null, note: body.note ?? "",
         consent_research_use: body.consent_research_use, created_at: new Date().toISOString() };
       await localFeedback.add(f);
+      const cur = await localAnalyses.get(id);
+      if (cur) {
+        const changed = { ...cur, synced_at: null };
+        await localAnalyses.put(changed);
+        setA((prev) => (prev ? { ...prev, synced_at: null } : prev));
+        syncSoon(changed, () => localAnalyses.get(id).then((y) => { if (y) setA(y); }));
+      }
     },
   }), [id]);
 
@@ -48,7 +62,7 @@ export function LocalAnalysisPage({ id }: { id: string }) {
     <section>
       <h1 tabIndex={-1}>{a.filename}</h1>
       <p class="muted">{fmtDate(new Date(a.createdAt).toISOString())}{place ? ` - ${place.name}` : ""}{a.subject_mode !== "unknown" ? ` - You said: ${petNames}` : ""}</p>
-      <InfoBanner tone="info">Analysed on this device. The recording and the result stay on this device{a.synced_at ? "; the result (not the recording) was synced to your account" : ""}.</InfoBanner>
+      <InfoBanner tone="info">Analysed on this device. The recording and the result stay on this device{a.synced_at ? "; the result (not the recording) is backed up to your account" : ""}.</InfoBanner>
       <ResultView feedback={sink} result={a.result} mediaUrl={mediaUrl} mediaKind={a.kind} />
       <div class="card">
         <h2>On this device</h2>
@@ -62,9 +76,17 @@ export function LocalAnalysisPage({ id }: { id: string }) {
           <button type="button" class="btn btn-danger" onClick={() => setConfirm(true)}>Delete analysis</button>
         </div>
       </div>
-      <ConfirmDialog open={confirm} title="Delete this analysis?" body="The result, the recording and your feedback on this device are deleted. This cannot be undone."
+      <ConfirmDialog open={confirm} title="Delete this analysis?"
+        body={a.synced_at ? "The result, the recording and your feedback on this device are deleted, and the backed-up copy of the result in your account too. This cannot be undone."
+          : "The result, the recording and your feedback on this device are deleted. This cannot be undone."}
         confirmLabel="Delete" onCancel={() => setConfirm(false)}
-        onConfirm={async () => { setConfirm(false); await localAnalyses.remove(a.id); toast("Deleted."); navigate("/history"); }} />
+        onConfirm={async () => {
+          setConfirm(false);
+          try {
+            if (a.synced_at) await deleteSynced(a.id);
+          } catch (e) { setError(e); return; } // keep the local copy if the backup could not be deleted
+          await localAnalyses.remove(a.id); toast("Deleted."); navigate("/history");
+        }} />
     </section>
   );
 }

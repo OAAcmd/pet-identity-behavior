@@ -8,9 +8,9 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 92,
+    "python_tests": 94,
     "typescript_unit_tests": 16,
-    "e2e_tests": 16,
+    "e2e_tests": 17,
     "ci": "green on every push",
     "model_parity_browser": "bit-exact or <= 3e-8 (float32, int8, float16 builds)",
     "engine_parity": {
@@ -20,7 +20,8 @@
      "sounds_f1": 1.0,
      "segments_f1": 0.969,
      "hypotheses_f1": 1.0
-    }
+    },
+    "phone_results_valid_against_server_schema": "34/34"
    },
    "open": [
     "Safari/WebKit never tested",
@@ -110,7 +111,9 @@
    "validation": "none on real data (E5 synthetic checks)"
   },
   "result_sync": {
-   "implemented": false
+   "implemented": true,
+   "opt_in": true,
+   "media": "never"
   }
  },
  "decisions": [

@@ -137,6 +137,19 @@ def _match_intervals(a: list[tuple[str, float, float]], b: list[tuple[str, float
     return hits, len(a) - hits, len(b) - hits, errs
 
 
+def _schema_errors(web: dict) -> int:
+    """1 if the phone engine's result does not validate against the (strict) server result schema."""
+    from pydantic import ValidationError
+
+    from ..schemas.analysis import AnalysisResult
+
+    try:
+        AnalysisResult.model_validate({k: v for k, v in web.items() if k != "wall_ms"})  # wall_ms: added by the test harness
+        return 0
+    except ValidationError:
+        return 1
+
+
 def compare(out: Path) -> dict:
     cases = json.loads((out / "cases.json").read_text())["cases"]
     rows = []
@@ -144,6 +157,7 @@ def compare(out: Path) -> dict:
     errs: dict[str, list[float]] = {k: [] for k in agg}
     decisions = 0
     compared = 0
+    schema_errors = 0
     posture = {"ref_frames": 0, "web_frames": 0, "matched": 0, "same_label": 0, "both_reported": 0, "both_reported_same": 0, "gate_flips": 0, "abs_score_diff": []}
     for c in cases:
         ref_p, web_p = out / "reference" / f"{c['name']}.json", out / "web" / f"{c['name']}.json"
@@ -157,6 +171,7 @@ def compare(out: Path) -> dict:
             rows.append({"name": c["name"], "web_error": web["error"]})
             continue
         compared += 1
+        schema_errors += _schema_errors(web)
         tol_t = 1.0 / 2.0 + 0.05  # one sampling interval at 2 fps
         tr = _match_intervals([(t["species"], t["first_seen_s"], t["last_seen_s"]) for t in _tracks(ref)],
                               [(t["species"], t["first_seen_s"], t["last_seen_s"]) for t in _tracks(web)], 2 * tol_t)
@@ -190,6 +205,7 @@ def compare(out: Path) -> dict:
                      "web_timings_ms": web.get("timings_ms"), "ref_timings_ms": {k: v for k, v in ref["timings_ms"].items() if not k.startswith("model_load")}})
     summary = {
         "cases_compared": compared, "decision_agreement": decisions / max(compared, 1),
+        "web_results_failing_result_schema": schema_errors,
         "agreement": {k: {"matched": v[0], "only_reference": v[1], "only_web": v[2],
                           "f1": 2 * v[0] / max(2 * v[0] + v[1] + v[2], 1),
                           "median_boundary_error_s": float(np.median(errs[k])) if errs[k] else None} for k, v in agg.items()},

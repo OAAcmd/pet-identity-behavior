@@ -5,6 +5,7 @@ from __future__ import annotations
 import hmac
 import io
 import json
+import re
 from typing import Any, Literal
 
 from fastapi import APIRouter, Depends, Query, Request, Response
@@ -119,6 +120,19 @@ class AnalysisIn(BaseModel):
 
 class DeviceReportIn(BaseModel):
     report: dict[str, Any]
+
+
+# Opt-in backup of on-device results (JSON only).
+SYNC_MAX_RESULTS = 2000
+SYNC_MAX_RESULT_BYTES = 3_000_000
+
+
+class SyncedResultIn(BaseModel):
+    filename: str = Field(min_length=1, max_length=200)
+    created_at: str = Field(min_length=1, max_length=40)
+    bundle_version: str | None = Field(None, max_length=64)
+    result: dict[str, Any]
+    feedback: list[dict[str, Any]] = Field(default_factory=list, max_length=200)
 
 
 class FeedbackIn(BaseModel):
@@ -398,6 +412,56 @@ def build_router(store: Store, engine_caps, readiness) -> APIRouter:
         rows = store.db.query("SELECT id, created_at, bundle_version, passed, user_agent FROM device_reports WHERE user_id = ? ORDER BY created_at DESC LIMIT 50",
                             (p.user_id,))
         return [dict(r) | {"passed": bool(r["passed"])} for r in rows]
+
+    @r.put("/synced-results/{local_id}", tags=["sync"])
+    def put_synced_result(local_id: str, body: SyncedResultIn, p: Principal = Depends(principal)) -> dict:
+        """Back up an on-device analysis result (opt-in). Result JSON and feedback only - the
+        recording never leaves the device. The result must validate against the result schema."""
+        from pydantic import ValidationError
+
+        from ..schemas.analysis import AnalysisResult
+
+        if not re.fullmatch(r"dev[0-9a-f]{24}", local_id):
+            raise ApiError(422, "invalid_id", "Unknown on-device analysis id format.")
+        try:
+            res = AnalysisResult.model_validate(body.result)
+        except ValidationError as exc:
+            raise ApiError(422, "invalid_result", "The result does not match the result schema.", None, {"errors": len(exc.errors())}) from None
+        if res.analysis_id != local_id:
+            raise ApiError(422, "id_mismatch", "The result belongs to a different analysis.")
+        blob, fb = res.model_dump_json(), json.dumps(body.feedback)
+        if len(blob) > SYNC_MAX_RESULT_BYTES or len(fb) > 100_000:
+            raise ApiError(413, "result_too_large", "This result is too large to back up.")
+        with store.db.tx(immediate=True) as c:
+            n = c.execute("SELECT count(*) FROM synced_results WHERE user_id = ? AND id != ?", (p.user_id, local_id)).fetchone()[0]
+            if n >= SYNC_MAX_RESULTS:
+                raise ApiError(507, "sync_quota_exceeded", f"At most {SYNC_MAX_RESULTS} results can be backed up.", "Delete old backed-up results first.")
+            c.execute("INSERT INTO synced_results (id, user_id, created_at, synced_at, filename, bundle_version, decision_state, result_json, feedback_json, bytes) "
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(user_id, id) DO UPDATE SET synced_at = excluded.synced_at, filename = excluded.filename, "
+                      "bundle_version = excluded.bundle_version, decision_state = excluded.decision_state, result_json = excluded.result_json, "
+                      "feedback_json = excluded.feedback_json, bytes = excluded.bytes",
+                      (local_id, p.user_id, body.created_at, now_iso(), body.filename, body.bundle_version, res.decision.state, blob, fb, len(blob) + len(fb)))
+        return {"id": local_id, "synced": True}
+
+    @r.get("/synced-results", tags=["sync"])
+    def list_synced_results(p: Principal = Depends(principal)) -> list[dict]:
+        rows = store.db.query("SELECT id, created_at, synced_at, filename, bundle_version, decision_state, bytes FROM synced_results "
+                              "WHERE user_id = ? ORDER BY created_at DESC", (p.user_id,))
+        return [dict(r) for r in rows]
+
+    @r.get("/synced-results/{local_id}", tags=["sync"])
+    def get_synced_result(local_id: str, p: Principal = Depends(principal)) -> dict:
+        row = store.db.one("SELECT * FROM synced_results WHERE user_id = ? AND id = ?", (p.user_id, local_id))
+        if row is None:
+            raise ApiError(404, "not_found", "No backed-up result with this id.")
+        return {"id": row["id"], "created_at": row["created_at"], "synced_at": row["synced_at"], "filename": row["filename"],
+                "bundle_version": row["bundle_version"], "result": json.loads(row["result_json"]), "feedback": json.loads(row["feedback_json"])}
+
+    @r.delete("/synced-results/{local_id}", tags=["sync"], status_code=204)
+    def delete_synced_result(local_id: str, p: Principal = Depends(principal)) -> Response:
+        if store.db.execute("DELETE FROM synced_results WHERE user_id = ? AND id = ?", (p.user_id, local_id)) == 0:
+            raise ApiError(404, "not_found", "No backed-up result with this id.")
+        return Response(status_code=204)
 
     @r.delete("/feedback/{feedback_id}", tags=["feedback"], status_code=204)
     def delete_feedback(feedback_id: str, p: Principal = Depends(principal)) -> Response:

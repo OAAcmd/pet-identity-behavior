@@ -119,9 +119,12 @@ bundle); background or delta updates.
 * The signed-in user's profile, pets and places are cached (no tokens) so the
   shell renders offline; edits need the network.
 * On-device results and feedback are stored in IndexedDB on the device
-  (`web/src/lib/localstore.ts`). They are not synced; deleting browser data
-  deletes them. Opt-in result sync (JSON only, no media) is planned and not
-  implemented.
+  (`web/src/lib/localstore.ts`). If the user turns on "Back up on-device
+  results" (off by default), each result and its feedback - never the
+  recording - is sent to `PUT /api/v1/synced-results/{id}`, where it must
+  validate against the result schema; "Restore backed-up results here"
+  copies them to a new or wiped device (without recordings). Deleting an
+  analysis deletes its backup too.
 
 ## Recording-to-result workflow on the phone
 

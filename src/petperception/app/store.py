@@ -558,9 +558,12 @@ class Store:
             full["feedback"] = self.list_feedback(user_id, a["id"])
             analyses.append(full)
         u = self.get_user(user_id)
+        synced = [{"id": r["id"], "created_at": r["created_at"], "synced_at": r["synced_at"], "filename": r["filename"],
+                   "result": json.loads(r["result_json"]), "feedback": json.loads(r["feedback_json"])}
+                  for r in self.db.query("SELECT * FROM synced_results WHERE user_id = ? ORDER BY created_at", (user_id,))]
         return {"format": "petperception.export/1", "exported_at": now_iso(), "user": {k: u[k] for k in ("username", "retain_media_days", "feedback_research_consent", "created_at")},
-                "pets": self.list_pets(user_id), "places": self.list_places(user_id), "analyses": analyses,
-                "note": "Recordings are not included; download retained recordings individually."}
+                "pets": self.list_pets(user_id), "places": self.list_places(user_id), "analyses": analyses, "on_device_results_backed_up": synced,
+                "note": "Recordings are not included; download retained recordings individually. On-device recordings never reach the server."}
 
     # ---------------------------------------------------------------- cleanup
     def cleanup(self) -> dict[str, int]:

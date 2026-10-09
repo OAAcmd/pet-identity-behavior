@@ -1,6 +1,7 @@
 {
  "cases_compared": 34,
  "decision_agreement": 1.0,
+ "web_results_failing_result_schema": 0,
  "agreement": {
   "tracks": {
    "matched": 34,
@@ -1641,7 +1642,7 @@
   "segments_s": 1.1
  },
  "note": "Desktop headless Chromium (LiteRT.js WASM) vs Python LiteRT; media decoded by the browser vs FFmpeg.",
- "created_at": "2026-10-09T09:26:32+00:00",
+ "created_at": "2026-10-09T09:51:45+00:00",
  "bundle": {
   "variant": "float32 detector + float32 backbone (default phone bundle), with person-pet interaction (E13)",
   "bundle_version": "042b0243f26217e6"

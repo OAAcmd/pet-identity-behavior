@@ -143,9 +143,10 @@ export function CapturePage() {
       const modalities: ("audio" | "video")[] = clip.kind === "audio" ? ["audio"] : clip.kind === "image" ? ["video"] : ["audio", "video"];
       const result = await engine.analyze(clip.blob, { name: clip.filename, zones: (place?.zones as never) ?? null, modalities, analysisId: id,
         progress: (stage, frac) => setLocalRun({ stage, frac }), shouldCancel: () => cancelLocal.current });
-      await localAnalyses.put({ id, userId: me.id, createdAt: Date.now(), filename: clip.filename, kind: clip.kind, subject_mode: subject,
+      const saved = { id, userId: me.id, createdAt: Date.now(), filename: clip.filename, kind: clip.kind, subject_mode: subject,
         pet_ids: subject === "unknown" ? [] : petIds, place_id: placeId || null, note, bundle_version: ondevice.status.installed.bundle_version,
-        result: result as unknown as AnalysisResult, media: clip.blob, synced_at: null });
+        result: result as unknown as AnalysisResult, media: clip.blob, synced_at: null };
+      await localAnalyses.put(saved); // the result page backs it up if the user turned that on (never the recording)
       navigate(`/local/${id}`);
     } catch (e) {
       if (e instanceof AnalysisCancelled) toast("Analysis cancelled.");

@@ -63,7 +63,7 @@ export function HistoryPage() {
           <li key={a.id} class="list-item">
             <a href={`#/local/${a.id}`}>
               <strong>{a.filename}</strong>
-              <span class="muted"> - {fmtDate(new Date(a.createdAt).toISOString())} - {a.result.decision.summary}</span>
+              <span class="muted"> - {fmtDate(new Date(a.createdAt).toISOString())}{a.synced_at ? " - backed up" : ""} - {a.result.decision.summary}</span>
             </a>
           </li>
         ))}

@@ -38,6 +38,7 @@ The phone engine (TypeScript) and the server engine (Python) produce the
 | `GET /analyses/{id}/media`, `DELETE /analyses/{id}/media` | retained media of a server analysis |
 | `GET/POST /analyses/{id}/feedback`, `DELETE /feedback/{id}` | user feedback on observations and hypotheses, with explicit research consent |
 | `GET/POST /device-reports` | device-check reports (JSON only, never media; size-limited) |
+| `PUT/GET/DELETE /synced-results/{id}`, `GET /synced-results` | opt-in backup of on-device results: result JSON (validated against the result schema, id must match) and feedback; never media; per-user limits |
 
 Outside `/api/v1`: `GET /ondevice/<path>` serves the checksummed on-device
 bundle (`manifest.json` → 503 `ondevice_bundle_missing` when not published;

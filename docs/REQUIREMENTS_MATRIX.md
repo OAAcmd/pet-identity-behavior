@@ -10,7 +10,7 @@ readiness are not. Every open item names what blocks it.
 
 | Dimension | What "accepted" requires | Status | Evidence | Blocking |
 | --- | --- | --- | --- | --- |
-| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 92 Python tests, 16 TypeScript unit tests, 16 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 34/34 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
+| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 94 Python tests, 16 TypeScript unit tests, 17 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 34/34 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
 | **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E4, E7, E9-E13 ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md)); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
 | **C. On-device compatibility and performance** | the bundle runs offline on tier-B phones of both platforms within the budgets | **not met (pending)** | desktop headless Chromium only: device check passes, budgets measured there ([DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md)) | physical phones and testers ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) |
 | **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided with legal sign-off, operations in place, A-C met | **not met** | image builds in CI, compose stack (bundle step verified in the image), runbook, release gating implemented | host/domain/TLS, legal review of weights and data terms, A-C |
@@ -40,7 +40,7 @@ what prevents the next status.
 | D8 | No silent capability reduction or server substitution | yes | components report state and reason in every result; release gating notes in the bundle | - | - |
 | D9 | Explanations without a remote language model | yes | template tests | - | - |
 | D10 | Native path if the PWA is insufficient | not needed so far | - | - | decided by real-phone budgets |
-| D11 | Opt-in sync of on-device results (no media) | **no** | - | - | not implemented; results stay on the device |
+| D11 | Opt-in sync of on-device results (no media) | yes (off by default) | backend tests (schema validation, isolation, CSRF, export, deletion); E2E (only JSON sent, restore on a wiped device, deletion removes the backup) | - | - |
 
 ### 2.2 Device engineering
 
@@ -102,7 +102,6 @@ what prevents the next status.
 3. Vocal context datasets blocked by network policy.
 4. No pet-pet interaction data; object relations not trained.
 5. No real-phone results.
-6. Result sync not implemented.
 7. Commercial profile: every model still needs the recorded legal sign-off
    (training-data terms); the technical blocker (no browser-compatible
    licence-confirmed detector) is resolved by E14.

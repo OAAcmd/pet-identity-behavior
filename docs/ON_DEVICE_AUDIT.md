@@ -40,7 +40,7 @@ passing in Chromium).
 | Explanations and suggestions | server and phone (templates) | yes | **yes** | rule-based templates | tests | done | Core explanations never need a remote language model. |
 | Model distribution | server publishes `/ondevice/` bundle (SHA-256 manifest) | yes | client verifies, caches, switches atomically | - | E2E install / offline test | done | Signed bundles (beyond HTTPS + SHA-256 manifest) not implemented. |
 | Accounts, pets, places | server; cached on device for offline use | yes | cached | - | backend tests, E2E | - | Pets/places created offline cannot be saved until online. |
-| Result sync | **not implemented**; results stay on the device | - | - | - | - | opt-in upload of result JSON (no media) | Planned; until then on-device results are not backed up. |
+| Result backup (sync) | opt-in, off by default: result JSON and feedback uploaded to the user's account; recordings never | yes (stores, validates against the result schema) | yes (Settings toggle, back up now, restore on another device) | - | backend tests; E2E asserts only JSON is sent and restore works | done | Restored results have no recording (by design). |
 | Server analysis (upload media) | optional path, **off by default**, explicit setting | yes | uploads only when enabled | - | backend and E2E tests | - | - |
 
 ## Capabilities that still require a remote service
@@ -50,6 +50,7 @@ passing in Chromium).
 * Creating the account and syncing pets/places edits (reads are cached).
 * Server analysis, only if the user turns it on.
 * Sending a device-check report (explicit button).
+* Backing up or restoring on-device results, only if the user turns backup on.
 
 Nothing in the default analysis path uploads media. The automated test
 `on-device analysis of an existing file uploads no media` asserts that no

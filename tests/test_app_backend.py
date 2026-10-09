@@ -445,3 +445,36 @@ def test_device_reports_and_ondevice_bundle_route(app_settings, tmp_path):
         assert r.status_code == 503 and r.json()["error"]["code"] == "ondevice_bundle_missing"
         rd = c.get("/api/v1/ready")
         assert rd.status_code == 503 and rd.json()["checks"]["ondevice_bundle"]["ok"] is False
+
+
+def test_opt_in_sync_of_on_device_results(app_settings):
+    app, _, _ = make(app_settings)
+    lid = "dev" + "ab" * 12
+    res = json.loads(minimal_result(lid).model_dump_json())
+    with TestClient(app) as c:
+        body = {"filename": "clip.webm", "created_at": "2026-10-09T10:00:00Z", "bundle_version": "b1", "result": res,
+                "feedback": [{"verdict": "agree", "target_type": "overall"}]}
+        assert c.put(f"/api/v1/synced-results/{lid}", json=body).status_code in (401, 403)
+        csrf = register(c, "alice")
+        h = {"X-CSRF-Token": csrf}
+        assert c.put(f"/api/v1/synced-results/{lid}", json=body).status_code == 403  # CSRF required
+        assert c.put(f"/api/v1/synced-results/{lid}", json=body, headers=h).json() == {"id": lid, "synced": True}
+        assert c.put(f"/api/v1/synced-results/{lid}", json=body, headers=h).status_code == 200  # idempotent upsert
+        rows = c.get("/api/v1/synced-results").json()
+        assert len(rows) == 1 and rows[0]["filename"] == "clip.webm" and rows[0]["decision_state"] == res["decision"]["state"]
+        got = c.get(f"/api/v1/synced-results/{lid}").json()
+        assert got["result"]["analysis_id"] == lid and got["feedback"][0]["verdict"] == "agree"
+        # Only schema-valid results for the same analysis; no foreign fields (e.g. smuggled media).
+        bad = {**body, "result": {**res, "media_b64": "AAAA"}}
+        assert c.put(f"/api/v1/synced-results/{lid}", json=bad, headers=h).json()["error"]["code"] == "invalid_result"
+        assert c.put(f"/api/v1/synced-results/dev{'cd' * 12}", json=body, headers=h).json()["error"]["code"] == "id_mismatch"
+        assert c.put("/api/v1/synced-results/dev..x", json=body, headers=h).json()["error"]["code"] == "invalid_id"
+        assert any(x["id"] == lid for x in c.get("/api/v1/export").json()["on_device_results_backed_up"])
+        c.post("/api/v1/auth/logout", headers=h)
+        if c.get("/api/v1/auth/status").json()["registration_open"]:
+            register(c, "bob")
+            assert c.get("/api/v1/synced-results").json() == [] and c.get(f"/api/v1/synced-results/{lid}").status_code == 404
+            c.post("/api/v1/auth/logout")
+        h = {"X-CSRF-Token": login(c, "alice")}
+        assert c.delete(f"/api/v1/synced-results/{lid}", headers=h).status_code == 204
+        assert c.get("/api/v1/synced-results").json() == []

@@ -58,12 +58,13 @@ passwords are not logged (tested).
 
 ## Data handling
 
-* On-device analyses never reach the server; their results live in the
-  browser (IndexedDB) of the phone. Deleting browser data deletes them.
+* On-device analyses never reach the server unless the user turns on result
+  backup; then the result JSON and feedback (never the recording) are stored
+  in `synced_results` and included in the user's export and deletion.
 * Server analysis (opt-in per user) uploads media; media are deleted after
   analysis unless the user chose to keep them (then at most
   `max_retain_media_days`). Users can export (`GET /api/v1/export`) and delete
   their account (`POST /api/v1/auth/delete-account`), which removes their
-  analyses, media, feedback and device reports.
+  analyses, media, feedback, backed-up on-device results and device reports.
 * Person detection used for interaction candidates runs on the analysing
   device; person boxes are not stored in results.

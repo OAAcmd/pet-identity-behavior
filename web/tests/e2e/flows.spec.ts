@@ -252,6 +252,46 @@ test("on-device analysis of an existing file uploads no media", async ({ page })
   await expect(page.getByRole("list", { name: "Analysed on this device" }).getByText("big_cat_clip.webm")).toBeVisible();
 });
 
+test("opt-in result backup sends result JSON only (never the recording) and restores on a wiped device", async ({ page }) => {
+  await signIn(page);
+  await installModels(page);
+  await page.getByLabel("Back up on-device results to my account (off by default)").check();
+  const sent: { url: string; method: string; bytes: number; type: string }[] = [];
+  page.on("request", (r) => {
+    if (/\/api\/v1\/(uploads|analyses|synced-results)/.test(r.url()) && r.method() !== "GET")
+      sent.push({ url: r.url(), method: r.method(), bytes: r.postDataBuffer()?.length ?? 0, type: r.headers()["content-type"] ?? "" });
+  });
+  await page.goto("/#/capture");
+  await page.getByRole("tab", { name: "Upload file" }).click();
+  await page.locator("#file").setInputFiles(path.join(FIX, "big_cat_clip.webm"));
+  await page.getByRole("button", { name: "Analyze on this device" }).click();
+  await expect(page).toHaveURL(/#\/local\/dev[a-f0-9]+/, { timeout: 120_000 });
+  const id = page.url().split("/local/")[1];
+  await expect(page.getByText(/is backed up to your account/)).toBeVisible({ timeout: 20_000 });
+  const clipBytes = fs.statSync(path.join(FIX, "big_cat_clip.webm")).size;
+  expect(sent.filter((r) => /uploads|analyses/.test(r.url)), "no media upload or server analysis").toEqual([]);
+  const puts = sent.filter((r) => r.url.endsWith(`/synced-results/${id}`) && r.method === "PUT");
+  expect(puts.length).toBeGreaterThan(0);
+  for (const r of puts) expect(r.type.startsWith("application/json") && r.bytes < clipBytes / 4, JSON.stringify(r)).toBe(true);
+  const backed = await (await page.request.get("/api/v1/synced-results")).json();
+  expect(backed.some((x: { id: string }) => x.id === id)).toBe(true);
+  // A wiped device (or a new phone) restores the results, without recordings.
+  await page.evaluate(() => new Promise<void>((res) => { const r = indexedDB.deleteDatabase("pet-observer-local"); r.onsuccess = r.onerror = r.onblocked = () => res(); }));
+  await page.goto("/#/settings");
+  await page.getByRole("button", { name: "Restore backed-up results here" }).click();
+  await expect(page.getByText(/Restored [1-9]\d* result\(s\) to this device/)).toBeVisible();
+  await page.goto(`/#/local/${id}`);
+  await expect(page.getByText(/The recording has been removed; the result remains/)).toBeVisible();
+  // Deleting the analysis deletes its backup too.
+  await page.getByRole("button", { name: "Delete analysis" }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
+  await expect(page).toHaveURL(/#\/history/);
+  const after = await (await page.request.get("/api/v1/synced-results")).json();
+  expect(after.some((x: { id: string }) => x.id === id)).toBe(false);
+  await page.goto("/#/settings");
+  await page.getByLabel("Back up on-device results to my account (off by default)").uncheck();
+});
+
 test("offline end-to-end: after installing models, analysis works with the network off (desktop Chromium)", async ({ page, context }) => {
   await signIn(page);
   await installModels(page);

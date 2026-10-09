@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { fmtBytes, fmtDate } from "../lib/format";
 import { localAnalyses } from "../lib/localstore";
 import { serverAnalysisEnabled, setServerAnalysis, useOnDevice, WARMUP } from "../lib/ondevice";
+import { listSynced, restoreMissing, setSyncEnabled, syncEnabled, syncPending } from "../lib/sync";
 import type { Me } from "../lib/types";
 import { offlineCache, useApp } from "../state";
 
@@ -38,6 +39,7 @@ export function SettingsPage() {
       <h1 tabIndex={-1}>Settings</h1>
       <ErrorBanner error={error} />
       <OnDeviceCard />
+      <BackupCard />
 
       <form class="card" onSubmit={(e) => { e.preventDefault(); void run(async () => setMe(await api.patch<Me>("/settings", { retain_media_days: Number(days), feedback_research_consent: consent })), "Settings saved."); }}>
         <h2>Privacy</h2>
@@ -92,6 +94,42 @@ export function SettingsPage() {
           offlineCache.clear(); setMe(null); }, "Account deleted."); }} />
       <p class="muted"><a href="#/about">About this app and its limits</a> - <a href="#/places">Places</a></p>
     </section>
+  );
+}
+
+function BackupCard() {
+  const { me, toast } = useApp();
+  const [on, setOn] = useState(syncEnabled());
+  const [count, setCount] = useState<number | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<unknown>(null);
+  const refresh = () => listSynced().then((r) => setCount(r.length), () => setCount(null));
+  useEffect(() => { if (navigator.onLine !== false) refresh(); }, []);
+  const act = async (fn: () => Promise<string>) => {
+    setBusy(true); setError(null);
+    try { toast(await fn()); await refresh(); } catch (e) { setError(e); } finally { setBusy(false); }
+  };
+  return (
+    <div class="card">
+      <h2>Back up results</h2>
+      <p>On-device results are stored only on this device unless you turn this on. Backups contain the analysis results and your feedback;
+        <strong> recordings are never uploaded</strong>.</p>
+      <label class="check">
+        <input type="checkbox" checked={on} onChange={() => {
+          const next = !on; setSyncEnabled(next); setOn(next);
+          if (next && me) void act(async () => `Backed up ${await syncPending(me.id)} result(s).`);
+        }} />
+        Back up on-device results to my account (off by default)
+      </label>
+      {count !== null && <p class="muted">{count} result(s) backed up in your account.</p>}
+      <ErrorBanner error={error} />
+      <div class="row wrap">
+        {on && me && <button type="button" class="btn btn-secondary" disabled={busy || navigator.onLine === false}
+          onClick={() => void act(async () => `Backed up ${await syncPending(me.id)} result(s).`)}>Back up now</button>}
+        {me && <button type="button" class="btn btn-secondary" disabled={busy || navigator.onLine === false}
+          onClick={() => void act(async () => `Restored ${await restoreMissing(me.id)} result(s) to this device (without recordings).`)}>Restore backed-up results here</button>}
+      </div>
+    </div>
   );
 }
 
