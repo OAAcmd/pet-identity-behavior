@@ -6,6 +6,7 @@ import logging
 import time
 import uuid
 from pathlib import Path
+from typing import Callable
 
 import numpy as np
 
@@ -39,6 +40,10 @@ STATIC_LIMITATIONS = [
     "(no verified animal pose model).",
     "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
 ]
+
+
+class AnalysisCancelled(Exception):
+    """Raised inside ``analyze`` when the caller requested cancellation."""
 
 
 class AnalysisEngine:
@@ -110,10 +115,26 @@ class AnalysisEngine:
 
     # -- analysis ------------------------------------------------------------
     def analyze(self, path: str | Path, zones: ZoneConfig | None = None, modalities: tuple[str, ...] = ("audio", "video"),
-                analysis_id: str | None = None, display_name: str | None = None) -> S.AnalysisResult:
+                analysis_id: str | None = None, display_name: str | None = None,
+                progress: Callable[[str, float], None] | None = None,
+                should_cancel: Callable[[], bool] | None = None) -> S.AnalysisResult:
+        """Analyze one media file.
+
+        ``progress(stage, fraction)`` is called with a monotonically increasing
+        fraction in [0, 1]; ``should_cancel()`` is polled between stages and per
+        sampled frame, and a True answer raises :class:`AnalysisCancelled`.
+        """
         s = self.settings
         timer = StageTimer()
         aid = analysis_id or str(uuid.uuid4())
+
+        def report(stage: str, frac: float) -> None:
+            if should_cancel is not None and should_cancel():
+                raise AnalysisCancelled(stage)
+            if progress is not None:
+                progress(stage, max(0.0, min(1.0, frac)))
+
+        report("probe", 0.0)
         with timer.stage("probe"):
             mp = M.probe(path, s.limits)
         with timer.stage("hash"):
@@ -152,6 +173,7 @@ class AnalysisEngine:
             audio_summary = S.AudioSummary(state=audio_state, rms_dbfs=track_audio.rms_dbfs, peak_dbfs=track_audio.peak_dbfs,
                                            silent_fraction=track_audio.silent_fraction, clipping_fraction=track_audio.clipping_fraction,
                                            effective_bandwidth_hz=(min(track_audio.sample_rate_hz, s.audio.analysis_sample_rate) / 2) if track_audio.sample_rate_hz else None)
+            report("audio", 0.10)
             if audio_state == "present" and self.audio_backend is not None:
                 with timer.stage("audio_inference"):
                     ws = self.audio_backend.score_track(track_audio, s.audio.yamnet.hop_s)
@@ -185,9 +207,12 @@ class AnalysisEngine:
             classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes))
             prev_gray, prev_t, prev_boxes = None, None, []
             detect_s = quality_s = 0.0
+            report("video", 0.30)
+            expected = max(1, min(s.limits.max_video_frames, int((mp.duration_s or 0.0) * s.vision.sample_fps) + 1))
             with timer.stage("video_decode_detect_track"):
                 for fr in M.iter_frames(mp, s.vision.sample_fps, s.vision.max_side, s.limits, frame_report):
                     n_frames += 1
+                    report("video", 0.30 + 0.60 * min(1.0, n_frames / expected))
                     tq = time.perf_counter()
                     fq, gray = frame_quality(fr.t_s, fr.rgb, s.vision.quality)
                     quality_s += time.perf_counter() - tq
@@ -380,6 +405,7 @@ class AnalysisEngine:
         fctx = FusionContext(audio_available=audio_state == "present" and self.audio_backend is not None, audio_state=audio_state, video_available=video_ok,
                              zones_configured=bool(zones and zones.zones), person_detection_enabled="person" in s.vision.context_object_classes,
                              n_tracks=len(tracks), gates=gates)
+        report("fusion", 0.95)
         with timer.stage("fusion"):
             hyps = self.fusion.evaluate(expanded, fctx)
             ev_index = {e.item.evidence_id: e.item for e in evidence}

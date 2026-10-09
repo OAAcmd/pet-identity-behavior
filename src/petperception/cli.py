@@ -223,7 +223,7 @@ def cmd_serve(args: argparse.Namespace) -> int:
 
     import uvicorn
 
-    from .serve.app import create_app
+    from .app.main import create_app
 
     s = _settings(args)
     host = args.host or s.serve.host
@@ -232,23 +232,112 @@ def cmd_serve(args: argparse.Namespace) -> int:
         loopback = ipaddress.ip_address(host).is_loopback
     except ValueError:
         loopback = host == "localhost"
-    if not loopback and not os.environ.get(s.serve.auth_token_env):
-        print(f"refusing to bind {host}: non-loopback binding requires ${s.serve.auth_token_env} (bearer token). "
-              "TLS/production auth are Phase 2 items.", file=sys.stderr)
+    if not loopback and not s.app.auth.cookie_secure:
+        print(f"refusing to bind {host}: non-loopback serving requires app.auth.cookie_secure=true and an HTTPS "
+              "reverse proxy in front (see docs/DEPLOYMENT.md).", file=sys.stderr)
         return 2
-    uvicorn.run(create_app(s), host=host, port=port, workers=1, log_level="info")
+    if args.workers is not None:
+        s.app.jobs.workers = args.workers
+    uvicorn.run(create_app(s), host=host, port=port, workers=1, log_config=None, proxy_headers=s.serve.trusted_proxy_hops > 0,
+                forwarded_allow_ips="*" if s.serve.trusted_proxy_hops > 0 else None)
+    return 0
+
+
+def _store(args: argparse.Namespace):
+    from .app.db import Database
+    from .app.store import Store
+
+    s = _settings(args)
+    db = Database(s.app.storage.resolve(s.app.storage.database_path))
+    db.migrate()
+    return s, db, Store(s, db)
+
+
+def cmd_worker(args: argparse.Namespace) -> int:
+    """Run job workers in a separate process (same database as the API)."""
+    import signal
+    import threading
+
+    from .app.logs import configure
+    from .app.main import _engine_factory
+    from .app.worker import JobRunner
+
+    s, db, store = _store(args)
+    configure(s.app.log_format, s.app.log_level)
+    runner = JobRunner(s, db, store, _engine_factory(s))
+    if args.once:
+        print(json.dumps({"processed": runner.run_pending()}))
+        return 0
+    stop = threading.Event()
+    signal.signal(signal.SIGTERM, lambda *_: stop.set())
+    signal.signal(signal.SIGINT, lambda *_: stop.set())
+    th = runner.start()
+    stop.wait()
+    runner.stop()
+    th.join(timeout=30)
+    return 0
+
+
+def cmd_db(args: argparse.Namespace) -> int:
+    s, db, _ = _store(args)
+    print(json.dumps({"database": str(db.path), "schema_version": db.schema_version()}))
+    return 0
+
+
+def cmd_user(args: argparse.Namespace) -> int:
+    import getpass
+
+    s, db, store = _store(args)
+    if args.action == "list":
+        print(json.dumps(store.list_users(), indent=2))
+        return 0
+    if not args.username:
+        print("--username is required", file=sys.stderr)
+        return 2
+    if args.action in ("create", "reset-password"):
+        pw = os.environ.get("PETPERCEPTION_NEW_PASSWORD") or getpass.getpass("New password: ")
+        if args.action == "create":
+            u = store.create_user(args.username, pw, is_admin=args.admin)
+            print(json.dumps({"created": u["username"], "is_admin": bool(u["is_admin"])}))
+        else:
+            r = db.one("SELECT id FROM users WHERE username = ?", (args.username,))
+            if r is None:
+                print("unknown user", file=sys.stderr)
+                return 1
+            store.set_password(r["id"], pw)
+            print(json.dumps({"password_reset": args.username, "sessions_revoked": True}))
+        return 0
+    if args.action in ("disable", "enable"):
+        store.set_disabled(args.username, args.action == "disable")
+        print(json.dumps({args.action + "d": args.username}))
+        return 0
+    return 2
+
+
+def cmd_cleanup(args: argparse.Namespace) -> int:
+    from .app.worker import JobRunner
+
+    s, db, store = _store(args)
+    recovered = JobRunner(s, db, store, lambda: None, worker_id="cleanup-cli").recover_expired()
+    print(json.dumps({"recovered_jobs": recovered, **store.cleanup()}))
     return 0
 
 
 def cmd_export_openapi(args: argparse.Namespace) -> int:
+    import tempfile
+
+    from .app.main import create_app
     from .schemas.analysis import AnalysisResult
-    from .serve.app import create_app
 
     s = _settings(args)
-    app = create_app(s, engine=object())  # schema generation does not need models
+    with tempfile.TemporaryDirectory() as td:
+        s.app.storage.database_path = str(Path(td) / "openapi.sqlite3")
+        s.app.storage.media_root = str(Path(td) / "media")
+        app = create_app(s, engine_factory=lambda: None, start_workers=False)  # schema generation needs no models
+        doc = app.openapi()
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(app.openapi(), indent=2) + "\n", encoding="utf-8")
+    out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
     Path(args.schema_out).write_text(json.dumps(AnalysisResult.model_json_schema(), indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"openapi": str(out), "analysis_result_schema": args.schema_out}))
     return 0
@@ -313,10 +402,24 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--out", help="write JSON result here (default: stdout)")
     an.add_argument("--report", help="write a Markdown report here")
     an.set_defaults(func=cmd_analyze)
-    sv = sub.add_parser("serve", help="run the HTTP API (loopback by default)")
+    sv = sub.add_parser("serve", help="run the web app + API (+ in-process workers); loopback by default")
     sv.add_argument("--host")
     sv.add_argument("--port", type=int)
+    sv.add_argument("--workers", type=int, help="in-process job workers (0 = use a separate `worker` process)")
     sv.set_defaults(func=cmd_serve)
+    wk = sub.add_parser("worker", help="run job workers as a separate process")
+    wk.add_argument("--once", action="store_true", help="process due jobs and exit")
+    wk.set_defaults(func=cmd_worker)
+    dbp = sub.add_parser("db", help="apply database migrations and print the schema version")
+    dbp.add_argument("action", choices=["migrate"])
+    dbp.set_defaults(func=cmd_db)
+    us = sub.add_parser("user", help="manage accounts (password via prompt or $PETPERCEPTION_NEW_PASSWORD)")
+    us.add_argument("action", choices=["create", "list", "disable", "enable", "reset-password"])
+    us.add_argument("--username")
+    us.add_argument("--admin", action="store_true")
+    us.set_defaults(func=cmd_user)
+    cl = sub.add_parser("cleanup", help="recover expired jobs, expire uploads/media/sessions, remove orphan files")
+    cl.set_defaults(func=cmd_cleanup)
     oa = sub.add_parser("export-openapi", help="write the OpenAPI document and the result JSON schema")
     oa.add_argument("--out", default=str(REPO_ROOT / "docs" / "openapi.json"))
     oa.add_argument("--schema-out", default=str(REPO_ROOT / "docs" / "analysis_result.schema.json"))

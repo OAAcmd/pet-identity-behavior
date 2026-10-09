@@ -82,11 +82,14 @@ def test_schema_forbids_extra_fields_and_fixes_version():
                                    "explanation": ""})
 
 
-def test_committed_openapi_and_schema_are_current():
+def test_committed_openapi_and_schema_are_current(tmp_path):
+    from petperception.app.main import create_app
     from petperception.config import load_settings
-    from petperception.serve.app import create_app
 
-    app = create_app(load_settings(), engine=object())
+    s = load_settings()
+    s.app.storage.database_path = str(tmp_path / "db.sqlite3")
+    s.app.storage.media_root = str(tmp_path / "media")
+    app = create_app(s, engine_factory=lambda: None, start_workers=False)
     committed = json.loads((REPO_ROOT / "docs" / "openapi.json").read_text())
     assert committed == json.loads(json.dumps(app.openapi())), "run: uv run petperception export-openapi"
     assert json.loads((REPO_ROOT / "docs" / "analysis_result.schema.json").read_text()) == AnalysisResult.model_json_schema()

@@ -6,6 +6,7 @@
 # A GPU/NPU delegate is not wired in: `runtime.accelerator` accepts only "cpu"
 # so that no untested path can be selected by accident. Use with:
 #   uv run petperception --config configs/accelerator.example.yaml analyze clip.mp4
+config_version: 2
 profile: cpu-large
 research_profile: true
 

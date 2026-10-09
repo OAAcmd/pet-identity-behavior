@@ -1,6 +1,9 @@
-# Bounded CPU profile (default). All paths are relative to the repository root
-# unless absolute; ${VAR:-default} values are expanded from the environment.
+# Bounded CPU profile for local development (default). All paths are relative
+# to the repository root unless absolute; ${VAR:-default} values are expanded
+# from the environment. See docs/CONFIGURATION.md.
+config_version: 2
 profile: cpu
+release_profile: ${PETPERCEPTION_RELEASE_PROFILE:-research}
 research_profile: true
 
 paths:
@@ -71,12 +74,39 @@ vlm:
   endpoint: null
 
 serve:
-  host: 127.0.0.1                # loopback by default; non-loopback requires a token
+  host: 127.0.0.1                # loopback by default
   port: 8000
-  auth_token_env: PETPERCEPTION_API_TOKEN
-  max_upload_bytes: 104857600    # 100 MiB
-  job_ttl_s: 3600
-  max_jobs: 32
+  static_dir: web/dist           # built PWA, served from the same origin
+
+app:
+  log_format: json
+  log_level: INFO
+  auth:
+    registration: first_user_only   # first account becomes admin; then admin-created accounts only
+    cookie_secure: false            # localhost development over http; production config sets true
+    session_ttl_hours: 336
+    session_idle_hours: 72
+    min_password_length: 10
+  jobs:
+    workers: 1
+    lease_s: 60
+    heartbeat_s: 10
+    max_attempts: 3
+    retry_backoff_s: 5
+    job_timeout_s: 900
+    max_active_per_user: 3
+    max_queued_total: 50
+  storage:
+    database_path: ${PETPERCEPTION_DB:-var/app/petperception.sqlite3}
+    media_root: ${PETPERCEPTION_MEDIA_ROOT:-var/app/media}
+    max_upload_bytes: 104857600     # 100 MiB
+    max_chunk_bytes: 8388608        # 8 MiB
+    max_open_uploads_per_user: 5
+    upload_expiry_hours: 24
+    user_quota_bytes: 2147483648    # 2 GiB retained media per user
+    max_retain_media_days: 30
+    min_free_disk_bytes: 536870912
+    cleanup_interval_s: 300
 
 runtime:
   num_threads: 2

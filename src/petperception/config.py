@@ -149,13 +149,62 @@ class VlmConfig(BaseModel):
 class ServeConfig(BaseModel):
     host: str = "127.0.0.1"
     port: int = 8000
-    auth_token_env: str = "PETPERCEPTION_API_TOKEN"
-    max_upload_bytes: int = 100 * 1024 * 1024
-    job_ttl_s: float = 3600.0
-    max_jobs: int = 32
     allowed_extensions: list[str] = Field(
-        default_factory=lambda: [".wav", ".flac", ".ogg", ".mp3", ".m4a", ".mp4", ".mov", ".mkv", ".webm", ".avi"]
+        default_factory=lambda: [".wav", ".flac", ".ogg", ".oga", ".opus", ".mp3", ".m4a", ".aac",
+                                 ".mp4", ".m4v", ".mov", ".mkv", ".webm", ".avi", ".jpg", ".jpeg", ".png"]
     )
+    # Static PWA build served from the same origin (no CORS needed).
+    static_dir: str = "web/dist"
+    # Extra Content-Security-Policy connect-src entries (none by default).
+    trusted_proxy_hops: int = 0
+
+
+class AuthConfig(BaseModel):
+    registration: Literal["first_user_only", "open", "closed"] = "first_user_only"
+    session_ttl_hours: float = 24.0 * 14
+    session_idle_hours: float = 24.0 * 3
+    cookie_name: str = "pp_session"
+    cookie_secure: bool = True  # set false only for plain-http localhost development
+    min_password_length: int = 10
+    login_max_failures: int = 5
+    login_window_s: float = 900.0
+
+
+class JobsConfig(BaseModel):
+    workers: int = 1
+    lease_s: float = 60.0
+    heartbeat_s: float = 10.0
+    max_attempts: int = 3
+    retry_backoff_s: float = 5.0
+    job_timeout_s: float = 900.0
+    poll_interval_s: float = 0.5
+    max_active_per_user: int = 3
+    max_queued_total: int = 50
+
+
+class StorageConfig(BaseModel):
+    database_path: str = "${PETPERCEPTION_DB:-var/app/petperception.sqlite3}"
+    media_root: str = "${PETPERCEPTION_MEDIA_ROOT:-var/app/media}"
+    max_upload_bytes: int = 100 * 1024 * 1024
+    max_chunk_bytes: int = 8 * 1024 * 1024
+    max_open_uploads_per_user: int = 5
+    upload_expiry_hours: float = 24.0
+    user_quota_bytes: int = 2 * 1024 * 1024 * 1024
+    max_retain_media_days: int = 30
+    min_free_disk_bytes: int = 512 * 1024 * 1024
+    cleanup_interval_s: float = 300.0
+
+    def resolve(self, value: str) -> Path:
+        p = Path(_expand_env(value)).expanduser()
+        return p if p.is_absolute() else (REPO_ROOT / p)
+
+
+class AppConfig(BaseModel):
+    auth: AuthConfig = Field(default_factory=AuthConfig)
+    jobs: JobsConfig = Field(default_factory=JobsConfig)
+    storage: StorageConfig = Field(default_factory=StorageConfig)
+    log_format: Literal["json", "text"] = "json"
+    log_level: str = "INFO"
 
 
 class RuntimeConfig(BaseModel):
@@ -163,8 +212,16 @@ class RuntimeConfig(BaseModel):
     accelerator: Literal["cpu"] = "cpu"
 
 
+SUPPORTED_CONFIG_VERSION = 2
+
+
 class Settings(BaseModel):
+    config_version: int = SUPPORTED_CONFIG_VERSION
     profile: str = "cpu"
+    # Release profile decides which assets may be loaded (see manifests/resources.json):
+    # "research" allows research-only assets; "personal_noncommercial" and
+    # "commercial" refuse assets whose terms do not permit that use.
+    release_profile: Literal["research", "personal_noncommercial", "commercial"] = "research"
     research_profile: bool = True
     paths: PathsConfig = Field(default_factory=PathsConfig)
     limits: LimitsConfig = Field(default_factory=LimitsConfig)
@@ -174,7 +231,15 @@ class Settings(BaseModel):
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)
+    app: AppConfig = Field(default_factory=AppConfig)
     runtime: RuntimeConfig = Field(default_factory=RuntimeConfig)
+
+    @field_validator("config_version")
+    @classmethod
+    def _supported_version(cls, v: int) -> int:
+        if v != SUPPORTED_CONFIG_VERSION:
+            raise ValueError(f"config_version {v} is not supported (expected {SUPPORTED_CONFIG_VERSION}); see docs/CONFIGURATION.md")
+        return v
 
     def config_hash(self) -> str:
         blob = json.dumps(self.model_dump(mode="json"), sort_keys=True).encode()
