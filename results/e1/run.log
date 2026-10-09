@@ -1,0 +1,21 @@
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+2026-10-09 03:06:48,187 petperception.e1 E1 inputs 200/2000 (8.0s)
+2026-10-09 03:06:56,184 petperception.e1 E1 inputs 400/2000 (16.0s)
+2026-10-09 03:07:03,732 petperception.e1 E1 inputs 600/2000 (23.5s)
+2026-10-09 03:07:11,001 petperception.e1 E1 inputs 800/2000 (30.8s)
+2026-10-09 03:07:17,932 petperception.e1 E1 inputs 1000/2000 (37.7s)
+2026-10-09 03:07:25,080 petperception.e1 E1 inputs 1200/2000 (44.9s)
+2026-10-09 03:07:32,518 petperception.e1 E1 inputs 1400/2000 (52.3s)
+2026-10-09 03:07:39,543 petperception.e1 E1 inputs 1600/2000 (59.4s)
+2026-10-09 03:07:46,830 petperception.e1 E1 inputs 1800/2000 (66.6s)
+2026-10-09 03:07:53,666 petperception.e1 E1 inputs 2000/2000 (73.5s)
+2026-10-09 03:08:14,023 petperception.e1 fold 1 done
+2026-10-09 03:08:28,419 petperception.e1 fold 2 done
+2026-10-09 03:08:47,387 petperception.e1 fold 3 done
+2026-10-09 03:09:05,931 petperception.e1 fold 4 done
+2026-10-09 03:09:26,319 petperception.e1 fold 5 done
+majority {'macro_f1': 0.327, 'balanced_accuracy': 0.333, 'macro_f1_mean': None}
+mfcc_logreg {'macro_f1': 0.617, 'balanced_accuracy': 0.734, 'macro_f1_mean': None}
+yamnet_tags_nested_threshold {'macro_f1': 0.895, 'balanced_accuracy': 0.906, 'macro_f1_mean': None}
+yamnet_embedding_logreg {'macro_f1': 0.956, 'balanced_accuracy': 0.982, 'macro_f1_mean': None}
+stratified_random {'macro_f1': None, 'balanced_accuracy': None, 'macro_f1_mean': 0.333}

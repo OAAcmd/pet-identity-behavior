@@ -1,0 +1,30 @@
+{
+  "schema": "petperception.zones/1",
+  "coordinate_space": "normalized_image",
+  "anchor": "bottom_center",
+  "zones": [
+    {
+      "zone_id": "rest_area",
+      "label": "owner-marked rest area (synthetic test zone)",
+      "semantic_tag": "rest_area",
+      "polygon": [
+        [
+          0.253593751875,
+          0.25125
+        ],
+        [
+          0.6760937593749999,
+          0.25125
+        ],
+        [
+          0.6760937593749999,
+          0.751875
+        ],
+        [
+          0.253593751875,
+          0.751875
+        ]
+      ]
+    }
+  ]
+}

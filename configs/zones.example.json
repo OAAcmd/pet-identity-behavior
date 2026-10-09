@@ -1,0 +1,25 @@
+{
+  "schema": "petperception.zones/1",
+  "coordinate_space": "normalized_image",
+  "anchor": "bottom_center",
+  "zones": [
+    {
+      "zone_id": "bowl",
+      "label": "Food bowl corner",
+      "semantic_tag": "food_area",
+      "polygon": [[0.05, 0.60], [0.35, 0.60], [0.35, 1.00], [0.05, 1.00]]
+    },
+    {
+      "zone_id": "front_door",
+      "label": "Front door",
+      "semantic_tag": "exit_door",
+      "polygon": [[0.75, 0.20], [1.00, 0.20], [1.00, 1.00], [0.75, 1.00]]
+    },
+    {
+      "zone_id": "bed",
+      "label": "Pet bed",
+      "semantic_tag": "rest_area",
+      "polygon": [[0.40, 0.70], [0.65, 0.70], [0.65, 0.95], [0.40, 0.95]]
+    }
+  ]
+}

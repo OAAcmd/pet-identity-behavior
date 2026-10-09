@@ -1,0 +1,104 @@
+{
+  "schema": "petperception.phase1_acceptance/1",
+  "date": "2026-10-09",
+  "branch": "claude/dreamy-davinci-49d6ng",
+  "engineering_ready": {
+    "status": true,
+    "verified": {
+      "installation": {"status": true, "evidence": "uv.lock (Python 3.12.3) + requirements.lock.txt; `uv run petperception doctor` exit 0; Docker image built and run"},
+      "real_audio_path": {"status": true, "evidence": "YAMNet TFLite on real ESC-50 audio (E1, integration test test_real_yamnet_detects_esc50_cat_and_ignores_silence)"},
+      "real_visual_path": {"status": true, "evidence": "EfficientDet-Lite0 on 823 real Open Images photos (E4); tracker/camera-motion on scenario videos (E5)"},
+      "unified_cli_api": {"status": true, "evidence": "CLI analyze and API /v1/analyses use the same AnalysisEngine and schema 1.0.0; tests/test_api.py full lifecycle with the real engine; Docker API round-trip"},
+      "artifact_availability": {"status": true, "evidence": "model files fetchable with pinned SHA-256 (fetch-models); fitted thresholds committed in artifacts/ with terms"},
+      "regression_tests": {"status": true, "evidence": "54 passed: split leakage, timestamp alignment, corrupt/silent/no-audio inputs, no-pet input, multi-pet attribution, unsupported pose features, missing models, schema validation, invalid uploads, deterministic deletion, uncertainty behaviour"}
+    },
+    "test_counts": {"total": 54, "synthetic_only": 42, "integration_only": 5, "synthetic_and_integration": 2, "manifest_schema_contract": 5},
+    "notes": "Synthetic/mocked tests are marked and do not substitute for the real E1/E4 runs."
+  },
+  "dataset_benchmarks": {
+    "E1_audio_events": {
+      "status": "completed",
+      "dataset": "ESC-50 @33c8ce9e, 2000 clips (40 cat, 40 dog, 1920 other), checksums verified",
+      "protocol": "5 official source-preserving folds; inner leave-one-fold-out; nested F1-optimal thresholds; bootstrap over 1524 Freesound sources",
+      "results_macro_f1": {
+        "majority": 0.327,
+        "stratified_random_mean": 0.333,
+        "mfcc_logreg": {"value": 0.617, "ci95": [0.551, 0.677]},
+        "yamnet_tags_nested_threshold": {"value": 0.895, "ci95": [0.846, 0.935], "cat_f1": 0.790, "dog_f1": 0.902},
+        "yamnet_embedding_logreg_optional": {"value": 0.956, "ci95": [0.920, 0.982]}
+      },
+      "limitations": ["clip-level only", "not household audio", "4 non-pet sources span two folds", "AudioSet/Freesound overlap unaudited"],
+      "files": "results/e1/"
+    },
+    "E2_cat_recording_context": {
+      "status": "blocked",
+      "reason": "CatMeows unreachable: zenodo.org denied by the workspace egress policy",
+      "implemented": "Zenodo MD5-verified fetch, filename parser, leave-one-cat-out + leave-one-owner-out, inner grouped C, cat bootstrap, leakage diagnostic",
+      "results": null,
+      "files": "results/e2/status.json"
+    },
+    "E3_dog_activity_context": {
+      "status": "pending",
+      "reason": "Barkopedia unreachable (huggingface.co denied) and media provenance/grouping unaudited",
+      "identity_disjoint_evaluation_possible": "unknown",
+      "cross_dog_claims": "declined",
+      "results": null,
+      "files": "results/e3/status.json"
+    },
+    "E4_visual_detection": {
+      "status": "completed",
+      "dataset": "Open Images V7 validation subset, 823 images, human-verified labels",
+      "protocol": "per-class verified images only; depiction/group-of ignored; AP@0.5; operating threshold 0.35 fixed a priori; author bootstrap",
+      "results": {
+        "efficientdet_lite0": {"cat_ap50": 0.923, "cat_ap50_ci95": [0.897, 0.947], "dog_ap50": 0.842, "dog_ap50_ci95": [0.789, 0.886],
+                               "cat_p_r_at_0.35": [0.918, 0.876], "dog_p_r_at_0.35": [0.783, 0.820],
+                               "specificity_verified_negatives": {"cat": 0.617, "dog": 0.559}, "ms_per_image": 28},
+        "efficientdet_lite2_optional": {"cat_ap50": 0.938, "dog_ap50": 0.849, "ms_per_image": 69}
+      },
+      "tracking_metrics": "not_evaluated (no labelled cat/dog tracking video reachable)",
+      "pose_metrics": "not_evaluated (no verified animal pose model or set)",
+      "files": "results/e4/"
+    },
+    "E5_fusion": {
+      "status": "behavior_checks_completed",
+      "scenarios": 14,
+      "pass_counts": {"rule_baseline": "14/14", "weighted_average": "14/14", "product_of_experts": "14/14"},
+      "synthetic_pairing": true,
+      "multimodal_accuracy": "not_evaluated",
+      "files": "results/e5/"
+    },
+    "E6_runtime": {
+      "status": "completed",
+      "hardware": "4 vCPU Intel Xeon 2.10 GHz, 15.7 GB RAM, no GPU",
+      "cold_start_s": {"imports": 1.33, "model_load": 0.60},
+      "warm_wall_s": {"video_8s_640x480_audio": 0.95, "video_64s_640x480_audio": 5.36, "audio_only_5s": 0.22, "still_image": 0.14},
+      "peak_rss_mb": 271,
+      "files": "results/e6/"
+    }
+  },
+  "household_intent_validation": "not_evaluated",
+  "phase2_ready": {
+    "status": true,
+    "justification": "The service is usable (CLI, API, Docker), the result contract is versioned (1.0.0) with OpenAPI and JSON Schema, and every limitation (experimental fusion, uncalibrated scores, unavailable pose, blocked datasets, quality flags, abstention reasons) is exposed in the output for an observation-first research PWA. Lack of household intent validation does not block an honest observation-first PWA.",
+    "conditions_for_phase2": [
+      "PWA must present observations first and label hypotheses as experimental/uncalibrated",
+      "add TLS and production authentication before any non-local deployment",
+      "do not display scores as percentages or confidences"
+    ]
+  },
+  "blocked_or_optional_items": [
+    {"item": "CatMeows dataset (E2)", "dependency": "network access to zenodo.org", "effect": "no cat recording-context results; no grouped cat evaluation",
+     "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate --experiment e2"},
+    {"item": "Barkopedia dataset (E3)", "dependency": "network access to huggingface.co + manual provenance/grouping review", "effect": "no dog activity/context evaluation; no cross-dog claims",
+     "next_command": "uv run petperception fetch-data barkopedia --audit-only  # then complete var/data/barkopedia/audit_review.json"},
+    {"item": "AST audio-event candidate", "dependency": "network access to huggingface.co; model card/preprocessing verification; optional torch+transformers extra", "effect": "YAMNet used instead; AST comparison absent",
+     "next_command": "allow huggingface.co, verify card and revision, then implement an adapter behind the AudioEventBackend interface"},
+    {"item": "Animal pose (ear/tail/play-bow features)", "dependency": "a verified cat/dog keypoint checkpoint with documented terms (Ultralytics dog-pose blocked)", "effect": "pose features always unavailable",
+     "next_command": "allow docs.ultralytics.com and github release assets, audit terms, train/fetch a dog-pose model, implement a PoseProvider"},
+    {"item": "Tracking accuracy", "dependency": "labelled cat/dog video tracking ground truth with clear terms", "effect": "tracker validated functionally only", "next_command": "n/a (dataset to be identified)"},
+    {"item": "Household paired validation", "dependency": "owner-collected, consented, labelled recordings", "effect": "hypothesis accuracy and calibration not_evaluated; fusion weights unfitted", "next_command": "collect data per a Phase 2/3 protocol; then fit/calibrate on development partitions only"},
+    {"item": "MediaPipe weight terms (primary source)", "dependency": "access to ai.google.dev model pages", "effect": "research profile only; no commercial use assumed", "next_command": "re-verify https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector and audio_classifier pages"},
+    {"item": "Accelerator profile", "dependency": "GPU/NPU hardware", "effect": "configs/accelerator.example.yaml is a larger-CPU profile; no accelerator path tested", "next_command": "n/a in this workspace"},
+    {"item": "Optional local VLM adapter", "dependency": "owner-configured loopback endpoint", "effect": "not implemented; disabled by default", "next_command": "n/a (optional)"}
+  ]
+}

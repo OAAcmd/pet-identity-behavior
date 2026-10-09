@@ -1,0 +1,368 @@
+{
+  "schema_version": "1.0.0",
+  "analysis_id": "e5-s12_meow_8khz-rule_baseline",
+  "created_at": "2026-10-09T03:44:26.665306Z",
+  "engine_version": "0.1.0",
+  "config_profile": "cpu",
+  "config_hash": "4fe67d6ca51b053e",
+  "media": {
+    "analysis_filename": "s12_meow_8khz.wav",
+    "size_bytes": 80078,
+    "sha256": "aeef0782a7c381537c347ff4d5ca25c31877164b42cb46680d4ebacdab730715",
+    "container": "wav",
+    "duration_s": 5.0,
+    "start_time_s": 0.0,
+    "audio": {
+      "codec": "pcm_s16le",
+      "sample_rate_hz": 8000,
+      "channels": 1,
+      "first_sample_time_s": 0.0,
+      "decoded_duration_s": 5.0
+    },
+    "video": null,
+    "timeline": "container_pts_seconds"
+  },
+  "modalities": {
+    "requested": [
+      "audio",
+      "video"
+    ],
+    "available": [
+      "audio"
+    ],
+    "audio_state": "present",
+    "video_state": "absent"
+  },
+  "components": [
+    {
+      "name": "audio_event",
+      "kind": "audio_event",
+      "state": "ok",
+      "model_id": "yamnet_mediapipe_v1",
+      "version": "yamnet-mediapipe-v1",
+      "reason": null
+    },
+    {
+      "name": "visual_detector",
+      "kind": "visual_detector",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "efficientdet_lite0_mediapipe_v1",
+      "reason": null
+    },
+    {
+      "name": "iou_tracker",
+      "kind": "tracker",
+      "state": "ok",
+      "model_id": null,
+      "version": "iou-hungarian-v1",
+      "reason": null
+    },
+    {
+      "name": "pose",
+      "kind": "pose",
+      "state": "unavailable",
+      "model_id": null,
+      "version": null,
+      "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+    },
+    {
+      "name": "fusion",
+      "kind": "fusion",
+      "state": "ok",
+      "model_id": null,
+      "version": "rules-v1+ontology-v1",
+      "reason": "experimental; not validated on paired data"
+    },
+    {
+      "name": "vlm",
+      "kind": "vlm",
+      "state": "disabled",
+      "model_id": null,
+      "version": null,
+      "reason": "optional local VLM adapter is disabled by default (Phase 1)"
+    }
+  ],
+  "observations": {
+    "animal_tracks": [],
+    "sound_events": [
+      {
+        "event_id": "snd-1",
+        "label": "cat_vocalization",
+        "t_start_s": 0.0,
+        "t_end_s": 3.855,
+        "peak_raw_score": 0.98046875,
+        "mean_raw_score": 0.8900669813156128,
+        "threshold": 0.73828125,
+        "threshold_source": "audio_event_thresholds.json: F1-optimal threshold on raw YAMNet group scores (max over 0.975 s windows) over all 5 ESC-50 folds; generalization estimate = nested E1 result",
+        "score_kind": "yamnet_sigmoid_raw",
+        "calibration_status": "uncalibrated",
+        "calibrated_probability": null,
+        "subtypes": {
+          "meow": 0.8515625
+        },
+        "top_audioset_labels": [
+          [
+            "Animal",
+            0.98828125
+          ],
+          [
+            "Domestic animals, pets",
+            0.984375
+          ],
+          [
+            "Cat",
+            0.98046875
+          ],
+          [
+            "Meow",
+            0.8515625
+          ],
+          [
+            "Caterwaul",
+            0.1484375
+          ]
+        ],
+        "attribution": {
+          "status": "video_unavailable",
+          "candidate_track_ids": [],
+          "method": "none_evaluated",
+          "note": "no usable video to relate the sound to a visible animal"
+        },
+        "evidence_id": "ev-snd-1"
+      }
+    ],
+    "context_sounds": [],
+    "audio_summary": {
+      "state": "present",
+      "rms_dbfs": -29.864210845982328,
+      "peak_dbfs": -12.430437088012695,
+      "silent_fraction": 0.0,
+      "clipping_fraction": 0.0,
+      "effective_bandwidth_hz": 4000.0,
+      "windows_scored": 10
+    },
+    "evidence": [
+      {
+        "evidence_id": "ev-snd-1",
+        "kind": "sound_event",
+        "t_start_s": 0.0,
+        "t_end_s": 3.855,
+        "summary": "cat vocalization sound 0.00-3.85s (peak raw score 0.98; meow 0.85)",
+        "track_id": null,
+        "value": 0.98046875,
+        "value_kind": "yamnet_sigmoid_raw",
+        "reliability": "medium",
+        "provenance": {
+          "component": "audio_event",
+          "model_id": "yamnet_mediapipe_v1",
+          "root": "audio:yamnet",
+          "method": "YAMNet tags, ontology group max, thresholded"
+        }
+      }
+    ],
+    "sampled_frames": 0,
+    "sample_fps": null
+  },
+  "quality_flags": [
+    {
+      "code": "bandwidth_limited_audio",
+      "severity": "warning",
+      "t_start_s": null,
+      "t_end_s": null,
+      "detail": "8000 Hz input: no content above 4000 Hz; resampling does not restore it",
+      "track_id": null
+    },
+    {
+      "code": "audio_end_padded",
+      "severity": "info",
+      "t_start_s": null,
+      "t_end_s": null,
+      "detail": "final analysis window zero-padded",
+      "track_id": null
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "hyp-1",
+      "name": "food",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 0.0,
+      "t_end_s": 3.855,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.605,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "missing_modality_video"
+      ],
+      "explanation": "Insufficient evidence 'food' (need). Supporting observations: cat vocalization sound 0.00-3.85s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no usable video was available. Score 0.60 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    },
+    {
+      "hypothesis_id": "hyp-2",
+      "name": "outside",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 0.0,
+      "t_end_s": 3.855,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.605,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "missing_modality_video"
+      ],
+      "explanation": "Insufficient evidence 'outside' (need). Supporting observations: cat vocalization sound 0.00-3.85s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no usable video was available. Score 0.60 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    },
+    {
+      "hypothesis_id": "hyp-3",
+      "name": "attention",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 0.0,
+      "t_end_s": 3.855,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.57,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "missing_modality_video",
+        "person_detection_disabled"
+      ],
+      "explanation": "Insufficient evidence 'attention' (need). Supporting observations: cat vocalization sound 0.00-3.85s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no usable video was available; person detection is disabled. Score 0.57 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    }
+  ],
+  "decision": {
+    "state": "supported_observation",
+    "overall_interpretation": "insufficient_evidence",
+    "reason_codes": [
+      "missing_modality_video"
+    ],
+    "summary": "Observations only: 0 animal track(s), 1 pet sound event(s). Candidate interpretations lacked sufficient independent evidence."
+  },
+  "suggestions": [
+    {
+      "suggestion_id": "sug-1",
+      "text": "The audio has a low sample rate, so high-frequency sound content is missing and sound tagging is less reliable.",
+      "based_on_evidence_ids": [],
+      "kind": "data_quality"
+    }
+  ],
+  "limitations": [
+    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
+    "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
+    "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
+    "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable (no verified animal pose model).",
+    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
+    "Low-sample-rate audio: frequency content above the Nyquist limit is missing."
+  ],
+  "fusion": {
+    "mode": "experimental",
+    "method": "rule_baseline",
+    "validated": false,
+    "multimodal_accuracy": "not_evaluated",
+    "weights_fitted": false,
+    "note": "Experimental fusion; weights/temperature are unfitted configuration values."
+  },
+  "timings_ms": {
+    "probe": 57.22,
+    "hash": 0.17,
+    "decode_audio": 115.55,
+    "audio_inference": 13.82,
+    "fusion": 0.23,
+    "model_load_ms_engine_startup": 284.65
+  },
+  "models": [
+    {
+      "model_id": "yamnet_mediapipe_v1",
+      "name": "YAMNet (MediaPipe Audio Classifier TFLite build, version 1)",
+      "revision": "GCS object generation 1682545011401633 (Last-Modified 2023-04-26); tensorflow/models@34a21326906b9574fa11c4d6d0a5c534ff039267; audioset/ontology@d417d32bf59c711abb5910fd2f76a0eb44697991",
+      "sha256": {
+        "yamnet.tflite": "4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf",
+        "yamnet_class_map.csv": "cdf24d193e196d9e95912a2667051ae203e92a2ba09449218ccb40ef787c6df2",
+        "audioset_ontology.json": "9c685f4403eecc3ca9be37fd7285cf212feaaea6ff7229d3e7ca89e0d1f2d15d"
+      },
+      "terms": {
+        "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
+        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
+      },
+      "use_restrictions": [
+        "Weights are fetched from Google, never committed.",
+        "Do not assume commercial permission until weights terms are re-verified."
+      ]
+    },
+    {
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "name": "EfficientDet-Lite0 (MediaPipe Object Detector float32 build, version 1)",
+      "revision": "GCS object generation 1682636012161435 (Last-Modified 2023-04-27)",
+      "sha256": {
+        "efficientdet_lite0.tflite": "40338edf5ec70d43e318b0a716a84d4564cd1802759a7a07170c7e43796dbf58"
+      },
+      "terms": {
+        "code": "Apache-2.0 (google-ai-edge/mediapipe)",
+        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
+      },
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Do not assume commercial permission."
+      ]
+    }
+  ],
+  "usage_restrictions": {
+    "research_only": true,
+    "notices": [
+      "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
+      "Do not assume commercial permission for any bundled model or dataset."
+    ]
+  }
+}

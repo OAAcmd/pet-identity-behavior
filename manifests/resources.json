@@ -1,0 +1,222 @@
+{
+  "schema": "petperception.resources/1",
+  "retrieval_environment": "Claude Code cloud session, egress via policy proxy; see docs/DATA_AND_MODEL_REGISTER.md",
+  "resources": [
+    {
+      "id": "yamnet_mediapipe_v1",
+      "kind": "model",
+      "role": "default audio-event backend (frozen)",
+      "name": "YAMNet (MediaPipe Audio Classifier TFLite build, version 1)",
+      "canonical_url": "https://github.com/tensorflow/models/tree/master/research/audioset/yamnet",
+      "status": "available",
+      "profiles": ["default", "research"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "yamnet.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/1/yamnet.tflite",
+          "revision": "GCS object generation 1682545011401633 (Last-Modified 2023-04-26)",
+          "bytes": 4126810,
+          "sha256": "4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf"
+        },
+        {
+          "name": "yamnet_class_map.csv",
+          "url": "https://raw.githubusercontent.com/tensorflow/models/34a21326906b9574fa11c4d6d0a5c534ff039267/research/audioset/yamnet/yamnet_class_map.csv",
+          "revision": "tensorflow/models@34a21326906b9574fa11c4d6d0a5c534ff039267",
+          "bytes": 14096,
+          "sha256": "cdf24d193e196d9e95912a2667051ae203e92a2ba09449218ccb40ef787c6df2"
+        },
+        {
+          "name": "audioset_ontology.json",
+          "url": "https://raw.githubusercontent.com/audioset/ontology/d417d32bf59c711abb5910fd2f76a0eb44697991/ontology.json",
+          "revision": "audioset/ontology@d417d32bf59c711abb5910fd2f76a0eb44697991",
+          "bytes": 342780,
+          "sha256": "9c685f4403eecc3ca9be37fd7285cf212feaaea6ff7229d3e7ca89e0d1f2d15d"
+        }
+      ],
+      "task": "Frame-level multi-label audio event tagging over 521 AudioSet classes.",
+      "verified_interface": {
+        "input": "float32 mono waveform, 15600 samples at 16 kHz (0.975 s), expected range [-1, 1]; log-mel frontend (25 ms window, 10 ms hop, 64 bands 125-7500 Hz) is inside the graph (RFFT2D, LOG ops)",
+        "output": "[1, 521] scores after an in-graph LOGISTIC op: independent per-class sigmoid scores, NOT softmax probabilities and NOT calibrated",
+        "quantization": "internal activations are int8 (QUANTIZE/DEQUANTIZE ops) despite the 'float32' path; output scores are multiples of 1/256",
+        "label_map": "521 labels embedded as yamnet_label_list.txt; order verified identical to yamnet_class_map.csv",
+        "embedding": "1024-d pooled activation (tensor 'tower0/network/layer28/reduce_mean', int8, dequantized) readable with experimental_preserve_all_tensors"
+      },
+      "training_data": "AudioSet (YouTube segments), per tensorflow/models YAMNet README",
+      "terms": {
+        "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
+        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
+      },
+      "attribution": "YAMNet by Manoj Plakal and Dan Ellis (Google); AudioSet ontology by Google Inc. (CC BY-SA 4.0).",
+      "use_restrictions": ["Weights are fetched from Google, never committed.", "Do not assume commercial permission until weights terms are re-verified."],
+      "contamination_notes": "Trained on AudioSet YouTube clips. ESC-50 clips come from Freesound; overlap is unlikely but unverified."
+    },
+    {
+      "id": "efficientdet_lite0_mediapipe_v1",
+      "kind": "model",
+      "role": "default cat/dog visual detector (frozen)",
+      "name": "EfficientDet-Lite0 (MediaPipe Object Detector float32 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
+      "status": "available",
+      "profiles": ["default", "research"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientdet_lite0.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float32/1/efficientdet_lite0.tflite",
+          "revision": "GCS object generation 1682636012161435 (Last-Modified 2023-04-27)",
+          "bytes": 13836895,
+          "sha256": "40338edf5ec70d43e318b0a716a84d4564cd1802759a7a07170c7e43796dbf58"
+        }
+      ],
+      "task": "COCO 80-class object detection; only 'cat' and 'dog' are used by default.",
+      "verified_interface": {
+        "input": "[1, 320, 320, 3] float32 RGB, normalized (x - 127.5) / 127.5 (NormalizationOptions in embedded TFLite metadata)",
+        "output": "raw anchor outputs: boxes [1, 19206, 4] (YXHW offsets) and scores [1, 19206, 90] after an in-graph LOGISTIC op; no in-graph NMS",
+        "decoding": "Embedded MediaPipe DETECTOR_METADATA: 19206 fixed anchors, x/y/w/h scale 1.0, exponential box size, sigmoid_score=false (already applied). Box format YXHW per MediaPipe detection_postprocessing_graph.cc. NMS implemented in this package.",
+        "label_map": "Embedded labels.txt: 90 COCO category slots with '???' placeholders; index 16 = cat, index 17 = dog (0-based)."
+      },
+      "class_map_notes": "COCO has no door, leash, litter box, or pet-bowl classes. 'bowl', 'frisbee', 'sports ball' and 'teddy bear' exist but are not validated for pet contexts.",
+      "training_data": "COCO 2017 (per MediaPipe documentation).",
+      "terms": {
+        "code": "Apache-2.0 (google-ai-edge/mediapipe)",
+        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
+      },
+      "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
+      "use_restrictions": ["Weights fetched from Google, never committed.", "Do not assume commercial permission."],
+      "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited."
+    },
+    {
+      "id": "efficientdet_lite2_mediapipe_v1",
+      "kind": "model",
+      "role": "optional higher-accuracy detector",
+      "name": "EfficientDet-Lite2 (MediaPipe Object Detector float32 build, version 1)",
+      "canonical_url": "https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
+      "status": "available_optional",
+      "profiles": ["research"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {
+          "name": "efficientdet_lite2.tflite",
+          "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/float32/1/efficientdet_lite2.tflite",
+          "revision": "MediaPipe model version 1",
+          "bytes": 23096891,
+          "sha256": "ad2abbf2b4e10585e15176fd7b5ef03c28dda959ae26fc142549fdd1814db91d"
+        }
+      ],
+      "task": "Same as EfficientDet-Lite0, 448x448 input.",
+      "terms": {"code": "Apache-2.0", "weights": "Same status as EfficientDet-Lite0.", "training_data": "COCO 2017"},
+      "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
+      "use_restrictions": ["Research profile only."]
+    },
+    {
+      "id": "ast_audioset_candidate",
+      "kind": "model",
+      "role": "candidate audio-event backend (not implemented)",
+      "name": "MIT/ast-finetuned-audioset-10-10-0.4593",
+      "canonical_url": "https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593",
+      "status": "blocked",
+      "profiles": [],
+      "retrieved_at": null,
+      "errors": ["2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; model card, label map, preprocessing and weight revision could not be verified."],
+      "terms": {"code": "unverified", "weights": "unverified", "data": "AudioSet"},
+      "use_restrictions": ["Do not implement or ingest until the model card, preprocessing (10.24 s input, normalization), label map and revision are verified."],
+      "next_command": "uv run petperception fetch-models --only ast_audioset_candidate  # after huggingface.co is allowed; adapter still to be written"
+    },
+    {
+      "id": "esc50",
+      "kind": "dataset",
+      "role": "E1 audio-event benchmark (cat/dog vs other)",
+      "name": "ESC-50: Dataset for Environmental Sound Classification",
+      "canonical_url": "https://github.com/karolpiczak/ESC-50",
+      "status": "available",
+      "profiles": ["research"],
+      "retrieved_at": "2026-10-09",
+      "retrieval": {"method": "git", "url": "https://github.com/karolpiczak/esc-50", "revision": "33c8ce9eb2cf0b1c2f8bcf322eb349b6be34dbb6"},
+      "integrity": {"file_manifest": "manifests/esc50_files.csv", "files": 2000, "bytes": 882088000, "aggregate_sha256": "2bcd3b1c5d39f93f16449f6e79fc5e51bfa89d35798c235a6f013cc70797fb79", "aggregate_rule": "sha256 over sorted lines '<filename>:<sha256>\\n'"},
+      "task": "Environmental sound classification, 50 classes, 5 s clips. Used for cat/dog/other sound-event evaluation only; not an intent dataset.",
+      "observed_counts": {"clips": 2000, "categories": 50, "cat": 40, "dog": 40, "other": 1920, "per_fold": "8 cat, 8 dog, 384 other in each of 5 folds", "source_groups": 1524, "esc10_clips": 400, "sample_rate_hz": 44100, "channels": 1},
+      "grouping_fields": ["fold", "src_file (Freesound recording ID)", "take"],
+      "grouping_findings": ["Verified: 4 Freesound source recordings appear in two folds each, always under different classes (clock_tick/clock_alarm: 131943, 209698; hen/rooster: 134049, 234879). No cat or dog source spans folds."],
+      "label_provenance": "Manual clip-level labels by the dataset author; clips extracted from Freesound recordings.",
+      "terms": {"data": "CC BY-NC 3.0 for the collection; ESC-10 subset CC BY 3.0; per-clip Freesound licenses (CC0 869, CC-BY 901, CC-BY-NC 169, CC-Sampling+ 60) parsed into manifests/esc50_files.csv", "code": "Repository code: see upstream repository"},
+      "attribution": "K. J. Piczak, ESC: Dataset for Environmental Sound Classification, ACM MM 2015; per-clip Freesound authors in manifests/esc50_files.csv.",
+      "use_restrictions": ["Non-commercial research use; trained artifacts inherit CC BY-NC 3.0 obligations.", "Audio is not committed to Git."]
+    },
+    {
+      "id": "openimages_v7_val_catdog",
+      "kind": "dataset",
+      "role": "E4 visual detection benchmark (cat/dog boxes)",
+      "name": "Open Images V7 validation split, cat/dog subset",
+      "canonical_url": "https://storage.googleapis.com/openimages/web/index.html",
+      "status": "available",
+      "profiles": ["research"],
+      "retrieved_at": "2026-10-09",
+      "files": [
+        {"name": "validation-annotations-bbox.csv", "url": "https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv", "bytes": 25105048, "sha256": "d8bbd59410af14835d7733165a7bb8a3f0213981b22dd5077b0b9f7878991ff2"},
+        {"name": "oidv7-val-annotations-human-imagelabels.csv", "url": "https://storage.googleapis.com/openimages/v7/oidv7-val-annotations-human-imagelabels.csv", "bytes": 28392297, "sha256": "92ddbdfceb3626e044df5e89100b24f6c22a79c1888a4bddd00a6f231d86d56a"},
+        {"name": "oidv7-class-descriptions-boxable.csv", "url": "https://storage.googleapis.com/openimages/v7/oidv7-class-descriptions-boxable.csv", "bytes": 12064, "sha256": "1839e0e7e84130ae281f7f67413768601b031581c0c42e7fc17527b8e2a99aa9"},
+        {"name": "validation-images-with-rotation.csv", "url": "https://storage.googleapis.com/openimages/2018_04/validation/validation-images-with-rotation.csv", "bytes": 15245485, "sha256": "ed93a0e121fe345effdfc7359b848dbc64a1ff6778c8c73563157cb500b33a17"}
+      ],
+      "integrity": {"subset_images": "manifests/openimages_catdog_images.csv", "subset_boxes": "manifests/openimages_catdog_boxes.csv", "image_sha256": "manifests/openimages_catdog_sha256.csv"},
+      "task": "Cat/dog bounding-box detection evaluation with human-verified positives and negatives.",
+      "observed_counts": {"validation_images_with_cat_boxes": 345, "validation_images_with_dog_boxes": 1586, "subset_images": 823, "subset_cat_positive": 339, "subset_dog_positive": 350, "subset_verified_negative": 134, "excluded_for_rotation": 16, "subset_boxes": 820},
+      "grouping_fields": ["image_id", "Author / AuthorProfileURL (bootstrap group)"],
+      "label_provenance": "Human-verified image-level labels and human-drawn boxes (Google Open Images team).",
+      "terms": {"annotations": "CC BY 4.0", "images": "Per-image license recorded in the subset manifest (all CC BY 2.0 in validation metadata)", "code": "n/a"},
+      "attribution": "Open Images Dataset V7 (Kuznetsova et al., 2020; Benenson & Ferrari 2022); per-image Flickr authors in manifests/openimages_catdog_images.csv.",
+      "use_restrictions": ["Images are not committed to Git; attribution must accompany any reproduced image."]
+    },
+    {
+      "id": "catmeows",
+      "kind": "dataset",
+      "role": "E2 cat recording-context benchmark",
+      "name": "CatMeows: A Publicly-Available Dataset of Cat Vocalizations (v1.0.2)",
+      "canonical_url": "https://zenodo.org/records/4008297",
+      "doi": "10.5281/zenodo.4008297",
+      "status": "blocked",
+      "profiles": ["research"],
+      "retrieved_at": null,
+      "errors": [
+        "2026-10-09: zenodo.org:443 CONNECT rejected with HTTP 403 by the session egress policy (also via WebFetch: DNS ENOTFOUND).",
+        "2026-10-09: no complete official mirror reachable (huggingface.co denied; GitHub search found only 3-sample repositories)."
+      ],
+      "documented_but_unverified": {
+        "description": "440 meows from 21 cats (Maine Coon, European Shorthair); contexts brushing (B), isolation in unfamiliar environment (I), waiting for food (F); filenames C_NNNNN_BB_SS_OOOOO_RXX encode context, cat ID, breed, sex, owner ID, recording session, counter; extra.zip holds excluded/non-meow recordings and uncut sequences; reported 8 kHz.",
+        "terms_discrepancy": "Zenodo text: open for scientific research and non-commercial purposes; University of Milan repository: CC BY 4.0. Research-only, non-commercial treatment applies until resolved."
+      },
+      "grouping_fields": ["cat_id", "owner_id", "recording_session"],
+      "label_provenance": "Recording context assigned by experimental protocol (stimulus), not by a behavioral interpretation.",
+      "use_restrictions": ["Research-only, non-commercial.", "extra.zip kept separate and excluded from context training.", "'isolation' is a recording context, not a fear label."],
+      "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate e2"
+    },
+    {
+      "id": "barkopedia_dog_act_env",
+      "kind": "dataset",
+      "role": "E3 dog activity/context candidate",
+      "name": "ArlingtonCL2/Barkopedia_Dog_Act_Env",
+      "canonical_url": "https://huggingface.co/datasets/ArlingtonCL2/Barkopedia_Dog_Act_Env",
+      "status": "blocked_pending_review",
+      "profiles": [],
+      "retrieved_at": null,
+      "errors": ["2026-10-09: huggingface.co:443 CONNECT rejected with HTTP 403 by the session egress policy; card, archives, CSVs, media provenance and splits could not be inspected."],
+      "terms": {"card_claim": "MIT (per card, as reported in the task brief; unverified here)", "media_provenance": "unreviewed"},
+      "use_restrictions": ["Importer disabled until media provenance, animal/source grouping, and split formats are audited.", "Activity labels remain activity/context labels, never mental states."],
+      "next_command": "uv run petperception fetch-data barkopedia --audit-only"
+    },
+    {
+      "id": "ultralytics_dog_pose",
+      "kind": "dataset",
+      "role": "optional dog pose",
+      "name": "Ultralytics Dog-pose dataset",
+      "canonical_url": "https://docs.ultralytics.com/datasets/pose/dog-pose/",
+      "status": "blocked",
+      "profiles": [],
+      "retrieved_at": null,
+      "errors": ["2026-10-09: docs.ultralytics.com:443 CONNECT rejected with HTTP 403; github.com release assets are not served to this session. Image terms (Stanford Dogs / ImageNet-derived) and code/config terms (AGPL-3.0 for Ultralytics) unverified; no verified dog-pose checkpoint exists."],
+      "use_restrictions": ["No pose features are produced; ear/tail/play-bow features report 'unavailable'."]
+    }
+  ]
+}

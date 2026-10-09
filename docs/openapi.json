@@ -1,0 +1,2308 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Pet Perception Research API",
+    "description": "Observation-first cat/dog behavior evidence engine (Phase 1, research use). Results separate observations, experimental uncalibrated hypotheses and restrained suggestions. Not a translator, emotion reader or diagnostic tool.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Health",
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Capabilities",
+        "operationId": "capabilities_v1_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Capabilities V1 Capabilities Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/schema/analysis-result": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Analysis Schema",
+        "operationId": "analysis_schema_v1_schema_analysis_result_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Analysis Schema V1 Schema Analysis Result Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyses": {
+      "post": {
+        "tags": [
+          "analyses"
+        ],
+        "summary": "Submit",
+        "operationId": "submit_v1_analyses_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_submit_v1_analyses_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyses/{analysis_id}": {
+      "get": {
+        "tags": [
+          "analyses"
+        ],
+        "summary": "Status",
+        "operationId": "status_v1_analyses__analysis_id__get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "analyses"
+        ],
+        "summary": "Delete",
+        "operationId": "delete_v1_analyses__analysis_id__delete",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyses/{analysis_id}/result": {
+      "get": {
+        "tags": [
+          "analyses"
+        ],
+        "summary": "Result",
+        "operationId": "result_v1_analyses__analysis_id__result_get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisError": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "1.0.0",
+            "title": "Schema Version",
+            "default": "1.0.0"
+          },
+          "analysis_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Id"
+          },
+          "error_code": {
+            "type": "string",
+            "title": "Error Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentStatus"
+            },
+            "type": "array",
+            "title": "Components"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "error_code",
+          "message"
+        ],
+        "title": "AnalysisError"
+      },
+      "AnalysisResult": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "1.0.0",
+            "title": "Schema Version",
+            "default": "1.0.0"
+          },
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "config_profile": {
+            "type": "string",
+            "title": "Config Profile"
+          },
+          "config_hash": {
+            "type": "string",
+            "title": "Config Hash"
+          },
+          "media": {
+            "$ref": "#/components/schemas/MediaInfo"
+          },
+          "modalities": {
+            "$ref": "#/components/schemas/ModalityStatus"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentStatus"
+            },
+            "type": "array",
+            "title": "Components"
+          },
+          "observations": {
+            "$ref": "#/components/schemas/Observations"
+          },
+          "quality_flags": {
+            "items": {
+              "$ref": "#/components/schemas/QualityFlag"
+            },
+            "type": "array",
+            "title": "Quality Flags"
+          },
+          "hypotheses": {
+            "items": {
+              "$ref": "#/components/schemas/Hypothesis"
+            },
+            "type": "array",
+            "title": "Hypotheses"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/Decision"
+          },
+          "suggestions": {
+            "items": {
+              "$ref": "#/components/schemas/Suggestion"
+            },
+            "type": "array",
+            "title": "Suggestions"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "fusion": {
+            "$ref": "#/components/schemas/FusionInfo"
+          },
+          "timings_ms": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Timings Ms"
+          },
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/ModelInfo"
+            },
+            "type": "array",
+            "title": "Models"
+          },
+          "usage_restrictions": {
+            "$ref": "#/components/schemas/UsageRestrictions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "created_at",
+          "engine_version",
+          "config_profile",
+          "config_hash",
+          "media",
+          "modalities",
+          "components",
+          "observations",
+          "quality_flags",
+          "hypotheses",
+          "decision",
+          "suggestions",
+          "limitations",
+          "fusion",
+          "timings_ms",
+          "models",
+          "usage_restrictions"
+        ],
+        "title": "AnalysisResult"
+      },
+      "AnimalTrack": {
+        "properties": {
+          "track_id": {
+            "type": "string",
+            "title": "Track Id"
+          },
+          "identity_note": {
+            "type": "string",
+            "const": "per-analysis track label; not a verified pet identity",
+            "title": "Identity Note",
+            "default": "per-analysis track label; not a verified pet identity"
+          },
+          "species": {
+            "type": "string",
+            "enum": [
+              "cat",
+              "dog"
+            ],
+            "title": "Species"
+          },
+          "species_scores": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Species Scores"
+          },
+          "score_kind": {
+            "type": "string",
+            "const": "detector_sigmoid_raw",
+            "title": "Score Kind",
+            "default": "detector_sigmoid_raw"
+          },
+          "first_seen_s": {
+            "type": "number",
+            "title": "First Seen S"
+          },
+          "last_seen_s": {
+            "type": "number",
+            "title": "Last Seen S"
+          },
+          "duration_s": {
+            "type": "number",
+            "title": "Duration S"
+          },
+          "n_detections": {
+            "type": "integer",
+            "title": "N Detections"
+          },
+          "missed_sampled_frames": {
+            "type": "integer",
+            "title": "Missed Sampled Frames"
+          },
+          "detections": {
+            "items": {
+              "$ref": "#/components/schemas/Detection"
+            },
+            "type": "array",
+            "title": "Detections"
+          },
+          "movement": {
+            "$ref": "#/components/schemas/MovementSummary"
+          },
+          "zones": {
+            "items": {
+              "$ref": "#/components/schemas/ZoneOccupancy"
+            },
+            "type": "array",
+            "title": "Zones"
+          },
+          "pose_features": {
+            "items": {
+              "$ref": "#/components/schemas/PoseFeature"
+            },
+            "type": "array",
+            "title": "Pose Features"
+          },
+          "quality_flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Quality Flags"
+          },
+          "evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Evidence Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "track_id",
+          "species",
+          "species_scores",
+          "first_seen_s",
+          "last_seen_s",
+          "duration_s",
+          "n_detections",
+          "missed_sampled_frames",
+          "detections",
+          "movement"
+        ],
+        "title": "AnimalTrack"
+      },
+      "Attribution": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "no_visible_animal",
+              "single_visible_candidate",
+              "video_unavailable"
+            ],
+            "title": "Status"
+          },
+          "candidate_track_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Candidate Track Ids"
+          },
+          "method": {
+            "type": "string",
+            "const": "none_evaluated",
+            "title": "Method",
+            "default": "none_evaluated"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "note"
+        ],
+        "title": "Attribution"
+      },
+      "AudioStream": {
+        "properties": {
+          "codec": {
+            "type": "string",
+            "title": "Codec"
+          },
+          "sample_rate_hz": {
+            "type": "integer",
+            "title": "Sample Rate Hz"
+          },
+          "channels": {
+            "type": "integer",
+            "title": "Channels"
+          },
+          "first_sample_time_s": {
+            "type": "number",
+            "title": "First Sample Time S"
+          },
+          "decoded_duration_s": {
+            "type": "number",
+            "title": "Decoded Duration S"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "codec",
+          "sample_rate_hz",
+          "channels",
+          "first_sample_time_s",
+          "decoded_duration_s"
+        ],
+        "title": "AudioStream"
+      },
+      "AudioSummary": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "rms_dbfs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rms Dbfs"
+          },
+          "peak_dbfs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Peak Dbfs"
+          },
+          "silent_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Silent Fraction"
+          },
+          "clipping_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clipping Fraction"
+          },
+          "effective_bandwidth_hz": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective Bandwidth Hz"
+          },
+          "windows_scored": {
+            "type": "integer",
+            "title": "Windows Scored",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "title": "AudioSummary"
+      },
+      "Body_submit_v1_analyses_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "Audio or video file (no URLs)"
+          },
+          "zones": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zones",
+            "description": "Optional zone configuration JSON (petperception.zones/1)"
+          },
+          "modalities": {
+            "type": "string",
+            "title": "Modalities",
+            "description": "Comma-separated subset of audio,video",
+            "default": "audio,video"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_submit_v1_analyses_post"
+      },
+      "ComponentStatus": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ingest",
+              "audio_event",
+              "visual_detector",
+              "tracker",
+              "pose",
+              "context",
+              "fusion",
+              "explanation",
+              "vlm"
+            ],
+            "title": "Kind"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "unavailable",
+              "disabled",
+              "failed",
+              "skipped",
+              "not_applicable"
+            ],
+            "title": "State"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "state"
+        ],
+        "title": "ComponentStatus"
+      },
+      "Decision": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "supported_observation",
+              "experimental_hypothesis",
+              "abstention"
+            ],
+            "title": "State"
+          },
+          "overall_interpretation": {
+            "type": "string",
+            "enum": [
+              "observations_only",
+              "experimental_hypotheses_present",
+              "unknown",
+              "insufficient_evidence"
+            ],
+            "title": "Overall Interpretation"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reason Codes"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "overall_interpretation",
+          "reason_codes",
+          "summary"
+        ],
+        "title": "Decision"
+      },
+      "DeleteResponse": {
+        "properties": {
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "deleted",
+              "deletion_scheduled"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "status"
+        ],
+        "title": "DeleteResponse"
+      },
+      "Detection": {
+        "properties": {
+          "t_s": {
+            "type": "number",
+            "title": "T S"
+          },
+          "box_xyxy_norm": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Box Xyxy Norm"
+          },
+          "species_scores": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Species Scores"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "t_s",
+          "box_xyxy_norm",
+          "species_scores"
+        ],
+        "title": "Detection"
+      },
+      "ErrorBody": {
+        "properties": {
+          "error_code": {
+            "type": "string",
+            "title": "Error Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error_code",
+          "message"
+        ],
+        "title": "ErrorBody"
+      },
+      "EvidenceItem": {
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "title": "Evidence Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "animal_track",
+              "sound_event",
+              "zone_occupancy",
+              "movement",
+              "pose_feature",
+              "context_sound",
+              "context_object",
+              "audio_absence"
+            ],
+            "title": "Kind"
+          },
+          "t_start_s": {
+            "type": "number",
+            "title": "T Start S"
+          },
+          "t_end_s": {
+            "type": "number",
+            "title": "T End S"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "track_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track Id"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "value_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Kind"
+          },
+          "reliability": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Reliability"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "kind",
+          "t_start_s",
+          "t_end_s",
+          "summary",
+          "reliability",
+          "provenance"
+        ],
+        "title": "EvidenceItem"
+      },
+      "FusionInfo": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "const": "experimental",
+            "title": "Mode",
+            "default": "experimental"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "validated": {
+            "type": "boolean",
+            "const": false,
+            "title": "Validated",
+            "default": false
+          },
+          "multimodal_accuracy": {
+            "type": "string",
+            "const": "not_evaluated",
+            "title": "Multimodal Accuracy",
+            "default": "not_evaluated"
+          },
+          "weights_fitted": {
+            "type": "boolean",
+            "const": false,
+            "title": "Weights Fitted",
+            "default": false
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "method",
+          "note"
+        ],
+        "title": "FusionInfo"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "engine_loaded": {
+            "type": "boolean",
+            "title": "Engine Loaded"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "schema_version",
+          "engine_version",
+          "engine_loaded"
+        ],
+        "title": "HealthResponse"
+      },
+      "Hypothesis": {
+        "properties": {
+          "hypothesis_id": {
+            "type": "string",
+            "title": "Hypothesis Id"
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "food",
+              "outside",
+              "attention",
+              "play",
+              "alert",
+              "tense",
+              "warning",
+              "relaxed"
+            ],
+            "title": "Name"
+          },
+          "semantic_type": {
+            "type": "string",
+            "enum": [
+              "need",
+              "activity",
+              "state",
+              "communicative_signal"
+            ],
+            "title": "Semantic Type"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "experimental_hypothesis",
+              "insufficient_evidence",
+              "abstained"
+            ],
+            "title": "Status"
+          },
+          "track_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track Id"
+          },
+          "t_start_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "T Start S"
+          },
+          "t_end_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "T End S"
+          },
+          "supporting_evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Supporting Evidence Ids"
+          },
+          "conflicting_evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Conflicting Evidence Ids"
+          },
+          "independent_provenance_roots": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Independent Provenance Roots"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score",
+            "description": "Experimental unitless support score; NOT a probability"
+          },
+          "score_kind": {
+            "type": "string",
+            "enum": [
+              "heuristic_support_0_1",
+              "fusion_experimental_score_0_1",
+              "none"
+            ],
+            "title": "Score Kind"
+          },
+          "scorer": {
+            "$ref": "#/components/schemas/Scorer"
+          },
+          "calibration_status": {
+            "type": "string",
+            "enum": [
+              "uncalibrated",
+              "calibrated",
+              "not_applicable"
+            ],
+            "title": "Calibration Status",
+            "default": "uncalibrated"
+          },
+          "calibrated_confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibrated Confidence"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reason Codes"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "hypothesis_id",
+          "name",
+          "semantic_type",
+          "status",
+          "supporting_evidence_ids",
+          "conflicting_evidence_ids",
+          "independent_provenance_roots",
+          "score_kind",
+          "scorer",
+          "explanation"
+        ],
+        "title": "Hypothesis"
+      },
+      "MediaInfo": {
+        "properties": {
+          "analysis_filename": {
+            "type": "string",
+            "title": "Analysis Filename",
+            "description": "Sanitized basename; the server never echoes client paths"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "container": {
+            "type": "string",
+            "title": "Container"
+          },
+          "duration_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration S"
+          },
+          "start_time_s": {
+            "type": "number",
+            "title": "Start Time S"
+          },
+          "audio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AudioStream"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "video": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VideoStream"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timeline": {
+            "type": "string",
+            "const": "container_pts_seconds",
+            "title": "Timeline",
+            "default": "container_pts_seconds"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "analysis_filename",
+          "size_bytes",
+          "sha256",
+          "container",
+          "duration_s",
+          "start_time_s",
+          "audio",
+          "video"
+        ],
+        "title": "MediaInfo"
+      },
+      "ModalityStatus": {
+        "properties": {
+          "requested": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "audio",
+                "video"
+              ]
+            },
+            "type": "array",
+            "title": "Requested"
+          },
+          "available": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "audio",
+                "video"
+              ]
+            },
+            "type": "array",
+            "title": "Available"
+          },
+          "audio_state": {
+            "type": "string",
+            "enum": [
+              "present",
+              "absent",
+              "silent",
+              "corrupt",
+              "disabled",
+              "too_short"
+            ],
+            "title": "Audio State"
+          },
+          "video_state": {
+            "type": "string",
+            "enum": [
+              "present",
+              "absent",
+              "no_decodable_frames",
+              "corrupt",
+              "disabled"
+            ],
+            "title": "Video State"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "requested",
+          "available",
+          "audio_state",
+          "video_state"
+        ],
+        "title": "ModalityStatus"
+      },
+      "ModelInfo": {
+        "properties": {
+          "model_id": {
+            "type": "string",
+            "title": "Model Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "sha256": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Sha256"
+          },
+          "terms": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Terms"
+          },
+          "use_restrictions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Use Restrictions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model_id",
+          "name",
+          "revision",
+          "sha256",
+          "terms",
+          "use_restrictions"
+        ],
+        "title": "ModelInfo"
+      },
+      "MovementSummary": {
+        "properties": {
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "units": {
+            "type": "string",
+            "title": "Units"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "median_speed": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median Speed"
+          },
+          "p90_speed": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P90 Speed"
+          },
+          "path_length_diagonals": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path Length Diagonals"
+          },
+          "moving_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Moving Fraction"
+          },
+          "moving_threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Moving Threshold"
+          },
+          "median_speed_box_units_per_second": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median Speed Box Units Per Second"
+          },
+          "box_area_change_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Box Area Change Ratio"
+          },
+          "camera_compensated_steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Camera Compensated Steps"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "reliability": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Reliability",
+            "default": "low"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "available",
+          "units"
+        ],
+        "title": "MovementSummary"
+      },
+      "Observations": {
+        "properties": {
+          "animal_tracks": {
+            "items": {
+              "$ref": "#/components/schemas/AnimalTrack"
+            },
+            "type": "array",
+            "title": "Animal Tracks"
+          },
+          "sound_events": {
+            "items": {
+              "$ref": "#/components/schemas/SoundEvent"
+            },
+            "type": "array",
+            "title": "Sound Events"
+          },
+          "context_sounds": {
+            "items": {
+              "$ref": "#/components/schemas/SoundEvent"
+            },
+            "type": "array",
+            "title": "Context Sounds"
+          },
+          "audio_summary": {
+            "$ref": "#/components/schemas/AudioSummary"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceItem"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "sampled_frames": {
+            "type": "integer",
+            "title": "Sampled Frames"
+          },
+          "sample_fps": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Fps"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "animal_tracks",
+          "sound_events",
+          "context_sounds",
+          "audio_summary",
+          "evidence",
+          "sampled_frames",
+          "sample_fps"
+        ],
+        "title": "Observations"
+      },
+      "PoseFeature": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "units": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "available"
+        ],
+        "title": "PoseFeature"
+      },
+      "Provenance": {
+        "properties": {
+          "component": {
+            "type": "string",
+            "title": "Component"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          },
+          "root": {
+            "type": "string",
+            "title": "Root",
+            "description": "Provenance root; evidence sharing a root is not independent"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "component",
+          "root",
+          "method"
+        ],
+        "title": "Provenance"
+      },
+      "QualityFlag": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "limiting"
+            ],
+            "title": "Severity"
+          },
+          "t_start_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "T Start S"
+          },
+          "t_end_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "T End S"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "track_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "severity"
+        ],
+        "title": "QualityFlag"
+      },
+      "Scorer": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rule_baseline",
+              "weighted_average",
+              "product_of_experts"
+            ],
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "revision",
+          "kind"
+        ],
+        "title": "Scorer"
+      },
+      "SoundEvent": {
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "title": "Event Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "t_start_s": {
+            "type": "number",
+            "title": "T Start S"
+          },
+          "t_end_s": {
+            "type": "number",
+            "title": "T End S"
+          },
+          "peak_raw_score": {
+            "type": "number",
+            "title": "Peak Raw Score"
+          },
+          "mean_raw_score": {
+            "type": "number",
+            "title": "Mean Raw Score"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "threshold_source": {
+            "type": "string",
+            "title": "Threshold Source"
+          },
+          "score_kind": {
+            "type": "string",
+            "const": "yamnet_sigmoid_raw",
+            "title": "Score Kind",
+            "default": "yamnet_sigmoid_raw"
+          },
+          "calibration_status": {
+            "type": "string",
+            "const": "uncalibrated",
+            "title": "Calibration Status",
+            "default": "uncalibrated"
+          },
+          "calibrated_probability": {
+            "type": "null",
+            "title": "Calibrated Probability"
+          },
+          "subtypes": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Subtypes"
+          },
+          "top_audioset_labels": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Top Audioset Labels"
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "evidence_id": {
+            "type": "string",
+            "title": "Evidence Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "event_id",
+          "label",
+          "t_start_s",
+          "t_end_s",
+          "peak_raw_score",
+          "mean_raw_score",
+          "threshold",
+          "threshold_source",
+          "attribution",
+          "evidence_id"
+        ],
+        "title": "SoundEvent"
+      },
+      "StatusResponse": {
+        "properties": {
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "status",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "StatusResponse"
+      },
+      "SubmitResponse": {
+        "properties": {
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "status": {
+            "type": "string",
+            "const": "queued",
+            "title": "Status"
+          },
+          "status_url": {
+            "type": "string",
+            "title": "Status Url"
+          },
+          "result_url": {
+            "type": "string",
+            "title": "Result Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "status",
+          "status_url",
+          "result_url"
+        ],
+        "title": "SubmitResponse"
+      },
+      "Suggestion": {
+        "properties": {
+          "suggestion_id": {
+            "type": "string",
+            "title": "Suggestion Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "based_on_evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Based On Evidence Ids"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "observation_followup",
+              "safety_general",
+              "data_quality"
+            ],
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "suggestion_id",
+          "text",
+          "based_on_evidence_ids",
+          "kind"
+        ],
+        "title": "Suggestion"
+      },
+      "UsageRestrictions": {
+        "properties": {
+          "research_only": {
+            "type": "boolean",
+            "title": "Research Only"
+          },
+          "notices": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notices"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "research_only",
+          "notices"
+        ],
+        "title": "UsageRestrictions"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VideoStream": {
+        "properties": {
+          "codec": {
+            "type": "string",
+            "title": "Codec"
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width"
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height"
+          },
+          "avg_fps": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Fps"
+          },
+          "start_time_s": {
+            "type": "number",
+            "title": "Start Time S"
+          },
+          "duration_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration S"
+          },
+          "rotation_deg": {
+            "type": "integer",
+            "title": "Rotation Deg"
+          },
+          "is_still_image": {
+            "type": "boolean",
+            "title": "Is Still Image"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "codec",
+          "width",
+          "height",
+          "avg_fps",
+          "start_time_s",
+          "duration_s",
+          "rotation_deg",
+          "is_still_image"
+        ],
+        "title": "VideoStream"
+      },
+      "ZoneOccupancy": {
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "title": "Zone Id"
+          },
+          "semantic_tag": {
+            "type": "string",
+            "title": "Semantic Tag"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "intervals_s": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Intervals S"
+          },
+          "dwell_s": {
+            "type": "number",
+            "title": "Dwell S"
+          },
+          "fraction_of_track_detections": {
+            "type": "number",
+            "title": "Fraction Of Track Detections"
+          },
+          "anchor": {
+            "type": "string",
+            "title": "Anchor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "zone_id",
+          "semantic_tag",
+          "label",
+          "intervals_s",
+          "dwell_s",
+          "fraction_of_track_detections",
+          "anchor"
+        ],
+        "title": "ZoneOccupancy"
+      }
+    }
+  }
+}

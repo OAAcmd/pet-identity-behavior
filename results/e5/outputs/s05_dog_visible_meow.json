@@ -1,0 +1,711 @@
+{
+  "schema_version": "1.0.0",
+  "analysis_id": "e5-s05_dog_visible_meow-rule_baseline",
+  "created_at": "2026-10-09T03:44:22.612536Z",
+  "engine_version": "0.1.0",
+  "config_profile": "cpu",
+  "config_hash": "4fe67d6ca51b053e",
+  "media": {
+    "analysis_filename": "s05_dog_visible_meow.mp4",
+    "size_bytes": 154566,
+    "sha256": "a0e0f9c5b3e91ffd99780b844a78abf7169727720ba454cca9c37329dfd207c4",
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "duration_s": 8.0,
+    "start_time_s": 0.0,
+    "audio": {
+      "codec": "aac",
+      "sample_rate_hz": 44100,
+      "channels": 1,
+      "first_sample_time_s": 0.0,
+      "decoded_duration_s": 8.010884353741497
+    },
+    "video": {
+      "codec": "h264",
+      "width": 640,
+      "height": 480,
+      "avg_fps": 10.0,
+      "start_time_s": 0.0,
+      "duration_s": 8.0,
+      "rotation_deg": 0,
+      "is_still_image": false
+    },
+    "timeline": "container_pts_seconds"
+  },
+  "modalities": {
+    "requested": [
+      "audio",
+      "video"
+    ],
+    "available": [
+      "audio",
+      "video"
+    ],
+    "audio_state": "present",
+    "video_state": "present"
+  },
+  "components": [
+    {
+      "name": "audio_event",
+      "kind": "audio_event",
+      "state": "ok",
+      "model_id": "yamnet_mediapipe_v1",
+      "version": "yamnet-mediapipe-v1",
+      "reason": null
+    },
+    {
+      "name": "visual_detector",
+      "kind": "visual_detector",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "efficientdet_lite0_mediapipe_v1",
+      "reason": null
+    },
+    {
+      "name": "iou_tracker",
+      "kind": "tracker",
+      "state": "ok",
+      "model_id": null,
+      "version": "iou-hungarian-v1",
+      "reason": null
+    },
+    {
+      "name": "pose",
+      "kind": "pose",
+      "state": "unavailable",
+      "model_id": null,
+      "version": null,
+      "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+    },
+    {
+      "name": "fusion",
+      "kind": "fusion",
+      "state": "ok",
+      "model_id": null,
+      "version": "rules-v1+ontology-v1",
+      "reason": "experimental; not validated on paired data"
+    },
+    {
+      "name": "vlm",
+      "kind": "vlm",
+      "state": "disabled",
+      "model_id": null,
+      "version": null,
+      "reason": "optional local VLM adapter is disabled by default (Phase 1)"
+    }
+  ],
+  "observations": {
+    "animal_tracks": [
+      {
+        "track_id": "track-1",
+        "identity_note": "per-analysis track label; not a verified pet identity",
+        "species": "dog",
+        "species_scores": {
+          "dog": {
+            "mean": 0.9217907600104809,
+            "max": 0.9219772815704346,
+            "frames_top": 16.0
+          }
+        },
+        "score_kind": "detector_sigmoid_raw",
+        "first_seen_s": 0.0,
+        "last_seen_s": 7.5,
+        "duration_s": 7.5,
+        "n_detections": 16,
+        "missed_sampled_frames": 0,
+        "detections": [
+          {
+            "t_s": 0.0,
+            "box_xyxy_norm": [
+              0.28532975912094116,
+              0.19813774526119232,
+              0.6830322742462158,
+              0.6336268186569214
+            ],
+            "species_scores": {
+              "dog": 0.9219772815704346
+            },
+            "flags": []
+          },
+          {
+            "t_s": 0.5,
+            "box_xyxy_norm": [
+              0.2853298783302307,
+              0.19808034598827362,
+              0.6830786466598511,
+              0.6337546110153198
+            ],
+            "species_scores": {
+              "dog": 0.9219199419021606
+            },
+            "flags": []
+          },
+          {
+            "t_s": 1.0,
+            "box_xyxy_norm": [
+              0.2854301631450653,
+              0.1981121301651001,
+              0.6830449104309082,
+              0.6336754560470581
+            ],
+            "species_scores": {
+              "dog": 0.9217429161071777
+            },
+            "flags": []
+          },
+          {
+            "t_s": 1.5,
+            "box_xyxy_norm": [
+              0.28540337085723877,
+              0.19813477993011475,
+              0.6830523014068604,
+              0.6337369680404663
+            ],
+            "species_scores": {
+              "dog": 0.9217860102653503
+            },
+            "flags": []
+          },
+          {
+            "t_s": 2.0,
+            "box_xyxy_norm": [
+              0.28540098667144775,
+              0.19816236197948456,
+              0.6830239295959473,
+              0.6336989402770996
+            ],
+            "species_scores": {
+              "dog": 0.9217433929443359
+            },
+            "flags": []
+          },
+          {
+            "t_s": 2.5,
+            "box_xyxy_norm": [
+              0.28540128469467163,
+              0.19813494384288788,
+              0.6830537915229797,
+              0.633745551109314
+            ],
+            "species_scores": {
+              "dog": 0.9217774868011475
+            },
+            "flags": []
+          },
+          {
+            "t_s": 3.0,
+            "box_xyxy_norm": [
+              0.28543031215667725,
+              0.198114275932312,
+              0.6830437183380127,
+              0.6336802840232849
+            ],
+            "species_scores": {
+              "dog": 0.9217427372932434
+            },
+            "flags": []
+          },
+          {
+            "t_s": 3.5,
+            "box_xyxy_norm": [
+              0.28540128469467163,
+              0.19813494384288788,
+              0.6830537915229797,
+              0.633745551109314
+            ],
+            "species_scores": {
+              "dog": 0.9217774868011475
+            },
+            "flags": []
+          },
+          {
+            "t_s": 4.0,
+            "box_xyxy_norm": [
+              0.28539180755615234,
+              0.19817805290222168,
+              0.6830241680145264,
+              0.6337099075317383
+            ],
+            "species_scores": {
+              "dog": 0.9218170046806335
+            },
+            "flags": []
+          },
+          {
+            "t_s": 4.5,
+            "box_xyxy_norm": [
+              0.28540128469467163,
+              0.19813494384288788,
+              0.6830537915229797,
+              0.633745551109314
+            ],
+            "species_scores": {
+              "dog": 0.9217774868011475
+            },
+            "flags": []
+          },
+          {
+            "t_s": 5.0,
+            "box_xyxy_norm": [
+              0.28543031215667725,
+              0.198114275932312,
+              0.6830437183380127,
+              0.6336802840232849
+            ],
+            "species_scores": {
+              "dog": 0.9217427372932434
+            },
+            "flags": []
+          },
+          {
+            "t_s": 5.5,
+            "box_xyxy_norm": [
+              0.28540128469467163,
+              0.19813494384288788,
+              0.6830537915229797,
+              0.633745551109314
+            ],
+            "species_scores": {
+              "dog": 0.9217774868011475
+            },
+            "flags": []
+          },
+          {
+            "t_s": 6.0,
+            "box_xyxy_norm": [
+              0.28540098667144775,
+              0.19816236197948456,
+              0.6830239295959473,
+              0.6336989402770996
+            ],
+            "species_scores": {
+              "dog": 0.9217433929443359
+            },
+            "flags": []
+          },
+          {
+            "t_s": 6.5,
+            "box_xyxy_norm": [
+              0.28540128469467163,
+              0.19813494384288788,
+              0.6830537915229797,
+              0.633745551109314
+            ],
+            "species_scores": {
+              "dog": 0.9217774868011475
+            },
+            "flags": []
+          },
+          {
+            "t_s": 7.0,
+            "box_xyxy_norm": [
+              0.28543031215667725,
+              0.198114275932312,
+              0.6830437183380127,
+              0.6336802840232849
+            ],
+            "species_scores": {
+              "dog": 0.9217427372932434
+            },
+            "flags": []
+          },
+          {
+            "t_s": 7.5,
+            "box_xyxy_norm": [
+              0.2854030132293701,
+              0.19820985198020935,
+              0.683027982711792,
+              0.633678674697876
+            ],
+            "species_scores": {
+              "dog": 0.9218065738677979
+            },
+            "flags": []
+          }
+        ],
+        "movement": {
+          "available": true,
+          "units": "image_diagonals_per_second",
+          "reason": null,
+          "median_speed": 5.3753028623759747e-05,
+          "p90_speed": 5.8736784383654594e-05,
+          "path_length_diagonals": 0.0003365603322163224,
+          "moving_fraction": 0.0,
+          "moving_threshold": 0.05,
+          "median_speed_box_units_per_second": 0.00018641516408072733,
+          "box_area_change_ratio": 0.9997585805846135,
+          "camera_compensated_steps": 0,
+          "steps": 15,
+          "reliability": "high"
+        },
+        "zones": [],
+        "pose_features": [
+          {
+            "name": "ear_angle_deg",
+            "available": false,
+            "value": null,
+            "units": null,
+            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+          },
+          {
+            "name": "tail_height",
+            "available": false,
+            "value": null,
+            "units": null,
+            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+          },
+          {
+            "name": "play_bow_candidate",
+            "available": false,
+            "value": null,
+            "units": null,
+            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+          },
+          {
+            "name": "tail_lateral_oscillation",
+            "available": false,
+            "value": null,
+            "units": null,
+            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+          }
+        ],
+        "quality_flags": [],
+        "evidence_ids": [
+          "ev-track-1",
+          "ev-move-track-1"
+        ]
+      }
+    ],
+    "sound_events": [
+      {
+        "event_id": "snd-1",
+        "label": "cat_vocalization",
+        "t_start_s": 1.44,
+        "t_end_s": 7.215,
+        "peak_raw_score": 0.984375,
+        "mean_raw_score": 0.89453125,
+        "threshold": 0.73828125,
+        "threshold_source": "audio_event_thresholds.json: F1-optimal threshold on raw YAMNet group scores (max over 0.975 s windows) over all 5 ESC-50 folds; generalization estimate = nested E1 result",
+        "score_kind": "yamnet_sigmoid_raw",
+        "calibration_status": "uncalibrated",
+        "calibrated_probability": null,
+        "subtypes": {
+          "meow": 0.8515625
+        },
+        "top_audioset_labels": [
+          [
+            "Animal",
+            0.99609375
+          ],
+          [
+            "Domestic animals, pets",
+            0.9921875
+          ],
+          [
+            "Cat",
+            0.984375
+          ],
+          [
+            "Meow",
+            0.8515625
+          ],
+          [
+            "Caterwaul",
+            0.33203125
+          ]
+        ],
+        "attribution": {
+          "status": "unknown",
+          "candidate_track_ids": [
+            "track-1"
+          ],
+          "method": "none_evaluated",
+          "note": "the only visible animal's species does not match the sound; source may be off-screen"
+        },
+        "evidence_id": "ev-snd-1"
+      }
+    ],
+    "context_sounds": [],
+    "audio_summary": {
+      "state": "present",
+      "rms_dbfs": -31.773048021402587,
+      "peak_dbfs": -3.2640938758850098,
+      "silent_fraction": 0.375,
+      "clipping_fraction": 0.0,
+      "effective_bandwidth_hz": 8000.0,
+      "windows_scored": 16
+    },
+    "evidence": [
+      {
+        "evidence_id": "ev-track-1",
+        "kind": "animal_track",
+        "t_start_s": 0.0,
+        "t_end_s": 7.5,
+        "summary": "dog detected (track-1) from 0.00s to 7.50s in 16 sampled frames",
+        "track_id": "track-1",
+        "value": 0.9217907600104809,
+        "value_kind": "mean_detector_score_raw",
+        "reliability": "high",
+        "provenance": {
+          "component": "visual_detector",
+          "model_id": "efficientdet_lite0_mediapipe_v1",
+          "root": "vision:detector",
+          "method": "efficientdet+iou_tracker"
+        }
+      },
+      {
+        "evidence_id": "ev-move-track-1",
+        "kind": "movement",
+        "t_start_s": 0.0,
+        "t_end_s": 7.5,
+        "summary": "low apparent movement of track-1 (median 0.000 image diagonals/s; moving in 0 of 15 sampled steps)",
+        "track_id": "track-1",
+        "value": 5.3753028623759747e-05,
+        "value_kind": "image_diagonals_per_second",
+        "reliability": "high",
+        "provenance": {
+          "component": "tracker",
+          "model_id": "efficientdet_lite0_mediapipe_v1",
+          "root": "vision:detector",
+          "method": "centroid displacement, camera-translation compensated when estimated"
+        }
+      },
+      {
+        "evidence_id": "ev-snd-1",
+        "kind": "sound_event",
+        "t_start_s": 1.44,
+        "t_end_s": 7.215,
+        "summary": "cat vocalization sound 1.44-7.21s (peak raw score 0.98; meow 0.85)",
+        "track_id": null,
+        "value": 0.984375,
+        "value_kind": "yamnet_sigmoid_raw",
+        "reliability": "high",
+        "provenance": {
+          "component": "audio_event",
+          "model_id": "yamnet_mediapipe_v1",
+          "root": "audio:yamnet",
+          "method": "YAMNet tags, ontology group max, thresholded"
+        }
+      }
+    ],
+    "sampled_frames": 16,
+    "sample_fps": 2.0
+  },
+  "quality_flags": [
+    {
+      "code": "audio_end_padded",
+      "severity": "info",
+      "t_start_s": null,
+      "t_end_s": null,
+      "detail": "final analysis window zero-padded",
+      "track_id": null
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "hyp-1",
+      "name": "food",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 1.44,
+      "t_end_s": 7.215,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.65,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "zones_not_configured"
+      ],
+      "explanation": "Insufficient evidence 'food' (need). Supporting observations: cat vocalization sound 1.44-7.21s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no scene zones were configured. Score 0.65 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    },
+    {
+      "hypothesis_id": "hyp-2",
+      "name": "outside",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 1.44,
+      "t_end_s": 7.215,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.65,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "zones_not_configured"
+      ],
+      "explanation": "Insufficient evidence 'outside' (need). Supporting observations: cat vocalization sound 1.44-7.21s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no scene zones were configured. Score 0.65 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    },
+    {
+      "hypothesis_id": "hyp-3",
+      "name": "attention",
+      "semantic_type": "need",
+      "status": "insufficient_evidence",
+      "track_id": null,
+      "t_start_s": 1.44,
+      "t_end_s": 7.215,
+      "supporting_evidence_ids": [
+        "ev-snd-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "audio:yamnet"
+      ],
+      "score": 0.6,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "person_detection_disabled"
+      ],
+      "explanation": "Insufficient evidence 'attention' (need). Supporting observations: cat vocalization sound 1.44-7.21s (peak raw score 0.98; meow 0.85) [ev-snd-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; person detection is disabled. Score 0.60 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    },
+    {
+      "hypothesis_id": "hyp-4",
+      "name": "relaxed",
+      "semantic_type": "state",
+      "status": "insufficient_evidence",
+      "track_id": "track-1",
+      "t_start_s": 0.0,
+      "t_end_s": 7.5,
+      "supporting_evidence_ids": [
+        "ev-move-track-1"
+      ],
+      "conflicting_evidence_ids": [],
+      "independent_provenance_roots": [
+        "vision:detector"
+      ],
+      "score": 0.6,
+      "score_kind": "heuristic_support_0_1",
+      "scorer": {
+        "name": "rule_baseline:rules-v1",
+        "revision": "rules-v1+ontology-v1",
+        "kind": "rule_baseline"
+      },
+      "calibration_status": "uncalibrated",
+      "calibrated_confidence": null,
+      "reason_codes": [
+        "fusion_not_validated",
+        "single_provenance_root",
+        "zones_not_configured",
+        "silence_not_used_as_evidence"
+      ],
+      "explanation": "Insufficient evidence 'relaxed' (state) for track-1. Supporting observations: low apparent movement of track-1 (median 0.000 image diagonals/s; moving in 0 of 15 sampled steps) [ev-move-track-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; no scene zones were configured; silence is never used as evidence of relaxation. Score 0.60 is an uncalibrated heuristic_support_0_1 value, not a probability."
+    }
+  ],
+  "decision": {
+    "state": "supported_observation",
+    "overall_interpretation": "insufficient_evidence",
+    "reason_codes": [],
+    "summary": "Observations only: 1 animal track(s), 1 pet sound event(s). Candidate interpretations lacked sufficient independent evidence."
+  },
+  "suggestions": [],
+  "limitations": [
+    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
+    "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
+    "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
+    "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable (no verified animal pose model).",
+    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose."
+  ],
+  "fusion": {
+    "mode": "experimental",
+    "method": "rule_baseline",
+    "validated": false,
+    "multimodal_accuracy": "not_evaluated",
+    "weights_fitted": false,
+    "note": "Experimental fusion; weights/temperature are unfitted configuration values."
+  },
+  "timings_ms": {
+    "probe": 57.61,
+    "hash": 0.22,
+    "decode_audio": 166.34,
+    "audio_inference": 23.85,
+    "video_decode_detect_track": 635.06,
+    "video_detector_inference": 332.57,
+    "video_quality_and_camera_motion": 212.54,
+    "frame_gap_check": 64.2,
+    "fusion": 0.23,
+    "model_load_ms_engine_startup": 284.65
+  },
+  "models": [
+    {
+      "model_id": "yamnet_mediapipe_v1",
+      "name": "YAMNet (MediaPipe Audio Classifier TFLite build, version 1)",
+      "revision": "GCS object generation 1682545011401633 (Last-Modified 2023-04-26); tensorflow/models@34a21326906b9574fa11c4d6d0a5c534ff039267; audioset/ontology@d417d32bf59c711abb5910fd2f76a0eb44697991",
+      "sha256": {
+        "yamnet.tflite": "4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf",
+        "yamnet_class_map.csv": "cdf24d193e196d9e95912a2667051ae203e92a2ba09449218ccb40ef787c6df2",
+        "audioset_ontology.json": "9c685f4403eecc3ca9be37fd7285cf212feaaea6ff7229d3e7ca89e0d1f2d15d"
+      },
+      "terms": {
+        "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
+        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
+      },
+      "use_restrictions": [
+        "Weights are fetched from Google, never committed.",
+        "Do not assume commercial permission until weights terms are re-verified."
+      ]
+    },
+    {
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "name": "EfficientDet-Lite0 (MediaPipe Object Detector float32 build, version 1)",
+      "revision": "GCS object generation 1682636012161435 (Last-Modified 2023-04-27)",
+      "sha256": {
+        "efficientdet_lite0.tflite": "40338edf5ec70d43e318b0a716a84d4564cd1802759a7a07170c7e43796dbf58"
+      },
+      "terms": {
+        "code": "Apache-2.0 (google-ai-edge/mediapipe)",
+        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
+      },
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Do not assume commercial permission."
+      ]
+    }
+  ],
+  "usage_restrictions": {
+    "research_only": true,
+    "notices": [
+      "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
+      "Do not assume commercial permission for any bundled model or dataset."
+    ]
+  }
+}

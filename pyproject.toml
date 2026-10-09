@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pet-perception"
+version = "0.1.0"
+description = "Observation-first research engine for cat and dog audio/visual behavior evidence (Phase 1)."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "Proprietary research code; see docs/DATA_AND_MODEL_REGISTER.md for third-party data/model terms" }
+authors = [{ name = "pet-identity-behavior contributors" }]
+dependencies = [
+    "numpy>=2.0,<3",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "soundfile>=0.12",
+    "librosa>=0.10",
+    "opencv-python-headless>=4.10",
+    "ai-edge-litert>=1.2",
+    "pydantic>=2.7,<3",
+    "pyyaml>=6.0",
+    "psutil>=5.9",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+petperception = "petperception.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/petperception"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "synthetic: test uses synthetic or mocked inputs; it is not evidence of real-world accuracy",
+    "integration: test runs real models and/or real public media (requires fetched artifacts)",
+]
+addopts = "-ra"
+filterwarnings = [
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated",
+    "ignore::UserWarning:ai_edge_litert",
+]
+
+[tool.uv]
+# Pin the interpreter used for the lock and the default environment.
+python-preference = "only-system"

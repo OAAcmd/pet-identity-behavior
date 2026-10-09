@@ -1,0 +1,21 @@
+{
+  "format": "petperception.audio_event_thresholds/1",
+  "model_id": "yamnet_mediapipe_v1",
+  "selection_method": "F1-optimal threshold on raw YAMNet group scores (max over 0.975 s windows) over all 5 ESC-50 folds; generalization estimate = nested E1 result",
+  "thresholds": {
+    "cat_vocalization": {
+      "threshold": 0.73828125,
+      "in_sample_f1": 0.8157894736842105
+    },
+    "dog_vocalization": {
+      "threshold": 0.80078125,
+      "in_sample_f1": 0.9382716049382716
+    }
+  },
+  "score_kind": "yamnet_sigmoid_raw (uncalibrated)",
+  "data": "ESC-50 @ 33c8ce9e (CC BY-NC 3.0 collection)",
+  "use_restrictions": [
+    "Derived from CC BY-NC 3.0 data: non-commercial research use with attribution."
+  ],
+  "created_at": "2026-10-09T03:09:39+00:00"
+}

@@ -1,0 +1,3758 @@
+{
+  "experiment": "E5",
+  "camera_compensation_diagnostic": {
+    "scenario_id": "s09_camera_pan_cat",
+    "uncompensated_tracks": [
+      {
+        "available": true,
+        "units": "image_diagonals_per_second",
+        "reason": null,
+        "median_speed": 0.057316884994506836,
+        "p90_speed": 0.07028334331512451,
+        "path_length_diagonals": 0.38194228887557985,
+        "moving_fraction": 0.5333333333333333,
+        "moving_threshold": 0.05,
+        "median_speed_box_units_per_second": 0.18273704425858645,
+        "box_area_change_ratio": 1.0944888549705014,
+        "camera_compensated_steps": 0,
+        "steps": 15,
+        "reliability": "medium"
+      }
+    ],
+    "compensated_tracks_rows": 1
+  },
+  "title": "Fusion/abstention behavior on synthetic-pairing scenarios",
+  "status_note": "Behavioral integration checks only. Multimodal accuracy: not_evaluated (no genuine paired test set).",
+  "synthetic_pairing": true,
+  "scenarios": 14,
+  "methods": [
+    "rule_baseline",
+    "weighted_average",
+    "product_of_experts"
+  ],
+  "pass_counts": {
+    "rule_baseline": "14/14",
+    "weighted_average": "14/14",
+    "product_of_experts": "14/14"
+  },
+  "multimodal_accuracy": "not_evaluated",
+  "rows": [
+    {
+      "scenario_id": "s01_food_zone_meow",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Static cat photo inside a food_area zone; meow clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.6275,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_experimental_rule_baseline": true,
+        "attribution": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s02_food_zone_silent",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone with a silent audio track (context only).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.605,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "audio_silent"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s03_two_animals_bark",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Cat and dog visible; dog bark clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "multiple_animals_visible"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "alert",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-2",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 2,
+      "sound_events": [
+        [
+          "dog_vocalization",
+          1.92,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true,
+        "min_tracks": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "bdf391a6f4b1840a",
+          "author": "Helena Jacoba",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/69302634@N02/13906589946",
+          "title": "Chatelaine the manx cat meets Grady the wheaten terrier"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-192236-A-0.wav",
+          "author": "Ligidium",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Ligidium/sounds/192236/",
+          "category": "dog"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s04_no_pet_vacuum",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Verified no-cat/no-dog scene with a vacuum cleaner clip.",
+      "error_code": null,
+      "decision_state": "abstention",
+      "decision_reasons": [
+        "no_pet_detected",
+        "no_pet_sound_detected"
+      ],
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "decision_state": true,
+        "reason_code": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "35e7f8550ba0d7e7",
+          "author": "Madison Scott-Clary",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/ranna/14120961959",
+          "title": "IMG_2448"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "5-182012-A-36.wav",
+          "author": "ohrpilot",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/ohrpilot/sounds/182012/",
+          "category": "vacuum_cleaner"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s05_dog_visible_meow",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Dog visible, cat meow audio: species mismatch, attribution unknown.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "1b7e7fe61e350040",
+          "author": "Ana Carolina de Castro Cavalcanti",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/carolcastro/3082391432",
+          "title": "Vamos brincar????"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s06_rest_zone_growl",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone; growl-like cat clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "tense",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.575,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "warning",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.585,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "conflicting_evidence",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          2.4,
+          3.38,
+          "single_visible_candidate"
+        ],
+        [
+          "growl",
+          5.28,
+          6.25,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_not_experimental": true,
+        "relaxed_conflict_recorded": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "3-146972-A-5.wav",
+          "author": "Zabuhailo",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Zabuhailo/sounds/146972/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s07_audio_only_meow",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Meow clip only (no video stream).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          5.29,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "video_state": true,
+        "no_experimental": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s08_video_only_cat",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone, no audio stream.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_audio"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.605,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "missing_modality_audio"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_audio",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s09_camera_pan_cat",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.57,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent",
+        "blurry_frames",
+        "camera_motion"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "camera_motion_flag": true,
+        "compensated_movement_low": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s10_moving_cat_play_zone",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Composite: real cat crop moved across a real no-pet background inside a play_area zone.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "play",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.585,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "movement_high_observed": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "c1a0d7aed52c0c2c",
+          "author": "mollyjeanpoganski",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/62721811@N06/8557401823",
+          "title": "Arrow3"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s11_corrupt",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Truncated MP4 (first 4 KiB).",
+      "error_code": "corrupt_input",
+      "decision_state": null,
+      "decision_reasons": null,
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {},
+      "expectations": {
+        "error_code": true
+      },
+      "passed": true,
+      "sources": []
+    },
+    {
+      "scenario_id": "s12_meow_8khz",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Meow clip downsampled to 8 kHz (bandwidth-limited input).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.605,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.605,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.57,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          3.85,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "bandwidth_limited_audio"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s13_low_light_cat",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Cat scene darkened to 12% brightness with sensor-like noise; meow audio.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.605,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified",
+            "low_reliability_evidence"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.65,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "blurry_frames",
+        "camera_motion_unknown",
+        "low_light"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s14_rest_zone_silent",
+      "method": "rule_baseline",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone, silent audio.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.585,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_uses_no_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s01_food_zone_meow",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Static cat photo inside a food_area zone; meow clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.635,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s02_food_zone_silent",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone with a silent audio track (context only).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.535,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "audio_silent"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s03_two_animals_bark",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Cat and dog visible; dog bark clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "multiple_animals_visible"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "alert",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-2",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 2,
+      "sound_events": [
+        [
+          "dog_vocalization",
+          1.92,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true,
+        "min_tracks": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "bdf391a6f4b1840a",
+          "author": "Helena Jacoba",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/69302634@N02/13906589946",
+          "title": "Chatelaine the manx cat meets Grady the wheaten terrier"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-192236-A-0.wav",
+          "author": "Ligidium",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Ligidium/sounds/192236/",
+          "category": "dog"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s04_no_pet_vacuum",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Verified no-cat/no-dog scene with a vacuum cleaner clip.",
+      "error_code": null,
+      "decision_state": "abstention",
+      "decision_reasons": [
+        "no_pet_detected",
+        "no_pet_sound_detected"
+      ],
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "decision_state": true,
+        "reason_code": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "35e7f8550ba0d7e7",
+          "author": "Madison Scott-Clary",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/ranna/14120961959",
+          "title": "IMG_2448"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "5-182012-A-36.wav",
+          "author": "ohrpilot",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/ohrpilot/sounds/182012/",
+          "category": "vacuum_cleaner"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s05_dog_visible_meow",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Dog visible, cat meow audio: species mismatch, attribution unknown.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "1b7e7fe61e350040",
+          "author": "Ana Carolina de Castro Cavalcanti",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/carolcastro/3082391432",
+          "title": "Vamos brincar????"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s06_rest_zone_growl",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone; growl-like cat clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "tense",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.575,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "warning",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.554,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "conflicting_evidence",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          2.4,
+          3.38,
+          "single_visible_candidate"
+        ],
+        [
+          "growl",
+          5.28,
+          6.25,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_not_experimental": true,
+        "relaxed_conflict_recorded": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "3-146972-A-5.wav",
+          "author": "Zabuhailo",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Zabuhailo/sounds/146972/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s07_audio_only_meow",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Meow clip only (no video stream).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          5.29,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "video_state": true,
+        "no_experimental": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s08_video_only_cat",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone, no audio stream.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_audio"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.535,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "missing_modality_audio"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.54,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_audio",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s09_camera_pan_cat",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.528,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent",
+        "blurry_frames",
+        "camera_motion"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "camera_motion_flag": true,
+        "compensated_movement_low": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s10_moving_cat_play_zone",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Composite: real cat crop moved across a real no-pet background inside a play_area zone.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "play",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.554,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "movement_high_observed": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "c1a0d7aed52c0c2c",
+          "author": "mollyjeanpoganski",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/62721811@N06/8557401823",
+          "title": "Arrow3"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s11_corrupt",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Truncated MP4 (first 4 KiB).",
+      "error_code": "corrupt_input",
+      "decision_state": null,
+      "decision_reasons": null,
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {},
+      "expectations": {
+        "error_code": true
+      },
+      "passed": true,
+      "sources": []
+    },
+    {
+      "scenario_id": "s12_meow_8khz",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Meow clip downsampled to 8 kHz (bandwidth-limited input).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.57,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.57,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.535,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          3.85,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "bandwidth_limited_audio"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s13_low_light_cat",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Cat scene darkened to 12% brightness with sensor-like noise; meow audio.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.62,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "audio_attribution_unverified",
+            "low_reliability_evidence"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.6,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.55,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "blurry_frames",
+        "camera_motion_unknown",
+        "low_light"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s14_rest_zone_silent",
+      "method": "weighted_average",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone, silent audio.",
+      "error_code": null,
+      "decision_state": "experimental_hypothesis",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "experimental_hypothesis",
+          "track_id": "track-1",
+          "score": 0.554,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_uses_no_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s01_food_zone_meow",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Static cat photo inside a food_area zone; meow clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.358,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s02_food_zone_silent",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone with a silent audio track (context only).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.2904,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "audio_silent"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s03_two_animals_bark",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Cat and dog visible; dog bark clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "multiple_animals_visible"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "alert",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "uncertain_attribution_multiple_animals"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-2",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 2,
+      "sound_events": [
+        [
+          "dog_vocalization",
+          1.92,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true,
+        "min_tracks": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "bdf391a6f4b1840a",
+          "author": "Helena Jacoba",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/69302634@N02/13906589946",
+          "title": "Chatelaine the manx cat meets Grady the wheaten terrier"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-192236-A-0.wav",
+          "author": "Ligidium",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Ligidium/sounds/192236/",
+          "category": "dog"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s04_no_pet_vacuum",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Verified no-cat/no-dog scene with a vacuum cleaner clip.",
+      "error_code": null,
+      "decision_state": "abstention",
+      "decision_reasons": [
+        "no_pet_detected",
+        "no_pet_sound_detected"
+      ],
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "decision_state": true,
+        "reason_code": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "35e7f8550ba0d7e7",
+          "author": "Madison Scott-Clary",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/ranna/14120961959",
+          "title": "IMG_2448"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "5-182012-A-36.wav",
+          "author": "ohrpilot",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/ohrpilot/sounds/182012/",
+          "category": "vacuum_cleaner"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s05_dog_visible_meow",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Dog visible, cat meow audio: species mismatch, attribution unknown.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "unknown"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "attribution": true,
+        "no_experimental_with_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "1b7e7fe61e350040",
+          "author": "Ana Carolina de Castro Cavalcanti",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/carolcastro/3082391432",
+          "title": "Vamos brincar????"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s06_rest_zone_growl",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone; growl-like cat clip at 2-7 s.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "tense",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3325,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "warning",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3566,
+          "roots": [
+            "audio:yamnet",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3259,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "conflicting_evidence",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          2.4,
+          3.38,
+          "single_visible_candidate"
+        ],
+        [
+          "growl",
+          5.28,
+          6.25,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_not_experimental": true,
+        "relaxed_conflict_recorded": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "3-146972-A-5.wav",
+          "author": "Zabuhailo",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/Zabuhailo/sounds/146972/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s07_audio_only_meow",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Meow clip only (no video stream).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          5.29,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "video_state": true,
+        "no_experimental": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s08_video_only_cat",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Cat in food_area zone, no audio stream.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_audio"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.2904,
+          "roots": [
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "context_only_evidence",
+            "missing_modality_audio"
+          ]
+        },
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_audio",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "food_not_experimental": true,
+        "audio_state": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s09_camera_pan_cat",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.2859,
+          "roots": [
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_silent",
+            "zones_not_configured",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent",
+        "blurry_frames",
+        "camera_motion"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "camera_motion_flag": true,
+        "compensated_movement_low": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s10_moving_cat_play_zone",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Composite: real cat crop moved across a real no-pet background inside a play_area zone.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "play",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3259,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "movement_high_observed": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "c1a0d7aed52c0c2c",
+          "author": "mollyjeanpoganski",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/62721811@N06/8557401823",
+          "title": "Arrow3"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s11_corrupt",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Truncated MP4 (first 4 KiB).",
+      "error_code": "corrupt_input",
+      "decision_state": null,
+      "decision_reasons": null,
+      "hypotheses": [],
+      "tracks": 0,
+      "sound_events": [],
+      "quality_flags": [],
+      "invariants": {},
+      "expectations": {
+        "error_code": true
+      },
+      "passed": true,
+      "sources": []
+    },
+    {
+      "scenario_id": "s12_meow_8khz",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Meow clip downsampled to 8 kHz (bandwidth-limited input).",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "missing_modality_video"
+      ],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.2904,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.2904,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": null,
+          "score": 0.283,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "missing_modality_video",
+            "person_detection_disabled"
+          ]
+        }
+      ],
+      "tracks": 0,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          0.0,
+          3.85,
+          "video_unavailable"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "bandwidth_limited_audio"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s13_low_light_cat",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Cat scene darkened to 12% brightness with sensor-like noise; meow audio.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [],
+      "hypotheses": [
+        {
+          "name": "food",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3475,
+          "roots": [
+            "audio:yamnet",
+            "context:zones"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support",
+            "audio_attribution_unverified",
+            "low_reliability_evidence"
+          ]
+        },
+        {
+          "name": "outside",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3339,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "audio_attribution_unverified"
+          ]
+        },
+        {
+          "name": "attention",
+          "status": "insufficient_evidence",
+          "track_id": "track-1",
+          "score": 0.3106,
+          "roots": [
+            "audio:yamnet"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "single_provenance_root",
+            "person_detection_disabled",
+            "audio_attribution_unverified"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [
+        [
+          "cat_vocalization",
+          1.44,
+          7.21,
+          "single_visible_candidate"
+        ]
+      ],
+      "quality_flags": [
+        "audio_end_padded",
+        "blurry_frames",
+        "camera_motion_unknown",
+        "low_light"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "quality_flag": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        },
+        {
+          "type": "audio",
+          "dataset": "ESC-50 @ 33c8ce9e",
+          "id": "4-133047-A-5.wav",
+          "author": "temawas",
+          "license": "CC0",
+          "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+          "category": "cat"
+        }
+      ]
+    },
+    {
+      "scenario_id": "s14_rest_zone_silent",
+      "method": "product_of_experts",
+      "synthetic_pairing": true,
+      "description": "Still cat in rest_area zone, silent audio.",
+      "error_code": null,
+      "decision_state": "supported_observation",
+      "decision_reasons": [
+        "audio_silent"
+      ],
+      "hypotheses": [
+        {
+          "name": "relaxed",
+          "status": "abstained",
+          "track_id": "track-1",
+          "score": 0.3259,
+          "roots": [
+            "context:zones",
+            "vision:detector"
+          ],
+          "reasons": [
+            "fusion_not_validated",
+            "low_support",
+            "silence_not_used_as_evidence"
+          ]
+        }
+      ],
+      "tracks": 1,
+      "sound_events": [],
+      "quality_flags": [
+        "audio_silent"
+      ],
+      "invariants": {
+        "no_calibrated_confidence": true,
+        "experimental_needs_two_roots": true,
+        "no_context_only_experimental": true,
+        "evidence_ids_resolve": true,
+        "explanations_cite_existing_evidence": true,
+        "audio_used_only_with_single_candidate": true,
+        "fusion_marked_unvalidated": true,
+        "no_forbidden_phrasing": true,
+        "relaxed_never_from_audio_absence": true
+      },
+      "expectations": {
+        "relaxed_uses_no_audio": true
+      },
+      "passed": true,
+      "sources": [
+        {
+          "type": "image",
+          "dataset": "Open Images V7 validation",
+          "id": "d60e1c25e87d8b45",
+          "author": "Qfamily",
+          "license": "https://creativecommons.org/licenses/by/2.0/",
+          "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+          "title": "Fwd: Heh"
+        }
+      ]
+    }
+  ],
+  "runtime_s": 43.365607745000034,
+  "created_at": "2026-10-09T03:44:51+00:00"
+}

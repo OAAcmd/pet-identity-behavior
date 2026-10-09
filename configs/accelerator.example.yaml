@@ -1,0 +1,31 @@
+# Optional "accelerator" profile - NOT TESTED in Phase 1.
+#
+# The Phase 1 workspace had no GPU (no /dev/nvidia*, no nvidia-smi), and the
+# default runtime (ai-edge-litert / TFLite with XNNPACK) runs on CPU. This
+# profile only raises CPU parallelism and sampling density for larger hosts.
+# A GPU/NPU delegate is not wired in: `runtime.accelerator` accepts only "cpu"
+# so that no untested path can be selected by accident. Use with:
+#   uv run petperception --config configs/accelerator.example.yaml analyze clip.mp4
+profile: cpu-large
+research_profile: true
+
+paths:
+  data_root: ${PETPERCEPTION_DATA_ROOT:-var/data}
+  models_root: ${PETPERCEPTION_MODELS_ROOT:-var/models}
+  jobs_root: ${PETPERCEPTION_JOBS_ROOT:-var/jobs}
+
+audio:
+  yamnet:
+    hop_s: 0.48
+
+vision:
+  detector: efficientdet_lite2_mediapipe_v1   # optional higher-accuracy model (fetch with --include-optional)
+  sample_fps: 4.0
+  max_side: 960
+
+limits:
+  max_video_frames: 2400
+
+runtime:
+  num_threads: 8
+  accelerator: cpu

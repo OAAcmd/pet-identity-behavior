@@ -1,0 +1,135 @@
+[
+  {
+    "scenario_id": "s01_food_zone_meow",
+    "description": "Static cat photo inside a food_area zone; meow clip at 2-7 s.",
+    "synthetic_pairing": true,
+    "sources": [
+      {
+        "type": "image",
+        "dataset": "Open Images V7 validation",
+        "id": "d60e1c25e87d8b45",
+        "author": "Qfamily",
+        "license": "https://creativecommons.org/licenses/by/2.0/",
+        "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+        "title": "Fwd: Heh"
+      },
+      {
+        "type": "audio",
+        "dataset": "ESC-50 @ 33c8ce9e",
+        "id": "4-133047-A-5.wav",
+        "author": "temawas",
+        "license": "CC0",
+        "url": "http://www.freesound.org/people/temawas/sounds/133047/",
+        "category": "cat"
+      }
+    ],
+    "decision": "experimental_hypothesis",
+    "reason_codes": []
+  },
+  {
+    "scenario_id": "s02_food_zone_silent",
+    "description": "Cat in food_area zone with a silent audio track (context only).",
+    "synthetic_pairing": true,
+    "sources": [
+      {
+        "type": "image",
+        "dataset": "Open Images V7 validation",
+        "id": "d60e1c25e87d8b45",
+        "author": "Qfamily",
+        "license": "https://creativecommons.org/licenses/by/2.0/",
+        "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+        "title": "Fwd: Heh"
+      }
+    ],
+    "decision": "supported_observation",
+    "reason_codes": [
+      "audio_silent"
+    ]
+  },
+  {
+    "scenario_id": "s03_two_animals_bark",
+    "description": "Cat and dog visible; dog bark clip at 2-7 s.",
+    "synthetic_pairing": true,
+    "sources": [
+      {
+        "type": "image",
+        "dataset": "Open Images V7 validation",
+        "id": "bdf391a6f4b1840a",
+        "author": "Helena Jacoba",
+        "license": "https://creativecommons.org/licenses/by/2.0/",
+        "url": "https://www.flickr.com/photos/69302634@N02/13906589946",
+        "title": "Chatelaine the manx cat meets Grady the wheaten terrier"
+      },
+      {
+        "type": "audio",
+        "dataset": "ESC-50 @ 33c8ce9e",
+        "id": "4-192236-A-0.wav",
+        "author": "Ligidium",
+        "license": "CC0",
+        "url": "http://www.freesound.org/people/Ligidium/sounds/192236/",
+        "category": "dog"
+      }
+    ],
+    "decision": "supported_observation",
+    "reason_codes": [
+      "multiple_animals_visible"
+    ]
+  },
+  {
+    "scenario_id": "s04_no_pet_vacuum",
+    "description": "Verified no-cat/no-dog scene with a vacuum cleaner clip.",
+    "synthetic_pairing": true,
+    "sources": [
+      {
+        "type": "image",
+        "dataset": "Open Images V7 validation",
+        "id": "35e7f8550ba0d7e7",
+        "author": "Madison Scott-Clary",
+        "license": "https://creativecommons.org/licenses/by/2.0/",
+        "url": "https://www.flickr.com/photos/ranna/14120961959",
+        "title": "IMG_2448"
+      },
+      {
+        "type": "audio",
+        "dataset": "ESC-50 @ 33c8ce9e",
+        "id": "5-182012-A-36.wav",
+        "author": "ohrpilot",
+        "license": "CC0",
+        "url": "http://www.freesound.org/people/ohrpilot/sounds/182012/",
+        "category": "vacuum_cleaner"
+      }
+    ],
+    "decision": "abstention",
+    "reason_codes": [
+      "no_pet_detected",
+      "no_pet_sound_detected"
+    ]
+  },
+  {
+    "scenario_id": "s06_rest_zone_growl",
+    "description": "Still cat in rest_area zone; growl-like cat clip at 2-7 s.",
+    "synthetic_pairing": true,
+    "sources": [
+      {
+        "type": "image",
+        "dataset": "Open Images V7 validation",
+        "id": "d60e1c25e87d8b45",
+        "author": "Qfamily",
+        "license": "https://creativecommons.org/licenses/by/2.0/",
+        "url": "https://www.flickr.com/photos/dasqfamily/4570274727",
+        "title": "Fwd: Heh"
+      },
+      {
+        "type": "audio",
+        "dataset": "ESC-50 @ 33c8ce9e",
+        "id": "3-146972-A-5.wav",
+        "author": "Zabuhailo",
+        "license": "CC0",
+        "url": "http://www.freesound.org/people/Zabuhailo/sounds/146972/",
+        "category": "cat"
+      }
+    ],
+    "decision": "experimental_hypothesis",
+    "reason_codes": []
+  }
+]

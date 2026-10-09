@@ -1,0 +1,12 @@
+.git
+.venv
+var
+results
+examples
+docs
+tests
+**/__pycache__
+*.tflite
+*.wav
+*.mp4
+*.jpg

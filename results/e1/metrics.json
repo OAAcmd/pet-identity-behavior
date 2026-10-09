@@ -1,0 +1,789 @@
+{
+  "experiment": "E1",
+  "title": "Cat/dog vs other sound events on ESC-50 (clip level)",
+  "dataset": {
+    "id": "esc50",
+    "revision": "33c8ce9eb2cf0b1c2f8bcf322eb349b6be34dbb6",
+    "clips": 2000,
+    "label_counts": {
+      "cat": 40,
+      "dog": 40,
+      "other": 1920
+    },
+    "checksum_verification": {
+      "checked": 2000,
+      "mismatched": 0
+    }
+  },
+  "protocol": {
+    "outer": "5 official ESC-50 folds (source-preserving by construction)",
+    "inner": "leave-one-fold-out over the 4 training folds for C; thresholds F1-optimal on training folds",
+    "bootstrap": "1000 resamples of Freesound source recordings",
+    "decision_rule_tags": "cat if cat_score>=t_cat, dog if dog_score>=t_dog; both -> larger score/threshold ratio; else other",
+    "limitations": [
+      "clip-level labels only; no event-timing evaluation",
+      "ESC-50 is not household audio",
+      "4 non-pet source recordings span two folds each (verified)",
+      "YAMNet trained on AudioSet; overlap with Freesound-derived ESC-50 unaudited"
+    ]
+  },
+  "folds": [
+    {
+      "test_fold": 1,
+      "n_train": 1600,
+      "n_test": 400,
+      "test_counts": {
+        "cat": 8,
+        "dog": 8,
+        "other": 384
+      },
+      "mfcc_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.5497198128189267,
+          "0.1": 0.607477590538176,
+          "1.0": 0.6157301355242741,
+          "10.0": 0.598201473684164
+        },
+        "selected_C": 1.0,
+        "inner_folds_skipped_missing_class": 0
+      },
+      "yamnet_thresholds": {
+        "cat": 0.5,
+        "dog": 0.80078125,
+        "train_f1_cat": 0.7941176470588235,
+        "train_f1_dog": 0.9375
+      },
+      "yamnet_embedding_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.9672116096867572,
+          "0.1": 0.9698271275658511,
+          "1.0": 0.9698271275658511,
+          "10.0": 0.9007771662801828
+        },
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0
+      }
+    },
+    {
+      "test_fold": 2,
+      "n_train": 1600,
+      "n_test": 400,
+      "test_counts": {
+        "cat": 8,
+        "dog": 8,
+        "other": 384
+      },
+      "mfcc_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.546674518222108,
+          "0.1": 0.6005255890591391,
+          "1.0": 0.6227371879304773,
+          "10.0": 0.6159605602906785
+        },
+        "selected_C": 1.0,
+        "inner_folds_skipped_missing_class": 0
+      },
+      "yamnet_thresholds": {
+        "cat": 0.5,
+        "dog": 0.80078125,
+        "train_f1_cat": 0.8529411764705882,
+        "train_f1_dog": 0.9538461538461539
+      },
+      "yamnet_embedding_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.9574699259684725,
+          "0.1": 0.9624808188438398,
+          "1.0": 0.9550352403443526,
+          "10.0": 0.8979273246498825
+        },
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0
+      }
+    },
+    {
+      "test_fold": 3,
+      "n_train": 1600,
+      "n_test": 400,
+      "test_counts": {
+        "cat": 8,
+        "dog": 8,
+        "other": 384
+      },
+      "mfcc_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.5681464916348974,
+          "0.1": 0.6207822857222336,
+          "1.0": 0.6242695799905661,
+          "10.0": 0.6250844211946947
+        },
+        "selected_C": 10.0,
+        "inner_folds_skipped_missing_class": 0
+      },
+      "yamnet_thresholds": {
+        "cat": 0.73828125,
+        "dog": 0.8515625,
+        "train_f1_cat": 0.819672131147541,
+        "train_f1_dog": 0.9523809523809523
+      },
+      "yamnet_embedding_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.9453276961091993,
+          "0.1": 0.960237337568379,
+          "1.0": 0.9595020416081973,
+          "10.0": 0.9343789188892824
+        },
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0
+      }
+    },
+    {
+      "test_fold": 4,
+      "n_train": 1600,
+      "n_test": 400,
+      "test_counts": {
+        "cat": 8,
+        "dog": 8,
+        "other": 384
+      },
+      "mfcc_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.5505059346791175,
+          "0.1": 0.5823982503697427,
+          "1.0": 0.6016161847924538,
+          "10.0": 0.6159225493711815
+        },
+        "selected_C": 10.0,
+        "inner_folds_skipped_missing_class": 0
+      },
+      "yamnet_thresholds": {
+        "cat": 0.73828125,
+        "dog": 0.80078125,
+        "train_f1_cat": 0.819672131147541,
+        "train_f1_dog": 0.9230769230769231
+      },
+      "yamnet_embedding_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.9369183613156311,
+          "0.1": 0.9476707484552991,
+          "1.0": 0.9382798242114068,
+          "10.0": 0.8969899219399755
+        },
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0
+      }
+    },
+    {
+      "test_fold": 5,
+      "n_train": 1600,
+      "n_test": 400,
+      "test_counts": {
+        "cat": 8,
+        "dog": 8,
+        "other": 384
+      },
+      "mfcc_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.5670313914364109,
+          "0.1": 0.6203164396660534,
+          "1.0": 0.6291419206043555,
+          "10.0": 0.6279689049344598
+        },
+        "selected_C": 1.0,
+        "inner_folds_skipped_missing_class": 0
+      },
+      "yamnet_thresholds": {
+        "cat": 0.5859375,
+        "dog": 0.73828125,
+        "train_f1_cat": 0.8115942028985508,
+        "train_f1_dog": 0.9411764705882353
+      },
+      "yamnet_embedding_logreg": {
+        "inner_cv": "LeaveOneGroupOut",
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0
+        ],
+        "inner_macro_f1": {
+          "0.01": 0.9483161087147274,
+          "0.1": 0.9531753969060158,
+          "1.0": 0.9396846530850288,
+          "10.0": 0.8981554837375005
+        },
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0
+      }
+    }
+  ],
+  "results": {
+    "methods": {
+      "majority": {
+        "labels": [
+          "cat",
+          "dog",
+          "other"
+        ],
+        "n": 2000,
+        "macro_f1": 0.32653061224489793,
+        "balanced_accuracy": 0.3333333333333333,
+        "accuracy": 0.96,
+        "per_class": {
+          "cat": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 40,
+            "tp": 0,
+            "fp": 0,
+            "fn": 40
+          },
+          "dog": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 40,
+            "tp": 0,
+            "fp": 0,
+            "fn": 40
+          },
+          "other": {
+            "precision": 0.96,
+            "recall": 1.0,
+            "f1": 0.9795918367346939,
+            "support": 1920,
+            "tp": 1920,
+            "fp": 80,
+            "fn": 0
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "cat",
+            "dog",
+            "other"
+          ],
+          "matrix": [
+            [
+              0,
+              0,
+              40
+            ],
+            [
+              0,
+              0,
+              40
+            ],
+            [
+              0,
+              0,
+              1920
+            ]
+          ]
+        },
+        "per_fold_macro_f1": {
+          "1": 0.32653061224489793,
+          "2": 0.32653061224489793,
+          "3": 0.32653061224489793,
+          "4": 0.32653061224489793,
+          "5": 0.32653061224489793
+        },
+        "macro_f1_ci95": {
+          "ci_low": 0.3245977667050898,
+          "ci_high": 0.3282103675261459,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_cat_ci95": {
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_dog_ci95": {
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "false_positive_non_pet_categories": {
+          "cat": {},
+          "dog": {}
+        }
+      },
+      "mfcc_logreg": {
+        "labels": [
+          "cat",
+          "dog",
+          "other"
+        ],
+        "n": 2000,
+        "macro_f1": 0.6169001414549175,
+        "balanced_accuracy": 0.7335069444444445,
+        "accuracy": 0.9375,
+        "per_class": {
+          "cat": {
+            "precision": 0.3333333333333333,
+            "recall": 0.575,
+            "f1": 0.42201834862385323,
+            "support": 40,
+            "tp": 23,
+            "fp": 46,
+            "fn": 17
+          },
+          "dog": {
+            "precision": 0.35064935064935066,
+            "recall": 0.675,
+            "f1": 0.4615384615384615,
+            "support": 40,
+            "tp": 27,
+            "fp": 50,
+            "fn": 13
+          },
+          "other": {
+            "precision": 0.9843581445523193,
+            "recall": 0.9505208333333334,
+            "f1": 0.9671436142024377,
+            "support": 1920,
+            "tp": 1825,
+            "fp": 29,
+            "fn": 95
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "cat",
+            "dog",
+            "other"
+          ],
+          "matrix": [
+            [
+              23,
+              1,
+              16
+            ],
+            [
+              0,
+              27,
+              13
+            ],
+            [
+              46,
+              49,
+              1825
+            ]
+          ]
+        },
+        "per_fold_macro_f1": {
+          "1": 0.6383798194143022,
+          "2": 0.5802486096482524,
+          "3": 0.6102463921896556,
+          "4": 0.6877341186804102,
+          "5": 0.5681315739147065
+        },
+        "macro_f1_ci95": {
+          "ci_low": 0.5505818313087076,
+          "ci_high": 0.677497579621906,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_cat_ci95": {
+          "ci_low": 0.2744963738920226,
+          "ci_high": 0.5555555555555556,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_dog_ci95": {
+          "ci_low": 0.3260743174924166,
+          "ci_high": 0.5755510791366906,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "false_positive_non_pet_categories": {
+          "cat": {
+            "door_wood_creaks": 8,
+            "rooster": 8,
+            "siren": 7,
+            "crying_baby": 6,
+            "hen": 4,
+            "drinking_sipping": 2,
+            "sneezing": 2,
+            "breathing": 1,
+            "chirping_birds": 1,
+            "church_bells": 1,
+            "clock_alarm": 1,
+            "coughing": 1,
+            "door_wood_knock": 1,
+            "engine": 1,
+            "sheep": 1,
+            "washing_machine": 1
+          },
+          "dog": {
+            "frog": 9,
+            "hen": 6,
+            "siren": 6,
+            "coughing": 3,
+            "drinking_sipping": 3,
+            "laughing": 3,
+            "water_drops": 3,
+            "clock_tick": 2,
+            "cow": 2,
+            "door_wood_knock": 2,
+            "rooster": 2,
+            "church_bells": 1,
+            "crow": 1,
+            "glass_breaking": 1,
+            "pouring_water": 1,
+            "sheep": 1,
+            "sneezing": 1,
+            "snoring": 1,
+            "washing_machine": 1
+          }
+        }
+      },
+      "yamnet_tags_nested_threshold": {
+        "labels": [
+          "cat",
+          "dog",
+          "other"
+        ],
+        "n": 2000,
+        "macro_f1": 0.8953489914246434,
+        "balanced_accuracy": 0.9059027777777778,
+        "accuracy": 0.9875,
+        "per_class": {
+          "cat": {
+            "precision": 0.7804878048780488,
+            "recall": 0.8,
+            "f1": 0.7901234567901235,
+            "support": 40,
+            "tp": 32,
+            "fp": 9,
+            "fn": 8
+          },
+          "dog": {
+            "precision": 0.8809523809523809,
+            "recall": 0.925,
+            "f1": 0.9024390243902439,
+            "support": 40,
+            "tp": 37,
+            "fp": 5,
+            "fn": 3
+          },
+          "other": {
+            "precision": 0.9942618675013041,
+            "recall": 0.9927083333333333,
+            "f1": 0.9934844930935627,
+            "support": 1920,
+            "tp": 1906,
+            "fp": 11,
+            "fn": 14
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "cat",
+            "dog",
+            "other"
+          ],
+          "matrix": [
+            [
+              32,
+              0,
+              8
+            ],
+            [
+              0,
+              37,
+              3
+            ],
+            [
+              9,
+              5,
+              1906
+            ]
+          ]
+        },
+        "per_fold_macro_f1": {
+          "1": 0.9420479302832244,
+          "2": 0.8437409341456338,
+          "3": 0.883552590945587,
+          "4": 0.9320329432162983,
+          "5": 0.8780907883285237
+        },
+        "macro_f1_ci95": {
+          "ci_low": 0.8459064651320171,
+          "ci_high": 0.9351179549752116,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_cat_ci95": {
+          "ci_low": 0.6666666666666666,
+          "ci_high": 0.8775510204081632,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_dog_ci95": {
+          "ci_low": 0.8275632183908047,
+          "ci_high": 0.9615506329113923,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "false_positive_non_pet_categories": {
+          "cat": {
+            "snoring": 2,
+            "airplane": 1,
+            "crying_baby": 1,
+            "door_wood_creaks": 1,
+            "insects": 1,
+            "pouring_water": 1,
+            "sheep": 1,
+            "vacuum_cleaner": 1
+          },
+          "dog": {
+            "pig": 2,
+            "cow": 1,
+            "laughing": 1,
+            "rooster": 1
+          }
+        }
+      },
+      "yamnet_embedding_logreg": {
+        "labels": [
+          "cat",
+          "dog",
+          "other"
+        ],
+        "n": 2000,
+        "macro_f1": 0.9561684788179038,
+        "balanced_accuracy": 0.9817708333333334,
+        "accuracy": 0.9945,
+        "per_class": {
+          "cat": {
+            "precision": 0.8260869565217391,
+            "recall": 0.95,
+            "f1": 0.8837209302325583,
+            "support": 40,
+            "tp": 38,
+            "fp": 8,
+            "fn": 2
+          },
+          "dog": {
+            "precision": 0.975609756097561,
+            "recall": 1.0,
+            "f1": 0.9876543209876543,
+            "support": 40,
+            "tp": 40,
+            "fp": 1,
+            "fn": 0
+          },
+          "other": {
+            "precision": 0.9989545216936748,
+            "recall": 0.9953125,
+            "f1": 0.9971301852334986,
+            "support": 1920,
+            "tp": 1911,
+            "fp": 2,
+            "fn": 9
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "cat",
+            "dog",
+            "other"
+          ],
+          "matrix": [
+            [
+              38,
+              0,
+              2
+            ],
+            [
+              0,
+              40,
+              0
+            ],
+            [
+              8,
+              1,
+              1911
+            ]
+          ]
+        },
+        "per_fold_macro_f1": {
+          "1": 0.9184505606523955,
+          "2": 0.9773443144054328,
+          "3": 0.9398726896234374,
+          "4": 1.0,
+          "5": 0.9599139917063431
+        },
+        "macro_f1_ci95": {
+          "ci_low": 0.9198850898505772,
+          "ci_high": 0.9816264947491827,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_cat_ci95": {
+          "ci_low": 0.7842935112189205,
+          "ci_high": 0.9512708000911785,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "f1_dog_ci95": {
+          "ci_low": 0.9577464788732395,
+          "ci_high": 1.0,
+          "n_boot": 1000,
+          "n_groups": 1524,
+          "unit": "group"
+        },
+        "false_positive_non_pet_categories": {
+          "cat": {
+            "crying_baby": 2,
+            "door_wood_creaks": 2,
+            "rooster": 2,
+            "crow": 1,
+            "sheep": 1
+          },
+          "dog": {
+            "rooster": 1
+          }
+        }
+      },
+      "stratified_random": {
+        "repeats": 200,
+        "macro_f1_mean": 0.33316688488059343,
+        "macro_f1_sd": 0.010897317597788756,
+        "balanced_accuracy_mean": 0.3332760416666666,
+        "per_class_f1_mean": {
+          "cat": 0.019313502339324964,
+          "dog": 0.019886111232187975,
+          "other": 0.9603010410702671
+        }
+      }
+    },
+    "yamnet_raw_score_ranking": {
+      "cat": {
+        "average_precision": 0.8910829156464294,
+        "positives": 40
+      },
+      "dog": {
+        "average_precision": 0.9890002543834111,
+        "positives": 40
+      }
+    },
+    "calibration_diagnostic": {
+      "cat": {
+        "brier_raw_score": 0.006826438903808594,
+        "brier_platt_nested": 0.005592675746596365,
+        "positives": 40,
+        "note": "ECE/reliability curves not reported: 40 positives per class are too few for stable binning; calibration on ESC-50 does not transfer to household audio."
+      },
+      "dog": {
+        "brier_raw_score": 0.008280799865722657,
+        "brier_platt_nested": 0.0018470172680422885,
+        "positives": 40,
+        "note": "ECE/reliability curves not reported: 40 positives per class are too few for stable binning; calibration on ESC-50 does not transfer to household audio."
+      }
+    },
+    "growl_tag_score_ge_0.3_by_category": {
+      "cat": 3,
+      "cow": 4,
+      "crying_baby": 1,
+      "dog": 2,
+      "door_wood_creaks": 1,
+      "insects": 1,
+      "pig": 2,
+      "snoring": 1
+    }
+  },
+  "deployment_thresholds": {
+    "cat_vocalization": {
+      "threshold": 0.73828125,
+      "in_sample_f1": 0.8157894736842105
+    },
+    "dog_vocalization": {
+      "threshold": 0.80078125,
+      "in_sample_f1": 0.9382716049382716
+    }
+  },
+  "runtime_s": {
+    "inputs_compute_s_if_uncached": 73.47470370700012,
+    "total_s": 180.70234012100013
+  },
+  "created_at": "2026-10-09T03:09:39+00:00"
+}

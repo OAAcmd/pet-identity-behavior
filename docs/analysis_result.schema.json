@@ -1,0 +1,1738 @@
+{
+  "$defs": {
+    "AnimalTrack": {
+      "additionalProperties": false,
+      "properties": {
+        "track_id": {
+          "title": "Track Id",
+          "type": "string"
+        },
+        "identity_note": {
+          "const": "per-analysis track label; not a verified pet identity",
+          "default": "per-analysis track label; not a verified pet identity",
+          "title": "Identity Note",
+          "type": "string"
+        },
+        "species": {
+          "enum": [
+            "cat",
+            "dog"
+          ],
+          "title": "Species",
+          "type": "string"
+        },
+        "species_scores": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object"
+          },
+          "title": "Species Scores",
+          "type": "object"
+        },
+        "score_kind": {
+          "const": "detector_sigmoid_raw",
+          "default": "detector_sigmoid_raw",
+          "title": "Score Kind",
+          "type": "string"
+        },
+        "first_seen_s": {
+          "title": "First Seen S",
+          "type": "number"
+        },
+        "last_seen_s": {
+          "title": "Last Seen S",
+          "type": "number"
+        },
+        "duration_s": {
+          "title": "Duration S",
+          "type": "number"
+        },
+        "n_detections": {
+          "title": "N Detections",
+          "type": "integer"
+        },
+        "missed_sampled_frames": {
+          "title": "Missed Sampled Frames",
+          "type": "integer"
+        },
+        "detections": {
+          "items": {
+            "$ref": "#/$defs/Detection"
+          },
+          "title": "Detections",
+          "type": "array"
+        },
+        "movement": {
+          "$ref": "#/$defs/MovementSummary"
+        },
+        "zones": {
+          "items": {
+            "$ref": "#/$defs/ZoneOccupancy"
+          },
+          "title": "Zones",
+          "type": "array"
+        },
+        "pose_features": {
+          "items": {
+            "$ref": "#/$defs/PoseFeature"
+          },
+          "title": "Pose Features",
+          "type": "array"
+        },
+        "quality_flags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quality Flags",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "track_id",
+        "species",
+        "species_scores",
+        "first_seen_s",
+        "last_seen_s",
+        "duration_s",
+        "n_detections",
+        "missed_sampled_frames",
+        "detections",
+        "movement"
+      ],
+      "title": "AnimalTrack",
+      "type": "object"
+    },
+    "Attribution": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "unknown",
+            "no_visible_animal",
+            "single_visible_candidate",
+            "video_unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "candidate_track_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Candidate Track Ids",
+          "type": "array"
+        },
+        "method": {
+          "const": "none_evaluated",
+          "default": "none_evaluated",
+          "title": "Method",
+          "type": "string"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "note"
+      ],
+      "title": "Attribution",
+      "type": "object"
+    },
+    "AudioStream": {
+      "additionalProperties": false,
+      "properties": {
+        "codec": {
+          "title": "Codec",
+          "type": "string"
+        },
+        "sample_rate_hz": {
+          "title": "Sample Rate Hz",
+          "type": "integer"
+        },
+        "channels": {
+          "title": "Channels",
+          "type": "integer"
+        },
+        "first_sample_time_s": {
+          "title": "First Sample Time S",
+          "type": "number"
+        },
+        "decoded_duration_s": {
+          "title": "Decoded Duration S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "codec",
+        "sample_rate_hz",
+        "channels",
+        "first_sample_time_s",
+        "decoded_duration_s"
+      ],
+      "title": "AudioStream",
+      "type": "object"
+    },
+    "AudioSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "rms_dbfs": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rms Dbfs"
+        },
+        "peak_dbfs": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Dbfs"
+        },
+        "silent_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Silent Fraction"
+        },
+        "clipping_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clipping Fraction"
+        },
+        "effective_bandwidth_hz": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective Bandwidth Hz"
+        },
+        "windows_scored": {
+          "default": 0,
+          "title": "Windows Scored",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "title": "AudioSummary",
+      "type": "object"
+    },
+    "ComponentStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "ingest",
+            "audio_event",
+            "visual_detector",
+            "tracker",
+            "pose",
+            "context",
+            "fusion",
+            "explanation",
+            "vlm"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "ok",
+            "unavailable",
+            "disabled",
+            "failed",
+            "skipped",
+            "not_applicable"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "model_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Id"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "state"
+      ],
+      "title": "ComponentStatus",
+      "type": "object"
+    },
+    "Decision": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "enum": [
+            "supported_observation",
+            "experimental_hypothesis",
+            "abstention"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "overall_interpretation": {
+          "enum": [
+            "observations_only",
+            "experimental_hypotheses_present",
+            "unknown",
+            "insufficient_evidence"
+          ],
+          "title": "Overall Interpretation",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "overall_interpretation",
+        "reason_codes",
+        "summary"
+      ],
+      "title": "Decision",
+      "type": "object"
+    },
+    "Detection": {
+      "additionalProperties": false,
+      "properties": {
+        "t_s": {
+          "title": "T S",
+          "type": "number"
+        },
+        "box_xyxy_norm": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Box Xyxy Norm",
+          "type": "array"
+        },
+        "species_scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Species Scores",
+          "type": "object"
+        },
+        "flags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Flags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "t_s",
+        "box_xyxy_norm",
+        "species_scores"
+      ],
+      "title": "Detection",
+      "type": "object"
+    },
+    "EvidenceItem": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "animal_track",
+            "sound_event",
+            "zone_occupancy",
+            "movement",
+            "pose_feature",
+            "context_sound",
+            "context_object",
+            "audio_absence"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "t_start_s": {
+          "title": "T Start S",
+          "type": "number"
+        },
+        "t_end_s": {
+          "title": "T End S",
+          "type": "number"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Track Id"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "value_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Kind"
+        },
+        "reliability": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Reliability",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "kind",
+        "t_start_s",
+        "t_end_s",
+        "summary",
+        "reliability",
+        "provenance"
+      ],
+      "title": "EvidenceItem",
+      "type": "object"
+    },
+    "FusionInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "experimental",
+          "default": "experimental",
+          "title": "Mode",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "validated": {
+          "const": false,
+          "default": false,
+          "title": "Validated",
+          "type": "boolean"
+        },
+        "multimodal_accuracy": {
+          "const": "not_evaluated",
+          "default": "not_evaluated",
+          "title": "Multimodal Accuracy",
+          "type": "string"
+        },
+        "weights_fitted": {
+          "const": false,
+          "default": false,
+          "title": "Weights Fitted",
+          "type": "boolean"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "note"
+      ],
+      "title": "FusionInfo",
+      "type": "object"
+    },
+    "Hypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "hypothesis_id": {
+          "title": "Hypothesis Id",
+          "type": "string"
+        },
+        "name": {
+          "enum": [
+            "food",
+            "outside",
+            "attention",
+            "play",
+            "alert",
+            "tense",
+            "warning",
+            "relaxed"
+          ],
+          "title": "Name",
+          "type": "string"
+        },
+        "semantic_type": {
+          "enum": [
+            "need",
+            "activity",
+            "state",
+            "communicative_signal"
+          ],
+          "title": "Semantic Type",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "experimental_hypothesis",
+            "insufficient_evidence",
+            "abstained"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Track Id"
+        },
+        "t_start_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "T Start S"
+        },
+        "t_end_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "T End S"
+        },
+        "supporting_evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Supporting Evidence Ids",
+          "type": "array"
+        },
+        "conflicting_evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Conflicting Evidence Ids",
+          "type": "array"
+        },
+        "independent_provenance_roots": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Independent Provenance Roots",
+          "type": "array"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Experimental unitless support score; NOT a probability",
+          "title": "Score"
+        },
+        "score_kind": {
+          "enum": [
+            "heuristic_support_0_1",
+            "fusion_experimental_score_0_1",
+            "none"
+          ],
+          "title": "Score Kind",
+          "type": "string"
+        },
+        "scorer": {
+          "$ref": "#/$defs/Scorer"
+        },
+        "calibration_status": {
+          "default": "uncalibrated",
+          "enum": [
+            "uncalibrated",
+            "calibrated",
+            "not_applicable"
+          ],
+          "title": "Calibration Status",
+          "type": "string"
+        },
+        "calibrated_confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calibrated Confidence"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "explanation": {
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hypothesis_id",
+        "name",
+        "semantic_type",
+        "status",
+        "supporting_evidence_ids",
+        "conflicting_evidence_ids",
+        "independent_provenance_roots",
+        "score_kind",
+        "scorer",
+        "explanation"
+      ],
+      "title": "Hypothesis",
+      "type": "object"
+    },
+    "MediaInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis_filename": {
+          "description": "Sanitized basename; the server never echoes client paths",
+          "title": "Analysis Filename",
+          "type": "string"
+        },
+        "size_bytes": {
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "container": {
+          "title": "Container",
+          "type": "string"
+        },
+        "duration_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration S"
+        },
+        "start_time_s": {
+          "title": "Start Time S",
+          "type": "number"
+        },
+        "audio": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioStream"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "video": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VideoStream"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timeline": {
+          "const": "container_pts_seconds",
+          "default": "container_pts_seconds",
+          "title": "Timeline",
+          "type": "string"
+        }
+      },
+      "required": [
+        "analysis_filename",
+        "size_bytes",
+        "sha256",
+        "container",
+        "duration_s",
+        "start_time_s",
+        "audio",
+        "video"
+      ],
+      "title": "MediaInfo",
+      "type": "object"
+    },
+    "ModalityStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "requested": {
+          "items": {
+            "enum": [
+              "audio",
+              "video"
+            ],
+            "type": "string"
+          },
+          "title": "Requested",
+          "type": "array"
+        },
+        "available": {
+          "items": {
+            "enum": [
+              "audio",
+              "video"
+            ],
+            "type": "string"
+          },
+          "title": "Available",
+          "type": "array"
+        },
+        "audio_state": {
+          "enum": [
+            "present",
+            "absent",
+            "silent",
+            "corrupt",
+            "disabled",
+            "too_short"
+          ],
+          "title": "Audio State",
+          "type": "string"
+        },
+        "video_state": {
+          "enum": [
+            "present",
+            "absent",
+            "no_decodable_frames",
+            "corrupt",
+            "disabled"
+          ],
+          "title": "Video State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requested",
+        "available",
+        "audio_state",
+        "video_state"
+      ],
+      "title": "ModalityStatus",
+      "type": "object"
+    },
+    "ModelInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Name"
+        },
+        "revision": {
+          "title": "Revision",
+          "type": "string"
+        },
+        "sha256": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Sha256",
+          "type": "object"
+        },
+        "terms": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Terms",
+          "type": "object"
+        },
+        "use_restrictions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Use Restrictions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "model_id",
+        "name",
+        "revision",
+        "sha256",
+        "terms",
+        "use_restrictions"
+      ],
+      "title": "ModelInfo",
+      "type": "object"
+    },
+    "MovementSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "units": {
+          "title": "Units",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "median_speed": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Speed"
+        },
+        "p90_speed": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P90 Speed"
+        },
+        "path_length_diagonals": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path Length Diagonals"
+        },
+        "moving_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Moving Fraction"
+        },
+        "moving_threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Moving Threshold"
+        },
+        "median_speed_box_units_per_second": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Speed Box Units Per Second"
+        },
+        "box_area_change_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Box Area Change Ratio"
+        },
+        "camera_compensated_steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Camera Compensated Steps"
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steps"
+        },
+        "reliability": {
+          "default": "low",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Reliability",
+          "type": "string"
+        }
+      },
+      "required": [
+        "available",
+        "units"
+      ],
+      "title": "MovementSummary",
+      "type": "object"
+    },
+    "Observations": {
+      "additionalProperties": false,
+      "properties": {
+        "animal_tracks": {
+          "items": {
+            "$ref": "#/$defs/AnimalTrack"
+          },
+          "title": "Animal Tracks",
+          "type": "array"
+        },
+        "sound_events": {
+          "items": {
+            "$ref": "#/$defs/SoundEvent"
+          },
+          "title": "Sound Events",
+          "type": "array"
+        },
+        "context_sounds": {
+          "items": {
+            "$ref": "#/$defs/SoundEvent"
+          },
+          "title": "Context Sounds",
+          "type": "array"
+        },
+        "audio_summary": {
+          "$ref": "#/$defs/AudioSummary"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceItem"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "sampled_frames": {
+          "title": "Sampled Frames",
+          "type": "integer"
+        },
+        "sample_fps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sample Fps"
+        }
+      },
+      "required": [
+        "animal_tracks",
+        "sound_events",
+        "context_sounds",
+        "audio_summary",
+        "evidence",
+        "sampled_frames",
+        "sample_fps"
+      ],
+      "title": "Observations",
+      "type": "object"
+    },
+    "PoseFeature": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "name",
+        "available"
+      ],
+      "title": "PoseFeature",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "title": "Component",
+          "type": "string"
+        },
+        "model_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Id"
+        },
+        "root": {
+          "description": "Provenance root; evidence sharing a root is not independent",
+          "title": "Root",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component",
+        "root",
+        "method"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "QualityFlag": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "limiting"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "t_start_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "T Start S"
+        },
+        "t_end_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "T End S"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Track Id"
+        }
+      },
+      "required": [
+        "code",
+        "severity"
+      ],
+      "title": "QualityFlag",
+      "type": "object"
+    },
+    "Scorer": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "revision": {
+          "title": "Revision",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "rule_baseline",
+            "weighted_average",
+            "product_of_experts"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "revision",
+        "kind"
+      ],
+      "title": "Scorer",
+      "type": "object"
+    },
+    "SoundEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "t_start_s": {
+          "title": "T Start S",
+          "type": "number"
+        },
+        "t_end_s": {
+          "title": "T End S",
+          "type": "number"
+        },
+        "peak_raw_score": {
+          "title": "Peak Raw Score",
+          "type": "number"
+        },
+        "mean_raw_score": {
+          "title": "Mean Raw Score",
+          "type": "number"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "number"
+        },
+        "threshold_source": {
+          "title": "Threshold Source",
+          "type": "string"
+        },
+        "score_kind": {
+          "const": "yamnet_sigmoid_raw",
+          "default": "yamnet_sigmoid_raw",
+          "title": "Score Kind",
+          "type": "string"
+        },
+        "calibration_status": {
+          "const": "uncalibrated",
+          "default": "uncalibrated",
+          "title": "Calibration Status",
+          "type": "string"
+        },
+        "calibrated_probability": {
+          "default": null,
+          "title": "Calibrated Probability",
+          "type": "null"
+        },
+        "subtypes": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Subtypes",
+          "type": "object"
+        },
+        "top_audioset_labels": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Top Audioset Labels",
+          "type": "array"
+        },
+        "attribution": {
+          "$ref": "#/$defs/Attribution"
+        },
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "label",
+        "t_start_s",
+        "t_end_s",
+        "peak_raw_score",
+        "mean_raw_score",
+        "threshold",
+        "threshold_source",
+        "attribution",
+        "evidence_id"
+      ],
+      "title": "SoundEvent",
+      "type": "object"
+    },
+    "Suggestion": {
+      "additionalProperties": false,
+      "properties": {
+        "suggestion_id": {
+          "title": "Suggestion Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "based_on_evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Based On Evidence Ids",
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "observation_followup",
+            "safety_general",
+            "data_quality"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "suggestion_id",
+        "text",
+        "based_on_evidence_ids",
+        "kind"
+      ],
+      "title": "Suggestion",
+      "type": "object"
+    },
+    "UsageRestrictions": {
+      "additionalProperties": false,
+      "properties": {
+        "research_only": {
+          "title": "Research Only",
+          "type": "boolean"
+        },
+        "notices": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notices",
+          "type": "array"
+        }
+      },
+      "required": [
+        "research_only",
+        "notices"
+      ],
+      "title": "UsageRestrictions",
+      "type": "object"
+    },
+    "VideoStream": {
+      "additionalProperties": false,
+      "properties": {
+        "codec": {
+          "title": "Codec",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "title": "Height",
+          "type": "integer"
+        },
+        "avg_fps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Avg Fps"
+        },
+        "start_time_s": {
+          "title": "Start Time S",
+          "type": "number"
+        },
+        "duration_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration S"
+        },
+        "rotation_deg": {
+          "title": "Rotation Deg",
+          "type": "integer"
+        },
+        "is_still_image": {
+          "title": "Is Still Image",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "codec",
+        "width",
+        "height",
+        "avg_fps",
+        "start_time_s",
+        "duration_s",
+        "rotation_deg",
+        "is_still_image"
+      ],
+      "title": "VideoStream",
+      "type": "object"
+    },
+    "ZoneOccupancy": {
+      "additionalProperties": false,
+      "properties": {
+        "zone_id": {
+          "title": "Zone Id",
+          "type": "string"
+        },
+        "semantic_tag": {
+          "title": "Semantic Tag",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "intervals_s": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Intervals S",
+          "type": "array"
+        },
+        "dwell_s": {
+          "title": "Dwell S",
+          "type": "number"
+        },
+        "fraction_of_track_detections": {
+          "title": "Fraction Of Track Detections",
+          "type": "number"
+        },
+        "anchor": {
+          "title": "Anchor",
+          "type": "string"
+        }
+      },
+      "required": [
+        "zone_id",
+        "semantic_tag",
+        "label",
+        "intervals_s",
+        "dwell_s",
+        "fraction_of_track_detections",
+        "anchor"
+      ],
+      "title": "ZoneOccupancy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "analysis_id": {
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "config_profile": {
+      "title": "Config Profile",
+      "type": "string"
+    },
+    "config_hash": {
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "media": {
+      "$ref": "#/$defs/MediaInfo"
+    },
+    "modalities": {
+      "$ref": "#/$defs/ModalityStatus"
+    },
+    "components": {
+      "items": {
+        "$ref": "#/$defs/ComponentStatus"
+      },
+      "title": "Components",
+      "type": "array"
+    },
+    "observations": {
+      "$ref": "#/$defs/Observations"
+    },
+    "quality_flags": {
+      "items": {
+        "$ref": "#/$defs/QualityFlag"
+      },
+      "title": "Quality Flags",
+      "type": "array"
+    },
+    "hypotheses": {
+      "items": {
+        "$ref": "#/$defs/Hypothesis"
+      },
+      "title": "Hypotheses",
+      "type": "array"
+    },
+    "decision": {
+      "$ref": "#/$defs/Decision"
+    },
+    "suggestions": {
+      "items": {
+        "$ref": "#/$defs/Suggestion"
+      },
+      "title": "Suggestions",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "fusion": {
+      "$ref": "#/$defs/FusionInfo"
+    },
+    "timings_ms": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Timings Ms",
+      "type": "object"
+    },
+    "models": {
+      "items": {
+        "$ref": "#/$defs/ModelInfo"
+      },
+      "title": "Models",
+      "type": "array"
+    },
+    "usage_restrictions": {
+      "$ref": "#/$defs/UsageRestrictions"
+    }
+  },
+  "required": [
+    "analysis_id",
+    "created_at",
+    "engine_version",
+    "config_profile",
+    "config_hash",
+    "media",
+    "modalities",
+    "components",
+    "observations",
+    "quality_flags",
+    "hypotheses",
+    "decision",
+    "suggestions",
+    "limitations",
+    "fusion",
+    "timings_ms",
+    "models",
+    "usage_restrictions"
+  ],
+  "title": "AnalysisResult",
+  "type": "object"
+}

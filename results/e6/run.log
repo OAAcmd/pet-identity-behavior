@@ -1,0 +1,3 @@
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+{"experiment": "e6", "status": "completed", "results_dir": "results/e6"}
+done

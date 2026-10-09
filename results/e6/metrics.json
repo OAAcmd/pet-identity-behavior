@@ -1,0 +1,123 @@
+{
+  "experiment": "E6",
+  "hardware": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
+    "cpu_count_logical": 4,
+    "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "mem_total_gb": 15.7,
+    "gpu": "none detected (no /dev/nvidia*, no nvidia-smi)",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers"
+  },
+  "config": {
+    "profile": "cpu",
+    "num_threads": 2,
+    "sample_fps": 2.0,
+    "detector": "efficientdet_lite0_mediapipe_v1",
+    "audio_backend": "yamnet_mediapipe_v1"
+  },
+  "cold_start_fresh_process": {
+    "import_s": 1.3284759390003273,
+    "model_load_s": 0.5951952599998549,
+    "engine_reported_load_ms": 589.7786780001297,
+    "peak_rss_mb": 224.37890625
+  },
+  "warm_runs": {
+    "video_8s_640x480_with_audio": {
+      "media_duration_s": 8.0,
+      "sampled_frames": 16,
+      "audio_windows": 16,
+      "wall_s_median": 0.9492720869998266,
+      "wall_s_all": [
+        0.9492720869998266,
+        0.9389815129998169,
+        0.9546628690000034
+      ],
+      "real_time_factor": 0.11865901087497832,
+      "stage_ms_median": {
+        "audio_inference": 24.41,
+        "decode_audio": 152.4,
+        "frame_gap_check": 61.41,
+        "fusion": 0.27,
+        "hash": 0.22,
+        "probe": 60.24,
+        "video_decode_detect_track": 646.22,
+        "video_detector_inference": 353.47,
+        "video_quality_and_camera_motion": 200.37
+      },
+      "output_json_serialization_ms_median": 0.28775100008715526
+    },
+    "video_64s_640x480_with_audio": {
+      "media_duration_s": 64.076367,
+      "sampled_frames": 128,
+      "audio_windows": 133,
+      "wall_s_median": 5.356656538000152,
+      "wall_s_all": [
+        5.484784726999806,
+        5.098564257999897,
+        5.356656538000152
+      ],
+      "real_time_factor": 0.08359800639134475,
+      "stage_ms_median": {
+        "audio_inference": 192.34,
+        "decode_audio": 382.96,
+        "frame_gap_check": 60.16,
+        "fusion": 0.32,
+        "hash": 0.99,
+        "probe": 56.83,
+        "video_decode_detect_track": 4653.42,
+        "video_detector_inference": 2751.72,
+        "video_quality_and_camera_motion": 1635.71
+      },
+      "output_json_serialization_ms_median": 0.3699369999594637
+    },
+    "audio_only_5s_44k": {
+      "media_duration_s": 5.0,
+      "sampled_frames": 0,
+      "audio_windows": 10,
+      "wall_s_median": 0.21916961599981732,
+      "wall_s_all": [
+        0.21916961599981732,
+        0.2194559639997351,
+        0.20388959399997475
+      ],
+      "real_time_factor": 0.043833923199963466,
+      "stage_ms_median": {
+        "audio_inference": 20.54,
+        "decode_audio": 130.28,
+        "fusion": 0.24,
+        "hash": 0.48,
+        "probe": 57.98
+      },
+      "output_json_serialization_ms_median": 0.15235399996527121
+    },
+    "still_image_jpeg": {
+      "media_duration_s": 0.04,
+      "sampled_frames": 1,
+      "audio_windows": 0,
+      "wall_s_median": 0.13936134499999753,
+      "wall_s_all": [
+        0.1471143439998741,
+        0.13238953899963235,
+        0.13936134499999753
+      ],
+      "real_time_factor": null,
+      "stage_ms_median": {
+        "frame_gap_check": 0.01,
+        "fusion": 0.03,
+        "hash": 0.21,
+        "probe": 50.85,
+        "video_decode_detect_track": 86.63,
+        "video_detector_inference": 22.87,
+        "video_quality_and_camera_motion": 2.23
+      },
+      "output_json_serialization_ms_median": 0.1807509997888701
+    }
+  },
+  "peak_rss_mb_this_process": 271.16015625,
+  "notes": [
+    "Output serialization is included in 'wall_s' but not in stage timings.",
+    "Video decode, detection and tracking share one streaming stage ('video_decode_detect_track')."
+  ],
+  "created_at": "2026-10-09T03:39:16+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "experiment": "E3",
+  "status": "pending",
+  "reason": "Barkopedia metadata/media not reachable (huggingface.co denied) and not audited: no audit_review.json (provenance, splits and grouping unreviewed)",
+  "identity_disjoint_evaluation_possible": "unknown (animal/source IDs unverified)",
+  "cross_dog_claims": "declined",
+  "dog_sound_event_detection": "see E1 (ESC-50 dog vs other)",
+  "next_command": "uv run petperception fetch-data barkopedia --audit-only  # then complete var/data/barkopedia/audit_review.json",
+  "created_at": "2026-10-09T03:29:44+00:00"
+}

@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# Local data, models, caches and job storage (never committed)
+var/
+data_local/
+*.tflite
+*.h5
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Raw media must never be committed
+*.wav
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.ogg
+*.flac
+*.mp3
+*.m4a
+*.jpg
+*.jpeg
+*.png
+!docs/figures/*.png
+
+# Secrets
+.env
+*.token
