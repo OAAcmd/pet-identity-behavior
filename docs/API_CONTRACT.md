@@ -7,7 +7,8 @@ Generated, always-current artifacts (CI fails if they are stale):
 - Regenerate: `uv run petperception export-openapi`
 
 The phone engine (TypeScript) and the server engine (Python) produce the
-**same result schema**; on-device results never reach the server.
+**same result schema**; on-device results reach the server only if the user
+turns on result backup (result JSON and feedback, never media).
 
 ## Service posture
 
@@ -18,7 +19,7 @@ The phone engine (TypeScript) and the server engine (Python) produce the
 | CSRF | State-changing requests must send `X-CSRF-Token` (returned by login/register and `/auth/me`). |
 | Errors | JSON `{"error": {"code", "message", "action", "details"?}}` with a stable `code`; every response carries `X-Request-ID`. |
 | Limits | per-user open uploads, active analyses and quota; global queue length; upload size and chunk size; media duration and frame limits (`app.*`, `limits.*`). |
-| Privacy | Media only arrive through explicit server analysis. Uploaded media are deleted after analysis unless the user keeps them (bounded retention). Logs contain no user names, file names or passwords. Account deletion removes analyses, media, feedback and device reports. |
+| Privacy | Media only arrive through explicit server analysis. Uploaded media are deleted after analysis unless the user keeps them (bounded retention). Logs contain no user names, file names or passwords. Account deletion removes analyses, media, feedback, backed-up on-device results and device reports. |
 
 ## Endpoints
 

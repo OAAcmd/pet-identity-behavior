@@ -30,7 +30,8 @@ export function AboutPage() {
       </ul>
       <h2>Privacy</h2>
       <p>
-        On-device results are stored only in this browser until you delete them. If you use server analysis, recordings are deleted from
+        On-device results are stored only in this browser until you delete them, unless you turn on result backup in Settings: then the
+        result text and your feedback (never the recording) are copied to your account. If you use server analysis, recordings are deleted from
         the server right after analysis unless you choose to keep them; server results and feedback stay until you delete them or your
         account. Reference pictures for places stay on your device.
       </p>

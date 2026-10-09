@@ -102,7 +102,7 @@ what prevents the next status.
 3. Vocal context datasets blocked by network policy.
 4. No pet-pet interaction data; object relations not trained.
 5. No real-phone results.
-7. Commercial profile: every model still needs the recorded legal sign-off
+6. Commercial profile: every model still needs the recorded legal sign-off
    (training-data terms); the technical blocker (no browser-compatible
    licence-confirmed detector) is resolved by E14.
 

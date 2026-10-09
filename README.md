@@ -23,6 +23,7 @@ phone browser (PWA) ── one-time model download (/ondevice/, SHA-256 verified
   capture / file ─► TypeScript engine + LiteRT.js (WebAssembly) ─► result (IndexedDB, on the phone)
                                                                     │
 server (optional): accounts, pets, places, bundle distribution, device reports,
+                   opt-in backup of result JSON (never recordings),
                    server analysis only when the user turns it on (Python engine, same result schema)
 ```
 
