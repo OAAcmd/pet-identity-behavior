@@ -1,0 +1,16 @@
+# TLS termination and reverse proxy. With a public domain whose DNS points at
+# this host (ports 80/443 reachable), Caddy obtains a certificate automatically.
+# With "localhost" it uses its internal CA (browsers warn unless trusted).
+{$PETPERCEPTION_DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 12MB   # upload chunks are <= 8 MiB (app.storage.max_chunk_bytes)
+	}
+	reverse_proxy app:8000 {
+		header_up X-Forwarded-Proto {scheme}
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+}

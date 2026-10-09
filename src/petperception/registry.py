@@ -100,12 +100,8 @@ def fetch_model(settings: Settings, model_id: str) -> dict[str, Any]:
 
 
 def default_model_ids(settings: Settings) -> list[str]:
-    ids = []
-    if settings.audio.enabled and settings.audio.event_backend == "yamnet":
-        ids.append(settings.audio.yamnet.model_id)
-    if settings.vision.enabled:
-        ids.append(settings.vision.detector)
-    return ids
+    """Every model the configured engine loads (detector, verifier classifier, backbones, YAMNet)."""
+    return [rid for rid in configured_resources(settings) if load_resources().get(rid, {}).get("kind") == "model"]
 
 
 def model_terms_summary(model_id: str) -> dict[str, Any]:

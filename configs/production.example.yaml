@@ -1,0 +1,154 @@
+# Production profile for the container image (docs/DEPLOYMENT.md). Differences
+# from configs/cpu.yaml: listens on all interfaces behind a TLS reverse proxy,
+# Secure cookies, persistent paths under /var/lib/petperception, models under
+# /models, release profile defaults to personal_noncommercial, and research-only
+# assets (dog keypoints) are not configured. ${VAR:-default} values are expanded
+# from the environment. See docs/CONFIGURATION.md.
+config_version: 2
+profile: production
+release_profile: ${PETPERCEPTION_RELEASE_PROFILE:-personal_noncommercial}
+research_profile: false
+
+paths:
+  data_root: ${PETPERCEPTION_DATA_ROOT:-/var/lib/petperception/data}
+  models_root: ${PETPERCEPTION_MODELS_ROOT:-/models}
+  results_root: results
+  artifacts_root: artifacts
+  manifests_root: manifests
+  jobs_root: ${PETPERCEPTION_JOBS_ROOT:-/tmp/petperception-jobs}
+
+limits:
+  max_file_bytes: 209715200      # 200 MiB
+  max_duration_s: 600            # 10 minutes
+  max_video_frames: 1200         # sampled frames per analysis
+  max_audio_channels: 8
+  ffprobe_timeout_s: 30
+  decode_timeout_s: 300
+
+audio:
+  enabled: true
+  event_backend: yamnet
+  silence_dbfs: -60
+  analysis_sample_rate: 16000
+  yamnet:
+    model_id: yamnet_mediapipe_v1
+    hop_s: 0.48
+    thresholds_file: artifacts/audio_event_thresholds.json
+    default_thresholds: {cat_vocalization: 0.5, dog_vocalization: 0.5, growl: 0.5}   # growl: not data-selected
+    context_tag_threshold: 0.3
+    min_event_gap_s: 0.5
+
+vision:
+  enabled: true
+  detector: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}   # commercial: efficientdet_lite0_tfhub_v1
+  sample_fps: 2.0
+  max_side: 640
+  score_threshold: 0.35
+  nms_iou: 0.5
+  max_detections_per_frame: 10
+  target_classes: [cat, dog]
+  context_object_classes: []     # e.g. [person]; COCO 'bowl' is not validated for pet bowls
+  camera_motion_compensation: true
+  tracker: {method: kalman, iou_threshold: 0.3, max_gap_s: 1.5, min_hits: 2}   # kalman selected on E8 development seeds
+  quality:
+    low_light_luma: 40
+    blur_laplacian_var: 25
+    tiny_area_fraction: 0.004
+    camera_motion_threshold: 0.01
+    frame_gap_factor: 2.5
+  verifier:                      # second-stage false-positive rejection (E7)
+    enabled: true
+    classifier: efficientnet_lite0_mediapipe_v1
+    params_dir: artifacts/verifier
+    max_checks_per_frame: 3
+
+pose:
+  provider: none                 # dog_keypoints_v1 is research-only (Research-Only training data)
+  head_file: artifacts/keypoints/dog_keypoints_head_v1.npz
+  backbone: efficientnet_lite0_mediapipe_v1
+  min_keypoint_visibility: 0.5
+  max_per_frame: 2
+  min_detection_score: 0.45
+
+posture:                         # coarse lying/sitting/standing from weak caption labels (E10)
+  enabled: true
+  model_file: artifacts/posture/posture_v1.npz
+  backbone: efficientnet_lite0_mediapipe_v1
+  max_per_frame: 2
+  min_detection_score: 0.45
+
+behavior:                        # a-priori thresholds; checked on synthetic/semi-synthetic data only (E8)
+  enabled: true
+  moving_speed: 0.05             # image diagonals per second
+  active_speed: 0.25
+  min_stationary_s: 2.0
+  min_moving_s: 1.0
+  min_active_s: 1.0
+  pacing_min_amplitude: 0.08
+  pacing_min_reversals: 3
+  pacing_max_leg_s: 10.0
+  pacing_min_span_s: 4.0
+  approach_min_drop: 0.05
+  approach_min_s: 1.0
+  approach_lookback_s: 10.0
+  view_edge_margin_s: 1.0
+  vocal_max_gap_s: 2.0
+  startle_max_lag_s: 1.5
+  startle_baseline_s: 3.0
+  startle_ratio: 3.0
+
+fusion:
+  mode: experimental
+  method: rule_baseline          # rule_baseline | weighted_average | product_of_experts
+  weights: {audio: 1.0, vision: 1.0, context: 0.5, pose: 1.0}   # NOT fitted: no paired dev data
+  temperature: 2.0
+  smoothing_epsilon: 0.02
+  prior_logit: -1.0
+  max_evidence_age_s: 10
+  co_occurrence_window_s: 3.0
+  min_zone_dwell_s: 1.0
+  abstain_below_score: 0.5
+
+vlm:
+  enabled: false                 # optional owner-configured loopback endpoint only
+  endpoint: null
+
+serve:
+  host: 0.0.0.0                  # inside the container, behind the TLS reverse proxy
+  port: 8000
+  trusted_proxy_hops: 1          # the reverse proxy sets X-Forwarded-For
+  static_dir: web/dist           # built PWA, served from the same origin
+
+app:
+  log_format: json
+  log_level: INFO
+  auth:
+    registration: first_user_only   # first account becomes admin; then admin-created accounts only
+    cookie_secure: true             # served over HTTPS only
+    session_ttl_hours: 336
+    session_idle_hours: 72
+    min_password_length: 10
+  jobs:
+    workers: ${PETPERCEPTION_WORKERS:-2}
+    lease_s: 60
+    heartbeat_s: 10
+    max_attempts: 3
+    retry_backoff_s: 5
+    job_timeout_s: 900
+    max_active_per_user: 3
+    max_queued_total: 50
+  storage:
+    database_path: ${PETPERCEPTION_DB:-/var/lib/petperception/petperception.sqlite3}
+    media_root: ${PETPERCEPTION_MEDIA_ROOT:-/var/lib/petperception/media}
+    max_upload_bytes: 104857600     # 100 MiB
+    max_chunk_bytes: 8388608        # 8 MiB
+    max_open_uploads_per_user: 5
+    upload_expiry_hours: 24
+    user_quota_bytes: 2147483648    # 2 GiB retained media per user
+    max_retain_media_days: 30
+    min_free_disk_bytes: 536870912
+    cleanup_interval_s: 300
+
+runtime:
+  num_threads: ${PETPERCEPTION_NUM_THREADS:-2}
+  accelerator: cpu

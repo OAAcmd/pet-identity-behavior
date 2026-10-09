@@ -319,8 +319,37 @@ def cmd_worker(args: argparse.Namespace) -> int:
 
 def cmd_db(args: argparse.Namespace) -> int:
     s, db, _ = _store(args)
+    if args.action == "backup":
+        import sqlite3
+
+        if not args.out:
+            print(json.dumps({"error": "--out is required for backup"}))
+            return 2
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        src = sqlite3.connect(str(db.path))
+        dst = sqlite3.connect(str(out))
+        with dst:
+            src.backup(dst)  # online, consistent copy (WAL-safe)
+        src.close()
+        dst.close()
+        print(json.dumps({"database": str(db.path), "backup": str(out), "bytes": out.stat().st_size, "schema_version": db.schema_version()}))
+        return 0
     print(json.dumps({"database": str(db.path), "schema_version": db.schema_version()}))
     return 0
+
+
+def cmd_release_check(args: argparse.Namespace) -> int:
+    from .registry import check_model, release_report, resource
+
+    s = _settings(args)
+    rep = release_report(s)
+    for d in rep["decisions"]:
+        if resource(d["resource_id"]).get("kind") == "model":
+            r = check_model(s, d["resource_id"])
+            d["files"] = r.status
+    print(json.dumps(rep, indent=2))
+    return 0 if rep["all_allowed"] else 3
 
 
 def cmd_user(args: argparse.Namespace) -> int:
@@ -450,13 +479,16 @@ def build_parser() -> argparse.ArgumentParser:
     wk.add_argument("--once", action="store_true", help="process due jobs and exit")
     wk.set_defaults(func=cmd_worker)
     dbp = sub.add_parser("db", help="apply database migrations and print the schema version")
-    dbp.add_argument("action", choices=["migrate"])
+    dbp.add_argument("action", choices=["migrate", "backup"])
+    dbp.add_argument("--out", help="backup destination file (action backup)")
     dbp.set_defaults(func=cmd_db)
     us = sub.add_parser("user", help="manage accounts (password via prompt or $PETPERCEPTION_NEW_PASSWORD)")
     us.add_argument("action", choices=["create", "list", "disable", "enable", "reset-password"])
     us.add_argument("--username")
     us.add_argument("--admin", action="store_true")
     us.set_defaults(func=cmd_user)
+    rc = sub.add_parser("release-check", help="check every configured asset against the release profile (exit 3 if any is not allowed)")
+    rc.set_defaults(func=cmd_release_check)
     cl = sub.add_parser("cleanup", help="recover expired jobs, expire uploads/media/sessions, remove orphan files")
     cl.set_defaults(func=cmd_cleanup)
     oa = sub.add_parser("export-openapi", help="write the OpenAPI document and the result JSON schema")

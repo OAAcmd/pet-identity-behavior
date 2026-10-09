@@ -37,7 +37,7 @@ audio:
 
 vision:
   enabled: true
-  detector: efficientdet_lite0_mediapipe_v1
+  detector: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}   # commercial: efficientdet_lite0_tfhub_v1
   sample_fps: 2.0
   max_side: 640
   score_threshold: 0.35
@@ -46,16 +46,53 @@ vision:
   target_classes: [cat, dog]
   context_object_classes: []     # e.g. [person]; COCO 'bowl' is not validated for pet bowls
   camera_motion_compensation: true
-  tracker: {iou_threshold: 0.3, max_gap_s: 1.5, min_hits: 2}
+  tracker: {method: kalman, iou_threshold: 0.3, max_gap_s: 1.5, min_hits: 2}   # kalman selected on E8 development seeds
   quality:
     low_light_luma: 40
     blur_laplacian_var: 25
     tiny_area_fraction: 0.004
     camera_motion_threshold: 0.01
     frame_gap_factor: 2.5
+  verifier:                      # second-stage false-positive rejection (E7)
+    enabled: true
+    classifier: efficientnet_lite0_mediapipe_v1
+    params_dir: artifacts/verifier
+    max_checks_per_frame: 3
 
 pose:
-  provider: none                 # no verified cat/dog pose checkpoint is available
+  provider: dog_keypoints_v1     # dogs only; research profile (Research-Only training data); cats: unavailable
+  head_file: artifacts/keypoints/dog_keypoints_head_v1.npz
+  backbone: efficientnet_lite0_mediapipe_v1
+  min_keypoint_visibility: 0.5
+  max_per_frame: 2
+  min_detection_score: 0.45
+
+posture:                         # coarse lying/sitting/standing from weak caption labels (E10)
+  enabled: true
+  model_file: artifacts/posture/posture_v1.npz
+  backbone: efficientnet_lite0_mediapipe_v1
+  max_per_frame: 2
+  min_detection_score: 0.45
+
+behavior:                        # a-priori thresholds; checked on synthetic/semi-synthetic data only (E8)
+  enabled: true
+  moving_speed: 0.05             # image diagonals per second
+  active_speed: 0.25
+  min_stationary_s: 2.0
+  min_moving_s: 1.0
+  min_active_s: 1.0
+  pacing_min_amplitude: 0.08
+  pacing_min_reversals: 3
+  pacing_max_leg_s: 10.0
+  pacing_min_span_s: 4.0
+  approach_min_drop: 0.05
+  approach_min_s: 1.0
+  approach_lookback_s: 10.0
+  view_edge_margin_s: 1.0
+  vocal_max_gap_s: 2.0
+  startle_max_lag_s: 1.5
+  startle_baseline_s: 3.0
+  startle_ratio: 3.0
 
 fusion:
   mode: experimental

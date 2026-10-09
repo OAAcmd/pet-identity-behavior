@@ -1,0 +1,56 @@
+# Single-host deployment: TLS reverse proxy (Caddy) -> app (API + workers + PWA).
+# Usage and requirements: docs/DEPLOYMENT.md.
+#   docker compose -f deploy/compose.yaml --env-file deploy/.env up -d --build
+name: petperception
+
+services:
+  # One-shot, checksum-verified model download into the shared "models" volume.
+  models:
+    image: petperception:${PETPERCEPTION_TAG:-local}
+    build: {context: .., dockerfile: Dockerfile}
+    command: ["fetch-models"]
+    environment:
+      PETPERCEPTION_RELEASE_PROFILE: ${PETPERCEPTION_RELEASE_PROFILE:-personal_noncommercial}
+      PETPERCEPTION_DETECTOR: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}
+    volumes: [models:/models]
+    restart: "no"
+
+  app:
+    image: petperception:${PETPERCEPTION_TAG:-local}
+    depends_on:
+      models: {condition: service_completed_successfully}
+    environment:
+      PETPERCEPTION_RELEASE_PROFILE: ${PETPERCEPTION_RELEASE_PROFILE:-personal_noncommercial}
+      PETPERCEPTION_DETECTOR: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}
+      PETPERCEPTION_WORKERS: ${PETPERCEPTION_WORKERS:-2}
+      PETPERCEPTION_NUM_THREADS: ${PETPERCEPTION_NUM_THREADS:-2}
+    volumes:
+      - data:/var/lib/petperception
+      - models:/models:ro
+    expose: ["8000"]
+    restart: unless-stopped
+    stop_grace_period: 60s   # running analyses are cancelled and re-queued on restart
+    deploy:
+      resources:
+        limits: {cpus: "${PETPERCEPTION_CPUS:-4}", memory: "${PETPERCEPTION_MEMORY:-4g}"}
+
+  proxy:
+    image: ${REGISTRY:-mirror.gcr.io/library}/caddy:2.10-alpine@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d
+    depends_on:
+      app: {condition: service_healthy}
+    environment:
+      PETPERCEPTION_DOMAIN: ${PETPERCEPTION_DOMAIN:-localhost}
+    ports:
+      - "${PETPERCEPTION_HTTPS_PORT:-443}:443"
+      - "${PETPERCEPTION_HTTP_PORT:-80}:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  data: {}
+  models: {}
+  caddy_data: {}
+  caddy_config: {}

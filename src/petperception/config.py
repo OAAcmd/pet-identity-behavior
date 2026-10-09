@@ -83,7 +83,7 @@ class AudioConfig(BaseModel):
 
 
 class TrackerConfig(BaseModel):
-    method: Literal["iou", "kalman"] = "iou"
+    method: Literal["iou", "kalman"] = "kalman"  # selected on E8 development seeds
     iou_threshold: float = 0.3
     max_gap_s: float = 1.5
     min_hits: int = 2

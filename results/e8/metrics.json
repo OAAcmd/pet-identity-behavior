@@ -1,0 +1,4896 @@
+{
+  "experiment": "E8",
+  "title": "Tracking and behavior segments on semi-synthetic sequences (real animal pixels, scripted motion)",
+  "protocol": [
+    "E8: tracking and behavior segments on SEMI-SYNTHETIC sequences.",
+    "",
+    "What is real: the animal pixels (Open Images test-split cat/dog box crops) and",
+    "backgrounds (test-split images with no cat, dog or confusable-animal boxes),",
+    "the detector, verifier, tracker and behavior code (the full ``analyze`` path on",
+    "encoded MP4 files). What is synthetic: the motion. Each animal crop is moved",
+    "along a scripted path, so the ground-truth boxes, identities and behavior",
+    "segments are exact. This measures whether the software recovers known motion",
+    "patterns under real detection noise. It says nothing about how real pets",
+    "move, how often they pace, or whether these segments match human behavior",
+    "annotations; no such labelled household data was available.",
+    "",
+    "Scripts: still->walk->still, run burst, pacing, zone visit, exit and return,",
+    "two animals crossing, occlusion, camera pan over a still animal.",
+    "",
+    "Seeds: development 0-15 (2 per script; used to check the code and to choose",
+    "the default tracker), test 1000-1047 (6 per script; reported). Behavior",
+    "thresholds are a-priori configuration values and were not tuned on either.",
+    "",
+    "Matching: interval segments by temporal IoU >= 0.3, instant events within",
+    "1.0 s; tracking by per-sample Hungarian IoU >= 0.5 (MOTA, IDF1, ID switches)."
+  ],
+  "assets": {
+    "cat_crops": 58,
+    "dog_crops": 142,
+    "backgrounds": 60,
+    "crop_screening": {
+      "candidates": {
+        "cat": 71,
+        "dog": 179
+      },
+      "kept": {
+        "cat": 58,
+        "dog": 142
+      }
+    },
+    "background_fetch_errors": 0,
+    "source": "Open Images V7 test split: crops from openimages_v7_test_tuning, indoor backgrounds from manifests/e8_backgrounds.csv"
+  },
+  "render": {
+    "width": 640,
+    "height": 480,
+    "fps": 10,
+    "codec": "libx264 crf 20",
+    "analysis_sample_fps": 2.0
+  },
+  "dev": {
+    "iou": {
+      "tracking": {
+        "gt": 381,
+        "pred": 358,
+        "tp": 322,
+        "fp": 36,
+        "fn": 59,
+        "idsw": 11,
+        "idtp": 251,
+        "mota": 0.7217847769028871,
+        "idf1": 0.6792963464140731,
+        "detection_recall": 0.8451443569553806,
+        "detection_precision": 0.8994413407821229
+      },
+      "tracking_by_script": {
+        "still_walk_still": {
+          "gt": 58,
+          "pred": 58,
+          "tp": 58,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 58,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        },
+        "run_burst": {
+          "gt": 37,
+          "pred": 51,
+          "tp": 34,
+          "fp": 17,
+          "fn": 3,
+          "idsw": 2,
+          "idtp": 18,
+          "tracks": 5,
+          "sequences": 2,
+          "idf1": 0.4090909090909091
+        },
+        "pacing": {
+          "gt": 62,
+          "pred": 41,
+          "tp": 22,
+          "fp": 19,
+          "fn": 40,
+          "idsw": 2,
+          "idtp": 9,
+          "tracks": 5,
+          "sequences": 2,
+          "idf1": 0.17475728155339806
+        },
+        "zone_visit": {
+          "gt": 69,
+          "pred": 69,
+          "tp": 69,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 69,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        },
+        "exit_return": {
+          "gt": 39,
+          "pred": 36,
+          "tp": 36,
+          "fp": 0,
+          "fn": 3,
+          "idsw": 2,
+          "idtp": 19,
+          "tracks": 4,
+          "sequences": 2,
+          "idf1": 0.5066666666666667
+        },
+        "two_cross": {
+          "gt": 60,
+          "pred": 53,
+          "tp": 53,
+          "fp": 0,
+          "fn": 7,
+          "idsw": 3,
+          "idtp": 36,
+          "tracks": 5,
+          "sequences": 2,
+          "idf1": 0.6371681415929203
+        },
+        "occlusion": {
+          "gt": 25,
+          "pred": 19,
+          "tp": 19,
+          "fp": 0,
+          "fn": 6,
+          "idsw": 2,
+          "idtp": 11,
+          "tracks": 4,
+          "sequences": 2,
+          "idf1": 0.5
+        },
+        "camera_pan": {
+          "gt": 31,
+          "pred": 31,
+          "tp": 31,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 31,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        }
+      },
+      "segments": {
+        "active_bout": {
+          "gt": 2,
+          "pred": 0,
+          "matched": 0,
+          "recall": 0.0,
+          "precision": null,
+          "median_max_boundary_error_s": null
+        },
+        "approach_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 2.0
+        },
+        "dwell_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.35000000000000053
+        },
+        "enter_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.30000000000000027
+        },
+        "entered_view": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.40000000000000036
+        },
+        "leave_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "left_view": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "moving": {
+          "gt": 6,
+          "pred": 7,
+          "matched": 3,
+          "recall": 0.5,
+          "precision": 0.42857142857142855,
+          "median_max_boundary_error_s": 0.2999999999999998
+        },
+        "pacing_candidate": {
+          "gt": 2,
+          "pred": 0,
+          "matched": 0,
+          "recall": 0.0,
+          "precision": null,
+          "median_max_boundary_error_s": null
+        },
+        "stationary": {
+          "gt": 10,
+          "pred": 11,
+          "matched": 10,
+          "recall": 1.0,
+          "precision": 0.9090909090909091,
+          "median_max_boundary_error_s": 0.25
+        }
+      }
+    },
+    "kalman": {
+      "tracking": {
+        "gt": 381,
+        "pred": 360,
+        "tp": 324,
+        "fp": 36,
+        "fn": 57,
+        "idsw": 10,
+        "idtp": 281,
+        "mota": 0.7296587926509186,
+        "idf1": 0.7584345479082322,
+        "detection_recall": 0.8503937007874016,
+        "detection_precision": 0.9
+      },
+      "tracking_by_script": {
+        "still_walk_still": {
+          "gt": 58,
+          "pred": 58,
+          "tp": 58,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 58,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        },
+        "run_burst": {
+          "gt": 37,
+          "pred": 52,
+          "tp": 35,
+          "fp": 17,
+          "fn": 2,
+          "idsw": 1,
+          "idtp": 27,
+          "tracks": 4,
+          "sequences": 2,
+          "idf1": 0.6067415730337079
+        },
+        "pacing": {
+          "gt": 62,
+          "pred": 41,
+          "tp": 22,
+          "fp": 19,
+          "fn": 40,
+          "idsw": 3,
+          "idtp": 13,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 0.2524271844660194
+        },
+        "zone_visit": {
+          "gt": 69,
+          "pred": 69,
+          "tp": 69,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 69,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        },
+        "exit_return": {
+          "gt": 39,
+          "pred": 36,
+          "tp": 36,
+          "fp": 0,
+          "fn": 3,
+          "idsw": 2,
+          "idtp": 19,
+          "tracks": 4,
+          "sequences": 2,
+          "idf1": 0.5066666666666667
+        },
+        "two_cross": {
+          "gt": 60,
+          "pred": 53,
+          "tp": 53,
+          "fp": 0,
+          "fn": 7,
+          "idsw": 3,
+          "idtp": 47,
+          "tracks": 5,
+          "sequences": 2,
+          "idf1": 0.831858407079646
+        },
+        "occlusion": {
+          "gt": 25,
+          "pred": 20,
+          "tp": 20,
+          "fp": 0,
+          "fn": 5,
+          "idsw": 1,
+          "idtp": 17,
+          "tracks": 3,
+          "sequences": 2,
+          "idf1": 0.7555555555555555
+        },
+        "camera_pan": {
+          "gt": 31,
+          "pred": 31,
+          "tp": 31,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 31,
+          "tracks": 2,
+          "sequences": 2,
+          "idf1": 1.0
+        }
+      },
+      "segments": {
+        "active_bout": {
+          "gt": 2,
+          "pred": 1,
+          "matched": 1,
+          "recall": 0.5,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.0
+        },
+        "approach_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 2.0
+        },
+        "dwell_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.35000000000000053
+        },
+        "enter_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.30000000000000027
+        },
+        "entered_view": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.40000000000000036
+        },
+        "leave_zone": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "left_view": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "moving": {
+          "gt": 6,
+          "pred": 5,
+          "matched": 4,
+          "recall": 0.6666666666666666,
+          "precision": 0.8,
+          "median_max_boundary_error_s": 0.25
+        },
+        "pacing_candidate": {
+          "gt": 2,
+          "pred": 2,
+          "matched": 1,
+          "recall": 0.5,
+          "precision": 0.5,
+          "median_max_boundary_error_s": 0.6999999999999993
+        },
+        "stationary": {
+          "gt": 10,
+          "pred": 11,
+          "matched": 10,
+          "recall": 1.0,
+          "precision": 0.9090909090909091,
+          "median_max_boundary_error_s": 0.2999999999999998
+        }
+      }
+    }
+  },
+  "tracker_selected_on_dev": "kalman",
+  "test": {
+    "iou": {
+      "tracking": {
+        "gt": 1173,
+        "pred": 1063,
+        "tp": 1026,
+        "fp": 37,
+        "fn": 147,
+        "idsw": 22,
+        "idtp": 877,
+        "mota": 0.8243819266837169,
+        "idf1": 0.7844364937388193,
+        "detection_recall": 0.8746803069053708,
+        "detection_precision": 0.9651928504233303
+      },
+      "tracking_by_script": {
+        "still_walk_still": {
+          "gt": 172,
+          "pred": 112,
+          "tp": 112,
+          "fp": 0,
+          "fn": 60,
+          "idsw": 0,
+          "idtp": 112,
+          "tracks": 4,
+          "sequences": 6,
+          "idf1": 0.7887323943661971
+        },
+        "run_burst": {
+          "gt": 112,
+          "pred": 106,
+          "tp": 106,
+          "fp": 0,
+          "fn": 6,
+          "idsw": 6,
+          "idtp": 54,
+          "tracks": 12,
+          "sequences": 6,
+          "idf1": 0.4954128440366973
+        },
+        "pacing": {
+          "gt": 185,
+          "pred": 183,
+          "tp": 183,
+          "fp": 0,
+          "fn": 2,
+          "idsw": 1,
+          "idtp": 181,
+          "tracks": 7,
+          "sequences": 6,
+          "idf1": 0.9836956521739131
+        },
+        "zone_visit": {
+          "gt": 207,
+          "pred": 207,
+          "tp": 207,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 207,
+          "tracks": 6,
+          "sequences": 6,
+          "idf1": 1.0
+        },
+        "exit_return": {
+          "gt": 117,
+          "pred": 143,
+          "tp": 107,
+          "fp": 36,
+          "fn": 10,
+          "idsw": 6,
+          "idtp": 55,
+          "tracks": 13,
+          "sequences": 6,
+          "idf1": 0.4230769230769231
+        },
+        "two_cross": {
+          "gt": 200,
+          "pred": 158,
+          "tp": 157,
+          "fp": 1,
+          "fn": 43,
+          "idsw": 5,
+          "idtp": 133,
+          "tracks": 15,
+          "sequences": 6,
+          "idf1": 0.7430167597765364
+        },
+        "occlusion": {
+          "gt": 79,
+          "pred": 71,
+          "tp": 71,
+          "fp": 0,
+          "fn": 8,
+          "idsw": 4,
+          "idtp": 52,
+          "tracks": 10,
+          "sequences": 6,
+          "idf1": 0.6933333333333334
+        },
+        "camera_pan": {
+          "gt": 101,
+          "pred": 83,
+          "tp": 83,
+          "fp": 0,
+          "fn": 18,
+          "idsw": 0,
+          "idtp": 83,
+          "tracks": 5,
+          "sequences": 6,
+          "idf1": 0.9021739130434783
+        }
+      },
+      "segments": {
+        "active_bout": {
+          "gt": 6,
+          "pred": 0,
+          "matched": 0,
+          "recall": 0.0,
+          "precision": null,
+          "median_max_boundary_error_s": null
+        },
+        "approach_zone": {
+          "gt": 6,
+          "pred": 5,
+          "matched": 5,
+          "recall": 0.8333333333333334,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 2.0
+        },
+        "dwell_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.3500000000000001
+        },
+        "enter_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "entered_view": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 4,
+          "recall": 0.6666666666666666,
+          "precision": 0.6666666666666666,
+          "median_max_boundary_error_s": 0.14999999999999947
+        },
+        "leave_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.40000000000000036
+        },
+        "left_view": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "moving": {
+          "gt": 18,
+          "pred": 10,
+          "matched": 10,
+          "recall": 0.5555555555555556,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.24999999999999956
+        },
+        "pacing_candidate": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.5499999999999998
+        },
+        "stationary": {
+          "gt": 30,
+          "pred": 25,
+          "matched": 25,
+          "recall": 0.8333333333333334,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.20000000000000018
+        }
+      }
+    },
+    "kalman": {
+      "tracking": {
+        "gt": 1173,
+        "pred": 1075,
+        "tp": 1037,
+        "fp": 38,
+        "fn": 136,
+        "idsw": 11,
+        "idtp": 966,
+        "mota": 0.8422847399829497,
+        "idf1": 0.8594306049822064,
+        "detection_recall": 0.8840579710144928,
+        "detection_precision": 0.9646511627906976
+      },
+      "tracking_by_script": {
+        "still_walk_still": {
+          "gt": 172,
+          "pred": 112,
+          "tp": 112,
+          "fp": 0,
+          "fn": 60,
+          "idsw": 0,
+          "idtp": 112,
+          "tracks": 4,
+          "sequences": 6,
+          "idf1": 0.7887323943661971
+        },
+        "run_burst": {
+          "gt": 112,
+          "pred": 112,
+          "tp": 112,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 112,
+          "tracks": 6,
+          "sequences": 6,
+          "idf1": 1.0
+        },
+        "pacing": {
+          "gt": 185,
+          "pred": 183,
+          "tp": 183,
+          "fp": 0,
+          "fn": 2,
+          "idsw": 0,
+          "idtp": 183,
+          "tracks": 6,
+          "sequences": 6,
+          "idf1": 0.9945652173913043
+        },
+        "zone_visit": {
+          "gt": 207,
+          "pred": 207,
+          "tp": 207,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 207,
+          "tracks": 6,
+          "sequences": 6,
+          "idf1": 1.0
+        },
+        "exit_return": {
+          "gt": 117,
+          "pred": 144,
+          "tp": 108,
+          "fp": 36,
+          "fn": 9,
+          "idsw": 6,
+          "idtp": 55,
+          "tracks": 13,
+          "sequences": 6,
+          "idf1": 0.421455938697318
+        },
+        "two_cross": {
+          "gt": 200,
+          "pred": 159,
+          "tp": 157,
+          "fp": 2,
+          "fn": 43,
+          "idsw": 5,
+          "idtp": 139,
+          "tracks": 14,
+          "sequences": 6,
+          "idf1": 0.7743732590529248
+        },
+        "occlusion": {
+          "gt": 79,
+          "pred": 75,
+          "tp": 75,
+          "fp": 0,
+          "fn": 4,
+          "idsw": 0,
+          "idtp": 75,
+          "tracks": 6,
+          "sequences": 6,
+          "idf1": 0.974025974025974
+        },
+        "camera_pan": {
+          "gt": 101,
+          "pred": 83,
+          "tp": 83,
+          "fp": 0,
+          "fn": 18,
+          "idsw": 0,
+          "idtp": 83,
+          "tracks": 5,
+          "sequences": 6,
+          "idf1": 0.9021739130434783
+        }
+      },
+      "segments": {
+        "active_bout": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.1499999999999999
+        },
+        "approach_zone": {
+          "gt": 6,
+          "pred": 5,
+          "matched": 5,
+          "recall": 0.8333333333333334,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 2.0
+        },
+        "dwell_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.3500000000000001
+        },
+        "enter_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "entered_view": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 5,
+          "recall": 0.8333333333333334,
+          "precision": 0.8333333333333334,
+          "median_max_boundary_error_s": 0.1999999999999993
+        },
+        "leave_zone": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.40000000000000036
+        },
+        "left_view": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.25
+        },
+        "moving": {
+          "gt": 18,
+          "pred": 16,
+          "matched": 16,
+          "recall": 0.8888888888888888,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.4500000000000002
+        },
+        "pacing_candidate": {
+          "gt": 6,
+          "pred": 6,
+          "matched": 6,
+          "recall": 1.0,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.7999999999999998
+        },
+        "stationary": {
+          "gt": 30,
+          "pred": 25,
+          "matched": 25,
+          "recall": 0.8333333333333334,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.2999999999999998
+        }
+      }
+    }
+  },
+  "test_sequences": [
+    {
+      "seq_id": "still_walk_still-1000",
+      "script": "still_walk_still",
+      "species": "dog",
+      "n_frames": 150,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 30,
+            "pred": 30,
+            "tp": 30,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 30,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 30,
+            "pred": 30,
+            "tp": 30,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 30,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "still_walk_still-1008",
+      "script": "still_walk_still",
+      "species": "cat",
+      "n_frames": 141,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 29,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 29,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": []
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 29,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 29,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": []
+        }
+      }
+    },
+    {
+      "seq_id": "still_walk_still-1016",
+      "script": "still_walk_still",
+      "species": "cat",
+      "n_frames": 135,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 27,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 27,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.40000000000000036,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 27,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 27,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.40000000000000036,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "still_walk_still-1024",
+      "script": "still_walk_still",
+      "species": "cat",
+      "n_frames": 154,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 31,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 31,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": []
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 31,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 31,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": []
+        }
+      }
+    },
+    {
+      "seq_id": "still_walk_still-1032",
+      "script": "still_walk_still",
+      "species": "dog",
+      "n_frames": 138,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 28,
+            "pred": 28,
+            "tp": 28,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 28,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.1999999999999993
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 28,
+            "pred": 28,
+            "tp": 28,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 28,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.1999999999999993
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "still_walk_still-1040",
+      "script": "still_walk_still",
+      "species": "dog",
+      "n_frames": 134,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 27,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 27,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.2999999999999998,
+                0.3000000000000007
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 27,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 27,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.2999999999999998,
+                0.3000000000000007
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1001",
+      "script": "run_burst",
+      "species": "dog",
+      "n_frames": 93,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 19,
+            "tp": 19,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 19,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1009",
+      "script": "run_burst",
+      "species": "cat",
+      "n_frames": 90,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 18,
+            "pred": 17,
+            "tp": 17,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1017",
+      "script": "run_burst",
+      "species": "dog",
+      "n_frames": 93,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 19,
+            "tp": 19,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 19,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1025",
+      "script": "run_burst",
+      "species": "dog",
+      "n_frames": 92,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 19,
+            "tp": 19,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 19,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.2999999999999998
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1033",
+      "script": "run_burst",
+      "species": "dog",
+      "n_frames": 91,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.09999999999999964
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 19,
+            "tp": 19,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 19,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.09999999999999964
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "run_burst-1041",
+      "script": "run_burst",
+      "species": "dog",
+      "n_frames": 90,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 18,
+            "pred": 17,
+            "tp": 17,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "active_bout",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1002",
+      "script": "pacing",
+      "species": "cat",
+      "n_frames": 124,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 25,
+            "pred": 25,
+            "tp": 25,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 25,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5999999999999996
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 25,
+            "pred": 25,
+            "tp": 25,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 25,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5999999999999996
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1010",
+      "script": "pacing",
+      "species": "cat",
+      "n_frames": 165,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1018",
+      "script": "pacing",
+      "species": "dog",
+      "n_frames": 182,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 37,
+            "pred": 37,
+            "tp": 37,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 37,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 37,
+            "pred": 37,
+            "tp": 37,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 37,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1026",
+      "script": "pacing",
+      "species": "cat",
+      "n_frames": 170,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 34,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 2,
+            "idsw": 1,
+            "idtp": 30,
+            "n_tracks": 2
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 34,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 2,
+            "idsw": 0,
+            "idtp": 32,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1034",
+      "script": "pacing",
+      "species": "dog",
+      "n_frames": 160,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 32,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 32,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 32,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 32,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "pacing-1042",
+      "script": "pacing",
+      "species": "cat",
+      "n_frames": 120,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 24,
+            "pred": 24,
+            "tp": 24,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 24,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 24,
+            "pred": 24,
+            "tp": 24,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 24,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving",
+            "pacing_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1003",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 161,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1011",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 163,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.9000000000000004
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.9000000000000004
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 33,
+            "pred": 33,
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 33,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.9000000000000004
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.9000000000000004
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1019",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 173,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 35,
+            "pred": 35,
+            "tp": 35,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 35,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 35,
+            "pred": 35,
+            "tp": 35,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 35,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1027",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 173,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 35,
+            "pred": 35,
+            "tp": 35,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 35,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 35,
+            "pred": 35,
+            "tp": 35,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 35,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1035",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 194,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 39,
+            "pred": 39,
+            "tp": 39,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 39,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 39,
+            "pred": 39,
+            "tp": 39,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 39,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "zone_visit-1043",
+      "script": "zone_visit",
+      "species": "cat",
+      "n_frames": 156,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 32,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 32,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 32,
+            "pred": 32,
+            "tp": 32,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 32,
+            "n_tracks": 1
+          },
+          "segments": {
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
+            },
+            "enter_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "dwell_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "leave_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "approach_zone",
+            "dwell_zone",
+            "enter_zone",
+            "leave_zone",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1004",
+      "script": "exit_return",
+      "species": "cat",
+      "n_frames": 161,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 20,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 8,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 20,
+            "pred": 16,
+            "tp": 16,
+            "fp": 0,
+            "fn": 4,
+            "idsw": 1,
+            "idtp": 8,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5999999999999996
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1012",
+      "script": "exit_return",
+      "species": "cat",
+      "n_frames": 170,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 4,
+            "idsw": 1,
+            "idtp": 8,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 4,
+            "idsw": 1,
+            "idtp": 8,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                1.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1020",
+      "script": "exit_return",
+      "species": "dog",
+      "n_frames": 166,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 20,
+            "pred": 53,
+            "tp": 20,
+            "fp": 33,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 3
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 20,
+            "pred": 53,
+            "tp": 20,
+            "fp": 33,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 3
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1028",
+      "script": "exit_return",
+      "species": "dog",
+      "n_frames": 158,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 20,
+            "tp": 18,
+            "fp": 2,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 20,
+            "tp": 18,
+            "fp": 2,
+            "fn": 1,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1036",
+      "script": "exit_return",
+      "species": "cat",
+      "n_frames": 169,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 19,
+            "pred": 20,
+            "tp": 19,
+            "fp": 1,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 19,
+            "pred": 20,
+            "tp": 19,
+            "fp": 1,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "exit_return-1044",
+      "script": "exit_return",
+      "species": "cat",
+      "n_frames": 156,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 20,
+            "pred": 20,
+            "tp": 20,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 20,
+            "pred": 20,
+            "tp": 20,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 10,
+            "n_tracks": 2
+          },
+          "segments": {
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "left_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1005",
+      "script": "two_cross",
+      "species": "cat",
+      "n_frames": 86,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 36,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 21,
+            "idsw": 0,
+            "idtp": 15,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 1,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 36,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 21,
+            "idsw": 0,
+            "idtp": 15,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 1,
+          "predicted_kinds": [
+            "moving",
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1013",
+      "script": "two_cross",
+      "species": "dog",
+      "n_frames": 84,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 34,
+            "pred": 32,
+            "tp": 31,
+            "fp": 1,
+            "fn": 3,
+            "idsw": 2,
+            "idtp": 24,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 34,
+            "pred": 32,
+            "tp": 31,
+            "fp": 1,
+            "fn": 3,
+            "idsw": 2,
+            "idtp": 30,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1021",
+      "script": "two_cross",
+      "species": "cat",
+      "n_frames": 73,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 30,
+            "pred": 25,
+            "tp": 25,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 20,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 30,
+            "pred": 25,
+            "tp": 25,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 20,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1029",
+      "script": "two_cross",
+      "species": "dog",
+      "n_frames": 77,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 32,
+            "pred": 30,
+            "tp": 30,
+            "fp": 0,
+            "fn": 2,
+            "idsw": 1,
+            "idtp": 23,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 32,
+            "pred": 31,
+            "tp": 30,
+            "fp": 1,
+            "fn": 2,
+            "idsw": 1,
+            "idtp": 23,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1037",
+      "script": "two_cross",
+      "species": "cat",
+      "n_frames": 81,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 34,
+            "pred": 29,
+            "tp": 29,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 0,
+            "idtp": 29,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 34,
+            "pred": 29,
+            "tp": 29,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 0,
+            "idtp": 29,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "left_view",
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "two_cross-1045",
+      "script": "two_cross",
+      "species": "dog",
+      "n_frames": 85,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 34,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 7,
+            "idsw": 1,
+            "idtp": 22,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 34,
+            "pred": 27,
+            "tp": 27,
+            "fp": 0,
+            "fn": 7,
+            "idsw": 1,
+            "idtp": 22,
+            "n_tracks": 3
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1006",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 72,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 14,
+            "pred": 9,
+            "tp": 9,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 7,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 1,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 14,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 1,
+            "idsw": 0,
+            "idtp": 13,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1014",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 75,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 7,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 13,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1022",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 75,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 13,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 13,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1030",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 69,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 12,
+            "pred": 12,
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 12,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 12,
+            "pred": 12,
+            "tp": 12,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 12,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1038",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 75,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 1,
+            "idtp": 7,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 13,
+            "pred": 13,
+            "tp": 13,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 13,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "occlusion-1046",
+      "script": "occlusion",
+      "species": "cat",
+      "n_frames": 79,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 14,
+            "pred": 11,
+            "tp": 11,
+            "fp": 0,
+            "fn": 3,
+            "idsw": 1,
+            "idtp": 6,
+            "n_tracks": 2
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "entered_view",
+            "left_view",
+            "moving"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 14,
+            "pred": 11,
+            "tp": 11,
+            "fp": 0,
+            "fn": 3,
+            "idsw": 0,
+            "idtp": 11,
+            "n_tracks": 1
+          },
+          "segments": {},
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "left_view",
+            "moving"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1007",
+      "script": "camera_pan",
+      "species": "cat",
+      "n_frames": 78,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 16,
+            "pred": 16,
+            "tp": 16,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 16,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 16,
+            "pred": 16,
+            "tp": 16,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 16,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1015",
+      "script": "camera_pan",
+      "species": "cat",
+      "n_frames": 87,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 18,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 18,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": []
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 18,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 18,
+            "idsw": 0,
+            "idtp": 0,
+            "n_tracks": 0
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 1,
+          "predicted_kinds": []
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1023",
+      "script": "camera_pan",
+      "species": "cat",
+      "n_frames": 71,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 15,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 15,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 15,
+            "pred": 15,
+            "tp": 15,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 15,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1031",
+      "script": "camera_pan",
+      "species": "dog",
+      "n_frames": 87,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1039",
+      "script": "camera_pan",
+      "species": "dog",
+      "n_frames": 80,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 16,
+            "pred": 16,
+            "tp": 16,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 16,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 16,
+            "pred": 16,
+            "tp": 16,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 16,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        }
+      }
+    },
+    {
+      "seq_id": "camera_pan-1047",
+      "script": "camera_pan",
+      "species": "dog",
+      "n_frames": 88,
+      "by_tracker": {
+        "iou": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        },
+        "kalman": {
+          "tracking": {
+            "gt": 18,
+            "pred": 18,
+            "tp": 18,
+            "fp": 0,
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 18,
+            "n_tracks": 1
+          },
+          "segments": {
+            "moving": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            }
+          },
+          "verifier_rejections": 0,
+          "predicted_kinds": [
+            "stationary"
+          ]
+        }
+      }
+    }
+  ],
+  "created_at": "2026-10-09T07:25:46+00:00"
+}
