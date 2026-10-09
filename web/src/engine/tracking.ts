@@ -13,6 +13,7 @@ export interface AnimalDetection {
   source: Detection;
   verify_score: number | null;
   posture: { label: string; score: number } | null;
+  interaction: number | null; // max person-pet interaction score in this frame (E13); null without a person
 }
 
 export const species = (d: AnimalDetection) => Object.entries(d.species_scores).sort((a, b) => b[1] - a[1])[0][0];
@@ -25,7 +26,7 @@ export function mergeSpecies(dets: Detection[], t: number, frameIndex: number, i
   for (const d of [...dets].sort((a, b) => b.score - a.score)) {
     const hit = out.find((a) => iou(a.box, d.box) >= iouThr);
     if (hit) hit.species_scores[d.label] = Math.max(hit.species_scores[d.label] ?? 0, d.score);
-    else out.push({ t_s: t, frame_index: frameIndex, box: [...d.box], species_scores: { [d.label]: d.score }, flags: [], source: d, verify_score: null, posture: null });
+    else out.push({ t_s: t, frame_index: frameIndex, box: [...d.box], species_scores: { [d.label]: d.score }, flags: [], source: d, verify_score: null, posture: null, interaction: null });
   }
   for (const a of out) {
     const s = Object.values(a.species_scores).sort((x, y) => y - x);

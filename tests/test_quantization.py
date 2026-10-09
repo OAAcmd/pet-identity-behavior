@@ -58,3 +58,12 @@ def test_dequantized_graph_outputs_match_numpy():
     for k, i in enumerate(BACKBONE_OUTPUTS):
         got = it.get_tensor(it.get_output_details()[1 + k]["index"])
         assert np.array_equal(got, dequantize(ref.get_tensor(i), q[i]))
+
+
+def test_configuration_rejects_unknown_keys():
+    from pydantic import ValidationError
+
+    from petperception.config import load_settings
+
+    with pytest.raises(ValidationError):
+        load_settings(overrides={"vision": {"detecor": "typo"}})

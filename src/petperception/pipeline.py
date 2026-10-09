@@ -58,6 +58,7 @@ class AnalysisEngine:
         self.verifier: DetectionVerifier | None = None
         self.pose = UnavailablePoseProvider()
         self.posture = None
+        self.interaction = None
         self._backbone = None
         self.release_notes: list[str] = []
         self.fusion = FusionEngine(settings.fusion)
@@ -113,6 +114,7 @@ class AnalysisEngine:
                                                    reason=None if self.detector else "requires the visual detector")
         self._load_pose()
         self._load_posture()
+        self._load_interaction()
         self.status["behavior"] = S.ComponentStatus(name="behavior_segments", kind="behavior", state="ok" if (self.detector and s.behavior.enabled) else
                                                     ("disabled" if not s.behavior.enabled else "unavailable"), version="behavior-rules-v1",
                                                     reason="fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)")
@@ -205,6 +207,27 @@ class AnalysisEngine:
             self._backbone = Backbone(Path(next(iter(rb.files.values()))), s.runtime.num_threads)
         self.status["posture"] = S.ComponentStatus(name=name, kind="pose", state="ok", model_id=s.posture.backbone, version=self.posture.version,
                                                    reason="coarse lying/sitting/standing from weak caption labels (E10); uncalibrated")
+
+    def _load_interaction(self) -> None:
+        s = self.settings
+        name = "person_interaction"
+        if not s.interaction.enabled:
+            self.status["interaction"] = S.ComponentStatus(name=name, kind="behavior", state="disabled", reason="disabled by configuration")
+            return
+        path = REPO_ROOT / s.interaction.model_file
+        decision = release_decision(s.release_profile, "person_pet_interaction_v1")
+        reason = ("requires the visual detector" if self.detector is None else
+                  f"{path.name} not found; run: petperception evaluate --experiment e13" if not path.exists() else
+                  None if decision.allowed else decision.reason)
+        if reason:
+            self.status["interaction"] = S.ComponentStatus(name=name, kind="behavior", state="unavailable", reason=reason)
+            return
+        from .vision.interaction import InteractionModel
+
+        self.interaction = InteractionModel.load(path)
+        self.status["interaction"] = S.ComponentStatus(
+            name=name, kind="behavior", state="ok", model_id=s.vision.detector, version=self.interaction.version,
+            reason="person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored")
 
     def capabilities(self) -> dict:
         s = self.settings
@@ -314,7 +337,7 @@ class AnalysisEngine:
         else:
             tracker = make_tracker(s.vision.tracker.method, s.vision.tracker.iou_threshold, s.vision.tracker.max_gap_s)
             verify_s = pose_s = 0.0
-            classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes))
+            classes = list(dict.fromkeys(s.vision.target_classes + s.vision.context_object_classes + (["person"] if self.interaction else [])))
             prev_gray, prev_t, prev_boxes = None, None, []
             detect_s = quality_s = 0.0
             report("video", 0.30)
@@ -339,6 +362,11 @@ class AnalysisEngine:
                             persons.append((fr.t_s, d.box, d.score))
                     adets = merge_species(animal, fr.t_s, fr.index)
                     detection_flags(adets, s.vision.quality)
+                    if self.interaction is not None:
+                        people = [d.box for d in dets if d.label == "person" and d.score >= s.interaction.min_person_score]
+                        for a in adets:
+                            if people:
+                                a.interaction = max(self.interaction.score(pb, a.box, fr.rgb.shape[:2], a.species) for pb in people)
                     if self.verifier is not None:
                         tv = time.perf_counter()
                         for a in sorted(adets, key=lambda x: -x.score)[: s.vision.verifier.max_checks_per_frame]:
@@ -453,6 +481,9 @@ class AnalysisEngine:
                 segs = (BH.motion_segments(ss, bparams, tid, brel) + BH.pacing_segments(ss, bparams, tid)
                         + BH.zone_segments(ts_, bx_, zones, frame_size[0], frame_size[1], bparams, s.vision.tracker.max_gap_s, tid, brel)
                         + BH.view_segments(ts_, bx_, media_start, media_end, bparams, tid, brel))
+                if self.interaction is not None:
+                    segs += BH.interaction_segments(ts_, [d.interaction for d in tr.detections], self.interaction.threshold,
+                                                    s.interaction.min_frames, s.vision.tracker.max_gap_s, tid)
                 segs.sort(key=lambda g: (g.t_start_s, g.kind))
             mean_score = float(np.mean([d.score for d in tr.detections]))
             track_rel = "high" if mean_score >= 0.6 and not ({"tiny_subject", "species_ambiguous"} & set(flags)) else ("medium" if mean_score >= 0.45 else "low")
@@ -691,7 +722,7 @@ class AnalysisEngine:
 def _segment(g: BH.Segment, sid: str) -> S.BehaviorSegment:
     return S.BehaviorSegment(segment_id=sid, kind=g.kind, track_id=g.track_id, t_start_s=round(g.t_start_s, 3), t_end_s=round(g.t_end_s, 3),
                              reliability=g.reliability, detail=g.detail, measurements={k: round(float(v), 4) for k, v in g.measurements.items()},
-                             method=g.method)
+                             method=g.method, validation_status=g.validation)
 
 
 def _safe_name(name: str) -> str:

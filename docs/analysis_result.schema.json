@@ -315,7 +315,8 @@
             "entered_view",
             "left_view",
             "vocal_bout",
-            "startle_candidate"
+            "startle_candidate",
+            "person_interaction_candidate"
           ],
           "title": "Kind",
           "type": "string"
@@ -365,8 +366,11 @@
           "type": "string"
         },
         "validation_status": {
-          "const": "synthetic_and_semi_synthetic_only",
           "default": "synthetic_and_semi_synthetic_only",
+          "enum": [
+            "synthetic_and_semi_synthetic_only",
+            "per_frame_model_public_still_images"
+          ],
           "title": "Validation Status",
           "type": "string"
         }
@@ -1873,10 +1877,11 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "default": "1.1.0",
+      "default": "1.2.0",
       "enum": [
         "1.0.0",
-        "1.1.0"
+        "1.1.0",
+        "1.2.0"
       ],
       "title": "Schema Version",
       "type": "string"

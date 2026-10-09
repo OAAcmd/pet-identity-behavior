@@ -60,6 +60,11 @@ export interface PostureAssets {
   gate: number; version: string; labels: string[]; min_detection_score: number; max_per_frame: number;
 }
 
+export interface InteractionAssets {
+  mean_b64: string; scale_b64: string; coef_b64: string; intercept: number; threshold: number; version: string;
+  min_person_score: number; min_frames: number;
+}
+
 export interface BehaviorParams {
   enabled: boolean;
   moving_speed: number; active_speed: number; min_stationary_s: number; min_moving_s: number; min_active_s: number;
@@ -90,6 +95,7 @@ export interface EngineAssets {
     input_quant?: [number, number] | null; output_quant?: ([number, number] | null)[] };
   verifier?: VerifierAssets;
   posture?: PostureAssets;
+  interaction?: InteractionAssets;
   vision: {
     sample_fps: number; max_side: number;
     quality: { low_light_luma: number; blur_laplacian_var: number; tiny_area_fraction: number; camera_motion_threshold: number; frame_gap_factor: number };

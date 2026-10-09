@@ -19,8 +19,9 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SCHEMA_VERSION = "1.1.0"
-SchemaVersion = Literal["1.0.0", "1.1.0"]  # 1.1.0 is additive (behavior segments, keypoints, verification)
+SCHEMA_VERSION = "1.2.0"
+# 1.1.0 is additive (behavior segments, keypoints, verification); 1.2.0 adds person_interaction_candidate.
+SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0"]
 
 Modality = Literal["audio", "video"]
 ComponentState = Literal["ok", "unavailable", "disabled", "failed", "skipped", "not_applicable"]
@@ -153,7 +154,7 @@ class PoseFeature(_Model):
 
 
 BehaviorKind = Literal["stationary", "moving", "active_bout", "pacing_candidate", "approach_zone", "enter_zone", "dwell_zone", "leave_zone",
-                       "entered_view", "left_view", "vocal_bout", "startle_candidate"]
+                       "entered_view", "left_view", "vocal_bout", "startle_candidate", "person_interaction_candidate"]
 
 
 class BehaviorSegment(_Model):
@@ -168,7 +169,7 @@ class BehaviorSegment(_Model):
     detail: str
     measurements: dict[str, float] = Field(default_factory=dict)
     method: str
-    validation_status: Literal["synthetic_and_semi_synthetic_only"] = "synthetic_and_semi_synthetic_only"
+    validation_status: Literal["synthetic_and_semi_synthetic_only", "per_frame_model_public_still_images"] = "synthetic_and_semi_synthetic_only"
 
 
 class KeypointFrame(_Model):

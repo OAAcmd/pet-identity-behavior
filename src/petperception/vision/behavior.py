@@ -57,6 +57,7 @@ class Segment:
     track_id: str | None = None
     measurements: dict[str, float] = field(default_factory=dict)
     method: str = ""
+    validation: str = "synthetic_and_semi_synthetic_only"
 
 
 @dataclass
@@ -323,4 +324,32 @@ def startle_candidates(series: dict[str, StepSeries], onsets: list[tuple[str, fl
                                     f"speed rose from {b:.2f} to {peak:.2f} diag/s within {p.startle_max_lag_s:.1f} s after {label.replace('_', ' ')}",
                                     tid, {"baseline_speed": b, "peak_speed": peak, "lag_s": float(mid[k] - t_on)},
                                     "speed ratio after a sound onset; temporal coincidence only"))
+    return segs
+
+
+def interaction_segments(times: list[float], scores: list[float | None], threshold: float, min_frames: int, max_gap_s: float,
+                         track_id: str) -> list[Segment]:
+    """Runs of sampled frames whose person-pet interaction score (E13) is >= threshold.
+
+    Frames without a detected person score None and end a run. The per-frame model was
+    evaluated on public still images (E13); grouping frames over time is not validated."""
+    segs: list[Segment] = []
+    run: list[int] = []
+
+    def close() -> None:
+        if len(run) >= min_frames:
+            sc = [scores[i] for i in run]
+            segs.append(Segment("person_interaction_candidate", times[run[0]], times[run[-1]], "low",
+                                f"pattern of a person holding or interacting with the animal in {len(run)} sampled frames (max score {max(sc):.2f})",
+                                track_id, {"frames": float(len(run)), "max_score": float(max(sc)), "threshold": float(threshold)},
+                                f"E13 still-image pair model on detection boxes, runs of >= {min_frames} sampled frames",
+                                "per_frame_model_public_still_images"))
+
+    for i, (t, v) in enumerate(zip(times, scores)):
+        if v is not None and v >= threshold and (not run or t - times[run[-1]] <= max_gap_s):
+            run.append(i)
+            continue
+        close()
+        run = [i] if v is not None and v >= threshold else []
+    close()
     return segs

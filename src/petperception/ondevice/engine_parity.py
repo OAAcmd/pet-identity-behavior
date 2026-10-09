@@ -53,6 +53,24 @@ def build_cases(settings: Settings) -> list[dict]:
             seq = E8.build_sequence(script, seed, patches, backgrounds)
             cases.append({"name": f"e8-{script}-{seed}", "media": str(mp4), "zones": seq.zones.model_dump(mode="json") if seq.zones else None,
                           "modalities": ["video"], "source": "E8 semi-synthetic sequence"})
+    # Person + pet stills from the E13 final split (Open Images test, CC BY 2.0), shown for 3 s:
+    # exercises person detection and interaction segments on both engines.
+    vrd = man / "oi_vrd_interaction_pairs.csv"
+    if vrd.exists():
+        import csv
+        import subprocess
+
+        ids = sorted({r["image_id"] for r in csv.DictReader(open(vrd, newline="")) if r["split"] == "test" and r["interaction"] == "1"})
+        for i in ids[:4]:
+            src = data / "openimages_vrd" / "images" / f"{i}.jpg"
+            dst = data.parent / "cache" / "engine_parity" / f"e13-{i}.mp4"
+            if not src.exists():
+                continue
+            if not dst.exists():
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-loop", "1", "-i", str(src), "-t", "3", "-r", "10", "-vf", "scale=640:-2",
+                                "-pix_fmt", "yuv420p", str(dst)], check=True)
+            cases.append({"name": f"e13-{i}", "media": str(dst), "zones": None, "modalities": ["video"], "source": "Open Images test image with a person-pet relationship"})
     big = data.parent / "e2e" / "big_cat_clip.mp4"
     if big.exists():
         cases.append({"name": "e2e-big-cat-clip", "media": str(big), "zones": None, "modalities": ["audio", "video"], "source": "E2E fixture"})

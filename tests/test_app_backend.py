@@ -223,7 +223,7 @@ def test_analysis_lifecycle_retention_and_deletion(app_settings, tmp_path):
         assert c.get(f"/api/v1/analyses/{aid}").json()["status"] == "queued"
         assert runner.run_pending() == 1
         a = c.get(f"/api/v1/analyses/{aid}").json()
-        assert a["status"] == "succeeded" and a["result"]["schema_version"] == "1.1.0" and a["decision_state"] == "abstention"
+        assert a["status"] == "succeeded" and a["result"]["schema_version"] == "1.2.0" and a["decision_state"] == "abstention"
         assert a["media_available"] is False  # default retention 0: media deleted right after processing
         assert not list((tmp_path / "media").rglob("analysis-*"))
         # With retention, media can be replayed with range requests, then deleted on demand.
@@ -423,6 +423,7 @@ def test_device_reports_and_ondevice_bundle_route(app_settings, tmp_path):
         r = c.get("/ondevice/%2E%2E/%2E%2E/pyproject.toml")
         assert r.status_code == 404 and b"[project]" not in r.content
         assert c.get("/ondevice/nope.bin").status_code == 404
+        assert c.get("/api/v1/ready").json()["checks"]["ondevice_bundle"]["ok"] is True
         # Device reports: authenticated, per-user, size-limited, never media.
         assert c.post("/api/v1/device-reports", json={"report": {}}).status_code in (401, 403)
         csrf = register(c, "alice")
@@ -442,3 +443,5 @@ def test_device_reports_and_ondevice_bundle_route(app_settings, tmp_path):
     with TestClient(app2) as c:
         r = c.get("/ondevice/manifest.json")
         assert r.status_code == 503 and r.json()["error"]["code"] == "ondevice_bundle_missing"
+        rd = c.get("/api/v1/ready")
+        assert rd.status_code == 503 and rd.json()["checks"]["ondevice_bundle"]["ok"] is False

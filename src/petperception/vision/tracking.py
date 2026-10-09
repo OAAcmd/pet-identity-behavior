@@ -30,6 +30,7 @@ class AnimalDetection:
     verify_score: float | None = None  # second-stage verifier score (uncalibrated)
     keypoints: object | None = field(default=None, repr=False)  # pose.KeypointSet when estimated
     posture: tuple[str, float] | None = None  # (label or "uncertain", uncalibrated top score)
+    interaction: float | None = None  # max person-pet interaction score in this frame (E13), None without a person
 
     @property
     def species(self) -> str:

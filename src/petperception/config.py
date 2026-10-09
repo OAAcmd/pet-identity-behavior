@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # Project root holding configs/, manifests/ and artifacts/. Overridable for containers.
 REPO_ROOT = Path(os.environ.get("PETPERCEPTION_HOME", Path(__file__).resolve().parents[2]))
@@ -37,7 +37,13 @@ def _expand_env(value: Any) -> Any:
     return value
 
 
-class PathsConfig(BaseModel):
+class _Strict(BaseModel):
+    """Configuration models reject unknown keys, so a misspelled option fails loudly."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class PathsConfig(_Strict):
     data_root: str = "var/data"
     models_root: str = "var/models"
     results_root: str = "results"
@@ -50,7 +56,7 @@ class PathsConfig(BaseModel):
         return p if p.is_absolute() else (REPO_ROOT / p)
 
 
-class LimitsConfig(BaseModel):
+class LimitsConfig(_Strict):
     max_file_bytes: int = 200 * 1024 * 1024
     max_duration_s: float = 600.0
     max_video_frames: int = 1200
@@ -59,7 +65,7 @@ class LimitsConfig(BaseModel):
     decode_timeout_s: float = 300.0
 
 
-class YamnetConfig(BaseModel):
+class YamnetConfig(_Strict):
     model_id: str = "yamnet_mediapipe_v1"
     hop_s: float = 0.48
     # Per-group decision thresholds on raw (uncalibrated) sigmoid scores.
@@ -73,7 +79,7 @@ class YamnetConfig(BaseModel):
     min_event_gap_s: float = 0.5
 
 
-class AudioConfig(BaseModel):
+class AudioConfig(_Strict):
     enabled: bool = True
     event_backend: Literal["yamnet", "none"] = "yamnet"
     yamnet: YamnetConfig = Field(default_factory=YamnetConfig)
@@ -82,14 +88,14 @@ class AudioConfig(BaseModel):
     analysis_sample_rate: int = 16000
 
 
-class TrackerConfig(BaseModel):
+class TrackerConfig(_Strict):
     method: Literal["iou", "kalman"] = "kalman"  # selected on E8 development seeds
     iou_threshold: float = 0.3
     max_gap_s: float = 1.5
     min_hits: int = 2
 
 
-class VisionQualityConfig(BaseModel):
+class VisionQualityConfig(_Strict):
     low_light_luma: float = 40.0
     blur_laplacian_var: float = 25.0
     tiny_area_fraction: float = 0.004
@@ -100,7 +106,7 @@ class VisionQualityConfig(BaseModel):
 E7_CLASSIFIER = "efficientnet_lite0_mediapipe_v1"
 
 
-class VerifierConfig(BaseModel):
+class VerifierConfig(_Strict):
     """Second-stage false-positive rejection (E7). Parameters are per detector."""
 
     enabled: bool = True
@@ -115,7 +121,7 @@ class VerifierConfig(BaseModel):
         return f"{self.params_dir}/verifier_{detector}{suffix}.json"
 
 
-class OnDeviceConfig(BaseModel):
+class OnDeviceConfig(_Strict):
     """Model builds exported into the phone bundle (export-ondevice).
 
     Default: the float32 builds, i.e. the configuration E4-E10 and engine parity were
@@ -130,7 +136,7 @@ class OnDeviceConfig(BaseModel):
     posture_model: str = "artifacts/posture/posture_v1.npz"
 
 
-class VisionConfig(BaseModel):
+class VisionConfig(_Strict):
     enabled: bool = True
     detector: str = "efficientdet_lite0_mediapipe_v1"
     sample_fps: float = 2.0
@@ -148,7 +154,7 @@ class VisionConfig(BaseModel):
     verifier: VerifierConfig = Field(default_factory=VerifierConfig)
 
 
-class PoseConfig(BaseModel):
+class PoseConfig(_Strict):
     # "dog_keypoints_v1": E9 head on EfficientNet-Lite0 features (dogs only, research profile).
     provider: Literal["none", "dog_keypoints_v1"] = "none"
     min_keypoint_visibility: float = 0.5
@@ -158,7 +164,17 @@ class PoseConfig(BaseModel):
     min_detection_score: float = 0.45
 
 
-class PostureConfig(BaseModel):
+class InteractionConfig(_Strict):
+    """Person-pet interaction candidates from box geometry (E13). Persons are detected on
+    the analysing device with the same detector; no person box is stored in results."""
+
+    enabled: bool = True
+    model_file: str = "artifacts/interaction/person_pet_interaction_v1.npz"
+    min_person_score: float = 0.35
+    min_frames: int = 2  # consecutive sampled frames above the threshold (2 fps: >= 0.5 s)
+
+
+class PostureConfig(_Strict):
     """Coarse posture from weak caption labels (E10); cats and dogs."""
 
     enabled: bool = True
@@ -168,7 +184,7 @@ class PostureConfig(BaseModel):
     min_detection_score: float = 0.45
 
 
-class BehaviorConfig(BaseModel):
+class BehaviorConfig(_Strict):
     """A-priori thresholds for vision/behavior.py (checked on synthetic data only, E8)."""
 
     enabled: bool = True
@@ -191,7 +207,7 @@ class BehaviorConfig(BaseModel):
     startle_ratio: float = 3.0
 
 
-class FusionConfig(BaseModel):
+class FusionConfig(_Strict):
     mode: Literal["experimental"] = "experimental"
     method: Literal["rule_baseline", "weighted_average", "product_of_experts"] = "rule_baseline"
     # Expert weights; NOT fitted (no paired development data exists).
@@ -207,7 +223,7 @@ class FusionConfig(BaseModel):
     abstain_below_score: float = 0.5
 
 
-class VlmConfig(BaseModel):
+class VlmConfig(_Strict):
     enabled: bool = False
     endpoint: str | None = None
 
@@ -219,7 +235,7 @@ class VlmConfig(BaseModel):
         return v
 
 
-class ServeConfig(BaseModel):
+class ServeConfig(_Strict):
     host: str = "127.0.0.1"
     port: int = 8000
     allowed_extensions: list[str] = Field(
@@ -234,7 +250,7 @@ class ServeConfig(BaseModel):
     trusted_proxy_hops: int = 0
 
 
-class AuthConfig(BaseModel):
+class AuthConfig(_Strict):
     registration: Literal["first_user_only", "open", "closed"] = "first_user_only"
     session_ttl_hours: float = 24.0 * 14
     session_idle_hours: float = 24.0 * 3
@@ -245,7 +261,7 @@ class AuthConfig(BaseModel):
     login_window_s: float = 900.0
 
 
-class JobsConfig(BaseModel):
+class JobsConfig(_Strict):
     workers: int = 1
     lease_s: float = 60.0
     heartbeat_s: float = 10.0
@@ -257,7 +273,7 @@ class JobsConfig(BaseModel):
     max_queued_total: int = 50
 
 
-class StorageConfig(BaseModel):
+class StorageConfig(_Strict):
     database_path: str = "${PETPERCEPTION_DB:-var/app/petperception.sqlite3}"
     media_root: str = "${PETPERCEPTION_MEDIA_ROOT:-var/app/media}"
     max_upload_bytes: int = 100 * 1024 * 1024
@@ -274,7 +290,7 @@ class StorageConfig(BaseModel):
         return p if p.is_absolute() else (REPO_ROOT / p)
 
 
-class AppConfig(BaseModel):
+class AppConfig(_Strict):
     auth: AuthConfig = Field(default_factory=AuthConfig)
     jobs: JobsConfig = Field(default_factory=JobsConfig)
     storage: StorageConfig = Field(default_factory=StorageConfig)
@@ -282,7 +298,7 @@ class AppConfig(BaseModel):
     log_level: str = "INFO"
 
 
-class RuntimeConfig(BaseModel):
+class RuntimeConfig(_Strict):
     num_threads: int = 2
     accelerator: Literal["cpu"] = "cpu"
 
@@ -290,7 +306,7 @@ class RuntimeConfig(BaseModel):
 SUPPORTED_CONFIG_VERSION = 2
 
 
-class Settings(BaseModel):
+class Settings(_Strict):
     config_version: int = SUPPORTED_CONFIG_VERSION
     profile: str = "cpu"
     # Release profile decides which assets may be loaded (see manifests/resources.json):
@@ -305,6 +321,7 @@ class Settings(BaseModel):
     pose: PoseConfig = Field(default_factory=PoseConfig)
     behavior: BehaviorConfig = Field(default_factory=BehaviorConfig)
     posture: PostureConfig = Field(default_factory=PostureConfig)
+    interaction: InteractionConfig = Field(default_factory=InteractionConfig)
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)

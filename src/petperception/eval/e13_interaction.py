@@ -38,40 +38,11 @@ import numpy as np
 from ..config import Settings, load_settings
 from ..utils import sha256_file, utc_now, write_json
 from ..vision import keypoints as KP
+from ..vision.interaction import GEOMETRY, _iou, geometry
 from . import metrics as M
 
 C_GRID = (0.003, 0.01, 0.03, 0.1, 0.3, 1.0)
 MATCH_IOU = 0.5
-GEOMETRY = ["iou", "inter_over_pet", "inter_over_person", "dx", "dy", "log_area_ratio", "person_aspect", "pet_aspect",
-            "gap", "pet_center_inside_person", "person_area", "pet_area"]
-
-
-def _iou(a: np.ndarray, b: np.ndarray) -> float:
-    ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
-    iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
-    inter = ix * iy
-    u = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
-    return inter / u if u > 0 else 0.0
-
-
-def geometry(person: np.ndarray, pet: np.ndarray, image_hw: tuple[int, int]) -> np.ndarray:
-    """Boxes as normalized (x1, y1, x2, y2). Same definition in web/src/engine/interaction.ts."""
-    h, w = image_hw
-    pw, ph = max(person[2] - person[0], 1e-4), max(person[3] - person[1], 1e-4)
-    qw, qh = max(pet[2] - pet[0], 1e-4), max(pet[3] - pet[1], 1e-4)
-    ix = max(0.0, min(person[2], pet[2]) - max(person[0], pet[0]))
-    iy = max(0.0, min(person[3], pet[3]) - max(person[1], pet[1]))
-    inter = ix * iy
-    pcx, pcy = (person[0] + person[2]) / 2, (person[1] + person[3]) / 2
-    qcx, qcy = (pet[0] + pet[2]) / 2, (pet[1] + pet[3]) / 2
-    gx = max(0.0, max(person[0], pet[0]) - min(person[2], pet[2]))
-    gy = max(0.0, max(person[1], pet[1]) - min(person[3], pet[3]))
-    return np.array([
-        _iou(person, pet), inter / (qw * qh), inter / (pw * ph), (qcx - pcx) / pw, (qcy - pcy) / ph, np.log((qw * qh) / (pw * ph)),
-        np.log((pw * w) / (ph * h)), np.log((qw * w) / (qh * h)), np.hypot(gx, gy) / np.sqrt(pw * ph),
-        float(person[0] <= qcx <= person[2] and person[1] <= qcy <= person[3]), pw * ph, qw * qh], dtype=np.float64)
-
-
 def union_box(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return np.array([min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])])
 

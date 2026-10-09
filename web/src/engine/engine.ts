@@ -10,6 +10,7 @@ import { decodeAudio16k, probe, sampleFrames, sha256Hex, type Probe } from "./me
 import type { LoadedModel } from "./runtime";
 import { detectionFlags, estimateCameraMotion, firstT, lastT, makeTracker, mergeSpecies, movementSummary, score as detScore, species,
   speciesSummary, trackSpecies, type Track } from "./tracking";
+import { Interaction } from "./interaction";
 import { Backbone, Posture, Verifier } from "./verifier";
 import { occupancy, type ZoneConfig } from "./zones";
 
@@ -39,6 +40,7 @@ export class LocalEngine {
   readonly detector?: Detector;
   readonly verifier?: Verifier;
   readonly posture?: Posture;
+  readonly interaction?: Interaction;
   readonly fusion: FusionEngine;
   constructor(readonly a: EngineAssets, readonly m: LocalModels, readonly info: EngineInfo) {
     if (a.detector && m.detector) this.detector = new Detector(m.detector, a.detector);
@@ -47,6 +49,7 @@ export class LocalEngine {
       if (a.verifier) this.verifier = new Verifier(bb, a.verifier);
       if (a.posture) this.posture = new Posture(bb, a.posture);
     }
+    if (a.interaction && this.detector) this.interaction = new Interaction(a.interaction);
     this.fusion = new FusionEngine(a.fusion);
   }
 
@@ -59,6 +62,7 @@ export class LocalEngine {
       { name: `${a.vision.tracker.method}_tracker`, kind: "tracker", state: this.detector ? "ok" : "unavailable", model_id: null, version: a.vision.tracker.method === "kalman" ? "kalman-cv-sort-v1" : "iou-hungarian-v1", reason: null },
       { name: "pose", kind: "pose", state: "unavailable", model_id: null, version: null, reason: "no keypoint model in the on-device bundle (dog keypoints are research-only; no cat keypoint data)" },
       { name: "posture", kind: "pose", state: this.posture ? "ok" : "unavailable", model_id: this.posture ? "efficientnet_lite0_mediapipe_v1" : null, version: a.posture?.version ?? null, reason: this.posture ? "coarse lying/sitting/standing from weak caption labels (E10); uncalibrated" : "posture model not in the on-device bundle" },
+      { name: "person_interaction", kind: "behavior", state: this.interaction ? "ok" : "unavailable", model_id: this.interaction ? (a.detector?.model_id ?? null) : null, version: a.interaction?.version ?? null, reason: this.interaction ? "person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored" : "interaction model not in the on-device bundle" },
       { name: "behavior_segments", kind: "behavior", state: this.detector && a.behavior.enabled ? "ok" : "unavailable", model_id: null, version: "behavior-rules-v1", reason: "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)" },
       { name: "fusion", kind: "fusion", state: "ok", model_id: null, version: this.fusion.scorer.revision, reason: "experimental; not validated on paired data" },
       { name: "runtime", kind: "ingest", state: "ok", model_id: null, version: `${this.info.runtime}/${this.info.accelerator}`, reason: `on-device bundle ${this.info.bundle_version}` },
@@ -155,10 +159,16 @@ export class LocalEngine {
         if (lapVar < v.quality.blur_laplacian_var) blurry.push(fr.t_s);
         qMs += tick() - tq;
         let td = tick();
-        const dets = await this.detector.detect(fr.rgb, this.a.detector!.target_classes, this.a.detector!.score_threshold, this.a.detector!.nms_iou, this.a.detector!.max_detections_per_frame);
+        const classes = this.interaction ? [...this.a.detector!.target_classes, "person"] : this.a.detector!.target_classes;
+        const all = await this.detector.detect(fr.rgb, classes, this.a.detector!.score_threshold, this.a.detector!.nms_iou, this.a.detector!.max_detections_per_frame);
         detMs += tick() - td;
+        const dets = all.filter((d) => d.label !== "person");
         const adets = mergeSpecies(dets, fr.t_s, fr.index);
         detectionFlags(adets, v.quality.tiny_area_fraction);
+        if (this.interaction) {
+          const people = all.filter((d) => d.label === "person" && d.score >= this.a.interaction!.min_person_score).map((d) => d.box);
+          if (people.length) for (const d of adets) d.interaction = Math.max(...people.map((pb) => this.interaction!.score(pb, d.box, fr.rgb.width, fr.rgb.height, species(d))));
+        }
         if (this.verifier) {
           td = tick();
           for (const d of [...adets].sort((x, y) => detScore(y) - detScore(x)).slice(0, this.a.verifier!.max_checks_per_frame)) {
@@ -248,7 +258,9 @@ export class LocalEngine {
         const brel = spanDark || tr.detections.length < 3 ? "low" : "medium";
         segs = [...BH.motionSegments(ss, bp, tid, brel), ...BH.pacingSegments(ss, bp, tid),
           ...BH.zoneSegments(times, boxes, opts.zones, frameSize[0], frameSize[1], bp, a.vision.tracker.max_gap_s, tid, brel),
-          ...BH.viewSegments(times, boxes, 0, mediaEnd, bp, tid, brel)].sort((x, y) => x.t_start_s - y.t_start_s || (x.kind < y.kind ? -1 : 1));
+          ...BH.viewSegments(times, boxes, 0, mediaEnd, bp, tid, brel),
+          ...(this.interaction ? BH.interactionSegments(times, tr.detections.map((d) => d.interaction), this.a.interaction!.threshold, this.a.interaction!.min_frames, a.vision.tracker.max_gap_s, tid) : []),
+        ].sort((x, y) => x.t_start_s - y.t_start_s || (x.kind < y.kind ? -1 : 1));
       }
       const meanScore = tr.detections.reduce((s, d) => s + detScore(d), 0) / tr.detections.length;
       let trackRel = meanScore >= 0.6 && !flags.some((x) => x === "tiny_subject" || x === "species_ambiguous") ? "high" : meanScore >= 0.45 ? "medium" : "low";
@@ -289,7 +301,7 @@ export class LocalEngine {
         movement: { ...mv, reliability: mvRel }, zones: zoneOcc,
         pose_features: POSE_FEATURES.map((name) => ({ name, available: false, value: null, units: null, reason: poseReason })),
         quality_flags: flags, evidence_ids: evIds,
-        behavior_segments: segs.map((g, k) => ({ segment_id: `beh-${tid}-${k + 1}`, ...g, validation_status: "synthetic_and_semi_synthetic_only" })),
+        behavior_segments: segs.map(({ validation, ...g }, k) => ({ segment_id: `beh-${tid}-${k + 1}`, ...g, validation_status: validation ?? "synthetic_and_semi_synthetic_only" })),
         keypoints: [],
         posture: tr.detections.filter((d) => d.posture).map((d) => ({ t_s: d.t_s, label: d.posture!.label, score: Math.round(d.posture!.score * 1000) / 1000, score_kind: "posture_softmax_uncalibrated" })),
         verification: tr.verification ? { verifier_id: "verifier-v1:crop", checked_detections: tr.verification.checked, median_score: tr.verification.median,
@@ -385,7 +397,7 @@ export class LocalEngine {
     if (videoOk && nFrames) avail.push("video");
     report("done", 1);
     return {
-      schema_version: "1.1.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
+      schema_version: "1.2.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
       config_profile: "ondevice", config_hash: this.info.bundle_version,
       media: { analysis_filename: opts.name.replace(/[^A-Za-z0-9._-]/g, "_").slice(0, 120) || "recording", size_bytes: file.size, sha256: digest, container: p.mime,
         duration_s: p.duration_s, start_time_s: 0,

@@ -144,10 +144,11 @@ an E2E test). Server analysis exists only as an explicit setting.
 | Device check (automated, not a phone) | E2E test "device check passes ..." | `results/ondevice/device_check_desktop_chromium.json` |
 | Real phones | [DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md) | **pending** |
 
-Engine-parity summary (30 cases, default float32 bundle): decision 30/30;
-tracks F1 0.95; sounds 1.00; behavior segments 0.96; hypotheses 1.00; posture
-labels identical when both engines report one (139/139), with 78/423 frames
-flipping across the report gate. With the int8 bundle on both sides: tracks
+Engine-parity summary (34 cases, default float32 bundle): decision 34/34;
+tracks F1 0.96; sounds 1.00; behavior segments 0.97 (person-interaction
+segments identical on the 4 person + dog clips); hypotheses 1.00; posture
+labels identical whenever both engines report one, with about one frame in
+five flipping across the report gate. With the int8 bundle on both sides: tracks
 0.84, segments 0.875, hypotheses 0.99, decisions 30/30
 (`results/ondevice/engine_parity_chromium_int8.json`). Media are decoded differently by design (FFmpeg vs browser), so
 pixel-level differences propagate into small score differences.

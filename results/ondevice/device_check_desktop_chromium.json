@@ -1,7 +1,7 @@
 {
  "schema": "petperception.device_check/2",
- "created_at": "2026-10-09T09:17:01.295Z",
- "bundle_version": "5a71db9c337f10e0",
+ "created_at": "2026-10-09T09:28:19.934Z",
+ "bundle_version": "042b0243f26217e6",
  "environment": {
   "user_agent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Mobile Safari/537.36",
   "platform": "Android",
@@ -42,25 +42,25 @@
   "models/efficientnet_lite0_features_v1.tflite": true,
   "models/yamnet.tflite": true
  },
- "engine_load_ms": 0.6899999994784594,
+ "engine_load_ms": 0.6799999997019768,
  "models": {
   "yamnet": {
-   "median_ms": 3.1850000005215406,
-   "min_ms": 2.519999999552965,
+   "median_ms": 3.744999999180436,
+   "min_ms": 2.8049999997019768,
    "max_abs_diff_first_values": 0,
    "mean_abs_relative_diff": 2.9802321664662564e-9,
    "argmax_equal": true
   },
   "detector_float": {
-   "median_ms": 46.21499999985099,
-   "min_ms": 40,
+   "median_ms": 43.7649999987334,
+   "min_ms": 37.25999999977648,
    "max_abs_diff_first_values": 0,
    "mean_abs_relative_diff": 2.4793600293289583e-8,
    "argmax_equal": true
   },
   "backbone": {
-   "median_ms": 15.630000000819564,
-   "min_ms": 14.274999998509884,
+   "median_ms": 11.870000001043081,
+   "min_ms": 11.595000000670552,
    "max_abs_diff_first_values": 0,
    "mean_abs_relative_diff": 6.018626370215246e-8,
    "argmax_equal": true
@@ -85,17 +85,17 @@
   "runs": [
    {
     "run": 1,
-    "wall_ms": 3554.289999999106,
+    "wall_ms": 3516.8699999991804,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 15.07,
-     "decode_audio": 2.07,
-     "video_decode_detect_track": 3526.18,
-     "video_detector_inference": 1148.86,
-     "video_verifier": 489.12,
-     "video_posture": 559.93,
-     "video_quality_and_camera_motion": 438.12,
-     "fusion_and_behavior": 2.48
+     "probe_and_hash": 12.9,
+     "decode_audio": 2.28,
+     "video_decode_detect_track": 3495.87,
+     "video_detector_inference": 1147.29,
+     "video_verifier": 520.54,
+     "video_posture": 545.4,
+     "video_quality_and_camera_motion": 415.42,
+     "fusion_and_behavior": 2.91
     },
     "tracks": 1,
     "species": [
@@ -111,17 +111,17 @@
    },
    {
     "run": 2,
-    "wall_ms": 3323.4949999991804,
+    "wall_ms": 3320.714999999851,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 14.15,
-     "decode_audio": 1.26,
-     "video_decode_detect_track": 3306.8,
-     "video_detector_inference": 1162.99,
-     "video_verifier": 454.21,
-     "video_posture": 520.91,
-     "video_quality_and_camera_motion": 338.74,
-     "fusion_and_behavior": 0.89
+     "probe_and_hash": 8.65,
+     "decode_audio": 1.32,
+     "video_decode_detect_track": 3309.34,
+     "video_detector_inference": 1141.43,
+     "video_verifier": 447.55,
+     "video_posture": 510.55,
+     "video_quality_and_camera_motion": 351.95,
+     "fusion_and_behavior": 0.83
     },
     "tracks": 1,
     "species": [
@@ -137,17 +137,17 @@
    },
    {
     "run": 3,
-    "wall_ms": 3459.5600000005215,
+    "wall_ms": 3514.440000001341,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 11.47,
-     "decode_audio": 1.47,
-     "video_decode_detect_track": 3445.37,
-     "video_detector_inference": 1152.74,
-     "video_verifier": 484.48,
-     "video_posture": 574.06,
-     "video_quality_and_camera_motion": 385.85,
-     "fusion_and_behavior": 0.88
+     "probe_and_hash": 10.34,
+     "decode_audio": 4.59,
+     "video_decode_detect_track": 3497.9,
+     "video_detector_inference": 1176.59,
+     "video_verifier": 460.04,
+     "video_posture": 539.12,
+     "video_quality_and_camera_motion": 426.37,
+     "fusion_and_behavior": 1.1
     },
     "tracks": 1,
     "species": [
@@ -163,8 +163,8 @@
    }
   ],
   "online_during_test": true,
-  "wall_ms_median": 3459.5600000005215,
-  "realtime_factor": 0.3088892857143323,
+  "wall_ms_median": 3514.440000001341,
+  "realtime_factor": 0.31378928571440545,
   "sustained_slowdown": null,
   "battery": {
    "start": {
@@ -180,16 +180,16 @@
   }
  },
  "js_heap": {
-  "used": 27692487,
+  "used": 29737290,
   "limit": 4294705152
  },
  "page_memory_bytes": null,
  "storage": {
-  "usage": 46996378,
-  "quota": 951889743
+  "usage": 46996809,
+  "quota": 990258330
  },
  "download_bytes": {
-  "bundle": 37188993,
+  "bundle": 37189424,
   "runtime": 9763309
  },
  "budgets": {
@@ -204,7 +204,7 @@
     "id": "download_mb",
     "label": "One-time model download (bundle + runtime)",
     "unit": "MB",
-    "value": 44.777204513549805,
+    "value": 44.777615547180176,
     "limit": 50,
     "status": "pass",
     "assumption": true,
@@ -214,7 +214,7 @@
     "id": "storage_mb",
     "label": "Storage used by the app (origin total)",
     "unit": "MB",
-    "value": 44.81923866271973,
+    "value": 44.8196496963501,
     "limit": 120,
     "status": "pass",
     "assumption": true,
@@ -224,7 +224,7 @@
     "id": "engine_load_ms",
     "label": "Model load from cache (cold)",
     "unit": "ms",
-    "value": 0.6899999994784594,
+    "value": 0.6799999997019768,
     "limit": 4000,
     "status": "pass",
     "assumption": true,
@@ -234,7 +234,7 @@
     "id": "realtime_factor",
     "label": "Analysis time / recording duration (audio + video, 2 frames per second)",
     "unit": "x",
-    "value": 0.3088892857143323,
+    "value": 0.31378928571440545,
     "limit": 1,
     "status": "pass",
     "assumption": true,
@@ -244,7 +244,7 @@
     "id": "detector_ms",
     "label": "Detector inference, one frame (median)",
     "unit": "ms",
-    "value": 46.21499999985099,
+    "value": 43.7649999987334,
     "limit": 160,
     "status": "pass",
     "assumption": true,

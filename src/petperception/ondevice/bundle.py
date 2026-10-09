@@ -175,6 +175,14 @@ def export_bundle(settings: Settings, out: Path) -> dict:
                                      "min_detection_score": settings.posture.min_detection_score, "max_per_frame": settings.posture.max_per_frame}
         if settings.pose.provider == "dog_keypoints_v1" and allowed("dog_keypoints_head_v1"):
             notes.append("dog keypoints are research-only; not bundled for on-device use in this version")
+    # Person-pet interaction (E13): box geometry only, needs the detector but not the backbone.
+    im = REPO_ROOT / settings.interaction.model_file
+    if "detector" in assets and settings.interaction.enabled and im.exists() and allowed("person_pet_interaction_v1"):
+        with np.load(im) as z:
+            assets["interaction"] = {"mean_b64": _b64(z["mean"]), "scale_b64": _b64(z["scale"]), "coef_b64": _b64(z["coef"]),
+                                     "intercept": float(np.ravel(z["intercept"])[0]), "threshold": float(z["threshold"]),
+                                     "version": str(z["version"]), "min_person_score": settings.interaction.min_person_score,
+                                     "min_frames": settings.interaction.min_frames}
     assets["vision"] = {"sample_fps": settings.vision.sample_fps, "max_side": settings.vision.max_side, "quality": settings.vision.quality.model_dump(),
                         "tracker": settings.vision.tracker.model_dump(), "camera_motion_compensation": settings.vision.camera_motion_compensation}
     assets["behavior"] = settings.behavior.model_dump()

@@ -55,7 +55,7 @@ unreachable from this environment.
 | 13 | Vocalization type (meow, purr, hiss, growl, bark, howl, whimper, yip) | cat, dog | type-labelled pet audio | none audited (ESC-50 only has "cat" and "dog") | YAMNet AudioSet subtype scores | **not evaluated** per type | yes (scores computed) | pretrained, unevaluated | Type-labelled pet vocalization corpus; purr detection in particular. |
 | 14 | Vocal context (e.g. meow while waiting for food / brushing / isolation) | cat | context labels | CatMeows (Zenodo) | planned E2 | - | no | **blocked** (zenodo.org) | Dataset context ≠ household intent; even with access it would be dataset-context classification. |
 | 14d | Vocal context / bark type | dog | context labels | Barkopedia (Hugging Face) | planned E3 | - | no | **blocked** (huggingface.co), terms unaudited | - |
-| 15 | Interaction with a person (holds / interacts with) | cat, dog | person-pet pair labels with reliable negatives | Open Images V7 visual relationships (exhaustive for annotated pairs; CC BY 4.0): 3,089 images, 11,598 pairs, positives train 2,219 / validation 47 / test 145 | logistic regression on detection-box geometry (E13; a union-crop embedding did not help) | E13 final (OI validation + test), pairs where both boxes are detected: AP 0.907 [0.86, 0.95] vs chance 0.47, precision 0.87, recall 0.68; only 249 of 531 annotated pairs scorable (person or pet undetected); end-to-end recall 0.42; 'boxes overlap' baseline F1 0.82 vs model 0.76 | see [ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md) | validated (public data), dogs only | Cats: 4 scorable final pairs - not evaluated. Still images only: no temporal interaction, nothing about the animal's response. Person detection coverage is the main limit. |
+| 15 | Interaction with a person (holds / interacts with) | cat, dog | person-pet pair labels with reliable negatives | Open Images V7 visual relationships (exhaustive for annotated pairs; CC BY 4.0): 3,089 images, 11,598 pairs, positives train 2,219 / validation 47 / test 145 | logistic regression on detection-box geometry (E13; a union-crop embedding did not help) | E13 final (OI validation + test), pairs where both boxes are detected: AP 0.907 [0.86, 0.95] vs chance 0.47, precision 0.87, recall 0.68; only 249 of 531 annotated pairs scorable (person or pet undetected); end-to-end recall 0.42; 'boxes overlap' baseline F1 0.82 vs model 0.76 | yes (server and phone; `person_interaction_candidate` segments, identical on both engines in engine parity) | validated (public data), dogs only | Cats: 4 scorable final pairs - not evaluated. Still images only: no temporal interaction, nothing about the animal's response. Person detection coverage is the main limit. |
 | 16 | Interaction with objects / furniture (on bed, chair, table, sofa; inside car) | cat, dog | pet-object relation labels | Open Images V7 visual relationships (e.g. dog on dog bed 119, cat on bed 93, cat on table 76) | not trained (COCO detector already finds bed, couch, chair, dining table) | - | no | data available, not trained | Toys, bowls, litter boxes, doors, windows (COCO "bowl" is not validated for pet bowls). |
 | 17 | Interaction with other animals (play, chase, fight, groom) | cat, dog | pair/interval labels | MammalNet "fights against other animals" (dog, research only); Open Images relationships contain **no** pet-pet triplets | E11 class "fights" only | E11 | no | research only / **missing** | Multi-pet household video with labelled social interactions. |
 | 18 | Environmental context sounds (doorbell, knock, vacuum, TV, speech, thunder, fireworks, alarm, baby cry ...) | - | clip labels | none audited | YAMNet AudioSet classes | not evaluated in this repository | yes | pretrained, unevaluated | Household recordings with context labels. |
@@ -85,18 +85,21 @@ unreachable from this environment.
 
 ## 3. On-device equivalence of each shipped capability
 
-Engine parity (`results/ondevice/engine_parity_chromium.json`, 30 cases,
-identical WebM inputs, Python reference engine vs TypeScript engine in
-headless Chromium; decoders differ by design):
+Engine parity (`results/ondevice/engine_parity_chromium.json`, 34 cases,
+identical WebM/MP4 inputs, Python reference engine vs TypeScript engine in
+headless Chromium; decoders differ by design; default float32 bundle):
 
 | Output | Agreement |
 | --- | --- |
-| Decision state | 30/30 |
-| Tracks (species + interval within 1.1 s) | F1 0.95 |
+| Decision state | 34/34 |
+| Tracks (species + interval within 1.1 s) | F1 0.96 |
 | Sound events | F1 1.00 |
-| Behavior segments | F1 0.96 |
+| Behavior segments (incl. person interaction) | F1 0.97 |
 | Hypotheses (name + status) | F1 1.00 |
-| Posture | identical label on 139/139 frames where both report a label; 78/423 frames flip across the report gate (one engine just below 0.84) |
+| Posture | identical label whenever both engines report one; about one frame in five flips across the report gate (one engine just below 0.84) |
+
+With the opt-in int8 bundle (30 cases): tracks 0.84, segments 0.875,
+hypotheses 0.99, decisions 30/30 (`engine_parity_chromium_int8.json`).
 
 Model-level parity on identical tensors is bit-exact or within 3e-8
 (`results/ondevice/runtime_parity_*.json`). The posture gate flips show that

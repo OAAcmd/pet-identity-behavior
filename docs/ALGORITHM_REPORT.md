@@ -506,6 +506,7 @@ validation + test once.
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
 YAMNet, the float and int8 detectors and both backbones are bit-identical or
 within 3e-8 of Python LiteRT on identical inputs (float16 detector: 3e-8).
-Engine-level parity on 30 identical media files with the default (float32)
-bundle: decision 30/30, tracks F1 0.95, sounds 1.00, segments 0.96,
-hypotheses 1.00 (int8 bundle: 0.84 / 1.00 / 0.875 / 0.99). Details: [ON_DEVICE.md](ON_DEVICE.md).
+Engine-level parity with the default (float32) bundle on 34 identical media
+files (including 4 person + dog clips): decision 34/34, tracks F1 0.96,
+sounds 1.00, segments 0.97 (interaction segments identical), hypotheses 1.00.
+With the int8 bundle (30 files): 0.84 / 1.00 / 0.875 / 0.99. Details: [ON_DEVICE.md](ON_DEVICE.md).

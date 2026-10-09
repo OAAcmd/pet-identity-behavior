@@ -5,6 +5,7 @@ import { anchorPoint, zoneDistance, type ZoneConfig } from "./zones";
 export interface Segment {
   kind: string; t_start_s: number; t_end_s: number; reliability: string; detail: string;
   track_id: string | null; measurements: Record<string, number>; method: string;
+  validation?: string; // default "synthetic_and_semi_synthetic_only"
 }
 
 export interface StepSeries { t0: number[]; t1: number[]; speed: number[]; raw: number[]; pos: [number, number][]; times: number[] }
@@ -231,5 +232,30 @@ export function startleCandidates(series: Map<string, StepSeries>, onsets: [stri
       }
     }
   }
+  return segs;
+}
+
+/** Runs of sampled frames whose person-pet interaction score (E13) is >= threshold.
+ * Mirrors vision/behavior.py interaction_segments. */
+export function interactionSegments(times: number[], scores: (number | null)[], threshold: number, minFrames: number, maxGap: number, tid: string): Segment[] {
+  const segs: Segment[] = [];
+  let run: number[] = [];
+  const close = () => {
+    if (run.length < minFrames) return;
+    const sc = run.map((i) => scores[i] as number);
+    const mx = Math.max(...sc);
+    segs.push({ kind: "person_interaction_candidate", t_start_s: times[run[0]], t_end_s: times[run[run.length - 1]], reliability: "low",
+      detail: `pattern of a person holding or interacting with the animal in ${run.length} sampled frames (max score ${f(mx, 2)})`, track_id: tid,
+      measurements: { frames: run.length, max_score: mx, threshold }, method: `E13 still-image pair model on detection boxes, runs of >= ${minFrames} sampled frames`,
+      validation: "per_frame_model_public_still_images" });
+  };
+  for (let i = 0; i < times.length; i++) {
+    const v = scores[i];
+    const hit = v !== null && v >= threshold;
+    if (hit && (!run.length || times[i] - times[run[run.length - 1]] <= maxGap)) { run.push(i); continue; }
+    close();
+    run = hit ? [i] : [];
+  }
+  close();
   return segs;
 }

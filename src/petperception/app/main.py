@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import shutil
 import time
@@ -84,6 +85,14 @@ def create_app(settings: Settings, engine_factory: Callable[[], object] | None =
             hb = db.one("SELECT max(last_seen) AS t FROM worker_heartbeats")
             age = time.time() - hb["t"] if hb and hb["t"] else None
             checks["worker"] = {"ok": age is not None and age < 3 * settings.app.jobs.heartbeat_s + 5, "last_heartbeat_age_s": age}
+        # The core analysis runs on phones from the published bundle: no bundle, not ready.
+        od = Path(settings.serve.ondevice_dir)
+        od = od if od.is_absolute() else REPO_ROOT / od
+        try:
+            man = json.loads((od / "manifest.json").read_text())
+            checks["ondevice_bundle"] = {"ok": True, "bundle_version": man.get("bundle_version"), "release_profile": man.get("release_profile")}
+        except (OSError, ValueError):
+            checks["ondevice_bundle"] = {"ok": False, "error": "manifest missing or unreadable; run petperception export-ondevice"}
         queued = db.one("SELECT count(*) AS n FROM analyses WHERE status = 'queued'")["n"]
         checks["queue"] = {"ok": queued < settings.app.jobs.max_queued_total, "queued": queued}
         return {"ready": all(c["ok"] for c in checks.values()), "checks": checks, "engine_version": __version__}
