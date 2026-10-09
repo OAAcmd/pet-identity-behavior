@@ -1,16 +1,26 @@
 # Experiment Results
 
-Produced in the Phase 1 workspace with `uv run petperception evaluate --experiment <id>`.
-Summaries and interpretation: [docs/ALGORITHM_REPORT.md](../docs/ALGORITHM_REPORT.md).
+Produced with `uv run petperception evaluate --experiment <id>` (on-device
+results: see the commands in [docs/ON_DEVICE.md](../docs/ON_DEVICE.md)).
+Summaries and interpretation: [docs/ALGORITHM_REPORT.md](../docs/ALGORITHM_REPORT.md);
+what each result does and does not show: [docs/CAPABILITY_MATRIX.md](../docs/CAPABILITY_MATRIX.md).
 
-| Dir | Status | Files |
-| --- | --- | --- |
-| `e1/` | completed (real data: ESC-50) | `metrics.json` (protocol, per-fold info, all methods, CIs, false positives, calibration diagnostic), `predictions.csv` (per clip, per method), `run.log` |
-| `e2/` | **blocked** (CatMeows unreachable) | `status.json` with reason and continuation command |
-| `e3/` | **pending** (Barkopedia unreachable and unaudited) | `status.json` |
-| `e4/` | completed (real data: Open Images V7 val subset) | `metrics.json`, `predictions_<detector>.json` (detections >= 0.2 per image), `run.log` |
-| `e5/` | completed as behavior checks (synthetic pairings of real media) | `scenario_results.json` (14 scenarios x 3 scorers, invariants/expectations), `outputs/*.json` (full results, rule baseline), `run.log` |
-| `e6/` | completed (runtime on this workspace) | `metrics.json`, `run.log` |
+| Dir | Status | Data | Files |
+| --- | --- | --- | --- |
+| `e1/` | completed | ESC-50 (real clips, not household audio) | `metrics.json` (protocol, per-fold info, all methods, CIs, false positives, calibration diagnostic), `predictions.csv`, `run.log` |
+| `e2/` | **blocked** (CatMeows on zenodo.org unreachable) | - | `status.json` with reason and continuation command |
+| `e3/` | **pending** (Barkopedia on huggingface.co unreachable and unaudited) | - | `status.json` |
+| `e4/` | completed | Open Images V7 validation subset (web photos) | `metrics.json`, `predictions_<detector>.json`, `run.log` |
+| `e5/` | completed as behavior checks | synthetic pairings of real public media | `scenario_results.json`, `outputs/*.json`, `run.log` |
+| `e6/` | completed | runtime on the cloud workspace (server path) | `metrics.json`, `run.log` |
+| `e7/` | completed | Open Images V7 test split (tuning) and the E4 validation subset (final) | `metrics.json`: false-positive verifier, recall/specificity trade-off per detector and feature set |
+| `e8/` | completed | semi-synthetic sequences (real animal pixels, scripted motion) | `metrics.json`: tracking (IDF1, ID switches) and behavior-segment detection |
+| `e9/` | completed | Ultralytics dog-pose (Research-Only) | `metrics.json` (PCK, ear/tail cue agreement, gates), `training_log.json` (learning curves, seeds) |
+| `e10/` | completed | Open Images V7 + Localized Narratives caption-derived weak labels | `metrics.json`: coarse posture agreement with weak labels, per species |
+| `e11/` | see `metrics.json` | MammalNet dog-breed video segments (research only) | `metrics.json`: dog behavior classes from video, breed breakdown |
+| `ondevice/` | completed in **desktop headless Chromium only** | parity fixtures, scenario media | `runtime_parity_*.json` (model level: browser LiteRT.js vs Python LiteRT), `engine_parity_chromium.json` (engine level, Python vs TypeScript engine on identical files), `device_check_desktop_chromium.json` (device-check report from an automated browser, **not a phone**) |
 
 No metric from different datasets is combined into a product-level number.
-Multimodal / hypothesis accuracy is `not_evaluated`.
+Multimodal / hypothesis accuracy on real household recordings is
+`not_evaluated` (no such labelled data exists yet; see
+[docs/EVALUATION_PLAN_REAL_PAIRED.md](../docs/EVALUATION_PLAN_REAL_PAIRED.md)).

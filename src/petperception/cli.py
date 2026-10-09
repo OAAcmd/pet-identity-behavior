@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "dog-pose", "posture-weak", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -198,6 +198,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e8_behavior_sequences as E
 
         return E.run(s, out_dir)
+    if name == "e11":
+        from .eval import e11_dog_behavior_video as E
+
+        return E.run(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "behavior_video")
     if name == "e10":
         from .eval import e10_posture as E
 
@@ -374,6 +378,22 @@ def cmd_export_parity(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_engine_parity(args: argparse.Namespace) -> int:
+    from .ondevice import engine_parity as P
+
+    s = _settings(args)
+    out = Path(args.out)
+    if args.action == "reference":
+        print(json.dumps(P.write_reference(s, out)))
+        return 0
+    summary = P.compare(out)
+    if args.write:
+        Path(args.write).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.write).write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
+    print(json.dumps({k: v for k, v in summary.items() if k != "rows"}, indent=1))
+    return 0
+
+
 def cmd_release_check(args: argparse.Namespace) -> int:
     from .registry import check_model, release_report, resource
 
@@ -530,6 +550,11 @@ def build_parser() -> argparse.ArgumentParser:
     ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))
     ep.set_defaults(func=cmd_export_parity)
+    pp = sub.add_parser("engine-parity", help="engine-level parity: write Python reference results, or score the browser results against them")
+    pp.add_argument("action", choices=["reference", "compare"])
+    pp.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice" / "engine_parity"))
+    pp.add_argument("--write", help="compare: also write the summary JSON to this file")
+    pp.set_defaults(func=cmd_engine_parity)
     rc = sub.add_parser("release-check", help="check every configured asset against the release profile (exit 3 if any is not allowed)")
     rc.set_defaults(func=cmd_release_check)
     cl = sub.add_parser("cleanup", help="recover expired jobs, expire uploads/media/sessions, remove orphan files")

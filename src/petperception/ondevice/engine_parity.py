@@ -121,6 +121,7 @@ def compare(out: Path) -> dict:
     errs: dict[str, list[float]] = {k: [] for k in agg}
     decisions = 0
     compared = 0
+    posture = {"ref_frames": 0, "web_frames": 0, "matched": 0, "same_label": 0, "abs_score_diff": []}
     for c in cases:
         ref_p, web_p = out / "reference" / f"{c['name']}.json", out / "web" / f"{c['name']}.json"
         if not (ref_p.exists() and web_p.exists()):
@@ -146,6 +147,14 @@ def compare(out: Path) -> dict:
             for i in range(3):
                 agg[k][i] += v[i]
             errs[k] += v[3]
+        pr = {(t["species"], round(p["t_s"], 2)): p for t in _tracks(ref) for p in t.get("posture", [])}
+        pw = {(t["species"], round(p["t_s"], 2)): p for t in _tracks(web) for p in t.get("posture", [])}
+        posture["ref_frames"] += len(pr)
+        posture["web_frames"] += len(pw)
+        for k in pr.keys() & pw.keys():
+            posture["matched"] += 1
+            posture["same_label"] += int(pr[k]["label"] == pw[k]["label"])
+            posture["abs_score_diff"].append(abs(pr[k]["score"] - pw[k]["score"]))
         same_decision = ref["decision"]["state"] == web["decision"]["state"]
         decisions += int(same_decision)
         rows.append({"name": c["name"], "decision_ref": ref["decision"]["state"], "decision_web": web["decision"]["state"],
@@ -156,6 +165,9 @@ def compare(out: Path) -> dict:
         "agreement": {k: {"matched": v[0], "only_reference": v[1], "only_web": v[2],
                           "f1": 2 * v[0] / max(2 * v[0] + v[1] + v[2], 1),
                           "median_boundary_error_s": float(np.median(errs[k])) if errs[k] else None} for k, v in agg.items()},
+        "posture": {"reference_frames": posture["ref_frames"], "web_frames": posture["web_frames"], "frames_matched_by_species_and_time": posture["matched"],
+                    "label_agreement": posture["same_label"] / posture["matched"] if posture["matched"] else None,
+                    "median_abs_score_diff": float(np.median(posture["abs_score_diff"])) if posture["abs_score_diff"] else None},
         "rows": rows,
         "tolerances": {"tracks_s": 2 * (1.0 / 2.0 + 0.05), "sounds_s": 0.5, "segments_s": 2 * (1.0 / 2.0 + 0.05)},
         "note": "Desktop headless Chromium (LiteRT.js WASM) vs Python LiteRT; media decoded by the browser vs FFmpeg.",

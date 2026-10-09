@@ -1,0 +1,207 @@
+{
+  "experiment": "E10",
+  "title": "Coarse posture from weak caption labels (cats and dogs)",
+  "protocol": [
+    "E10: coarse posture (lying / sitting / standing) from WEAK caption labels.",
+    "",
+    "Labels: parsed from Localized Narratives captions (see data/posture_weak.py).",
+    "Boxes: the product detector + verifier (exactly one accepted detection of the",
+    "captioned species and none of the other species), as at analysis time.",
+    "Features: pooled EfficientNet-Lite0 embedding of the square crop, box shape,",
+    "species indicator. Model: multinomial logistic regression.",
+    "",
+    "Splits (Open Images): train -> fit; test -> development (regularisation and",
+    "the abstention gate); validation -> final evaluation, used once.",
+    "",
+    "Every number is agreement with caption-derived labels. Caption noise was not",
+    "measured: a caption can be wrong, vague (\"resting\" while sitting) or refer to",
+    "a different animal than the one detected.",
+    "Baselines: majority class and a box-shape-only model, to show what the",
+    "embedding adds."
+  ],
+  "samples": {
+    "train": 1309,
+    "test": 581,
+    "validation": 229
+  },
+  "dropped": {
+    "missing_image": 0,
+    "no_single_accepted_detection": 712
+  },
+  "label_counts": {
+    "train": {
+      "cat/lying": 279,
+      "cat/sitting": 225,
+      "cat/standing": 50,
+      "dog/lying": 203,
+      "dog/sitting": 275,
+      "dog/standing": 277
+    },
+    "test": {
+      "cat/lying": 50,
+      "cat/sitting": 31,
+      "cat/standing": 7,
+      "dog/lying": 152,
+      "dog/sitting": 177,
+      "dog/standing": 164
+    },
+    "validation": {
+      "cat/lying": 22,
+      "cat/sitting": 16,
+      "cat/standing": 3,
+      "dog/lying": 53,
+      "dog/sitting": 62,
+      "dog/standing": 73
+    }
+  },
+  "selected_C_on_dev": 0.01,
+  "dev_macro_f1_by_C": {
+    "0.01": 0.6593524212916082,
+    "0.03": 0.6562329454794772,
+    "0.1": 0.6407566858552186,
+    "0.3": 0.632583381253594,
+    "1.0": 0.6361235718119777
+  },
+  "gate_rule": "smallest top-score gate with >= 80% development agreement on reported labels",
+  "dev": {
+    "n": 581,
+    "macro_f1": 0.6593524212916082,
+    "accuracy": 0.657487091222031,
+    "confusion_rows_true_cols_pred": [
+      [
+        128,
+        53,
+        21
+      ],
+      [
+        29,
+        118,
+        61
+      ],
+      [
+        8,
+        27,
+        136
+      ]
+    ],
+    "per_class": {
+      "lying": {
+        "precision": 0.7757575757575758,
+        "recall": 0.6336633663366337,
+        "f1": 0.6975476839237057,
+        "support": 202,
+        "tp": 128,
+        "fp": 37,
+        "fn": 74
+      },
+      "sitting": {
+        "precision": 0.5959595959595959,
+        "recall": 0.5673076923076923,
+        "f1": 0.5812807881773399,
+        "support": 208,
+        "tp": 118,
+        "fp": 80,
+        "fn": 90
+      },
+      "standing": {
+        "precision": 0.6238532110091743,
+        "recall": 0.7953216374269005,
+        "f1": 0.699228791773779,
+        "support": 171,
+        "tp": 136,
+        "fp": 82,
+        "fn": 35
+      }
+    },
+    "macro_f1_ci95": {
+      "ci_low": 0.6207435015089742,
+      "ci_high": 0.6967458039953919,
+      "n_boot": 1000,
+      "n_groups": 581,
+      "unit": "group"
+    },
+    "cat_macro_f1": 0.6926979666705694,
+    "cat_n": 88,
+    "dog_macro_f1": 0.6440554541791196,
+    "dog_n": 493,
+    "gated": {
+      "gate": 0.84,
+      "coverage": 0.3648881239242685,
+      "agreement_on_reported": 0.8301886792452831
+    }
+  },
+  "final_validation": {
+    "n": 229,
+    "macro_f1": 0.6478401137668045,
+    "accuracy": 0.6506550218340611,
+    "confusion_rows_true_cols_pred": [
+      [
+        45,
+        17,
+        13
+      ],
+      [
+        14,
+        44,
+        20
+      ],
+      [
+        6,
+        10,
+        60
+      ]
+    ],
+    "per_class": {
+      "lying": {
+        "precision": 0.6923076923076923,
+        "recall": 0.6,
+        "f1": 0.6428571428571429,
+        "support": 75,
+        "tp": 45,
+        "fp": 20,
+        "fn": 30
+      },
+      "sitting": {
+        "precision": 0.6197183098591549,
+        "recall": 0.5641025641025641,
+        "f1": 0.5906040268456376,
+        "support": 78,
+        "tp": 44,
+        "fp": 27,
+        "fn": 34
+      },
+      "standing": {
+        "precision": 0.6451612903225806,
+        "recall": 0.7894736842105263,
+        "f1": 0.7100591715976331,
+        "support": 76,
+        "tp": 60,
+        "fp": 33,
+        "fn": 16
+      }
+    },
+    "macro_f1_ci95": {
+      "ci_low": 0.5840469616660022,
+      "ci_high": 0.704356353594961,
+      "n_boot": 1000,
+      "n_groups": 229,
+      "unit": "group"
+    },
+    "cat_macro_f1": 0.7490514905149052,
+    "cat_n": 41,
+    "dog_macro_f1": 0.6079436056833538,
+    "dog_n": 188,
+    "gated": {
+      "gate": 0.84,
+      "coverage": 0.37554585152838427,
+      "agreement_on_reported": 0.8488372093023255
+    }
+  },
+  "baselines_on_validation": {
+    "majority_class": 0.16938110749185667,
+    "box_shape_only": 0.45250439158714323
+  },
+  "label_source_caveat": "Agreement with caption-derived weak labels; caption noise unmeasured.",
+  "created_at": "2026-10-09T08:09:40+00:00",
+  "artifact_sha256": "aa9bc30c15285c1a9b76e336bf4d5bef11b1ef1b0027e654497816829dd14d72"
+}
