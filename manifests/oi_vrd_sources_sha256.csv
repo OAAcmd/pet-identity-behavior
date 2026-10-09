@@ -1,0 +1,6 @@
+file,url,sha256
+oidv6-train-annotations-bbox.csv,https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv,dfc9637907a6b105f87e435bac91a5ee9b29af3ff8391168f86c1d63879786b6
+oidv6-train-annotations-vrd.csv,https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-vrd.csv,0fc0ef90bfb283c86ab97fa5f94cbad8bd62406311744178bec75df34ab8041a
+test-annotations-vrd.csv,https://storage.googleapis.com/openimages/v5/test-annotations-vrd.csv,231920c5dba28d5767b634d135e3bb4807e98d0056d2d060a692787eb84e8f66
+train-images-boxable-with-rotation.csv,https://storage.googleapis.com/openimages/2018_04/train/train-images-boxable-with-rotation.csv,05f3d68dbbb03728d1a37e51479f4f35c062b871e1a6cae8c4cefbe0e0c80ed0
+validation-annotations-vrd.csv,https://storage.googleapis.com/openimages/v5/validation-annotations-vrd.csv,60f93bca189b839f644e185e1b204e53940043dea47211c1b43e9ab989eed12a

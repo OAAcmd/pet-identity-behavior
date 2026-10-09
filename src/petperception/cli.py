@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12"]
-DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "dog-pose", "posture-weak", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -129,6 +129,20 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         out = OT.fetch_images(root, man)
         print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
         return 0 if not out.get("errors") else 1
+    if args.dataset == "mammalnet":
+        from .data import mammalnet as MN
+
+        print(json.dumps(MN.fetch(root), indent=2))
+        return 0
+    if args.dataset == "openimages-vrd":
+        from .data import openimages_vrd as VR
+
+        if not (man / "oi_vrd_interaction_pairs.csv").exists():  # the 2.9 GB source files are needed only to rebuild
+            VR.fetch_annotations(root, man)
+            print(json.dumps(VR.build(root, man), indent=2))
+        out = VR.fetch_images(root, man)
+        print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
+        return 0 if not out.get("errors") else 1
     if args.dataset == "posture-weak":
         from .data import posture_weak as PW
 
@@ -198,6 +212,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e8_behavior_sequences as E
 
         return E.run(s, out_dir)
+    if name == "e13":
+        from .eval import e13_interaction as E
+
+        return E.run(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "interaction")
     if name == "e12":
         from .eval import e12_quantization as E
 
@@ -357,6 +375,13 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
     s = _settings(args)
     if args.release_profile:
         s.release_profile = args.release_profile
+    if args.detector:
+        s.vision.detector = args.detector
+    if args.backbone:
+        # One backbone serves the verifier and posture; posture parameters must match it.
+        s.vision.verifier.classifier = s.posture.backbone = args.backbone
+    if args.posture_model:
+        s.posture.model_file = args.posture_model
     m = export_bundle(s, Path(args.out))
     if not args.no_device_check:
         from .ondevice.bundle import add_device_check
@@ -562,6 +587,9 @@ def build_parser() -> argparse.ArgumentParser:
     od.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice" / "bundle"))
     od.add_argument("--release-profile", choices=["research", "personal_noncommercial", "commercial"])
     od.add_argument("--no-device-check", action="store_true", help="skip the device-check reference clip and outputs")
+    od.add_argument("--detector", help="detector model id (e.g. the int8 build evaluated in E12)")
+    od.add_argument("--backbone", help="EfficientNet-Lite0 build for the verifier and posture (e.g. the int8 build)")
+    od.add_argument("--posture-model", help="posture parameters fitted on that backbone's features")
     od.set_defaults(func=cmd_export_ondevice)
     ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))

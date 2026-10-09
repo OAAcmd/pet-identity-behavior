@@ -7,7 +7,9 @@ Per-file manifests: [`manifests/esc50_files.csv`](../manifests/esc50_files.csv),
 [`manifests/openimages_catdog_sha256.csv`](../manifests/openimages_catdog_sha256.csv).
 
 All facts below were checked on the actual files in this workspace on **2026-10-09**
-unless marked *unverified*. Counts were computed from the files, not copied
+unless marked *unverified*. The Phase 1 sections are kept as written; everything
+acquired or trained afterwards is in [Phase 2 additions](#phase-2-additions) at the end
+(including the dog-pose data, which became reachable). Counts were computed from the files, not copied
 from papers or dataset cards.
 
 ## Retrieval environment
@@ -174,3 +176,66 @@ resource.
 | `var/data/*` | raw datasets | see above | session only; re-fetch with `fetch-data` |
 | `var/examples/*` | synthetic-pairing scenario media | inherits source terms | session only; regenerate with `evaluate --experiment e5` |
 | Docker image `pet-perception:phase1` | CPU runtime | as dependencies | built and tested in session only; not pushed to a registry |
+
+## Phase 2 additions
+
+Reachability changes observed in Phase 2: `github.com/ultralytics/assets` release
+downloads and `mammalnet.s3.amazonaws.com` are reachable; `zenodo.org` and
+`huggingface.co` remain denied (CatMeows, Barkopedia still blocked).
+
+### Release suitability
+
+Every resource now carries `release_suitability` per release profile
+(`research`, `personal_noncommercial`, `commercial`: `suitable`,
+`requires_legal_review` or `not_permitted`) in `manifests/resources.json`.
+`petperception release-check` reports the decision for every configured asset;
+the analysis engine and `export-ondevice` refuse assets that are not allowed in
+the active profile. Legal approvals for `requires_legal_review` items are
+recorded by a person in a separate approvals file
+(`configs/release_approvals.example.yaml`), never by code.
+
+### Models
+
+| ID | Use | File (bytes, SHA-256 prefix) | Weights terms | Profiles (research / personal NC / commercial) |
+| --- | --- | --- | --- | --- |
+| `efficientnet_lite0_mediapipe_v1` | crop classifier for the verifier; shared feature backbone (posture, keypoints, interaction, video) | 18,582,189, `6c7ab0a6` | Apache-2.0 in the embedded ModelMetadata; ImageNet training-data question open | suitable / suitable / legal review |
+| `efficientdet_lite0_tfhub_v1` | licence-confirmed detector candidate (TF Lite Task Library build) | 4,563,519, `2e04c53b` | Apache-2.0 in the embedded ModelMetadata; COCO training-data question open | suitable / suitable / legal review |
+| `efficientdet_lite0_mediapipe_int8_v1` | int8 detector evaluated for phones (E12) | 4,602,795, `0720bf24` | as the float MediaPipe build: no primary-source weight licence (none embedded; checked) | suitable / suitable / not permitted |
+| `efficientdet_lite0_mediapipe_f16_v1` | float16-weight detector evaluated for phones (E12) | 7,254,339, `4b591000` | as above | suitable / suitable / not permitted |
+| `efficientnet_lite0_mediapipe_int8_v1` | int8 backbone evaluated for phones (E12) | 5,434,517, `bc2ffe19` | Apache-2.0 in the embedded ModelMetadata | suitable / suitable / legal review |
+
+Interfaces of the quantized builds (verified by inspection): the int8 detector
+takes uint8 input (scale 1/128, zero point 127) and returns float32 raw anchors
+like the float build; the int8 classifier takes uint8 input (scale 0.012566,
+zero point 131), returns a uint8 softmax, and its intermediate feature tensors
+are int8 at the same tensor indices as the float build.
+
+### Datasets
+
+| ID | Use | Content and size (computed here) | Splits used | Terms | Profiles |
+| --- | --- | --- | --- | --- | --- |
+| `openimages_v7_test_tuning` | E7 verifier fitting and threshold selection | 2,111 Open Images V7 test-split images (cat/dog positives, verified negatives, confusable animals); `manifests/oi_test_tuning_*.csv` | tuning only (never a final metric); disjoint from E4 (asserted) | annotations CC BY 4.0, images CC BY 2.0 | all suitable |
+| `ultralytics_dog_pose` | E9 dog keypoints | `dog-pose.zip` 353,152,125 B, SHA-256 `0396a35f...`; 24 keypoint slots, of which 4 (eyes, withers, throat) are never annotated; 6,773 train instances (6,096 fit + 677 development), 1,703 val; Stanford Dogs synsets give 112 breeds | dog-pose train / val | Research-Only (Stanford Dogs / ImageNet terms; archive ships the Ultralytics AGPL-3.0 text) | research only |
+| `localized_narratives_captions` | E10 weak posture labels | caption files for OI train/test/validation (SHA-256 pinned); 2,834 candidate images in `manifests/posture_weak_images.csv`, 2,119 with exactly one accepted detection | OI train / test / validation | CC BY 4.0 (captions), CC BY 2.0 (images) | all suitable |
+| MammalNet dog-breed segments (`petperception fetch-data mammalnet`) | E11 dog behavior from video | `annotation.tar` SHA-256 `055af7e2...`; genus Canis with domestic-breed keywords (bulldog, terrier, malamute, hound, husky dog, shepherd dog, eskimo dog, foxhound), classes sleeps / eats food / drinks water / fights / pees or poops; up to 3 segments per video, at most 30 s each; 813 segments requested | MammalNet's own training / validation / testing | code MIT; **no dataset licence published**; videos are third-party YouTube uploads, streamed and never stored | research only |
+| Open Images V7 visual relationships, person-pet pairs (`fetch-data openimages-vrd`) | E13 person-pet interaction | source files pinned in `manifests/oi_vrd_sources_sha256.csv`; 3,089 images, 11,598 (person, pet) box pairs; positives: train 2,219 / validation 47 / test 145 | OI train (10 % image hold-out for development) / OI validation + test (final) | annotations CC BY 4.0, images CC BY 2.0 (attribution in `manifests/oi_vrd_interaction_images.csv`) | all suitable |
+
+Notes on the relationship data: relationship boxes are drawn separately from
+the box annotations; each relation was mapped to the annotated boxes of the
+same classes by IoU (all matched with IoU ≥ 0.91). Open Images states that
+relationship annotations are exhaustive for annotated pairs, which is what
+makes unrelated person-pet pairs reliable negatives. There are no pet-pet
+relationships and no pet attributes in the files.
+
+### Trained artifacts (this repository)
+
+See [`artifacts/README.md`](../artifacts/README.md) for checksums and
+[TRAINING_PROGRAM.md](TRAINING_PROGRAM.md) for reproduction.
+
+| Artifact | Trained on | Profiles |
+| --- | --- | --- |
+| `verifier/verifier_<detector>.json` | OI test-split tuning images | all suitable (backbone terms apply at runtime) |
+| `keypoints/dog_keypoints_head_v1.npz` | dog-pose | research only |
+| `posture/posture_v1.npz` | OI train + Localized Narratives weak labels | all suitable (backbone terms apply) |
+| `behavior_video/dog_behavior_video_v1.npz` | MammalNet dog segments | research only |
+| `interaction/person_pet_interaction_v1.npz` | OI visual relationships | all suitable (backbone terms apply) |

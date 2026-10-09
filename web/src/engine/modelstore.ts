@@ -14,7 +14,7 @@ export interface BundleManifest {
 
 const CACHE = "pp-ondevice-models-v1";
 /** Bundle engine-asset format this app understands (bundle.py ENGINE_VERSION major.minor). */
-export const SUPPORTED_BUNDLE_ENGINE = "0.1";
+export const SUPPORTED_BUNDLE_ENGINE = "0.2";
 const ACTIVE_KEY = "/__ondevice__/active-manifest.json";
 
 async function sha256(buf: ArrayBuffer): Promise<string> {

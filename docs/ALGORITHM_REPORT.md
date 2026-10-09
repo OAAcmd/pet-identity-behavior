@@ -1,10 +1,14 @@
-# Phase 1 Algorithm Report
+# Algorithm Report (Phase 1 and Phase 2)
 
 Scope: an evidence-based behavior interpreter for cats and dogs. The engine
 reports **observations** first (detected animals, sounds, movement, zone
 occupancy, timestamps, quality limits), then **experimental hypotheses** with
 evidence and explicit uncertainty, then **restrained suggestions**. It does not
 translate animal language, read minds or emotions, or diagnose.
+
+Sections 1-7 are the Phase 1 report, kept as written. Section 8 covers Phase 2
+(false-positive rejection, temporal behavior, keypoints, posture, video
+behavior, quantization, interaction, on-device execution).
 
 All numbers below were measured in this workspace (4 vCPU Intel Xeon @ 2.10 GHz,
 15.7 GB RAM, no GPU, Python 3.12.3, FFmpeg 6.1.1) and can be regenerated with
@@ -319,3 +323,106 @@ EfficientDet-Lite0. No accelerator was available or tested.
 - Historical targets (90% event F1, 60% cat-context accuracy, 70% selective
   intent accuracy, 5-15 point personalization gain) remain hypotheses. Only the
   first relates to a measured task, and only on ESC-50 clips.
+
+## 8. Phase 2
+
+Every result in this section is on public data (web photos, YouTube video) or
+on semi-synthetic sequences; none is a household measurement. The capability
+view of the same results is in [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md).
+
+### E7 - False-positive rejection with its recall cost - COMPLETED
+
+Phase 1 left cat/dog detection with poor specificity on verified-negative
+photos (E4, Lite0: cat 0.62, dog 0.56). E7 adds a second stage and measures
+what it costs in recall, with strict data separation: every fit and selection
+uses an Open Images **test-split** tuning subset (2,111 images); the unchanged
+E4 **validation** subset is evaluated once per frozen configuration.
+
+* Stage 2 options per detection: crop classifier (EfficientNet-Lite0 ImageNet
+  group masses), re-detection on the zoomed crop, the detector's own anchor
+  class vector, and combinations; per-class logistic regression; threshold tau
+  keeps 98 % of detector-only true positives (out-of-fold, grouped by Flickr
+  author). Baseline under the same budget: raise the detector threshold.
+* Result (Lite0, E4, image level): raising the threshold barely helps (cat
+  specificity 0.62 → 0.66, dog 0.56 → 0.62). The crop verifier: cat 0.62 →
+  0.70 [0.57, 0.83], dog 0.56 → 0.87 [0.80, 0.92]; image recall cat 0.93 →
+  0.91, dog 0.89 → 0.87. Lite2 and the TF Hub Lite0 build reach 0.85 (cat) and
+  0.90-0.91 (dog).
+* Deployed variant: the crop feature set (one backbone pass per detection,
+  shared with posture). The protocol-selected set (crop + redetect) is
+  exported for comparison.
+* Failure mode found: species confusion (a dog crop scored as cat) is
+  rejected rather than corrected; a detection rejected by the verifier
+  produces a quality flag, never a silent drop.
+
+### E8 - Tracking and temporal behavior segments (semi-synthetic) - COMPLETED
+
+Real animal pixels (Open Images crops) moved along scripted paths over real
+animal-free indoor backgrounds, rendered to video with ground-truth boxes,
+identities and segment boundaries. Development seeds select the tracker; test
+seeds are evaluated once.
+
+* Kalman (SORT-style, time-based constant velocity) vs IoU tracker on test:
+  IDF1 0.859 vs 0.784, ID switches 11 vs 22, MOTA 0.84 vs 0.82. Kalman is the
+  default.
+* Behavior segments (operational definitions, a-priori thresholds) on test:
+  active bout 6/6, pacing candidate 6/6, zone approach 5/6, enter/dwell/leave
+  6/6 each, entered view 5/6, left view 6/6, moving 16/18, stationary 25/30,
+  median boundary error 0.15-0.8 s (2 s for zone approach).
+* This shows the rules do what they are defined to do on controlled motion.
+  It does not show that they capture real pet behavior.
+
+### E9 - Dog keypoints (research profile only) - COMPLETED
+
+Ultralytics dog-pose (Stanford Dogs images; Research-Only). Frozen
+EfficientNet-Lite0 multi-scale features + a small JAX head (spatial softmax
+heatmaps, offsets, visibility), 30 epochs, best development epoch 13.
+
+* Final (val, 1,703 instances, CIs resample breeds): PCK@0.1 0.853 [0.843,
+  0.863], PCK@0.05 0.632, PCK@0.2 0.944; end-to-end with the product detector
+  0.844. Derived cues vs the same cues from the annotation: ear-tip elevation
+  sign agreement 0.93 (Spearman 0.84), tail elevation 0.89 (0.87).
+* Breed breakdown (89 breeds with ≥ 10 instances): per-breed PCK@0.1 from 0.73
+  to 0.94, significantly more spread than chance (permutation p = 0.0005); tail
+  keypoints fail completely for some breeds. Morphology is not in the
+  metadata, so the cause (tail type, coat) is not established.
+* The visibility gate rule (precision ≥ 0.90) could not be met on
+  development, so keypoints are reported with defaults and flagged.
+* No cat keypoint data exists in any reachable source.
+
+### E10 - Coarse posture from weak caption labels - COMPLETED
+
+Labels parsed from Localized Narratives captions (e.g. "a dog lying on a
+couch") for Open Images train/test/validation; boxes from the product
+detector + verifier; features: pooled crop embedding + box shape + species.
+
+* Final (validation, 229 animals): macro-F1 0.648 [0.584, 0.704] against the
+  weak labels; cat 0.75 (n = 41), dog 0.61 (n = 188); box-shape-only baseline
+  0.45, majority 0.17. With the report gate (top score ≥ 0.84, chosen on
+  development) 38 % of animals get a label, 85 % of those agree.
+* This is agreement with caption-derived labels whose noise was not measured.
+* On-device: identical labels whenever both engines report one; 19 % of
+  frames flip across the gate between the Python and browser engines because
+  decoders differ slightly. The app shows posture as per-track frame counts
+  including "uncertain".
+
+### E11 - Dog behavior from real video (MammalNet, research only)
+
+See `results/e11/metrics.json` (filled in below when the run completes).
+
+### E12 - Quantized models for phones
+
+See `results/e12/metrics.json` (filled in below when the run completes).
+
+### E13 - Person-pet interaction (Open Images relationships)
+
+See `results/e13/metrics.json` (filled in below when the run completes).
+
+### On-device execution
+
+Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
+YAMNet, both detectors that the web runtime supports, and the backbone are
+bit-identical or within 3e-8 of Python LiteRT on identical inputs; the int8
+detector and int8 backbone are bit-exact. Engine-level parity on 30 identical
+media files: decision 30/30, tracks F1 0.95, sounds 1.00, segments 0.96,
+hypotheses 1.00. Details: [ON_DEVICE.md](ON_DEVICE.md).

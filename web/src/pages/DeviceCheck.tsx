@@ -15,6 +15,16 @@ import { useApp } from "../state";
 interface RefCase { input: string; output_index_by_size: number; first: number[]; mean_abs: number; argmax: number; elements: number }
 interface Expected { file: string; mime: string; tracks: number; species: string[]; segment_kinds: string[]; decision: string; sound_labels: string[] }
 
+/** Deterministic inputs, identical to src/petperception/ondevice/parity.py CASES. */
+function parityInput(c: string): Float32Array | Uint8Array {
+  if (c === "yamnet") return syntheticAudio();
+  if (c === "detector_float") return normalize(syntheticImage(320), 127.5, 127.5);
+  if (c === "detector_int8") return syntheticImage(320);
+  if (c === "backbone") return normalize(syntheticImage(224), 127, 128);
+  if (c === "backbone_int8") return syntheticImage(224);
+  throw new Error(`unknown reference input ${c}`);
+}
+
 const median = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
 const MB = 1024 * 1024;
 
@@ -94,7 +104,7 @@ export function DeviceCheckPage() {
       for (const [name, mdl] of Object.entries(models)) {
         if (!mdl || !refs[name]) continue;
         setRunning(`benchmarking ${name}`);
-        const input = name === "yamnet" ? syntheticAudio() : name === "detector_float" ? normalize(syntheticImage(320), 127.5, 127.5) : normalize(syntheticImage(224), 127, 128);
+        const input = parityInput(refs[name].input);
         const times: number[] = [];
         let outs: ArrayLike<number>[] = [];
         for (let k = 0; k < 6; k++) {

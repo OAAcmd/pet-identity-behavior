@@ -31,6 +31,7 @@ import numpy as np
 from ..config import REPO_ROOT, Settings
 from ..registry import check_model, model_dir, release_decision
 from ..utils import sha256_file, utc_now
+from ..vision.tflite_io import dequantize
 from ..vision.tflite_meta import associated_files, input_normalization, mediapipe_detector_options
 from .tflite_patch import expose_outputs
 
@@ -38,7 +39,7 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 # Format of engine_assets.json as consumed by the TypeScript engine. Change the
 # major.minor only together with SUPPORTED_BUNDLE_ENGINE in web/src/engine/modelstore.ts:
 # the app refuses bundles whose major.minor it does not support.
-ENGINE_ASSET_FORMAT = "0.1.0"
+ENGINE_ASSET_FORMAT = "0.2.0"  # 0.2: quantized model inputs/outputs (input_quant, output_quant)
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
 WEB_DETECTORS = {"efficientdet_lite0_mediapipe_v1", "efficientdet_lite2_mediapipe_v1"}
@@ -207,16 +208,28 @@ def add_device_check(settings: Settings, out: Path) -> dict:
     m = json.loads((out / "manifest.json").read_text())
     by_res = {f["resource_id"]: f["path"] for f in m["files"] if f["kind"] == "model"}
     refs = {}
-    pick = {"yamnet": (settings.audio.yamnet.model_id, 521), "detector_float": (settings.vision.detector, None),
-            "backbone": (settings.vision.verifier.classifier, 1000)}
-    for case, (rid, size) in pick.items():
+    from ai_edge_litert.interpreter import Interpreter
+
+    def quantized(path: Path) -> bool:
+        return np.dtype(Interpreter(model_path=str(path)).get_input_details()[0]["dtype"]).kind in "iu"
+
+    # Keys are model roles; "input" names the deterministic input generator (parity.CASES,
+    # web/src/engine/parity.ts), which depends on the build (float or quantized input).
+    pick = {"yamnet": (settings.audio.yamnet.model_id, 521, ("yamnet", "yamnet")), "detector_float": (settings.vision.detector, None, ("detector_float", "detector_int8")),
+            "backbone": (settings.vision.verifier.classifier, 1000, ("backbone", "backbone_int8"))}
+    for role, (rid, size, (case_f, case_q)) in pick.items():
         if rid not in by_res:
             continue
-        outs = _run((out / by_res[rid]).read_bytes(), CASES[case]())
+        case = case_q if quantized(out / by_res[rid]) else case_f
+        model = (out / by_res[rid]).read_bytes()
+        outs = _run(model, CASES[case]())
+        # Quantized outputs are compared dequantized, as the app's runModel returns them.
+        qs = [d["quantization"] for d in Interpreter(model_content=model).get_output_details()]
         if size is None:  # detector: the box tensor
             size = next(o.size for o in outs if o.shape[-1] == 4)
-        o = next(x for x in outs if x.size == size).astype(np.float32).ravel()
-        refs[case] = {"input": case, "elements": int(o.size), "first": [float(v) for v in o[:64]], "mean_abs": float(np.abs(o).mean()), "argmax": int(o.argmax())}
+        k = next(i for i, x in enumerate(outs) if x.size == size)
+        o = dequantize(outs[k], qs[k]).astype(np.float32).ravel()
+        refs[role] = {"input": case, "elements": int(o.size), "first": [float(v) for v in o[:64]], "mean_abs": float(np.abs(o).mean()), "argmax": int(o.argmax())}
     (dc / "reference_outputs.json").write_text(json.dumps(refs))
     # Reference clip: a real Open Images cat crop walking across a real indoor background (CC BY 2.0 sources).
     data, man = settings.paths.resolve("data_root"), settings.paths.resolve("manifests_root")
