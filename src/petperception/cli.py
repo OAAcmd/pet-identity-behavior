@@ -339,6 +339,35 @@ def cmd_db(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_export_ondevice(args: argparse.Namespace) -> int:
+    from .ondevice.bundle import export_bundle
+
+    s = _settings(args)
+    if args.release_profile:
+        s.release_profile = args.release_profile
+    m = export_bundle(s, Path(args.out))
+    print(json.dumps({k: m[k] for k in ("bundle_version", "release_profile", "total_bytes", "notes")} | {"files": [f["path"] for f in m["files"]]}, indent=2))
+    return 0
+
+
+def cmd_export_parity(args: argparse.Namespace) -> int:
+    from .ondevice.bundle import BACKBONE_OUTPUTS
+    from .ondevice.parity import export
+    from .ondevice.tflite_patch import add_outputs
+    from .registry import check_model
+
+    s = _settings(args)
+    out = Path(args.out)
+    (out / "models").mkdir(parents=True, exist_ok=True)
+    path = lambda mid: Path(next(iter(check_model(s, mid).files.values())))  # noqa: E731
+    bb = out / "models" / "efficientnet_lite0_features_v1.tflite"
+    bb.write_bytes(add_outputs(path("efficientnet_lite0_mediapipe_v1").read_bytes(), BACKBONE_OUTPUTS))
+    m = export({"yamnet": path("yamnet_mediapipe_v1"), "detector_float": path("efficientdet_lite0_mediapipe_v1"),
+                "detector_uint8": path("efficientdet_lite0_tfhub_v1"), "backbone": bb}, out / "parity")
+    print(json.dumps({k: [o["shape"] for o in v["outputs"]] for k, v in m["cases"].items()}))
+    return 0
+
+
 def cmd_release_check(args: argparse.Namespace) -> int:
     from .registry import check_model, release_report, resource
 
@@ -487,6 +516,13 @@ def build_parser() -> argparse.ArgumentParser:
     us.add_argument("--username")
     us.add_argument("--admin", action="store_true")
     us.set_defaults(func=cmd_user)
+    od = sub.add_parser("export-ondevice", help="write the on-device model bundle (models, assets, checksummed manifest)")
+    od.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice" / "bundle"))
+    od.add_argument("--release-profile", choices=["research", "personal_noncommercial", "commercial"])
+    od.set_defaults(func=cmd_export_ondevice)
+    ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
+    ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))
+    ep.set_defaults(func=cmd_export_parity)
     rc = sub.add_parser("release-check", help="check every configured asset against the release profile (exit 3 if any is not allowed)")
     rc.set_defaults(func=cmd_release_check)
     cl = sub.add_parser("cleanup", help="recover expired jobs, expire uploads/media/sessions, remove orphan files")

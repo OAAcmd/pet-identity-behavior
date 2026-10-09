@@ -28,14 +28,17 @@ from .worker import JobRunner
 log = logging.getLogger("petperception.http")
 
 SECURITY_HEADERS = {
-    "Content-Security-Policy": ("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; "
-                                "media-src 'self' blob:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; "
+    # 'wasm-unsafe-eval' lets the on-device runtime (LiteRT.js) compile WebAssembly; no JS eval is allowed.
+    "Content-Security-Policy": ("default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' blob: data:; "
+                                "media-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:; manifest-src 'self'; "
                                 "frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"),
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
     "X-Frame-Options": "DENY",
     "Permissions-Policy": "camera=(self), microphone=(self), geolocation=(), payment=(), usb=()",
     "Cross-Origin-Opener-Policy": "same-origin",
+    # Cross-origin isolation enables multi-threaded WebAssembly for on-device inference.
+    "Cross-Origin-Embedder-Policy": "require-corp",
 }
 
 
@@ -157,10 +160,26 @@ def create_app(settings: Settings, engine_factory: Callable[[], object] | None =
     static = Path(settings.serve.static_dir)
     static = static if static.is_absolute() else REPO_ROOT / static
 
+    ondevice = Path(settings.serve.ondevice_dir)
+    ondevice = ondevice if ondevice.is_absolute() else REPO_ROOT / ondevice
+
+    def ondevice_file(rel: str):
+        """On-device model bundle (petperception export-ondevice). Clients verify every file's SHA-256."""
+        target = (ondevice / rel).resolve()
+        if not rel or not target.is_file() or not str(target).startswith(str(ondevice.resolve()) + "/"):
+            if rel == "manifest.json":
+                return err(503, "ondevice_bundle_missing", "On-device models are not published on this server.",
+                           "Run `petperception export-ondevice` (see docs/ON_DEVICE.md).")
+            return err(404, "not_found", "Unknown on-device file.")
+        return FileResponse(target, headers={"Cache-Control": "no-cache", "Cross-Origin-Resource-Policy": "same-origin"},
+                            media_type="application/json" if target.suffix == ".json" else "application/octet-stream")
+
     @app.get("/{path:path}", include_in_schema=False)
     async def spa(path: str):
         if path.startswith("api/"):
             return err(404, "not_found", "Unknown API path.")
+        if path.startswith("ondevice/"):
+            return ondevice_file(path[len("ondevice/"):])
         if not (static / "index.html").exists():
             return err(503, "frontend_not_built", "The web app has not been built.", "Run `npm --prefix web ci && npm --prefix web run build`.")
         target = (static / path).resolve()

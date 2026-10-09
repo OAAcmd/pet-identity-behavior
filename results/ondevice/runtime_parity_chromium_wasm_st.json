@@ -1,0 +1,148 @@
+{
+ "initMs": 329.70000000018626,
+ "accel": "wasm",
+ "threads": false,
+ "crossOriginIsolated": false,
+ "hardwareConcurrency": 4,
+ "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36",
+ "cases": {
+  "yamnet": {
+   "compileMs": 60.10000000055879,
+   "inputs": [
+    {
+     "name": "waveform_binary",
+     "shape": [
+      15600
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tower0/network/layer32/final_output",
+     "shape": [
+      1,
+      521
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 6.7999999998137355,
+   "minMs": 3.7000000001862645,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 521,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 0.33203125,
+     "argmaxEqual": true
+    }
+   ]
+  },
+  "detector_float": {
+   "compileMs": 22.90000000037253,
+   "inputs": [
+    {
+     "name": "images",
+     "shape": [
+      1,
+      320,
+      320,
+      3
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output_1",
+     "shape": [
+      1,
+      19206,
+      90
+     ],
+     "dtype": "float32"
+    },
+    {
+     "name": "output_0",
+     "shape": [
+      1,
+      19206,
+      4
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 87.6000000005588,
+   "minMs": 80.5,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 1728540,
+     "maxAbsDiff": 2.9802322387695312e-8,
+     "meanAbsDiff": 5.141721358998162e-11,
+     "maxAbsRef": 0.1649269461631775,
+     "argmaxEqual": true
+    },
+    {
+     "ref": 1,
+     "matchedOutput": 1,
+     "elements": 76824,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 1.8816770315170288,
+     "argmaxEqual": true
+    }
+   ]
+  },
+  "detector_uint8": {
+   "compileMs": 11.700000000186265,
+   "inputs": [
+    {
+     "name": "serving_default_images:0",
+     "shape": [
+      1,
+      320,
+      320,
+      3
+     ],
+     "dtype": "uint8"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "StatefulPartitionedCall:3",
+     "shape": [],
+     "dtype": "float32"
+    },
+    {
+     "name": "StatefulPartitionedCall:2",
+     "shape": [],
+     "dtype": "float32"
+    },
+    {
+     "name": "StatefulPartitionedCall:1",
+     "shape": [],
+     "dtype": "float32"
+    },
+    {
+     "name": "StatefulPartitionedCall:0",
+     "shape": [],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "error": "RuntimeError: memory access out of bounds\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[1371]:0xdaf2b\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[5150]:0x52ef99\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[2047]:0x1aa791\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[5107]:0x52a474\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[9089]:0x7fb485\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[8219]:0x6e2959\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[8625]:0x784bd2\n    at LiteRtCompiledModel.run (http://parity.test/wasm/litert_wasm_internal.js:4850:14)\n    at CompiledModelSignatureRunner.runWithArray (http://parity.test/:845:64)\n    at CompiledModelSignatureRunner.run (http://parity.test/:742:32)"
+  },
+  "backbone": {
+   "error": "RuntimeError: memory access out of bounds\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[223]:0x10acd\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[859]:0x61b51\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[126]:0x6b01\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[3758]:0x35cc8f\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[183]:0xd21a\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[9276]:0x817a49\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[8218]:0x6dfa66\n    at http://parity.test/wasm/litert_wasm_internal.wasm:wasm-function[8603]:0x7840fb\n    at Object.compileModel (http://parity.test/wasm/litert_wasm_internal.js:4850:14)\n    at LiteRt.loadAndCompile (http://parity.test/:1272:53)"
+  }
+ }
+}

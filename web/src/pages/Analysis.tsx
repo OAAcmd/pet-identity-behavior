@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { subjectText } from "../components/AnalysisListItem";
-import { ResultView } from "../components/ResultView";
+import { ResultView, serverFeedback } from "../components/ResultView";
 import { ConfirmDialog, ErrorBanner, InfoBanner, ProgressBar, Spinner } from "../components/ui";
 import { ApiError, api } from "../lib/api";
 import { fmtDate, isTerminal } from "../lib/format";
@@ -116,7 +116,7 @@ export function AnalysisPage({ id }: { id: string }) {
         </InfoBanner>
       )}
 
-      {a.status === "succeeded" && a.result && <ResultView analysis={a} result={a.result} mediaUrl={mediaUrl} mediaKind={mediaKind} />}
+      {a.status === "succeeded" && a.result && <ResultView feedback={serverFeedback(a.id)} result={a.result} mediaUrl={mediaUrl} mediaKind={mediaKind} />}
 
       <div class="card">
         <h2>Manage</h2>

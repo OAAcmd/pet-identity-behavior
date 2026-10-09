@@ -327,3 +327,39 @@ def _export_params(frozen: dict, results: dict, out: Path) -> None:
             "fitted_on": "openimages_v7_test_tuning (manifests/oi_test_tuning_images.csv)",
             "note": "Verification scores are rejection scores fitted on the tuning distribution, not calibrated probabilities.",
             "created_at": utc_now().isoformat(timespec="seconds")})
+
+
+def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Path, e7_metrics: Path) -> dict:
+    """Refit the per-class verifier for one feature set from the cached tuning features
+    (identical procedure and data as E7) and export it with E7's E4 numbers for that set.
+
+    Used for deployment variants chosen for runtime cost (e.g. the crop-only set on
+    phones); the threshold rule (98% true-positive retention, out-of-fold, tuning
+    split only) is unchanged.
+    """
+    man = settings.paths.resolve("manifests_root")
+    cache = settings.paths.resolve("data_root").parent / "cache" / "e7"
+    tune_imgs, tune_boxes, tune_conf = _tuning_subset(man)
+    trows = json.loads((cache / f"{detector_id}_tuning.json").read_text())
+    tlab = label_tuning(trows, tune_imgs, tune_boxes, tune_conf)
+    author_t = {r["image_id"]: r["author_profile_url"] or r["author"] for r in tune_imgs}
+    e4 = json.loads(e7_metrics.read_text())["results"][detector_id]["e4"]
+    classes = {}
+    for c in CLASSES:
+        idx = [k for k, x in enumerate(trows) if x["label"] == c and tlab[k] is not None]
+        y = np.array([tlab[k] for k in idx])
+        X = np.stack([features(trows[k], fset) for k in idx])
+        g = np.array([author_t[trows[k]["image_id"]] for k in idx])
+        sc = np.array([trows[k]["score"] for k in idx])
+        tau = _tau_for_retention(_oof(X, y, g)[(y == 1) & (sc >= OP)], RETAIN)
+        m = _fit(X, y)
+        scl, lr = m.named_steps["standardscaler"], m.named_steps["logisticregression"]
+        classes[c] = {"feature_set": fset, "mean": scl.mean_.tolist(), "scale": scl.scale_.tolist(), "coef": lr.coef_[0].tolist(),
+                      "intercept": float(lr.intercept_[0]), "tau": tau, "e4_final": _e4_digest(e4, fset, c)}
+    doc = {"schema": "petperception.verifier/1", "detector_id": detector_id, "classifier_id": CLASSIFIER, "operating_threshold": OP,
+           "retain_target": RETAIN, "classes": classes, "variant": f"{fset} (deployment variant; evaluated in E7 as verifier[{fset}])",
+           "fitted_on": "openimages_v7_test_tuning (manifests/oi_test_tuning_images.csv)",
+           "note": "Verification scores are rejection scores fitted on the tuning distribution, not calibrated probabilities.",
+           "created_at": utc_now().isoformat(timespec="seconds")}
+    write_json(out, doc)
+    return doc

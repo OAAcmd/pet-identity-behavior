@@ -3,7 +3,7 @@ import { api } from "../lib/api";
 import {
   ATTRIBUTION_TEXT, DECISION_HELP, fmtSpan, fmtTime, HYPOTHESIS_LABEL, QUALITY_TEXT, REASON_TEXT, soundLabel, STATUS_LABEL, supportWord,
 } from "../lib/format";
-import type { Analysis, AnalysisResult, Feedback, Hypothesis } from "../lib/types";
+import type { AnalysisResult, Feedback, Hypothesis } from "../lib/types";
 import { useApp } from "../state";
 import { Chip, ErrorBanner, InfoBanner } from "./ui";
 
@@ -22,7 +22,22 @@ const POSE_TEXT: Record<string, string> = {
 const ACTUAL_BEHAVIORS = ["eating or waiting for food", "wanting to go out", "seeking attention", "playing", "resting or sleeping",
   "alert / reacting to something", "fearful or hiding", "warning / aggressive", "grooming", "other", "not sure"];
 
-export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis: Analysis; result: AnalysisResult; mediaUrl: string | null;
+/** Where feedback is stored: the server account, or only this device (local analyses). */
+export interface FeedbackSink {
+  where: "server" | "device";
+  list(): Promise<Feedback[]>;
+  add(body: { target_type: Feedback["target_type"]; target_id?: string | null; verdict: Feedback["verdict"]; actual_behavior?: string | null; note?: string; consent_research_use: boolean }): Promise<void>;
+}
+
+export function serverFeedback(analysisId: string): FeedbackSink {
+  return {
+    where: "server",
+    list: () => api.get<Feedback[]>(`/analyses/${analysisId}/feedback`),
+    add: async (body) => { await api.post(`/analyses/${analysisId}/feedback`, body); },
+  };
+}
+
+export function ResultView({ feedback, result, mediaUrl, mediaKind }: { feedback: FeedbackSink; result: AnalysisResult; mediaUrl: string | null;
   mediaKind: "video" | "audio" | "image" }) {
   const mediaRef = useRef<HTMLVideoElement & HTMLAudioElement>(null);
   const [playhead, setPlayhead] = useState(0);
@@ -166,11 +181,11 @@ export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis
           probabilities, and the app may be wrong. Use your own knowledge of your pet.
         </p>
         {exp.length === 0 && <p>No interpretation had enough independent evidence.</p>}
-        {exp.map((h) => <HypothesisCard key={h.hypothesis_id} h={h} ev={ev} seek={seek} analysisId={analysis.id} />)}
+        {exp.map((h) => <HypothesisCard key={h.hypothesis_id} h={h} ev={ev} seek={seek} sink={feedback} />)}
         {other.length > 0 && (
           <details>
             <summary>Considered but not supported ({other.length})</summary>
-            {other.map((h) => <HypothesisCard key={h.hypothesis_id} h={h} ev={ev} seek={seek} analysisId={analysis.id} compact />)}
+            {other.map((h) => <HypothesisCard key={h.hypothesis_id} h={h} ev={ev} seek={seek} sink={feedback} compact />)}
           </details>
         )}
       </div>
@@ -191,7 +206,7 @@ export function ResultView({ analysis, result, mediaUrl, mediaKind }: { analysis
         <p class="muted">Components: {result.components.map((c) => `${c.name}: ${c.state}`).join(", ")}</p>
       </details>
 
-      <FeedbackForm analysisId={analysis.id} />
+      <FeedbackForm sink={feedback} />
     </div>
   );
 }
@@ -226,8 +241,8 @@ function TimelineRow({ label, start, end, total, tone, onSelect }: { label: stri
   );
 }
 
-function HypothesisCard({ h, ev, seek, analysisId, compact }: { h: Hypothesis; ev: Record<string, { summary: string; t_start_s: number }>;
-  seek: (t: number) => void; analysisId: string; compact?: boolean }) {
+function HypothesisCard({ h, ev, seek, sink, compact }: { h: Hypothesis; ev: Record<string, { summary: string; t_start_s: number }>;
+  seek: (t: number) => void; sink: FeedbackSink; compact?: boolean }) {
   const tone = h.status === "experimental_hypothesis" ? "exp" : h.status === "abstained" ? "warn" : "neutral";
   return (
     <div class={`hyp ${compact ? "compact" : ""}`}>
@@ -251,20 +266,20 @@ function HypothesisCard({ h, ev, seek, analysisId, compact }: { h: Hypothesis; e
         </>
       )}
       <ul class="reasons">{h.reason_codes.filter((r) => r !== "fusion_not_validated").map((r) => <li key={r}>{REASON_TEXT[r] ?? r.replace(/_/g, " ")}</li>)}</ul>
-      {!compact && <QuickFeedback analysisId={analysisId} targetType="hypothesis" targetId={h.hypothesis_id} />}
+      {!compact && <QuickFeedback sink={sink} targetType="hypothesis" targetId={h.hypothesis_id} />}
     </div>
   );
 }
 
-function QuickFeedback({ analysisId, targetType, targetId }: { analysisId: string; targetType: Feedback["target_type"]; targetId: string }) {
+function QuickFeedback({ sink, targetType, targetId }: { sink: FeedbackSink; targetType: Feedback["target_type"]; targetId: string }) {
   const { me, toast } = useApp();
   const [sent, setSent] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
   const send = async (verdict: Feedback["verdict"]) => {
     try {
-      await api.post(`/analyses/${analysisId}/feedback`, { target_type: targetType, target_id: targetId, verdict, consent_research_use: me?.feedback_research_consent ?? false });
+      await sink.add({ target_type: targetType, target_id: targetId, verdict, consent_research_use: me?.feedback_research_consent ?? false });
       setSent(verdict);
-      toast("Thanks - feedback saved.");
+      toast(sink.where === "device" ? "Thanks - feedback saved on this device." : "Thanks - feedback saved.");
     } catch (e) {
       setError(e);
     }
@@ -281,7 +296,7 @@ function QuickFeedback({ analysisId, targetType, targetId }: { analysisId: strin
   );
 }
 
-function FeedbackForm({ analysisId }: { analysisId: string }) {
+function FeedbackForm({ sink }: { sink: FeedbackSink }) {
   const { me, toast } = useApp();
   const [items, setItems] = useState<Feedback[]>([]);
   const [verdict, setVerdict] = useState<Feedback["verdict"]>("unsure");
@@ -289,16 +304,16 @@ function FeedbackForm({ analysisId }: { analysisId: string }) {
   const [note, setNote] = useState("");
   const [consent, setConsent] = useState(me?.feedback_research_consent ?? false);
   const [error, setError] = useState<unknown>(null);
-  const load = () => api.get<Feedback[]>(`/analyses/${analysisId}/feedback`).then(setItems).catch(setError);
+  const load = () => sink.list().then(setItems).catch(setError);
   useEffect(() => {
     load();
-  }, [analysisId]);
+  }, [sink]);
   const submit = async (e: Event) => {
     e.preventDefault();
     try {
-      await api.post(`/analyses/${analysisId}/feedback`, { target_type: "overall", verdict, actual_behavior: actual || null, note, consent_research_use: consent });
+      await sink.add({ target_type: "overall", verdict, actual_behavior: actual || null, note, consent_research_use: consent });
       setNote("");
-      toast("Feedback saved.");
+      toast(sink.where === "device" ? "Feedback saved on this device." : "Feedback saved.");
       load();
     } catch (err) {
       setError(err);
@@ -307,7 +322,8 @@ function FeedbackForm({ analysisId }: { analysisId: string }) {
   return (
     <form class="card" onSubmit={submit}>
       <h2>Your feedback</h2>
-      <p class="hint">Telling us what actually happened is the only way these interpretations can ever be checked.</p>
+      <p class="hint">Telling us what actually happened is the only way these interpretations can ever be checked.
+        {sink.where === "device" ? " This feedback stays on this device unless you turn on result sync." : ""}</p>
       <fieldset class="field">
         <legend>Overall, was the result useful?</legend>
         {(["agree", "disagree", "unsure"] as const).map((v) => (

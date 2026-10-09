@@ -162,10 +162,13 @@ def train(train_dir: Path, dev_dir: Path, log: list) -> dict[str, np.ndarray]:
     def loss_fn(p, x, xy, lab):
         heat, offs, vis = forward(p, x)
         n = x.shape[0]
+        # Unlabelled points can lie far outside the crop: clamp them onto the grid so the
+        # Gaussian target stays finite (they are masked out below anyway).
+        xy = jnp.where(lab[..., None], xy, 0.5)
         tx, ty = xy[..., 0] * g, xy[..., 1] * g  # [N, K] in cells
         d2 = (gx[None, :, :, None] + 0.5 - tx[:, None, None, :]) ** 2 + (gy[None, :, :, None] + 0.5 - ty[:, None, None, :]) ** 2
         tgt = jnp.exp(-d2 / (2 * SIGMA_CELLS ** 2))
-        tgt = tgt / tgt.sum(axis=(1, 2), keepdims=True)
+        tgt = tgt / jnp.maximum(tgt.sum(axis=(1, 2), keepdims=True), 1e-12)
         logp = jax.nn.log_softmax(heat.reshape(n, g * g, K), axis=1).reshape(n, g, g, K)
         ce = -(tgt * logp).sum(axis=(1, 2))  # [N, K]
         cx = jnp.clip(jnp.floor(tx), 0, g - 1).astype(jnp.int32)
@@ -177,7 +180,9 @@ def train(train_dir: Path, dev_dir: Path, log: list) -> dict[str, np.ndarray]:
         m = lab.astype(jnp.float32)
         denom = jnp.maximum(m.sum(), 1.0)
         bce = optax.sigmoid_binary_cross_entropy(vis, m).mean()
-        return (ce * m).sum() / denom + 1.0 * (l1 * m).sum() / denom + 0.5 * bce
+        ce = jnp.where(lab, ce, 0.0)
+        l1 = jnp.where(lab, l1, 0.0)
+        return ce.sum() / denom + 1.0 * l1.sum() / denom + 0.5 * bce
 
     n_tr = len(tr["xy"])
     steps = EPOCHS * math.ceil(n_tr / BATCH)
@@ -212,6 +217,8 @@ def train(train_dir: Path, dev_dir: Path, log: list) -> dict[str, np.ndarray]:
         err = np.linalg.norm(pxy - dev_xy, axis=-1) * KP.CROP_SCALE  # crop units -> box max-side units
         pck = float((err[dev_lab] <= 0.1).mean())
         log.append({"epoch": ep + 1, "train_loss": float(np.mean(losses)), "dev_pck@0.1": pck, "seconds": round(time.perf_counter() - t0, 1)})
+        if not np.isfinite(log[-1]["train_loss"]):
+            raise FloatingPointError(f"non-finite training loss at epoch {ep + 1}")
         if pck > best:
             best, best_p = pck, jax.tree_util.tree_map(np.asarray, params)
     assert best_p is not None

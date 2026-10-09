@@ -4,7 +4,9 @@
   "version": "0.2.0",
   "description": "Mobile-first PWA for the observation-first pet behavior engine",
   "type": "module",
-  "engines": { "node": ">=20.19" },
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -13,6 +15,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@litertjs/core": "2.5.3",
     "preact": "10.29.8"
   },
   "devDependencies": {

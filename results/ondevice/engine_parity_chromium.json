@@ -1,0 +1,801 @@
+{
+ "cases_compared": 30,
+ "decision_agreement": 1.0,
+ "agreement": {
+  "tracks": {
+   "matched": 28,
+   "only_reference": 2,
+   "only_web": 2,
+   "f1": 0.9333333333333333,
+   "median_boundary_error_s": 0.49899950000000004
+  },
+  "sounds": {
+   "matched": 9,
+   "only_reference": 0,
+   "only_web": 0,
+   "f1": 1.0,
+   "median_boundary_error_s": 0.0
+  },
+  "segments": {
+   "matched": 67,
+   "only_reference": 4,
+   "only_web": 3,
+   "f1": 0.950354609929078,
+   "median_boundary_error_s": 0.0
+  },
+  "hypotheses": {
+   "matched": 43,
+   "only_reference": 0,
+   "only_web": 0,
+   "f1": 1.0,
+   "median_boundary_error_s": 0.0
+  }
+ },
+ "tolerances": {
+  "tracks_s": 1.1,
+  "sounds_s": 0.5,
+  "segments_s": 1.1
+ },
+ "note": "Desktop headless Chromium (LiteRT.js WASM) vs Python LiteRT; media decoded by the browser vs FFmpeg.",
+ "created_at": "2026-10-09T07:53:36+00:00",
+ "rows": [
+  {
+   "name": "s01_food_zone_meow",
+   "decision_ref": "experimental_hypothesis",
+   "decision_web": "experimental_hypothesis",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    4,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s02_food_zone_silent",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    2,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s03_two_animals_bark",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    6,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s04_no_pet_vacuum",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s05_dog_visible_meow",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    4,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s06_rest_zone_growl",
+   "decision_ref": "experimental_hypothesis",
+   "decision_web": "experimental_hypothesis",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    4,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s07_audio_only_meow",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s08_video_only_cat",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    2,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s09_camera_pan_cat",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s10_moving_cat_play_zone",
+   "decision_ref": "experimental_hypothesis",
+   "decision_web": "experimental_hypothesis",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s11_corrupt",
+   "reference_error": "corrupt_input",
+   "web_rejected_too": true
+  },
+  {
+   "name": "s12_meow_8khz",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s13_low_light_cat",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "s14_rest_zone_silent",
+   "decision_ref": "experimental_hypothesis",
+   "decision_web": "experimental_hypothesis",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-still_walk_still-1000",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-still_walk_still-1008",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-run_burst-1001",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    4,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-run_burst-1009",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    0,
+    1,
+    1
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    4,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-pacing-1002",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-pacing-1010",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    2,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-zone_visit-1003",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    8,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-zone_visit-1011",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    8,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-exit_return-1004",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    5,
+    0,
+    0
+   ],
+   "hypotheses": [
+    2,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-exit_return-1012",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    5,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-two_cross-1005",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    1
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    0,
+    2
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-two_cross-1013",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    2,
+    1
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-occlusion-1006",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-occlusion-1014",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-camera_pan-1007",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    1,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    1,
+    0,
+    0
+   ],
+   "hypotheses": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e8-camera_pan-1015",
+   "decision_ref": "abstention",
+   "decision_web": "abstention",
+   "tracks": [
+    0,
+    0,
+    0
+   ],
+   "sounds": [
+    0,
+    0,
+    0
+   ],
+   "segments": [
+    0,
+    0,
+    0
+   ],
+   "hypotheses": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "e2e-big-cat-clip",
+   "decision_ref": "supported_observation",
+   "decision_web": "supported_observation",
+   "tracks": [
+    2,
+    1,
+    0
+   ],
+   "sounds": [
+    1,
+    0,
+    0
+   ],
+   "segments": [
+    3,
+    2,
+    0
+   ],
+   "hypotheses": [
+    3,
+    0,
+    0
+   ]
+  }
+ ],
+ "timing_note": "Desktop headless Chromium, 4 cores, WASM (threads) vs Python reference on the same machine; NOT phone timings.",
+ "median_wall_ms_web": 3352.3700000001118,
+ "median_total_ms_python": 2188.0
+}

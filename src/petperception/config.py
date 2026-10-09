@@ -204,6 +204,8 @@ class ServeConfig(BaseModel):
     )
     # Static PWA build served from the same origin (no CORS needed).
     static_dir: str = "web/dist"
+    # On-device model bundle published at /ondevice/ (petperception export-ondevice).
+    ondevice_dir: str = "var/ondevice/bundle"
     # Extra Content-Security-Policy connect-src entries (none by default).
     trusted_proxy_hops: int = 0
 
