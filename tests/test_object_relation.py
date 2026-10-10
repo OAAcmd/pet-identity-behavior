@@ -35,7 +35,8 @@ def test_segments_split_on_object_change_and_gaps():
     assert [(g.t_start_s, g.t_end_s, g.measurements["frames"]) for g in segs] == [(0.0, 1.0, 2.0)]
 
 
-MODEL = Path(__file__).resolve().parents[1] / "artifacts/object_relation/pet_object_relation_v1.npz"
+MODEL = Path(__file__).resolve().parents[1] / "artifacts/object_relation/pet_object_relation_v2.npz"
+LEARNED = Path(__file__).resolve().parents[1] / "artifacts/object_relation/pet_object_relation_v1.npz"
 
 
 @pytest.mark.skipif(not MODEL.exists(), reason="run petperception evaluate --experiment e15")
@@ -49,3 +50,20 @@ def test_shipped_model_contains_only_gated_relations_and_orders_cases():
     best = m.best([("couch", np.array(BESIDE_COUCH[0])), ("bed", np.array(ON_BED[0])), ("tv", np.array([0.0, 0.0, 1.0, 1.0]))],
                   np.array(ON_BED[1]), (480, 640), "cat")
     assert best["on"][1] == "bed" and best["on"][0] == pytest.approx(on)
+
+
+@pytest.mark.skipif(not MODEL.exists(), reason="run petperception evaluate --experiment e15-analysis")
+def test_shipped_rule_is_half_of_the_pet_box_inside_the_furniture():
+    m = ObjectRelationModel.load(MODEL)
+    h = m.heads["on"]
+    for frac, expect in ((0.49, False), (0.51, True), (1.0, True), (0.0, False)):
+        x = np.zeros(19)
+        x[1] = frac  # inter_over_pet
+        assert (h.score(x) >= h.threshold) is expect
+    with np.load(MODEL) as z:
+        assert str(z["on_kind"]) == "containment_rule" and float(z["on_tau"]) == 0.5
+
+
+@pytest.mark.skipif(not LEARNED.exists(), reason="run petperception evaluate --experiment e15")
+def test_learned_head_is_kept_as_the_evaluated_alternative():
+    assert set(ObjectRelationModel.load(LEARNED).heads) == {"on"}

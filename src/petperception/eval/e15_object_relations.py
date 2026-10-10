@@ -227,3 +227,209 @@ def run(settings: Settings, out_dir: Path, artifact_dir: Path | None = None) -> 
         summary["artifact_sha256"] = sha256_file(p)
     write_json(out_dir / "metrics.json", summary)
     return summary
+
+
+# ---------------------------------------------------------------- E15 follow-up: learned head vs geometric rule
+
+COVERAGE_THRESHOLDS = (0.15, 0.20, 0.25, 0.30, 0.35)
+RULE_FEATURE = "inter_over_pet"  # fraction of the pet box inside the object box
+
+
+def _ap_at(scores: np.ndarray, y: np.ndarray) -> dict:
+    """Average precision plus two operating points read off the ranking."""
+    order = np.argsort(-scores, kind="stable")
+    ys = y[order] == 1
+    tp = np.cumsum(ys)
+    prec = tp / np.arange(1, len(ys) + 1)
+    rec = tp / max(ys.sum(), 1)
+    p_at_r90 = float(prec[np.argmax(rec >= 0.9)]) if (rec >= 0.9).any() else None
+    ok = prec >= 0.95
+    r_at_p95 = float(rec[ok].max()) if ok.any() else 0.0
+    return {"average_precision": M.average_precision(scores, y == 1), "precision_at_recall_0.90": p_at_r90, "recall_at_precision_0.95": r_at_p95}
+
+
+def compare_learned_rule(settings: Settings, out_dir: Path, repeats: int = 5) -> dict:
+    """Is the learned 'on' head better than the containment rule? Pooled, photographer-grouped CV.
+
+    Uses every labelled, scorable 'on' pair (fit, development and test - a method comparison,
+    not a new estimate for the shipped model), 5-fold CV grouped by photographer repeated with
+    different group assignments; the rule needs no fitting. Reports AP and operating points on
+    all pairs and on the hard subset where the pet box lies mostly inside the furniture box (the
+    'in front of' versus 'on' cases), a photographer-level paired bootstrap of the AP difference,
+    and the hard negatives for visual audit.
+    """
+    from sklearn.model_selection import GroupKFold
+
+    data = settings.paths.resolve("data_root")
+    man = settings.paths.resolve("manifests_root")
+    photographer = {r["image_id"]: (r["author_profile_url"] or f"image:{r['image_id']}")
+                    for r in csv.DictReader(open(man / "oi_vrd_object_images.csv", newline=""))}
+    rows = [r for r in json.loads((data.parent / "cache" / "e15" / "pairs.json").read_text()) if r["covered"] and r["on"] != ""]
+    X = np.array([r["x"] for r in rows])
+    y = np.array([int(r["on"]) for r in rows])
+    g = np.array([photographer[r["image_id"]] for r in rows])
+    rule = X[:, GEOMETRY.index(RULE_FEATURE)]
+    hard = rule >= 0.5
+    rng = np.random.default_rng(20261016)
+    learned = np.zeros((repeats, len(y)))
+    for k in range(repeats):
+        uniq = np.unique(g)
+        perm = {u: i for i, u in enumerate(rng.permutation(uniq))}
+        gi = np.array([perm[u] for u in g])
+        for tr, te in GroupKFold(n_splits=FOLDS).split(X, y, gi):
+            learned[k, te] = _fit(X[tr], y[tr], 0.1).predict_proba(X[te])[:, 1]
+    mean_learned = learned.mean(axis=0)
+
+    def block(ix: np.ndarray) -> dict:
+        per_rep = [M.average_precision(learned[k, ix], y[ix] == 1) for k in range(repeats)]
+        return {"pairs": int(ix.sum()), "positives": int(y[ix].sum()), "chance_ap": float(y[ix].mean()),
+                "rule": _ap_at(rule[ix], y[ix]), "learned_mean_of_repeats": _ap_at(mean_learned[ix], y[ix]),
+                "learned_ap_per_repeat": per_rep}
+
+    all_ix, hard_ix = np.ones(len(y), bool), hard
+    uniq = np.unique(g)
+    members = {u: np.where(g == u)[0] for u in uniq}
+    diffs = {"all": [], "hard": []}
+    for _ in range(1000):
+        pick = np.concatenate([members[u] for u in rng.choice(uniq, size=len(uniq), replace=True)])
+        for name, mask in (("all", all_ix), ("hard", hard_ix)):
+            ix = pick[mask[pick]]
+            if (y[ix] == 1).any() and (y[ix] == 0).any():
+                diffs[name].append(M.average_precision(mean_learned[ix], y[ix] == 1) - M.average_precision(rule[ix], y[ix] == 1))
+    hard_neg = sorted(((float(rule[i]), rows[i]) for i in range(len(y)) if y[i] == 0 and rule[i] >= 0.8), key=lambda v: -v[0])
+    summary = {
+        "analysis": "E15 follow-up: learned 'on' head vs containment rule", "protocol": compare_learned_rule.__doc__.strip().splitlines(),
+        "rule": f"score = {RULE_FEATURE} (fraction of the pet's detection box inside the furniture detection box)", "learned": "E15 head (C = 0.1) refitted per fold",
+        "repeats": repeats, "folds": FOLDS, "photographers": int(len(uniq)),
+        "all_pairs": block(all_ix), "hard_subset_pet_box_at_least_half_inside": block(hard_ix),
+        "ap_difference_learned_minus_rule_ci95": {k: [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))] if v else None for k, v in diffs.items()},
+        "hard_negatives_for_audit": [{"image_id": r["image_id"], "pet": r["pet"], "object": r["object"], "split": r["split"], "inter_over_pet": s,
+                                      "learned_score": float(mean_learned[rows.index(r)]), "det_pet": r["det_pet"], "det_object": r["det_object"]} for s, r in hard_neg],
+        "created_at": utc_now().isoformat(timespec="seconds"),
+    }
+    write_json(out_dir / "learned_vs_rule.json", summary)
+    return summary
+
+
+def coverage_by_object_threshold(settings: Settings, out_dir: Path) -> dict:
+    """How many annotated pairs become scorable if furniture is accepted at a lower detector score?
+
+    Fit and development photographers only (the test split is not used for this choice). Pets
+    keep the product threshold and verifier; furniture detections are kept down to 0.15. For
+    each threshold: pairs scorable, positives scorable, and pet detections that sit at least half
+    inside a furniture detection which matches no annotated object of that class (an opening
+    for false 'on' claims).
+    """
+    from ..pipeline import AnalysisEngine
+
+    data = settings.paths.resolve("data_root")
+    man = settings.paths.resolve("manifests_root")
+    pairs = [p for p in csv.DictReader(open(man / "oi_vrd_object_pairs.csv", newline="")) if p["split"] in ("fit", "dev") and p["on"] != ""]
+    s = load_settings(overrides={"audio": {"enabled": False}, "posture": {"enabled": False}, "pose": {"provider": "none"}, "interaction": {"enabled": False}})
+    eng = AnalysisEngine(s).load()
+    img_dir = data / "openimages_vrd" / "images"
+    by_img: dict[str, list[dict]] = defaultdict(list)
+    for p in pairs:
+        by_img[p["image_id"]].append(p)
+    lo = min(COVERAGE_THRESHOLDS)
+    counts = {t: {"pairs_scorable": 0, "positives_scorable": 0, "pets_inside_unmatched_furniture": 0} for t in COVERAGE_THRESHOLDS}
+    total = {"pairs": 0, "positives": 0, "pet_detections": 0}
+    for i, ps in sorted(by_img.items()):
+        im = cv2.imread(str(img_dir / f"{i}.jpg"))
+        if im is None:
+            continue
+        rgb = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+        pets = [d for d in eng.detector.detect(rgb, ["cat", "dog"], s.vision.score_threshold, s.vision.nms_iou, 30)
+                if eng.verifier is None or (eng.verifier.verify(rgb, d) or (0.0, True))[1]]
+        objs = eng.detector.detect(rgb, sorted(set(DETECTOR_CLASS.values())), lo, s.vision.nms_iou, 30)
+        gq = sorted({(tuple(_box(p, "pet")), p["pet"]) for p in ps})
+        go = sorted({(tuple(_box(p, "object")), p["object"]) for p in ps})
+        mq = {}
+        for sp in ("cat", "dog"):
+            idx = [k for k, (_, s_) in enumerate(gq) if s_ == sp]
+            ds = [d for d in pets if d.label == sp]
+            for a, b in _assign([np.array(gq[k][0]) for k in idx], ds).items():
+                mq[idx[a]] = ds[b]
+        total["pets_detected"] = total.get("pets_detected", 0) + len(pets)
+        for t in COVERAGE_THRESHOLDS:
+            kept = [d for d in objs if d.score >= t]
+            mo, matched = {}, set()
+            for grp in GROUPS:
+                idx = [k for k, (_, g_) in enumerate(go) if g_ == grp]
+                ds = [d for d in kept if d.label == DETECTOR_CLASS[grp]]
+                for a, b in _assign([np.array(go[k][0]) for k in idx], ds).items():
+                    mo[idx[a]] = ds[b]
+                    matched.add(id(ds[b]))
+            for p in ps:
+                qi = gq.index((tuple(_box(p, "pet")), p["pet"]))
+                oi = go.index((tuple(_box(p, "object")), p["object"]))
+                if qi in mq and oi in mo:
+                    counts[t]["pairs_scorable"] += 1
+                    counts[t]["positives_scorable"] += int(p["on"] == "1")
+            for d in pets:
+                for o in kept:
+                    if id(o) in matched:
+                        continue
+                    f = features(o.box, d.box, rgb.shape[:2], d.label, "bed")
+                    if f[GEOMETRY.index(RULE_FEATURE)] >= 0.5:
+                        counts[t]["pets_inside_unmatched_furniture"] += 1
+                        break
+        total["pairs"] += len(ps)
+        total["positives"] += sum(int(p["on"] == "1") for p in ps)
+    summary = {"analysis": "E15 follow-up: coverage by furniture detection threshold (fit + development only)",
+               "protocol": coverage_by_object_threshold.__doc__.strip().splitlines(), "annotated": total,
+               "by_threshold": {str(t): {**c, "pair_coverage": c["pairs_scorable"] / max(total["pairs"], 1),
+                                          "positive_coverage": c["positives_scorable"] / max(total["positives"], 1)} for t, c in counts.items()},
+               "created_at": utc_now().isoformat(timespec="seconds")}
+    write_json(out_dir / "coverage_by_object_threshold.json", summary)
+    return summary
+
+
+RULE_STEEPNESS = 10.0
+RULE_TAU = 0.5
+RULE_VERSION = "pet_object_relation_v2"
+
+
+def rule_head(settings: Settings, out_dir: Path, artifact_dir: Path | None = None) -> dict:
+    """Ships the containment rule instead of the learned head (the learned head showed no
+    demonstrated advantage, learned_vs_rule.json). Rule: 'on' when at least half of the pet's
+    detection box lies inside the furniture box (tau = 0.5, the operating point written into the
+    E15 protocol before any result was seen). A tau maximising F1 on fit + development pairs is
+    reported as a diagnostic only: those pairs contain almost no 'in front of' negatives, so the
+    selected value rewards any overlap and is not used. Encoded in the runtime head format as
+    score = sigmoid(k * (fraction - tau)) with threshold 0.5, so the phone and server engines run
+    it without code changes."""
+    data = settings.paths.resolve("data_root")
+    man = settings.paths.resolve("manifests_root")
+    photographer = {r["image_id"]: (r["author_profile_url"] or f"image:{r['image_id']}")
+                    for r in csv.DictReader(open(man / "oi_vrd_object_images.csv", newline=""))}
+    rows = json.loads((data.parent / "cache" / "e15" / "pairs.json").read_text())
+    lab = [r for r in rows if r["on"] != ""]
+    sel = [r for r in lab if r["covered"] and r["split"] in ("fit", "dev")]
+    test_all = [r for r in lab if r["split"] == "test"]
+    test = [r for r in test_all if r["covered"]]
+    j = GEOMETRY.index(RULE_FEATURE)
+    xs, ys = np.array([r["x"][j] for r in sel]), np.array([int(r["on"]) for r in sel])
+    tau_f1, f1 = M.best_f1_threshold(xs, ys == 1)
+    tau = RULE_TAU
+    xt, yt = np.array([r["x"][j] for r in test]), np.array([int(r["on"]) for r in test])
+    score = 1.0 / (1.0 + np.exp(-RULE_STEEPNESS * (xt - tau)))
+    rep = _report(score, yt, [photographer[r["image_id"]] for r in test], 0.5, test, sum(int(r["on"]) for r in test_all))
+    summary = {"analysis": "E15 shipped 'on' relation: containment rule", "protocol": rule_head.__doc__.strip().splitlines(),
+               "tau": tau, "tau_source": "pre-specified in the E15 protocol (majority of the pet box inside the furniture box)",
+               "diagnostic_tau_maximising_f1_on_fit_and_development": float(tau_f1), "diagnostic_f1": float(f1), "selection_pairs": len(sel),
+               "selection_pairs_hard_negatives": int(((xs >= 0.5) & (ys == 0)).sum()),
+               "steepness": RULE_STEEPNESS, "test": rep, "created_at": utc_now().isoformat(timespec="seconds")}
+    if artifact_dir is not None:
+        n = len(GEOMETRY) + 2 + len(GROUPS)
+        coef = np.zeros(n)
+        coef[j] = RULE_STEEPNESS
+        artifact_dir.mkdir(parents=True, exist_ok=True)
+        p = artifact_dir / f"{RULE_VERSION}.npz"
+        np.savez(p, relations=np.array(["on"]), features=np.array("geometry+species+object_group"), geometry=np.array(GEOMETRY),
+                 object_groups=np.array(GROUPS), version=np.array(RULE_VERSION), on_kind=np.array("containment_rule"),
+                 on_groups=np.array(RELATIONS["on"]), on_mean=np.zeros(n), on_scale=np.ones(n), on_coef=coef,
+                 on_intercept=np.array([-RULE_STEEPNESS * tau]), on_threshold=np.array(0.5), on_tau=np.array(tau))
+        summary["artifact_sha256"] = sha256_file(p)
+    write_json(out_dir / "rule_head.json", summary)
+    return summary

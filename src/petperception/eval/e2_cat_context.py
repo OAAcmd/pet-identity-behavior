@@ -23,6 +23,7 @@ results. ``run_on_recordings`` is exercised by synthetic unit tests only.
 
 from __future__ import annotations
 
+import json
 import time
 from pathlib import Path
 
@@ -61,14 +62,32 @@ def _grouped_cv(X: np.ndarray, y: np.ndarray, groups: np.ndarray, seed: int) -> 
     return pred, folds
 
 
-def run_on_recordings(recs: list[CM.CatMeowsRecording], out_dir: Path, seed: int = 0, n_boot: int = 1000) -> dict:
+def _yamnet_embeddings(recs: list[CM.CatMeowsRecording], backend) -> np.ndarray:
+    """Mean and max of YAMNet frame embeddings; the backend resamples 8 kHz to 16 kHz (no content above 4 kHz)."""
+    from ..ingest.media import AudioTrack
+
+    out = []
+    for r in recs:
+        x, sr = _load(r.path)
+        ws = backend.score_track(AudioTrack("present", x, sr, 0.0), hop_s=0.48)
+        out.append(np.concatenate([ws.embeddings.mean(axis=0), ws.embeddings.max(axis=0)]))
+    return np.stack(out)
+
+
+def run_on_recordings(recs: list[CM.CatMeowsRecording], out_dir: Path, seed: int = 0, n_boot: int = 1000, yamnet=None,
+                      extra: dict | None = None) -> dict:
     X = np.stack([extract(*_load(r.path), FEATURES_8K) for r in recs])
     y = np.array([r.context for r in recs])
     cats = np.array([r.cat_id for r in recs])
     owners = np.array([r.owner_id for r in recs])
     res: dict = {"methods": {}}
-    for name, groups in (("loco_mfcc_logreg", cats), ("looo_mfcc_logreg", owners)):
-        pred, folds = _grouped_cv(X, y, groups, seed)
+    variants = [("loco_mfcc_logreg", X, cats), ("looo_mfcc_logreg", X, owners)]
+    if yamnet is not None:
+        # The phone-deployable variant (the app runs YAMNet); 8 kHz input upsampled, so out of YAMNet's domain.
+        E = _yamnet_embeddings(recs, yamnet)
+        variants += [("loco_yamnet_embedding_logreg", E, cats), ("looo_yamnet_embedding_logreg", E, owners)]
+    for name, F, groups in variants:
+        pred, folds = _grouped_cv(F, y, groups, seed)
         keep = pred != "excluded"
         rep = M.classification_report(y[keep].tolist(), pred[keep].tolist(), LABELS)
         rep["folds"] = folds
@@ -95,6 +114,7 @@ def run_on_recordings(recs: list[CM.CatMeowsRecording], out_dir: Path, seed: int
         "owner_to_cats": CM.owner_cat_relationships(recs),
     }
     res["feature_config"] = FEATURES_8K.to_dict()
+    res.update(extra or {})
     write_json(out_dir / "metrics.json", {"experiment": "E2", "status": "completed", "results": res, "created_at": utc_now().isoformat(timespec="seconds")})
     model, info = linear_model.fit(X, y, cats, LABELS, seed=seed, inner_splits=5)
     model.metadata = {"task": "CatMeows recording context (original labels)", "feature_config": FEATURES_8K.to_dict(),
@@ -129,7 +149,13 @@ def run(settings: Settings, out_dir: Path) -> dict:
         write_json(out_dir / "status.json", status)
         return status
     recs, rejected = CM.scan(root, settings.paths.resolve("manifests_root") / "catmeows_files.csv")
-    out = run_on_recordings(recs, out_dir)
+    from ..audio.yamnet import YamnetBackend
+    from ..registry import check_model, model_dir
+
+    yamnet = YamnetBackend(model_dir(settings, settings.audio.yamnet.model_id), settings.runtime.num_threads, with_embeddings=True) \
+        if check_model(settings, settings.audio.yamnet.model_id).ready else None
+    fs = CM.dataset_dir(settings.paths.resolve("data_root")) / "fetch_status.json"
+    out = run_on_recordings(recs, out_dir, yamnet=yamnet, extra={"data_source": json.loads(fs.read_text()) if fs.exists() else None})
     out["model"].to_json(settings.paths.resolve("artifacts_root") / "e2_catmeows_context_logreg.json")
     write_json(out_dir / "status.json", {"experiment": "E2", "status": "completed", "rejected_filenames": rejected,
                                          "runtime_s": time.perf_counter() - t0})

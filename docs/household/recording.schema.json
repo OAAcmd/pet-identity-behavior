@@ -1,0 +1,216 @@
+{
+ "$defs": {
+  "Consent": {
+   "additionalProperties": false,
+   "properties": {
+    "research_use": {
+     "title": "Research Use",
+     "type": "boolean"
+    },
+    "annotation_by_project_staff": {
+     "title": "Annotation By Project Staff",
+     "type": "boolean"
+    },
+    "people_in_recording_consented_or_blurred": {
+     "title": "People In Recording Consented Or Blurred",
+     "type": "boolean"
+    },
+    "aggregate_publication": {
+     "title": "Aggregate Publication",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "research_use",
+    "annotation_by_project_staff",
+    "people_in_recording_consented_or_blurred",
+    "aggregate_publication"
+   ],
+   "title": "Consent",
+   "type": "object"
+  },
+  "Device": {
+   "additionalProperties": false,
+   "properties": {
+    "model": {
+     "title": "Model",
+     "type": "string"
+    },
+    "os": {
+     "title": "Os",
+     "type": "string"
+    },
+    "browser": {
+     "title": "Browser",
+     "type": "string"
+    }
+   },
+   "required": [
+    "model",
+    "os",
+    "browser"
+   ],
+   "title": "Device",
+   "type": "object"
+  },
+  "OwnerContext": {
+   "additionalProperties": false,
+   "properties": {
+    "situation": {
+     "enum": [
+      "before_feeding",
+      "waiting_at_door",
+      "play",
+      "greeting",
+      "visitor_or_doorbell",
+      "rest",
+      "conflict_or_tension",
+      "grooming_or_handling",
+      "alone_at_home",
+      "ordinary",
+      "pet_free_control",
+      "other"
+     ],
+     "title": "Situation",
+     "type": "string"
+    },
+    "what_happened_before": {
+     "default": "",
+     "title": "What Happened Before",
+     "type": "string"
+    },
+    "what_the_pet_did_next": {
+     "default": "",
+     "title": "What The Pet Did Next",
+     "type": "string"
+    },
+    "note": {
+     "default": "",
+     "title": "Note",
+     "type": "string"
+    }
+   },
+   "required": [
+    "situation"
+   ],
+   "title": "OwnerContext",
+   "type": "object"
+  },
+  "Pet": {
+   "additionalProperties": false,
+   "properties": {
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "species": {
+     "enum": [
+      "cat",
+      "dog"
+     ],
+     "title": "Species",
+     "type": "string"
+    },
+    "breed_reported_by_owner": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Breed Reported By Owner"
+    },
+    "age_years": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Age Years"
+    }
+   },
+   "required": [
+    "pet_id",
+    "species"
+   ],
+   "title": "Pet",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "petperception.household_recording/1",
+   "title": "Schema",
+   "type": "string"
+  },
+  "recording_id": {
+   "title": "Recording Id",
+   "type": "string"
+  },
+  "household_id": {
+   "title": "Household Id",
+   "type": "string"
+  },
+  "pets_in_household": {
+   "items": {
+    "$ref": "#/$defs/Pet"
+   },
+   "title": "Pets In Household",
+   "type": "array"
+  },
+  "device": {
+   "$ref": "#/$defs/Device"
+  },
+  "recorded_at": {
+   "title": "Recorded At",
+   "type": "string"
+  },
+  "duration_s": {
+   "title": "Duration S",
+   "type": "number"
+  },
+  "room": {
+   "default": "",
+   "title": "Room",
+   "type": "string"
+  },
+  "lighting": {
+   "default": "artificial",
+   "enum": [
+    "daylight",
+    "artificial",
+    "low_light",
+    "mixed"
+   ],
+   "title": "Lighting",
+   "type": "string"
+  },
+  "owner_context": {
+   "$ref": "#/$defs/OwnerContext"
+  },
+  "consent": {
+   "$ref": "#/$defs/Consent"
+  }
+ },
+ "required": [
+  "schema",
+  "recording_id",
+  "household_id",
+  "pets_in_household",
+  "device",
+  "recorded_at",
+  "duration_s",
+  "owner_context",
+  "consent"
+ ],
+ "title": "RecordingManifest",
+ "type": "object"
+}

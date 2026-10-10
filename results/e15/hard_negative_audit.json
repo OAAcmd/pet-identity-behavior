@@ -1,0 +1,67 @@
+{
+ "audit": "E15 hard negatives (pet box at least 80 % inside the furniture box, labelled not 'on'), all splits",
+ "method": "visual inspection of each image with the detection boxes drawn, by the developer agent (single reviewer, not an independent annotator)",
+ "items": [
+  {
+   "image_id": "958a78d2874eee67",
+   "pet": "cat",
+   "object": "table",
+   "split": "fit",
+   "inter_over_pet": 1.0,
+   "learned_score": 0.8289668940643249,
+   "rule_says_on": true,
+   "learned_says_on": true,
+   "finding": "cat lying on the floor under the dining table; label correct (not on)",
+   "label_correct": true
+  },
+  {
+   "image_id": "974614b87cf24e9a",
+   "pet": "cat",
+   "object": "table",
+   "split": "fit",
+   "inter_over_pet": 1.0,
+   "learned_score": 0.7593938973515268,
+   "rule_says_on": true,
+   "learned_says_on": true,
+   "finding": "cat standing on a chair in front of the table; label correct (on the chair, not on the table)",
+   "label_correct": true
+  },
+  {
+   "image_id": "dcb2b2662f5583e5",
+   "pet": "dog",
+   "object": "table",
+   "split": "fit",
+   "inter_over_pet": 1.0,
+   "learned_score": 0.6491051655096246,
+   "rule_says_on": true,
+   "learned_says_on": true,
+   "finding": "dog lying under the table; label correct (not on)",
+   "label_correct": true
+  },
+  {
+   "image_id": "7b504000cda9e142",
+   "pet": "cat",
+   "object": "bed",
+   "split": "test",
+   "inter_over_pet": 0.8670908808708191,
+   "learned_score": 0.9600407177839209,
+   "rule_says_on": true,
+   "learned_says_on": true,
+   "finding": "cat sitting on the floor in front of the bed; label correct (not on)",
+   "label_correct": true
+  },
+  {
+   "image_id": "61e595f3b78cc075",
+   "pet": "dog",
+   "object": "chair",
+   "split": "fit",
+   "inter_over_pet": 0.830916702747345,
+   "learned_score": 0.40921998458098746,
+   "rule_says_on": true,
+   "learned_says_on": false,
+   "finding": "small dog standing on the floor in front of a chair that another dog lies on; label correct (not on)",
+   "label_correct": true
+  }
+ ],
+ "conclusion": "All 5 labels are correct; all are 2-D containment failures (under, in front of, on another object). The rule is wrong on 5/5, the learned head on 4/5. Neither box-geometry method can separate these cases; 5 such negatives among 246 scorable pairs means the public data cannot measure this failure mode. Household recordings with 'in front of / beside / under' labels are required."
+}

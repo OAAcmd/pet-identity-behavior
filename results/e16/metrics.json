@@ -1,0 +1,585 @@
+{
+  "experiment": "E16",
+  "title": "Pet detection and verification across breeds (Oxford-IIIT Pet)",
+  "protocol": [
+    "E16: does pet detection hold up across breeds? Cats and dogs (Oxford-IIIT Pet).",
+    "",
+    "Data: Oxford-IIIT Pet (data/oxford_pets.py): 37 breeds, 12 cat and 25 dog,",
+    "about 200 images each, with species and breed per image and a head box for",
+    "the trainval half. The photos are mostly close-up pet portraits, not",
+    "household video, so absolute rates are optimistic for the app; the point is",
+    "the *variation across breeds* (morphology: coat, face shape, colour, size),",
+    "which no other acquired source measures for cats.",
+    "",
+    "Pipeline (what the phone computes per frame): the product detector at the",
+    "product threshold for cats and dogs, then the product verifier. Outcome per",
+    "image, in this order:",
+    "* found: an accepted detection of the correct species that covers at least",
+    "  80 % of the annotated head box (images without a head box: any accepted",
+    "  detection of the correct species);",
+    "* wrong_species: no correct-species acceptance, but an accepted detection of",
+    "  the other species;",
+    "* rejected_by_verifier: a correct-species detection existed but the verifier",
+    "  rejected it;",
+    "* missed: no correct-species detection at the threshold.",
+    "Rates per breed with Wilson 95 % intervals; breed heterogeneity per species",
+    "by a permutation test on the between-breed standard deviation of the found",
+    "rate (breed labels permuted across images, same group sizes). Nothing is",
+    "trained, so all images are evaluation images."
+  ],
+  "images": 7349,
+  "unreadable": 0,
+  "species": {
+    "cat": {
+      "images": 2371,
+      "breeds": 12,
+      "outcomes": {
+        "found": 2216,
+        "missed": 117,
+        "wrong_species": 32,
+        "rejected_by_verifier": 6
+      },
+      "found_rate": 0.934626739772248,
+      "found_rate_ci95": [
+        0.923957210906014,
+        0.9438901436291262
+      ],
+      "lowest_breeds": [
+        "Sphynx",
+        "Bombay",
+        "Russian_Blue",
+        "Bengal"
+      ],
+      "highest_breeds": [
+        "Ragdoll",
+        "Birman",
+        "British_Shorthair",
+        "Maine_Coon"
+      ],
+      "heterogeneity": {
+        "between_breed_sd_of_found_rate": 0.11705190834740821,
+        "null_sd_mean": 0.016503759689362088,
+        "permutation_p": 0.0004997501249375312
+      },
+      "by_breed": {
+        "Abyssinian": {
+          "images": 198,
+          "found": 191,
+          "wrong_species": 2,
+          "rejected_by_verifier": 1,
+          "missed": 4,
+          "found_rate": 0.9646464646464646,
+          "found_rate_ci95": [
+            0.928834580484278,
+            0.9827713520885909
+          ],
+          "with_head_box": 99
+        },
+        "Bengal": {
+          "images": 200,
+          "found": 191,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 9,
+          "found_rate": 0.955,
+          "found_rate_ci95": [
+            0.9167024063390322,
+            0.9761477282752958
+          ],
+          "with_head_box": 98
+        },
+        "Birman": {
+          "images": 200,
+          "found": 197,
+          "wrong_species": 0,
+          "rejected_by_verifier": 1,
+          "missed": 2,
+          "found_rate": 0.985,
+          "found_rate_ci95": [
+            0.9568335194437211,
+            0.9948858548155076
+          ],
+          "with_head_box": 100
+        },
+        "Bombay": {
+          "images": 184,
+          "found": 173,
+          "wrong_species": 3,
+          "rejected_by_verifier": 0,
+          "missed": 8,
+          "found_rate": 0.9402173913043478,
+          "found_rate_ci95": [
+            0.8961345817937323,
+            0.9662941879782456
+          ],
+          "with_head_box": 96
+        },
+        "British_Shorthair": {
+          "images": 200,
+          "found": 197,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 3,
+          "found_rate": 0.985,
+          "found_rate_ci95": [
+            0.9568335194437211,
+            0.9948858548155076
+          ],
+          "with_head_box": 100
+        },
+        "Egyptian_Mau": {
+          "images": 190,
+          "found": 184,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 6,
+          "found_rate": 0.968421052631579,
+          "found_rate_ci95": [
+            0.9328270262020316,
+            0.9854485142392359
+          ],
+          "with_head_box": 90
+        },
+        "Maine_Coon": {
+          "images": 200,
+          "found": 196,
+          "wrong_species": 1,
+          "rejected_by_verifier": 1,
+          "missed": 2,
+          "found_rate": 0.98,
+          "found_rate_ci95": [
+            0.9497121344948062,
+            0.9921956998236058
+          ],
+          "with_head_box": 100
+        },
+        "Persian": {
+          "images": 200,
+          "found": 193,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 7,
+          "found_rate": 0.965,
+          "found_rate_ci95": [
+            0.9295285391333187,
+            0.9829446753626429
+          ],
+          "with_head_box": 100
+        },
+        "Ragdoll": {
+          "images": 200,
+          "found": 199,
+          "wrong_species": 1,
+          "rejected_by_verifier": 0,
+          "missed": 0,
+          "found_rate": 0.995,
+          "found_rate_ci95": [
+            0.9722256001302286,
+            0.999116854010634
+          ],
+          "with_head_box": 99
+        },
+        "Russian_Blue": {
+          "images": 200,
+          "found": 190,
+          "wrong_species": 1,
+          "rejected_by_verifier": 1,
+          "missed": 8,
+          "found_rate": 0.95,
+          "found_rate_ci95": [
+            0.9104209437021562,
+            0.9726176509713551
+          ],
+          "with_head_box": 100
+        },
+        "Siamese": {
+          "images": 199,
+          "found": 195,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 4,
+          "found_rate": 0.9798994974874372,
+          "found_rate_ci95": [
+            0.9494650967699504,
+            0.9921563457743799
+          ],
+          "with_head_box": 99
+        },
+        "Sphynx": {
+          "images": 200,
+          "found": 110,
+          "wrong_species": 24,
+          "rejected_by_verifier": 2,
+          "missed": 64,
+          "found_rate": 0.55,
+          "found_rate_ci95": [
+            0.48075488574571107,
+            0.6173605136624569
+          ],
+          "with_head_box": 100
+        }
+      }
+    },
+    "dog": {
+      "images": 4978,
+      "breeds": 25,
+      "outcomes": {
+        "missed": 313,
+        "found": 4599,
+        "wrong_species": 56,
+        "rejected_by_verifier": 10
+      },
+      "found_rate": 0.9238650060265167,
+      "found_rate_ci95": [
+        0.9161661638086436,
+        0.9309101462851981
+      ],
+      "lowest_breeds": [
+        "newfoundland",
+        "keeshond",
+        "scottish_terrier",
+        "pomeranian"
+      ],
+      "highest_breeds": [
+        "pug",
+        "beagle",
+        "havanese",
+        "wheaten_terrier"
+      ],
+      "heterogeneity": {
+        "between_breed_sd_of_found_rate": 0.05577046260587124,
+        "null_sd_mean": 0.018354181149491194,
+        "permutation_p": 0.0004997501249375312
+      },
+      "by_breed": {
+        "american_bulldog": {
+          "images": 200,
+          "found": 188,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 12,
+          "found_rate": 0.94,
+          "found_rate_ci95": [
+            0.8980673646931491,
+            0.9653481500987285
+          ],
+          "with_head_box": 100
+        },
+        "american_pit_bull_terrier": {
+          "images": 200,
+          "found": 193,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 7,
+          "found_rate": 0.965,
+          "found_rate_ci95": [
+            0.9295285391333187,
+            0.9829446753626429
+          ],
+          "with_head_box": 100
+        },
+        "basset_hound": {
+          "images": 200,
+          "found": 177,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 23,
+          "found_rate": 0.885,
+          "found_rate_ci95": [
+            0.8333517476611362,
+            0.9221368277817569
+          ],
+          "with_head_box": 100
+        },
+        "beagle": {
+          "images": 200,
+          "found": 196,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 4,
+          "found_rate": 0.98,
+          "found_rate_ci95": [
+            0.9497121344948062,
+            0.9921956998236058
+          ],
+          "with_head_box": 100
+        },
+        "boxer": {
+          "images": 199,
+          "found": 183,
+          "wrong_species": 1,
+          "rejected_by_verifier": 0,
+          "missed": 15,
+          "found_rate": 0.9195979899497487,
+          "found_rate_ci95": [
+            0.8733962313299496,
+            0.9499062864967683
+          ],
+          "with_head_box": 100
+        },
+        "chihuahua": {
+          "images": 200,
+          "found": 187,
+          "wrong_species": 4,
+          "rejected_by_verifier": 0,
+          "missed": 9,
+          "found_rate": 0.935,
+          "found_rate_ci95": [
+            0.8919799625008207,
+            0.9616240123502404
+          ],
+          "with_head_box": 100
+        },
+        "english_cocker_spaniel": {
+          "images": 196,
+          "found": 189,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 7,
+          "found_rate": 0.9642857142857143,
+          "found_rate_ci95": [
+            0.9281268215563168,
+            0.9825944697063633
+          ],
+          "with_head_box": 96
+        },
+        "english_setter": {
+          "images": 200,
+          "found": 188,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 12,
+          "found_rate": 0.94,
+          "found_rate_ci95": [
+            0.8980673646931491,
+            0.9653481500987285
+          ],
+          "with_head_box": 100
+        },
+        "german_shorthaired": {
+          "images": 200,
+          "found": 188,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 12,
+          "found_rate": 0.94,
+          "found_rate_ci95": [
+            0.8980673646931491,
+            0.9653481500987285
+          ],
+          "with_head_box": 100
+        },
+        "great_pyrenees": {
+          "images": 200,
+          "found": 186,
+          "wrong_species": 2,
+          "rejected_by_verifier": 0,
+          "missed": 12,
+          "found_rate": 0.93,
+          "found_rate_ci95": [
+            0.8859442178331628,
+            0.9578482170770813
+          ],
+          "with_head_box": 100
+        },
+        "havanese": {
+          "images": 200,
+          "found": 195,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 5,
+          "found_rate": 0.975,
+          "found_rate_ci95": [
+            0.9428208558483829,
+            0.9892754385292123
+          ],
+          "with_head_box": 100
+        },
+        "japanese_chin": {
+          "images": 200,
+          "found": 184,
+          "wrong_species": 5,
+          "rejected_by_verifier": 1,
+          "missed": 10,
+          "found_rate": 0.92,
+          "found_rate_ci95": [
+            0.8740095102048769,
+            0.9501598448237337
+          ],
+          "with_head_box": 100
+        },
+        "keeshond": {
+          "images": 199,
+          "found": 167,
+          "wrong_species": 16,
+          "rejected_by_verifier": 2,
+          "missed": 14,
+          "found_rate": 0.8391959798994975,
+          "found_rate_ci95": [
+            0.781811202386244,
+            0.8837327491503244
+          ],
+          "with_head_box": 100
+        },
+        "leonberger": {
+          "images": 200,
+          "found": 185,
+          "wrong_species": 1,
+          "rejected_by_verifier": 0,
+          "missed": 14,
+          "found_rate": 0.925,
+          "found_rate_ci95": [
+            0.8799554020266798,
+            0.9540254929427476
+          ],
+          "with_head_box": 100
+        },
+        "miniature_pinscher": {
+          "images": 200,
+          "found": 185,
+          "wrong_species": 2,
+          "rejected_by_verifier": 0,
+          "missed": 13,
+          "found_rate": 0.925,
+          "found_rate_ci95": [
+            0.8799554020266798,
+            0.9540254929427476
+          ],
+          "with_head_box": 100
+        },
+        "newfoundland": {
+          "images": 196,
+          "found": 139,
+          "wrong_species": 2,
+          "rejected_by_verifier": 0,
+          "missed": 55,
+          "found_rate": 0.7091836734693877,
+          "found_rate_ci95": [
+            0.6420688287726526,
+            0.7682561486094339
+          ],
+          "with_head_box": 96
+        },
+        "pomeranian": {
+          "images": 200,
+          "found": 176,
+          "wrong_species": 11,
+          "rejected_by_verifier": 3,
+          "missed": 10,
+          "found_rate": 0.88,
+          "found_rate_ci95": [
+            0.8276563857409517,
+            0.9180206497611246
+          ],
+          "with_head_box": 100
+        },
+        "pug": {
+          "images": 200,
+          "found": 197,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 3,
+          "found_rate": 0.985,
+          "found_rate_ci95": [
+            0.9568335194437211,
+            0.9948858548155076
+          ],
+          "with_head_box": 100
+        },
+        "saint_bernard": {
+          "images": 200,
+          "found": 193,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 7,
+          "found_rate": 0.965,
+          "found_rate_ci95": [
+            0.9295285391333187,
+            0.9829446753626429
+          ],
+          "with_head_box": 99
+        },
+        "samoyed": {
+          "images": 200,
+          "found": 186,
+          "wrong_species": 3,
+          "rejected_by_verifier": 0,
+          "missed": 11,
+          "found_rate": 0.93,
+          "found_rate_ci95": [
+            0.8859442178331628,
+            0.9578482170770813
+          ],
+          "with_head_box": 99
+        },
+        "scottish_terrier": {
+          "images": 199,
+          "found": 175,
+          "wrong_species": 5,
+          "rejected_by_verifier": 0,
+          "missed": 19,
+          "found_rate": 0.8793969849246231,
+          "found_rate_ci95": [
+            0.8268216219538639,
+            0.9176016127277794
+          ],
+          "with_head_box": 100
+        },
+        "shiba_inu": {
+          "images": 200,
+          "found": 181,
+          "wrong_species": 2,
+          "rejected_by_verifier": 3,
+          "missed": 14,
+          "found_rate": 0.905,
+          "found_rate_ci95": [
+            0.8563973488560237,
+            0.9383373863501365
+          ],
+          "with_head_box": 100
+        },
+        "staffordshire_bull_terrier": {
+          "images": 189,
+          "found": 178,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 11,
+          "found_rate": 0.9417989417989417,
+          "found_rate_ci95": [
+            0.8988013189581538,
+            0.9671943998079215
+          ],
+          "with_head_box": 100
+        },
+        "wheaten_terrier": {
+          "images": 200,
+          "found": 195,
+          "wrong_species": 0,
+          "rejected_by_verifier": 0,
+          "missed": 5,
+          "found_rate": 0.975,
+          "found_rate_ci95": [
+            0.9428208558483829,
+            0.9892754385292123
+          ],
+          "with_head_box": 100
+        },
+        "yorkshire_terrier": {
+          "images": 200,
+          "found": 188,
+          "wrong_species": 2,
+          "rejected_by_verifier": 1,
+          "missed": 9,
+          "found_rate": 0.94,
+          "found_rate_ci95": [
+            0.8980673646931491,
+            0.9653481500987285
+          ],
+          "with_head_box": 100
+        }
+      }
+    }
+  },
+  "terms": "Oxford-IIIT Pet: CC BY-SA 4.0; image copyright with the original owners. Evaluation only; no image is stored in the repository.",
+  "created_at": "2026-10-10T09:46:38+00:00"
+}

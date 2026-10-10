@@ -1,0 +1,417 @@
+{
+ "$defs": {
+  "Activity": {
+   "additionalProperties": false,
+   "properties": {
+    "t_start_s": {
+     "title": "T Start S",
+     "type": "number"
+    },
+    "t_end_s": {
+     "title": "T End S",
+     "type": "number"
+    },
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "stationary",
+      "moving",
+      "active_bout",
+      "pacing",
+      "entered_view",
+      "left_view",
+      "eating",
+      "drinking",
+      "grooming_self",
+      "playing",
+      "sleeping",
+      "scratching",
+      "eliminating",
+      "other"
+     ],
+     "title": "Kind",
+     "type": "string"
+    }
+   },
+   "required": [
+    "t_start_s",
+    "t_end_s",
+    "pet_id",
+    "kind"
+   ],
+   "title": "Activity",
+   "type": "object"
+  },
+  "FurnitureInterval": {
+   "additionalProperties": false,
+   "properties": {
+    "t_start_s": {
+     "title": "T Start S",
+     "type": "number"
+    },
+    "t_end_s": {
+     "title": "T End S",
+     "type": "number"
+    },
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "object": {
+     "enum": [
+      "bed",
+      "couch",
+      "chair",
+      "table",
+      "other"
+     ],
+     "title": "Object",
+     "type": "string"
+    },
+    "relation": {
+     "enum": [
+      "on",
+      "in_front_of",
+      "beside",
+      "under",
+      "inside"
+     ],
+     "title": "Relation",
+     "type": "string"
+    }
+   },
+   "required": [
+    "t_start_s",
+    "t_end_s",
+    "pet_id",
+    "object",
+    "relation"
+   ],
+   "title": "FurnitureInterval",
+   "type": "object"
+  },
+  "Interpretation": {
+   "additionalProperties": false,
+   "properties": {
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "hypothesis": {
+     "enum": [
+      "food",
+      "outside",
+      "attention",
+      "play",
+      "alert",
+      "tense",
+      "warning",
+      "relaxed"
+     ],
+     "title": "Hypothesis",
+     "type": "string"
+    },
+    "label": {
+     "enum": [
+      "yes",
+      "no",
+      "cannot_tell"
+     ],
+     "title": "Label",
+     "type": "string"
+    },
+    "evidence": {
+     "default": "",
+     "title": "Evidence",
+     "type": "string"
+    }
+   },
+   "required": [
+    "pet_id",
+    "hypothesis",
+    "label"
+   ],
+   "title": "Interpretation",
+   "type": "object"
+  },
+  "Observed": {
+   "additionalProperties": false,
+   "properties": {
+    "presence": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/Presence"
+     },
+     "title": "Presence",
+     "type": "array"
+    },
+    "activities": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/Activity"
+     },
+     "title": "Activities",
+     "type": "array"
+    },
+    "vocalizations": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/Vocalization"
+     },
+     "title": "Vocalizations",
+     "type": "array"
+    },
+    "posture": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/PostureFrame"
+     },
+     "title": "Posture",
+     "type": "array"
+    },
+    "person_interactions": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/PersonInteraction"
+     },
+     "title": "Person Interactions",
+     "type": "array"
+    },
+    "furniture": {
+     "default": [],
+     "items": {
+      "$ref": "#/$defs/FurnitureInterval"
+     },
+     "title": "Furniture",
+     "type": "array"
+    }
+   },
+   "title": "Observed",
+   "type": "object"
+  },
+  "PersonInteraction": {
+   "additionalProperties": false,
+   "properties": {
+    "t_start_s": {
+     "title": "T Start S",
+     "type": "number"
+    },
+    "t_end_s": {
+     "title": "T End S",
+     "type": "number"
+    },
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "holding",
+      "petting",
+      "playing_with",
+      "feeding",
+      "other"
+     ],
+     "title": "Kind",
+     "type": "string"
+    }
+   },
+   "required": [
+    "t_start_s",
+    "t_end_s",
+    "pet_id",
+    "kind"
+   ],
+   "title": "PersonInteraction",
+   "type": "object"
+  },
+  "PostureFrame": {
+   "additionalProperties": false,
+   "properties": {
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "t_s": {
+     "title": "T S",
+     "type": "number"
+    },
+    "label": {
+     "enum": [
+      "lying",
+      "sitting",
+      "standing",
+      "other",
+      "not_visible"
+     ],
+     "title": "Label",
+     "type": "string"
+    }
+   },
+   "required": [
+    "pet_id",
+    "t_s",
+    "label"
+   ],
+   "title": "PostureFrame",
+   "type": "object"
+  },
+  "Presence": {
+   "additionalProperties": false,
+   "properties": {
+    "t_start_s": {
+     "title": "T Start S",
+     "type": "number"
+    },
+    "t_end_s": {
+     "title": "T End S",
+     "type": "number"
+    },
+    "pet_id": {
+     "title": "Pet Id",
+     "type": "string"
+    },
+    "species": {
+     "enum": [
+      "cat",
+      "dog"
+     ],
+     "title": "Species",
+     "type": "string"
+    }
+   },
+   "required": [
+    "t_start_s",
+    "t_end_s",
+    "pet_id",
+    "species"
+   ],
+   "title": "Presence",
+   "type": "object"
+  },
+  "Vocalization": {
+   "additionalProperties": false,
+   "properties": {
+    "t_start_s": {
+     "title": "T Start S",
+     "type": "number"
+    },
+    "t_end_s": {
+     "title": "T End S",
+     "type": "number"
+    },
+    "pet_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Pet Id"
+    },
+    "species": {
+     "anyOf": [
+      {
+       "enum": [
+        "cat",
+        "dog"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Species"
+    },
+    "type": {
+     "enum": [
+      "meow",
+      "purr",
+      "hiss",
+      "growl",
+      "chirp_trill",
+      "caterwaul",
+      "bark",
+      "howl",
+      "whine_whimper",
+      "yip",
+      "other_pet_sound",
+      "unclear"
+     ],
+     "title": "Type",
+     "type": "string"
+    }
+   },
+   "required": [
+    "t_start_s",
+    "t_end_s",
+    "type"
+   ],
+   "title": "Vocalization",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "petperception.household_annotation/1",
+   "title": "Schema",
+   "type": "string"
+  },
+  "recording_id": {
+   "title": "Recording Id",
+   "type": "string"
+  },
+  "annotator_id": {
+   "title": "Annotator Id",
+   "type": "string"
+  },
+  "blind_to_app_output": {
+   "title": "Blind To App Output",
+   "type": "boolean"
+  },
+  "observed": {
+   "$ref": "#/$defs/Observed"
+  },
+  "interpretation": {
+   "default": [],
+   "items": {
+    "$ref": "#/$defs/Interpretation"
+   },
+   "title": "Interpretation",
+   "type": "array"
+  },
+  "quality": {
+   "default": [],
+   "items": {
+    "enum": [
+     "low_light",
+     "pet_mostly_occluded",
+     "heavy_camera_motion",
+     "audio_noisy",
+     "too_short"
+    ],
+    "type": "string"
+   },
+   "title": "Quality",
+   "type": "array"
+  }
+ },
+ "required": [
+  "schema",
+  "recording_id",
+  "annotator_id",
+  "blind_to_app_output",
+  "observed"
+ ],
+ "title": "Annotation",
+ "type": "object"
+}

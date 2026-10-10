@@ -211,7 +211,7 @@ def export_bundle(settings: Settings, out: Path) -> dict:
                                      "min_frames": settings.interaction.min_frames}
     # Pet on furniture (E15): box geometry only; only the relations that passed the E15 gate are in the file.
     om = REPO_ROOT / settings.object_relation.model_file
-    if "detector" in assets and settings.object_relation.enabled and om.exists() and allowed("pet_object_relation_v1"):
+    if "detector" in assets and settings.object_relation.enabled and om.exists() and allowed(settings.object_relation.resource_id):
         from ..vision.object_relation import DETECTOR_CLASS, GROUPS
 
         with np.load(om) as z:

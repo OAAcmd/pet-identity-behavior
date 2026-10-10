@@ -1,0 +1,175 @@
+{
+  "analysis": "E15 follow-up: learned 'on' head vs containment rule",
+  "protocol": [
+    "Is the learned 'on' head better than the containment rule? Pooled, photographer-grouped CV.",
+    "",
+    "    Uses every labelled, scorable 'on' pair (fit, development and test - a method comparison,",
+    "    not a new estimate for the shipped model), 5-fold CV grouped by photographer repeated with",
+    "    different group assignments; the rule needs no fitting. Reports AP and operating points on",
+    "    all pairs and on the hard subset where the pet box lies mostly inside the furniture box (the",
+    "    'in front of' versus 'on' cases), a photographer-level paired bootstrap of the AP difference,",
+    "    and the hard negatives for visual audit."
+  ],
+  "rule": "score = inter_over_pet (fraction of the pet's detection box inside the furniture detection box)",
+  "learned": "E15 head (C = 0.1) refitted per fold",
+  "repeats": 5,
+  "folds": 5,
+  "photographers": 170,
+  "all_pairs": {
+    "pairs": 246,
+    "positives": 183,
+    "chance_ap": 0.7439024390243902,
+    "rule": {
+      "average_precision": 0.9827606127247089,
+      "precision_at_recall_0.90": 0.9649122807017544,
+      "recall_at_precision_0.95": 0.9508196721311475
+    },
+    "learned_mean_of_repeats": {
+      "average_precision": 0.9897492703874592,
+      "precision_at_recall_0.90": 0.9821428571428571,
+      "recall_at_precision_0.95": 0.9890710382513661
+    },
+    "learned_ap_per_repeat": [
+      0.9895153480429747,
+      0.9881307094949624,
+      0.9887286621604875,
+      0.9910710310494227,
+      0.9896697626187461
+    ]
+  },
+  "hard_subset_pet_box_at_least_half_inside": {
+    "pairs": 172,
+    "positives": 166,
+    "chance_ap": 0.9651162790697675,
+    "rule": {
+      "average_precision": 0.9870122521692708,
+      "precision_at_recall_0.90": 0.9803921568627451,
+      "recall_at_precision_0.95": 1.0
+    },
+    "learned_mean_of_repeats": {
+      "average_precision": 0.9912418947665442,
+      "precision_at_recall_0.90": 0.9868421052631579,
+      "recall_at_precision_0.95": 1.0
+    },
+    "learned_ap_per_repeat": [
+      0.9910527360717521,
+      0.989479549643962,
+      0.9909282512358131,
+      0.9925003176137678,
+      0.9912443838754592
+    ]
+  },
+  "ap_difference_learned_minus_rule_ci95": {
+    "all": [
+      -0.007249660161435136,
+      0.04859786067376612
+    ],
+    "hard": [
+      -0.011741914710518312,
+      0.0503284772914664
+    ]
+  },
+  "hard_negatives_for_audit": [
+    {
+      "image_id": "958a78d2874eee67",
+      "pet": "cat",
+      "object": "table",
+      "split": "fit",
+      "inter_over_pet": 1.0,
+      "learned_score": 0.8289668940643249,
+      "det_pet": [
+        0.3845667243003845,
+        0.5372489094734192,
+        0.5659063458442688,
+        0.7084943652153015
+      ],
+      "det_object": [
+        0.02183842658996582,
+        0.07224911451339722,
+        0.8532272577285767,
+        0.975418746471405
+      ]
+    },
+    {
+      "image_id": "974614b87cf24e9a",
+      "pet": "cat",
+      "object": "table",
+      "split": "fit",
+      "inter_over_pet": 1.0,
+      "learned_score": 0.7593938973515268,
+      "det_pet": [
+        0.3491995930671692,
+        0.2669609487056732,
+        0.5949209332466125,
+        0.6449905633926392
+      ],
+      "det_object": [
+        0.03744533658027649,
+        0.1623431146144867,
+        0.9949393272399902,
+        0.9917198419570923
+      ]
+    },
+    {
+      "image_id": "dcb2b2662f5583e5",
+      "pet": "dog",
+      "object": "table",
+      "split": "fit",
+      "inter_over_pet": 1.0,
+      "learned_score": 0.6491051655096246,
+      "det_pet": [
+        0.4187593460083008,
+        0.47710120677948,
+        0.7542487382888794,
+        0.6643534898757935
+      ],
+      "det_object": [
+        0.11241540312767029,
+        0.297000914812088,
+        1.0,
+        0.7127028703689575
+      ]
+    },
+    {
+      "image_id": "7b504000cda9e142",
+      "pet": "cat",
+      "object": "bed",
+      "split": "test",
+      "inter_over_pet": 0.8670908808708191,
+      "learned_score": 0.9600407177839209,
+      "det_pet": [
+        0.7230129837989807,
+        0.22900423407554626,
+        0.9933721423149109,
+        0.5282166004180908
+      ],
+      "det_object": [
+        0.0,
+        0.03328526020050049,
+        0.9574389457702637,
+        0.9981139898300171
+      ]
+    },
+    {
+      "image_id": "61e595f3b78cc075",
+      "pet": "dog",
+      "object": "chair",
+      "split": "fit",
+      "inter_over_pet": 0.830916702747345,
+      "learned_score": 0.40921998458098746,
+      "det_pet": [
+        0.049855053424835205,
+        0.49614131450653076,
+        0.3923165500164032,
+        0.9440755844116211
+      ],
+      "det_object": [
+        0.10775959491729736,
+        0.11335897445678711,
+        1.0,
+        0.9696364402770996
+      ]
+    }
+  ],
+  "created_at": "2026-10-10T09:21:37+00:00"
+}

@@ -1,0 +1,56 @@
+{
+  "analysis": "E15 follow-up: coverage by furniture detection threshold (fit + development only)",
+  "protocol": [
+    "How many annotated pairs become scorable if furniture is accepted at a lower detector score?",
+    "",
+    "    Fit and development photographers only (the test split is not used for this choice). Pets",
+    "    keep the product threshold and verifier; furniture detections are kept down to 0.15. For",
+    "    each threshold: pairs scorable, positives scorable, and pet detections that sit at least half",
+    "    inside a furniture detection which matches no annotated object of that class (an opening",
+    "    for false 'on' claims)."
+  ],
+  "annotated": {
+    "pairs": 592,
+    "positives": 298,
+    "pet_detections": 0,
+    "pets_detected": 307
+  },
+  "by_threshold": {
+    "0.15": {
+      "pairs_scorable": 253,
+      "positives_scorable": 170,
+      "pets_inside_unmatched_furniture": 166,
+      "pair_coverage": 0.42736486486486486,
+      "positive_coverage": 0.5704697986577181
+    },
+    "0.2": {
+      "pairs_scorable": 236,
+      "positives_scorable": 164,
+      "pets_inside_unmatched_furniture": 113,
+      "pair_coverage": 0.39864864864864863,
+      "positive_coverage": 0.5503355704697986
+    },
+    "0.25": {
+      "pairs_scorable": 226,
+      "positives_scorable": 161,
+      "pets_inside_unmatched_furniture": 75,
+      "pair_coverage": 0.38175675675675674,
+      "positive_coverage": 0.540268456375839
+    },
+    "0.3": {
+      "pairs_scorable": 215,
+      "positives_scorable": 159,
+      "pets_inside_unmatched_furniture": 49,
+      "pair_coverage": 0.36317567567567566,
+      "positive_coverage": 0.5335570469798657
+    },
+    "0.35": {
+      "pairs_scorable": 200,
+      "positives_scorable": 152,
+      "pets_inside_unmatched_furniture": 38,
+      "pair_coverage": 0.33783783783783783,
+      "positive_coverage": 0.5100671140939598
+    }
+  },
+  "created_at": "2026-10-10T09:22:26+00:00"
+}

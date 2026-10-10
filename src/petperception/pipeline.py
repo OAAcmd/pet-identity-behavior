@@ -238,7 +238,7 @@ class AnalysisEngine:
             self.status["object_relation"] = S.ComponentStatus(name=name, kind="behavior", state="disabled", reason="disabled by configuration")
             return
         path = REPO_ROOT / s.object_relation.model_file
-        decision = release_decision(s.release_profile, "pet_object_relation_v1")
+        decision = release_decision(s.release_profile, s.object_relation.resource_id)
         reason = ("requires the visual detector" if self.detector is None else
                   f"{path.name} not found; run: petperception evaluate --experiment e15" if not path.exists() else
                   None if decision.allowed else decision.reason)
@@ -250,8 +250,7 @@ class AnalysisEngine:
         self.object_relation = ObjectRelationModel.load(path)
         self.status["object_relation"] = S.ComponentStatus(
             name=name, kind="behavior", state="ok", model_id=s.vision.detector, version=self.object_relation.version,
-            reason="pet on bed / couch / chair / table from box geometry (E15, still images); furniture is detected but not stored; "
-                   "under-furniture and inside-car relations did not pass the E15 gate")
+            reason=OBJECT_RELATION_REASON)
 
     def capabilities(self) -> dict:
         s = self.settings
@@ -751,6 +750,10 @@ class AnalysisEngine:
                 "Do not assume commercial permission for any asset without a recorded legal approval."]),
         )
         return result
+
+
+OBJECT_RELATION_REASON = ("pet on bed / couch / chair / table: at least half of the pet's box inside the furniture box (E15 rule, still images; "
+                          "the learned head showed no advantage); furniture is detected but not stored; under-furniture and inside-car did not pass the E15 gate")
 
 
 def _segment(g: BH.Segment, sid: str) -> S.BehaviorSegment:

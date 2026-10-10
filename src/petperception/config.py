@@ -180,7 +180,8 @@ class ObjectRelationConfig(_Strict):
     are not stored in results. Only relations that passed the E15 gate are in the model."""
 
     enabled: bool = True
-    model_file: str = "artifacts/object_relation/pet_object_relation_v1.npz"
+    model_file: str = "artifacts/object_relation/pet_object_relation_v2.npz"
+    resource_id: str = "pet_object_relation_v2"  # v2: containment rule (shipped); v1: learned E15 head (evaluated alternative)
     min_object_score: float = 0.35
     min_frames: int = 2
 

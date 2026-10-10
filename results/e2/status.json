@@ -1,17 +1,6 @@
 {
   "experiment": "E2",
-  "status": "blocked",
-  "reason": "CatMeows is not present: zenodo.org (and the huggingface.co mirror) are denied by this workspace's egress policy.",
-  "evidence": "manifests/resources.json -> catmeows.errors",
-  "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate e2",
-  "implemented": [
-    "filename parser",
-    "Zenodo MD5-verified fetch",
-    "LOCO + leave-one-owner-out protocol",
-    "inner grouped C selection",
-    "cat-level bootstrap",
-    "random-split leakage diagnostic"
-  ],
-  "tested_with": "synthetic fixtures only (tests/test_e2_protocol.py); no CatMeows metric is claimed",
-  "created_at": "2026-10-09T03:29:44+00:00"
+  "status": "completed",
+  "rejected_filenames": [],
+  "runtime_s": 842.0505492429998
 }

@@ -1,0 +1,1349 @@
+{
+  "experiment": "E2",
+  "status": "completed",
+  "results": {
+    "methods": {
+      "loco_mfcc_logreg": {
+        "labels": [
+          "brushing",
+          "isolation",
+          "waiting_for_food"
+        ],
+        "n": 440,
+        "macro_f1": 0.4624724394745725,
+        "balanced_accuracy": 0.4721591399048757,
+        "accuracy": 0.48863636363636365,
+        "per_class": {
+          "brushing": {
+            "precision": 0.3984375,
+            "recall": 0.4015748031496063,
+            "f1": 0.4,
+            "support": 127,
+            "tp": 51,
+            "fp": 77,
+            "fn": 76
+          },
+          "isolation": {
+            "precision": 0.7515527950310559,
+            "recall": 0.5475113122171946,
+            "f1": 0.6335078534031414,
+            "support": 221,
+            "tp": 121,
+            "fp": 40,
+            "fn": 100
+          },
+          "waiting_for_food": {
+            "precision": 0.2847682119205298,
+            "recall": 0.4673913043478261,
+            "f1": 0.35390946502057613,
+            "support": 92,
+            "tp": 43,
+            "fp": 108,
+            "fn": 49
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "brushing",
+            "isolation",
+            "waiting_for_food"
+          ],
+          "matrix": [
+            [
+              51,
+              26,
+              50
+            ],
+            [
+              42,
+              121,
+              58
+            ],
+            [
+              35,
+              14,
+              43
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "ANI01",
+            "status": "ok",
+            "n_test": 10,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.75,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BAC01",
+            "status": "ok",
+            "n_test": 25,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3394024276377217,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BLE01",
+            "status": "ok",
+            "n_test": 48,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.3776418242491657,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "BRA01",
+            "status": "ok",
+            "n_test": 19,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.4904761904761905,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "BRI01",
+            "status": "ok",
+            "n_test": 15,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.7444444444444445,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "CAN01",
+            "status": "ok",
+            "n_test": 54,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.26488210698737014,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "CLE01",
+            "status": "ok",
+            "n_test": 20,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.8235294117647058,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "DAK01",
+            "status": "ok",
+            "n_test": 40,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.5923976608187135,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "IND01",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.5,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "JJX01",
+            "status": "ok",
+            "n_test": 7,
+            "classes_present": [
+              "brushing"
+            ],
+            "missing_classes_in_test": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.0,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "LEO01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.888888888888889,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "MAG01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.22839506172839505,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "MAT01",
+            "status": "ok",
+            "n_test": 26,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.5751633986928103,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "MEG01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.46153846153846156,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "MIN01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.562962962962963,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "NIG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.5,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "NUL01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.6761904761904762,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "REG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.24999999999999997,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "SPI01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.1507936507936508,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "TIG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.3333333333333333,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "WHO01",
+            "status": "ok",
+            "n_test": 39,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.4718614718614718,
+            "selected_C": 0.1
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_cat": {
+          "ci_low": 0.3824818305113821,
+          "ci_high": 0.5532716499593405,
+          "n_boot": 1000,
+          "n_groups": 21,
+          "unit": "group"
+        }
+      },
+      "looo_mfcc_logreg": {
+        "labels": [
+          "brushing",
+          "isolation",
+          "waiting_for_food"
+        ],
+        "n": 440,
+        "macro_f1": 0.43220115208540183,
+        "balanced_accuracy": 0.441290715849187,
+        "accuracy": 0.4636363636363636,
+        "per_class": {
+          "brushing": {
+            "precision": 0.3853211009174312,
+            "recall": 0.33070866141732286,
+            "f1": 0.3559322033898305,
+            "support": 127,
+            "tp": 42,
+            "fp": 67,
+            "fn": 85
+          },
+          "isolation": {
+            "precision": 0.6402116402116402,
+            "recall": 0.5475113122171946,
+            "f1": 0.5902439024390245,
+            "support": 221,
+            "tp": 121,
+            "fp": 68,
+            "fn": 100
+          },
+          "waiting_for_food": {
+            "precision": 0.2887323943661972,
+            "recall": 0.44565217391304346,
+            "f1": 0.3504273504273504,
+            "support": 92,
+            "tp": 41,
+            "fp": 101,
+            "fn": 51
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "brushing",
+            "isolation",
+            "waiting_for_food"
+          ],
+          "matrix": [
+            [
+              42,
+              42,
+              43
+            ],
+            [
+              42,
+              121,
+              58
+            ],
+            [
+              25,
+              26,
+              41
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "BEN01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.7579365079365079,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "DEL01",
+            "status": "ok",
+            "n_test": 48,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.423076923076923,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "ELI01",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.6515151515151515,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "FED01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.2878787878787879,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "FER01",
+            "status": "ok",
+            "n_test": 20,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.8235294117647058,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "GIA01",
+            "status": "ok",
+            "n_test": 54,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.26488210698737014,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "GIO01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.24999999999999997,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "GIU01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.3333333333333333,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "NAI01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.1507936507936508,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "RIT01",
+            "status": "ok",
+            "n_test": 31,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.5709803921568627,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "SIM01",
+            "status": "ok",
+            "n_test": 187,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.43420091912554226,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "SIM10",
+            "status": "ok",
+            "n_test": 1,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 1.0,
+            "selected_C": 0.01
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_cat": {
+          "ci_low": 0.352479827969194,
+          "ci_high": 0.5207718926277056,
+          "n_boot": 1000,
+          "n_groups": 21,
+          "unit": "group"
+        }
+      },
+      "loco_yamnet_embedding_logreg": {
+        "labels": [
+          "brushing",
+          "isolation",
+          "waiting_for_food"
+        ],
+        "n": 440,
+        "macro_f1": 0.4640913180386865,
+        "balanced_accuracy": 0.4756846066580847,
+        "accuracy": 0.4818181818181818,
+        "per_class": {
+          "brushing": {
+            "precision": 0.46616541353383456,
+            "recall": 0.4881889763779528,
+            "f1": 0.47692307692307695,
+            "support": 127,
+            "tp": 62,
+            "fp": 71,
+            "fn": 65
+          },
+          "isolation": {
+            "precision": 0.6855345911949685,
+            "recall": 0.49321266968325794,
+            "f1": 0.5736842105263157,
+            "support": 221,
+            "tp": 109,
+            "fp": 50,
+            "fn": 112
+          },
+          "waiting_for_food": {
+            "precision": 0.27702702702702703,
+            "recall": 0.44565217391304346,
+            "f1": 0.3416666666666667,
+            "support": 92,
+            "tp": 41,
+            "fp": 107,
+            "fn": 51
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "brushing",
+            "isolation",
+            "waiting_for_food"
+          ],
+          "matrix": [
+            [
+              62,
+              28,
+              37
+            ],
+            [
+              42,
+              109,
+              70
+            ],
+            [
+              29,
+              22,
+              41
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "ANI01",
+            "status": "ok",
+            "n_test": 10,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.5873015873015873,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BAC01",
+            "status": "ok",
+            "n_test": 25,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.4227994227994228,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BLE01",
+            "status": "ok",
+            "n_test": 48,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.33571428571428574,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BRA01",
+            "status": "ok",
+            "n_test": 19,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.5426065162907269,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "BRI01",
+            "status": "ok",
+            "n_test": 15,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.8166666666666667,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "CAN01",
+            "status": "ok",
+            "n_test": 54,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.21237017748645656,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "CLE01",
+            "status": "ok",
+            "n_test": 20,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.9189189189189189,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "DAK01",
+            "status": "ok",
+            "n_test": 40,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.33816425120772947,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "IND01",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.44720496894409933,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "JJX01",
+            "status": "ok",
+            "n_test": 7,
+            "classes_present": [
+              "brushing"
+            ],
+            "missing_classes_in_test": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.7272727272727273,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "LEO01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.7499999999999999,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "MAG01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.2962962962962963,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "MAT01",
+            "status": "ok",
+            "n_test": 26,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.4794871794871794,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "MEG01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.5357142857142858,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "MIN01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3611111111111111,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "NIG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.42857142857142855,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "NUL01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.9047619047619047,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "REG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.6190476190476191,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "SPI01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3152415087898959,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "TIG01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.5,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "WHO01",
+            "status": "ok",
+            "n_test": 39,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.512008281573499,
+            "selected_C": 0.01
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_cat": {
+          "ci_low": 0.3995187121114306,
+          "ci_high": 0.5417129595093931,
+          "n_boot": 1000,
+          "n_groups": 21,
+          "unit": "group"
+        }
+      },
+      "looo_yamnet_embedding_logreg": {
+        "labels": [
+          "brushing",
+          "isolation",
+          "waiting_for_food"
+        ],
+        "n": 440,
+        "macro_f1": 0.3883261336364785,
+        "balanced_accuracy": 0.39518597579394643,
+        "accuracy": 0.4068181818181818,
+        "per_class": {
+          "brushing": {
+            "precision": 0.4178082191780822,
+            "recall": 0.48031496062992124,
+            "f1": 0.4468864468864469,
+            "support": 127,
+            "tp": 61,
+            "fp": 85,
+            "fn": 66
+          },
+          "isolation": {
+            "precision": 0.5909090909090909,
+            "recall": 0.4117647058823529,
+            "f1": 0.48533333333333334,
+            "support": 221,
+            "tp": 91,
+            "fp": 63,
+            "fn": 130
+          },
+          "waiting_for_food": {
+            "precision": 0.19285714285714287,
+            "recall": 0.29347826086956524,
+            "f1": 0.23275862068965517,
+            "support": 92,
+            "tp": 27,
+            "fp": 113,
+            "fn": 65
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "brushing",
+            "isolation",
+            "waiting_for_food"
+          ],
+          "matrix": [
+            [
+              61,
+              27,
+              39
+            ],
+            [
+              56,
+              91,
+              74
+            ],
+            [
+              29,
+              36,
+              27
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "BEN01",
+            "status": "ok",
+            "n_test": 14,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3611111111111111,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "DEL01",
+            "status": "ok",
+            "n_test": 48,
+            "classes_present": [
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "brushing"
+            ],
+            "macro_f1_present_classes": 0.33571428571428574,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "ELI01",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [
+              "isolation"
+            ],
+            "macro_f1_present_classes": 0.3208333333333333,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "FED01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.2962962962962963,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "FER01",
+            "status": "ok",
+            "n_test": 20,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.9189189189189189,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "GIA01",
+            "status": "ok",
+            "n_test": 54,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.21237017748645656,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "GIO01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.6190476190476191,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "GIU01",
+            "status": "ok",
+            "n_test": 5,
+            "classes_present": [
+              "brushing",
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 0.4,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "NAI01",
+            "status": "ok",
+            "n_test": 27,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3336894586894587,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "RIT01",
+            "status": "ok",
+            "n_test": 31,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.3568627450980392,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "SIM01",
+            "status": "ok",
+            "n_test": 187,
+            "classes_present": [
+              "brushing",
+              "isolation",
+              "waiting_for_food"
+            ],
+            "missing_classes_in_test": [],
+            "macro_f1_present_classes": 0.408438715776988,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "SIM10",
+            "status": "ok",
+            "n_test": 1,
+            "classes_present": [
+              "isolation"
+            ],
+            "missing_classes_in_test": [
+              "brushing",
+              "waiting_for_food"
+            ],
+            "macro_f1_present_classes": 1.0,
+            "selected_C": 0.01
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_cat": {
+          "ci_low": 0.32723277155429603,
+          "ci_high": 0.457094511928199,
+          "n_boot": 1000,
+          "n_groups": 21,
+          "unit": "group"
+        }
+      },
+      "majority": {
+        "labels": [
+          "brushing",
+          "isolation",
+          "waiting_for_food"
+        ],
+        "n": 440,
+        "macro_f1": 0.22289460413514875,
+        "balanced_accuracy": 0.3333333333333333,
+        "accuracy": 0.5022727272727273,
+        "per_class": {
+          "brushing": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 127,
+            "tp": 0,
+            "fp": 0,
+            "fn": 127
+          },
+          "isolation": {
+            "precision": 0.5022727272727273,
+            "recall": 1.0,
+            "f1": 0.6686838124054463,
+            "support": 221,
+            "tp": 221,
+            "fp": 219,
+            "fn": 0
+          },
+          "waiting_for_food": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 92,
+            "tp": 0,
+            "fp": 0,
+            "fn": 92
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "brushing",
+            "isolation",
+            "waiting_for_food"
+          ],
+          "matrix": [
+            [
+              0,
+              127,
+              0
+            ],
+            [
+              0,
+              221,
+              0
+            ],
+            [
+              0,
+              92,
+              0
+            ]
+          ]
+        }
+      },
+      "stratified_random": {
+        "macro_f1_mean": 0.33552178842245156,
+        "macro_f1_sd": 0.02571718509170245
+      }
+    },
+    "leakage_diagnostic_random_split": {
+      "macro_f1": 0.622494972609389,
+      "note": "NOT a valid estimate: the same cats appear in training and test"
+    },
+    "dataset_observed": {
+      "recordings": 440,
+      "cats": 21,
+      "owners": 12,
+      "label_counts": {
+        "brushing": 127,
+        "isolation": 221,
+        "waiting_for_food": 92
+      },
+      "sample_rates_hz": {
+        "8000": 440
+      },
+      "owner_to_cats": {
+        "BEN01": [
+          "MIN01"
+        ],
+        "DEL01": [
+          "BLE01"
+        ],
+        "ELI01": [
+          "IND01"
+        ],
+        "FED01": [
+          "MAG01"
+        ],
+        "FER01": [
+          "CLE01"
+        ],
+        "GIA01": [
+          "CAN01"
+        ],
+        "GIO01": [
+          "REG01"
+        ],
+        "GIU01": [
+          "TIG01"
+        ],
+        "NAI01": [
+          "SPI01"
+        ],
+        "RIT01": [
+          "LEO01",
+          "MAT01"
+        ],
+        "SIM01": [
+          "ANI01",
+          "BAC01",
+          "BRA01",
+          "BRI01",
+          "DAK01",
+          "JJX01",
+          "MEG01",
+          "NIG01",
+          "NUL01",
+          "WHO01"
+        ],
+        "SIM10": [
+          "BAC01"
+        ]
+      }
+    },
+    "feature_config": {
+      "sample_rate": 8000,
+      "n_fft": 256,
+      "hop_length": 80,
+      "n_mels": 32,
+      "n_mfcc": 20,
+      "fmin": 50.0,
+      "fmax": 3900.0,
+      "trim_silence_db": 40.0,
+      "version": "mfcc-stats-8k-v1"
+    },
+    "data_source": {
+      "status": "ok",
+      "source": "unofficial GitHub mirror",
+      "repo": "https://github.com/jinjingleayi/meow-by-meow",
+      "commit": "0fe6d4c2edbc98c53f410d60a7654fbb1ae39a4e",
+      "path": "data/raw_data/zenodo.4008297",
+      "files": 440,
+      "integrity": "SHA-256 pinned at first retrieval (manifests/catmeows_mirror_sha256.csv); not verifiable against Zenodo (zenodo.org blocked)",
+      "license": "CC BY 4.0 per the dataset paper (Ludovico et al., MMM 2021); the Zenodo record could not be read from this workspace"
+    }
+  },
+  "created_at": "2026-10-10T09:43:51+00:00"
+}

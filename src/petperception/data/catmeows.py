@@ -130,3 +130,56 @@ def owner_cat_relationships(recs: list[CatMeowsRecording]) -> dict[str, list[str
     for r in recs:
         rel.setdefault(r.owner_id, set()).add(r.cat_id)
     return {o: sorted(c) for o, c in sorted(rel.items())}
+
+
+# ---------------------------------------------------------------- unofficial GitHub mirror (zenodo.org is blocked here)
+
+MIRROR_REPO = "https://github.com/jinjingleayi/meow-by-meow"
+MIRROR_COMMIT = "0fe6d4c2edbc98c53f410d60a7654fbb1ae39a4e"  # 2023-12-04; README links the original as zenodo.org/records/4008297
+MIRROR_DIR = "data/raw_data/zenodo.4008297"
+MIRROR_PINS = "catmeows_mirror_sha256.csv"
+
+
+def fetch_mirror(data_root: Path, manifest_dir: Path) -> dict:
+    """Fetch the 440 CatMeows recordings from an unofficial GitHub mirror (sparse checkout at a
+    pinned commit) and pin every file's SHA-256 on first retrieval. The files cannot be compared
+    with Zenodo's checksums while zenodo.org is blocked; results carry that caveat."""
+    import shutil
+    import subprocess
+
+    d = dataset_dir(data_root)
+    clone = d / "_mirror"
+    if not (clone / ".git").exists():
+        clone.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["git", "clone", "-q", "--filter=blob:none", "--no-checkout", "--sparse", MIRROR_REPO, str(clone)], check=True, timeout=600)
+    subprocess.run(["git", "-C", str(clone), "sparse-checkout", "set", MIRROR_DIR], check=True, timeout=600)
+    subprocess.run(["git", "-C", str(clone), "checkout", "-q", MIRROR_COMMIT], check=True, timeout=600)
+    head = subprocess.run(["git", "-C", str(clone), "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+    if head != MIRROR_COMMIT:
+        raise RuntimeError(f"mirror at {head}, expected {MIRROR_COMMIT}")
+    src = clone / MIRROR_DIR
+    files = sorted(p for p in src.glob("*.wav") if p.is_file() and not p.is_symlink())
+    target = d / "dataset"
+    if target.exists():
+        shutil.rmtree(target)
+    target.mkdir(parents=True)
+    for p in files:
+        shutil.copyfile(p, target / p.name)
+    pin_path = manifest_dir / MIRROR_PINS
+    current = {p.name: sha256_file(target / p.name) for p in files}
+    if pin_path.exists():
+        pinned = {r["file"]: r["sha256"] for r in csv.DictReader(open(pin_path, newline=""))}
+        bad = sorted(k for k in pinned if current.get(k) != pinned[k]) + sorted(set(current) - set(pinned))
+        if bad:
+            raise RuntimeError(f"{len(bad)} mirror files differ from the pinned checksums, e.g. {bad[:3]}")
+    else:
+        with open(pin_path, "w", newline="", encoding="utf-8") as fh:
+            w = csv.writer(fh)
+            w.writerow(["file", "sha256"])
+            for k in sorted(current):
+                w.writerow([k, current[k]])
+    status = {"status": "ok", "source": "unofficial GitHub mirror", "repo": MIRROR_REPO, "commit": MIRROR_COMMIT, "path": MIRROR_DIR, "files": len(files),
+              "integrity": "SHA-256 pinned at first retrieval (manifests/" + MIRROR_PINS + "); not verifiable against Zenodo (zenodo.org blocked)",
+              "license": "CC BY 4.0 per the dataset paper (Ludovico et al., MMM 2021); the Zenodo record could not be read from this workspace"}
+    write_json(d / "fetch_status.json", status)
+    return status

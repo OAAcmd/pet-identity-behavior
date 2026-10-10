@@ -935,7 +935,20 @@
         "personal_noncommercial": "suitable",
         "commercial": "suitable"
       },
-      "release_note": "Fitted on CC BY 4.0 annotations / CC BY 2.0 images; geometry, species and object-group features only (no backbone needed)."
+      "release_note": "Fitted on CC BY 4.0 annotations / CC BY 2.0 images; geometry, species and object-group features only (no backbone needed). Evaluated alternative; v2 ships."
+    },
+    {
+      "id": "pet_object_relation_v2",
+      "kind": "derived_artifact",
+      "name": "artifacts/object_relation/pet_object_relation_v2.npz",
+      "role": "pet on bed / couch / chair / table: containment rule (at least half of the pet's box inside the furniture box), evaluated in E15",
+      "status": "available",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "A fixed geometric rule (no fitted parameters); evaluated on Open Images relationships (CC BY 4.0 annotations, CC BY 2.0 images)."
     }
   ]
 }

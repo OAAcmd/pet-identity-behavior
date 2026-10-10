@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15"]
-DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -153,6 +153,11 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         out = VO.fetch_images(root, man)
         print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
         return 0 if not out.get("errors") else 1
+    if args.dataset == "oxford-pets":
+        from .data import oxford_pets as OP
+
+        print(json.dumps(OP.fetch(root, man), indent=2))
+        return 0
     if args.dataset == "posture-weak":
         from .data import posture_weak as PW
 
@@ -171,6 +176,9 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         from .data import catmeows
 
         out = catmeows.fetch(root)
+        if out.get("status") == "blocked":  # zenodo.org denied: use the pinned unofficial mirror and say so
+            print(json.dumps({"zenodo": out}, indent=2))
+            out = catmeows.fetch_mirror(root, man)
         print(json.dumps(out, indent=2))
         return 0 if out.get("status") == "ok" else 2
     if args.dataset == "barkopedia":
@@ -226,6 +234,19 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e14_tfhub_rawdecode as E
 
         return E.run(s, out_dir)
+    if name == "e17":
+        from .eval import e17_temporal_dog_behavior as E
+
+        return E.run(s, out_dir)
+    if name == "e16":
+        from .eval import e16_breed_robustness as E
+
+        return E.run(s, out_dir)
+    if name == "e15-analysis":
+        from .eval import e15_object_relations as E
+
+        return {"learned_vs_rule": E.compare_learned_rule(s, out_dir), "coverage": E.coverage_by_object_threshold(s, out_dir),
+                "rule_head": E.rule_head(s, out_dir, artifact_dir=REPO_ROOT / "artifacts" / "object_relation")}
     if name == "e15":
         from .eval import e15_object_relations as E
 
@@ -415,6 +436,35 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
         print(json.dumps({"device_check": {k: v for k, v in dc.items() if k != "expected"}}))
         m = json.loads((Path(args.out) / "manifest.json").read_text())
     print(json.dumps({k: m[k] for k in ("bundle_version", "release_profile", "total_bytes", "notes")} | {"files": [f["path"] for f in m["files"]]}, indent=2))
+    return 0
+
+
+def cmd_household_eval(args: argparse.Namespace) -> int:
+    from .validation import household as H
+
+    if args.write_schemas:
+        d = REPO_ROOT / "docs" / "household"
+        d.mkdir(parents=True, exist_ok=True)
+        for name, schema in H.json_schemas().items():
+            (d / f"{name}.schema.json").write_text(json.dumps(schema, indent=1) + "\n", encoding="utf-8")
+        print(json.dumps({"written": [f"docs/household/{n}.schema.json" for n in H.json_schemas()]}))
+        return 0
+    if not args.dataset:
+        print("--dataset is required", file=sys.stderr)
+        return 2
+    out = {"evaluation": H.evaluate(Path(args.dataset)), "annotator_agreement": H.agreement(Path(args.dataset))}
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.out).write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
+    print(json.dumps(out["evaluation"]["metrics"], indent=1))
+    return 0
+
+
+def cmd_network_probe(args: argparse.Namespace) -> int:
+    from .data.network import probe
+
+    s = probe(REPO_ROOT / "manifests" / "network_requirements.json", REPO_ROOT / "results" / "data_access" / "network_probe.json")
+    for h in s["hosts"]:
+        print(f"{h['state']:26s} {h['host']:40s} {h['operation']}")
     return 0
 
 
@@ -630,6 +680,13 @@ def build_parser() -> argparse.ArgumentParser:
     od.add_argument("--posture-model", help="posture parameters valid for that backbone's features (default: ondevice.posture_model)")
     od.add_argument("--fetch-missing", action="store_true", help="download (checksum-verified) any bundle model not yet present")
     od.set_defaults(func=cmd_export_ondevice)
+    he = sub.add_parser("household-eval", help="score app results against household annotations (docs/household/)")
+    he.add_argument("--dataset", help="directory with recordings/, annotations/, adjudicated/, results/")
+    he.add_argument("--out", default=str(REPO_ROOT / "results" / "household" / "evaluation.json"))
+    he.add_argument("--write-schemas", action="store_true", help="write the annotation and recording JSON schemas to docs/household/")
+    he.set_defaults(func=cmd_household_eval)
+    npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
+    npb.set_defaults(func=cmd_network_probe)
     dt = sub.add_parser("export-device-test", help="assemble the static HTTPS phone test build (page, runtime, model bundle)")
     dt.add_argument("--bundle", default=str(REPO_ROOT / "var" / "ondevice" / "bundle"), help="an exported on-device bundle (export-ondevice)")
     dt.add_argument("--out", default=str(REPO_ROOT / "var" / "device_test" / "site"))
