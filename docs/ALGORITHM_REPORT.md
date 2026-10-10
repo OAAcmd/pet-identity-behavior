@@ -220,17 +220,38 @@ folds; YAMNet/AudioSet vs Freesound overlap unaudited. The runtime uses tag
 thresholds (frame-level, transparent); the embedding classifier is a comparison
 trained on 40 positives per class and is not used at runtime.
 
-### E2 - CatMeows recording context - BLOCKED (implemented, not run)
+### E2 - CatMeows recording context (G4, cats) - COMPLETED, not shipped
 
-zenodo.org is denied, so no CatMeows metric exists. Implemented protocol:
-leave-one-cat-out (plus stricter leave-one-owner-out), inner grouped `C`
-selection, standardization inside training partitions, folds with missing
-classes reported, cat-level bootstrap, majority/stratified baselines, analysis
-at native 8 kHz (fmax 3.9 kHz), random split as a labelled leakage diagnostic,
-optional embedding comparison flagged out-of-domain. Mechanics are tested only
-on synthetic tones (`tests/test_e2_protocol.py`). Labels keep their original
-meaning (`isolation` is not "fear"). Continue with
-`uv run petperception fetch-data catmeows && uv run petperception evaluate --experiment e2`.
+Data: CatMeows v1.0.2. It holds 440 meows from 21 cats of 12 owners,
+recorded in three situations: brushing 127, isolation in an unfamiliar
+environment 221, waiting for food 92. Zenodo is blocked here, so the data
+comes from an unofficial GitHub mirror at a pinned commit, with every file
+SHA-256-pinned on first retrieval. The mirror cannot be checked against
+Zenodo's checksums.
+
+Protocol as implemented before the data was reachable:
+* leave-one-cat-out (LOCO) and leave-one-owner-out (LOOO);
+* inner grouped selection of `C`;
+* cat-level bootstrap;
+* analysis at the native 8 kHz.
+
+| Method | Macro-F1 [95 % CI by cat] |
+| --- | --- |
+| MFCC + logistic regression, LOCO | 0.462 [0.382, 0.553] |
+| YAMNet embedding + logistic regression, LOCO | 0.464 [0.400, 0.542] |
+| MFCC, LOOO | 0.432 [0.352, 0.521] |
+| YAMNet embedding, LOOO | 0.388 [0.327, 0.457] |
+| majority / stratified random | 0.223 / 0.336 |
+| random split (leakage diagnostic: same cats in train and test; **not** an estimate) | 0.622 |
+
+* Above chance, but weak. Per class (MFCC, LOCO): isolation F1 0.63,
+  brushing 0.40, waiting for food 0.35.
+* The random-split figure shows how much a cat-mixed split would
+  overstate.
+* The model is research-only (data terms) and is not shipped for accuracy
+  reasons either: its lower interval bound is below 0.5.
+* Labels keep the dataset's meaning. "Isolation" is a recording situation,
+  not "fear".
 
 ### E3 - Dog activity/context - PENDING (disabled)
 
@@ -573,6 +594,93 @@ lower bound above chance, precision >= 0.70.
   treated as unknown (it neither extends nor ends a run). The temporal
   grouping is not validated, and nothing is inferred about whether the
   animal is allowed on the furniture.
+
+### E1-CC - Audio thresholds on CC0 / CC BY clips only - COMPLETED
+
+The deployed thresholds are fitted on all 2,000 ESC-50 clips, a CC BY-NC
+3.0 collection. 1,770 clips carry CC0 or CC BY on their own. Refitting on
+those clips only, with the same YAMNet scores and the nested fold-wise
+protocol pooled over the 5 held-out folds (`results/e1/licence_subset.json`):
+
+| | All-clip thresholds (current) | CC0 / CC BY thresholds |
+| --- | --- | --- |
+| Dog threshold, nested F1 | 0.801, 0.902 | identical (all 40 dog clips are CC0 / CC BY) |
+| Cat threshold, nested F1 [precision / recall] | 0.738, 0.790 [0.78 / 0.80] | 0.500, 0.763 [0.81 / 0.73] |
+
+Only 29 of the 40 cat clips qualify. The refitted file
+(`artifacts/audio_event_thresholds_cc.json`) is the commercial candidate.
+Its remaining question, whether ESC-50's own labels bind it, is
+`docs/ASSET_TERMS.md` Q-A2.
+
+### E16 - Breed robustness of detection (Oxford-IIIT Pet) - COMPLETED
+
+The product detector plus verifier, run on every Oxford-IIIT Pet image:
+7,349 images, 12 cat and 25 dog breeds. Each outcome is one of: found the
+right species, wrong species, rejected by the verifier, missed. Wilson
+intervals; breed heterogeneity tested by permutation.
+
+* Cats: found 0.935 [0.924, 0.944]. Lowest breeds: Sphynx 0.55, then
+  Bombay, Russian Blue and Bengal. Heterogeneity p = 0.0005 (between-breed
+  SD 0.117 against 0.017 under the null).
+* Dogs: found 0.924. Lowest: Newfoundland 0.71, keeshond 0.84.
+  Heterogeneity p = 0.0005.
+* The hairless and the uniformly dark breeds are where the detector fails;
+  household evaluation must include them.
+* These are web photos chosen to show the breed, so the figures are an
+  upper bound for home footage (see E18).
+
+### E18 - Full engine on real pet video with sound (Kinetics-700) - COMPLETED
+
+The first real-video, real-audio evaluation of the whole engine, both
+species. 294 Kinetics-700-2020 validation clips of six person-and-pet
+actions, 10 s each: petting cat 49, grooming cat 50, grooming dog 50,
+bathing dog 47, training dog 49, walking the dog 49. The clips are YouTube
+footage (research only, not committed). The labels support exactly two
+measurements:
+* pet presence: every clip shows the named species;
+* person contact: petting, grooming and bathing imply it; training and
+  walking do not exclude it.
+Nothing else is scored (`results/e18/metrics.json`).
+
+| Clip-level, reference configuration | Cats (99) | Dogs (195) |
+| --- | --- | --- |
+| Track of the right species | 0.566 [0.47, 0.66] | 0.533 [0.46, 0.60] |
+| Only the other species tracked | 0.061 | 0.062 |
+| No pet track at all | 0.374 | 0.405 |
+| Person-contact segment, contact classes | 40 / 99 overall; 35 / 56 (0.63) where the cat is tracked | 38 / 97 overall; 36 / 50 (0.72) where the dog is tracked |
+| Own-species vocalization detected | 9 / 99 | 7 / 195 |
+| Non-abstained interpretation | 0 / 99 | 2 / 195 (both unlabelled) |
+| Median analysis time per 10 s clip (server CPU) | 4.1 s | 4.1 s |
+
+Findings:
+* **Real video is much harder than photos.** On photos the detector finds
+  about 0.9 of pets (E4, E16). On these clips it finds the pet in about
+  half. Most clips have camera motion (78 of 99 cat clips), close-ups and
+  partial views (a hand grooming a cat's back), blur and low light.
+* **The verifier costs presence but prevents species confusion.** Removing
+  it recovers 11 cat and 20 dog clips and loses none. But "a dog is
+  present" in cat clips rises from 9 to 31 of 99. Even without the
+  verifier, 32 % of cat clips and 36 % of dog clips get no track, so the
+  detector itself is the main limit. That is the case for G1
+  (`docs/TRAINING_PROGRAM.md`).
+* Person contact is found in roughly two thirds of contact clips where the
+  pet is tracked. In walking and training clips the rate is lower (contact
+  happens there too, so it is not a false-positive rate).
+* Vocalizations are rare in these clips, many of which carry music or
+  speech. This is not a measure of vocalization recall.
+* **Detector variants on the same clips** (paired, exact McNemar):
+
+| Clips with the right species tracked | Cats (99) | Dogs (195) |
+| --- | --- | --- |
+| MediaPipe detector + verifier (reference) | 56 | 104 |
+| same, no verifier | 67 (also wrong species only in 15) | 124 (16) |
+| TF Hub detector + verifier (phone test build) | 59 (p = 0.61 vs reference) | 87 (p = 0.0095 vs reference) |
+
+  The licence-stated detector that the phone build ships
+  (`docs/ASSET_TERMS.md` Q-M2) is significantly worse for dogs on real
+  video, though not on the E4 photos. That is evidence that photo
+  benchmarks under-state real-video differences, and a measured cost of
+  the licence decision.
 
 ### On-device execution
 

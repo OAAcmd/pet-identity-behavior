@@ -82,6 +82,16 @@ export-device-test --bundle var/device_test/bundle
 In desktop Chromium the detector takes 74 ms per frame, single-threaded
 WebAssembly. That is a desktop figure, not a phone figure.
 
+**Measured cost of M3 on real video (E18, 294 Kinetics pet clips with
+sound; same clips, paired):**
+* Cats: pet found in 59 of 99 clips with M3 against 56 with M2. The
+  difference is not significant (exact McNemar p = 0.61).
+* Dogs: 87 of 195 against 104, p = 0.0095. M3 misses the dog in 17 more
+  clips. It is worst on bathing (14 against 21 of 47).
+
+So the licence statement costs dog recall on real video. Answering Q-M2 is
+the cheapest way to recover it. G1 is meant to beat both detectors.
+
 **Q-T (one question for M1, M3 and M4; commercial profile only).** The
 weights carry Apache-2.0. Their training data carries narrower terms:
 ImageNet's non-commercial terms of access, the per-image Flickr licences of
@@ -170,7 +180,7 @@ ffmpeg. The phone build contains no ffmpeg.
 | Profile | Blocker | What clears it |
 | --- | --- | --- |
 | personal_noncommercial | none for the shipped build (M1, M3, M4, A1, A3, A4, A7, A8, S1, S2, P1) | - |
-| personal_noncommercial, optional | Q-M2: using M2 instead of M3 (better parity, slightly better cat specificity) needs its licence statement | read the ai.google.dev Models section (one minute in a browser) and record it in `configs/release_approvals.yaml` |
+| personal_noncommercial, recommended | Q-M2: using M2 instead of M3 (better parity; on real video it finds the dog in 17 more of 195 clips, p = 0.0095) needs its licence statement | read the ai.google.dev Models section (one minute in a browser) and record it in `configs/release_approvals.yaml` |
 | commercial | Q-T: training-data terms of M1, M3, M4 | a publisher decision recorded in `configs/release_approvals.yaml`, or G1 (Open-Images-only detector and backbone) |
 | commercial | A1 not permitted | A2 plus Q-A2 (or its re-labelling route) |
 | commercial and personal_noncommercial | dog ears/tail/keypoints (A5) and dog video behaviour (A6) are research-only | G2 and G3/G5 in `docs/TRAINING_PROGRAM.md` (new licensed annotation; household video) |

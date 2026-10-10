@@ -488,6 +488,11 @@ def cmd_train_prep(args: argparse.Namespace) -> int:
 
         out = build(s.paths.resolve("data_root"), REPO_ROOT / "manifests", REPO_ROOT / "var" / "training" / "g1", REPO_ROOT / "results" / "g1")
         print(json.dumps({k: out[k] for k in ("images", "selected_by_role", "dropped_for_leakage", "original_bytes_total")}, indent=2))
+    elif args.job == "g2":
+        from .training.g2_candidates import build as build_g2
+
+        out = build_g2(REPO_ROOT / "var" / "training" / "g1", REPO_ROOT / "var" / "training" / "g2", REPO_ROOT / "results" / "g2")
+        print(json.dumps({k: out[k] for k in ("candidates", "excluded")}, indent=2))
     return 0
 
 
@@ -709,7 +714,7 @@ def build_parser() -> argparse.ArgumentParser:
     he.add_argument("--write-schemas", action="store_true", help="write the annotation and recording JSON schemas to docs/household/")
     he.set_defaults(func=cmd_household_eval)
     tp = sub.add_parser("train-prep", help="build the training-data manifests of a G-job (docs/TRAINING_PROGRAM.md)")
-    tp.add_argument("job", choices=["g1"])
+    tp.add_argument("job", choices=["g1", "g2"])
     tp.set_defaults(func=cmd_train_prep)
     npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
     npb.set_defaults(func=cmd_network_probe)

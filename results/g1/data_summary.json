@@ -1,0 +1,280 @@
+{
+  "job": "G1 data",
+  "created_at": "2026-10-10T10:32:24+00:00",
+  "protocol": [
+    "G1 training data: a pet-and-household detector set from Open Images V7 train.",
+    "",
+    "Why Open Images train: annotations CC BY 4.0, images listed as CC BY 2.0, no",
+    "registration, reachable from here (storage.googleapis.com and the",
+    "open-images-dataset S3 bucket). A detector trained only on it removes the",
+    "COCO terms question for the detector (docs/ASSET_TERMS.md Q-T) when trained",
+    "from scratch, and adapts the class set to the product either way.",
+    "",
+    "What this job does (CPU, streaming; nothing but compact manifests is stored):",
+    "1. streams the train box annotations, the train human-verified image labels",
+    "   and the train image metadata, hashing each source file as it streams;",
+    "2. keeps boxes of the product classes (CLASSES; Open Images leaf classes",
+    "   merged, for example Man/Woman/Boy/Girl -> person);",
+    "3. selects images: every image with a cat or dog box; a capped sample of",
+    "   person-only images; for each household class a quota of images",
+    "   containing it (rarest class first, so bed, couch, bowl or teddy bear are",
+    "   not swamped by windows and cars); a capped sample of confusable-animal",
+    "   images (hard negatives). Images whose cat/dog boxes are depictions",
+    "   (drawings, toys) are dropped from the positives;",
+    "4. marks for each non-pet image whether cat and dog are human-verified",
+    "   absent (unboxed pets in negatives are the main label-noise risk);",
+    "5. leakage control: drops train images whose Flickr author also took an",
+    "   image of any evaluation set used in this project (E4, E7, E13/E15 test",
+    "   and validation, E8 backgrounds), which also removes re-uploads of an",
+    "   evaluation photo by its author (identical photos uploaded by different",
+    "   authors are not checked); then holds out a development split grouped by",
+    "   author;",
+    "6. writes var/training/g1/{images,boxes}.csv.gz and",
+    "   results/g1/data_summary.json (counts, licences, bytes to download,",
+    "   source checksums)."
+  ],
+  "sources": {
+    "boxes": {
+      "url": "https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv",
+      "sha256": "dfc9637907a6b105f87e435bac91a5ee9b29af3ff8391168f86c1d63879786b6"
+    },
+    "image_labels": {
+      "url": "https://storage.googleapis.com/openimages/v7/oidv7-train-annotations-human-imagelabels.csv",
+      "sha256": "0237e1e4080291b959ceb99484a8f2d723aeeb7d15b2adf60337f2c027174116"
+    },
+    "images": {
+      "url": "https://storage.googleapis.com/openimages/2018_04/train/train-images-boxable-with-rotation.csv",
+      "sha256": "05f3d68dbbb03728d1a37e51479f4f35c062b871e1a6cae8c4cefbe0e0c80ed0"
+    }
+  },
+  "box_rows_streamed": 14610229,
+  "classes": {
+    "cat": [
+      "/m/01yrx"
+    ],
+    "dog": [
+      "/m/0bt9lr"
+    ],
+    "person": [
+      "/m/01g317",
+      "/m/04yx4",
+      "/m/03bt1vf",
+      "/m/01bl7v",
+      "/m/05r655"
+    ],
+    "bed": [
+      "/m/03ssj5"
+    ],
+    "couch": [
+      "/m/02crq1",
+      "/m/03m3pdh",
+      "/m/026qbn5"
+    ],
+    "chair": [
+      "/m/01mzpv"
+    ],
+    "table": [
+      "/m/04bcr3",
+      "/m/0h8n5zk",
+      "/m/078n6m",
+      "/m/01y9k5"
+    ],
+    "car": [
+      "/m/0k4j"
+    ],
+    "bowl": [
+      "/m/04kkgm"
+    ],
+    "toy": [
+      "/m/0138tl"
+    ],
+    "teddy_bear": [
+      "/m/0kmg4"
+    ],
+    "door": [
+      "/m/02dgv"
+    ],
+    "window": [
+      "/m/0d4v4"
+    ],
+    "stairs": [
+      "/m/01lynh"
+    ]
+  },
+  "confusers": [
+    "bear",
+    "cheetah",
+    "doll",
+    "fox",
+    "goat",
+    "hamster",
+    "jaguar",
+    "leopard",
+    "lion",
+    "lynx",
+    "monkey",
+    "mouse",
+    "otter",
+    "rabbit",
+    "raccoon",
+    "red_panda",
+    "sheep",
+    "skunk",
+    "squirrel",
+    "tiger"
+  ],
+  "caps": {
+    "person_only": 15000,
+    "household_per_class": 2500,
+    "confuser": 10000
+  },
+  "seed": 20261016,
+  "pools": {
+    "pet_images": 32892,
+    "pet_images_with_depicted_pets_removed": 2607,
+    "person_only": 720488,
+    "household": 238023,
+    "household_by_class": {
+      "bed": 2818,
+      "couch": 4564,
+      "chair": 25157,
+      "table": 52299,
+      "car": 89043,
+      "bowl": 1443,
+      "toy": 17047,
+      "teddy_bear": 965,
+      "door": 13281,
+      "window": 59354,
+      "stairs": 4501
+    },
+    "confuser": 16509
+  },
+  "selected_by_role": {
+    "pet": 15841,
+    "person_only": 11971,
+    "household": 18742,
+    "confuser": 6045
+  },
+  "dropped_for_leakage": {
+    "author_in_evaluation_sets": 26929,
+    "is_evaluation_image": 93
+  },
+  "dropped_by_role": {
+    "pet": 14444,
+    "person_only": 3029,
+    "household": 5639,
+    "confuser": 3910
+  },
+  "dropped_authors": {
+    "distinct": 2003,
+    "top_20_image_counts": [
+      947,
+      304,
+      274,
+      254,
+      232,
+      228,
+      188,
+      186,
+      183,
+      179,
+      177,
+      171,
+      171,
+      165,
+      160,
+      160,
+      157,
+      152,
+      151,
+      140
+    ]
+  },
+  "evaluation_authors_excluded": 2568,
+  "development_authors": 857,
+  "images": {
+    "train": 50007,
+    "development": 2592
+  },
+  "images_per_class": {
+    "train": {
+      "dog": 9249,
+      "cat": 5819,
+      "window": 3640,
+      "person": 21852,
+      "chair": 3117,
+      "table": 4415,
+      "car": 2363,
+      "bed": 1875,
+      "door": 2174,
+      "couch": 2041,
+      "toy": 1963,
+      "stairs": 1954,
+      "bowl": 1012,
+      "teddy_bear": 715
+    },
+    "development": {
+      "cat": 317,
+      "window": 179,
+      "dog": 557,
+      "chair": 148,
+      "person": 1140,
+      "table": 215,
+      "car": 118,
+      "couch": 96,
+      "toy": 97,
+      "bed": 106,
+      "stairs": 77,
+      "door": 104,
+      "teddy_bear": 22,
+      "bowl": 42
+    }
+  },
+  "boxes_per_class": {
+    "train": {
+      "dog": 11711,
+      "cat": 6725,
+      "window": 22036,
+      "person": 82850,
+      "chair": 14838,
+      "table": 8615,
+      "car": 6306,
+      "bed": 2356,
+      "door": 3172,
+      "couch": 3356,
+      "toy": 7481,
+      "stairs": 2546,
+      "bowl": 3035,
+      "teddy_bear": 1118
+    },
+    "development": {
+      "cat": 371,
+      "window": 828,
+      "dog": 691,
+      "person": 4174,
+      "chair": 621,
+      "table": 381,
+      "car": 337,
+      "couch": 141,
+      "toy": 377,
+      "bed": 125,
+      "stairs": 112,
+      "door": 144,
+      "teddy_bear": 27,
+      "bowl": 117
+    }
+  },
+  "small_pet_boxes_under_1pct_of_image": {
+    "dog": 616,
+    "cat": 82
+  },
+  "non_pet_images_with_both_pets_verified_absent": 496,
+  "licences": {
+    "https://creativecommons.org/licenses/by/2.0/": 52599
+  },
+  "original_bytes_total": 112468162035,
+  "manifests": {
+    "images": "/home/user/pet-identity-behavior/var/training/g1/images.csv.gz",
+    "boxes": "/home/user/pet-identity-behavior/var/training/g1/boxes.csv.gz"
+  }
+}

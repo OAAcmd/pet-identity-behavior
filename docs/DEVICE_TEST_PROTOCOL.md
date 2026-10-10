@@ -127,6 +127,23 @@ decoding; the host's per-publish limit requires two batches).
 
 ### Infrastructure needed for track B
 
+**In short:** track A needs no purchase and is ready. Track B tests the
+installed app: offline reopen from the home screen, the live camera and
+microphone page, and the multi-threaded runtime. It needs one thing we do
+not have, an HTTPS origin whose response headers and service worker we
+control. The claude.ai page used for track A cannot provide it: it refuses
+camera, microphone and service workers, and it sends no cross-origin
+isolation headers.
+
+Why each requirement exists:
+
+| Requirement | Needed for | Without it |
+| --- | --- | --- |
+| HTTPS (secure context) | service worker (offline app shell), Cache Storage, `getUserMedia` (live camera and microphone) | the browser disables these APIs; analysis of chosen files still works |
+| A service worker on our origin | reopening the app offline from the home screen; model updates with rollback | the app needs the network to open |
+| `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` | `SharedArrayBuffer`, hence the multi-threaded LiteRT.js runtime | single-threaded runtime (what track A measures; slower, still correct) |
+| A server process (option 1 only) | sign-in, pets and places, result backup, opt-in server analysis | an account-free build is needed (option 2) |
+
 The PWA must be served from an HTTPS origin under our control (service
 workers, Cache Storage, camera access and cross-origin isolation require a
 secure context; cross-origin isolation additionally needs the
@@ -142,10 +159,19 @@ require-corp` headers for the multi-threaded runtime). Either of:
    backup and opt-in server analysis.
 2. **A static HTTPS host** for an account-free build of the PWA (not
    implemented yet: the PWA currently requires the server for sign-in, pets
-   and places). GitHub Pages would need the repository owner to enable Pages
-   (Settings > Pages > Source: GitHub Actions); it cannot set COOP/COEP
-   headers, so the runtime would be single-threaded unless the service
-   worker adds them.
+   and places; estimate 1-2 days to add a local-only mode). This needs no
+   server and no domain purchase. Options:
+   * GitHub Pages: the repository owner enables Pages (Settings > Pages >
+     Source: GitHub Actions). It cannot set COOP/COEP headers, so the
+     runtime is single-threaded unless the service worker adds them.
+   * Any static host that lets us set response headers (most do), which
+     would give the multi-threaded runtime.
+
+Recommendation: run track A on phones first. It answers the main device
+questions (does the engine run, how fast, how much memory, does it work
+offline once loaded). Choose option 2 if track A passes and the installed
+app experience is the next question. Choose option 1 when accounts and
+backup are to be tested.
 
 ### Procedure (track B)
 

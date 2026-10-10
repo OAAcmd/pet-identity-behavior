@@ -1,0 +1,63 @@
+{
+  "job": "G2 annotation candidates",
+  "created_at": "2026-10-10T10:33:04+00:00",
+  "protocol": [
+    "G2 annotation candidates: cat and dog images for licensed keypoint labels.",
+    "",
+    "Every public dog and cat keypoint set is research-only or has unclear terms",
+    "(docs/DATA_SOURCES.md), so ears, tail and body keypoints usable outside",
+    "research need new annotation. This job selects the images to annotate from",
+    "the G1 Open Images manifest (CC BY 2.0 images, CC BY 4.0 boxes):",
+    "",
+    "* exactly one cat or dog box in the image, which is not group-of or a",
+    "  depiction, and covers at least MIN_AREA of the image (keypoints need",
+    "  pixels). Truncated and occluded animals stay in (their hidden or",
+    "  out-of-frame points get visibility 1 or 0) and are flagged, so a budget",
+    "  can start with fully visible animals;",
+    "* split by Flickr author into train / development / test (70 / 10 / 20),",
+    "  so one photographer's pets never span splits;",
+    "* per species, ordered by a seeded shuffle so any prefix is a random",
+    "  sample (annotate in that order and stop at the budget).",
+    "",
+    "Output: var/training/g2/candidates.csv (image id, species, box, split,",
+    "author, licence, URL, order) and results/g2/candidates_summary.json. The",
+    "annotation schema and procedure are in docs/training/G2_ANNOTATION_SPEC.md."
+  ],
+  "pet_images_in_g1": 15841,
+  "excluded": {
+    "more_than_one_pet": 2346,
+    "box_under_min_area": 2241,
+    "group_of_or_depiction": 93
+  },
+  "min_box_area": 0.1,
+  "candidates": {
+    "cat": {
+      "train": 3364,
+      "test": 883,
+      "development": 566
+    },
+    "dog": {
+      "test": 1315,
+      "development": 608,
+      "train": 4425
+    }
+  },
+  "fully_visible": {
+    "cat": {
+      "train": 814,
+      "test": 221,
+      "development": 158
+    },
+    "dog": {
+      "test": 123,
+      "train": 403,
+      "development": 59
+    }
+  },
+  "authors": 5351,
+  "licences": {
+    "https://creativecommons.org/licenses/by/2.0/": 11161
+  },
+  "seed": 20261017,
+  "file": "/home/user/pet-identity-behavior/var/training/g2/candidates.csv"
+}

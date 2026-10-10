@@ -6,7 +6,12 @@ prepare_coco.py. Outputs in --export-dir:
 
 * model_float32.tflite: raw box encodings and class scores, no in-graph NMS
   (decoded on the phone like the E14 detector); metadata.json holds anchors;
-* model_int8_qat.tflite (unless --no-qat): quantization-aware-trained int8;
+* model_int8_ptq.tflite: post-training full-integer quantization with the
+  development images as representative data (works for every spec);
+* model_float16.tflite: float16 weights;
+* model_int8_qat.tflite (only with --qat): quantization-aware training; in
+  this toolchain QAT fails for MOBILENET_V2 (Conv2DBNBlock has no quantize
+  config, found by the CPU smoke test), so it is opt-in;
 * metrics.json: versions, hyperparameters, data sizes, COCO metrics of the
   development split for float32 and int8, per-epoch history, wall time.
 
@@ -34,13 +39,13 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=50)
     ap.add_argument("--batch-size", type=int, default=32)
     ap.add_argument("--learning-rate", type=float, default=0.3)
+    ap.add_argument("--qat", action="store_true", help="also run quantization-aware training (MOBILENET_MULTI_AVG specs)")
     ap.add_argument("--qat-epochs", type=int, default=10)
-    ap.add_argument("--no-qat", action="store_true")
     ap.add_argument("--max-images", type=int, default=None, help="smoke test")
     a = ap.parse_args()
 
     import tensorflow as tf
-    from mediapipe_model_maker import object_detector
+    from mediapipe_model_maker import object_detector, quantization
 
     t0 = time.time()
     exp = Path(a.export_dir)
@@ -55,18 +60,21 @@ def main() -> None:
     t_train = time.time() - t0
     loss, coco = model.evaluate(dev, batch_size=min(8, a.batch_size))
     model.export_model("model_float32.tflite")
+    model.export_model("model_float16.tflite", quantization_config=quantization.QuantizationConfig.for_float16())
+    model.export_model("model_int8_ptq.tflite", quantization_config=quantization.QuantizationConfig.for_int8(representative_data=dev))
     out = {"job": "G1", "model_spec": a.model, "epochs": a.epochs, "batch_size": a.batch_size, "learning_rate": a.learning_rate,
            "train_images": train.size, "development_images": dev.size, "labels": train.label_names,
            "float32": {"development_loss": [float(x) for x in (loss if isinstance(loss, (list, tuple)) else [loss])],
                        "development_coco": {k: float(v) for k, v in coco.items()}},
            "history": history, "train_seconds": t_train,
            "versions": {"tensorflow": tf.__version__, "python": platform.python_version(), "gpus": [d.name for d in tf.config.list_physical_devices("GPU")]}}
-    if not a.no_qat:
+    if a.qat:
         qat = object_detector.QATHParams(learning_rate=0.3, batch_size=a.batch_size, epochs=a.qat_epochs, decay_steps=6, decay_rate=0.96)
         model.quantization_aware_training(train, dev, qat_hparams=qat)
         qloss, qcoco = model.evaluate(dev, batch_size=min(8, a.batch_size))
         model.export_model("model_int8_qat.tflite")
         out["int8_qat"] = {"qat_epochs": a.qat_epochs, "development_coco": {k: float(v) for k, v in qcoco.items()}}
+    out["exported_bytes"] = {p.name: p.stat().st_size for p in sorted(exp.glob("*.tflite"))}
     out["total_seconds"] = time.time() - t0
     (exp / "metrics.json").write_text(json.dumps(out, indent=2))
     print(json.dumps({k: out[k] for k in ("train_images", "development_images", "total_seconds")}))

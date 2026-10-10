@@ -1,6 +1,12 @@
 # Data and Model Register
 
 Machine-readable source of truth: [`manifests/resources.json`](../manifests/resources.json).
+**Current terms, artifact by artifact, with the open questions and their
+replacements: [ASSET_TERMS.md](ASSET_TERMS.md).** Where a Phase 1 or Phase 2
+row below differs from it (for example CatMeows and dog-pose were later
+obtained, and the MediaPipe detector licence was checked in the file
+itself on 2026-10-10), ASSET_TERMS.md and `manifests/resources.json` are
+current. The 94-source survey is [DATA_SOURCES.md](DATA_SOURCES.md).
 Per-file manifests: [`manifests/esc50_files.csv`](../manifests/esc50_files.csv),
 [`manifests/openimages_catdog_images.csv`](../manifests/openimages_catdog_images.csv),
 [`manifests/openimages_catdog_boxes.csv`](../manifests/openimages_catdog_boxes.csv),
@@ -242,3 +248,22 @@ See [`artifacts/README.md`](../artifacts/README.md) for checksums and
 | `behavior_video/dog_behavior_video_v1.npz` | MammalNet dog segments | research only |
 | `interaction/person_pet_interaction_v1.npz` | OI visual relationships | all suitable (backbone terms apply) |
 | `object_relation/pet_object_relation_v1.npz` | OI visual relationships (pet-object pairs) | all suitable (detector terms apply) |
+
+## Phase 3 additions (2026-10-10)
+
+### Datasets
+
+| ID | Use | Content and size (computed here) | Splits | Terms | Profiles |
+| --- | --- | --- | --- | --- | --- |
+| CatMeows via mirror (`fetch-data catmeows`) | E2 cat vocal context | 440 WAV files, 21 cats, 12 owners, 3 contexts; GitHub mirror `jinjingleayi/meow-by-meow` at commit `0fe6d4c2`, per-file SHA-256 in `manifests/catmeows_mirror_sha256.csv`; not verifiable against Zenodo (blocked) | leave-one-cat-out, leave-one-owner-out | research and non-commercial (Zenodo text); CC BY 4.0 per the University of Milan page | research only |
+| Oxford-IIIT Pet (`fetch-data oxford-pets`) | E16 breed robustness | 7,349 images, 12 cat and 25 dog breeds; fast.ai S3 mirror tarball 811,706,944 B, SHA-256 in `manifests/oxford_pets_sha256.csv` | evaluation only | annotations CC BY-SA 4.0 (secondary); image rights with owners | evaluation only, nothing derived ships |
+| Kinetics-700-2020, 6 pet-action validation classes (`fetch-data kinetics-pets`) | E18 full engine on real video with sound | 294 clips (petting cat 49, grooming cat 50, grooming dog 50, bathing dog 47, training dog 49, walking the dog 49); CVDF S3 tarballs SHA-256 in `manifests/kinetics_pets_sha256.csv` | evaluation only | annotations CC BY 4.0 (secondary); YouTube clips | evaluation only |
+| Open Images V7 train, G1 detector set (`train-prep g1`) | G1 detector training data | see `results/g1/data_summary.json`; source CSVs streamed with SHA-256 recorded, compact manifests in `var/training/g1/` | train / development by Flickr author; evaluation authors excluded | annotations CC BY 4.0, images CC BY 2.0 (per image) | all suitable (data) |
+
+### Artifacts
+
+| Artifact | Trained on | Profiles |
+| --- | --- | --- |
+| `object_relation/pet_object_relation_v2.npz` (shipped) | none (rule; evaluated on OI relationships) | all suitable |
+| `audio_event_thresholds_cc.json` | ESC-50 CC0 / CC BY clips (E1-CC) | research, personal; commercial pending ASSET_TERMS Q-A2 |
+| `e2_catmeows_context_logreg.json` | CatMeows | research only; not shipped |

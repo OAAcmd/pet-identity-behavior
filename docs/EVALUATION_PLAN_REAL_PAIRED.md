@@ -1,6 +1,16 @@
 # Evaluation plan: real paired household recordings
 
-**Status: not started (no data).** Every accuracy number in this repository
+**Status: collection package ready; no household recording yet.** The
+executable package is [docs/household/](household/README.md): situations
+and recording procedure, consent and privacy decisions, annotation guide
+(observed behaviour separated from inferred intention), JSON schemas,
+quality checks, and the scorer (`uv run petperception household-eval`).
+What public recordings already evaluate, and what only household
+recordings can, is listed in [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md)
+§3. The first real-video measurement of the whole engine (E18, Kinetics
+pet clips with sound) is in [ALGORITHM_REPORT.md](ALGORITHM_REPORT.md).
+
+Every accuracy number in this repository
 comes from public web photos, YouTube video, curated sound clips or synthetic
 compositions. None of them shows how the product behaves on a phone camera
 in a real home, and none can validate the multimodal interpretations
@@ -12,11 +22,11 @@ advance.
 
 | Layer | Question | Current evidence |
 | --- | --- | --- |
-| Observations | Are cats, dogs, people and furniture found, tracked and measured correctly in household recordings? | web photos (E4, E7, E13, E15), semi-synthetic video (E8) |
+| Observations | Are cats, dogs, people and furniture found, tracked and measured correctly in household recordings? | web photos (E4, E7, E13, E15, E16), semi-synthetic video (E8), real YouTube pet video with sound (E18: pet found in about half of the clips) |
 | Body cues | Posture, ears, tail (dogs), vocalization type | weak labels (E10), research-only dog data (E9), none for vocal types |
 | Temporal behavior | Are activity, zone, interaction, on-furniture and vocal-bout segments correct in time? | semi-synthetic only (E8); interaction and on-furniture per frame on web photos (E13, E15) |
 | Interpretation | When the app proposes "possibly food-related" (or abstains), is that right, and is abstention used where it should be? | none (E5 synthetic checks only) |
-| Device | Does the phone produce the same result as the reference engine on the same recording? | desktop Chromium only |
+| Device | Does the phone produce the same result as the reference engine on the same recording? | desktop Chromium only; the phone test build is published, and physical Android, iPhone and Safari runs are pending |
 
 ## 2. Data to collect
 

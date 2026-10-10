@@ -11,16 +11,20 @@ What this job does (CPU, streaming; nothing but compact manifests is stored):
    and the train image metadata, hashing each source file as it streams;
 2. keeps boxes of the product classes (CLASSES; Open Images leaf classes
    merged, for example Man/Woman/Boy/Girl -> person);
-3. selects images: every image with a cat or dog box, capped samples of
-   person-only, household-object and confusable-animal images (hard
-   negatives); images whose cat/dog boxes are depictions (drawings, toys)
-   are dropped from the positives;
+3. selects images: every image with a cat or dog box; a capped sample of
+   person-only images; for each household class a quota of images
+   containing it (rarest class first, so bed, couch, bowl or teddy bear are
+   not swamped by windows and cars); a capped sample of confusable-animal
+   images (hard negatives). Images whose cat/dog boxes are depictions
+   (drawings, toys) are dropped from the positives;
 4. marks for each non-pet image whether cat and dog are human-verified
    absent (unboxed pets in negatives are the main label-noise risk);
 5. leakage control: drops train images whose Flickr author also took an
    image of any evaluation set used in this project (E4, E7, E13/E15 test
-   and validation, E8 backgrounds) and images whose OriginalMD5 equals an
-   evaluation image's; then holds out a development split grouped by author;
+   and validation, E8 backgrounds), which also removes re-uploads of an
+   evaluation photo by its author (identical photos uploaded by different
+   authors are not checked); then holds out a development split grouped by
+   author;
 6. writes var/training/g1/{images,boxes}.csv.gz and
    results/g1/data_summary.json (counts, licences, bytes to download,
    source checksums).
@@ -59,7 +63,8 @@ CONFUSERS = {"/m/0306r": "fox", "/m/0dq75": "raccoon", "/m/071qp": "squirrel", "
              "/m/04rmv": "mouse", "/m/0167gd": "doll"}
 PETS = {"/m/01yrx": "cat", "/m/0bt9lr": "dog"}
 MID2CLS = {m: c for c, ms in CLASSES.items() for m in ms}
-CAPS = {"person_only": 20000, "household": 20000, "confuser": 10000}
+CAPS = {"person_only": 15000, "household_per_class": 2500, "confuser": 10000}
+HOUSEHOLD = ["bed", "couch", "chair", "table", "car", "bowl", "toy", "teddy_bear", "door", "window", "stairs"]
 DEV_FRACTION = 0.05
 SEED = 20261016
 EVAL_MANIFESTS = [("openimages_catdog_images.csv", None), ("oi_test_tuning_images.csv", None),
@@ -137,15 +142,24 @@ def build(data_root: Path, manifest_dir: Path, out_dir: Path, results_dir: Path)
     def sample(pool: list[str], k: int) -> list[str]:
         # prefer images where both pets are human-verified absent
         ver = [i for i in pool if verified_absent.get(i, set()) >= {"cat", "dog"}]
-        rest = [i for i in pool if i not in set(ver)]
+        vs = set(ver)
+        rest = [i for i in pool if i not in vs]
         rng.shuffle(ver)
         rng.shuffle(rest)
         return (ver + rest)[:k]
 
     selected = {i: "pet" for i in pets_clean}
-    for role, pool in (("person_only", person_only), ("household", household), ("confuser", confuser)):
-        for i in sample(pool, CAPS[role]):
-            selected.setdefault(i, role)
+    for i in sample(person_only, CAPS["person_only"]):
+        selected.setdefault(i, "person_only")
+    by_class: dict[str, list[str]] = defaultdict(list)
+    for i in household:
+        for c in {b[0] for b in boxes[i]} - {"person"}:
+            by_class[c].append(i)
+    for c in sorted(HOUSEHOLD, key=lambda c: len(by_class[c])):
+        for i in sample(by_class[c], CAPS["household_per_class"]):
+            selected.setdefault(i, "household")
+    for i in sample(confuser, CAPS["confuser"]):
+        selected.setdefault(i, "confuser")
     # 4. metadata, leakage control
     eval_authors, eval_ids = _eval_authors(manifest_dir)
     h = hashlib.sha256()
@@ -209,7 +223,7 @@ def build(data_root: Path, manifest_dir: Path, out_dir: Path, results_dir: Path)
         "sources": {k: {"url": SOURCES[k], "sha256": sums[k]} for k in SOURCES}, "box_rows_streamed": n_rows,
         "classes": CLASSES, "confusers": sorted(set(CONFUSERS.values())), "caps": CAPS, "seed": SEED,
         "pools": {"pet_images": len(pets), "pet_images_with_depicted_pets_removed": len(pets - pets_clean), "person_only": len(person_only),
-                  "household": len(household), "confuser": len(confuser)},
+                  "household": len(household), "household_by_class": {c: len(by_class[c]) for c in HOUSEHOLD}, "confuser": len(confuser)},
         "selected_by_role": dict(Counter(selected.values())), "dropped_for_leakage": dict(dropped), "dropped_by_role": dict(dropped_by_role),
         "dropped_authors": {"distinct": len(dropped_authors), "top_20_image_counts": [n for _, n in dropped_authors.most_common(20)]},
         "evaluation_authors_excluded": len(eval_authors), "development_authors": len(dev_authors),
