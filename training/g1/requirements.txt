@@ -2,4 +2,7 @@
 mediapipe-model-maker==0.2.1.4
 tensorflow==2.15.1
 tf-keras==2.15.1
+mediapipe==0.10.14  # 1.x lacks mediapipe.tasks.cc, which Model Maker 0.2.1.4 imports
+numpy<2
+ml-dtypes==0.3.2
 setuptools==69.5.1  # tensorflow_hub 0.16 imports pkg_resources, removed from newer setuptools

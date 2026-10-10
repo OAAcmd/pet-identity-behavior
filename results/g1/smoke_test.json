@@ -1,0 +1,65 @@
+{
+  "job": "G1 toolchain smoke test",
+  "purpose": "check that the pinned G1 environment trains, evaluates and exports a phone-compatible detector end to end on CPU; the scores are meaningless (39 training images, 1 epoch)",
+  "created_at": "2026-10-10T10:40:00+00:00",
+  "environment": {
+    "python": "3.11.17",
+    "tensorflow": "2.15.1",
+    "mediapipe_model_maker": "0.2.1.4",
+    "mediapipe": "0.10.14",
+    "lock": "training/g1/requirements.lock.txt",
+    "gpu": false,
+    "cpu": "4 shared cores (other jobs running)"
+  },
+  "command": [
+    "prepare_coco.py --limit 32 --workers 8 (40 train + 10 development images downloaded, 117 boxes)",
+    "train.py --model MOBILENET_V2 --epochs 1 --batch-size 4"
+  ],
+  "measured": {
+    "train_images": 39,
+    "development_images": 10,
+    "train_seconds": 61.4,
+    "total_seconds_incl_evaluation_and_exports": 311.5,
+    "exported_bytes": {
+      "model_float16.tflite": 5741688,
+      "model_float32.tflite": 10962672,
+      "model_int8_ptq.tflite": 3375144
+    },
+    "labels": [
+      "background",
+      "cat",
+      "dog",
+      "person",
+      "bed",
+      "couch",
+      "chair",
+      "table",
+      "car",
+      "bowl",
+      "toy",
+      "teddy_bear",
+      "door",
+      "window",
+      "stairs"
+    ],
+    "development_coco_AP50_meaningless": 0.0399,
+    "litert_single_thread_ms_this_cpu": {
+      "model_float32.tflite": 19.7,
+      "model_float16.tflite": 23.8,
+      "model_int8_ptq.tflite": 12.9,
+      "current phone detector (TF Hub EfficientDet-Lite0 raw decoding, 320 px)": 20.4
+    },
+    "ops": "builtin only: ADD, CONCATENATION, CONV_2D, DEPTHWISE_CONV_2D, LOGISTIC, MUL, RELU6, RESHAPE, RESIZE_NEAREST_NEIGHBOR (+ QUANTIZE for int8, DEQUANTIZE for float16); no TFLite_Detection_PostProcess",
+    "io": "input 1x256x256x3 (float32 [-1,1]; uint8 for int8); outputs 12,276 raw box encodings and 15 sigmoid class scores; anchors and box-coder scales (1.0) in metadata.json",
+    "product_detector_class_loads_export": "yes: petperception.vision.detector.EfficientDetDetector loads model_float32.tflite and model_int8_ptq.tflite unchanged (anchors, scales, labels from the embedded metadata) and returns detections"
+  },
+  "problems_found_and_fixed": [
+    "tensorflow_hub 0.16 imports pkg_resources: pinned setuptools==69.5.1",
+    "mediapipe 1.1.0 lacks mediapipe.tasks.cc used by Model Maker 0.2.1.4: pinned mediapipe==0.10.14 with numpy<2",
+    "quantization-aware training fails for MOBILENET_V2 (Conv2DBNBlock has no quantize config): int8 export switched to post-training quantization; QAT opt-in"
+  ],
+  "not_done": [
+    "full training (needs a GPU)",
+    "browser parity of a trained G1 export (bundle export + engine parity)"
+  ]
+}

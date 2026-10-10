@@ -92,6 +92,13 @@ sound; same clips, paired):**
 So the licence statement costs dog recall on real video. Answering Q-M2 is
 the cheapest way to recover it. G1 is meant to beat both detectors.
 
+In return, M3 is faster in the browser. The phone test page in desktop
+Chromium measured 258 ms per frame with M2 (float32, versions 1-3 of the
+page) against 74 ms with M3 (internally uint8, version 4). Both runs were
+single-threaded WebAssembly on the same desktop, at different times. On
+native LiteRT, single thread, the two cost about the same (20 ms). Which
+matters more on phones is for the device tests to show.
+
 **Q-T (one question for M1, M3 and M4; commercial profile only).** The
 weights carry Apache-2.0. Their training data carries narrower terms:
 ImageNet's non-commercial terms of access, the per-image Flickr licences of

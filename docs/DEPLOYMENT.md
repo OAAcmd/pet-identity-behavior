@@ -80,9 +80,10 @@ docker compose -f deploy/compose.yaml --env-file deploy/.env run --rm app releas
 
 Exit code 3 means a configured asset is not allowed; the engine and the
 bundle export already leave such assets out and the result says so.
-`commercial` additionally needs legal sign-off recorded in an approvals
-file (`configs/release_approvals.example.yaml`) for every asset marked
-`requires_legal_review`, and the detector must be
+`commercial` additionally needs, for every asset marked
+`requires_legal_review`, the decision on its specific question
+([ASSET_TERMS.md](ASSET_TERMS.md): Q-T training-data terms, Q-A2 label
+terms) recorded in an approvals file (`configs/release_approvals.example.yaml`), and the detector must be
 `efficientdet_lite0_tfhub_rawdecode_v1` (Apache-2.0 in its embedded
 metadata; runs in the browser engine (desktop Chromium) with its post-processing decoded outside the graph,
 evaluated in E14): set `PETPERCEPTION_DETECTOR` and add `--detector
@@ -137,6 +138,6 @@ Configuration reference: [CONFIGURATION.md](CONFIGURATION.md).
 | --- | --- |
 | A Linux host with Docker | run the stack |
 | A domain and DNS record, ports 80/443 open | TLS certificate and secure context for the PWA |
-| Decision on the release profile and, for `commercial`, legal sign-off per asset | data and weight terms |
+| Decision on the release profile and, for `commercial`, the per-asset decisions Q-T / Q-A2 ([ASSET_TERMS.md](ASSET_TERMS.md)) | data and weight terms |
 | Off-host backup storage | database backups |
 | Physical phones for the acceptance test | [DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md) |

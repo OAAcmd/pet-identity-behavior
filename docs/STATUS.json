@@ -1,138 +1,95 @@
 {
  "schema": "petperception.status/1",
- "date": "2026-10-09",
+ "date": "2026-10-10",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "Core analysis runs on the phone (PWA, LiteRT.js) with server/phone parity; validated only on public data and in desktop Chromium. Behavioral validity, real-phone execution and production deployment are open.",
+ "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending (a phone test build is published and collects reports). Behavioural validity rests on public data only; on real pet video (E18) the pet is found in about half of the clips. Required capabilities missing for cats (face, ears, tail, actions) and for dogs outside research (keypoints, actions) remain unresolved.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 97,
-    "typescript_unit_tests": 19,
+    "python_tests": 106,
+    "typescript_unit_tests": 21,
     "e2e_tests": 17,
+    "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
     "ci": "green on every push",
-    "model_parity_browser": "bit-exact or <= 3e-8 (float32, int8, float16 builds)",
-    "engine_parity": {
-     "cases": 38,
-     "decision_agreement": 1.0,
-     "tracks_f1": 0.964,
-     "sounds_f1": 1.0,
-     "segments_f1": 0.968,
+    "model_parity_browser": "bit-exact or <= 3e-8",
+    "engine_parity_cases": 38,
+    "engine_parity_reference_bundle": {
+     "decisions": "38/38",
+     "tracks_f1": 0.96,
+     "segments_f1": 0.97,
      "hypotheses_f1": 1.0
     },
-    "phone_results_valid_against_server_schema": "38/38"
+    "engine_parity_phone_build_bundle": {
+     "decisions": "38/38",
+     "tracks_f1": 0.91,
+     "segments_f1": 0.91,
+     "hypotheses_f1": 0.96
+    }
    },
    "open": [
-    "Safari/WebKit never tested",
-    "real phones never tested"
+    "Safari/WebKit never run",
+    "physical phones never run"
    ]
   },
   "behavioral_model_validity": {
    "status": "not_met",
-   "evidence": "public-data evaluations E1, E4, E7, E9-E13, E15; semi-synthetic E8; synthetic E5",
+   "evidence": "public data: E1, E1-CC, E2, E4, E7, E9-E18; real pet video with sound: E18 (Kinetics, 294 clips); semi-synthetic E8 and synthetic E5 are software checks, not evidence",
+   "key_results": {
+    "real_video_pet_found_cat": "0.566 [0.47, 0.66] reference detector; 0.596 phone build",
+    "real_video_pet_found_dog": "0.533 [0.46, 0.60] reference; 0.446 [0.38, 0.52] phone build (paired p = 0.0095)",
+    "breed_found_rate": "cats 0.935, dogs 0.924 on breed photos; Sphynx 0.55, Newfoundland 0.71",
+    "cat_vocal_context_loco_macro_f1": "0.46 [0.38, 0.55] (not shipped)"
+   },
    "blocking": [
-    "real paired household recordings (docs/EVALUATION_PLAN_REAL_PAIRED.md)",
-    "cat keypoint / face / video-action data",
-    "licensed dog keypoint data",
-    "vocal-context datasets blocked by network policy (zenodo.org, huggingface.co)"
+    "household recordings (package ready: docs/household/)",
+    "cat face, ear, tail and action data",
+    "licensed dog keypoints (G2 annotation)",
+    "detector on real video (G1, GPU)",
+    "vocal type and dog context data (zenodo.org, huggingface.co blocked; terms)"
    ]
   },
   "on_device_compatibility_and_performance": {
    "status": "pending",
-   "evidence": "desktop headless Chromium only (device check passes; budgets measured there)",
+   "evidence": "desktop headless Chromium only; phone test build published at https://claude.ai/artifact/NRG1a19X1ZkPbgdigJGaf2 (version 4), no phone report yet",
    "blocking": [
-    "physical tier-B phones (iOS Safari, Android Chrome) and testers (docs/DEVICE_TEST_PROTOCOL.md)"
+    "testers running the phone test on an iPhone (Safari) and an Android phone (Chrome)"
    ]
   },
   "complete_product_readiness": {
    "status": "not_met",
-   "evidence": "image builds in CI; compose stack with bundle service tested locally; runbook and configuration docs",
+   "evidence": "release profiles enforced by the exporter; asset terms recorded per artifact (docs/ASSET_TERMS.md)",
    "blocking": [
-    "public host, domain, DNS, TLS",
-    "release-profile decision and legal sign-off for assets marked requires_legal_review",
-    "behavioral validity",
+    "behavioural validity",
     "real-phone acceptance",
-    "commercial profile: legal sign-off for every model (browser-compatible licence-confirmed detector available since E14)"
+    "Q-M2 (licence statement of the MediaPipe detector) or accept the phone build's lower dog recall",
+    "commercial: Q-T publisher decision or G1b",
+    "HTTPS origin under our control for the installed-app track (docs/DEVICE_TEST_PROTOCOL.md)"
    ]
   }
  },
- "capabilities": {
-  "animal_detection": {
-   "phone": true,
-   "validation": "E4/E7 web photos"
-  },
-  "false_positive_rejection": {
-   "phone": true,
-   "validation": "E7 web photos"
-  },
-  "tracking": {
-   "phone": true,
-   "validation": "E8 semi-synthetic"
-  },
-  "behavior_segments": {
-   "phone": true,
-   "validation": "E8 semi-synthetic"
-  },
-  "posture": {
-   "phone": true,
-   "validation": "E10 weak caption labels"
-  },
-  "person_pet_interaction": {
-   "phone": true,
-   "validation": "E13 web photos, dogs only"
-  },
-  "pet_on_furniture": {
-   "phone": true,
-   "validation": "E15 web photos (on bed / couch / chair / table); under-furniture and inside-car failed the gate"
-  },
-  "vocalization_presence": {
-   "phone": true,
-   "validation": "E1 ESC-50"
-  },
-  "vocalization_type": {
-   "phone": "scores only",
-   "validation": "none"
-  },
-  "dog_ears_tail_keypoints": {
-   "phone": false,
-   "validation": "E9 (research-only data)"
-  },
-  "dog_actions_from_video": {
-   "phone": false,
-   "validation": "E11 MammalNet (research-only data)"
-  },
-  "cat_keypoints_face_actions": {
-   "phone": false,
-   "validation": "no data"
-  },
-  "facial_cues": {
-   "phone": false,
-   "validation": "no data"
-  },
-  "multimodal_hypotheses": {
-   "phone": true,
-   "validation": "none on real data (E5 synthetic checks)"
-  },
-  "result_sync": {
-   "implemented": true,
-   "opt_in": true,
-   "media": "never"
-  }
+ "capabilities_by_species": "docs/CAPABILITY_MATRIX.md",
+ "training_jobs": {
+  "G1": "data job and CPU toolchain smoke test done; GPU run pending",
+  "G2": "annotation candidates and spec done; annotation pending",
+  "G3": "E17 on dog video (results/e17)",
+  "G4": "cat context done (not shipped); dog context and vocal type blocked",
+  "G5": "not started"
  },
  "decisions": [
-  "Default phone bundle uses float32 builds; int8 bundle (14.8 MB) is an evaluated opt-in because per-image verifier decisions diverge (E12).",
+  "The phone test build uses the licence-stated TF Hub detector; the MediaPipe detector is research-only until its licence statement is recorded (Q-M2). Measured cost: fewer dogs found on real video; measured benefit: faster in the browser on desktop.",
+  "The on-furniture relation ships as the pre-specified containment rule; the learned head was not better (E15 follow-up).",
   "Dog keypoints and MammalNet-trained heads stay research-only (data terms).",
-  "Server analysis is opt-in; the default path never uploads media.",
-  "Commercial bundles must use efficientdet_lite0_tfhub_rawdecode_v1 (E14) once legal sign-off is recorded."
+  "Server analysis is opt-in; the default path never uploads media."
  ],
  "resources_needed": [
-  "Physical phones (tier B iOS and Android at minimum) for the offline acceptance protocol",
-  "Real paired household recordings with consent and annotation (plan in docs/EVALUATION_PLAN_REAL_PAIRED.md)",
-  "Network access to zenodo.org and huggingface.co (CatMeows, Barkopedia)",
-  "Licensed cat and dog keypoint / facial / video-action datasets",
-  "GPU compute for jobs G1-G5 (docs/TRAINING_PROGRAM.md) once data exists",
-  "Hosting, domain, DNS and TLS for deployment",
-  "Legal review of model weights and training-data terms per release profile"
+  "Run the phone test on one iPhone and one Android phone",
+  "Read the MediaPipe Object Detector Models page (Q-M2) and record its licence statement",
+  "Allow zenodo.org and huggingface.co (or provide the files)",
+  "One GPU (24 GB class, 4-8 h) for G1",
+  "Annotators for G2 (70-100 h for 2,000 cats + 2,000 dogs)",
+  "Household recordings: participants and a data controller (docs/household/CONSENT_AND_PRIVACY.md)",
+  "An HTTPS host with header control for the installed-app track (only after track A)"
  ]
 }

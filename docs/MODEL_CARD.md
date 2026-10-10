@@ -38,7 +38,8 @@ validated against household outcomes.
   was observable and, cautiously, what it might relate to.
 - Out of scope: medical or welfare decisions, claims about what an animal
   "says" or "feels", identity verification, surveillance of people,
-  commercial deployment without the recorded legal sign-off.
+  commercial deployment before the per-asset questions in
+  [ASSET_TERMS.md](ASSET_TERMS.md) (Q-T, Q-A2) are decided and recorded.
 
 ## Measured performance (public data; none of it household)
 

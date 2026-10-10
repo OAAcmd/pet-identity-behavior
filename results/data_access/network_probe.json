@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-10T09:42:30+00:00",
+  "checked_at": "2026-10-10T10:40:04+00:00",
   "via": "workspace egress proxy (HTTPS_PROXY)",
   "blocked": [
     "zenodo.org",
@@ -15,7 +15,9 @@
     "cvml.ista.ac.at",
     "onedrive.live.com",
     "fsannotator.upf.edu",
-    "visualgenome.org"
+    "visualgenome.org",
+    "ai.google.dev",
+    "www.deepmind.com"
   ],
   "reachable": [
     "storage.googleapis.com",
@@ -274,6 +276,35 @@
         "(reachable today) MammalNet"
       ],
       "resume": []
+    },
+    {
+      "host": "ai.google.dev",
+      "operation": "GET https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
+      "state": "blocked_by_egress_policy",
+      "http_status": "000",
+      "curl_exit": 56,
+      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "unblocks": [
+        "Primary licence statement, if any, for the MediaPipe EfficientDet-Lite0/Lite2 detector files used by the personal_noncommercial phone bundle (their embedded metadata has no licence field; docs/ASSET_TERMS.md M2)",
+        "MediaPipe Audio Classifier page for the YAMNet build (its embedded metadata already states Apache-2.0)"
+      ],
+      "resume": [
+        "re-read the Models section; update manifests/resources.json terms.weights and docs/ASSET_TERMS.md"
+      ]
+    },
+    {
+      "host": "www.deepmind.com",
+      "operation": "GET https://www.deepmind.com/open-source/kinetics",
+      "state": "blocked_by_egress_policy",
+      "http_status": "000",
+      "curl_exit": 56,
+      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "unblocks": [
+        "Primary licence statement for Kinetics-700-2020 annotations (secondary sources say CC BY 4.0; docs/ASSET_TERMS.md D9)"
+      ],
+      "resume": [
+        "update docs/ASSET_TERMS.md"
+      ]
     }
   ]
 }

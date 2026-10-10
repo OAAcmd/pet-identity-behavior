@@ -100,5 +100,6 @@ never committed.
 Project code: private. Third-party data and model terms differ per asset and
 per release profile (research / personal non-commercial / commercial); they
 are recorded in the register and enforced by `petperception release-check`,
-the engines and the bundle export. Commercial use is not assumed for any
-asset without the recorded legal sign-off.
+the engines and the bundle export. Per-asset terms, the specific open
+questions and their replacements: [docs/ASSET_TERMS.md](docs/ASSET_TERMS.md).
+Commercial use is not assumed for any asset whose question is open.

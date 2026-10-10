@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -157,6 +157,7 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         from .data import kinetics_pets as KP
 
         print(json.dumps(KP.fetch(root, man), indent=2))
+        print(json.dumps(KP.fetch_train_sample(root, man), indent=2))
         return 0
     if args.dataset == "oxford-pets":
         from .data import oxford_pets as OP
@@ -241,6 +242,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         return E.run(s, out_dir)
     if name == "e14":
         from .eval import e14_tfhub_rawdecode as E
+
+        return E.run(s, out_dir)
+    if name == "e19":
+        from .eval import e19_video_operating_point as E
 
         return E.run(s, out_dir)
     if name == "e18":

@@ -63,8 +63,12 @@ independent labels for what happened.
 Consent and privacy: participation is opt-in with written research consent
 covering media retention, annotation and publication of aggregate results;
 people appearing in recordings must consent or be blurred before annotation;
-participants can withdraw and have their media deleted. The consent text
-requires legal review before use. The app already stores feedback with an
+participants can withdraw and have their media deleted. What the consent
+must cover, and the decisions the data controller must take before the
+first recording (legal basis, storage region, retention, access,
+cross-border transfer, minors), are specified in
+[household/CONSENT_AND_PRIVACY.md](household/CONSENT_AND_PRIVACY.md). The
+final wording follows the controller's jurisdiction. The app already stores feedback with an
 explicit `consent_research_use` flag; a research upload flow (media only
 with that consent) and an annotation tool still need to be built.
 

@@ -16,7 +16,7 @@ results are kept).
 
 | Job | Capability | Ran here | Blocked on |
 | --- | --- | --- | --- |
-| G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); toolchain **smoke-tested** on CPU (train, evaluate, export) | a GPU for the full run (estimate 4-8 GPU hours) |
+| G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); toolchain **smoke-tested** on CPU: train, evaluate, export float32 / float16 / int8 (`results/g1/smoke_test.json`) | a GPU for the full run (estimate 4-8 GPU hours) |
 | G2 | licensed cat and dog keypoints: ears, tail, body | candidate job **ran** (4,813 cat / 6,348 dog images, split by photographer); annotation spec written | human annotation (estimate 70-100 hours for 2,000 + 2,000) |
 | G3 | temporal behaviour from video | E17 on dog video **ran on CPU** (results in `results/e17/`) | household or licensed video for cats and for release |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
@@ -117,11 +117,14 @@ on E4/E7, E16 and E18.
 * Input 256×256 RGB, normalised to [-1, 1].
 * Outputs: 12,276 raw box encodings and 15 sigmoid class scores; anchors
   and box-coder scales (1.0) are in `metadata.json`.
-* The TypeScript decoder needs configurable box-coder scales (the E14
-  decoder uses 10/5) and anchors read from the metadata. This is a small
-  change, not yet made.
-* Exports: float32 (10.96 MB measured for MobileNetV2-256 with 14
-  classes), float16, and int8 post-training quantization.
+* The product's detector class loads the export unchanged. Anchors,
+  box-coder scales (1.0, exponential sizes) and the 14-class label map are
+  read from the MediaPipe detector metadata that Model Maker embeds; this
+  was verified on the smoke export, float32 and int8. The phone bundle
+  exporter writes the same decoding for the TypeScript engine. Browser
+  parity of a G1 export is still to run, once a trained model exists.
+* Exports: float32, float16 and int8 post-training quantization (10.96 /
+  5.74 / 3.38 MB measured for MobileNetV2-256 with 14 classes).
 * Quantization-aware training fails for MobileNetV2 in this toolchain
   (found by the smoke test) and is opt-in (`--qat`).
 
@@ -130,7 +133,9 @@ on E4/E7, E16 and E18.
 | Item | Value | Kind |
 | --- | --- | --- |
 | Inference, float32 MobileNetV2-256, 1 thread, this workspace's CPU (native LiteRT) | 19.7 ms per frame, against 20.4 ms for the current phone detector (M3, 320 px) on the same CPU | measured |
-| CPU smoke run (40 + 10 images, 1 epoch, evaluation, float32 export) | completes; 1 epoch ≈ 2.5 min on 4 shared CPU cores | measured |
+| CPU smoke run (39 + 10 images, 1 epoch, evaluation, float32 / float16 / int8 exports; `results/g1/smoke_test.json`) | completes in 334 s on 4 shared CPU cores (training 61 s); scores meaningless | measured |
+| Exported sizes, MobileNetV2-256, 14 classes | float32 10.96 MB, float16 5.74 MB, int8 3.38 MB | measured |
+| int8 inference, 1 thread, this CPU | 12.9 ms per frame (uint8 in and out; builtin ops only) | measured |
 | Full run: 50k images × 50 epochs at 384 px | 4-8 h on one 24 GB GPU (L4/A10 class), plus 1 h for evaluation and exports | estimate (throughput 100-200 images/s for a MobileNet RetinaNet at 384 px) |
 | GPU memory, batch 32 at 384 px | under 16 GB | estimate |
 | Disk | 7 GB images + 2 GB caches + 1 GB checkpoints | estimate |

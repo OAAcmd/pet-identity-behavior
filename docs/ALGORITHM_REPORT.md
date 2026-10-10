@@ -545,7 +545,7 @@ decisions 38/38, tracks 0.91, segments 0.91, hypotheses 0.96 - lower than the Me
 float32 bundle, as with the int8 builds (the TF Hub build is internally
 uint8-quantized). A commercial bundle can now technically include a
 detector with a primary-source weight licence; it still requires the
-recorded legal sign-off (COCO training-data question), as do YAMNet and the
+recorded decision on the COCO training-data question (ASSET_TERMS Q-T), as do YAMNet and the
 backbone.
 
 ### E15 - Pet on furniture (Open Images relationships) - COMPLETED, one relation shipped
