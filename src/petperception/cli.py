@@ -418,6 +418,13 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_export_device_test(args: argparse.Namespace) -> int:
+    from .ondevice.device_test import export_site
+
+    print(json.dumps(export_site(Path(args.bundle), REPO_ROOT / "web", Path(args.out)), indent=2))
+    return 0
+
+
 def cmd_export_parity(args: argparse.Namespace) -> int:
     from .ondevice.bundle import BACKBONE_OUTPUTS
     from .ondevice.parity import export
@@ -623,6 +630,10 @@ def build_parser() -> argparse.ArgumentParser:
     od.add_argument("--posture-model", help="posture parameters valid for that backbone's features (default: ondevice.posture_model)")
     od.add_argument("--fetch-missing", action="store_true", help="download (checksum-verified) any bundle model not yet present")
     od.set_defaults(func=cmd_export_ondevice)
+    dt = sub.add_parser("export-device-test", help="assemble the static HTTPS phone test build (page, runtime, model bundle)")
+    dt.add_argument("--bundle", default=str(REPO_ROOT / "var" / "ondevice" / "bundle"), help="an exported on-device bundle (export-ondevice)")
+    dt.add_argument("--out", default=str(REPO_ROOT / "var" / "device_test" / "site"))
+    dt.set_defaults(func=cmd_export_device_test)
     ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))
     ep.set_defaults(func=cmd_export_parity)

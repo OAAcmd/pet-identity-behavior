@@ -1,114 +1,174 @@
-# Real-phone offline acceptance test
+# Real-phone acceptance test
 
-**Status: PENDING.** This project has no physical phones. Everything below has
-been exercised only in headless desktop Chromium with phone emulation
-(viewport, user agent, touch), which is not evidence of phone execution. The
-product cannot be declared on-device ready until this protocol passes on a
-tier-B phone of each platform (iOS Safari, Android Chrome); see
-[DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md).
+**Status: PENDING - no physical phone has been tested.** The browser
+inference implementation has passed automated tests in desktop headless
+Chromium only (with phone-sized viewports and emulated touch, which is not
+phone evidence). Android Chrome, iPhone Safari and every other phone browser
+are untested. Device readiness is accepted only when the criteria below pass
+on a tier-B phone of each platform ([DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md)).
 
-## What is tested
+Two test builds exist because no HTTPS server of ours is running:
 
-1. The model bundle installs over the network, is verified (SHA-256) and the
-   engine starts on the phone.
-2. With **no network at all** (airplane mode), the app opens, analyses a
-   reference clip, a fresh camera recording and a file from the phone's
-   gallery, and shows and stores the results locally.
-3. Numerical agreement of each model with the Python reference on the phone.
-4. Resource budgets for the phone's tier (load time, real-time factor,
-   detector latency, memory, sustained slowdown, battery).
-5. Update and recovery: an interrupted update leaves the previous version
+| Track | Build | Where | Status |
+| --- | --- | --- | --- |
+| **A. Phone test** (engine, runtime, models, capture, offline analysis, reload) | static page that runs the app's TypeScript engine, LiteRT.js runtime and model bundle (`web/src/devicetest`, assembled by `petperception export-device-test`) | **published**: <https://claude.ai/artifact/NRG1a19X1ZkPbgdigJGaf2> (private claude.ai page; HTTPS) | ready to run; results collected automatically |
+| **B. Installed app** (PWA: service worker, offline reopen, live camera page, history, update recovery) | the full PWA + `/ondevice/` bundle | needs an HTTPS origin we control (see [Infrastructure needed for track B](#infrastructure-needed-for-track-b)) | pending infrastructure |
+
+## Coverage of the acceptance requirements
+
+| Requirement | Track A (available now) | Track B (pending) |
+| --- | --- | --- |
+| Model download and integrity | yes: every file (and every Base64 part) SHA-256 checked | yes |
+| Runtime backend recorded | yes: LiteRT.js build (threads / single-thread), accelerator | yes |
+| Model versions recorded | yes: bundle version, model ids and SHA-256 in the report | yes |
+| Device model, OS, browser | tester enters them; user agent, OS and browser guesses, in-app web view detection recorded | same |
+| Camera input | yes, through the phone's own camera app (file input with `capture`); live camera preview is not available on this host | yes, live camera page (`getUserMedia` + `MediaRecorder`) |
+| Microphone input | yes, the recorded video's sound track; separate audio recording via a saved audio file | yes, sound-only recording |
+| Analysis and results | yes: reference clip 3x (must match the expected result), the tester's own recording (summary shown and reported, never uploaded) | yes, plus results stored in history |
+| Offline after download | yes: analysis in airplane mode, with a count of network requests made during the analysis (must be 0) | yes, including **reopening the app** with no network |
+| Memory | JS heap peak where the browser reports it (Chromium only; WebAssembly memory not included, so a lower bound); Safari: not measurable | same |
+| Sustained latency | yes: 10 consecutive analyses, slowdown last-3 / first-3 | same |
+| Battery | Battery Status API where available (Android Chrome), 1 % resolution | same |
+| Interruptions | yes: app switch during the sustained run; page visibility, freeze, offline/online events logged with the runs | same, plus incoming call / lock screen in the installed app |
+| Recovery | yes: reload the page, start from models saved on the phone without downloading (cold start time measured) | yes, plus interrupted model update keeps the previous version |
+
+Track A does not test: service-worker caching of the app shell, reopening the
+app offline from the home screen, the live camera and microphone page,
+IndexedDB history, opt-in result backup, update recovery, and the
+multi-threaded runtime (the page is not cross-origin isolated, so LiteRT.js
+uses its single-threaded build; desktop measurement: detector 258 ms per frame
+single-threaded, so latency from track A is a pessimistic bound for an
+isolated install).
+
+## Track A: phone test (available now)
+
+**Who can run it.** The page is private to the owner. To let others test,
+share it from the page's Share menu. Only people who can **write** to its
+database send reports automatically: the owner, members of the owner's
+claude.ai Team or Enterprise organization with Contributor access, or people
+invited by email as **Editor** (when the page is not also shared by a public
+link). Anyone else can run every step and use **Copy report** or **Save
+report** and send the JSON by any channel.
+
+**Before you start.** Charge above 50 %, Wi-Fi on, about 70 MB of mobile
+storage free. Open the link in **Safari (iPhone)** or **Chrome (Android)**,
+not in an app's built-in browser (the page warns when it detects one). If
+the claude.ai app opens instead, use "Open in browser".
+
+**Steps** (the page numbers them the same way):
+
+1. Fill in *Phone model* (for example "Pixel 7a"), check *Operating system*
+   and *Browser* (pre-filled from the browser), choose the tier.
+2. *Download* (about 69 MB on the wire before compression, 37 MB of model
+   data). Every file is verified.
+3. *Start* the engine, then *Check* the models (outputs compared with the
+   reference computer on fixed inputs).
+4. *Analyse* the reference clip three times (each must match the expected
+   result).
+5. Unplug the charger. *Start ten analyses*; during the run, switch to
+   another app for about 10 seconds once, then come back.
+6. Turn on airplane mode (Wi-Fi off too) and tap *Analyse offline*. Turn the
+   network back on afterwards.
+7. Choose what you will record, tap *Record video*, record 10-30 s of your
+   cat or dog (or anything) with the camera app, confirm. The clip is
+   analysed on the phone; note whether the summary matches what you
+   recorded. Optionally also *Choose a saved video* recorded earlier with the
+   camera app (iPhone: HEVC `.mov`; Android: H.264/HEVC `.mp4`).
+8. Reload the page (pull down), then *Start from saved models*.
+9. Add notes (heat, reloads, anything odd) and tap *Send report*.
+
+**Pass criteria (track A).** Steps 2-4, 6 and 8 report *passed*; step 6
+reports 0 network requests; the tester's recording in step 7 decodes and
+produces a result (a decode failure must give a clear message, not a hang);
+budgets are reported per tier (a budget failure does not hide functional
+success). A failure is recorded with its message and stack in the report.
+
+**Collection.** Reports are stored in the page's database under
+`reports/<tester id>/runs/<run id>` (each tester writes only their own;
+only the owner reads all). The project copies each report into
+`results/ondevice/devices/<date>_<phone model>/report.json` and updates
+[DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md). The report
+contains device, browser and timing data and analysis summaries; it never
+contains video, audio or images.
+
+**Rebuild and republish** (after a model or engine change):
+
+```bash
+uv run petperception export-ondevice --release-profile personal_noncommercial
+cd web && npm run build:devicetest && cd ..
+uv run petperception export-device-test        # writes var/device_test/site (not committed: contains model weights)
+cd web && npx playwright test -c playwright.devicetest.config.ts   # desktop check of every step
+```
+
+Then publish `var/device_test/site/index.html` with the files listed in
+`var/device_test/site_files.json` (the claude.ai host serves only web media
+types, so model files are published as Base64 text parts and checked after
+decoding; the host's per-publish limit requires two batches).
+
+## Track B: installed app
+
+### Infrastructure needed for track B
+
+The PWA must be served from an HTTPS origin under our control (service
+workers, Cache Storage, camera access and cross-origin isolation require a
+secure context; cross-origin isolation additionally needs the
+`Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy:
+require-corp` headers for the multi-threaded runtime). Either of:
+
+1. **The existing compose deployment** ([DEPLOYMENT.md](DEPLOYMENT.md)) on
+   any Linux host with Docker: 2 vCPU, 4 GB RAM, 20 GB disk (estimate;
+   measured here: server models 123 MB, on-device bundle 37 MB), a DNS name
+   pointing to it and ports 80/443 open for automatic TLS (Caddy or any
+   ACME-capable proxy). Gives the full product including accounts, result
+   backup and opt-in server analysis.
+2. **A static HTTPS host** for an account-free build of the PWA (not
+   implemented yet: the PWA currently requires the server for sign-in, pets
+   and places). GitHub Pages would need the repository owner to enable Pages
+   (Settings > Pages > Source: GitHub Actions); it cannot set COOP/COEP
+   headers, so the runtime would be single-threaded unless the service
+   worker adds them.
+
+### Procedure (track B)
+
+1. **Install.** On Wi-Fi, open the app URL, sign in. Optionally "Add to Home
+   Screen". Settings > On-device analysis > *Install models*. Expect
+   "Installed: model bundle <version>" and a runtime line ("Multi-threaded" or
+   "Single-threaded").
+2. **Go fully offline.** Airplane mode (Wi-Fi and mobile data off). Close the
+   browser completely, reopen the app (from the home-screen icon if
+   installed). Expect the app to open with an "offline" notice.
+3. **Device check** (Settings > *Run device check*): quick, then sustained
+   (unplugged). Download the reports.
+4. **Fresh recording** (*Record* tab, camera and microphone allowed): 15-30 s
+   of a pet, *Analyze on this device*.
+5. **Gallery file** (*Upload file* tab): a video from the phone's camera app.
+6. **History** lists both analyses and opens them offline.
+7. **Interruption**: start a long analysis, lock the screen for 10 s, unlock;
+   record whether it completed, resumed or failed with a clear message.
+8. **Update recovery** (needs a newer bundle): *Update models*, enable
+   airplane mode during the download; expect the previous version still
    working.
 
-## Equipment
-
-* At least one phone per platform in tier B (reference tier); tiers A and C
-  are strongly recommended. Record the exact model, OS version and browser
-  version.
-* The server deployed over HTTPS ([DEPLOYMENT.md](DEPLOYMENT.md)) with a
-  current on-device bundle (`petperception export-ondevice`). HTTPS is
-  required: Cache Storage, service workers, camera and cross-origin isolation
-  only work in a secure context.
-* A test account (`petperception user create --username tester`).
-* A cat or dog, or (if none is available) a second screen playing a pet video
-  for the camera test. Note which was used.
-* For diagnosis: Android: Chrome remote debugging over USB (`chrome://inspect`);
-  iOS: Safari Web Inspector (Settings > Safari > Advanced > Web Inspector).
-
-## Procedure
-
-Record every step's outcome in the report template at the end.
-
-1. **Install.** On Wi-Fi, open the app URL, sign in. Optionally use "Add to
-   Home Screen". Settings > On-device analysis > *Install models*. Expect
-   "Installed: model bundle <version>" and a runtime line ("Multi-threaded" or
-   "Single-threaded"). Note the download time.
-2. **Go fully offline.** Enable airplane mode (Wi-Fi and mobile data off).
-   Close the browser completely (swipe it away), then reopen the app (from the
-   home-screen icon if installed). Expect the app to open with an
-   "offline" notice and the cached account.
-3. **Device check, quick.** Open the device check (Settings > *Run device check*,
-   or `#/device-check`). Enter the phone model, confirm the tier, tap *Run device
-   check*. Expect **Passed**. Tap *Download report* (or *Copy report*).
-4. **Device check, sustained.** Unplug the phone, battery above 50 %, screen
-   on. Tick *Sustained check*, run again (1-3 minutes). Download the report.
-   Note whether the phone became noticeably warm.
-5. **Fresh recording.** *Record* tab: record 15-30 s of a pet (allow camera
-   and microphone). Tap *Analyze on this device*. Expect a result page that
-   says "Analysed on this device"; check tracks, timeline and the decision.
-6. **Gallery file.** *Upload file* tab: pick a video recorded earlier with the
-   phone's own camera app (iPhone: HEVC `.mov` by default; Android: usually
-   H.264 or HEVC `.mp4`). Tap *Analyze on this device*. Record whether it
-   decoded. A decode failure must produce a clear message, not a hang.
-7. **History.** *History* lists both analyses under "Analysed on this
-   device"; open one; it renders offline.
-8. **Back online.** Disable airplane mode. Optionally *Send report to
-   server* on the device-check page (sends the JSON report only, never media).
-9. **Update recovery** (needs a newer bundle on the server): Settings >
-   *Update models*; switch on airplane mode during the download. Expect an
-   error message and the **previous** version still installed and working
-   (repeat step 5 offline). Reconnect and complete the update.
-
-## Pass criteria
+### Pass criteria (track B)
 
 | Area | Criterion |
 | --- | --- |
-| Functional | Steps 1-3, 5, 7 and 9 succeed; device check reports `passed: true` (integrity, numerical agreement, expected end-to-end result on the reference clip). Step 6 either succeeds or fails with a clear unsupported-format message. |
-| Offline | Steps 3-7 run in airplane mode. |
-| Budgets | Every tier budget in the report is `pass`; `not_measured` items are listed with the reason (for example no Battery API on iOS). A budget failure does not hide functional success: both are reported. |
-| Privacy | No media leaves the phone in the default mode (airplane mode makes this physically certain for steps 3-7). |
-
-## Report template
-
-Store each phone's results as `results/ondevice/devices/<YYYY-MM-DD>_<model>/`
-with the downloaded quick and sustained device-check JSON files and a
-`notes.md`:
-
-```
-Phone model / OS version / browser version:
-Tier (A/B/C):
-Tester / date:
-Step 1 install: ok | failed (message) ; download time:
-Step 2 offline open: ok | failed
-Step 3 device check quick: Passed | Not passed ; report file:
-Step 4 sustained: report file ; warm: yes/no
-Step 5 fresh recording: ok | failed ; pet or screen:
-Step 6 gallery file: container/codec ; ok | failed (message)
-Step 7 history offline: ok | failed
-Step 9 update recovery: ok | failed | not run
-Console errors (if any):
-```
+| Functional | Steps 1-4, 6 and 8 succeed; device check `passed`; step 5 succeeds or fails with a clear unsupported-format message. |
+| Offline | Steps 2-7 run in airplane mode. |
+| Budgets | Every tier budget is `pass`, or listed with the reason it was not measured. |
+| Privacy | No media leaves the phone in the default mode. |
 
 ## Known limitations going in (to confirm or refute on phones)
 
-* LiteRT.js loads its multi-threaded build only with cross-origin isolation
-  **and** relaxed WebAssembly SIMD; otherwise the single-threaded build is
-  used (fallback implemented in `web/src/engine/runtime.ts`). Browsers without
-  relaxed SIMD are therefore expected to be slower.
+* Multi-threaded LiteRT.js needs cross-origin isolation **and** relaxed
+  WebAssembly SIMD; otherwise the single-threaded build is used.
+* Whether the claude.ai page frame allows WebAssembly compilation on phones
+  is unverified; step 3 of track A reports it (an engine-start failure names
+  the reason).
 * Page memory is measurable only in Chromium; iOS Safari exposes neither
-  memory nor battery, so those budgets read `not_measured` there.
+  memory nor battery.
 * MP4/H.264, HEVC and MOV decoding have not been tested in any browser here
   (the automated Chromium build has no H.264 decoder).
-* The bundled reference clip is a synthetic composition of public photos
-  (see `device_check/ATTRIBUTION.json` in the bundle), so step 3 verifies
-  correctness of the pipeline, not behavioral accuracy.
+* The reference clip is a semi-synthetic composition of public photos
+  (`device_check/ATTRIBUTION.json`), so the reference steps verify the
+  pipeline, not behavioral accuracy.

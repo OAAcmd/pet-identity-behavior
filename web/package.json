@@ -12,7 +12,8 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "build:devicetest": "tsc --noEmit && vite build -c vite.devicetest.config.ts"
   },
   "dependencies": {
     "@litertjs/core": "2.5.3",
