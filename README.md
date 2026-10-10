@@ -43,13 +43,13 @@ segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 | Topic | Document |
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
-| What each capability can and cannot do (data, model, evaluation, gaps) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E15) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| What each capability can and cannot do, per species (software, behavioural evidence, device, release) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
+| Methods and measured results (E1-E19) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
-| Data, models, licences | [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
-| Training and reproduction, GPU jobs | [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md) |
-| Validation still needed | [EVALUATION_PLAN_REAL_PAIRED.md](docs/EVALUATION_PLAN_REAL_PAIRED.md) |
+| Data, models, licences | [ASSET_TERMS.md](docs/ASSET_TERMS.md) (per asset, open questions, replacements), [DATA_SOURCES.md](docs/DATA_SOURCES.md) (94-source survey, network blockers), [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
+| Training jobs G1-G5 and reproduction | [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md), `training/g1/`, [G2 annotation spec](docs/training/G2_ANNOTATION_SPEC.md) |
+| Validation still needed; household collection package | [EVALUATION_PLAN_REAL_PAIRED.md](docs/EVALUATION_PLAN_REAL_PAIRED.md), [docs/household/](docs/household/README.md) |
 | Tests | [TEST_REPORT.md](docs/TEST_REPORT.md) |
 | API | [API_CONTRACT.md](docs/API_CONTRACT.md), [openapi.json](docs/openapi.json) |
 | Deploy and operate | [DEPLOYMENT.md](docs/DEPLOYMENT.md), [OPERATIONS_RUNBOOK.md](docs/OPERATIONS_RUNBOOK.md), [CONFIGURATION.md](docs/CONFIGURATION.md) |

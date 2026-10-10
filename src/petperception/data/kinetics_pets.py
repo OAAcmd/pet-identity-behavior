@@ -66,9 +66,11 @@ def fetch(data_root: Path, manifest_dir: Path) -> dict:
 
 
 TRAIN_PINS = "kinetics_pets_train_sample_sha256.csv"
+HOLDOUT_PINS = "kinetics_pets_train_holdout_sha256.csv"
 
 
-def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50) -> dict:
+def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50, skip: int = 0, subdir: str = "train_sample",
+                       pins_name: str = TRAIN_PINS) -> dict:
     """Tuning clips for E19: the first `per_class` clips of each class in the train tarballs.
 
     The tarballs are 0.8-1.6 GB each, so they are streamed and the transfer is
@@ -83,8 +85,8 @@ def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50)
 
     from ..utils import USER_AGENT
 
-    d = root(data_root) / "train_sample"
-    pin_path = manifest_dir / TRAIN_PINS
+    d = root(data_root) / subdir
+    pin_path = manifest_dir / pins_name
     pins = {r["file"]: r["sha256"] for r in csv.DictReader(open(pin_path, newline=""))} if pin_path.exists() else {}
     got: dict[str, str] = {}
     for cls, (i, _, _) in CLASSES.items():
@@ -94,9 +96,12 @@ def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50)
             out.mkdir(parents=True, exist_ok=True)
             req = urllib.request.Request(f"{BASE}/train/k700_train_{i:03d}.tar.gz", headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(req, timeout=600) as resp, tarfile.open(fileobj=io.BufferedReader(resp, 1 << 20), mode="r|gz") as tf:
-                n = 0
+                n = seen = 0
                 for m in tf:
                     if not (m.isfile() and m.name.startswith(f"{cls}/") and m.name.endswith(".mp4")):
+                        continue
+                    seen += 1
+                    if seen <= skip:  # clips already used elsewhere (tuning sample) are passed over
                         continue
                     tf.extract(m, d, filter="data")  # rejects absolute paths, '..' and links
                     n += 1
@@ -119,10 +124,10 @@ def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50)
     return {"clips": len(got), "youtube_ids_shared_with_validation": overlap}
 
 
-def train_sample(data_root: Path, per_class: int = 50) -> list[dict]:
+def train_sample(data_root: Path, per_class: int = 50, subdir: str = "train_sample") -> list[dict]:
     rows = []
     for cls, (_, species, contact) in CLASSES.items():
-        for p in sorted((root(data_root) / "train_sample" / cls).glob("*.mp4"))[:per_class]:
+        for p in sorted((root(data_root) / subdir / cls).glob("*.mp4"))[:per_class]:
             rows.append({"class": cls, "species": species, "person_contact_implied": contact, "path": str(p), "clip": p.stem})
     return rows
 

@@ -629,6 +629,43 @@ intervals; breed heterogeneity tested by permutation.
 * These are web photos chosen to show the breed, so the figures are an
   upper bound for home footage (see E18).
 
+### E17 - Temporal model for dog behaviour in video (job G3) - COMPLETED, not adopted
+
+The question: does modelling time beat pooling? Same MammalNet dog-breed
+segments, classes and video-level splits as E11 (659 development, 154
+test; research only).
+
+Per sampled frame, as the phone computes it:
+* the product detector's largest dog box;
+* the EfficientNet-Lite0 embedding of its crop and of the whole frame;
+* box position and size.
+
+Models (JAX, CPU):
+* temporal: a projection to 64, two dilated 1-D convolutions, then
+  attention and max pooling over time;
+* pooled ablation: the same network without the convolutions.
+
+Weight decay and epochs were selected by 5-fold cross-validation grouped
+by video. Then 3 seeds were trained, and the test split was scored once
+per seed.
+
+| Model | Test macro-F1, mean of 3 seeds (sd) | Per seed [95 % CI by video] |
+| --- | --- | --- |
+| Temporal conv + attention | 0.590 (0.036) | 0.636 [0.53, 0.72], 0.585, 0.548 |
+| Pooled ablation | 0.575 (0.030) | 0.570, 0.614, 0.540 |
+| E11 logistic regression on pooled features (reference) | 0.638 [0.537, 0.716] | deterministic |
+
+* Modelling time adds nothing measurable here. The temporal-vs-pooled
+  difference (0.015) is smaller than the spread between seeds (0.09).
+  Neither network beats E11's logistic regression, so E11 stays the
+  research reference and E17 is not exported.
+* The likely reasons: 659 development segments; frame features from a
+  frozen ImageNet backbone; classes that are mostly separable from
+  appearance (sleeping 0.80-0.88 F1) or confused regardless of time
+  (drinking and eliminating 0.34-0.51).
+* The data that would test temporal modelling properly is household video
+  with timestamped actions (`docs/household/`).
+
 ### E18 - Full engine on real pet video with sound (Kinetics-700) - COMPLETED
 
 The first real-video, real-audio evaluation of the whole engine, both
@@ -681,6 +718,69 @@ Findings:
   video, though not on the E4 photos. That is evidence that photo
   benchmarks under-state real-video differences, and a measured cost of
   the licence decision.
+
+### E19 - Video operating point chosen on real pet video - COMPLETED, single threshold not adopted
+
+The detector threshold (0.35) and the verifier thresholds came from photos.
+E19 chooses them on real video without training any weights:
+* tuning: 300 Kinetics-700 *train* clips, the first 50 of each pet-action
+  class, streamed from the train tarballs with per-clip SHA-256 pins;
+* evaluation: no YouTube video shared with the 294 E18 validation clips.
+
+Each clip is decoded once. Detections down to 0.15 are cached with their
+verifier scores. The engine's merge, tracker and track-level verifier rule
+are replayed per setting. Replay fidelity against the engine's own E18
+runs: 291 / 294 identical clips (phone detector) and 294 / 294 (MediaPipe).
+
+The grid and the selection rule were fixed before running: highest mean
+right-species rate, with any wrong-species track increasing by no more
+than 0.03 per species (`results/e19/metrics.json`).
+
+* **Keep the verifier.** On the tuning clips, every lowered verifier
+  threshold raised wrong-species tracks beyond the allowance. With the
+  verifier off, the phone detector puts a dog track in 30 % of cat clips,
+  against 7 %.
+* **Selected: detector threshold 0.25, for both detectors.** Evaluated
+  once against 0.35 (paired, exact McNemar):
+
+| Detector | Cats: right species (of 99) | Dogs: right species (of 195) | Wrong-species track, dog clips | Photo false positives (cat / dog negatives) |
+| --- | --- | --- | --- | --- |
+| Phone build (TF Hub) | 59 → **69** (p = 0.002) | 88 → 82 (p = 0.18) | 26 → 34 | unchanged (16/47, 9/111) |
+| MediaPipe | 56 → 57 (p = 1.0) | 104 → 107 (p = 0.61) | 18 → 16 | 14 → 15 of 47 / unchanged |
+
+* For the phone detector, the lower threshold helps cats clearly and
+  costs dogs. The tuning clips show the same direction (cats 0.61 → 0.66,
+  dogs 0.565 → 0.55).
+* A single threshold is therefore not adopted. A per-species threshold
+  (lower for cats) is what both the tuning and the evaluation data
+  suggest. Choosing it from the evaluation clips would reuse them, so it is
+  tested on fresh clips in E19b.
+
+**E19b - per-species thresholds on a fresh holdout - not adopted.**
+
+Setup:
+* grid: cat × dog thresholds; selected on the E19 tuning clips:
+  cat 0.20, dog 0.35;
+* evaluated once on 300 fresh clips: train clips 51-100 per class, no
+  YouTube video shared with tuning or validation;
+* adoption rule fixed before the run (`results/e19b/per_species.json`).
+
+| Phone detector, holdout | Current (0.35 / 0.35) | Selected (cat 0.20, dog 0.35) | Paired |
+| --- | --- | --- | --- |
+| Cats: right species (of 100) | 60 | 66 | p = 0.07 |
+| Dogs: right species (of 200) | 96 | 93 | p = 0.38 |
+| Wrong-species track in dog clips | 22 | 29 | |
+
+* Lowering only the cat threshold still costs dogs. The extra low-score
+  cat detections compete with dogs in dog clips, and the merged tracks
+  flip species.
+* The limit is the detector's cat-versus-dog separation on video, not its
+  operating point. Thresholds cannot fix it; G1 (a detector trained on
+  more varied pet images) and Q-M2 (restoring the MediaPipe detector,
+  better on dogs) can.
+* The adoption rule (no species loses; one gains at p < 0.05) is not met.
+  The operating point stays 0.35 with the photo-fitted verifier, which
+  both E19 and E19b confirm is worth keeping on video.
 
 ### On-device execution
 

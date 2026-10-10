@@ -30,7 +30,7 @@ in every area (reconciled 2026-10-10).
 | Ultralytics dog-pose (24 keypoints) | dog ears, tail, keypoints | E9 | research only | GitHub release |
 | MammalNet dog-breed videos | dog temporal behaviour | E11, E17 | no dataset licence (research) | annotations from S3; video streamed |
 | Oxford-IIIT Pet (37 breeds) | breed robustness, cats and dogs | E16 | CC BY-SA 4.0 annotations | fast.ai S3 mirror, pinned |
-| Kinetics-700-2020, 6 pet-action classes (294 clips with sound) | full engine on real pet video | E18 | annotations CC BY 4.0 (secondary); YouTube clips | CVDF S3 mirror, pinned |
+| Kinetics-700-2020, 6 pet-action classes (294 validation clips with sound; 600 train clips for tuning and holdout) | full engine on real pet video; video operating point | E18, E19, E19b | annotations CC BY 4.0 (secondary); YouTube clips | CVDF S3 mirror, pinned |
 
 ## Priorities and what is possible today
 

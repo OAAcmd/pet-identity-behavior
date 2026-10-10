@@ -40,7 +40,9 @@
     "real_video_pet_found_cat": "0.566 [0.47, 0.66] reference detector; 0.596 phone build",
     "real_video_pet_found_dog": "0.533 [0.46, 0.60] reference; 0.446 [0.38, 0.52] phone build (paired p = 0.0095)",
     "breed_found_rate": "cats 0.935, dogs 0.924 on breed photos; Sphynx 0.55, Newfoundland 0.71",
-    "cat_vocal_context_loco_macro_f1": "0.46 [0.38, 0.55] (not shipped)"
+    "cat_vocal_context_loco_macro_f1": "0.46 [0.38, 0.55] (not shipped)",
+    "dog_actions_video_macro_f1": "E11 0.638 [0.537, 0.716] (research); E17 temporal 0.590, not adopted",
+    "video_operating_point": "E19/E19b: no detector threshold or verifier scale improves both species on real video (600 additional clips); lower thresholds add cat-dog confusion; current operating point kept"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
@@ -73,7 +75,7 @@
  "training_jobs": {
   "G1": "data job and CPU toolchain smoke test done; GPU run pending",
   "G2": "annotation candidates and spec done; annotation pending",
-  "G3": "E17 on dog video (results/e17)",
+  "G3": "E17 on dog video: temporal model 0.590 vs pooled 0.575 vs E11 logistic regression 0.638 macro-F1; not adopted",
   "G4": "cat context done (not shipped); dog context and vocal type blocked",
   "G5": "not started"
  },

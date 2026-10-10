@@ -18,7 +18,7 @@ results are kept).
 | --- | --- | --- | --- |
 | G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); toolchain **smoke-tested** on CPU: train, evaluate, export float32 / float16 / int8 (`results/g1/smoke_test.json`) | a GPU for the full run (estimate 4-8 GPU hours) |
 | G2 | licensed cat and dog keypoints: ears, tail, body | candidate job **ran** (4,813 cat / 6,348 dog images, split by photographer); annotation spec written | human annotation (estimate 70-100 hours for 2,000 + 2,000) |
-| G3 | temporal behaviour from video | E17 on dog video **ran on CPU** (results in `results/e17/`) | household or licensed video for cats and for release |
+| G3 | temporal behaviour from video | E17 **ran on CPU**: temporal model 0.590 vs pooled 0.575 vs E11 0.638 macro-F1; not adopted | household or licensed video (cats; release) |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
 | G5 | distilled multi-task student for phones | not started | household video and G1 |
 
@@ -54,6 +54,10 @@ trained on COCO.
   dog clips, so the detector itself is the limit.
 * E18, paired over the same clips: the licence-stated detector loses 17
   dog clips out of 195 (p = 0.0095).
+* E19 / E19b: re-choosing the detector threshold and verifier scale on
+  real video (300 tuning clips, then 300 fresh clips) does not help both
+  species. Lower thresholds add cat-versus-dog confusion. The operating
+  point cannot fix the detector.
 * E4: small-animal recall 0.27.
 * E15: the furniture detector misses a third of the furniture under
   detected pets.
@@ -265,17 +269,28 @@ validation. 3 seeds. The test split is scored once per seed.
 convolutions → masked attention pooling + max pooling → 5 classes. JAX,
 CPU.
 
-**Result.** See `results/e17/metrics.json`; the summary is in
-ALGORITHM_REPORT E17. The temporal model is adopted only if the paired
-bootstrap of macro-F1 against E11 excludes zero.
+**Result (measured, `results/e17/metrics.json`).** Test macro-F1, mean of
+3 seeds:
+
+| Model | Macro-F1 (sd) |
+| --- | --- |
+| Temporal model | 0.590 (0.036) |
+| Pooled ablation | 0.575 (0.030) |
+| E11 logistic regression | 0.638 [0.537, 0.716] |
+
+The temporal model does not beat E11, so it is **not adopted** and nothing
+is exported. The acceptance rule was set before the run: adopt only if it
+beats E11. Seed variance (0.548-0.636) exceeds the temporal-vs-pooled gap.
+The test needs more, and more representative, video, not a bigger model.
 
 **Phone format.** Numeric parameters in `engine_assets.json`, evaluated
 in TypeScript over the track's per-frame features (about 0.1 M
 parameters; estimate under 1 ms per window).
 
-**Compute.** Feature extraction about 2 h on 4 CPU cores (measured,
-dominated by video streaming and the detector). Training under 1 h on CPU
-(measured).
+**Compute (measured).** About 50 min of wall time to stream 813 segments
+and extract features, and about 30 min to train (5 folds × 3 weight
+decays × 2 models, plus 6 final runs). That was on 4 CPU cores shared with
+other jobs: 87 CPU minutes in total.
 
 **Next.** The same model on household video, for both species, with the
 household split.

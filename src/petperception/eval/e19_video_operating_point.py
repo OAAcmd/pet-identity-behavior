@@ -93,15 +93,18 @@ def extract(s: Settings, eng, path: str) -> list[dict]:
     return frames
 
 
-def replay(s: Settings, taus: dict[str, float], frames: list[dict], thr: float, tau_scale: float) -> set[str]:
-    """Species with at least one reported track, using the engine's merge, tracker and verifier rule."""
+def replay(s: Settings, taus: dict[str, float], frames: list[dict], thr: float | dict[str, float], tau_scale: float) -> set[str]:
+    """Species with at least one reported track, using the engine's merge, tracker and verifier rule.
+
+    `thr` is one detector threshold, or one per species (E19b)."""
     from ..vision.detector import Detection
     from ..vision.tracking import make_tracker, merge_species
 
+    th = thr if isinstance(thr, dict) else {"cat": thr, "dog": thr}
     tracker = make_tracker(s.vision.tracker.method, s.vision.tracker.iou_threshold, s.vision.tracker.max_gap_s)
     for f in frames:
         raw = [(Detection(r["label"], r["score"], np.array(r["box"]), None if r["cs"] is None else np.array(r["cs"])), r["v"])
-               for r in f["dets"] if r["score"] >= thr]
+               for r in f["dets"] if r["score"] >= th[r["label"]]]
         vmap = {id(d): v for d, v in raw}
         adets = merge_species([d for d, _ in raw], f["t"], f["i"])
         for a in sorted(adets, key=lambda x: -x.score)[: s.vision.verifier.max_checks_per_frame]:
@@ -242,3 +245,71 @@ def run(settings: Settings, out_dir: Path) -> dict:
     summary["created_at"] = utc_now().isoformat(timespec="seconds")
     write_json(out_dir / "metrics.json", summary)
     return summary
+
+
+E19B_DOC = """E19b: per-species detector thresholds, phone-build detector, fresh holdout.
+
+E19 found that a lower detector threshold helps cats and costs dogs with
+the phone build's detector, on both its tuning and its evaluation clips.
+Choosing per-species thresholds from the E19 evaluation clips would reuse
+them, so:
+* grid: cat threshold x dog threshold in {0.20, 0.25, 0.30, 0.35}^2,
+  verifier unchanged (E19 showed lowering it adds species confusion);
+* selection on the E19 tuning clips (train clips 1-50 per class) with
+  E19's rule: highest mean right-species rate, any wrong-species track
+  rate at most 0.03 above the current setting for both species;
+* evaluation once on a fresh holdout: train clips 51-100 per class
+  (300 clips; no clip shared with tuning; validation untouched).
+Adoption rule, fixed before the run: adopt if on the holdout neither
+species loses right-species clips (selected >= current), at least one
+species gains with paired exact McNemar p < 0.05, and neither species'
+wrong-species track rate rises by more than 0.03.
+"""
+
+
+def run_per_species(settings: Settings, out_dir: Path) -> dict:
+    from ..data import kinetics_pets as KP
+
+    det = DETECTORS[0]
+    data = settings.paths.resolve("data_root")
+    s, eng = _engine(det)
+    taus = {c: cv.tau for c, cv in eng.verifier.per_class.items()}
+    cache = data.parent / "cache" / "e19" / det
+    tune_rows, hold_rows = KP.train_sample(data), KP.train_sample(data, subdir="train_holdout")
+    tune = _cached(s, eng, tune_rows, cache / "tune")
+    hold = _cached(s, eng, hold_rows, cache / "holdout")
+    tune_ok = [r for r in tune_rows if isinstance(tune[r["clip"]], list)]
+    hold_ok = [r for r in hold_rows if isinstance(hold[r["clip"]], list)]
+    grid = {}
+    for tc in THRESHOLDS:
+        for td in THRESHOLDS:
+            sets = {r["clip"]: replay(s, taus, tune[r["clip"]], {"cat": tc, "dog": td}, 1.0) for r in tune_ok}
+            grid[(tc, td)] = _metrics(tune_ok, sets)
+    cur_key = (CURRENT[0], CURRENT[0])
+    cur = grid[cur_key]
+    allowed = [k for k, m in grid.items() if all(m[sp]["wrong_species_track"] <= cur[sp]["wrong_species_track"] + MAX_WRONG_INCREASE for sp in ("cat", "dog"))]
+    sel = max(allowed, key=lambda k: (np.mean([grid[k][sp]["right_species"] for sp in ("cat", "dog")]), k[1], k[0]))
+    cur_sets = {r["clip"]: replay(s, taus, hold[r["clip"]], {"cat": cur_key[0], "dog": cur_key[1]}, 1.0) for r in hold_ok}
+    sel_sets = {r["clip"]: replay(s, taus, hold[r["clip"]], {"cat": sel[0], "dog": sel[1]}, 1.0) for r in hold_ok}
+    mc, ms = _metrics(hold_ok, cur_sets), _metrics(hold_ok, sel_sets)
+    paired = {sp: _mcnemar(hold_ok, cur_sets, sel_sets, sp) for sp in ("cat", "dog")}
+    adopt = (all(ms[sp]["k_right"] >= mc[sp]["k_right"] for sp in ("cat", "dog"))
+             and any(paired[sp]["exact_p"] < 0.05 and ms[sp]["k_right"] > mc[sp]["k_right"] for sp in ("cat", "dog"))
+             and all(ms[sp]["wrong_species_track"] <= mc[sp]["wrong_species_track"] + MAX_WRONG_INCREASE for sp in ("cat", "dog")))
+    out = {"experiment": "E19b", "detector": det, "protocol": E19B_DOC.strip().splitlines(), "verifier_taus": taus,
+           "clips": {"tuning": len(tune_ok), "holdout": len(hold_ok)},
+           "tuning_grid": {f"cat={k[0]},dog={k[1]}": v for k, v in grid.items()},
+           "allowed": [f"cat={k[0]},dog={k[1]}" for k in allowed], "selected": {"cat": sel[0], "dog": sel[1]},
+           "holdout": {"current": mc, "selected": ms, "paired": paired}, "adopted": bool(adopt),
+           "created_at": utc_now().isoformat(timespec="seconds")}
+    if sel != cur_key:
+        img_dir = data / "openimages" / "images"
+        guard = {}
+        for name, k in (("current", cur_key), ("selected", sel)):
+            g = {}
+            for sp, th in (("cat", k[0]), ("dog", k[1])):
+                g[sp] = photo_guard(s, eng, taus, (th, 1.0), settings.paths.resolve("manifests_root"), img_dir)[sp]
+            guard[name] = g
+        out["photo_guard"] = guard
+    write_json(out_dir / "per_species.json", out)
+    return out
