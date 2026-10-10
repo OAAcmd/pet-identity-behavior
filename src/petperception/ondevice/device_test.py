@@ -16,6 +16,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import re
 import shutil
 from pathlib import Path
 
@@ -32,6 +33,28 @@ CONTENT_TYPES = {".json": "application/json", ".js": "text/javascript", ".wasm":
 
 def content_type(path: str) -> str:
     return CONTENT_TYPES.get(Path(path).suffix.lower(), "application/octet-stream")
+
+
+def credits(bundle_dir: Path, manifest: dict) -> list[dict]:
+    """Attribution shown on the page: models (manifests/resources.json), runtime, reference clip images."""
+    from ..registry import resource
+
+    out = []
+    for rid in dict.fromkeys(f["resource_id"] for f in manifest["files"] if f["kind"] == "model" and f["resource_id"]):
+        r = resource(rid)
+        weights = r.get("terms", {}).get("weights", "")
+        short = re.split(r":|\. ", weights, maxsplit=1)[0]
+        out.append({"item": r["name"], "credit": r.get("attribution", ""), "terms": f"weights licence: {short}"})
+    out += [{"item": "LiteRT.js runtime (@litertjs/core 2.5.3)", "credit": "Google", "terms": "Apache-2.0"},
+            {"item": "Preact 10.29.8", "credit": "Jason Miller and contributors", "terms": "MIT"}]
+    att = bundle_dir / "device_check" / "ATTRIBUTION.json"
+    if att.exists():
+        a = json.loads(att.read_text())
+        for role in ("animal", "background"):
+            if a.get(role):
+                out.append({"item": f"Reference clip {role} photo (Open Images {a[role]['image_id']})", "credit": a[role].get("author") or "",
+                            "terms": f"{a[role].get('license')} - {a[role].get('source')}"})
+    return out
 
 
 def export_site(bundle_dir: Path, web_dir: Path, out: Path) -> dict:
@@ -65,7 +88,8 @@ def export_site(bundle_dir: Path, web_dir: Path, out: Path) -> dict:
             (out / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, out / rel)
             published[rel] = content_type(rel)
-    site = {"schema": SCHEMA, "harness_version": HARNESS_VERSION, "created_at": utc_now().isoformat(timespec="seconds"), "bundle": manifest, "parts": parts}
+    site = {"schema": SCHEMA, "harness_version": HARNESS_VERSION, "created_at": utc_now().isoformat(timespec="seconds"), "bundle": manifest, "parts": parts,
+            "credits": credits(bundle_dir, manifest)}
     (out / "bundle" / "site_manifest.json").write_text(json.dumps(site, indent=1))
     published["bundle/site_manifest.json"] = "application/json"
     (out / "litert").mkdir()

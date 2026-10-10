@@ -14,8 +14,9 @@ phone browser (PWA) ──HTTPS──► Caddy (TLS, HSTS) ──► app contain
                                                       └─ /ondevice/  model bundle (read-only volume)
 ```
 
-The core analysis runs **on the phone** with the bundle downloaded from
-`/ondevice/`; the server does accounts, pets and places, bundle distribution,
+The core analysis is built to run in the phone's browser with the bundle
+downloaded from `/ondevice/` (verified in desktop Chromium only; physical
+phones pending, [DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)); the server does accounts, pets and places, bundle distribution,
 device-check reports and (only when a user enables it) server analysis.
 See [ON_DEVICE.md](ON_DEVICE.md).
 
@@ -83,7 +84,7 @@ bundle export already leave such assets out and the result says so.
 file (`configs/release_approvals.example.yaml`) for every asset marked
 `requires_legal_review`, and the detector must be
 `efficientdet_lite0_tfhub_rawdecode_v1` (Apache-2.0 in its embedded
-metadata; runs on phones with its post-processing decoded outside the graph,
+metadata; runs in the browser engine (desktop Chromium) with its post-processing decoded outside the graph,
 evaluated in E14): set `PETPERCEPTION_DETECTOR` and add `--detector
 efficientdet_lite0_tfhub_rawdecode_v1` to the bundle export. Without the
 approvals the commercial bundle contains no models and says why.

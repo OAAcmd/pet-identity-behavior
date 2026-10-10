@@ -290,6 +290,15 @@ function App() {
         {message && <p class="result" role="status">{message}{sent ? ` (id ${sent})` : ""}</p>}
         <details><summary>Show report</summary><pre class="report">{text()}</pre></details>
       </section>
+
+      {site.credits && site.credits.length > 0 && (
+        <section class="card" aria-labelledby="credits">
+          <h2 id="credits">Credits</h2>
+          <ul class="credits">
+            {site.credits.map((c) => <li key={c.item}><strong>{c.item}</strong>{c.credit ? ` - ${c.credit}` : ""}<br /><span class="hint">{c.terms}</span></li>)}
+          </ul>
+        </section>
+      )}
     </main>
   );
 }

@@ -502,7 +502,7 @@ validation + test once.
   **not evaluated**. Still images only: says nothing about the animal's
   response or about interaction over time.
 
-### E14 - Licence-confirmed detector on the phone - COMPLETED
+### E14 - Licence-confirmed detector in the browser engine - COMPLETED
 
 The TF Hub EfficientDet-Lite0 build states Apache-2.0 in its embedded
 metadata but crashes LiteRT.js 2.5.3 inside its `TFLite_Detection_PostProcess`
@@ -516,7 +516,7 @@ refitted):
 | Final E4 split, with crop verifier | Cat recall | Cat specificity | Dog recall | Dog specificity | AP50 cat / dog |
 | --- | --- | --- | --- | --- | --- |
 | TF Hub, in-graph post-processing (E7) | 0.873 | 0.851 [0.75, 0.94] | 0.815 | 0.910 [0.85, 0.96] | 0.825 / 0.709 |
-| TF Hub, raw decoding (E14, runs on phones) | 0.885 | 0.660 [0.52, 0.79] | 0.866 | 0.919 [0.86, 0.97] | 0.833 / 0.748 |
+| TF Hub, raw decoding (E14, runs in browser LiteRT.js) | 0.885 | 0.660 [0.52, 0.79] | 0.866 | 0.919 [0.86, 0.97] | 0.833 / 0.748 |
 | MediaPipe float32 (default) | 0.906 | 0.702 [0.57, 0.83] | 0.872 | 0.865 [0.80, 0.92] | 0.847 / 0.758 |
 
 Engine parity with this detector in the bundle (38 cases, after E15):

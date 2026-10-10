@@ -1,0 +1,164 @@
+{
+  "experiment": "E1-CC",
+  "title": "Audio-event thresholds refitted on CC0 / CC BY ESC-50 clips",
+  "protocol": [
+    "E1-CC: audio-event thresholds refitted on CC0 / CC BY clips only.",
+    "",
+    "Why: the deployed thresholds (artifacts/audio_event_thresholds.json) are",
+    "fitted on all 2,000 ESC-50 clips, a CC BY-NC 3.0 collection, so the",
+    "commercial profile cannot use them. 1,770 of the clips carry a Freesound",
+    "licence of CC0 or CC BY on their own (manifests/esc50_files.csv). This job",
+    "refits the two thresholds on that subset and measures what changes.",
+    "",
+    "Protocol (same as E1, same cached YAMNet scores):",
+    "* deployment candidate: F1-optimal thresholds on the CC0 + CC BY clips of",
+    "  all 5 folds;",
+    "* generalization: for each official fold, thresholds from the CC0 + CC BY",
+    "  clips of the 4 other folds versus thresholds from all clips of those",
+    "  folds (the current method), both scored on every clip of the held-out",
+    "  fold and on its CC0 + CC BY clips only; precision / recall / F1 pooled",
+    "  over the 5 held-out folds.",
+    "",
+    "What this does not settle: the class labels used for fitting are ESC-50's",
+    "own (CC BY-NC 3.0 collection). docs/ASSET_TERMS.md (A1) states that question",
+    "and the label-independent route (re-labelling the subset's cat/dog clips)."
+  ],
+  "clips": {
+    "all": 2000,
+    "cc0_or_cc_by": 1770,
+    "licence_counts": {
+      "CC-BY": 901,
+      "CC-BY-NC": 170,
+      "CC-Sampling+": 60,
+      "CC0": 869
+    },
+    "positives_all": {
+      "cat_vocalization": 40,
+      "dog_vocalization": 40
+    },
+    "positives_cc0_or_cc_by": {
+      "cat_vocalization": 29,
+      "dog_vocalization": 40
+    }
+  },
+  "groups": {
+    "cat_vocalization": {
+      "threshold_all_clips": 0.73828125,
+      "in_sample_f1_all_clips": 0.8157894736842105,
+      "threshold_cc0_or_cc_by": 0.5,
+      "in_sample_f1_cc0_or_cc_by": 0.7878787878787878,
+      "nested": {
+        "all_clip_thresholds": {
+          "per_fold_threshold": [
+            0.5,
+            0.5,
+            0.73828125,
+            0.73828125,
+            0.5859375
+          ],
+          "held_out_all": {
+            "tp": 32,
+            "fp": 9,
+            "fn": 8,
+            "precision": 0.7804878048780488,
+            "recall": 0.8,
+            "f1": 0.7901234567901234
+          },
+          "held_out_cc": {
+            "tp": 23,
+            "fp": 9,
+            "fn": 6,
+            "precision": 0.71875,
+            "recall": 0.7931034482758621,
+            "f1": 0.7540983606557377
+          }
+        },
+        "cc_thresholds": {
+          "per_fold_threshold": [
+            0.5,
+            0.5,
+            0.8515625,
+            0.73828125,
+            0.80078125
+          ],
+          "held_out_all": {
+            "tp": 29,
+            "fp": 7,
+            "fn": 11,
+            "precision": 0.8055555555555556,
+            "recall": 0.725,
+            "f1": 0.7631578947368421
+          },
+          "held_out_cc": {
+            "tp": 20,
+            "fp": 7,
+            "fn": 9,
+            "precision": 0.7407407407407407,
+            "recall": 0.6896551724137931,
+            "f1": 0.7142857142857143
+          }
+        }
+      }
+    },
+    "dog_vocalization": {
+      "threshold_all_clips": 0.80078125,
+      "in_sample_f1_all_clips": 0.9382716049382716,
+      "threshold_cc0_or_cc_by": 0.80078125,
+      "in_sample_f1_cc0_or_cc_by": 0.9382716049382716,
+      "nested": {
+        "all_clip_thresholds": {
+          "per_fold_threshold": [
+            0.80078125,
+            0.80078125,
+            0.8515625,
+            0.80078125,
+            0.73828125
+          ],
+          "held_out_all": {
+            "tp": 37,
+            "fp": 5,
+            "fn": 3,
+            "precision": 0.8809523809523809,
+            "recall": 0.925,
+            "f1": 0.9024390243902439
+          },
+          "held_out_cc": {
+            "tp": 37,
+            "fp": 5,
+            "fn": 3,
+            "precision": 0.8809523809523809,
+            "recall": 0.925,
+            "f1": 0.9024390243902439
+          }
+        },
+        "cc_thresholds": {
+          "per_fold_threshold": [
+            0.80078125,
+            0.80078125,
+            0.8515625,
+            0.80078125,
+            0.73828125
+          ],
+          "held_out_all": {
+            "tp": 37,
+            "fp": 5,
+            "fn": 3,
+            "precision": 0.8809523809523809,
+            "recall": 0.925,
+            "f1": 0.9024390243902439
+          },
+          "held_out_cc": {
+            "tp": 37,
+            "fp": 5,
+            "fn": 3,
+            "precision": 0.8809523809523809,
+            "recall": 0.925,
+            "f1": 0.9024390243902439
+          }
+        }
+      }
+    }
+  },
+  "artifact": "artifacts/audio_event_thresholds_cc.json",
+  "created_at": "2026-10-10T09:58:40+00:00"
+}

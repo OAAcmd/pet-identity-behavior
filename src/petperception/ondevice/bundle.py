@@ -329,8 +329,9 @@ def add_device_check(settings: Settings, out: Path) -> dict:
     bg_meta = next((r for r in csv.DictReader(open(man / "e8_backgrounds.csv", newline="", encoding="utf-8")) if r["image_id"] == chosen[1]), {})
     (dc / "ATTRIBUTION.json").write_text(json.dumps({"clip": "semi-synthetic: real Open Images cat crop moved along a scripted path on a real Open Images background",
                                                      "animal": attribution(chosen[0]),
-                                                     "background": {"image_id": chosen[1], "license": "CC BY 2.0 (Open Images; see the Open Images metadata for the author)",
-                                                                    "source": bg_meta.get("download_url")}}, indent=1))
+                                                     "background": {"image_id": chosen[1], "author": bg_meta.get("author"),
+                                                                    "license": bg_meta.get("license") or "CC BY 2.0 (Open Images)",
+                                                                    "source": bg_meta.get("original_landing_url") or bg_meta.get("download_url")}}, indent=1))
     # Re-register files in the manifest (content hash changes the bundle version).
     for rel, kind in (("device_check/reference_outputs.json", "device_check"), ("device_check/expected.json", "device_check"),
                       ("device_check/ATTRIBUTION.json", "device_check"), ("device_check/clip.webm", "device_check"), ("device_check/clip.mp4", "device_check")):

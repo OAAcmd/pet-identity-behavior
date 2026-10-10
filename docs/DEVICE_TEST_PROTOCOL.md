@@ -36,9 +36,24 @@ Track A does not test: service-worker caching of the app shell, reopening the
 app offline from the home screen, the live camera and microphone page,
 IndexedDB history, opt-in result backup, update recovery, and the
 multi-threaded runtime (the page is not cross-origin isolated, so LiteRT.js
-uses its single-threaded build; desktop measurement: detector 258 ms per frame
-single-threaded, so latency from track A is a pessimistic bound for an
-isolated install).
+uses its single-threaded build, so latency from track A is a pessimistic
+bound for an isolated install).
+
+**What version 4 of the page tests (2026-10-10).** Bundle `2dd9e6b541aeffde`
+(profile `personal_noncommercial`, 26.6 MB of model data):
+
+* YAMNet;
+* the TF Hub EfficientDet-Lite0 detector with raw-output decoding;
+* EfficientNet-Lite0 features with the verifier, posture, interaction and
+  object-relation parameters.
+
+Every component is cleared for that profile (`docs/ASSET_TERMS.md`).
+Versions 1-3 used the MediaPipe detector, whose weights state no licence.
+
+Desktop Chromium run of version 4 (single-threaded WebAssembly; a desktop
+figure, not a phone figure): download 26.6 MB, verified in 1.4 s; engine
+start 750 ms; detector 74 ms per frame; a 11.2 s reference clip analysed in
+5.6 s (median of 3); reload from saved models 562 ms.
 
 ## Track A: phone test (available now)
 
@@ -50,7 +65,7 @@ invited by email as **Editor** (when the page is not also shared by a public
 link). Anyone else can run every step and use **Copy report** or **Save
 report** and send the JSON by any channel.
 
-**Before you start.** Charge above 50 %, Wi-Fi on, about 70 MB of mobile
+**Before you start.** Charge above 50 %, Wi-Fi on, about 60 MB of
 storage free. Open the link in **Safari (iPhone)** or **Chrome (Android)**,
 not in an app's built-in browser (the page warns when it detects one). If
 the claude.ai app opens instead, use "Open in browser".
@@ -59,8 +74,8 @@ the claude.ai app opens instead, use "Open in browser".
 
 1. Fill in *Phone model* (for example "Pixel 7a"), check *Operating system*
    and *Browser* (pre-filled from the browser), choose the tier.
-2. *Download* (about 69 MB on the wire before compression, 37 MB of model
-   data). Every file is verified.
+2. *Download* (about 50 MB on the wire before compression, 26.6 MB of
+   model data). Every file is verified.
 3. *Start* the engine, then *Check* the models (outputs compared with the
    reference computer on fixed inputs).
 4. *Analyse* the reference clip three times (each must match the expected
@@ -84,8 +99,10 @@ budgets are reported per tier (a budget failure does not hide functional
 success). A failure is recorded with its message and stack in the report.
 
 **Collection.** Reports are stored in the page's database under
-`reports/<tester id>/runs/<run id>` (each tester writes only their own;
-only the owner reads all). The project copies each report into
+`reports/<tester id>/runs/<run id>`. Each tester writes only their own;
+only the owner reads all. An index document `reports/<tester id>` lists the
+tester's run ids and the latest phone, browser and pass state, so a listing
+of `reports` finds every tester (added in version 4). The project copies each report into
 `results/ondevice/devices/<date>_<phone model>/report.json` and updates
 [DEVICE_TIERS_AND_BUDGETS.md](DEVICE_TIERS_AND_BUDGETS.md). The report
 contains device, browser and timing data and analysis summaries; it never
@@ -94,9 +111,10 @@ contains video, audio or images.
 **Rebuild and republish** (after a model or engine change):
 
 ```bash
-uv run petperception export-ondevice --release-profile personal_noncommercial
+uv run petperception export-ondevice --release-profile personal_noncommercial \
+    --detector efficientdet_lite0_tfhub_rawdecode_v1 --out var/device_test/bundle
 cd web && npm run build:devicetest && cd ..
-uv run petperception export-device-test        # writes var/device_test/site (not committed: contains model weights)
+uv run petperception export-device-test --bundle var/device_test/bundle   # writes var/device_test/site (not committed: contains model weights)
 cd web && npx playwright test -c playwright.devicetest.config.ts   # desktop check of every step
 ```
 
@@ -117,7 +135,8 @@ require-corp` headers for the multi-threaded runtime). Either of:
 
 1. **The existing compose deployment** ([DEPLOYMENT.md](DEPLOYMENT.md)) on
    any Linux host with Docker: 2 vCPU, 4 GB RAM, 20 GB disk (estimate;
-   measured here: server models 123 MB, on-device bundle 37 MB), a DNS name
+   measured here: server models 123 MB, on-device bundle 27.9 MB with the
+   licence-stated detector), a DNS name
    pointing to it and ports 80/443 open for automatic TLS (Caddy or any
    ACME-capable proxy). Gives the full product including accounts, result
    backup and opt-in server analysis.

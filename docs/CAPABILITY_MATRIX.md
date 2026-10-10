@@ -1,137 +1,113 @@
-# Capability → dataset → model → evaluation matrix
+# Capability and evidence matrix
 
-Status date: 2026-10-09. This matrix lists every behavioral capability the
-product is meant to have, for cats and dogs, and for each one: the labels it
-needs, the real data we have (or lack), the model that implements it, the
-evaluation that exists, whether it runs on the phone, and what is missing.
+Status date: 2026-10-10. Every required capability is listed for cats and
+for dogs separately. Each is assessed on four independent dimensions;
+progress on one never counts for another.
 
-Rules applied throughout:
+| Dimension | Question | Evidence that counts |
+| --- | --- | --- |
+| **Software** | Is it implemented, and does the implementation do what it specifies? | unit and end-to-end tests; parity between the Python reference engine and the phone (TypeScript + LiteRT.js) engine |
+| **Behavioural validity** | Does it detect the behaviour in real recordings of real animals? | held-out real data with labels; numbers with their split and interval. Semi-synthetic clips (E8), synthetic pairings (E5) and software scenario tests are **not** evidence of behavioural accuracy. |
+| **Device readiness** | Does it run on phones within budget? | measurements on physical phones |
+| **Release readiness** | May it ship, and under which profile? | per-asset terms (`docs/ASSET_TERMS.md`) |
 
-* Only real, licence-recorded data is used for training and evaluation
-  (register: [DATA_AND_MODEL_REGISTER.md](DATA_AND_MODEL_REGISTER.md),
-  machine-readable: `manifests/resources.json`). No metadata is invented:
-  where a source has no breed, identity or household field, no split or
-  breakdown by that field is claimed.
-* Splits follow the strongest grouping the source metadata supports
-  (identity > household > video/source > image). Synthetic and semi-synthetic
-  media (E5, E8) are integration and behavior checks, **not** evidence of
-  real-world accuracy.
-* Every number is tied to its dataset and split. Agreement with weak labels is
-  reported as agreement, not accuracy.
-* "Phone" means the TypeScript engine in the PWA running LiteRT.js models
-  locally ([ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md)). So far it has been
-  exercised only in desktop headless Chromium; **no physical phone has run it**
-  ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)).
+**Device status, the same for every capability marked "phone".** The browser
+inference implementation has passed desktop Chromium tests: engine parity
+on 38 cases, and the phone test page run end to end in headless Chromium.
+Physical Android, iPhone and Safari validation remains pending. The phone
+test build is published and collects reports automatically
+(`docs/DEVICE_TEST_PROTOCOL.md`); no report has arrived yet. No latency,
+memory or battery figure in this repository comes from a phone.
 
-Legend for "Status": **validated (public data)** = trained or selected and
-tested on held-out real public data, not household video; **rule-based** =
-operational definition with a-priori thresholds; **weak** = trained and
-scored against weak (automatically derived) labels; **research only** = data
-terms forbid the product release profiles; **missing** = no usable labelled
-data available to this project; **blocked** = data identified but the host is
-unreachable from this environment.
+**Household validity, the same for every capability.** None has been
+validated on household recordings. The collection and annotation package
+is in `docs/household/`. Public data evaluates what it can (the tables
+below). The list of what only household recordings can establish is in
+§3.
 
-## 1. Matrix
+Abbreviations:
+* Python: the reference engine.
+* Phone: the TypeScript engine with LiteRT.js models.
+* PNC: release profile `personal_noncommercial`.
+* COM: release profile `commercial`.
+* "research only": the data terms exclude PNC and COM.
 
-| # | Capability | Species | Labels needed | Data we have (licence) | Model | Evaluation (split, result) | Phone | Status | Missing labels / coverage |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | Animal presence and location | cat, dog | boxes, verified negatives | Open Images V7 validation boxes + verified image-level negatives (CC BY 4.0 annotations, CC BY 2.0 images) | EfficientDet-Lite0 (COCO, pretrained) | E4: AP50 cat 0.92 [0.90, 0.95], dog 0.84 [0.79, 0.89]; box recall 0.88 / 0.82 at the 0.35 operating point | yes | validated (public data) | Household camera frames (wide angle, low light, IR night mode, motion blur, partial views from floor-level cameras). Small animals (1-10 % of frame) have recall 0.27 (n = 11). Licence-confirmed alternative for commercial releases: E14. |
-| 2 | False-positive rejection | cat, dog | detections labelled TP/FP; verified negative images | Open Images V7 test split (tuning) and the E4 validation subset (final), disjoint | crop verifier: EfficientNet-Lite0 ImageNet-group features + per-class logistic regression (E7) | E7 final, Lite0: image specificity on verified negatives cat 0.62 → 0.70 [0.57, 0.83], dog 0.56 → 0.87 [0.80, 0.92]; image recall cat 0.93 → 0.91, dog 0.89 → 0.87 (98 % TP-retention target set on the tuning split) | yes | validated (public data) | Household negatives (pet beds, plush toys, coats, pet-shaped decor) are the real failure population; cat specificity CI is wide (47 verified negative images). |
-| 3 | Identity across frames (tracking) within a clip | cat, dog | per-frame identities in multi-animal video | none real; E8 semi-synthetic sequences (real animal pixels from Open Images, scripted motion, real indoor backgrounds) | Kalman (SORT-style) tracker, rule-based | E8 test: IDF1 0.859 (Kalman) vs 0.784 (IoU baseline) | yes | rule-based, semi-synthetic only | Real multi-pet household video with identity labels. Cross-clip re-identification of a specific pet is **not implemented** (no labelled per-animal identity data). |
-| 4 | Facial cues (eye narrowing, mouth, whiskers, facial action units) | cat, dog | facial landmarks or action units | **none** (dog-pose has eye keypoints in its schema but 0 % are annotated) | - | - | no | **missing** | Cat facial landmarks / Feline Grimace Scale-style units; DogFACS-style units. Any such dataset must have a licence permitting the release profile. |
-| 5 | Ear position | dog | ear base/tip keypoints | Ultralytics dog-pose (Stanford Dogs images; Research-Only) | trained head on frozen EfficientNet-Lite0 features (E9) | E9 val (1,703 instances, CIs resample breeds): ear-tip elevation sign agreement with annotation 0.93, Spearman 0.84; ear keypoint PCK@0.1 per breed: median 0.89, min 0.66 | **no** (research only) | research only | Licensed dog keypoint data for production; ear-carriage morphology (pricked / folded / drop) is not in the metadata, so its effect is unmeasured. |
-| 5c | Ear position | cat | ear keypoints | **none** | - | - | no | **missing** | Any cat keypoint dataset with a usable licence. |
-| 6 | Tail position | dog | tail start/end keypoints | dog-pose (Research-Only) | E9 head | E9 val: tail-elevation sign agreement 0.89, Spearman 0.87; tail keypoints per-breed PCK@0.1 median 0.79, min 0.0 (breeds with docked or curled tails) | **no** (research only) | research only | Licensed data; tail-type morphology labels; docked tails. |
-| 6t | Tail wagging (temporal) | dog | timestamped wag intervals | **none** | keypoint-based lateral-oscillation feature (`tail_lateral_oscillation`) | none | no | **missing** (feature exists, unvalidated) | Video with wag labels. |
-| 6c | Tail position / movement | cat | tail keypoints | **none** | - | - | no | **missing** | Cat keypoint data. |
-| 7 | Static posture (lying / sitting / standing) | cat, dog | per-animal posture label | Open Images V7 train images + Localized Narratives captions (CC BY 4.0) → caption-derived **weak** labels | logistic regression on EfficientNet-Lite0 crop embedding + box shape (E10) | E10 final (OI validation split, 229 animals): macro-F1 0.648 [0.584, 0.704] vs weak labels (cat 0.75, n = 41; dog 0.61, n = 188); box-shape-only baseline 0.45. Gated output (score ≥ 0.84): 38 % coverage, 85 % agreement | yes | weak | Human-verified posture labels (caption noise is unmeasured); "standing" has only 3 cat examples in validation; no breed metadata in Open Images. On-device: identical labels whenever both engines report one; 18 % of frames flip across the report gate between engines (see §3). |
-| 8 | Body keypoints (limbs) | dog | 20 keypoints | dog-pose (Research-Only) | E9 head | E9 val PCK@0.1 0.853 [0.843, 0.863]; end-to-end with the product detector 0.844; per-breed PCK@0.1 0.73-0.94, breed heterogeneity significant (permutation p = 0.0005, `results/e9/breed_breakdown.json`) | **no** (research only) | research only | Licensed data; puppies; household frames. |
-| 8c | Body keypoints | cat | keypoints | **none** | - | - | no | **missing** | - |
-| 9 | Locomotion and activity over time (still, moving, active bout, back-and-forth, entered/left view) | cat, dog | timestamped activity intervals in real video | none real; E8 semi-synthetic | rule-based segments on tracks | E8 test: moving 16/18, stationary 25/30, active bout 6/6, pacing 6/6 segments recovered | yes | rule-based, semi-synthetic only | Real household video with timestamped activity labels. |
-| 10 | Zone behavior (approach / enter / dwell / leave owner-drawn places) | cat, dog | owner zones + intervals | E8 semi-synthetic | rule-based | E8: zone segments 6/6 | yes | rule-based, semi-synthetic only | Real recordings with owner-drawn zones and labelled visits. |
-| 11 | Actions from video (sleep, eat, drink, fight, eliminate) | dog | segment-level action labels | MammalNet dog-breed segments (YouTube videos, no dataset licence; research only) | logistic regression on detector-crop + frame embeddings + box motion (E11) | E11 on MammalNet's own test split (154 segments): macro-F1 0.638 [0.537, 0.716] vs majority 0.113, motion-only 0.369; sleeps 0.86, fights 0.77, eats 0.58, drinks 0.53, eliminates 0.46; breed accuracy 0.50-0.75 (5-49 segments per breed) | no (research only; not wired in) | research only | Licensed household video; play, greeting, scratching, chewing, digging, door-waiting. Eat / drink / eliminate are mostly confused with each other. |
-| 11c | Actions from video | cat | segment-level labels | **none** (MammalNet has no domestic cats) | - | - | no | **missing** | Cat video with action labels (eating, grooming, kneading, litter use, scratching, play, hunting). |
-| 12 | Vocalization present (cat / dog / other) | cat, dog | clip labels | ESC-50 (CC BY-NC 3.0 collection, per-clip Freesound licences) | YAMNet (AudioSet, pretrained) + thresholds selected on ESC-50 dev folds | E1 5-fold CV: macro-F1 0.895 [0.846, 0.935] (tags) / 0.956 [0.920, 0.982] (embedding + LR, not deployed) | yes | validated (public data) | Household audio (room reverb, TV, distance); ESC-50 clips are clean, foreground sounds. Commercial thresholds need non-NC data. |
-| 13 | Vocalization type (meow, purr, hiss, growl, bark, howl, whimper, yip) | cat, dog | type-labelled pet audio | none audited (ESC-50 only has "cat" and "dog") | YAMNet AudioSet subtype scores | **not evaluated** per type | yes (scores computed) | pretrained, unevaluated | Type-labelled pet vocalization corpus; purr detection in particular. |
-| 14 | Vocal context (e.g. meow while waiting for food / brushing / isolation) | cat | context labels | CatMeows (Zenodo) | planned E2 | - | no | **blocked** (zenodo.org) | Dataset context ≠ household intent; even with access it would be dataset-context classification. |
-| 14d | Vocal context / bark type | dog | context labels | Barkopedia (Hugging Face) | planned E3 | - | no | **blocked** (huggingface.co), terms unaudited | - |
-| 15 | Interaction with a person (holds / interacts with) | cat, dog | person-pet pair labels with reliable negatives | Open Images V7 visual relationships (exhaustive for annotated pairs; CC BY 4.0): 3,089 images, 11,598 pairs, positives train 2,219 / validation 47 / test 145 | logistic regression on detection-box geometry (E13; a union-crop embedding did not help) | E13 final (OI validation + test), pairs where both boxes are detected: AP 0.907 [0.86, 0.95] vs chance 0.47, precision 0.87, recall 0.68; only 249 of 531 annotated pairs scorable (person or pet undetected); end-to-end recall 0.42; 'boxes overlap' baseline F1 0.82 vs model 0.76 | yes (server and phone; `person_interaction_candidate` segments, identical on both engines in engine parity) | validated (public data), dogs only | Cats: 4 scorable final pairs - not evaluated. Still images only: no temporal interaction, nothing about the animal's response. Person detection coverage is the main limit. |
-| 16 | On furniture (bed, couch, chair, table) | cat, dog | pet-object relation labels with reliable negatives | Open Images V7 visual relationships (CC BY 4.0): 526 images, 1,125 pairs, split by photographer; furniture boxes from the product detector's COCO classes | logistic regression on detection-box geometry + species + object group (E15) | E15 test (79 photographers, scored once): AP 0.974 [0.90, 1.00] vs chance 0.67, precision 0.97, recall 1.00 on the 46 pairs where pet and furniture are detected (31 positives: 17 cat, 14 dog); end-to-end recall 0.40; a "pet box inside furniture box" rule is as good (AP 0.995) | yes (server and phone; `on_furniture_candidate` segments with `related_object`) | validated (public photos) | "In front of" vs "on" is the observed failure mode and is likely more common in home video; "on a table" rests on 1 scored positive; whether the animal is allowed there is not inferred. |
-| 16u | Under furniture (table, chair) | cat, dog | as row 16 | as row 16 (37 development, 8 test positives) | E15 head | cross-validated AP 0.18; no test positive scorable | no | **failed the E15 gate** | More data with hiding / under-furniture labels. |
-| 16v | Inside a car | cat, dog | as row 16 | as row 16 | E15 head | E15 test: AP 0.931 [0.75, 1.00], precision 0.88 on 15 scored positives (dogs only) | no | **failed the E15 gate** (< 20 scored positives) | More scored positives, cats. |
-| 16o | Other objects (toys, bowls, litter boxes, crates, cat trees, dog beds, doors, windows) | cat, dog | relation labels | Open Images has dog beds and cat furniture, but the detector has no class for them | - | - | no | **missing** | A detector for pet objects; COCO "bowl" is not validated for pet bowls. |
-| 17 | Interaction with other animals (play, chase, fight, groom) | cat, dog | pair/interval labels | MammalNet "fights against other animals" (dog, research only); Open Images relationships contain **no** pet-pet triplets | E11 class "fights" only | E11 | no | research only / **missing** | Multi-pet household video with labelled social interactions. |
-| 18 | Environmental context sounds (doorbell, knock, vacuum, TV, speech, thunder, fireworks, alarm, baby cry ...) | - | clip labels | none audited | YAMNet AudioSet classes | not evaluated in this repository | yes | pretrained, unevaluated | Household recordings with context labels. |
-| 19 | Scenario context: owner-drawn places, time stamps, view coverage | - | owner input | owner input | deterministic | unit and E2E tests | yes | deterministic | - |
-| 20 | Multimodal interpretation (food / outside / attention / play / alert / tense / warning / relaxed hypotheses) with abstention | cat, dog | real paired recordings with behavior and context labels | **none** | rule-based fusion with explicit evidence, conflicts and abstention | **not evaluated**; E5 checks behavior on synthetic pairings only | yes | rule-based, unvalidated | Everything in [EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md). |
-| 21 | Breed / morphology robustness | dog | breed field | dog-pose (Stanford Dogs synsets, 112 breeds), MammalNet breed keywords | - | E9 breed breakdown (89 breeds with ≥ 10 instances); E11 breed table | - | partial | Cats: no breed metadata in any acquired source. Morphology (coat colour/length, ear carriage, tail type, brachycephaly, body size) is not in any metadata; not inferred. |
+## 1. Cats
 
-## 2. What the matrix says about coverage
+| Capability | Software | Behavioural validity (real data) | Release (PNC / COM) | Next step |
+| --- | --- | --- | --- | --- |
+| Presence and location | Python + phone; parity tracks F1 0.91 with the phone detector | Photos, E4/E7, Open Images validation (phone detector, E14): image recall 0.885, image specificity 0.660 [0.52, 0.79] on 47 verified negative images. Breeds, E16, Oxford-IIIT Pet, 2,371 images: found 0.935 [0.924, 0.944]; Sphynx 0.55, Bombay and Russian Blue lowest, breed heterogeneity p = 0.0005. **Real video, E18, Kinetics (99 clips with sound): a cat track in 0.566 [0.47, 0.66] of clips; 37 % of clips have no pet track at all.** | yes / Q-T | G1 detector; E18 variants (running) separate verifier from detector misses |
+| False-positive rejection | Python + phone | E7 final: cat specificity 0.62 → 0.70 with the verifier, recall 0.93 → 0.91 (MediaPipe detector); household negatives (plush toys, pet beds) unmeasured | yes / Q-T | household negatives (`docs/household/`) |
+| Identity across frames (one clip) | Python + phone (Kalman tracker) | none real. E8 semi-synthetic IDF1 0.86 is a software check. | yes / yes | household multi-cat clips |
+| Facial cues (eyes, mouth, whiskers, ear tips in the face) | **not implemented** | none. CatFLW (48 landmarks, CC BY-NC 4.0) is blocked on kaggle.com. | - | network (kaggle.com) for research; new annotation for PNC/COM |
+| Ears | **not implemented** | none. AwA-Pose has 588 cat images with ear and tail points (MIT annotations); its images are blocked on cvml.ista.ac.at. | - | G2 (cat keypoints on Open Images CC BY images) |
+| Tail (position, movement) | **not implemented** | none (as ears) | - | G2 |
+| Posture (lying / sitting / standing) | Python + phone | E10 against caption-derived **weak** labels, Open Images validation, 41 cats: F1 0.75. Human-verified accuracy unknown; "standing" has 3 cat examples. | yes / Q-T (backbone) | household annotation (posture field) |
+| Temporal: locomotion, activity, entered/left view | Python + phone (rule-based) | none real. E8 is semi-synthetic. E18 shows the segments are produced on real video (moving in 50 of 99 clips), but these are not labels. | yes / yes | household timestamps |
+| Temporal: actions (eat, drink, groom, litter, scratch, knead, play, sleep) | **not implemented** for cats | none: no public cat action set with usable terms (A2D is blocked and research-only; MammalNet has no domestic cats) | - | household collection, then G3 for cats |
+| Vocalization present | Python + phone | E1, ESC-50 (40 cat clips, 5-fold CV): F1 0.79 nested (cat), deployed thresholds. E1-CC on CC0/CC BY clips only: 0.76. Real video, E18: own-species vocalization in 9 of 99 cat clips (unlabelled; Kinetics audio often has music). | yes / A2 + Q-A2 | household audio with sound intervals |
+| Vocalization type (meow, purr, hiss, caterwaul) | Python + phone (YAMNet sub-type scores) | **not evaluated**: no type-labelled set reachable (FSD50K on zenodo.org) | yes / Q-T | network (zenodo.org) |
+| Vocal context (brushing, isolation, waiting for food) | Python research experiment (E2) only | E2, CatMeows, leave-one-cat-out: macro-F1 0.46 [0.38, 0.55] (MFCC) / 0.46 [0.40, 0.54] (YAMNet) vs 0.34 stratified random. Weak, so not shipped. | research only | more data per context; household owner-reported situations |
+| Environmental context (doorbell, vacuum, TV, speech, thunder) | Python + phone (YAMNet classes) | **not evaluated** in this repository | yes / Q-T | household audio labels |
+| Interaction with a person | Python + phone | E13 photos: only 4 scorable cat pairs, not evaluated. **Real video, E18: in petting/grooming clips where a cat is tracked, a person-contact segment in 35 of 56 (0.63).** No negative label is available on Kinetics. | yes / yes | household recordings (person interaction field) |
+| On furniture (bed, couch, chair, table) | Python + phone (containment rule v2) | E15, Open Images, 17 cat positives in test: rule precision and recall 0.97 (both species pooled); end-to-end recall 0.40 | yes / yes | household; pet-specific objects need new collection |
+| Under furniture, inside a car | not shipped (failed the E15 gate) | E15: under AP 0.18 (cross-validated) | - | more labelled data |
+| Interaction with other animals | **not implemented** | none: no labelled pet-pet source obtainable (VidOR, EgoPet and Visual Genome are blocked or have unclear terms) | - | household multi-pet recordings |
+| Multimodal interpretation (food, outside, attention, play, alert, tense, warning, relaxed) | Python + phone (rule-based fusion with abstention) | **none**. E5 uses synthetic pairings. E18: no non-abstained interpretation on any of 99 cat clips (no labels to score). | yes / yes | household recordings with owner-reported situations |
+| Breed / morphology | - | E16 per breed (above); no coat or ear-type metadata in any source | - | household metadata (breed, coat) |
 
-* **Cats are under-covered.** Cat capabilities with real trained models:
-  presence (1), false-positive rejection (2), coarse posture (7, weak labels)
-  and vocalization presence (12). Cat ears, tail, face, body keypoints and
-  video actions have **no usable data**.
-* **Dog body-language cues exist only in the research profile** (E9 data are
-  Research-Only). Product releases (personal non-commercial, commercial) ship
-  without ear/tail/limb keypoints and the result says so.
-* **Temporal behavior in real video** is covered only by E11 (dogs, YouTube,
-  research only; macro-F1 0.64 over five classes). Everything the product reports over time on the phone is
-  rule-based and validated only on semi-synthetic sequences.
-* **Interactions**: Open Images relationship annotations are exhaustive for
-  annotated pairs, so they give reliable negatives for person-pet interaction
-  in still images (E13: AP 0.91 on scored dog pairs, but two thirds of pairs
-  are not scorable because a box is missed) and for pets on furniture (E15:
-  "on" shipped; "under" and "inside a car" failed the pre-set gate). Pet-pet
-  interactions have no labelled source.
-* **No capability has household validation.** All public data are web photos,
-  YouTube video or curated clips.
+## 2. Dogs
 
-## 3. On-device equivalence of each shipped capability
+| Capability | Software | Behavioural validity (real data) | Release (PNC / COM) | Next step |
+| --- | --- | --- | --- | --- |
+| Presence and location | Python + phone | Photos, E14 phone detector: image recall 0.866, specificity 0.919 [0.86, 0.97]. Breeds, E16, Oxford-IIIT Pet, 25 breeds: found 0.924; Newfoundland 0.71, keeshond 0.84; heterogeneity p = 0.0005. **Real video, E18, Kinetics (195 clips): a dog track in 0.533 [0.46, 0.60] of clips; 41 % have no pet track; walking-the-dog clips are worst (0.39).** | yes / Q-T | G1; E18 variants (running) |
+| False-positive rejection | Python + phone | E7 final: dog specificity 0.56 → 0.87, recall 0.89 → 0.87 | yes / Q-T | household negatives |
+| Identity across frames (one clip) | Python + phone | none real (E8 semi-synthetic) | yes / yes | household multi-dog clips |
+| Facial cues | **not implemented** | none. DogFLW (CC BY-NC 4.0) is blocked on kaggle.com; eye keypoints in dog-pose are 0 % annotated. | - | network for research; new annotation |
+| Ears | Python research profile (E9 keypoint head) | E9, dog-pose validation, 1,703 instances: ear-tip elevation sign agreement 0.93, Spearman 0.84; per-breed ear PCK@0.1 median 0.89, minimum 0.66 | **research only** (dog-pose) | G2 (licensed annotation) |
+| Tail position | Python research profile (E9) | E9: tail elevation sign 0.89, Spearman 0.87; tail PCK@0.1 per breed median 0.79, minimum 0.0 (docked or curled tails) | research only | G2 |
+| Tail wagging (temporal) | feature only (`tail_lateral_oscillation`) | none (no wag labels anywhere) | research only | household (tail field in the annotation guide) |
+| Body keypoints | Python research profile (E9) | E9 PCK@0.1 0.853 [0.843, 0.863]; per breed 0.73-0.94 | research only | G2 |
+| Posture | Python + phone | E10, weak labels, 188 dogs: F1 0.61 | yes / Q-T | household annotation |
+| Temporal: locomotion, activity | Python + phone (rules) | none real (E8 semi-synthetic) | yes / yes | household |
+| Temporal: actions (sleep, eat, drink, fight, eliminate) | Python research experiments E11 and E17 (G3) | E11, MammalNet test, 154 segments: macro-F1 0.638 [0.537, 0.716] (pooled features, logistic regression). E17 temporal model: running (results in `results/e17/`). | research only (MammalNet) | E17 result; household video (play, greeting, scratching, chewing, door-waiting have no labels) |
+| Vocalization present | Python + phone | E1, ESC-50 40 dog clips: F1 0.90 nested; identical on the CC0/CC BY subset (all dog clips are CC0/CC BY). E18: own-species vocalization in 7 of 195 clips (unlabelled). | yes / A2 | household audio |
+| Vocalization type (bark, growl, whine, howl, yip) | Python + phone (YAMNet sub-type scores; growl threshold 0.5 unfitted) | **not evaluated** | yes / Q-T | network (zenodo.org: FSD50K) |
+| Vocal context (bark context, arousal) | **not implemented** (E3 audit only) | none: Barkopedia and DogSpeak are on huggingface.co (blocked); Yin & McCowan is reachable but has no stated licence | - | network plus terms; household owner-reported situations |
+| Environmental context sounds | Python + phone | **not evaluated** | yes / Q-T | household |
+| Interaction with a person | Python + phone | E13 photos (dog pairs, Open Images validation + test): AP 0.907 [0.86, 0.95], precision 0.87, recall 0.68 on scorable pairs; end-to-end recall 0.42. **Real video, E18: in bathing/grooming clips where a dog is tracked, a person-contact segment in 36 of 50 (0.72)**; in training/walking clips, 19 of 54 (contact possible, not a false-positive rate). | yes / yes | household |
+| On furniture | Python + phone (rule v2) | E15: 14 dog positives in test, pooled precision and recall 0.97; end-to-end recall 0.40 | yes / yes | household |
+| Inside a car | not shipped (failed gate: under 20 scored positives) | E15 test AP 0.93 on 15 dog positives | - | more data |
+| Interaction with other animals | research class "fights" in E11 only | E11 "fights" F1 0.77 (MammalNet, research) | research only | household multi-pet; VidOR if its terms clear |
+| Multimodal interpretation | Python + phone (rules, abstention) | **none**. E18: 2 of 195 dog clips produced a non-abstained hypothesis (alert, warning; both in "training dog"; unlabelled). | yes / yes | household |
+| Breed / morphology | - | E16 (above); E9 per-breed keypoints; E11 per-breed actions (5-49 segments per breed) | - | household metadata |
 
-Engine parity (`results/ondevice/engine_parity_chromium.json`, 38 cases,
-identical WebM/MP4 inputs, Python reference engine vs TypeScript engine in
-headless Chromium; decoders differ by design; default float32 bundle):
+## 3. What needs household recordings, and what public data already covers
 
-| Output | Agreement |
-| --- | --- |
-| Decision state | 38/38 |
-| Tracks (species + interval within 1.1 s) | F1 0.96 |
-| Sound events | F1 1.00 |
-| Behavior segments (kind, object and interval; incl. person interaction and on-furniture) | F1 0.97 |
-| Hypotheses (name + status) | F1 1.00 |
-| Posture | identical label whenever both engines report one; about one frame in five flips across the report gate (one engine just below 0.84) |
+| Question | Public data that answers it now | Needs new household recordings |
+| --- | --- | --- |
+| Is the pet found in its own home footage (wide angle, low light, floor-level camera, partial views)? | E18 real video (YouTube, person-centred) gives a first real-video figure | yes: home cameras and phones, the owner's own pets |
+| Are household objects mistaken for pets? | E7 (web photos) | yes: plush toys, pet beds, coats, decor |
+| Ears, tail and face of cats | none obtainable | yes, or new annotation of CC BY photos (G2) |
+| Ear and tail of dogs in a releasable model | none (E9 is research only) | new annotation (G2) |
+| Timestamped activities and actions (both species) | E11/E17 for 5 dog actions (research only) | yes (eating, drinking, grooming, litter, scratching, play, greeting, waiting at the door) |
+| Vocalization type and context in the home | CatMeows (3 cat contexts, research) | yes (with owner-reported situation) |
+| Person interaction over time, and the pet's response | E13 (photos), E18 (contact clips) | yes |
+| Pet-pet interactions | none | yes |
+| Interpretations (food, outside, play, tense ...) | none: public data has no owner-reported situations | yes; observed behaviour and inferred intention are annotated in separate layers (`docs/household/ANNOTATION_GUIDE.md`) |
 
-With the opt-in int8 bundle (38 cases): tracks 0.87, segments 0.83,
-hypotheses 0.99, decisions 38/38 (`engine_parity_chromium_int8.json`); with
-the TF Hub detector: tracks 0.91, segments 0.91, hypotheses 0.96, decisions
-38/38 (`engine_parity_chromium_tfhub_rawdecode.json`).
+## 4. Engine parity of the shipped capabilities
 
-Model-level parity on identical tensors is bit-exact or within 3e-8
-(`results/ondevice/runtime_parity_*.json`). The posture gate flips show that
-frame-level posture labels are sensitive to small pixel differences (FFmpeg
-vs browser decoding), and by extension to real-world image noise. The result
-view therefore summarises posture per track as frame counts per label,
-including "uncertain", rather than presenting a single frame as a fact.
-On-furniture segments are identical on the four E15 clips; in one scenario
-clip a couch scored 0.34-0.37 against the 0.35 detector threshold, so the
-dog's on-couch segments appear only in the Python run - furniture near the
-threshold makes this output fragile.
+Python reference engine vs phone engine in headless Chromium, 38 cases,
+identical WebM/MP4 inputs (`results/ondevice/engine_parity_chromium*.json`):
 
-## 4. Data acquisition priorities (what would change the matrix most)
+| Bundle | Decisions | Tracks | Segments | Hypotheses |
+| --- | --- | --- | --- | --- |
+| MediaPipe detector (float32), used by E4-E18 | 38/38 | F1 0.96 | 0.97 (0.966 after rule v2) | 1.00 |
+| TF Hub detector, raw decoding (the phone test build since 2026-10-10) | 38/38 | 0.91 | 0.91 | 0.96 |
+| int8 builds (opt-in) | 38/38 | 0.87 | 0.83 | 0.99 |
 
-1. **Real paired household recordings** with timestamped behavior, context
-   and owner-reported situation labels, for both species
-   ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)). Unlocks
-   validation of rows 3, 9, 10, 13, 18 and 20, and household validation of all
-   others.
-2. **Cat keypoints / facial landmarks** under a licence compatible with the
-   release profile (rows 4, 5c, 6c, 8c).
-3. **Licensed dog keypoint data** to move E9 out of research-only.
-4. **Cat video actions** (row 11c) and **pet-pet interaction video** (row 17).
-5. **Network access** to zenodo.org and huggingface.co for CatMeows and
-   Barkopedia (rows 14, 14d), plus a terms audit.
-
-Compute: all trainings so far fit on the 4-core CPU workspace because they
-fit small heads on frozen pretrained features. Fine-tuning backbones or
-training a video model is a GPU job; see [TRAINING_PROGRAM.md](TRAINING_PROGRAM.md).
+Model-level parity on identical tensors is bit-exact or within 3e-8.
+Posture: when both engines report a label it is identical, but about one
+frame in five flips across the 0.84 report gate. Posture is therefore
+summarised per track, never shown as a single-frame fact.

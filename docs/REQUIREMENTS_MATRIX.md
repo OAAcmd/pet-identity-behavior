@@ -30,7 +30,7 @@ what prevents the next status.
 
 | # | Requirement | Impl | Test | Valid | Blocked by / notes |
 | --- | --- | --- | --- | --- | --- |
-| D1 | Core analysis runs on the phone (audio events, detection, verification, tracking, posture, behavior segments, person-interaction and on-furniture candidates, fusion, explanations) | yes | engine parity, E2E | no | real phones |
+| D1 | Core analysis implemented in the phone's browser engine (audio events, detection, verification, tracking, posture, behavior segments, person-interaction and on-furniture candidates, fusion, explanations) | yes | engine parity, E2E | no | real phones |
 | D2 | Works offline after the one-time model download | yes | E2E offline test (desktop Chromium; runtime cache asserted) | no | real phones (airplane-mode protocol) |
 | D3 | No media upload in the default path; server analysis only by explicit setting | yes | E2E asserts no upload request | - | - |
 | D4 | Capabilities that still need a server are listed | yes | - | - | [ON_DEVICE_AUDIT.md](ON_DEVICE_AUDIT.md) |

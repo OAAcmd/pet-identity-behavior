@@ -1,0 +1,720 @@
+{
+  "experiment": "E18",
+  "title": "Full engine on real pet video with sound (Kinetics-700 pet actions; research only)",
+  "protocol": [
+    "E18: the full engine on real pet video with sound (Kinetics-700 pet actions).",
+    "",
+    "Data: 10-second Kinetics-700-2020 validation clips of six human actions that",
+    "involve a cat or a dog (data/kinetics_pets.py): petting cat, grooming cat,",
+    "grooming dog, bathing dog, training dog, walking the dog. They are real,",
+    "synchronized audio and video, but YouTube footage chosen for the human",
+    "action, not household recordings, and the labels are clip-level actions.",
+    "",
+    "Engine: the Python reference engine with the components of the shipped",
+    "phone bundle (release profile personal_noncommercial), audio and video.",
+    "",
+    "What the labels support (and only that):",
+    "* pet presence: every clip shows the named species, so the share of clips",
+    "  with a track of that species is a clip-level recall; clips whose only",
+    "  tracks are the other species are counted as species confusion;",
+    "* person contact: petting, grooming and bathing imply a person touching the",
+    "  animal during the clip, so the share of those clips with a",
+    "  person_interaction_candidate segment is a clip-level recall; training and",
+    "  walking do not imply contact (often a leash or distance), so their rate is",
+    "  reported alongside but is not a false-positive rate;",
+    "* everything else (sounds, posture, on-furniture, interpretations) has no",
+    "  label here and is reported descriptively, never as accuracy.",
+    "Intervals are Wilson 95 % intervals over clips."
+  ],
+  "clips": 294,
+  "decode_errors": {},
+  "by_class": {
+    "bathing dog": {
+      "clips": 47,
+      "pet_present": {
+        "k": 21,
+        "n": 47,
+        "rate": 0.44680851063829785,
+        "ci95": [
+          0.31410747474911305,
+          0.5875478626124176
+        ]
+      },
+      "only_other_species": {
+        "k": 4,
+        "n": 47,
+        "rate": 0.0851063829787234,
+        "ci95": [
+          0.033593579469713086,
+          0.19931805195022648
+        ]
+      },
+      "no_pet_track": {
+        "k": 22,
+        "n": 47,
+        "rate": 0.46808510638297873,
+        "ci95": [
+          0.33331462168462633,
+          0.6076785807322921
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 13,
+        "n": 47,
+        "rate": 0.2765957446808511,
+        "ci95": [
+          0.16936405991152936,
+          0.41758835700689967
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 0,
+        "n": 47,
+        "rate": 0.0,
+        "ci95": [
+          6.938893903907228e-18,
+          0.0755601711983887
+        ]
+      },
+      "segment_kinds": {
+        "entered_view": 20,
+        "left_view": 21,
+        "moving": 15,
+        "person_interaction_candidate": 13,
+        "stationary": 8,
+        "on_furniture_candidate": 1,
+        "active_bout": 1
+      },
+      "decisions": {
+        "abstention": 22,
+        "supported_observation": 25
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 47,
+        "rate": 0.0,
+        "ci95": [
+          6.938893903907228e-18,
+          0.0755601711983887
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 47,
+        "low_light": 5,
+        "blurry_frames": 14,
+        "camera_motion_unknown": 42,
+        "audio_clipping": 2,
+        "camera_motion": 34,
+        "detections_rejected_by_verifier": 16
+      },
+      "analysis_ms_median": 3909.2
+    },
+    "grooming cat": {
+      "clips": 50,
+      "pet_present": {
+        "k": 25,
+        "n": 50,
+        "rate": 0.5,
+        "ci95": [
+          0.36644286412332855,
+          0.6335571358766714
+        ]
+      },
+      "only_other_species": {
+        "k": 3,
+        "n": 50,
+        "rate": 0.06,
+        "ci95": [
+          0.020614596364630478,
+          0.16217343370877002
+        ]
+      },
+      "no_pet_track": {
+        "k": 22,
+        "n": 50,
+        "rate": 0.44,
+        "ci95": [
+          0.3116198721023534,
+          0.5769421319985648
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 19,
+        "n": 50,
+        "rate": 0.38,
+        "ci95": [
+          0.2586259584257722,
+          0.5184980497760643
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 2,
+        "n": 50,
+        "rate": 0.04,
+        "ci95": [
+          0.011038652660826577,
+          0.13460337877954667
+        ]
+      },
+      "segment_kinds": {
+        "entered_view": 12,
+        "person_interaction_candidate": 19,
+        "stationary": 14,
+        "left_view": 19,
+        "moving": 23,
+        "active_bout": 1,
+        "on_furniture_candidate": 2,
+        "pacing_candidate": 1
+      },
+      "decisions": {
+        "abstention": 22,
+        "supported_observation": 28
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 50,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 47,
+        "detections_rejected_by_verifier": 22,
+        "blurry_frames": 12,
+        "camera_motion": 40,
+        "camera_motion_unknown": 44,
+        "low_light": 4,
+        "audio_clipping": 2,
+        "audio_silent": 3
+      },
+      "analysis_ms_median": 4150.07
+    },
+    "grooming dog": {
+      "clips": 50,
+      "pet_present": {
+        "k": 29,
+        "n": 50,
+        "rate": 0.58,
+        "ci95": [
+          0.4423319668777783,
+          0.7062520276543307
+        ]
+      },
+      "only_other_species": {
+        "k": 4,
+        "n": 50,
+        "rate": 0.08,
+        "ci95": [
+          0.031549003255790686,
+          0.18838502545063704
+        ]
+      },
+      "no_pet_track": {
+        "k": 17,
+        "n": 50,
+        "rate": 0.34,
+        "ci95": [
+          0.2243676963506106,
+          0.47846431458517147
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 25,
+        "n": 50,
+        "rate": 0.5,
+        "ci95": [
+          0.36644286412332855,
+          0.6335571358766714
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 0,
+        "n": 50,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "segment_kinds": {
+        "moving": 12,
+        "person_interaction_candidate": 25,
+        "stationary": 17,
+        "entered_view": 26,
+        "left_view": 21,
+        "pacing_candidate": 1,
+        "on_furniture_candidate": 1
+      },
+      "decisions": {
+        "supported_observation": 33,
+        "abstention": 17
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 50,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 46,
+        "camera_motion": 34,
+        "camera_motion_unknown": 36,
+        "detections_rejected_by_verifier": 7,
+        "blurry_frames": 10,
+        "low_light": 2,
+        "audio_silent": 3
+      },
+      "analysis_ms_median": 4046.9300000000003
+    },
+    "petting cat": {
+      "clips": 49,
+      "pet_present": {
+        "k": 31,
+        "n": 49,
+        "rate": 0.6326530612244898,
+        "ci95": [
+          0.49266811386889864,
+          0.7533501747521878
+        ]
+      },
+      "only_other_species": {
+        "k": 3,
+        "n": 49,
+        "rate": 0.061224489795918366,
+        "ci95": [
+          0.021039764955529186,
+          0.16520743422087725
+        ]
+      },
+      "no_pet_track": {
+        "k": 15,
+        "n": 49,
+        "rate": 0.30612244897959184,
+        "ci95": [
+          0.1951532349314748,
+          0.4452815740069374
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 21,
+        "n": 49,
+        "rate": 0.42857142857142855,
+        "ci95": [
+          0.3002310889895705,
+          0.5672975248298444
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 7,
+        "n": 49,
+        "rate": 0.14285714285714285,
+        "ci95": [
+          0.07096333720544586,
+          0.2666797318916292
+        ]
+      },
+      "segment_kinds": {
+        "left_view": 21,
+        "moving": 27,
+        "person_interaction_candidate": 21,
+        "stationary": 15,
+        "entered_view": 19,
+        "on_furniture_candidate": 8,
+        "active_bout": 3
+      },
+      "decisions": {
+        "supported_observation": 36,
+        "abstention": 13
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 49,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.07270029673590504
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 47,
+        "blurry_frames": 26,
+        "camera_motion": 38,
+        "camera_motion_unknown": 44,
+        "detections_rejected_by_verifier": 15,
+        "low_light": 8,
+        "audio_silent": 1,
+        "audio_clipping": 1
+      },
+      "analysis_ms_median": 3855.67
+    },
+    "training dog": {
+      "clips": 49,
+      "pet_present": {
+        "k": 35,
+        "n": 49,
+        "rate": 0.7142857142857143,
+        "ci95": [
+          0.5759085079389967,
+          0.8215056506027583
+        ]
+      },
+      "only_other_species": {
+        "k": 3,
+        "n": 49,
+        "rate": 0.061224489795918366,
+        "ci95": [
+          0.021039764955529186,
+          0.16520743422087725
+        ]
+      },
+      "no_pet_track": {
+        "k": 11,
+        "n": 49,
+        "rate": 0.22448979591836735,
+        "ci95": [
+          0.1302483771472861,
+          0.35879056187045744
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 19,
+        "n": 49,
+        "rate": 0.3877551020408163,
+        "ci95": [
+          0.26428814373960496,
+          0.5275425351194757
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 5,
+        "n": 49,
+        "rate": 0.10204081632653061,
+        "ci95": [
+          0.044378892487039884,
+          0.21756624164970087
+        ]
+      },
+      "segment_kinds": {
+        "moving": 24,
+        "person_interaction_candidate": 19,
+        "stationary": 22,
+        "left_view": 23,
+        "entered_view": 23,
+        "active_bout": 4,
+        "on_furniture_candidate": 2
+      },
+      "decisions": {
+        "abstention": 10,
+        "supported_observation": 37,
+        "experimental_hypothesis": 2
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 2,
+        "n": 49,
+        "rate": 0.04081632653061224,
+        "ci95": [
+          0.011265396927928273,
+          0.13713283476831106
+        ]
+      },
+      "interpretations": {
+        "warning": 1,
+        "alert": 1
+      },
+      "quality_flags": {
+        "audio_end_padded": 49,
+        "camera_motion": 39,
+        "camera_motion_unknown": 37,
+        "blurry_frames": 8,
+        "detections_rejected_by_verifier": 22,
+        "low_light": 1
+      },
+      "analysis_ms_median": 4323.22
+    },
+    "walking the dog": {
+      "clips": 49,
+      "pet_present": {
+        "k": 19,
+        "n": 49,
+        "rate": 0.3877551020408163,
+        "ci95": [
+          0.26428814373960496,
+          0.5275425351194757
+        ]
+      },
+      "only_other_species": {
+        "k": 1,
+        "n": 49,
+        "rate": 0.02040816326530612,
+        "ci95": [
+          0.003611579538530696,
+          0.10693768467754147
+        ]
+      },
+      "no_pet_track": {
+        "k": 29,
+        "n": 49,
+        "rate": 0.5918367346938775,
+        "ci95": [
+          0.4524706997204626,
+          0.7178496539402894
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 1,
+        "n": 49,
+        "rate": 0.02040816326530612,
+        "ci95": [
+          0.003611579538530696,
+          0.10693768467754147
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 2,
+        "n": 49,
+        "rate": 0.04081632653061224,
+        "ci95": [
+          0.011265396927928273,
+          0.13713283476831106
+        ]
+      },
+      "segment_kinds": {
+        "entered_view": 13,
+        "left_view": 18,
+        "moving": 16,
+        "active_bout": 1,
+        "stationary": 1,
+        "person_interaction_candidate": 1
+      },
+      "decisions": {
+        "supported_observation": 21,
+        "abstention": 28
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 49,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.07270029673590504
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 48,
+        "camera_motion": 29,
+        "camera_motion_unknown": 48,
+        "detections_rejected_by_verifier": 15,
+        "audio_clipping": 2,
+        "low_light": 4,
+        "blurry_frames": 13,
+        "audio_silent": 1
+      },
+      "analysis_ms_median": 4197.18
+    }
+  },
+  "by_species": {
+    "cat": {
+      "clips": 99,
+      "pet_present": {
+        "k": 56,
+        "n": 99,
+        "rate": 0.5656565656565656,
+        "ci95": [
+          0.4673727835155469,
+          0.659035207025246
+        ]
+      },
+      "only_other_species": {
+        "k": 6,
+        "n": 99,
+        "rate": 0.06060606060606061,
+        "ci95": [
+          0.028069414889737472,
+          0.12596941764495667
+        ]
+      },
+      "no_pet_track": {
+        "k": 37,
+        "n": 99,
+        "rate": 0.37373737373737376,
+        "ci95": [
+          0.28483033657505374,
+          0.47207737392342164
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 40,
+        "n": 99,
+        "rate": 0.40404040404040403,
+        "ci95": [
+          0.3127170137864219,
+          0.5025328461924193
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 9,
+        "n": 99,
+        "rate": 0.09090909090909091,
+        "ci95": [
+          0.04856521249187529,
+          0.16381576952318477
+        ]
+      },
+      "segment_kinds": {
+        "left_view": 40,
+        "moving": 50,
+        "person_interaction_candidate": 40,
+        "stationary": 29,
+        "entered_view": 31,
+        "on_furniture_candidate": 10,
+        "active_bout": 4,
+        "pacing_candidate": 1
+      },
+      "decisions": {
+        "supported_observation": 64,
+        "abstention": 35
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 0,
+        "n": 99,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.03735453357396229
+        ]
+      },
+      "interpretations": {},
+      "quality_flags": {
+        "audio_end_padded": 94,
+        "blurry_frames": 38,
+        "camera_motion": 78,
+        "camera_motion_unknown": 88,
+        "detections_rejected_by_verifier": 37,
+        "low_light": 12,
+        "audio_silent": 4,
+        "audio_clipping": 3
+      },
+      "analysis_ms_median": 4051.08
+    },
+    "dog": {
+      "clips": 195,
+      "pet_present": {
+        "k": 104,
+        "n": 195,
+        "rate": 0.5333333333333333,
+        "ci95": [
+          0.4633429352049995,
+          0.6020357380706128
+        ]
+      },
+      "only_other_species": {
+        "k": 12,
+        "n": 195,
+        "rate": 0.06153846153846154,
+        "ci95": [
+          0.03554920970080911,
+          0.10446978028921314
+        ]
+      },
+      "no_pet_track": {
+        "k": 79,
+        "n": 195,
+        "rate": 0.40512820512820513,
+        "ci95": [
+          0.33870100614939563,
+          0.4752212314507846
+        ]
+      },
+      "person_interaction_segment": {
+        "k": 58,
+        "n": 195,
+        "rate": 0.29743589743589743,
+        "ci95": [
+          0.2376897543033914,
+          0.36500907732942584
+        ]
+      },
+      "own_species_vocalization_detected": {
+        "k": 7,
+        "n": 195,
+        "rate": 0.035897435897435895,
+        "ci95": [
+          0.017495340587197504,
+          0.07223236226773827
+        ]
+      },
+      "segment_kinds": {
+        "moving": 67,
+        "person_interaction_candidate": 58,
+        "stationary": 48,
+        "entered_view": 82,
+        "left_view": 83,
+        "pacing_candidate": 1,
+        "on_furniture_candidate": 4,
+        "active_bout": 6
+      },
+      "decisions": {
+        "supported_observation": 116,
+        "abstention": 77,
+        "experimental_hypothesis": 2
+      },
+      "clips_with_a_non_abstained_interpretation": {
+        "k": 2,
+        "n": 195,
+        "rate": 0.010256410256410256,
+        "ci95": [
+          0.0028171396519349606,
+          0.0366192760679144
+        ]
+      },
+      "interpretations": {
+        "warning": 1,
+        "alert": 1
+      },
+      "quality_flags": {
+        "audio_end_padded": 190,
+        "camera_motion": 136,
+        "camera_motion_unknown": 163,
+        "detections_rejected_by_verifier": 60,
+        "blurry_frames": 45,
+        "low_light": 12,
+        "audio_silent": 4,
+        "audio_clipping": 4
+      },
+      "analysis_ms_median": 4116.13
+    }
+  },
+  "person_interaction": {
+    "contact_classes_recall": {
+      "k": 78,
+      "n": 196,
+      "rate": 0.3979591836734694,
+      "ci95": [
+        0.3320274727178339,
+        0.46781400172992865
+      ]
+    },
+    "non_contact_classes_rate": {
+      "k": 20,
+      "n": 98,
+      "rate": 0.20408163265306123,
+      "ci95": [
+        0.1361759801787412,
+        0.29431215040836667
+      ]
+    },
+    "note": "non-contact classes may still show contact; their rate is not a false-positive rate"
+  },
+  "terms": "Kinetics-700-2020 via the CVDF mirror; annotations CC BY 4.0, clips are YouTube uploads (research use; not committed).",
+  "created_at": "2026-10-10T10:03:30+00:00"
+}

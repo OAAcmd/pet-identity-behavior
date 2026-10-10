@@ -1,0 +1,8 @@
+file,url,sha256
+k700_val_026.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_026.tar.gz,853ef724c9f880c6ff401daa622969710e68e341ea3095cef755586d4e681473
+k700_val_231.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_231.tar.gz,7b24a455b9690564b5b4ffb65187417b01e5b3d73c3d0754947a3db0dbc41318
+k700_val_232.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_232.tar.gz,2734930157eeea4e905c94f9358af547714ffed8d9e892cd9d4f381074766d72
+k700_val_363.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_363.tar.gz,1d53ac0560554770cd55d0cbb0b8a3390f78a85dcc5b7dc14380fb0a76ee63d6
+k700_val_634.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_634.tar.gz,703b570b71a822b04f5ba6a2c5c73c13444f14105a8477bb2a08842fa455f0da
+k700_val_670.tar.gz,https://kinetics.s3.amazonaws.com/700_2020/val/k700_val_670.tar.gz,5c1da305c75ba4aeb6409e355d95d60ded2b5447dcbaf80e869716704592da30
+val.csv,https://kinetics.s3.amazonaws.com/700_2020/annotations/val.csv,a6749d9f3bc785620de5ee96025f201b98b2436eae4b782eb3e1db61f50ab7ac

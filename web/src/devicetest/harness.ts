@@ -18,7 +18,8 @@ const CACHE = "pp-phone-test-v1";
 
 export interface Part { path: string; sha256: string; bytes: number; encoding?: "base64" }
 /** Written by `petperception export-device-test`: the app bundle manifest plus how large files were split for hosting. */
-export interface SiteManifest { schema: string; harness_version: string; created_at: string; bundle: BundleManifest; parts: Record<string, Part[]> }
+export interface Credit { item: string; credit: string; terms: string }
+export interface SiteManifest { schema: string; harness_version: string; created_at: string; bundle: BundleManifest; parts: Record<string, Part[]>; credits?: Credit[] }
 
 export async function sha256Hex(buf: ArrayBuffer | Uint8Array): Promise<string> {
   const d = await crypto.subtle.digest("SHA-256", buf as BufferSource);
@@ -352,13 +353,21 @@ export function finalize(rep: Record<string, unknown>, tier: Tier): Record<strin
 export async function sendReport(rep: Record<string, unknown>): Promise<string> {
   const c = (window as unknown as { claude?: { use: (n: string) => Promise<unknown> } }).claude;
   if (!c?.use) throw new Error("Sending needs the claude.ai page; copy or save the report instead.");
-  const [db, user] = (await Promise.all([c.use("db"), c.use("user")])) as [
-    { doc: (p: string) => { set: (d: Record<string, unknown>) => Promise<void> } } | null, { id: () => Promise<string | null> } | null];
+  type Doc = { set: (d: Record<string, unknown>) => Promise<void>; get: () => Promise<{ exists: boolean; data: () => Record<string, unknown> | undefined }> };
+  const [db, user] = (await Promise.all([c.use("db"), c.use("user")])) as [{ doc: (p: string) => Doc } | null, { id: () => Promise<string | null> } | null];
   if (!db) throw new Error("Report storage is not available in this view; copy or save the report instead.");
   const id = user ? await user.id() : null;
   if (!id) throw new Error("Sign in to claude.ai to send the report, or copy or save it instead.");
   const runId = `${new Date().toISOString().replace(/[:.]/g, "-")}-${Math.random().toString(36).slice(2, 8)}`;
   await db.doc(`reports/${id}/runs/${runId}`).set(JSON.parse(JSON.stringify(rep)) as Record<string, unknown>);
+  // Index document, so the run documents can be found without knowing each tester's id.
+  const index = db.doc(`reports/${id}`);
+  const prev = await index.get().then((s) => (s.exists ? s.data() ?? {} : {})).catch(() => ({} as Record<string, unknown>));
+  const runs = Array.isArray(prev.runs) ? (prev.runs as unknown[]).filter((r): r is string => typeof r === "string") : [];
+  const t = (rep.tester ?? {}) as Record<string, unknown>;
+  await index.set({ runs: [...runs, runId].slice(-100), updated_at: new Date().toISOString(), last_run: runId,
+    last: { device_model: t.device_model ?? null, os: t.os ?? null, browser: t.browser ?? null, functional_pass: rep.functional_pass ?? null,
+      bundle_version: rep.bundle_version ?? null } });
   return runId;
 }
 

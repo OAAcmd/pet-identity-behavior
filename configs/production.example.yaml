@@ -40,7 +40,7 @@ audio:
 
 vision:
   enabled: true
-  detector: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_mediapipe_v1}   # commercial: efficientdet_lite0_tfhub_v1
+  detector: ${PETPERCEPTION_DETECTOR:-efficientdet_lite0_tfhub_v1}   # Apache-2.0 stated in the file; the MediaPipe build needs Q-M2 (docs/ASSET_TERMS.md)
   sample_fps: 2.0
   max_side: 640
   score_threshold: 0.35

@@ -1094,12 +1094,12 @@
    ],
    "citation": "Chen et al. 'MammalNet: A Large-scale Video Benchmark for Mammal Recognition and Behavior Understanding', CVPR 2023.",
    "official_page": "https://mammal-net.github.io/ ; https://github.com/Vision-CAIR/MammalNet",
-   "notes": "Reachable now, so it is the cheapest generic animal-behaviour pretraining source if terms are acceptable.",
+   "notes": "Reachable now, so it is the cheapest generic animal-behaviour pretraining source if terms are acceptable. Reconciled 2026-10-10: one category for every MammalNet entry. No dataset licence is published; videos are YouTube uploads; research evaluation only (E11, E17).",
    "sources": [
     "https://github.com/Vision-CAIR/MammalNet",
     "https://mammalnet.s3.amazonaws.com/annotation.tar"
    ],
-   "acquired_in_this_project": "yes (annotations; video streamed for E11)"
+   "acquired_in_this_project": "yes (annotations; dog-breed video streamed frame by frame for E11 and E17, never stored)"
   },
   {
    "id": "gap_household_domestic_cat_behaviour_video_eating_drinking_g",
@@ -1874,7 +1874,7 @@
    "id": "mammalnet_canis_subset_already_used",
    "area": "dogs",
    "name": "MammalNet (Canis subset) - already used",
-   "category": "obtainable_now",
+   "category": "unresolved_usage_conditions",
    "species": [
     "173 mammal categories; genus 'canis' includes domestic dogs and wolves"
    ],
@@ -1902,18 +1902,18 @@
    "capability": null,
    "citation": "Chen, Hu, Coker, Berumen, Costelloe, Beery, Rohrbach, Elhoseiny, 'MammalNet: A Large-scale Video Benchmark for Mammal Recognition and Behavior Understanding', CVPR 2023",
    "official_page": "https://mammal-net.github.io ; https://github.com/Vision-CAIR/MammalNet",
-   "notes": "No tail-wagging, play, or posture (sit/lie/stand) labels.",
+   "notes": "No tail-wagging, play, or posture (sit/lie/stand) labels. Reconciled 2026-10-10: one category for every MammalNet entry. No dataset licence is published; videos are YouTube uploads; research evaluation only (E11, E17).",
    "sources": [
     "https://github.com/Vision-CAIR/MammalNet",
     "https://arxiv.org/abs/2306.00576"
    ],
-   "acquired_in_this_project": "yes (annotations; video streamed for E11)"
+   "acquired_in_this_project": "yes (annotations; dog-breed video streamed frame by frame for E11 and E17, never stored)"
   },
   {
    "id": "kinetics_700_2020_dog_related_classes",
    "area": "dogs",
    "name": "Kinetics-700-2020 dog-related classes",
-   "category": "obtainable_now",
+   "category": "unresolved_usage_conditions",
    "species": [
     "dog (human-dog interaction classes)"
    ],
@@ -1943,11 +1943,12 @@
    "capability": null,
    "citation": "Carreira et al., 'A Short Note on the Kinetics-700 Human Action Dataset' (arXiv 1907.06987); Smaira et al., 'A Short Note on the Kinetics-700-2020 Human Action Dataset' (arXiv 2010.10864)",
    "official_page": "https://github.com/cvdfoundation/kinetics-dataset",
-   "notes": "",
+   "notes": "Reconciled 2026-10-10: one category for every Kinetics entry. Annotations CC BY 4.0 per secondary sources (the DeepMind page is blocked); the clips are YouTube uploads with rights unstated by CVDF, so this is used for research evaluation only.",
    "sources": [
     "https://github.com/cvdfoundation/kinetics-dataset",
     "https://arxiv.org/abs/2010.10864"
-   ]
+   ],
+   "acquired_in_this_project": "yes (E18: 294 validation clips of 6 pet-action classes, SHA-256-pinned tarballs from kinetics.s3.amazonaws.com; not committed)"
   },
   {
    "id": "decade_who_let_the_dogs_out",
@@ -3514,12 +3515,13 @@
    "capability": null,
    "citation": "Smaira et al., 'A Short Note on the Kinetics-700-2020 Human Action Dataset', arXiv 2010.10864",
    "official_page": "https://github.com/cvdfoundation/kinetics-dataset",
-   "notes": "This is the only reachable large synchronized AV source with visible pets. 8 val tars total about 0.5 GB (not downloaded).",
+   "notes": "This is the only reachable large synchronized AV source with visible pets. 8 val tars total about 0.5 GB (not downloaded). Reconciled 2026-10-10: one category for every Kinetics entry. Annotations CC BY 4.0 per secondary sources (the DeepMind page is blocked); the clips are YouTube uploads with rights unstated by CVDF, so this is used for research evaluation only.",
    "sources": [
     "https://s3.amazonaws.com/kinetics/700_2020/K700_2020_readme.txt",
     "https://s3.amazonaws.com/kinetics/700_2020/annotations/val.csv",
     "https://github.com/cvdfoundation/kinetics-dataset"
-   ]
+   ],
+   "acquired_in_this_project": "yes (E18: 294 validation clips of 6 pet-action classes, SHA-256-pinned tarballs from kinetics.s3.amazonaws.com; not committed)"
   },
   {
    "id": "mammalnet_trimmed_behaviour_clips_genus_canis_felis",
@@ -3573,12 +3575,12 @@
    "capability": null,
    "citation": "Chen et al., 'MammalNet: A Large-scale Video Benchmark for Mammal Recognition and Behavior Understanding', CVPR 2023",
    "official_page": "https://mammal-net.github.io/",
-   "notes": "Probably covered by the video survey. Listed here because the clips carry audio.",
+   "notes": "Probably covered by the video survey. Listed here because the clips carry audio. Reconciled 2026-10-10: one category for every MammalNet entry. No dataset licence is published; videos are YouTube uploads; research evaluation only (E11, E17).",
    "sources": [
     "https://mammalnet.s3.amazonaws.com/annotation.tar",
     "https://raw.githubusercontent.com/Vision-CAIR/MammalNet/main/LICENSE"
    ],
-   "acquired_in_this_project": "yes (annotations; video streamed for E11)"
+   "acquired_in_this_project": "yes (annotations; dog-breed video streamed frame by frame for E11 and E17, never stored)"
   },
   {
    "id": "inatsounds_2024_felis_catus_canis_familiaris",
@@ -4448,7 +4450,7 @@
    "id": "kinetics_700_2020_pet_classes",
    "area": "interactions_objects_household",
    "name": "Kinetics-700-2020 (pet classes)",
-   "category": "obtainable_now",
+   "category": "unresolved_usage_conditions",
    "species": "dog, cat (+ 'petting animal (not cat)')",
    "size": "~650k 10-s YouTube clips, 700 classes, >=700 clips per class",
    "annotations": "clip-level single action label (YouTube id + start/end seconds)",
@@ -4511,14 +4513,15 @@
    "capability": null,
    "citation": "Smaira et al., 'A Short Note on the Kinetics-700-2020 Human Action Dataset', arXiv:2010.10864, 2020; Carreira et al., Kinetics-700, 2019",
    "official_page": "https://github.com/cvdfoundation/kinetics-dataset (DeepMind page: https://deepmind.google/research/open-source/kinetics/)",
-   "notes": "The bare-host S3 block reported earlier did not apply to path-style object GETs today. No pet-pet classes in Kinetics.",
+   "notes": "The bare-host S3 block reported earlier did not apply to path-style object GETs today. No pet-pet classes in Kinetics. Reconciled 2026-10-10: one category for every Kinetics entry. Annotations CC BY 4.0 per secondary sources (the DeepMind page is blocked); the clips are YouTube uploads with rights unstated by CVDF, so this is used for research evaluation only.",
    "sources": [
     "https://github.com/cvdfoundation/kinetics-dataset",
     "https://kinetics.s3.amazonaws.com/700_2020/annotations/val.csv",
     "https://s3.amazonaws.com/kinetics/700_2020/val/k700_2020_val_path.txt",
     "https://hyak.uw.edu/docs/data-commons/kinetics",
     "https://arxiv.org/pdf/2107.07502"
-   ]
+   ],
+   "acquired_in_this_project": "yes (E18: 294 validation clips of 6 pet-action classes, SHA-256-pinned tarballs from kinetics.s3.amazonaws.com; not committed)"
   },
   {
    "id": "activitynet_v1_3_pet_classes",
@@ -4645,13 +4648,13 @@
    "capability": null,
    "citation": "Chen et al., 'MammalNet: A Large-scale Video Benchmark for Mammal Recognition and Behavior Understanding', CVPR 2023",
    "official_page": "https://mammal-net.github.io/ (repo https://github.com/Vision-CAIR/MammalNet)",
-   "notes": "Videos technically reachable only as one 392 GB archive (trimmed clips archive is access-denied).",
+   "notes": "Videos technically reachable only as one 392 GB archive (trimmed clips archive is access-denied). Reconciled 2026-10-10: one category for every MammalNet entry. No dataset licence is published; videos are YouTube uploads; research evaluation only (E11, E17).",
    "sources": [
     "https://raw.githubusercontent.com/Vision-CAIR/MammalNet/main/README.md",
     "https://raw.githubusercontent.com/Vision-CAIR/MammalNet/main/LICENSE",
     "https://mammalnet.s3.amazonaws.com/annotation.tar"
    ],
-   "acquired_in_this_project": "yes (annotations; video streamed for E11)"
+   "acquired_in_this_project": "yes (annotations; dog-breed video streamed frame by frame for E11 and E17, never stored)"
   },
   {
    "id": "charades_household_activities",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import hashlib
+import http.client
 import json
 import os
 import shutil
@@ -67,11 +68,16 @@ def download(url: str, dest: Path, expected_sha256: str | None = None, timeout: 
                 out.write(b)
                 h.update(b)
                 n += len(b)
-    except (urllib.error.URLError, OSError, TimeoutError) as exc:
+    except (urllib.error.URLError, OSError, TimeoutError, http.client.HTTPException) as exc:
         with contextlib.suppress(FileNotFoundError):
             os.unlink(tmp_name)
         raise DownloadError(f"{url}: {exc}") from exc
     digest = h.hexdigest()
+    declared = headers.get("content-length")
+    if declared is not None and declared.isdigit() and int(declared) != n and "content-encoding" not in headers:
+        # A connection cut mid-transfer can end without an error; never keep (or pin) a truncated file.
+        os.unlink(tmp_name)
+        raise DownloadError(f"{url}: truncated transfer ({n} of {declared} bytes)")
     if expected_sha256 and digest != expected_sha256:
         os.unlink(tmp_name)
         raise DownloadError(f"{url}: sha256 mismatch (got {digest}, expected {expected_sha256})")

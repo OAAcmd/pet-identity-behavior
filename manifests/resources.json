@@ -45,7 +45,7 @@
       "training_data": "AudioSet (YouTube segments), per tensorflow/models YAMNet README",
       "terms": {
         "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
-        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the pinned file ('Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.', author 'MediaPipe'), read 2026-10-10. Google also releases YAMNet in the Apache-2.0 tensorflow/models project. No separate model card exists in gs://mediapipe-assets (listed 2026-10-10).",
         "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
       },
       "attribution": "YAMNet by Manoj Plakal and Dan Ellis (Google); AudioSet ontology by Google Inc. (CC BY-SA 4.0).",
@@ -90,7 +90,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -98,10 +98,10 @@
       "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
       "release_suitability": {
         "research": "suitable",
-        "personal_noncommercial": "suitable",
+        "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
+      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientdet_lite2_mediapipe_v1",
@@ -131,7 +131,7 @@
       "use_restrictions": ["Research profile only."],
       "release_suitability": {
         "research": "suitable",
-        "personal_noncommercial": "suitable",
+        "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
       "release_note": "As efficientdet_lite0_mediapipe_v1."
@@ -566,6 +566,29 @@
       "release_note": "Derived from CC BY-NC 3.0 data; commercial builds fall back to unfitted config defaults."
     },
     {
+      "id": "audio_event_thresholds_cc_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "per-group audio-event thresholds refitted on the CC0 / CC BY clips of ESC-50 (E1-CC); candidate for the commercial profile",
+      "name": "artifacts/audio_event_thresholds_cc.json",
+      "files": [
+        {
+          "name": "audio_event_thresholds_cc.json",
+          "path": "artifacts/audio_event_thresholds_cc.json"
+        }
+      ],
+      "derived_from": [
+        "esc50",
+        "yamnet_mediapipe_v1"
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "requires_legal_review"
+      },
+      "release_note": "Audio is CC0 or CC BY per clip (1,770 of 2,000; attribution list in manifests/esc50_files.csv). Open question: the cat/dog labels used to fit the two numbers are ESC-50's (collection CC BY-NC 3.0); re-labelling the 29 cat and 40 dog clips independently removes that dependence (docs/ASSET_TERMS.md A2)."
+    },
+    {
       "id": "detection_verifier_v1",
       "kind": "derived_artifact",
       "status": "available",
@@ -640,7 +663,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -651,10 +674,10 @@
       "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
       "release_suitability": {
         "research": "suitable",
-        "personal_noncommercial": "suitable",
+        "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
+      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientdet_lite0_mediapipe_f16_v1",
@@ -686,7 +709,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -697,10 +720,10 @@
       "contamination_notes": "COCO and Open Images both draw from Flickr; identical photos across them are possible and unaudited.",
       "release_suitability": {
         "research": "suitable",
-        "personal_noncommercial": "suitable",
+        "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "No primary-source weight license in the file or a reachable card; use efficientdet_lite0_tfhub_v1 (license in embedded metadata) for commercial releases."
+      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientnet_lite0_mediapipe_int8_v1",

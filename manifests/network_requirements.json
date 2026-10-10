@@ -20,6 +20,8 @@
     {"host": "open-images-dataset.s3.amazonaws.com", "operation": "GET https://open-images-dataset.s3.amazonaws.com/validation/fe600639ac5f36c1.jpg", "unblocks": ["(reachable today) Open Images images"], "resume": []},
     {"host": "fast-ai-imageclas.s3.amazonaws.com", "operation": "HEAD https://fast-ai-imageclas.s3.amazonaws.com/oxford-iiit-pet.tgz", "unblocks": ["(reachable today) Oxford-IIIT Pet mirror"], "resume": []},
     {"host": "kinetics.s3.amazonaws.com", "operation": "GET https://kinetics.s3.amazonaws.com/", "unblocks": ["(reachable today) Kinetics-700-2020 pet classes via the CVDF mirror"], "resume": []},
-    {"host": "mammalnet.s3.amazonaws.com", "operation": "GET https://mammalnet.s3.amazonaws.com/annotation.tar", "unblocks": ["(reachable today) MammalNet"], "resume": []}
+    {"host": "mammalnet.s3.amazonaws.com", "operation": "GET https://mammalnet.s3.amazonaws.com/annotation.tar", "unblocks": ["(reachable today) MammalNet"], "resume": []},
+    {"host": "ai.google.dev", "operation": "GET https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector", "unblocks": ["Primary licence statement, if any, for the MediaPipe EfficientDet-Lite0/Lite2 detector files used by the personal_noncommercial phone bundle (their embedded metadata has no licence field; docs/ASSET_TERMS.md M2)", "MediaPipe Audio Classifier page for the YAMNet build (its embedded metadata already states Apache-2.0)"], "resume": ["re-read the Models section; update manifests/resources.json terms.weights and docs/ASSET_TERMS.md"]},
+    {"host": "www.deepmind.com", "operation": "GET https://www.deepmind.com/open-source/kinetics", "unblocks": ["Primary licence statement for Kinetics-700-2020 annotations (secondary sources say CC BY 4.0; docs/ASSET_TERMS.md D9)"], "resume": ["update docs/ASSET_TERMS.md"]}
   ]
 }

@@ -17,7 +17,7 @@ validated against household outcomes.
 
 ## Components
 
-| Component | Model / method | Trained here? | Evaluated here | On the phone |
+| Component | Model / method | Trained here? | Evaluated here | In the phone engine (browser; phones untested) |
 | --- | --- | --- | --- | --- |
 | Sound events | YAMNet (AudioSet), ontology-derived cat/dog groups; thresholds from ESC-50 | thresholds | E1 (ESC-50) | yes |
 | Detection (cats, dogs, people) | EfficientDet-Lite0 (COCO), frozen | no | E4, E7, E12 | yes |

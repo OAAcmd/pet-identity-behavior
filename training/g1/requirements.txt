@@ -1,0 +1,4 @@
+# Top-level pins of the G1 training environment (CPython 3.11; TensorFlow <2.16 is required by Model Maker).
+mediapipe-model-maker==0.2.1.4
+tensorflow==2.15.1
+tf-keras==2.15.1

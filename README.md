@@ -1,9 +1,13 @@
 # pet-identity-behavior
 
 **Pet Observer** - an observation-first behavior app for cats and dogs whose
-core analysis runs **on the phone**. A mobile web app (PWA) records or opens
-a clip, analyses it locally with downloaded models (no upload, works offline
-after the one-time download) and reports *observations* (animals found and
+core analysis is built to run **in the phone's browser** (TypeScript engine +
+LiteRT.js WebAssembly; no upload, offline after the one-time model
+download). **Device evidence so far: the browser inference implementation
+has passed automated tests in desktop Chromium only; physical Android,
+iPhone and Safari validation is pending** ([phone test](docs/DEVICE_TEST_PROTOCOL.md)).
+A mobile web app (PWA) records or opens a clip, analyses it locally and
+reports *observations* (animals found and
 tracked, sounds, movement, posture, owner-drawn places, interaction with a
 person, being on a bed, couch, chair or table, quality limits, all with
 timestamps), then *experimental,

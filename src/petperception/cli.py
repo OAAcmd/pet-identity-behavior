@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17"]
-DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -153,6 +153,11 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         out = VO.fetch_images(root, man)
         print(json.dumps({k: v for k, v in out.items() if k != "errors"} | {"errors": list(out.get("errors", {}).items())[:10]}, indent=2))
         return 0 if not out.get("errors") else 1
+    if args.dataset == "kinetics-pets":
+        from .data import kinetics_pets as KP
+
+        print(json.dumps(KP.fetch(root, man), indent=2))
+        return 0
     if args.dataset == "oxford-pets":
         from .data import oxford_pets as OP
 
@@ -201,6 +206,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e1_audio_events as E
 
         return E.run(s, out_dir)
+    if name == "e1-cc":
+        from .eval import e1_licence_subset as E
+
+        return E.run(s, out_dir)
     if name == "e2":
         from .eval import e2_cat_context as E
 
@@ -232,6 +241,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         return E.run(s, out_dir)
     if name == "e14":
         from .eval import e14_tfhub_rawdecode as E
+
+        return E.run(s, out_dir)
+    if name == "e18":
+        from .eval import e18_kinetics_pet_video as E
 
         return E.run(s, out_dir)
     if name == "e17":
@@ -468,6 +481,16 @@ def cmd_network_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_train_prep(args: argparse.Namespace) -> int:
+    s = _settings(args)
+    if args.job == "g1":
+        from .training.g1_data import build
+
+        out = build(s.paths.resolve("data_root"), REPO_ROOT / "manifests", REPO_ROOT / "var" / "training" / "g1", REPO_ROOT / "results" / "g1")
+        print(json.dumps({k: out[k] for k in ("images", "selected_by_role", "dropped_for_leakage", "original_bytes_total")}, indent=2))
+    return 0
+
+
 def cmd_export_device_test(args: argparse.Namespace) -> int:
     from .ondevice.device_test import export_site
 
@@ -685,6 +708,9 @@ def build_parser() -> argparse.ArgumentParser:
     he.add_argument("--out", default=str(REPO_ROOT / "results" / "household" / "evaluation.json"))
     he.add_argument("--write-schemas", action="store_true", help="write the annotation and recording JSON schemas to docs/household/")
     he.set_defaults(func=cmd_household_eval)
+    tp = sub.add_parser("train-prep", help="build the training-data manifests of a G-job (docs/TRAINING_PROGRAM.md)")
+    tp.add_argument("job", choices=["g1"])
+    tp.set_defaults(func=cmd_train_prep)
     npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
     npb.set_defaults(func=cmd_network_probe)
     dt = sub.add_parser("export-device-test", help="assemble the static HTTPS phone test build (page, runtime, model bundle)")
