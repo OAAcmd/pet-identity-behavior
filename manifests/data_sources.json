@@ -3591,7 +3591,7 @@
     "dog",
     "cat"
    ],
-   "size": "Val split: Felis catus 14 recordings (248.7 s), Canis familiaris 10 recordings (147.3 s). Train/test counts not computed (train.json.tar.gz 14 MB not downloaded). Audio is only in split tarballs: val 26.7 GB, test 28.0 GB, train 86.2 GB.",
+   "size": "Train: Felis catus 14 recordings (549.7 s), Canis familiaris 8 (90.6 s), counted from train.json (2026-10-11). Val: Felis catus 14 (248.7 s), Canis familiaris 10 (147.3 s). Audio is only in split tarballs: val 26.7 GB, test 28.0 GB, train 86.2 GB.",
    "annotations": {
     "species_only": [
      "Felis catus (id 5282)",
@@ -3628,7 +3628,8 @@
    "notes": "Obtainable but impractical, because the files are inside 27-86 GB gzip tarballs with no per-file objects.",
    "sources": [
     "https://ml-inat-competition-datasets.s3.amazonaws.com/sounds/2024/val.json.tar.gz"
-   ]
+   ],
+   "decision": "Not requested (2026-10-11): 46 short recordings with species labels only (no vocalization type, no context) sit inside about 113 GB of tarballs that cannot be read member by member; see docs/DATA_TRANSFER_REQUEST.md section 3."
   },
   {
    "id": "yfcc100m_videos_via_multimedia_commons_and_google_audioscope",

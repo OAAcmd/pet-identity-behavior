@@ -75,7 +75,12 @@ in every area (reconciled 2026-10-10).
   * DogSpeak: CC BY-NC-SA per mirrors, huggingface.co blocked.
   * Mudi barks in 6 contexts: data on request from the authors.
 * Vocalization type (bark/growl/whine/howl, meow/purr/hiss):
-  * FSD50K needs zenodo.org (CC licences per clip).
+  * FSD50K needs zenodo.org (CC licences per clip). It is now on the
+    mirror request list ([DATA_TRANSFER_REQUEST.md](DATA_TRANSFER_REQUEST.md), P2).
+  * iNatSounds 2024 has species labels only: train 14 cat recordings
+    (550 s) and 8 dog (91 s); val 14 cat (249 s) and 10 dog (147 s). The
+    audio sits in tarballs of 86 GB (train) and 27 GB (val), which cannot
+    be read member by member. It is not requested (decision 2026-10-11).
   * AudioSet Strong labels are obtained, but the audio is on YouTube
     (blocked).
 
