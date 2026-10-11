@@ -1,0 +1,301 @@
+{
+ "schema": "petperception.mirror_files/1",
+ "note": "Catalogue of dataset files that may be supplied through an authorised mirror. Identity (dataset, version, official URL, filename, size, official checksums) is fixed here; mirror URLs are not committed (src/petperception/data/mirror.py). Priority 1 = most impact on the current bottleneck. Checksum sources are named per entry.",
+ "datasets": [
+  {
+   "id": "mirror_validation_openimages",
+   "version": "v7 (GCS generation 1665485179993737)",
+   "priority": 0,
+   "name": "Open Images V7 boxable class descriptions (importer validation file)",
+   "terms": "CC BY 4.0 (Google)",
+   "annotations": "class id to name",
+   "unblocks": "validation of the mirror importer on a real object-store file",
+   "files": [
+    {
+     "file": "oidv7-class-descriptions-boxable.csv",
+     "official_url": "https://storage.googleapis.com/openimages/v7/oidv7-class-descriptions-boxable.csv",
+     "target": "mirror_validation/openimages_v7/oidv7-class-descriptions-boxable.csv",
+     "size": 12064,
+     "checksums": {
+      "md5": "c5e7cb6b85d0539b2105db2d1974681f"
+     },
+     "note": "md5 from the publisher's Cloud Storage object metadata (md5Hash)"
+    }
+   ]
+  },
+  {
+   "id": "beans_dog_barks",
+   "version": "BEANS dog_barks.zip (GCS generation 1728757838735376)",
+   "priority": 2,
+   "name": "Dog barks, Yin & McCowan (2004), as packaged in the BEANS benchmark",
+   "terms": "no data licence stated (BEANS code MIT); research evaluation only; cite Yin & McCowan 2004",
+   "annotations": "bark context (disturbance, isolation, play), individual dog, breed",
+   "unblocks": "G4 dog bark context (dog counterpart of E2), research profile",
+   "note_present": "reachable directly; no transfer needed",
+   "files": [
+    {
+     "file": "dog_barks.zip",
+     "official_url": "https://storage.googleapis.com/ml-bioacoustics-datasets/dog_barks.zip",
+     "target": "beans_dog_barks/dog_barks.zip",
+     "size": 901568218,
+     "checksums": {
+      "md5": "e8ef0441a89f8087ce8fcade3dfe6c93"
+     },
+     "note": "md5 from the publisher's Cloud Storage object metadata"
+    }
+   ]
+  },
+  {
+   "id": "cop3d",
+   "version": "CoP3D v1 (facebookresearch/cop3d links.json)",
+   "priority": 1,
+   "name": "Common Pets in 3D: smartphone videos of people's own cats and dogs",
+   "terms": "CC BY-NC 4.0 (research evaluation)",
+   "annotations": "per-frame foreground masks (model-generated), camera poses, category cat/dog, sequence id",
+   "unblocks": "detection and tracking evaluation on home-style phone video for both species (current bottleneck), as a second real-video evaluation source",
+   "files": [
+    {
+     "file": "metadata_000.zip",
+     "official_url": "https://dl.fbaipublicfiles.com/cop3d/metadata_000.zip",
+     "target": "cop3d/metadata_000.zip",
+     "checksums": {
+      "sha256": "ce30c523eefea45d169e9ac060baae328d10f5daa5e993138729c606caf77abd"
+     },
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+    },
+    {
+     "file": "cat_000.zip",
+     "official_url": "https://dl.fbaipublicfiles.com/cop3d/cat_000.zip",
+     "target": "cop3d/cat_000.zip",
+     "checksums": {
+      "sha256": "e94cea08cd61dfa31f353c766316271be68c397add5586a0f4663f3816508057"
+     },
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+    },
+    {
+     "file": "cat_001.zip",
+     "official_url": "https://dl.fbaipublicfiles.com/cop3d/cat_001.zip",
+     "target": "cop3d/cat_001.zip",
+     "checksums": {
+      "sha256": "7fba200b39c1e9f8a9783e54b9c1e6fb65d31b032a26b9a6f15f3dea78a44187"
+     },
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+    },
+    {
+     "file": "dog_000.zip",
+     "official_url": "https://dl.fbaipublicfiles.com/cop3d/dog_000.zip",
+     "target": "cop3d/dog_000.zip",
+     "checksums": {
+      "sha256": "186cc7b6b8c06ff0b51f4b8d4da1d2aee085df5ec80712976580d55b9c8bce55"
+     },
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+    },
+    {
+     "file": "dog_001.zip",
+     "official_url": "https://dl.fbaipublicfiles.com/cop3d/dog_001.zip",
+     "target": "cop3d/dog_001.zip",
+     "checksums": {
+      "sha256": "6be8e1f92fa3edbb3fe86c5fb925652e2000ee799a23deabc4b09194ebd1a99b"
+     },
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+    }
+   ]
+  },
+  {
+   "id": "fsd50k",
+   "version": "FSD50K v1.0 (Zenodo record 4060432)",
+   "priority": 2,
+   "name": "FSD50K: human-labelled Freesound sound events (200 AudioSet classes)",
+   "terms": "per clip CC0 / CC BY / CC BY-NC / Sampling+ (licences in FSD50K.metadata.zip); attribution required",
+   "annotations": "clip-level labels incl. Bark, Growling, Howl, Whimper (dog), Meow, Purr, Hiss, Cat, Dog",
+   "unblocks": "vocalization-type evaluation and thresholds for cats and dogs; commercial-capable subset (CC0/CC BY)",
+   "files": [
+    {
+     "file": "FSD50K.ground_truth.zip",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.ground_truth.zip",
+     "target": "fsd50k/FSD50K.ground_truth.zip",
+     "checksums": {
+      "md5": "ca27382c195e37d2269c4c866dd73485"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training"
+    },
+    {
+     "file": "FSD50K.metadata.zip",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.metadata.zip",
+     "target": "fsd50k/FSD50K.metadata.zip",
+     "checksums": {
+      "md5": "b9ea0c829a411c1d42adb9da539ed237"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training"
+    },
+    {
+     "file": "FSD50K.doc.zip",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.doc.zip",
+     "target": "fsd50k/FSD50K.doc.zip",
+     "checksums": {
+      "md5": "3516162b82dc2945d3e7feba0904e800"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training"
+    },
+    {
+     "file": "FSD50K.eval_audio.zip",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.eval_audio.zip",
+     "target": "fsd50k/FSD50K.eval_audio.zip",
+     "checksums": {
+      "md5": "6fa47636c3a3ad5c7dfeba99f2637982"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.eval_audio.z01",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.eval_audio.z01",
+     "target": "fsd50k/FSD50K.eval_audio.z01",
+     "checksums": {
+      "md5": "3090670eaeecc013ca1ff84fe4442aeb"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.zip",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.zip",
+     "target": "fsd50k/FSD50K.dev_audio.zip",
+     "checksums": {
+      "md5": "c480d119b8f7a7e32fdb58f3ea4d6c5a"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.z01",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.z01",
+     "target": "fsd50k/FSD50K.dev_audio.z01",
+     "checksums": {
+      "md5": "faa7cf4cc076fc34a44a479a5ed862a3"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.z02",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.z02",
+     "target": "fsd50k/FSD50K.dev_audio.z02",
+     "checksums": {
+      "md5": "8f9b66153e68571164fb1315d00bc7bc"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.z03",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.z03",
+     "target": "fsd50k/FSD50K.dev_audio.z03",
+     "checksums": {
+      "md5": "1196ef47d267a993d30fa98af54b7159"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.z04",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.z04",
+     "target": "fsd50k/FSD50K.dev_audio.z04",
+     "checksums": {
+      "md5": "d088ac4e11ba53daf9f7574c11cccac9"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    },
+    {
+     "file": "FSD50K.dev_audio.z05",
+     "official_url": "https://zenodo.org/record/4060432/files/FSD50K.dev_audio.z05",
+     "target": "fsd50k/FSD50K.dev_audio.z05",
+     "checksums": {
+      "md5": "81356521aa159accd3c35de22da28c7f"
+     },
+     "note": "md5 as published on the Zenodo record (copied in soundata/datasets/fsd50k.py); dev audio needed only for training - split archive part"
+    }
+   ]
+  },
+  {
+   "id": "catmeows_official",
+   "version": "CatMeows v1.0.2 (Zenodo record 4008297)",
+   "priority": 3,
+   "name": "CatMeows official files (to verify the mirror already used by E2)",
+   "terms": "open access for scientific research and non-commercial purposes; cite Ludovico et al. 2021",
+   "annotations": "context (brushing, isolation, waiting for food), cat id, breed, sex, owner, session in file names",
+   "unblocks": "byte-level verification of the 440 WAVs E2 used (mirror pinned only at first retrieval) and the record's second file, whose content the mirror does not include",
+   "files": [
+    {
+     "file": "dataset.zip",
+     "official_url": "https://zenodo.org/records/4008297/files/dataset.zip",
+     "target": "catmeows_official/dataset.zip",
+     "checksums": {},
+     "note": "the record lists two files: 8.9 MB (md5 b5fa911bcd6514e39dfef6876f747df4) and 4.1 MB (md5 7663bb5e1de2c808beeb202a52dc99ab); which md5 belongs to which name was not readable here - verify against the record JSON"
+    },
+    {
+     "file": "record.json",
+     "official_url": "https://zenodo.org/api/records/4008297",
+     "target": "catmeows_official/record.json",
+     "checksums": {},
+     "note": "the record metadata: file names, sizes, md5 and the licence field"
+    }
+   ]
+  },
+  {
+   "id": "barkopedia",
+   "version": "Hugging Face dataset repositories of ArlingtonCL2 (IJCAI 2025 challenge), snapshot at transfer",
+   "priority": 3,
+   "name": "Barkopedia dog vocal datasets",
+   "terms": "unverified (dataset cards not readable here); must be read from the card before use",
+   "annotations": "bark arousal/valence (husky, shiba), breed, sex, age group, individual id, vocal detection",
+   "unblocks": "G4 dog vocal context at scale",
+   "files": [
+    {
+     "file": "BarkopediaDogEmotionClassification_Data (full repository snapshot incl. README.md)",
+     "official_url": "https://huggingface.co/datasets/ArlingtonCL2/BarkopediaDogEmotionClassification_Data",
+     "target": "barkopedia/emotion.tar",
+     "checksums": {},
+     "note": "repository snapshot as a tar; the card's licence decides use"
+    }
+   ]
+  },
+  {
+   "id": "catflw_dogflw",
+   "version": "Kaggle georgemartvel/catflw and georgemartvel/dogflw, latest version at transfer",
+   "priority": 4,
+   "name": "CatFLW and DogFLW facial landmarks",
+   "terms": "CC BY-NC 4.0 (research); images from the CAT dataset / Stanford Dogs",
+   "annotations": "48 cat / 46 dog facial landmarks per image, bounding boxes",
+   "unblocks": "facial cues for both species (research profile); eye/ear/mouth features",
+   "files": [
+    {
+     "file": "catflw.zip",
+     "official_url": "https://www.kaggle.com/datasets/georgemartvel/catflw",
+     "target": "catflw/catflw.zip",
+     "checksums": {},
+     "note": "Kaggle archive; no published checksum - pinned on first retrieval"
+    },
+    {
+     "file": "dogflw.zip",
+     "official_url": "https://www.kaggle.com/datasets/georgemartvel/dogflw",
+     "target": "dogflw/dogflw.zip",
+     "checksums": {},
+     "note": "as above"
+    }
+   ]
+  },
+  {
+   "id": "awa2_cat_images",
+   "version": "Animals with Attributes 2 (AwA2-data.zip), cat classes only",
+   "priority": 4,
+   "name": "AwA2 images for the AwA-Pose cat keypoints (persian+cat, siamese+cat)",
+   "terms": "per-image licences as listed by AwA2 (images collected from public sources); AwA-Pose annotations MIT",
+   "annotations": "39 keypoints incl. ear base/tip and tail base/end (annotations already reachable on GitHub)",
+   "unblocks": "cat ear and tail keypoints (research), first cat keypoint data",
+   "files": [
+    {
+     "file": "AwA2-cats.zip (JPEGImages/persian+cat and JPEGImages/siamese+cat from AwA2-data.zip)",
+     "official_url": "https://cvml.ista.ac.at/AwA2/AwA2-data.zip",
+     "target": "awa2_cats/AwA2-cats.zip",
+     "checksums": {},
+     "note": "subset archive made by the data owner; pinned on first retrieval; the full AwA2-data.zip is about 13 GB"
+    }
+   ]
+  }
+ ]
+}

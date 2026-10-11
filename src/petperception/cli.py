@@ -505,6 +505,47 @@ def cmd_train_prep(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_mirror(args: argparse.Namespace) -> int:
+    from .data import mirror as MR
+
+    s = _settings(args)
+    data_root = s.paths.resolve("data_root")
+    catalog = MR.load_catalog(REPO_ROOT / "manifests" / "mirror_files.json")
+    sel = [c for c in catalog if (not args.dataset or c.dataset == args.dataset) and (not args.file or c.file == args.file)]
+    urls = MR.mirror_urls()
+    if args.action == "status":
+        for r in MR.status(sel, data_root, urls):
+            exp = r["expiry"]["state"] if r["expiry"] else "-"
+            print(f"{'present' if r['present'] else 'missing':8s} p{r['priority']} {r['key']:60s} url={'yes' if r['url_configured'] else 'no '} "
+                  f"host={r['url_host'] or '-'} expiry={exp} partial={r['partial_bytes']}")
+        return 0
+    if args.action == "fetch":
+        rc = 0
+        for cf in sel:
+            url = MR.url_for(cf, urls) or (cf.official_url if args.official else None)
+            if url is None:
+                print(json.dumps({"key": cf.key, "state": "no_url", "hint": f"set {MR.env_key(cf.key)} or add it to the mirrors file"}))
+                continue
+            try:
+                print(json.dumps(MR.fetch_file(cf, url, data_root, REPO_ROOT / "manifests" / "mirror_pins.csv")))
+            except MR.MirrorError as exc:
+                print(json.dumps({"key": cf.key, "state": "error", "error": str(exc)}))
+                rc = 1
+        return rc
+    if args.action == "verify-remote":
+        rc = 0
+        for cf in sel:
+            url = MR.url_for(cf, urls) or (cf.official_url if args.official else None)
+            if url is None:
+                continue
+            d = MR.stream_digests(url)
+            ok = all(d.get(k) == v for k, v in cf.checksums.items()) and (cf.size is None or d["bytes"] == cf.size)
+            rc |= 0 if ok else 1
+            print(json.dumps({"key": cf.key, "verified": ok, "bytes": d["bytes"], "checked": sorted(cf.checksums), "url": MR.redact(url)}))
+        return rc
+    return 2
+
+
 def cmd_export_device_test(args: argparse.Namespace) -> int:
     from .ondevice.device_test import export_site
 
@@ -722,6 +763,12 @@ def build_parser() -> argparse.ArgumentParser:
     he.add_argument("--out", default=str(REPO_ROOT / "results" / "household" / "evaluation.json"))
     he.add_argument("--write-schemas", action="store_true", help="write the annotation and recording JSON schemas to docs/household/")
     he.set_defaults(func=cmd_household_eval)
+    mr = sub.add_parser("mirror", help="dataset files from authorised mirrors (manifests/mirror_files.json; URLs never committed)")
+    mr.add_argument("action", choices=["status", "fetch", "verify-remote"])
+    mr.add_argument("--dataset")
+    mr.add_argument("--file")
+    mr.add_argument("--official", action="store_true", help="use the official URL when no mirror URL is configured (reachable hosts only)")
+    mr.set_defaults(func=cmd_mirror)
     tp = sub.add_parser("train-prep", help="build the training-data manifests of a G-job (docs/TRAINING_PROGRAM.md)")
     tp.add_argument("job", choices=["g1", "g2"])
     tp.set_defaults(func=cmd_train_prep)
