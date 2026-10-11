@@ -27,6 +27,12 @@ with trainable in {all, head, decoder_head}, for example `2:decoder_head,8:all`
 (staged fine-tuning) or `10:all` (full fine-tuning). Frozen layers run in
 inference mode (BatchNorm statistics fixed).
 
+Initialisation (--init): `coco` (default) starts backbone, decoder and the
+head's convolutions from Model Maker's COCO-trained RetinaNet checkpoint (the
+classifier layer is always re-initialised for the product classes);
+`scratch` skips that checkpoint, so no COCO-derived weight is used. Both are
+recorded in the configuration hash.
+
 Benchmark mode (--benchmark N): measures data loading alone, N training
 steps (after warm-up), a checkpoint write and restore, and a validation
 pass, then exits; results go to <run-dir>/benchmark.json.
@@ -113,6 +119,8 @@ def main() -> None:
     ap.add_argument("--batch-size", type=int, default=16)
     ap.add_argument("--learning-rate", type=float, default=0.3, help="Model Maker convention: scaled by batch/256")
     ap.add_argument("--stages", default="10:all")
+    ap.add_argument("--init", choices=["coco", "scratch"], default="coco", help="COCO-pretrained RetinaNet weights or random initialisation")
+    ap.add_argument("--val-every", type=int, default=1, help="validate every K epochs (the last epoch is always validated)")
     ap.add_argument("--seed", type=int, default=20261019)
     ap.add_argument("--ckpt-minutes", type=float, default=10.0)
     ap.add_argument("--max-minutes", type=float, default=0.0, help="stop cleanly (with a checkpoint) after this wall time; 0 = no limit")
@@ -138,6 +146,8 @@ def main() -> None:
     stages = parse_stages(a.stages)
     total_epochs = sum(n for n, _ in stages)
     config = {"view": str(view), "model": a.model, "batch_size": a.batch_size, "learning_rate": a.learning_rate, "stages": a.stages, "seed": a.seed}
+    if a.init != "coco":  # keeps the hash of earlier COCO-initialised runs unchanged
+        config["init"] = a.init
     config_sha = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     data_ids = {s: sha256_file(view / s / "labels.json") for s in ("train", "development")}
     code_sha = sha256_file(Path(__file__))
@@ -160,6 +170,13 @@ def main() -> None:
     det = od_mod.ObjectDetector(model_spec=ms.SupportedModels.get(getattr(object_detector.SupportedModels, a.model)),
                                 label_names=train_data.label_names, hparams=hp, model_options=model_opt.ObjectDetectorModelOptions())
     det._optimizer = det._create_optimizer(steps_per_epoch)  # warm-up + cosine schedule over all epochs
+    if a.init == "scratch":
+        from mediapipe_model_maker.python.vision.object_detector import model as model_lib
+
+        def build_only(self, checkpoint_path, include_last_layer=False):  # noqa: ARG001 - replaces the COCO checkpoint load
+            self._model(tf.zeros([1] + self._model_spec.input_image_shape), training=True)
+
+        model_lib.ObjectDetectorModel.load_checkpoint = build_only
     det._create_model()  # COCO-pretrained backbone, decoder and head (classifier re-initialised)
     model, opt, pre = det._model, det._optimizer, det._preprocessor
     inner = model._model
@@ -328,7 +345,11 @@ def main() -> None:
         if prev is None:
             sys.exit("no checkpoint to validate")
         ckpt.restore(prev["checkpoint"]).assert_existing_objects_matched()
+        restored_sha = weights_sha()
         v = validate()
+        v["checkpoint"] = prev["checkpoint"]
+        v["restore_weights_sha256"] = restored_sha
+        v["restore_weights_identical"] = restored_sha == prev["weights_sha256"]
         atomic_write(run / f"validation-{prev['checkpoint'].rsplit('-', 1)[-1]}.json", json.dumps(v, indent=2))
         print(json.dumps(v, indent=2))
         return
@@ -417,7 +438,8 @@ def main() -> None:
                 last_ckpt = time.time()
         rec = {"epoch": epoch, "stage": what, "train_loss_mean": float(np.mean(losses)) if losses else None, "epoch_minutes": (time.time() - t_ep) / 60,
                "images_per_second": len(losses) * a.batch_size / max(1e-9, time.time() - t_ep)}
-        rec.update(validate())
+        if (epoch + 1) % a.val_every == 0 or epoch + 1 == total_epochs:
+            rec.update(validate())
         history.append(rec)
         print(json.dumps(rec), flush=True)
         epoch_v.assign_add(1)

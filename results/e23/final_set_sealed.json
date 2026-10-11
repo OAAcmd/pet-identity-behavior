@@ -1,0 +1,23 @@
+{
+  "set": "untouched final video evaluation set",
+  "definition": "Kinetics-700-2020 train clips 101-160 (stream order) of each of the six pet-action classes; after the E19 tuning sample (1-50) and the E19b holdout (51-100)",
+  "fetched_at": "2026-10-11T04:00:03+00:00",
+  "clips": 360,
+  "per_class": {
+    "bathing dog": 60,
+    "grooming cat": 60,
+    "grooming dog": 60,
+    "petting cat": 60,
+    "training dog": 60,
+    "walking the dog": 60
+  },
+  "pins_file": "manifests/kinetics_pets_train_final_sha256.csv",
+  "pins_file_sha256": "dc59f65b87a07d0cc0e76f59a578eb4000630caf8b538b6fa16286f4ef5a392c",
+  "disjoint_from": [
+    "E18 validation clips (YouTube ids checked: none shared)",
+    "E19 tuning clips (file names)",
+    "E19b holdout clips (file names)"
+  ],
+  "rule": "No analysis, viewing or tuning on these clips. They are read once, by E23, after the G1 detector and every operating point are fixed; E23 records that use in results/e23/final_set_use.json and refuses a second run.",
+  "analysed": false
+}

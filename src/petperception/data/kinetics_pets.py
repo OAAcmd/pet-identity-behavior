@@ -67,6 +67,11 @@ def fetch(data_root: Path, manifest_dir: Path) -> dict:
 
 TRAIN_PINS = "kinetics_pets_train_sample_sha256.csv"
 HOLDOUT_PINS = "kinetics_pets_train_holdout_sha256.csv"
+FINAL_PINS = "kinetics_pets_train_final_sha256.csv"
+# Untouched final video evaluation set: train clips 101-160 of each class (after the E19 tuning
+# sample, 1-50, and the E19b holdout, 51-100). Fetched once, pinned, and read only by the final
+# evaluation (E23), which records its single use in results/e23/final_set_use.json.
+FINAL_SKIP, FINAL_PER_CLASS, FINAL_SUBDIR = 100, 60, "train_final"
 
 
 def fetch_train_sample(data_root: Path, manifest_dir: Path, per_class: int = 50, skip: int = 0, subdir: str = "train_sample",

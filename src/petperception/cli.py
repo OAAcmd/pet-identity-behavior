@@ -18,8 +18,8 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b"]
-DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e22"]
+DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
 
@@ -159,6 +159,12 @@ def cmd_fetch_data(args: argparse.Namespace) -> int:
         print(json.dumps(KP.fetch(root, man), indent=2))
         print(json.dumps(KP.fetch_train_sample(root, man), indent=2))
         return 0
+    if args.dataset == "kinetics-pets-final":  # fetch and pin only; nothing reads these clips before E23
+        from .data import kinetics_pets as KP
+
+        out = KP.fetch_train_sample(root, man, per_class=KP.FINAL_PER_CLASS, skip=KP.FINAL_SKIP, subdir=KP.FINAL_SUBDIR, pins_name=KP.FINAL_PINS)
+        print(json.dumps(out, indent=2))
+        return 0
     if args.dataset == "oxford-pets":
         from .data import oxford_pets as OP
 
@@ -217,6 +223,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         return E.run(s, out_dir)
     if name == "e3":
         from .eval import e3_dog_context as E
+
+        return E.run(s, out_dir)
+    if name == "e22":
+        from .eval import e22_dog_bark_context as E
 
         return E.run(s, out_dir)
     if name == "e4":
