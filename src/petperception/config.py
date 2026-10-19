@@ -159,7 +159,9 @@ class VisionConfig(_Strict):
 
 class PoseConfig(_Strict):
     # "dog_keypoints_v1": E9 head on EfficientNet-Lite0 features (dogs only, research profile).
-    provider: Literal["none", "dog_keypoints_v1"] = "none"
+    # "catdog_keypoints_awa_v1": E24 joint head (AwA-Pose), cats and dogs, research profile;
+    #   set head_file to artifacts/keypoints/catdog_keypoints_head_awa_v1.npz with it.
+    provider: Literal["none", "dog_keypoints_v1", "catdog_keypoints_awa_v1"] = "none"
     min_keypoint_visibility: float = 0.5
     head_file: str = "artifacts/keypoints/dog_keypoints_head_v1.npz"
     backbone: str = "efficientnet_lite0_mediapipe_v1"

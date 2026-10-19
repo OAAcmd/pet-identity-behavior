@@ -59,15 +59,27 @@ validated against household outcomes.
 - Dog keypoints (research): PCK@0.1 0.85; dog actions from video (research):
   macro-F1 0.64.
 - Phone vs server on identical files (desktop browser): decisions 38/38,
-  segments F1 0.97.
-- Not measured: anything in real homes, on real phones, cat interaction,
-  vocalization types, hypothesis accuracy, calibration.
+  segments F1 0.98 (2026-10-19, current engine).
+- Home phone videos of pets (CoP3D, E20): the phone build finds the cat in
+  0.70 and the dog in 0.60 of frames; 14 % of dog frames show only a "cat".
+- Independent sound clips (FSD50K, E21, nothing tuned): cat sound present
+  F1 0.69, dog 0.73. Vocalization types: meow 0.73 and bark 0.73 pass the
+  pre-set gate. Purr (0.70, interval too wide) and growl (0.49) do not. Cat
+  hiss could not be measured (two clips). Only meow and bark are shown, and
+  only they can start or support an interpretation. Unvalidated types stay
+  in the result file and can only make an interpretation abstain.
+- Cat keypoints (research, AwA-Pose, E24): PCK@0.1 0.76; ears 0.91, tail 0.51.
+- Not measured: anything in real homes with labels, on real phones, cat
+  interaction, hypothesis accuracy, calibration.
 
 ## Known failure modes
 
 - Sound tags: snoring, crying babies, door creaks and farm animals can trigger
   cat/dog events; TV audio is indistinguishable from a present animal unless
-  no animal is visible.
+  no animal is visible. On FSD50K, purr-like scores fire on engines and
+  motorcycles and the hiss score on trains and traffic, which is why those
+  types are not shown (E21).
+- Dogs in home videos are often reported as cats (E20).
 - Small, occluded or poorly lit animals are often missed; foxes and other
   carnivores can be confused with dogs or cats (the verifier rejects many,
   and rejects some real pets - reported as a quality flag).

@@ -1032,10 +1032,17 @@ Findings:
   The photographer and photo URL of every image are recorded, so the
   variants can be verified per image. That is the step to a releasable cat
   ear model.
-* Not yet integrated: the engines' keypoint path is dog-only and is
-  excluded from the phone bundle (research profile). Integrating it means
-  running the joint head for cats in the research profile, computing the
-  pose features for cats, and checking engine parity.
+* Visibility gates: no gate setting reached the required 90 % precision
+  on the development split, so both heads use E9's default gates (0.5 /
+  0.2). On the cat test split, 87 % of the points the joint head reports
+  are labelled and 71 % are within 0.1 of the box size. Treat reported cat
+  points as uncertain.
+* Integrated in the server engine, research profile only
+  (`pose.provider: catdog_keypoints_awa_v1`). Cat tracks then get keypoints
+  and an ear-tip elevation feature, and tail features are reported
+  unavailable when the tail points are not visible. The phone bundle
+  carries no keypoint model (research data), and the personal and
+  commercial profiles refuse the head.
 
 ### On-device execution
 

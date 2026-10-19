@@ -29,10 +29,10 @@ the effective state. Unknown keys are rejected.
 | `release_profile` | which assets may be used (`manifests/resources.json`, approvals file) | enforced by the engine, `release-check` and `export-ondevice` |
 | `paths` | data, models, results, artifacts, manifests, job scratch | relative paths resolve from the repository root |
 | `limits` | file size, duration, sampled frames, channels, decode timeouts | apply to server analysis; the phone engine reads `max_duration_s`, `max_video_frames`, `max_file_bytes` from the bundle |
-| `audio` | YAMNet backend, thresholds file (E1), context-tag threshold | thresholds file is CC BY-NC-derived: not used in commercial builds |
+| `audio` | YAMNet backend, thresholds file (E1), context-tag threshold, `subtype_validation_file` (E21: which vocalization types may be shown or trigger interpretations) | thresholds file is CC BY-NC-derived: not used in commercial builds; without the validation file no subtype counts as validated |
 | `vision` | detector id, 2 fps sampling, score threshold 0.35, NMS, target classes, tracker (Kalman, chosen in E8), quality thresholds, camera-motion compensation | `context_object_classes` (e.g. `[person]`) adds the generic "person visible" evidence on the server; COCO `bowl` is not validated for pet bowls |
 | `vision.verifier` | second-stage false-positive rejection (E7) | parameters file is chosen per (detector, classifier) pair: `verifier_<detector>[__<classifier>].json` |
-| `pose` | dog keypoints (E9) | research profile only; `provider: none` elsewhere |
+| `pose` | keypoints: `dog_keypoints_v1` (E9, dogs) or `catdog_keypoints_awa_v1` with `head_file: artifacts/keypoints/catdog_keypoints_head_awa_v1.npz` (E24, cats and dogs) | research profile only (data terms); `provider: none` elsewhere; never in the phone bundle |
 | `posture` | coarse posture (E10) | `backbone` must match the features the parameters were validated on |
 | `interaction` | person-pet interaction candidates (E13): model file, minimum person score, minimum consecutive frames | persons are detected but never stored in results |
 | `object_relation` | on-furniture candidates (E15): model file, minimum furniture detection score (0.35, the value E15 was evaluated with), minimum consecutive frames | furniture is detected but never stored in results |

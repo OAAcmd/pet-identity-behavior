@@ -120,6 +120,16 @@ def score(params: dict, d: Path, recs: list[dict], gv: float, gp: float) -> dict
     return res
 
 
+def head_metadata(fname: str, sha: str, model: str, gate: dict) -> dict:
+    """Sidecar read by the engine (gates) and by people (terms)."""
+    return {"file": fname, "sha256": sha, "backbone": "efficientnet_lite0_mediapipe_v1", "keypoints": KP.DOG_KEYPOINTS,
+            "species": ["cat"] if model == "A_cat_head" else ["cat", "dog"], "experiment": "E24", "model": model,
+            "gates": {"min_visible": gate["min_visible"], "min_peak": gate["min_peak"], "dev_precision": gate.get("dev_precision"),
+                      "dev_coverage_of_labelled": gate.get("dev_coverage_of_labelled"), "rule": gate.get("rule")},
+            "trained_on": f"AwA-Pose @ {awa_pose.COMMIT} on AwA2 images, photographer-grouped fit split (results/e24/metrics.json)",
+            "terms": "Research only: AwA2 image licence variants unverified for most images. Annotations MIT."}
+
+
 def run(settings: Settings, out_dir: Path) -> dict:
     t_start = time.perf_counter()
     data_root = settings.paths.resolve("data_root")
@@ -170,6 +180,7 @@ def run(settings: Settings, out_dir: Path) -> dict:
         p = art / fname
         np.savez(p, **models[name], version=np.array(fname[:-4]))
         shas[fname] = sha256_file(p)
+        write_json(p.with_suffix(".json"), head_metadata(fname, shas[fname], name, gates[name]))
     summary = {
         "experiment": "E24", "status": "completed", "created_at": utc_now().isoformat(timespec="seconds"),
         "protocol": __doc__.strip().splitlines(),

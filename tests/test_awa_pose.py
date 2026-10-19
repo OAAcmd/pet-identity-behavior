@@ -62,3 +62,32 @@ def test_photographer_split_is_disjoint_and_complete():
     ph = {k: {r["photographer"] for r in v} for k, v in s.items()}
     assert not (ph["fit"] & ph["dev"]) and not (ph["fit"] & ph["test"]) and not (ph["dev"] & ph["test"])
     assert sum(len(v) for v in s.values()) == 500
+
+
+@pytest.mark.integration
+def test_research_profile_runs_cat_keypoints_with_the_joint_head():
+    from pathlib import Path
+
+    from petperception.config import REPO_ROOT, load_settings
+    from petperception.pipeline import AnalysisEngine
+    from petperception.registry import check_model
+
+    media = REPO_ROOT / "var" / "examples" / "s10_moving_cat_play_zone.mp4"
+    s = load_settings(overrides={"pose": {"provider": "catdog_keypoints_awa_v1", "head_file": "artifacts/keypoints/catdog_keypoints_head_awa_v1.npz"}})
+    if not media.exists() or not check_model(s, s.vision.detector).ready or not check_model(s, s.pose.backbone).ready:
+        pytest.skip("scenario media or models not present (evaluate e5; fetch-models)")
+    eng = AnalysisEngine(s).load()
+    assert eng.status["pose"].state == "ok" and eng.pose.species == ("cat", "dog")
+    r = eng.analyze(str(Path(media)))
+    cats = [t for t in r.observations.animal_tracks if t.species == "cat"]
+    assert cats and cats[0].keypoints
+    feats = {f.name: f for f in cats[0].pose_features}
+    assert feats["ear_tip_elevation"].available
+
+
+def test_personal_profile_refuses_the_research_keypoint_head():
+    from petperception.config import load_settings
+    from petperception.registry import release_decision
+
+    s = load_settings(overrides={"release_profile": "personal_noncommercial"})
+    assert not release_decision(s.release_profile, "catdog_keypoints_head_awa_v1").allowed

@@ -40,7 +40,11 @@ for this project. Consequently:
 - `waiting_for_food`, `brushing`, `isolation` (CatMeows) and any Barkopedia
   activity labels keep their original meaning. `isolation` is not fear.
 - AudioSet tags such as "Hiss" or "Growling" are acoustic categories, not
-  verified emotional states, and "Growling" is shared by cats and dogs.
+  verified emotional states, and "Growling" is shared by cats and dogs. In
+  FSD50K most "Hiss" clips are steam, fire or traffic, so E21 scores cat
+  hiss as "Hiss and Cat" (two evaluation clips exist).
+- Barkopedia's arousal and valence labels are human attributions of emotion.
+  The product does not output emotions, so the set is not used (CC BY-NC-SA 4.0).
 
 ## Identity
 

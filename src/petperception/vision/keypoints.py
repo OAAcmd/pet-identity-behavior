@@ -175,7 +175,10 @@ class DogKeypointModel:
 
 @dataclass
 class DogPoseProvider:
-    """PoseProvider for dogs backed by DogKeypointModel (research profile only)."""
+    """PoseProvider backed by a keypoint head in the 24-point layout (research profile only).
+
+    Default: the E9 dog head (dog-pose data). The E24 joint head (AwA-Pose) also covers cats
+    and was trained on eyes, withers and throat, so nothing is suppressed for it."""
 
     model: DogKeypointModel
     name: str = "dog_keypoints_effnetlite0_head"
@@ -184,12 +187,14 @@ class DogPoseProvider:
     available: bool = True
     unavailable_reason: str | None = None
     # A point is reported visible when both scores pass these a-priori gates
-    # (chosen on the development split; see results/e9).
+    # (chosen on the development split; see results/e9 and results/e24).
     min_visible: float = 0.5
     min_peak: float = 0.2
+    suppressed: tuple[str, ...] = UNANNOTATED  # points the head never saw labelled: always reported invisible
 
     def estimate(self, rgb: np.ndarray, box: np.ndarray, t_s: float, feats: dict[str, np.ndarray] | None = None) -> KeypointSet | None:
         xy, peak, vis = self.model.predict(rgb, box, feats)
         conf = np.where((vis >= self.min_visible) & (peak >= self.min_peak), np.minimum(vis, 1.0), 0.0)
-        conf[[DOG_KEYPOINTS.index(k) for k in UNANNOTATED]] = 0.0
+        if self.suppressed:
+            conf[[DOG_KEYPOINTS.index(k) for k in self.suppressed]] = 0.0
         return KeypointSet(t_s=t_s, names=list(DOG_KEYPOINTS), xy=xy, visibility=conf)

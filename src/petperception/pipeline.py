@@ -163,11 +163,12 @@ class AnalysisEngine:
         if s.pose.provider == "none":
             self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="unavailable", reason=self.pose.unavailable_reason)
             return
-        from .vision.keypoints import DogKeypointModel, DogPoseProvider
+        from .vision.keypoints import DOG_KEYPOINTS, DogKeypointModel, DogPoseProvider
 
         head = REPO_ROOT / s.pose.head_file
+        head_id = {"dog_keypoints_v1": "dog_keypoints_head_v1", "catdog_keypoints_awa_v1": "catdog_keypoints_head_awa_v1"}[s.pose.provider]
         rb = check_model(s, s.pose.backbone)
-        blocked = [d for d in (release_decision(s.release_profile, s.pose.backbone), release_decision(s.release_profile, "dog_keypoints_head_v1")) if not d.allowed]
+        blocked = [d for d in (release_decision(s.release_profile, s.pose.backbone), release_decision(s.release_profile, head_id)) if not d.allowed]
         reason = None if head.exists() else f"{head.name} not found; run: petperception evaluate --experiment e9"
         reason = reason or (rb.reason if not rb.ready else None) or (blocked[0].reason if blocked else None)
         if reason:
@@ -180,9 +181,14 @@ class AnalysisEngine:
         gates = _json.loads(meta_path.read_text()).get("gates", {}) if meta_path.exists() else {}
         model = DogKeypointModel.load(Path(next(iter(rb.files.values()))), head, s.runtime.num_threads)
         self._backbone = model.backbone
-        self.pose = DogPoseProvider(model, min_visible=float(gates.get("min_visible", 0.5)), min_peak=float(gates.get("min_peak", 0.2)))
-        self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="ok", model_id=s.pose.backbone, version=model.version,
-                                                reason="dogs only (research profile); no cat keypoint model is available")
+        if s.pose.provider == "catdog_keypoints_awa_v1":
+            self.pose = DogPoseProvider(model, name="catdog_keypoints_awa_effnetlite0_head", species=("cat", "dog"), keypoint_vocabulary=tuple(DOG_KEYPOINTS),
+                                        min_visible=float(gates.get("min_visible", 0.5)), min_peak=float(gates.get("min_peak", 0.2)), suppressed=())
+            why = "cats and dogs (research profile; AwA-Pose, E24: cat ears PCK@0.1 0.91, tails 0.51)"
+        else:
+            self.pose = DogPoseProvider(model, min_visible=float(gates.get("min_visible", 0.5)), min_peak=float(gates.get("min_peak", 0.2)))
+            why = "dogs only (research profile); cats need pose.provider catdog_keypoints_awa_v1"
+        self.status["pose"] = S.ComponentStatus(name="pose", kind="pose", state="ok", model_id=s.pose.backbone, version=model.version, reason=why)
 
     def _load_posture(self) -> None:
         s = self.settings
