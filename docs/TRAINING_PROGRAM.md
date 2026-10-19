@@ -234,6 +234,10 @@ verifier):
 * The export step had never run before and crashed (missing directory).
   Fixed. The crashed run was recovered by re-running the same command,
   which restored the final checkpoint and exported.
+* The per-epoch shuffle buffered the whole training set as decoded images.
+  On the full set that reached 12.4 GB of the 15.7 GB of RAM within two
+  minutes. `--shuffle-buffer` (seeded, part of the configuration hash)
+  bounds it: the full run uses 4,096 and peaks at about 4.4 GB.
 
 **Metrics and acceptance (fixed now).** G1a replaces the phone detector
 only if all of these hold:
@@ -251,11 +255,14 @@ only if all of these hold:
 **Checkpoints and artifacts.**
 * `train_resumable.py` writes a full checkpoint every `--ckpt-minutes`, at
   every epoch end and on SIGTERM / SIGINT (see Recoverability below).
-* The development AP50 (fast NumPy validation per epoch) selects the epoch.
+* The export is made from the final epoch. The per-epoch development AP50
+  (fast NumPy validation) is recorded in the history for monitoring. The
+  learning-rate schedule anneals to the last epoch, and the last three
+  checkpoints are kept.
 * Exports: `model_float32.tflite`, `model_float16.tflite`,
-  `model_int8_ptq.tflite`, `metadata.json`, `metrics.json` (versions,
-  hyperparameters, data sizes, development COCO metrics, history, wall
-  time).
+  `model_int8_ptq.tflite`, `metadata.json` (anchors, labels), and
+  `final.json` (configuration, per-epoch history with development AP50 per
+  class, SHA-256 of each export, peak memory).
 * Registered as `pet_detector_oi_g1a_v1` in `manifests/resources.json`.
   The weights are never committed.
 
