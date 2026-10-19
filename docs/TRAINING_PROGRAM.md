@@ -188,6 +188,20 @@ verifier):
 * The E4-subset AP50 of M3 (0.923 / 0.851) differs from acceptance 1's
   values (0.833 / 0.748): those are on the E4 final split with the
   verifier.
+* Acceptance 1 check (`petperception g1-eval --e7`): a verifier was fitted
+  for the light model on the tuning set, and the E4 split scored once with
+  it (E7 protocol). AP50 is then computed from the detections kept at the
+  operating point, so it is lower than the full-curve AP above
+  (`results/g1/light6k_e7/`). The light model is close but does not pass:
+
+  | E7 protocol | AP50 cat | AP50 dog | Image specificity cat / dog |
+  | --- | --- | --- | --- |
+  | M3 with its verifier (acceptance thresholds) | 0.833 | 0.748 | 0.660 / 0.919 |
+  | G1 light run with its verifier | 0.713 (fail) | 0.737 (fail, by 0.011) | 0.766 / 0.820 |
+
+  One tuning image's upstream bytes no longer match the pin recorded at
+  first retrieval. It is excluded and listed in the result, not silently
+  replaced.
 * **On home phone video (E20, CoP3D, detector only) the light model is
   clearly worse** (`results/g1/light6k_e20/metrics.json`):
   - cat frames found 0.565 against M3's 0.713 (paired difference -0.148

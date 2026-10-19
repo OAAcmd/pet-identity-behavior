@@ -24,13 +24,17 @@ in every area (reconciled 2026-10-10).
 | Data | Capability it serves | Experiments | Terms (docs/ASSET_TERMS.md) | How obtained |
 | --- | --- | --- | --- | --- |
 | ESC-50 (40 cat, 40 dog clips) | cat/dog vocalization presence | E1, E1-CC | CC BY-NC 3.0 collection; per-clip CC0 / CC BY / NC | GitHub, pinned |
-| CatMeows (440 meows, 3 contexts, 21 cats) | cat vocal context (G4) | E2 | research and non-commercial (Zenodo text) | unofficial GitHub mirror, per-file pins; Zenodo blocked |
+| CatMeows (440 meows, 3 contexts, 21 cats) | cat vocal context (G4) | E2 | CC BY-NC 4.0 (Zenodo record licence field) | official Zenodo files since 2026-10-19 (MD5-verified); the 440 WAVs of the earlier mirror are byte-identical |
 | Open Images V7 subsets (cat/dog boxes, verified negatives, confusable animals, person-pet and pet-object relationships, captions) | detection, false-positive rejection, posture, person interaction, pet on furniture | E4, E7, E10, E13, E15 | CC BY 4.0 / CC BY 2.0 | storage.googleapis.com, S3 |
 | Open Images V7 train (G1 manifest) | detector training (G1) | G1 data job | CC BY 4.0 / CC BY 2.0 | streamed annotations; images on demand |
 | Ultralytics dog-pose (24 keypoints) | dog ears, tail, keypoints | E9 | research only | GitHub release |
 | MammalNet dog-breed videos | dog temporal behaviour | E11, E17 | no dataset licence (research) | annotations from S3; video streamed |
 | Oxford-IIIT Pet (37 breeds) | breed robustness, cats and dogs | E16 | CC BY-SA 4.0 annotations | fast.ai S3 mirror, pinned |
 | Kinetics-700-2020, 6 pet-action classes (294 validation clips with sound; 600 train clips for tuning and holdout) | full engine on real pet video; video operating point | E18, E19, E19b | annotations CC BY 4.0 (secondary); YouTube clips | CVDF S3 mirror, pinned |
+| FSD50K v1.0 (51,197 clips; eval 10,231, dev 40,966) | species presence, vocalization types, context sounds | E21, E21b | CC BY 4.0 collection; per-clip CC0 / CC BY / CC BY-NC / Sampling+ | Zenodo, MD5 per archive file (2026-10-19) |
+| Yin & McCowan dog barks (693 barks, 10 dogs), BEANS package | dog bark context | E22 | no data licence stated (research) | publisher bucket, MD5 by streaming, members by Range |
+| CoP3D v1 (209 cat and 147 dog phone videos read, 10 frames each) | pet detection on home phone video | E20 | CC BY-NC 4.0 | dl.fbaipublicfiles.com by Range, CRC per member |
+| AwA-Pose on AwA2 images (619 cat, 1,310 dog instances) | cat and dog keypoints (ears, tail) | E24 | annotations MIT; per-image Flickr licences, mostly variant not stated | GitHub (pinned commit) and cvml.ista.ac.at by Range |
 
 ## Priorities and what is possible today
 
@@ -105,6 +109,11 @@ in every area (reconciled 2026-10-10).
   annotation guide has an object field).
 
 ## Network blockers
+
+**2026-10-19: the blockers below are lifted** except Kaggle downloads, which
+need an account token, and YouTube's video CDN. See
+`results/data_access/network_probe.json` and docs/DATA_TRANSFER_REQUEST.md
+for what was fetched. The table is kept as the record of 2026-10-10.
 
 Each row gives the exact host and the failed operation. The operation is
 repeated by `uv run petperception network-probe`, which writes
