@@ -929,6 +929,68 @@ The dog counterpart of E2:
   A release needs licensed, household-recorded barks with owner-reported
   situations.
 
+### E24 - Cat and dog keypoints on AwA-Pose - COMPLETED, research only
+
+The first cat keypoint model in the project. AwA-Pose has MIT annotations
+(39 named points and a box per animal) on AwA2 images:
+* cats: 619 instances (persian, siamese), 257 photographers;
+* dogs: 1,310 instances (four breeds), 533 photographers.
+
+Data handling:
+* images and their per-image licence files were read by HTTP Range from
+  the 13.9 GB AwA2 archive;
+* the pickled annotations were loaded with an unpickler that refuses every
+  global;
+* points were mapped to the product's 24-point layout
+  (`petperception.data.awa_pose.TO_AWA`).
+
+Protocol, fixed before training (`src/petperception/eval/e24_awa_keypoints.py`):
+* splits per species, grouped by photographer, because one photographer
+  contributed 250 dog instances: test 20 % of photographers, development
+  10 % of the rest;
+* E9's head, hyperparameters and training code, unchanged;
+* CIs resample photographers.
+
+| Model (test split) | Cat PCK@0.1 [95 % CI] (79 inst., 51 photogr.) | Cat ears / tail | Dog PCK@0.1 [95 % CI] (459 inst., 107 photogr.) | Dog ears / tail |
+| --- | --- | --- | --- | --- |
+| A: cat head (AwA cats) | 0.740 [0.688, 0.785] | **0.898** / 0.392 | - | - |
+| B: joint head (AwA cats + dogs) | **0.760 [0.711, 0.802]** | **0.914** / 0.510 | **0.712 [0.675, 0.807]** | 0.761 / 0.629 |
+| C: E9 dog head (dog-pose, research), unchanged | 0.479 [0.446, 0.510] | 0.858 / 0.412 | 0.507 [0.486, 0.563] | 0.788 / 0.708 |
+
+Derived features against the annotation (model B):
+* cats: ear-tip elevation sign agreement 0.93 (75 instances, Spearman
+  0.71); tail elevation is computable on only 11 test cats (0.82);
+* dogs: ear-tip elevation 0.88 (Spearman 0.78), tail elevation 0.86
+  (Spearman 0.82).
+
+Per class:
+* persian 0.77, siamese 0.75;
+* chihuahua 0.75, collie 0.79, German shepherd 0.83, dalmatian 0.65
+  (257 of the dog test instances).
+
+Findings:
+* **Cat ears meet the G2 PCK criterion** (ear PCK@0.1 ≥ 0.85) with either
+  head. **The tail does not** (≥ 0.75 required; 0.39-0.51 for cats,
+  0.63 for dogs). The ear-position kappa criterion needs categorical
+  labels, which this data does not have.
+* Cat-specific training matters. The dog head finds cat ears (0.86) but
+  not cat heads, legs or tails (overall 0.48). Training jointly on dogs
+  helps cats (0.74 → 0.76; tail 0.39 → 0.51).
+* The E9 head scores only 0.51 on AwA dogs: a cross-dataset drop that
+  includes annotation-convention differences (AwA-Pose's upper-leg point
+  is mapped to the product's elbow). Keypoint figures do not transfer
+  between datasets. Household evaluation stays necessary.
+* Release status: the images' licence files mostly say "Creative Commons"
+  without the variant (1,803 of 1,929 instances), so both heads are
+  research only (`artifacts/keypoints/cat*_keypoints_head_awa_v1.npz`).
+  The photographer and photo URL of every image are recorded, so the
+  variants can be verified per image. That is the step to a releasable cat
+  ear model.
+* Not yet integrated: the engines' keypoint path is dog-only and is
+  excluded from the phone bundle (research profile). Integrating it means
+  running the joint head for cats in the research profile, computing the
+  pose features for cats, and checking engine parity.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

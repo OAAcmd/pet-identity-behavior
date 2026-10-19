@@ -76,24 +76,37 @@ def clone(data_root: Path) -> Path:
 
 
 def parse_licence(text: str) -> dict:
-    """Licence class and source of one AwA2 licence file (free-text lines such as 'license: ...')."""
-    t = text.lower()
+    """Licence class, photographer and photo URL of one AwA2 licence file.
+
+    The files are Flickr / Wikimedia metadata blocks with `Photographer :`,
+    `Photo URL :` and `License :` lines. Most say only "Creative Commons
+    (http://creativecommons.org/licenses)" without the variant; those are
+    classed "CC (variant not stated)", which may include NC or ND variants.
+    """
+    field = {}
+    for line in text.splitlines():
+        if ":" in line:
+            k, v = line.split(":", 1)
+            field.setdefault(k.strip().lower(), v.strip())
+    lic = field.get("license", "")
+    t = lic.lower()
     if "publicdomain/zero" in t or "cc0" in t:
         kind = "CC0"
-    elif "publicdomain/mark" in t or "public domain" in t:
+    elif "public domain" in t or "publicdomain/mark" in t:
         kind = "PD"
-    elif re.search(r"licenses/by-nc|by-nc|noncommercial|non-commercial", t):
-        kind = "CC BY-NC" + ("-SA" if "-sa" in t or "sharealike" in t else "") + ("-ND" if "-nd" in t or "noderiv" in t else "")
-    elif re.search(r"licenses/by-sa|by-sa|sharealike", t):
+    elif re.search(r"licenses/by-nc", t):
+        kind = "CC BY-NC"
+    elif re.search(r"licenses/by-sa|attribution-share ?alike", t):
         kind = "CC BY-SA"
-    elif re.search(r"licenses/by-nd|by-nd|noderiv", t):
+    elif re.search(r"licenses/by-nd", t):
         kind = "CC BY-ND"
-    elif re.search(r"licenses/by/|creative commons attribution|\bcc by\b|cc-by", t):
+    elif re.search(r"licenses/by/", t):
         kind = "CC BY"
+    elif t.startswith("creative commons"):
+        kind = "CC (variant not stated)"
     else:
-        kind = "other"
-    url = re.search(r"https?://\S+", text)
-    return {"kind": kind, "first_url": url.group(0) if url else None}
+        kind = "not stated"
+    return {"kind": kind, "photographer": field.get("photographer", ""), "photo_url": field.get("photo url", ""), "licence_line": lic}
 
 
 def fetch(data_root: Path, workers: int = 16) -> list[dict]:
@@ -115,13 +128,17 @@ def fetch(data_root: Path, workers: int = 16) -> list[dict]:
 
     def get(job):
         cls, p, member = job
-        img = z.read(member)
-        lic_name = f"Animals_with_Attributes2/licenses/{cls}/{p.stem}.txt"
-        lic = z.read(lic_name).decode("utf-8", "replace") if lic_name in z.entries else ""
         dst = out / cls / f"{p.stem}.jpg"
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        dst.write_bytes(img)
-        (dst.with_suffix(".licence.txt")).write_text(lic)
+        lic_p = dst.with_suffix(".licence.txt")
+        if dst.exists() and lic_p.exists():  # already fetched (the cache is keyed by AwA2 file name)
+            img, lic = dst.read_bytes(), lic_p.read_text()
+        else:
+            img = z.read(member)
+            lic_name = f"Animals_with_Attributes2/licenses/{cls}/{p.stem}.txt"
+            lic = z.read(lic_name).decode("utf-8", "replace") if lic_name in z.entries else ""
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes(img)
+            lic_p.write_text(lic)
         return cls, p, dst, hashlib.sha256(img).hexdigest(), lic
 
     rows = []
@@ -133,7 +150,7 @@ def fetch(data_root: Path, workers: int = 16) -> list[dict]:
                 if not isinstance(a, dict) or "bbox" not in a:
                     continue
                 rows.append({"id": f"{p.stem}#{aid}", "image": str(dst), "class": cls, "species": CLASSES[cls], "sha256": sha,
-                             "licence": lp["kind"], "licence_url": lp["first_url"] or "",
+                             "licence": lp["kind"], "photographer": lp["photographer"], "photo_url": lp["photo_url"],
                              "bbox": json.dumps([float(v) for v in a["bbox"]]),
                              "points": json.dumps({k: [float(v[0]), float(v[1])] for k, v in a.items() if k != "bbox"})})
     with open(index, "w", newline="", encoding="utf-8") as fh:
@@ -159,4 +176,5 @@ def to_record(row: dict, hw: tuple[int, int]) -> dict:
         if v and v[0] >= 0 and v[1] >= 0:
             kp[i] = (v[0] / w, v[1] / h, 2.0)
     return {"id": row["id"], "image": row["image"], "breed": row["class"], "species": row["species"], "licence": row["licence"],
+            "photographer": row["photographer"] or row["id"],
             "box": np.clip(np.array([x1 / w, y1 / h, x2 / w, y2 / h]), 0.0, 1.0), "kp": kp}

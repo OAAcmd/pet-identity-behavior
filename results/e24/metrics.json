@@ -1,0 +1,1531 @@
+{
+  "experiment": "E24",
+  "status": "completed",
+  "created_at": "2026-10-19T10:44:58+00:00",
+  "protocol": [
+    "E24: cat and dog keypoints (ears, tail, limbs) on AwA-Pose, the first cat keypoint model.",
+    "",
+    "Data (`petperception.data.awa_pose`): AwA-Pose annotations (MIT) on AwA2",
+    "images. 619 cat instances (persian, siamese; 257 photographers) and 1,310 dog",
+    "instances (chihuahua, collie, dalmatian, German shepherd; 533 photographers).",
+    "The points are mapped to the 24-point layout the product uses for dogs.",
+    "",
+    "Protocol, fixed before training:",
+    "* Splits per species, grouped by photographer: one photographer often shot",
+    "  the same animal many times (one contributed 250 dog instances). Test: 20 %",
+    "  of photographers (seed 20261019). Development: 10 % of the rest. Fit: the",
+    "  remainder. The test split is scored once per model.",
+    "* Models (E9's architecture, hyperparameters and training code, unchanged:",
+    "  frozen EfficientNet-Lite0 features of the box crop, heatmap + offset head,",
+    "  30 epochs, the epoch chosen by development PCK@0.1, visibility gates chosen",
+    "  on development at >= 90 % precision):",
+    "  A. cat head: AwA cats only;",
+    "  B. joint head: AwA cats and dogs;",
+    "  C. reference: the E9 dog head (dog-pose data, research only) applied",
+    "     unchanged. For cats this is zero-shot; for AwA dogs it is cross-dataset.",
+    "* Metrics (E9's): PCK@{0.05, 0.1, 0.2} of the box's longer side, per",
+    "  keypoint and per region (ears, tail, legs, head). Ear-tip and tail",
+    "  elevation sign agreement with the annotation, using the product's",
+    "  feature definitions. 95 % CIs resample photographers. Also per class",
+    "  (persian / siamese, the four dog breeds).",
+    "* G2 shipping criteria (docs/TRAINING_PROGRAM.md, set before this run):",
+    "  ears only if ear PCK@0.1 >= 0.85; tail only if tail PCK@0.1 >= 0.75. The",
+    "  ear-position kappa criterion needs categorical labels this data does not",
+    "  have, so it is reported as not evaluable.",
+    "",
+    "Terms: annotations MIT; images carry per-image Flickr / Wikimedia licences,",
+    "mostly \"Creative Commons\" without the variant stated (1,803 of 1,929",
+    "instances). Until the variants are verified, everything trained here is",
+    "research only."
+  ],
+  "data": {
+    "annotations": "https://github.com/prinik/AwA-Pose.git @ 7ba27c70dca49b83f37770a16b64df19058f3f96 (MIT)",
+    "images": "https://cvml.ista.ac.at/AwA2/AwA2-data.zip (per-image licence files)",
+    "instances": {
+      "cat": 619,
+      "dog": 1310
+    },
+    "photographers": {
+      "cat": 257,
+      "dog": 533
+    },
+    "licences": {
+      "CC (variant not stated)": 1803,
+      "CC BY-SA": 65,
+      "CC0": 27,
+      "PD": 7,
+      "CC BY": 27
+    },
+    "splits": {
+      "cat": {
+        "fit": {
+          "instances": 457,
+          "photographers": 185
+        },
+        "dev": {
+          "instances": 83,
+          "photographers": 21
+        },
+        "test": {
+          "instances": 79,
+          "photographers": 51
+        }
+      },
+      "dog": {
+        "fit": {
+          "instances": 789,
+          "photographers": 383
+        },
+        "dev": {
+          "instances": 62,
+          "photographers": 43
+        },
+        "test": {
+          "instances": 459,
+          "photographers": 107
+        }
+      }
+    },
+    "keypoint_mapping": {
+      "front_left_paw": "front_left_paw",
+      "front_left_knee": "front_left_knee",
+      "front_left_elbow": "front_left_thai",
+      "rear_left_paw": "back_left_paw",
+      "rear_left_knee": "back_left_knee",
+      "rear_left_elbow": "back_left_thai",
+      "front_right_paw": "front_right_paw",
+      "front_right_knee": "front_right_knee",
+      "front_right_elbow": "front_right_thai",
+      "rear_right_paw": "back_right_paw",
+      "rear_right_knee": "back_right_knee",
+      "rear_right_elbow": "back_right_thai",
+      "tail_start": "tail_base",
+      "tail_end": "tail_end",
+      "left_ear_base": "left_earbase",
+      "right_ear_base": "right_earbase",
+      "nose": "nose",
+      "chin": "lower_jaw",
+      "left_ear_tip": "left_earend",
+      "right_ear_tip": "right_earend",
+      "left_eye": "left_eye",
+      "right_eye": "right_eye",
+      "withers": "back_base",
+      "throat": "throat_base"
+    },
+    "seed": 20261019
+  },
+  "training": {
+    "A_cat_head": {
+      "log": [
+        {
+          "epoch": 1,
+          "train_loss": 5.587879061698914,
+          "dev_pck@0.1": 0.31724627395315824,
+          "seconds": 10.9
+        },
+        {
+          "epoch": 2,
+          "train_loss": 4.515889525413513,
+          "dev_pck@0.1": 0.47196593328601844,
+          "seconds": 6.3
+        },
+        {
+          "epoch": 3,
+          "train_loss": 4.062896549701691,
+          "dev_pck@0.1": 0.5940383250532293,
+          "seconds": 6.6
+        },
+        {
+          "epoch": 4,
+          "train_loss": 3.824026256799698,
+          "dev_pck@0.1": 0.63875088715401,
+          "seconds": 4.7
+        },
+        {
+          "epoch": 5,
+          "train_loss": 3.643375664949417,
+          "dev_pck@0.1": 0.6600425833924769,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 6,
+          "train_loss": 3.5256802141666412,
+          "dev_pck@0.1": 0.6692689850958127,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 7,
+          "train_loss": 3.448530912399292,
+          "dev_pck@0.1": 0.6777856635911994,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 8,
+          "train_loss": 3.389281839132309,
+          "dev_pck@0.1": 0.6855926188786373,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 9,
+          "train_loss": 3.3313073813915253,
+          "dev_pck@0.1": 0.6855926188786373,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 10,
+          "train_loss": 3.2847341299057007,
+          "dev_pck@0.1": 0.6841731724627396,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 11,
+          "train_loss": 3.256983608007431,
+          "dev_pck@0.1": 0.6983676366217175,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 12,
+          "train_loss": 3.2106890976428986,
+          "dev_pck@0.1": 0.694819020581973,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 13,
+          "train_loss": 3.1873399317264557,
+          "dev_pck@0.1": 0.6919801277501775,
+          "seconds": 4.5
+        },
+        {
+          "epoch": 14,
+          "train_loss": 3.1501556038856506,
+          "dev_pck@0.1": 0.694819020581973,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 15,
+          "train_loss": 3.111982047557831,
+          "dev_pck@0.1": 0.6983676366217175,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 16,
+          "train_loss": 3.103854775428772,
+          "dev_pck@0.1": 0.6990773598296665,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 17,
+          "train_loss": 3.088728576898575,
+          "dev_pck@0.1": 0.694819020581973,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 18,
+          "train_loss": 3.067073792219162,
+          "dev_pck@0.1": 0.6997870830376153,
+          "seconds": 4.3
+        },
+        {
+          "epoch": 19,
+          "train_loss": 3.059061735868454,
+          "dev_pck@0.1": 0.7012065294535131,
+          "seconds": 4.4
+        },
+        {
+          "epoch": 20,
+          "train_loss": 3.0399582982063293,
+          "dev_pck@0.1": 0.694819020581973,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 21,
+          "train_loss": 3.028113842010498,
+          "dev_pck@0.1": 0.6919801277501775,
+          "seconds": 4.0
+        },
+        {
+          "epoch": 22,
+          "train_loss": 3.0114356875419617,
+          "dev_pck@0.1": 0.6983676366217175,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 23,
+          "train_loss": 3.0049770772457123,
+          "dev_pck@0.1": 0.6997870830376153,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 24,
+          "train_loss": 2.9974551796913147,
+          "dev_pck@0.1": 0.6955287437899219,
+          "seconds": 4.1
+        },
+        {
+          "epoch": 25,
+          "train_loss": 2.984589695930481,
+          "dev_pck@0.1": 0.6933995741660752,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 26,
+          "train_loss": 2.98367902636528,
+          "dev_pck@0.1": 0.694819020581973,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 27,
+          "train_loss": 2.9778798818588257,
+          "dev_pck@0.1": 0.6941092973740242,
+          "seconds": 4.6
+        },
+        {
+          "epoch": 28,
+          "train_loss": 2.987698495388031,
+          "dev_pck@0.1": 0.6933995741660752,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 29,
+          "train_loss": 2.9768932461738586,
+          "dev_pck@0.1": 0.6933995741660752,
+          "seconds": 4.2
+        },
+        {
+          "epoch": 30,
+          "train_loss": 2.9852943420410156,
+          "dev_pck@0.1": 0.6933995741660752,
+          "seconds": 4.0
+        }
+      ],
+      "selected_epoch": 19,
+      "min_visible": 0.5,
+      "min_peak": 0.2,
+      "dev_precision": 0.0,
+      "dev_coverage_of_labelled": 0.0,
+      "rule": "precision >= 0.90, max coverage",
+      "train_seconds": 146.8
+    },
+    "B_joint_head": {
+      "log": [
+        {
+          "epoch": 1,
+          "train_loss": 4.97209746837616,
+          "dev_pck@0.1": 0.5337101332256762,
+          "seconds": 13.9
+        },
+        {
+          "epoch": 2,
+          "train_loss": 3.9111424922943114,
+          "dev_pck@0.1": 0.662091239402503,
+          "seconds": 11.0
+        },
+        {
+          "epoch": 3,
+          "train_loss": 3.6378018498420714,
+          "dev_pck@0.1": 0.7085183689947517,
+          "seconds": 11.3
+        },
+        {
+          "epoch": 4,
+          "train_loss": 3.50511554479599,
+          "dev_pck@0.1": 0.7283003633427533,
+          "seconds": 11.1
+        },
+        {
+          "epoch": 5,
+          "train_loss": 3.4307961463928223,
+          "dev_pck@0.1": 0.73960436011304,
+          "seconds": 10.9
+        },
+        {
+          "epoch": 6,
+          "train_loss": 3.367992269992828,
+          "dev_pck@0.1": 0.7436415018167137,
+          "seconds": 10.7
+        },
+        {
+          "epoch": 7,
+          "train_loss": 3.3153048515319825,
+          "dev_pck@0.1": 0.7476786435203876,
+          "seconds": 11.0
+        },
+        {
+          "epoch": 8,
+          "train_loss": 3.2775976419448853,
+          "dev_pck@0.1": 0.7488897860314897,
+          "seconds": 11.6
+        },
+        {
+          "epoch": 9,
+          "train_loss": 3.243645131587982,
+          "dev_pck@0.1": 0.7501009285425918,
+          "seconds": 10.9
+        },
+        {
+          "epoch": 10,
+          "train_loss": 3.209063231945038,
+          "dev_pck@0.1": 0.7480823576907549,
+          "seconds": 10.7
+        },
+        {
+          "epoch": 11,
+          "train_loss": 3.1841788411140444,
+          "dev_pck@0.1": 0.7533306419055309,
+          "seconds": 10.7
+        },
+        {
+          "epoch": 12,
+          "train_loss": 3.1539905667304993,
+          "dev_pck@0.1": 0.7375857892612031,
+          "seconds": 10.6
+        },
+        {
+          "epoch": 13,
+          "train_loss": 3.132823848724365,
+          "dev_pck@0.1": 0.7464675010092854,
+          "seconds": 14.6
+        },
+        {
+          "epoch": 14,
+          "train_loss": 3.1128262639045716,
+          "dev_pck@0.1": 0.749293500201857,
+          "seconds": 14.5
+        },
+        {
+          "epoch": 15,
+          "train_loss": 3.0907097101211547,
+          "dev_pck@0.1": 0.749293500201857,
+          "seconds": 14.4
+        },
+        {
+          "epoch": 16,
+          "train_loss": 3.075802135467529,
+          "dev_pck@0.1": 0.7440452159870812,
+          "seconds": 15.2
+        },
+        {
+          "epoch": 17,
+          "train_loss": 3.061866044998169,
+          "dev_pck@0.1": 0.742834073475979,
+          "seconds": 14.7
+        },
+        {
+          "epoch": 18,
+          "train_loss": 3.0481849670410157,
+          "dev_pck@0.1": 0.7416229309648769,
+          "seconds": 14.7
+        },
+        {
+          "epoch": 19,
+          "train_loss": 3.0374706745147706,
+          "dev_pck@0.1": 0.744852644327816,
+          "seconds": 15.3
+        },
+        {
+          "epoch": 20,
+          "train_loss": 3.0258270144462585,
+          "dev_pck@0.1": 0.749293500201857,
+          "seconds": 14.3
+        },
+        {
+          "epoch": 21,
+          "train_loss": 3.0148305177688597,
+          "dev_pck@0.1": 0.7436415018167137,
+          "seconds": 13.6
+        },
+        {
+          "epoch": 22,
+          "train_loss": 3.007039511203766,
+          "dev_pck@0.1": 0.7472749293500202,
+          "seconds": 13.9
+        },
+        {
+          "epoch": 23,
+          "train_loss": 3.0006914496421815,
+          "dev_pck@0.1": 0.7444489301574485,
+          "seconds": 14.9
+        },
+        {
+          "epoch": 24,
+          "train_loss": 2.995683014392853,
+          "dev_pck@0.1": 0.7476786435203876,
+          "seconds": 14.3
+        },
+        {
+          "epoch": 25,
+          "train_loss": 2.990002155303955,
+          "dev_pck@0.1": 0.7424303593056116,
+          "seconds": 13.9
+        },
+        {
+          "epoch": 26,
+          "train_loss": 2.9877413272857667,
+          "dev_pck@0.1": 0.7456600726685506,
+          "seconds": 13.8
+        },
+        {
+          "epoch": 27,
+          "train_loss": 2.984248197078705,
+          "dev_pck@0.1": 0.7456600726685506,
+          "seconds": 16.3
+        },
+        {
+          "epoch": 28,
+          "train_loss": 2.9838420748710632,
+          "dev_pck@0.1": 0.7456600726685506,
+          "seconds": 14.6
+        },
+        {
+          "epoch": 29,
+          "train_loss": 2.980742847919464,
+          "dev_pck@0.1": 0.7452563584981833,
+          "seconds": 14.8
+        },
+        {
+          "epoch": 30,
+          "train_loss": 2.98118714094162,
+          "dev_pck@0.1": 0.7456600726685506,
+          "seconds": 13.7
+        }
+      ],
+      "selected_epoch": 11,
+      "min_visible": 0.5,
+      "min_peak": 0.2,
+      "dev_precision": 0.0,
+      "dev_coverage_of_labelled": 0.0,
+      "rule": "precision >= 0.90, max coverage",
+      "train_seconds": 399.5
+    }
+  },
+  "gates": {
+    "A_cat_head": {
+      "min_visible": 0.5,
+      "min_peak": 0.2,
+      "dev_precision": 0.0,
+      "dev_coverage_of_labelled": 0.0,
+      "rule": "precision >= 0.90, max coverage",
+      "train_seconds": 146.8
+    },
+    "B_joint_head": {
+      "min_visible": 0.5,
+      "min_peak": 0.2,
+      "dev_precision": 0.0,
+      "dev_coverage_of_labelled": 0.0,
+      "rule": "precision >= 0.90, max coverage",
+      "train_seconds": 399.5
+    },
+    "C_e9_dog_head_reference": {
+      "min_visible": 0.5,
+      "min_peak": 0.2,
+      "note": "E9's own gates"
+    }
+  },
+  "results": {
+    "A_cat_head": {
+      "cat": {
+        "instances": 79,
+        "labelled_points": 1166,
+        "breeds": 51,
+        "pck@0.05": 0.5205831903945112,
+        "pck@0.05_ci95": {
+          "ci_low": 0.47480045329128895,
+          "ci_high": 0.5641829330545968,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.1": 0.7401372212692967,
+        "pck@0.1_ci95": {
+          "ci_low": 0.6875799129687332,
+          "ci_high": 0.7854271715758268,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.2": 0.8730703259005146,
+        "pck@0.2_ci95": {
+          "ci_low": 0.8277252149224819,
+          "ci_high": 0.9088933312374237,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "per_keypoint_pck@0.1": {
+          "front_left_paw": [
+            0.5510204081632653,
+            49
+          ],
+          "front_left_knee": [
+            0.574468085106383,
+            47
+          ],
+          "front_left_elbow": [
+            0.6326530612244898,
+            49
+          ],
+          "rear_left_paw": [
+            0.3333333333333333,
+            21
+          ],
+          "rear_left_knee": [
+            0.3157894736842105,
+            19
+          ],
+          "rear_left_elbow": [
+            0.43478260869565216,
+            23
+          ],
+          "front_right_paw": [
+            0.5227272727272727,
+            44
+          ],
+          "front_right_knee": [
+            0.5526315789473685,
+            38
+          ],
+          "front_right_elbow": [
+            0.5,
+            40
+          ],
+          "rear_right_paw": [
+            0.3684210526315789,
+            19
+          ],
+          "rear_right_knee": [
+            0.4375,
+            16
+          ],
+          "rear_right_elbow": [
+            0.5555555555555556,
+            18
+          ],
+          "tail_start": [
+            0.48,
+            25
+          ],
+          "tail_end": [
+            0.3076923076923077,
+            26
+          ],
+          "left_ear_base": [
+            0.9078947368421053,
+            76
+          ],
+          "right_ear_base": [
+            0.9473684210526315,
+            76
+          ],
+          "nose": [
+            0.961038961038961,
+            77
+          ],
+          "chin": [
+            0.9726027397260274,
+            73
+          ],
+          "left_ear_tip": [
+            0.8513513513513513,
+            74
+          ],
+          "right_ear_tip": [
+            0.8831168831168831,
+            77
+          ],
+          "left_eye": [
+            0.9324324324324325,
+            74
+          ],
+          "right_eye": [
+            0.948051948051948,
+            77
+          ],
+          "withers": [
+            0.6166666666666667,
+            60
+          ],
+          "throat": [
+            0.75,
+            68
+          ]
+        },
+        "visibility_average_precision": 0.9433348540561984,
+        "gated_output": {
+          "gate_visible": 0.5,
+          "gate_peak": 0.2,
+          "reported_points": 1205,
+          "reported_that_are_labelled": 0.8589211618257261,
+          "reported_and_within_0.1": 0.6738589211618258,
+          "labelled_points_reported": 0.8876500857632933
+        },
+        "derived_features": {
+          "ear_tip_elevation": {
+            "n": 75,
+            "available_rate_where_gt_available": 1.0,
+            "sign_agreement": 0.96,
+            "spearman": 0.44739687055476524,
+            "mae": 0.20351787049023662
+          },
+          "tail_elevation": {
+            "n": 11,
+            "available_rate_where_gt_available": 0.5789473684210527,
+            "sign_agreement": 0.8181818181818182,
+            "spearman": 0.8363636363636365,
+            "mae": 0.16671304284307334
+          }
+        },
+        "regions": {
+          "ears": {
+            "pck@0.1": 0.8976897689768977,
+            "labelled_points": 303
+          },
+          "tail": {
+            "pck@0.1": 0.39215686274509803,
+            "labelled_points": 51
+          },
+          "legs": {
+            "pck@0.1": 0.5117493472584856,
+            "labelled_points": 383
+          },
+          "head": {
+            "pck@0.1": 0.9534883720930233,
+            "labelled_points": 301
+          }
+        },
+        "g2_criteria": {
+          "ears": {
+            "threshold": 0.85,
+            "pck@0.1": 0.8976897689768977,
+            "met": true
+          },
+          "tail": {
+            "threshold": 0.75,
+            "pck@0.1": 0.39215686274509803,
+            "met": false
+          },
+          "ear_position_kappa": "not evaluable: no categorical ear-position labels in AwA-Pose"
+        },
+        "by_class": {
+          "persian+cat": {
+            "instances": 35,
+            "pck@0.1": 0.7510373443983402
+          },
+          "siamese+cat": {
+            "instances": 44,
+            "pck@0.1": 0.7324561403508771
+          }
+        }
+      }
+    },
+    "B_joint_head": {
+      "cat": {
+        "instances": 79,
+        "labelled_points": 1166,
+        "breeds": 51,
+        "pck@0.05": 0.5514579759862779,
+        "pck@0.05_ci95": {
+          "ci_low": 0.5041601089040848,
+          "ci_high": 0.5918557722060395,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.1": 0.7598627787307033,
+        "pck@0.1_ci95": {
+          "ci_low": 0.7106360535057007,
+          "ci_high": 0.8018401853649372,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.2": 0.8970840480274442,
+        "pck@0.2_ci95": {
+          "ci_low": 0.8541859647040874,
+          "ci_high": 0.9284753826924643,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "per_keypoint_pck@0.1": {
+          "front_left_paw": [
+            0.6326530612244898,
+            49
+          ],
+          "front_left_knee": [
+            0.5957446808510638,
+            47
+          ],
+          "front_left_elbow": [
+            0.6326530612244898,
+            49
+          ],
+          "rear_left_paw": [
+            0.5238095238095238,
+            21
+          ],
+          "rear_left_knee": [
+            0.3684210526315789,
+            19
+          ],
+          "rear_left_elbow": [
+            0.4782608695652174,
+            23
+          ],
+          "front_right_paw": [
+            0.6590909090909091,
+            44
+          ],
+          "front_right_knee": [
+            0.5789473684210527,
+            38
+          ],
+          "front_right_elbow": [
+            0.55,
+            40
+          ],
+          "rear_right_paw": [
+            0.2631578947368421,
+            19
+          ],
+          "rear_right_knee": [
+            0.5,
+            16
+          ],
+          "rear_right_elbow": [
+            0.4444444444444444,
+            18
+          ],
+          "tail_start": [
+            0.64,
+            25
+          ],
+          "tail_end": [
+            0.38461538461538464,
+            26
+          ],
+          "left_ear_base": [
+            0.9078947368421053,
+            76
+          ],
+          "right_ear_base": [
+            0.9210526315789473,
+            76
+          ],
+          "nose": [
+            0.935064935064935,
+            77
+          ],
+          "chin": [
+            0.9178082191780822,
+            73
+          ],
+          "left_ear_tip": [
+            0.9324324324324325,
+            74
+          ],
+          "right_ear_tip": [
+            0.8961038961038961,
+            77
+          ],
+          "left_eye": [
+            0.918918918918919,
+            74
+          ],
+          "right_eye": [
+            0.948051948051948,
+            77
+          ],
+          "withers": [
+            0.6166666666666667,
+            60
+          ],
+          "throat": [
+            0.7794117647058824,
+            68
+          ]
+        },
+        "visibility_average_precision": 0.9507967710907869,
+        "gated_output": {
+          "gate_visible": 0.5,
+          "gate_peak": 0.2,
+          "reported_points": 1194,
+          "reported_that_are_labelled": 0.871859296482412,
+          "reported_and_within_0.1": 0.7077051926298158,
+          "labelled_points_reported": 0.8927958833619211
+        },
+        "derived_features": {
+          "ear_tip_elevation": {
+            "n": 75,
+            "available_rate_where_gt_available": 1.0,
+            "sign_agreement": 0.9333333333333333,
+            "spearman": 0.7127169274537696,
+            "mae": 0.30823169133369166
+          },
+          "tail_elevation": {
+            "n": 11,
+            "available_rate_where_gt_available": 0.5789473684210527,
+            "sign_agreement": 0.8181818181818182,
+            "spearman": 0.7181818181818183,
+            "mae": 0.19254864345222253
+          }
+        },
+        "regions": {
+          "ears": {
+            "pck@0.1": 0.9141914191419142,
+            "labelled_points": 303
+          },
+          "tail": {
+            "pck@0.1": 0.5098039215686274,
+            "labelled_points": 51
+          },
+          "legs": {
+            "pck@0.1": 0.556135770234987,
+            "labelled_points": 383
+          },
+          "head": {
+            "pck@0.1": 0.9302325581395349,
+            "labelled_points": 301
+          }
+        },
+        "g2_criteria": {
+          "ears": {
+            "threshold": 0.85,
+            "pck@0.1": 0.9141914191419142,
+            "met": true
+          },
+          "tail": {
+            "threshold": 0.75,
+            "pck@0.1": 0.5098039215686274,
+            "met": false
+          },
+          "ear_position_kappa": "not evaluable: no categorical ear-position labels in AwA-Pose"
+        },
+        "by_class": {
+          "persian+cat": {
+            "instances": 35,
+            "pck@0.1": 0.7676348547717843
+          },
+          "siamese+cat": {
+            "instances": 44,
+            "pck@0.1": 0.7543859649122807
+          }
+        }
+      },
+      "dog": {
+        "instances": 459,
+        "labelled_points": 7509,
+        "breeds": 107,
+        "pck@0.05": 0.45691836462911173,
+        "pck@0.05_ci95": {
+          "ci_low": 0.41893622078277015,
+          "ci_high": 0.5526641756418227,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "pck@0.1": 0.7123451857770675,
+        "pck@0.1_ci95": {
+          "ci_low": 0.6751662212846093,
+          "ci_high": 0.8072549327444134,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "pck@0.2": 0.8718870688507124,
+        "pck@0.2_ci95": {
+          "ci_low": 0.8492826538283796,
+          "ci_high": 0.9292569234377841,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "per_keypoint_pck@0.1": {
+          "front_left_paw": [
+            0.5738831615120275,
+            291
+          ],
+          "front_left_knee": [
+            0.6357388316151202,
+            291
+          ],
+          "front_left_elbow": [
+            0.6851851851851852,
+            270
+          ],
+          "rear_left_paw": [
+            0.5085470085470085,
+            234
+          ],
+          "rear_left_knee": [
+            0.5895196506550219,
+            229
+          ],
+          "rear_left_elbow": [
+            0.587378640776699,
+            206
+          ],
+          "front_right_paw": [
+            0.5947712418300654,
+            306
+          ],
+          "front_right_knee": [
+            0.6390728476821192,
+            302
+          ],
+          "front_right_elbow": [
+            0.7068965517241379,
+            290
+          ],
+          "rear_right_paw": [
+            0.5102880658436214,
+            243
+          ],
+          "rear_right_knee": [
+            0.5258620689655172,
+            232
+          ],
+          "rear_right_elbow": [
+            0.5863636363636363,
+            220
+          ],
+          "tail_start": [
+            0.678714859437751,
+            249
+          ],
+          "tail_end": [
+            0.5727272727272728,
+            220
+          ],
+          "left_ear_base": [
+            0.8354114713216958,
+            401
+          ],
+          "right_ear_base": [
+            0.8528678304239401,
+            401
+          ],
+          "nose": [
+            0.8868778280542986,
+            442
+          ],
+          "chin": [
+            0.85785536159601,
+            401
+          ],
+          "left_ear_tip": [
+            0.6814621409921671,
+            383
+          ],
+          "right_ear_tip": [
+            0.6666666666666666,
+            384
+          ],
+          "left_eye": [
+            0.903485254691689,
+            373
+          ],
+          "right_eye": [
+            0.9102902374670184,
+            379
+          ],
+          "withers": [
+            0.7182320441988951,
+            362
+          ],
+          "throat": [
+            0.7875,
+            400
+          ]
+        },
+        "visibility_average_precision": 0.9277217916518189,
+        "gated_output": {
+          "gate_visible": 0.5,
+          "gate_peak": 0.2,
+          "reported_points": 8233,
+          "reported_that_are_labelled": 0.8470788291023928,
+          "reported_and_within_0.1": 0.6207943641442973,
+          "labelled_points_reported": 0.9287521640697829
+        },
+        "derived_features": {
+          "ear_tip_elevation": {
+            "n": 343,
+            "available_rate_where_gt_available": 0.9942028985507246,
+            "sign_agreement": 0.8775510204081632,
+            "spearman": 0.7801465576613579,
+            "mae": 0.624852503293715
+          },
+          "tail_elevation": {
+            "n": 163,
+            "available_rate_where_gt_available": 0.8489583333333334,
+            "sign_agreement": 0.8588957055214724,
+            "spearman": 0.8196141675118183,
+            "mae": 0.14740044350276965
+          },
+          "play_bow_candidate": {
+            "n": 36,
+            "available_rate_where_gt_available": 0.6792452830188679,
+            "gt_positive": 0,
+            "pred_positive": 1,
+            "agreement": 0.9722222222222222,
+            "recall": null,
+            "precision": 0.0
+          }
+        },
+        "regions": {
+          "ears": {
+            "pck@0.1": 0.7609942638623327,
+            "labelled_points": 1569
+          },
+          "tail": {
+            "pck@0.1": 0.6289978678038379,
+            "labelled_points": 469
+          },
+          "legs": {
+            "pck@0.1": 0.5995504174694927,
+            "labelled_points": 3114
+          },
+          "head": {
+            "pck@0.1": 0.8890282131661442,
+            "labelled_points": 1595
+          }
+        },
+        "g2_criteria": {
+          "ears": {
+            "threshold": 0.85,
+            "pck@0.1": 0.7609942638623327,
+            "met": false
+          },
+          "tail": {
+            "threshold": 0.75,
+            "pck@0.1": 0.6289978678038379,
+            "met": false
+          },
+          "ear_position_kappa": "not evaluable: no categorical ear-position labels in AwA-Pose"
+        },
+        "by_class": {
+          "chihuahua": {
+            "instances": 53,
+            "pck@0.1": 0.7493975903614458
+          },
+          "collie": {
+            "instances": 70,
+            "pck@0.1": 0.7920072661217076
+          },
+          "dalmatian": {
+            "instances": 257,
+            "pck@0.1": 0.647877358490566
+          },
+          "german+shepherd": {
+            "instances": 79,
+            "pck@0.1": 0.828101644245142
+          }
+        }
+      }
+    },
+    "C_e9_dog_head_reference": {
+      "cat": {
+        "instances": 79,
+        "labelled_points": 1166,
+        "breeds": 51,
+        "pck@0.05": 0.32075471698113206,
+        "pck@0.05_ci95": {
+          "ci_low": 0.28542494421161485,
+          "ci_high": 0.3481730823439209,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.1": 0.47855917667238423,
+        "pck@0.1_ci95": {
+          "ci_low": 0.44621805763307254,
+          "ci_high": 0.5101485976656833,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "pck@0.2": 0.6389365351629502,
+        "pck@0.2_ci95": {
+          "ci_low": 0.6052472973658833,
+          "ci_high": 0.6727165149695066,
+          "n_boot": 1000,
+          "n_groups": 51,
+          "unit": "group"
+        },
+        "per_keypoint_pck@0.1": {
+          "front_left_paw": [
+            0.4897959183673469,
+            49
+          ],
+          "front_left_knee": [
+            0.23404255319148937,
+            47
+          ],
+          "front_left_elbow": [
+            0.4489795918367347,
+            49
+          ],
+          "rear_left_paw": [
+            0.42857142857142855,
+            21
+          ],
+          "rear_left_knee": [
+            0.21052631578947367,
+            19
+          ],
+          "rear_left_elbow": [
+            0.34782608695652173,
+            23
+          ],
+          "front_right_paw": [
+            0.5681818181818182,
+            44
+          ],
+          "front_right_knee": [
+            0.2894736842105263,
+            38
+          ],
+          "front_right_elbow": [
+            0.35,
+            40
+          ],
+          "rear_right_paw": [
+            0.3157894736842105,
+            19
+          ],
+          "rear_right_knee": [
+            0.0,
+            16
+          ],
+          "rear_right_elbow": [
+            0.3333333333333333,
+            18
+          ],
+          "tail_start": [
+            0.44,
+            25
+          ],
+          "tail_end": [
+            0.38461538461538464,
+            26
+          ],
+          "left_ear_base": [
+            0.8289473684210527,
+            76
+          ],
+          "right_ear_base": [
+            0.8947368421052632,
+            76
+          ],
+          "nose": [
+            0.8961038961038961,
+            77
+          ],
+          "chin": [
+            0.8904109589041096,
+            73
+          ],
+          "left_ear_tip": [
+            0.8513513513513513,
+            74
+          ],
+          "right_ear_tip": [
+            0.8571428571428571,
+            77
+          ],
+          "left_eye": [
+            0.0,
+            74
+          ],
+          "right_eye": [
+            0.0,
+            77
+          ],
+          "withers": [
+            0.05,
+            60
+          ],
+          "throat": [
+            0.0,
+            68
+          ]
+        },
+        "visibility_average_precision": 0.8342079388374769,
+        "gated_output": {
+          "gate_visible": 0.5,
+          "gate_peak": 0.2,
+          "reported_points": 968,
+          "reported_that_are_labelled": 0.7964876033057852,
+          "reported_and_within_0.1": 0.5392561983471075,
+          "labelled_points_reported": 0.6612349914236707
+        },
+        "derived_features": {
+          "ear_tip_elevation": {
+            "n": 74,
+            "available_rate_where_gt_available": 0.9866666666666667,
+            "sign_agreement": 0.8918918918918919,
+            "spearman": 0.5982228804146611,
+            "mae": 0.2691296034110759
+          }
+        },
+        "regions": {
+          "ears": {
+            "pck@0.1": 0.858085808580858,
+            "labelled_points": 303
+          },
+          "tail": {
+            "pck@0.1": 0.4117647058823529,
+            "labelled_points": 51
+          },
+          "legs": {
+            "pck@0.1": 0.36553524804177545,
+            "labelled_points": 383
+          },
+          "head": {
+            "pck@0.1": 0.44518272425249167,
+            "labelled_points": 301
+          }
+        },
+        "g2_criteria": {
+          "ears": {
+            "threshold": 0.85,
+            "pck@0.1": 0.858085808580858,
+            "met": true
+          },
+          "tail": {
+            "threshold": 0.75,
+            "pck@0.1": 0.4117647058823529,
+            "met": false
+          },
+          "ear_position_kappa": "not evaluable: no categorical ear-position labels in AwA-Pose"
+        },
+        "by_class": {
+          "persian+cat": {
+            "instances": 35,
+            "pck@0.1": 0.46473029045643155
+          },
+          "siamese+cat": {
+            "instances": 44,
+            "pck@0.1": 0.48830409356725146
+          }
+        }
+      },
+      "dog": {
+        "instances": 459,
+        "labelled_points": 7509,
+        "breeds": 107,
+        "pck@0.05": 0.31522173391929686,
+        "pck@0.05_ci95": {
+          "ci_low": 0.2914533262557706,
+          "ci_high": 0.3775987812534375,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "pck@0.1": 0.506725263017712,
+        "pck@0.1_ci95": {
+          "ci_low": 0.48615378855680436,
+          "ci_high": 0.5628751073526131,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "pck@0.2": 0.6863763483819417,
+        "pck@0.2_ci95": {
+          "ci_low": 0.6694050884782201,
+          "ci_high": 0.7372358744462804,
+          "n_boot": 1000,
+          "n_groups": 107,
+          "unit": "group"
+        },
+        "per_keypoint_pck@0.1": {
+          "front_left_paw": [
+            0.6494845360824743,
+            291
+          ],
+          "front_left_knee": [
+            0.17525773195876287,
+            291
+          ],
+          "front_left_elbow": [
+            0.5888888888888889,
+            270
+          ],
+          "rear_left_paw": [
+            0.5555555555555556,
+            234
+          ],
+          "rear_left_knee": [
+            0.25327510917030566,
+            229
+          ],
+          "rear_left_elbow": [
+            0.5970873786407767,
+            206
+          ],
+          "front_right_paw": [
+            0.6176470588235294,
+            306
+          ],
+          "front_right_knee": [
+            0.19536423841059603,
+            302
+          ],
+          "front_right_elbow": [
+            0.5724137931034483,
+            290
+          ],
+          "rear_right_paw": [
+            0.6090534979423868,
+            243
+          ],
+          "rear_right_knee": [
+            0.27586206896551724,
+            232
+          ],
+          "rear_right_elbow": [
+            0.5590909090909091,
+            220
+          ],
+          "tail_start": [
+            0.7670682730923695,
+            249
+          ],
+          "tail_end": [
+            0.6409090909090909,
+            220
+          ],
+          "left_ear_base": [
+            0.8329177057356608,
+            401
+          ],
+          "right_ear_base": [
+            0.8478802992518704,
+            401
+          ],
+          "nose": [
+            0.8891402714932126,
+            442
+          ],
+          "chin": [
+            0.8603491271820449,
+            401
+          ],
+          "left_ear_tip": [
+            0.7336814621409922,
+            383
+          ],
+          "right_ear_tip": [
+            0.734375,
+            384
+          ],
+          "left_eye": [
+            0.04289544235924933,
+            373
+          ],
+          "right_eye": [
+            0.013192612137203167,
+            379
+          ],
+          "withers": [
+            0.049723756906077346,
+            362
+          ],
+          "throat": [
+            0.0,
+            400
+          ]
+        },
+        "visibility_average_precision": 0.8596999483519701,
+        "gated_output": {
+          "gate_visible": 0.5,
+          "gate_peak": 0.2,
+          "reported_points": 6338,
+          "reported_that_are_labelled": 0.816030293467971,
+          "reported_and_within_0.1": 0.5315556958030925,
+          "labelled_points_reported": 0.6887734718337994
+        },
+        "derived_features": {
+          "ear_tip_elevation": {
+            "n": 320,
+            "available_rate_where_gt_available": 0.927536231884058,
+            "sign_agreement": 0.9125,
+            "spearman": 0.8221922333225911,
+            "mae": 0.5036769538044001
+          },
+          "tail_elevation": {
+            "n": 111,
+            "available_rate_where_gt_available": 0.578125,
+            "sign_agreement": 0.8918918918918919,
+            "spearman": 0.8876535626535627,
+            "mae": 0.09494734353869516
+          },
+          "play_bow_candidate": {
+            "n": 16,
+            "available_rate_where_gt_available": 0.3018867924528302,
+            "gt_positive": 0,
+            "pred_positive": 0,
+            "agreement": 1.0,
+            "recall": null,
+            "precision": null
+          }
+        },
+        "regions": {
+          "ears": {
+            "pck@0.1": 0.7884002549394519,
+            "labelled_points": 1569
+          },
+          "tail": {
+            "pck@0.1": 0.7078891257995735,
+            "labelled_points": 469
+          },
+          "legs": {
+            "pck@0.1": 0.46852922286448295,
+            "labelled_points": 3114
+          },
+          "head": {
+            "pck@0.1": 0.47586206896551725,
+            "labelled_points": 1595
+          }
+        },
+        "g2_criteria": {
+          "ears": {
+            "threshold": 0.85,
+            "pck@0.1": 0.7884002549394519,
+            "met": false
+          },
+          "tail": {
+            "threshold": 0.75,
+            "pck@0.1": 0.7078891257995735,
+            "met": false
+          },
+          "ear_position_kappa": "not evaluable: no categorical ear-position labels in AwA-Pose"
+        },
+        "by_class": {
+          "chihuahua": {
+            "instances": 53,
+            "pck@0.1": 0.5421686746987951
+          },
+          "collie": {
+            "instances": 70,
+            "pck@0.1": 0.5313351498637602
+          },
+          "dalmatian": {
+            "instances": 257,
+            "pck@0.1": 0.467688679245283
+          },
+          "german+shepherd": {
+            "instances": 79,
+            "pck@0.1": 0.5881913303437967
+          }
+        }
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "cat_keypoints_head_awa_v1.npz": "432bacadeda4b63c9b95ed4b66634d6e8fa190b5ae94617d166692921ea350dd",
+    "catdog_keypoints_head_awa_v1.npz": "2ff4eea03e78eaf75ebdbd3b6b4dfe6a220b6a5a50f1ae131a7b654761a9be06"
+  },
+  "extract_seconds": 166.5,
+  "terms": "annotations MIT; images per-image Flickr/Wikimedia licences, mostly CC without a stated variant: research only; model C was trained on dog-pose (research only)",
+  "runtime_s": 769.4
+}

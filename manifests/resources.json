@@ -1032,6 +1032,102 @@
         "commercial": "suitable"
       },
       "release_note": "Evaluation data; per-clip licences matter only if something is trained on it (then select CC0 / CC BY clips for commercial use)."
+    },
+    {
+      "id": "awa_pose_catdog",
+      "kind": "dataset",
+      "role": "E24 cat and dog keypoints (ears, tail, limbs)",
+      "name": "AwA-Pose annotations on Animals with Attributes 2 images (cats: persian, siamese; dogs: chihuahua, collie, dalmatian, German shepherd)",
+      "canonical_url": "https://github.com/prinik/AwA-Pose",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-19",
+      "files": "annotations: git commit 7ba27c70dca49b83f37770a16b64df19058f3f96; images and per-image licence files read by Range from https://cvml.ista.ac.at/AwA2/AwA2-data.zip (13,923,888,724 bytes), SHA-256 per cached image in var/data/awa_pose/index.csv",
+      "terms": {
+        "annotations": "MIT (repository LICENSE.txt, Copyright 2021 Prianka Banik)",
+        "images": "per-image licence files in AwA2: 1,803 of 1,929 instances say 'Creative Commons' without the variant; 65 CC BY-SA, 27 CC BY, 27 CC0, 7 public domain"
+      },
+      "grouping_fields": [
+        "photographer (from the licence file)"
+      ],
+      "use_restrictions": [
+        "Annotation pickles are read with an unpickler that refuses every global.",
+        "Research only until the per-image licence variants are verified (they may include NC or ND)."
+      ],
+      "next_command": "uv run petperception evaluate --experiment e24",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "requires_legal_review",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Image licence variants not stated for most images; verify per image (photographer and photo URL are recorded) before any release."
+    },
+    {
+      "id": "cop3d_v1",
+      "kind": "dataset",
+      "role": "E20 evaluation of pet detection on home smartphone video",
+      "name": "CoP3D (Common Pets in 3D) v1: frame archives cat_001.zip and dog_001.zip",
+      "canonical_url": "https://github.com/facebookresearch/cop3d",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-19",
+      "files": "10 frames per sequence read by Range from https://dl.fbaipublicfiles.com/cop3d/{cat,dog}_001.zip (CRC per member; archive SHA-256 values in manifests/mirror_files.json, whole-archive hash not checked); SHA-256 per cached frame in var/data/cop3d/frames/*/index_k10.csv",
+      "terms": {
+        "data": "CC BY-NC 4.0 (LICENSE in the annotation archives, primary)"
+      },
+      "label_provenance": "sequence category (cat / dog); foreground masks are model-generated",
+      "use_restrictions": [
+        "Evaluation only; nothing is trained on it."
+      ],
+      "next_command": "uv run petperception evaluate --experiment e20",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Non-commercial licence: research evaluation only."
+    },
+    {
+      "id": "cat_keypoints_head_awa_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "cat keypoint head on EfficientNet-Lite0 features (E24, model A)",
+      "name": "artifacts/keypoints/cat_keypoints_head_awa_v1.npz",
+      "files": [],
+      "sha256": "432bacadeda4b63c9b95ed4b66634d6e8fa190b5ae94617d166692921ea350dd",
+      "derived_from": [
+        "awa_pose_catdog",
+        "efficientnet_lite0_mediapipe_v1"
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Image licence variants unverified (awa_pose_catdog): research only."
+    },
+    {
+      "id": "catdog_keypoints_head_awa_v1",
+      "kind": "derived_artifact",
+      "status": "available",
+      "role": "joint cat and dog keypoint head on EfficientNet-Lite0 features (E24, model B)",
+      "name": "artifacts/keypoints/catdog_keypoints_head_awa_v1.npz",
+      "files": [],
+      "sha256": "2ff4eea03e78eaf75ebdbd3b6b4dfe6a220b6a5a50f1ae131a7b654761a9be06",
+      "derived_from": [
+        "awa_pose_catdog",
+        "efficientnet_lite0_mediapipe_v1"
+      ],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Image licence variants unverified (awa_pose_catdog): research only."
     }
   ]
 }

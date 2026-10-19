@@ -32,11 +32,13 @@ server (optional): accounts, pets, places, bundle distribution, device reports,
                    server analysis only when the user turns it on (Python engine, same result schema)
 ```
 
-Models: YAMNet (audio events), EfficientDet-Lite0 (cats, dogs, people,
-furniture), EfficientNet-Lite0 features and small heads trained here
-(false-positive verifier, posture, person-pet interaction, pet on
-furniture); rule-based tracking, behavior
-segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
+Models: YAMNet (audio events; only vocalization types that passed the
+FSD50K validation gate, meow and bark, are shown or can trigger an
+interpretation, E21), EfficientDet-Lite0 (cats, dogs, people, furniture),
+EfficientNet-Lite0 features and small heads trained here (false-positive
+verifier, posture, person-pet interaction, pet on furniture); rule-based
+tracking, behavior segments and fusion. A pet-and-household detector trained
+here on CC BY images (G1) is in training. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 
 ## Documents
 
@@ -44,7 +46,7 @@ segments and fusion. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
 | What each capability can and cannot do, per species (software, behavioural evidence, device, release) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E19) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Methods and measured results (E1-E24) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
 | Data, models, licences | [ASSET_TERMS.md](docs/ASSET_TERMS.md) (per asset, open questions, replacements), [DATA_SOURCES.md](docs/DATA_SOURCES.md) (94-source survey, network blockers), [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
@@ -72,9 +74,11 @@ uv run petperception serve                        # http://127.0.0.1:8000 (the P
 Analyse a file on the server engine from the command line:
 `uv run petperception analyze clip.mp4 --zones configs/zones.example.json --out result.json`.
 
-Experiments: `uv run petperception fetch-data <dataset>` then
-`uv run petperception evaluate --experiment e1 ... e15` (data sources,
-licences and blockers per experiment in the register). Tests:
+Experiments: `uv run petperception fetch-data <dataset>` (or `mirror fetch
+--dataset <id> --official` for archives listed in `manifests/mirror_files.json`)
+then `uv run petperception evaluate --experiment e1 ... e24` (data sources,
+licences and blockers per experiment in the register). Detector training
+(G1, CPU or GPU, resumable): [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md). Tests:
 `uv run pytest -q`, `cd web && npm test && npx playwright test`
 ([TEST_REPORT.md](docs/TEST_REPORT.md)).
 

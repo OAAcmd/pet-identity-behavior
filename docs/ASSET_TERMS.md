@@ -130,6 +130,8 @@ and backbone trained only on Open Images images under CC BY 2.0.
 | D10 | FSD50K v1.0 (Zenodo 4060432) | **Collection CC BY 4.0, stated (primary)**: `FSD50K.doc/LICENSE-DATASET`. Each clip keeps its Freesound licence, listed in `FSD50K.metadata/*_clips_info_FSD50K.json`; eval split: CC0 4,914, CC BY 3,489, CC BY-NC 1,425, Sampling+ 403. Attribution required. | Zenodo, each file checked against the record's MD5 by the mirror importer; audio read member by member, never extracted | E21 evaluation of species, vocalization-type and context-sound decisions | evaluation only; nothing derived ships |
 | D11 | Dog barks, Yin & McCowan (2004), as packaged in BEANS (`dog_barks.zip`, GCS generation 1728757838735376) | **No data licence stated.** BEANS code is MIT. Cite Yin & McCowan 2004. | streamed from the publisher's bucket; MD5 checked in one pass, members read by Range, archive never stored | E22 evaluation (dog bark context) | research only; nothing derived ships |
 | D12 | Barkopedia / EmotionalCanines (Hugging Face `ArlingtonCL2/BarkopediaDogEmotionClassification_Data`, commit `c0617b1`) | **CC BY-NC-SA 4.0, stated (primary)**: dataset card, read 2026-10-19. | not downloaded | none. Its labels are human-attributed arousal and valence, i.e. emotion labels, which the product does not output (`docs/MODEL_CARD.md`). | - |
+| D13 | AwA-Pose annotations (github.com/prinik/AwA-Pose @ 7ba27c70) on Animals with Attributes 2 images | **Annotations MIT, stated (primary)**: repository LICENSE.txt. **Images: per-image licence files in the AwA2 archive** (primary). 1,803 of the 1,929 cat and dog instances say "Creative Commons" without the variant; 65 CC BY-SA, 27 CC BY, 27 CC0, 7 public domain. The photographer and photo URL of each image are recorded. | annotations by git at a pinned commit (pickles read with a globals-refusing unpickler); images and licence files by HTTP Range from AwA2-data.zip | E24 (cat and dog keypoints); artifacts A11, A12 | research only until the per-image licence variants are verified |
+| D14 | CoP3D v1 (dl.fbaipublicfiles.com/cop3d) | **CC BY-NC 4.0, stated (primary)**: LICENSE inside the annotation archives | 10 frames per sequence by HTTP Range from `cat_001.zip` and `dog_001.zip` (CRC per member) | E20 evaluation (home phone video) | evaluation only; nothing derived ships |
 
 ## Derived artifacts (committed under `artifacts/`)
 
@@ -145,6 +147,9 @@ and backbone trained only on Open Images images under CC BY 2.0.
 | A8 | `object_relation/pet_object_relation_v2.npz` | none: a fixed containment rule, evaluated on D3 | yes | yes | yes | v1 (learned on D3) has the same terms; not shipped |
 | A9 | `e1_mfcc_catdogother_logreg.json` | D1 | yes | yes | no | baseline only |
 | A10 | `e2_catmeows_context_logreg.json` | D2 | yes | not shipped | no | weak model (E2) |
+| A11 | `keypoints/cat_keypoints_head_awa_v1.npz` | D13 cats | yes | no | no | first cat keypoint head (E24); image licence variants unverified |
+| A12 | `keypoints/catdog_keypoints_head_awa_v1.npz` | D13 cats and dogs | yes | no | no | joint head (E24); as A11 |
+| A13 | `audio_subtype_validation.json` | D10 (FSD50K eval): pass / fail status per subtype, no fitted parameter | yes | yes | yes | read by both engines (E21 gate) |
 
 **Q-A2.** A2's audio is CC0 or CC BY clip by clip, with every author and
 URL listed in `manifests/esc50_files.csv`. But the cat/dog/other labels used

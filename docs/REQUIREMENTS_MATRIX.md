@@ -1,6 +1,6 @@
 # Requirements matrix and acceptance status
 
-Status date: 2026-10-09. Machine-readable copy: [STATUS.json](STATUS.json).
+Status date: 2026-10-19. Machine-readable copy: [STATUS.json](STATUS.json).
 
 **The product is not complete.** Software correctness is established in
 automated environments; behavioral validity, phone execution and production
@@ -10,7 +10,7 @@ readiness are not. Every open item names what blocks it.
 
 | Dimension | What "accepted" requires | Status | Evidence | Blocking |
 | --- | --- | --- | --- | --- |
-| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 97 Python tests, 19 TypeScript unit tests, 17 Playwright E2E tests (Chromium), CI green on every push, model-level browser parity bit-exact / ≤ 3e-8, engine parity 38/38 decisions ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
+| **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 139 Python tests, 26 TypeScript unit tests, 17 Playwright E2E tests (Chromium), model-level browser parity bit-exact / ≤ 3e-8, engine parity 38/38 decisions with the current engine (2026-10-19) ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
 | **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E1-CC, E2, E4, E7, E9-E16; first real pet video with sound (E18: the pet is found in about half of the clips) ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md), per species); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
 | **C. On-device compatibility and performance** | the bundle runs offline on tier-B phones of both platforms within the budgets | **not met (pending)** | the browser inference implementation has passed desktop Chromium tests; physical Android, iPhone and Safari validation remains pending; the phone test build is published with automatic report collection ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) | physical phones and testers ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) |
 | **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided, each asset's terms cleared for it, operations in place, A-C met | **not met** | image builds in CI, compose stack (bundle step verified in the image), runbook, release gating implemented, asset terms recorded per artifact ([ASSET_TERMS.md](ASSET_TERMS.md)) | HTTPS origin (installed-app track); the specific open terms questions Q-M2, Q-T, Q-A2 in ASSET_TERMS.md; A-C |
@@ -59,13 +59,13 @@ what prevents the next status.
 | M3 | Facial cues | **no** | - | - | no usable data (cats or dogs) |
 | M4 | Ear and tail cues | dogs, research profile | E9 | public photos | dog keypoint data is Research-Only; no cat data |
 | M5 | Posture and temporal actions | posture (cats, dogs); rule segments; dog actions (research) | E10, E8, E11 | weak labels / semi-synthetic / YouTube | household video with labels; cat action data |
-| M6 | Vocalizations | presence (YAMNet), types scored but unevaluated | E1 | ESC-50 clips | CatMeows and Barkopedia blocked (zenodo.org, huggingface.co); type-labelled pet audio |
+| M6 | Vocalizations | presence (YAMNet); types gated by validation (meow, bark shown; purr, growl, hiss not); bark context research-only (E22) | E1, E21, E21b, E22 | public audio: FSD50K eval (presence cat 0.69 / dog 0.73; meow 0.73 and bark 0.73 pass the gate; purr, growl fail; cat hiss not evaluable) | household audio with type labels; cat-hiss data; licensed bark-context data |
 | M7 | Interactions with people / animals / objects | people (E13, still images); objects: pet on bed / couch / chair / table (E15, still images; "under" and "inside a car" failed the pre-set gate); animals: dog fights (research) | E13, E15, E11 | public photos | interaction video; pet-pet data; detector classes for pet objects (bowls, beds, cat trees, litter boxes) |
 | M8 | Environmental / scenario context | context sounds (unevaluated), owner zones | unit, E8 | no | household context labels |
 | M9 | Multimodal interpretation with uncertainty and abstention | yes (rule-based) | E5 synthetic checks | **no** | real paired recordings |
 | M10 | Splits by identity / household / source / breed where metadata supports; no invented metadata | yes | split tests (ESC-50 sources), protocols in each experiment | - | - |
 | M11 | Real training with preserved configs, checkpoints, seeds, learning curves, independent evaluation | yes (E7, E9-E13, E15) | experiments reproduce from commands | - | - |
-| M12 | Compute requirements and reproducible jobs where CPU is insufficient | specified | - | - | GPU jobs G1-G5 not run ([TRAINING_PROGRAM.md](TRAINING_PROGRAM.md)) |
+| M12 | Compute requirements and reproducible jobs where CPU is insufficient | specified and measured | G1 data-path tests | - | G1 trains on this CPU (benchmark, 6k-image run within 0.03 AP50 of the shipped detectors on E4; full-data run in progress, resumable); durable checkpoint storage needs write access ([TRAINING_PROGRAM.md](TRAINING_PROGRAM.md)) |
 | M13 | Synthetic data only as integration/behavior checks | yes | E5, E8 labelled as such | - | - |
 | M14 | Evaluation plan for real paired data | yes | - | - | [EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md); not started |
 
@@ -87,7 +87,7 @@ what prevents the next status.
 | B2 | Server analysis with resumable chunked uploads, jobs, cancellation, retention | yes (opt-in) | backend tests, E2E | - | - |
 | B3 | Health, readiness (incl. bundle), structured logs without personal data | yes | backend tests | - | - |
 | W1 | Mobile PWA: capture (camera/microphone/file), on-device analysis, results timeline, history, settings, device check, accessibility | yes | E2E (3 viewports, axe checks) | no | real phones, Safari |
-| R1 | Licence-confirmed assets before production; release profiles enforced | yes | release-check in CI | - | per asset in [ASSET_TERMS.md](ASSET_TERMS.md): the personal build is cleared (licence-stated detector since 2026-10-10); Q-M2 would restore the better-recall detector; commercial needs Q-T (publisher decision on training-data terms) or G1b |
+| R1 | Licence-confirmed assets before production; release profiles enforced | yes | release-check in CI | - | per asset in [ASSET_TERMS.md](ASSET_TERMS.md): the personal build is cleared (licence-stated detector since 2026-10-10); Q-M2 answered 2026-10-19 (no licence stated, the MediaPipe detector stays research-only); commercial needs Q-T (publisher decision on training-data terms) or G1b |
 | R2 | Locked dependencies, checksum-verified model retrieval | yes | CI (`uv sync --frozen`, `npm ci`, `fetch-models`) | - | - |
 | R3 | Database migrations | yes | backend tests | - | - |
 | R4 | CI | yes | green on every push | - | - |
