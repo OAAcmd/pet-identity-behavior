@@ -108,6 +108,15 @@ of `reports` finds every tester (added in version 4). The project copies each re
 contains device, browser and timing data and analysis summaries; it never
 contains video, audio or images.
 
+**Pending republish (2026-10-19).** The published version 4 carries
+bundle asset format 0.2.1. The current engine uses format 0.2.2: only
+validated vocalization types are shown or used as triggers (E21), and
+context sounds have per-tag thresholds (E21b). The rebuilt test site passes
+every step in desktop Chromium (`var/device_test/`; 45 s). It has to be
+republished from a session that can write to the artifact host before the
+next tester round. Reports from version 4 remain valid for timing and
+compatibility.
+
 **Rebuild and republish** (after a model or engine change):
 
 ```bash
