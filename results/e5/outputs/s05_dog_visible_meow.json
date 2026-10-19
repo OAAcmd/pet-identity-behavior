@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "analysis_id": "e5-s05_dog_visible_meow-rule_baseline",
-  "created_at": "2026-10-09T03:44:22.612536Z",
+  "created_at": "2026-10-19T07:49:42.219303Z",
   "engine_version": "0.1.0",
   "config_profile": "cpu",
-  "config_hash": "4fe67d6ca51b053e",
+  "config_hash": "cb1492b5596d4dc7",
   "media": {
     "analysis_filename": "s05_dog_visible_meow.mp4",
     "size_bytes": 154566,
@@ -61,20 +61,60 @@
       "reason": null
     },
     {
-      "name": "iou_tracker",
+      "name": "detection_verifier",
+      "kind": "visual_verifier",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "verifier-v1:efficientdet_lite0_mediapipe_v1",
+      "reason": "track-level median of per-detection rejection scores; thresholds from E7 tuning"
+    },
+    {
+      "name": "kalman_tracker",
       "kind": "tracker",
       "state": "ok",
       "model_id": null,
-      "version": "iou-hungarian-v1",
+      "version": "kalman-cv-sort-v1",
       "reason": null
     },
     {
       "name": "pose",
       "kind": "pose",
-      "state": "unavailable",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "dog_keypoints_head_v1",
+      "reason": "dogs only (research profile); no cat keypoint model is available"
+    },
+    {
+      "name": "posture",
+      "kind": "pose",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "posture_v1",
+      "reason": "coarse lying/sitting/standing from weak caption labels (E10); uncalibrated"
+    },
+    {
+      "name": "person_interaction",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "person_pet_interaction_v1",
+      "reason": "person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored"
+    },
+    {
+      "name": "object_relation",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "pet_object_relation_v2",
+      "reason": "pet on bed / couch / chair / table: at least half of the pet's box inside the furniture box (E15 rule, still images; the learned head showed no advantage); furniture is detected but not stored; under-furniture and inside-car did not pass the E15 gate"
+    },
+    {
+      "name": "behavior_segments",
+      "kind": "behavior",
+      "state": "ok",
       "model_id": null,
-      "version": null,
-      "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+      "version": "behavior-rules-v1",
+      "reason": "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)"
     },
     {
       "name": "fusion",
@@ -340,39 +380,1861 @@
         "zones": [],
         "pose_features": [
           {
-            "name": "ear_angle_deg",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+            "name": "ear_tip_elevation",
+            "available": true,
+            "value": -0.7575492269559672,
+            "units": "ear_base_widths_above_base",
+            "reason": null
           },
           {
-            "name": "tail_height",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+            "name": "tail_elevation",
+            "available": true,
+            "value": 0.09591774160231556,
+            "units": "body_lengths_above_tail_start",
+            "reason": null
           },
           {
             "name": "play_bow_candidate",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+            "available": true,
+            "value": false,
+            "units": "boolean_candidate",
+            "reason": null
           },
           {
             "name": "tail_lateral_oscillation",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+            "available": true,
+            "value": 0.0,
+            "units": "sign_changes_of_tail_end_offset",
+            "reason": null
           }
         ],
         "quality_flags": [],
         "evidence_ids": [
           "ev-track-1",
           "ev-move-track-1"
-        ]
+        ],
+        "behavior_segments": [
+          {
+            "segment_id": "beh-track-1-1",
+            "kind": "stationary",
+            "track_id": "track-1",
+            "t_start_s": 0.0,
+            "t_end_s": 7.5,
+            "reliability": "medium",
+            "detail": "median speed 0.000 diag/s for 7.5 s",
+            "measurements": {
+              "median_speed": 0.0001,
+              "duration_s": 7.5
+            },
+            "method": "speed below moving threshold",
+            "validation_status": "synthetic_and_semi_synthetic_only",
+            "related_object": null
+          }
+        ],
+        "keypoints": [
+          {
+            "t_s": 0.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.907
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5611,
+                0.931
+              ],
+              "front_left_elbow": [
+                0.5432,
+                0.4384,
+                0.913
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6359,
+                0.9
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5328,
+                0.897
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.436,
+                0.772
+              ],
+              "front_right_paw": [
+                0.5064,
+                0.6116,
+                0.93
+              ],
+              "front_right_knee": [
+                0.5041,
+                0.5988,
+                0.972
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4387,
+                0.978
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.659,
+                0.96
+              ],
+              "rear_right_knee": [
+                0.3019,
+                0.5402,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3362,
+                0.4417,
+                0.954
+              ],
+              "tail_start": [
+                0.3329,
+                0.3359,
+                0.953
+              ],
+              "tail_end": [
+                0.3128,
+                0.3033,
+                0.958
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2154,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5992,
+                0.2265,
+                0.965
+              ],
+              "nose": [
+                0.6667,
+                0.2517,
+                0.993
+              ],
+              "chin": [
+                0.6514,
+                0.292,
+                0.941
+              ],
+              "left_ear_tip": [
+                0.6384,
+                0.2924,
+                0.782
+              ],
+              "right_ear_tip": [
+                0.6012,
+                0.2643,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 0.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6084,
+                0.907
+              ],
+              "front_left_knee": [
+                0.5268,
+                0.5613,
+                0.931
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4389,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4031,
+                0.6357,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3312,
+                0.5331,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.776
+              ],
+              "front_right_paw": [
+                0.5064,
+                0.6119,
+                0.93
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.599,
+                0.972
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4392,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.276,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3016,
+                0.5404,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3364,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3327,
+                0.336,
+                0.953
+              ],
+              "tail_end": [
+                0.3128,
+                0.3031,
+                0.958
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.215,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2551,
+                0.965
+              ],
+              "nose": [
+                0.6668,
+                0.2519,
+                0.993
+              ],
+              "chin": [
+                0.6515,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2925,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.601,
+                0.2641,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 1.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6086,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5268,
+                0.5612,
+                0.931
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4384,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6357,
+                0.901
+              ],
+              "rear_left_knee": [
+                0.3309,
+                0.5326,
+                0.898
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.4361,
+                0.773
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6119,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5041,
+                0.5988,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4389,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6593,
+                0.96
+              ],
+              "rear_right_knee": [
+                0.3019,
+                0.5401,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3364,
+                0.442,
+                0.954
+              ],
+              "tail_start": [
+                0.3327,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3028,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2152,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5992,
+                0.2263,
+                0.965
+              ],
+              "nose": [
+                0.667,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6513,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6384,
+                0.2923,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 1.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6084,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.915
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5326,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6119,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5043,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.303,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 2.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6085,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4387,
+                0.915
+              ],
+              "rear_left_paw": [
+                0.403,
+                0.6357,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.331,
+                0.5327,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.436,
+                0.774
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6118,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5988,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6592,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4418,
+                0.954
+              ],
+              "tail_start": [
+                0.3326,
+                0.3361,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3028,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2152,
+                0.895
+              ],
+              "right_ear_base": [
+                0.599,
+                0.2263,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2517,
+                0.993
+              ],
+              "chin": [
+                0.6511,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2924,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.601,
+                0.2642,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 2.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5327,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.612,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3029,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.885
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 3.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6086,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5268,
+                0.5612,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4385,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6356,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3309,
+                0.5326,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.4361,
+                0.774
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6119,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5987,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4389,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3019,
+                0.5401,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3364,
+                0.442,
+                0.954
+              ],
+              "tail_start": [
+                0.3327,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3125,
+                0.3029,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5973,
+                0.2556,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6513,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 3.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5327,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.612,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3029,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.885
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 4.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6084,
+                0.907
+              ],
+              "front_left_knee": [
+                0.527,
+                0.5612,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5432,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4031,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5328,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.4361,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.6118,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.528,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6591,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.442,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.3361,
+                0.953
+              ],
+              "tail_end": [
+                0.3126,
+                0.303,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.895
+              ],
+              "right_ear_base": [
+                0.599,
+                0.2263,
+                0.965
+              ],
+              "nose": [
+                0.667,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6511,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6384,
+                0.2923,
+                0.782
+              ],
+              "right_ear_tip": [
+                0.601,
+                0.2642,
+                0.887
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 4.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5327,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.612,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3029,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.885
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 5.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6086,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5268,
+                0.5612,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4385,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6356,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3309,
+                0.5326,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.4361,
+                0.774
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6119,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5987,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4389,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3019,
+                0.5401,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3364,
+                0.442,
+                0.954
+              ],
+              "tail_start": [
+                0.3327,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3125,
+                0.3029,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5973,
+                0.2556,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6513,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 5.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5327,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.612,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3029,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.885
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 6.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6085,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4387,
+                0.915
+              ],
+              "rear_left_paw": [
+                0.403,
+                0.6357,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.331,
+                0.5327,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.436,
+                0.774
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6118,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5988,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6592,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4418,
+                0.954
+              ],
+              "tail_start": [
+                0.3326,
+                0.3361,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3028,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2152,
+                0.895
+              ],
+              "right_ear_base": [
+                0.599,
+                0.2263,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2517,
+                0.993
+              ],
+              "chin": [
+                0.6511,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2924,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.601,
+                0.2642,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 6.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6083,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5613,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4388,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6358,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3311,
+                0.5327,
+                0.9
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.436,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5065,
+                0.612,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4391,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2762,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5403,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.4419,
+                0.955
+              ],
+              "tail_start": [
+                0.3326,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3029,
+                0.956
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5972,
+                0.2557,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6512,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.78
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.885
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 7.0,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6086,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5268,
+                0.5612,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5433,
+                0.4385,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6356,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.3309,
+                0.5326,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3809,
+                0.4361,
+                0.774
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6119,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5987,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.5281,
+                0.4389,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6593,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3019,
+                0.5401,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3364,
+                0.442,
+                0.954
+              ],
+              "tail_start": [
+                0.3327,
+                0.336,
+                0.952
+              ],
+              "tail_end": [
+                0.3125,
+                0.3029,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6367,
+                0.2151,
+                0.894
+              ],
+              "right_ear_base": [
+                0.5973,
+                0.2556,
+                0.965
+              ],
+              "nose": [
+                0.6669,
+                0.2518,
+                0.993
+              ],
+              "chin": [
+                0.6513,
+                0.2919,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2923,
+                0.781
+              ],
+              "right_ear_tip": [
+                0.6011,
+                0.2639,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          },
+          {
+            "t_s": 7.5,
+            "points": {
+              "front_left_paw": [
+                0.54,
+                0.6084,
+                0.908
+              ],
+              "front_left_knee": [
+                0.5269,
+                0.5612,
+                0.932
+              ],
+              "front_left_elbow": [
+                0.5432,
+                0.4389,
+                0.914
+              ],
+              "rear_left_paw": [
+                0.4032,
+                0.6359,
+                0.902
+              ],
+              "rear_left_knee": [
+                0.331,
+                0.5326,
+                0.899
+              ],
+              "rear_left_elbow": [
+                0.3808,
+                0.4359,
+                0.775
+              ],
+              "front_right_paw": [
+                0.5066,
+                0.6118,
+                0.931
+              ],
+              "front_right_knee": [
+                0.5042,
+                0.5989,
+                0.973
+              ],
+              "front_right_elbow": [
+                0.528,
+                0.4392,
+                0.979
+              ],
+              "rear_right_paw": [
+                0.2761,
+                0.6592,
+                0.961
+              ],
+              "rear_right_knee": [
+                0.3017,
+                0.5402,
+                0.978
+              ],
+              "rear_right_elbow": [
+                0.3366,
+                0.442,
+                0.954
+              ],
+              "tail_start": [
+                0.3326,
+                0.3361,
+                0.952
+              ],
+              "tail_end": [
+                0.3126,
+                0.3031,
+                0.957
+              ],
+              "left_ear_base": [
+                0.6368,
+                0.2152,
+                0.895
+              ],
+              "right_ear_base": [
+                0.599,
+                0.2264,
+                0.965
+              ],
+              "nose": [
+                0.667,
+                0.2517,
+                0.993
+              ],
+              "chin": [
+                0.6511,
+                0.2918,
+                0.942
+              ],
+              "left_ear_tip": [
+                0.6383,
+                0.2922,
+                0.782
+              ],
+              "right_ear_tip": [
+                0.601,
+                0.2642,
+                0.886
+              ]
+            },
+            "provider": "dog_keypoints_effnetlite0_head"
+          }
+        ],
+        "posture": [
+          {
+            "t_s": 0.0,
+            "label": "standing",
+            "score": 0.924,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 0.5,
+            "label": "standing",
+            "score": 0.921,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 1.0,
+            "label": "standing",
+            "score": 0.923,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 1.5,
+            "label": "standing",
+            "score": 0.92,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 2.0,
+            "label": "standing",
+            "score": 0.92,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 2.5,
+            "label": "standing",
+            "score": 0.919,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 3.0,
+            "label": "standing",
+            "score": 0.922,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 3.5,
+            "label": "standing",
+            "score": 0.919,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 4.0,
+            "label": "standing",
+            "score": 0.916,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 4.5,
+            "label": "standing",
+            "score": 0.919,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 5.0,
+            "label": "standing",
+            "score": 0.922,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 5.5,
+            "label": "standing",
+            "score": 0.919,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 6.0,
+            "label": "standing",
+            "score": 0.92,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 6.5,
+            "label": "standing",
+            "score": 0.919,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 7.0,
+            "label": "standing",
+            "score": 0.922,
+            "score_kind": "posture_softmax_uncalibrated"
+          },
+          {
+            "t_s": 7.5,
+            "label": "standing",
+            "score": 0.916,
+            "score_kind": "posture_softmax_uncalibrated"
+          }
+        ],
+        "verification": {
+          "verifier_id": "verifier-v1:efficientdet_lite0_mediapipe_v1",
+          "checked_detections": 16,
+          "median_score": 0.995035053553998,
+          "threshold": 0.25423940146121626,
+          "accepted": true,
+          "score_kind": "verifier_rejection_score_uncalibrated"
+        }
       }
     ],
     "sound_events": [
@@ -488,7 +2350,8 @@
       }
     ],
     "sampled_frames": 16,
-    "sample_fps": 2.0
+    "sample_fps": 2.0,
+    "behavior_events": []
   },
   "quality_flags": [
     {
@@ -635,12 +2498,14 @@
   },
   "suggestions": [],
   "limitations": [
-    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
+    "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
     "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
     "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
     "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
-    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable (no verified animal pose model).",
-    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose."
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; a second-stage verifier reduces but does not remove false detections (E7, web photos).",
+    "Behavior segments (stillness, movement, zone visits, back-and-forth, startle candidates) use fixed thresholds checked only on synthetic and semi-synthetic sequences; they are not validated against labelled household behavior.",
+    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
+    "Dog keypoints come from a research-only model evaluated on web photos (E9), not household video; no cat keypoint model is available, so cat ear/tail features are unavailable."
   ],
   "fusion": {
     "mode": "experimental",
@@ -651,16 +2516,19 @@
     "note": "Experimental fusion; weights/temperature are unfitted configuration values."
   },
   "timings_ms": {
-    "probe": 57.61,
-    "hash": 0.22,
-    "decode_audio": 166.34,
-    "audio_inference": 23.85,
-    "video_decode_detect_track": 635.06,
-    "video_detector_inference": 332.57,
-    "video_quality_and_camera_motion": 212.54,
-    "frame_gap_check": 64.2,
+    "probe": 78.87,
+    "hash": 0.69,
+    "decode_audio": 174.32,
+    "audio_inference": 39.35,
+    "video_decode_detect_track": 1554.93,
+    "video_detector_inference": 579.67,
+    "video_verifier": 253.74,
+    "video_pose": 302.89,
+    "video_quality_and_camera_motion": 307.7,
+    "frame_gap_check": 61.08,
+    "behavior_segments": 3.51,
     "fusion": 0.23,
-    "model_load_ms_engine_startup": 284.65
+    "model_load_ms_engine_startup": 547.62
   },
   "models": [
     {
@@ -674,7 +2542,7 @@
       },
       "terms": {
         "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
-        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the pinned file ('Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.', author 'MediaPipe'), read 2026-10-10. Google also releases YAMNet in the Apache-2.0 tensorflow/models project. No separate model card exists in gs://mediapipe-assets (listed 2026-10-10).",
         "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
       },
       "use_restrictions": [
@@ -691,21 +2559,39 @@
       },
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "use_restrictions": [
         "Weights fetched from Google, never committed.",
         "Do not assume commercial permission."
       ]
+    },
+    {
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "name": "EfficientNet-Lite0 (MediaPipe Image Classifier float32 build, version 1)",
+      "revision": "GCS object generation 1682480007106905 (Last-Modified 2023-04-26)",
+      "sha256": {
+        "efficientnet_lite0.tflite": "6c7ab0a6e5dcbf38a8c33b960996a55a3b4300b36a018c4545801de3a3c8bde0"
+      },
+      "terms": {
+        "code": "Apache-2.0 (MediaPipe)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the file, read from the pinned file on 2026-10-09.",
+        "training_data": "ImageNet images are provided for non-commercial research/education under the ImageNet terms of access. Whether those terms constrain use of trained weights is a legal question not settled here."
+      },
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release requires legal sign-off on the ImageNet training-data question."
+      ]
     }
   ],
   "usage_restrictions": {
     "research_only": true,
     "notices": [
-      "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
-      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
-      "Do not assume commercial permission for any bundled model or dataset."
+      "Release profile 'research': only assets permitted for this profile were loaded (manifests/resources.json).",
+      "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial use.",
+      "Do not assume commercial permission for any asset without a recorded legal approval."
     ]
   }
 }

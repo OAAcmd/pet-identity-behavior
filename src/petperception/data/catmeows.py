@@ -10,7 +10,7 @@ C = context (B brushing, F waiting for food, I isolation in an unfamiliar
 environment), NNNNN = cat ID, BB = breed, SS = sex/neuter status,
 OOOOO = owner ID, R = recording session, XX = vocalization counter.
 The parser verifies this structure on the actual files and rejects anything
-else rather than guessing. ``extra.zip`` (excluded / non-meow recordings and
+else rather than guessing. ``extras.zip`` (excluded / non-meow recordings and
 uncut sequences) is kept separate and never used for context training.
 Context labels keep their original semantics: ``isolation`` is a recording
 context, not a fear label.
@@ -62,7 +62,7 @@ def parse_name(stem: str) -> dict[str, str] | None:
 
 
 def fetch(data_root: Path) -> dict:
-    """Fetch record metadata, then dataset.zip and extra.zip, verifying Zenodo MD5s."""
+    """Fetch record metadata, then dataset.zip and extras.zip, verifying Zenodo MD5s."""
     import hashlib
 
     d = dataset_dir(data_root)
@@ -77,7 +77,7 @@ def fetch(data_root: Path) -> dict:
     rec = read_json(meta_path)
     files = {f["key"]: f for f in rec.get("files", [])}
     out = {"status": "ok", "record_version": rec.get("metadata", {}).get("version"), "license": rec.get("metadata", {}).get("license"), "files": {}}
-    for key in ("dataset.zip", "extra.zip"):
+    for key in ("dataset.zip", "extras.zip"):  # record keys; the record's description calls the second "extra.zip"
         if key not in files:
             out["files"][key] = "missing from record"
             continue

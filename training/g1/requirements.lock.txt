@@ -111,7 +111,7 @@ tensorflow-datasets==4.9.10
 tensorflow-estimator==2.15.0
 tensorflow-hub==0.16.1
 tensorflow-io-gcs-filesystem==0.37.1
-tensorflow-metadata==1.21.0
+tensorflow-metadata==1.16.1  # 1.21 needs protobuf>=5, which TensorFlow 2.15 excludes (tensorflow_datasets import failed)
 tensorflow-model-optimization==0.7.3
 tensorflow-text==2.15.0
 termcolor==3.3.0

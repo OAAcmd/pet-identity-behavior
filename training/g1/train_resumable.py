@@ -111,6 +111,74 @@ def _nms(boxes: np.ndarray, scores: np.ndarray, thr: float, max_out: int) -> lis
     return keep
 
 
+# Cache layout written by install_coco_writer(); a new name so caches of the stock writer are never reused.
+CACHE_LAYOUT = "coco-v2-negatives-crowd"
+
+
+def coco_examples(labels: dict, image_bytes, decode_hw):
+    """Yield one tf.train.Example feature dict per COCO image, including images without boxes.
+
+    Model Maker 0.2.1.4's COCO cache writer differs from what G1 needs in two ways:
+    * it skips every image without a box, which silently removes the hard
+      negatives (confusable animals, dolls) that G1 selects on purpose;
+    * it does not write `is_crowd`, so its evaluation ground truth treats
+      Open Images group-of boxes as ordinary boxes.
+    This version keeps box-less images (empty box lists) and writes is_crowd.
+    Training is unchanged for group-of boxes: Model Maker's preprocessor
+    trains on them as ordinary boxes and uses is_crowd only in evaluation
+    ground truth. Boxes outside the image or without area are dropped, as in
+    the stock writer. `image_bytes(file_name)` returns the encoded JPEG and
+    `decode_hw(bytes)` its (height, width).
+    """
+    by_image: dict[int, list] = {}
+    for a in labels["annotations"]:
+        by_image.setdefault(a["image_id"], []).append(a)
+    for img in labels["images"]:
+        enc = image_bytes(img["file_name"])
+        h, w = decode_hw(enc)
+        xmin, xmax, ymin, ymax, cls, crowd = [], [], [], [], [], []
+        for a in by_image.get(img["id"], []):
+            x, y, bw, bh = a["bbox"]
+            if bw <= 0 or bh <= 0 or x + bw > w or y + bh > h:
+                continue
+            xmin.append(x / w)
+            xmax.append((x + bw) / w)
+            ymin.append(y / h)
+            ymax.append((y + bh) / h)
+            cls.append(int(a["category_id"]))
+            crowd.append(int(a.get("iscrowd", 0)))
+        yield img, enc, h, w, {"xmin": xmin, "xmax": xmax, "ymin": ymin, "ymax": ymax, "category_id": cls, "is_crowd": crowd}
+
+
+def install_coco_writer() -> None:
+    """Replace Model Maker's COCO cache writer with coco_examples() (see there)."""
+    import tensorflow as tf
+    from mediapipe_model_maker.python.vision.object_detector import dataset_util
+    from official.vision.data import tfrecord_lib
+
+    def get_example(self, data_dir: str):  # noqa: ARG001 - signature of CacheFilesWriter._get_example
+        data_dir = os.path.abspath(data_dir)
+        labels = json.loads(Path(data_dir, "labels.json").read_text())
+
+        def image_bytes(name: str) -> bytes:
+            return Path(data_dir, "images", name).read_bytes()
+
+        def decode_hw(enc: bytes) -> tuple[int, int]:
+            s = tf.io.decode_jpeg(enc, channels=3).shape
+            return int(s[0]), int(s[1])
+
+        for img, enc, h, w, d in coco_examples(labels, image_bytes, decode_hw):
+            f = tfrecord_lib.image_info_to_feature_dict(h, w, img["file_name"], img["id"], enc, "jpg")
+            for key, vals, kind in (("xmin", d["xmin"], "float_list"), ("xmax", d["xmax"], "float_list"), ("ymin", d["ymin"], "float_list"),
+                                    ("ymax", d["ymax"], "float_list")):
+                f[f"image/object/bbox/{key}"] = tfrecord_lib.convert_to_feature(vals, kind)
+            f["image/object/class/label"] = tfrecord_lib.convert_to_feature(d["category_id"], "int64_list")
+            f["image/object/is_crowd"] = tfrecord_lib.convert_to_feature(d["is_crowd"], "int64_list")
+            yield tf.train.Example(features=tf.train.Features(feature=f))
+
+    dataset_util.COCOCacheFilesWriter._get_example = get_example
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--view", required=True, help="COCO view directory with train/ and development/")
@@ -145,8 +213,9 @@ def main() -> None:
     view = Path(a.view)
     stages = parse_stages(a.stages)
     total_epochs = sum(n for n, _ in stages)
-    config = {"view": str(view), "model": a.model, "batch_size": a.batch_size, "learning_rate": a.learning_rate, "stages": a.stages, "seed": a.seed}
-    if a.init != "coco":  # keeps the hash of earlier COCO-initialised runs unchanged
+    config = {"view": str(view), "model": a.model, "batch_size": a.batch_size, "learning_rate": a.learning_rate, "stages": a.stages, "seed": a.seed,
+              "cache_layout": CACHE_LAYOUT}
+    if a.init != "coco":
         config["init"] = a.init
     config_sha = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     data_ids = {s: sha256_file(view / s / "labels.json") for s in ("train", "development")}
@@ -159,7 +228,8 @@ def main() -> None:
             sys.exit(f"refusing to resume: configuration or data changed since {prev['checkpoint']}")
 
     t_load = time.time()
-    cache = view / "_cache"
+    install_coco_writer()
+    cache = view / "_cache" / CACHE_LAYOUT
     train_data = object_detector.Dataset.from_coco_folder(str(view / "train"), cache_dir=str(cache / "train"))
     dev_data = object_detector.Dataset.from_coco_folder(str(view / "development"), cache_dir=str(cache / "development"))
     t_load = time.time() - t_load
@@ -356,6 +426,7 @@ def main() -> None:
 
     if a.benchmark:
         bench: dict = {"config": config, "cpu_count": os.cpu_count(), "train_images": n_train, "development_images": len(dev_data),
+                       "view_images": {s: len(json.loads((view / s / "labels.json").read_text())["images"]) for s in ("train", "development")},
                        "dataset_load_and_cache_seconds": t_load}
         it = iter(epoch_dataset(0))
         t = time.time()
@@ -447,6 +518,7 @@ def main() -> None:
         save("epoch_end")
         last_ckpt = time.time()
     if int(epoch_v.numpy()) >= total_epochs:
+        (run / "export").mkdir(parents=True, exist_ok=True)  # Model Maker's save_tflite does not create it
         det.export_model("model_float32.tflite")
         det.export_model("model_float16.tflite", quantization_config=__import__("mediapipe_model_maker").quantization.QuantizationConfig.for_float16())
         det.export_model("model_int8_ptq.tflite",

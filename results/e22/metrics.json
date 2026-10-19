@@ -1,0 +1,892 @@
+{
+  "experiment": "E22",
+  "status": "completed",
+  "results": {
+    "labels": [
+      "aggression",
+      "contact",
+      "play"
+    ],
+    "methods": {
+      "lodo_mfcc_logreg": {
+        "labels": [
+          "aggression",
+          "contact",
+          "play"
+        ],
+        "n": 693,
+        "macro_f1": 0.6509670240730073,
+        "balanced_accuracy": 0.6853497379813169,
+        "accuracy": 0.6695526695526696,
+        "per_class": {
+          "aggression": {
+            "precision": 0.5294117647058824,
+            "recall": 0.7272727272727273,
+            "f1": 0.6127659574468085,
+            "support": 99,
+            "tp": 72,
+            "fp": 64,
+            "fn": 27
+          },
+          "contact": {
+            "precision": 0.8250825082508251,
+            "recall": 0.6493506493506493,
+            "f1": 0.7267441860465116,
+            "support": 385,
+            "tp": 250,
+            "fp": 53,
+            "fn": 135
+          },
+          "play": {
+            "precision": 0.5590551181102362,
+            "recall": 0.6794258373205742,
+            "f1": 0.6133909287257019,
+            "support": 209,
+            "tp": 142,
+            "fp": 112,
+            "fn": 67
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "aggression",
+            "contact",
+            "play"
+          ],
+          "matrix": [
+            [
+              72,
+              7,
+              20
+            ],
+            [
+              43,
+              250,
+              92
+            ],
+            [
+              21,
+              46,
+              142
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "Farley",
+            "status": "ok",
+            "n_test": 52,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6737853107344632,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Freid",
+            "status": "ok",
+            "n_test": 45,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.42841530054644816,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Keri",
+            "status": "ok",
+            "n_test": 42,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.4929953917050692,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "Louie",
+            "status": "ok",
+            "n_test": 33,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.4621832358674464,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Luke",
+            "status": "ok",
+            "n_test": 117,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6223484848484849,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Mac",
+            "status": "ok",
+            "n_test": 86,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.8352650933296095,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Roodie",
+            "status": "ok",
+            "n_test": 152,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.7832996547949819,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Rudy",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 1.0,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Siggy",
+            "status": "ok",
+            "n_test": 71,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5175743611227482,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Zoe",
+            "status": "ok",
+            "n_test": 74,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.33928571428571425,
+            "selected_C": 10.0
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_dog": {
+          "ci_low": 0.5082725753197137,
+          "ci_high": 0.7490087365747005,
+          "n_boot": 1000,
+          "n_groups": 10,
+          "unit": "group"
+        }
+      },
+      "lobo_mfcc_logreg": {
+        "labels": [
+          "aggression",
+          "contact",
+          "play"
+        ],
+        "n": 693,
+        "macro_f1": 0.5701685383877377,
+        "balanced_accuracy": 0.5896863370547581,
+        "accuracy": 0.5945165945165946,
+        "per_class": {
+          "aggression": {
+            "precision": 0.4789915966386555,
+            "recall": 0.5757575757575758,
+            "f1": 0.5229357798165138,
+            "support": 99,
+            "tp": 57,
+            "fp": 62,
+            "fn": 42
+          },
+          "contact": {
+            "precision": 0.7857142857142857,
+            "recall": 0.6,
+            "f1": 0.6804123711340206,
+            "support": 385,
+            "tp": 231,
+            "fp": 63,
+            "fn": 154
+          },
+          "play": {
+            "precision": 0.44285714285714284,
+            "recall": 0.5933014354066986,
+            "f1": 0.5071574642126789,
+            "support": 209,
+            "tp": 124,
+            "fp": 156,
+            "fn": 85
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "aggression",
+            "contact",
+            "play"
+          ],
+          "matrix": [
+            [
+              57,
+              11,
+              31
+            ],
+            [
+              29,
+              231,
+              125
+            ],
+            [
+              33,
+              52,
+              124
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "Australian cattle dog",
+            "status": "ok",
+            "n_test": 226,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.3969638963227277,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Australian shepherd",
+            "status": "ok",
+            "n_test": 169,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6683316683316683,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "Dachsund",
+            "status": "ok",
+            "n_test": 45,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.2542372881355932,
+            "selected_C": 10.0
+          },
+          {
+            "held_out": "German shorthair pointer",
+            "status": "ok",
+            "n_test": 178,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5939641531195954,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Labrador mix",
+            "status": "ok",
+            "n_test": 42,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.48007229727659834,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "Springer spaniel",
+            "status": "ok",
+            "n_test": 33,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5367404017289602,
+            "selected_C": 0.1
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_dog": {
+          "ci_low": 0.4278888008691349,
+          "ci_high": 0.6574442736326537,
+          "n_boot": 1000,
+          "n_groups": 10,
+          "unit": "group"
+        }
+      },
+      "lodo_yamnet_embedding_logreg": {
+        "labels": [
+          "aggression",
+          "contact",
+          "play"
+        ],
+        "n": 693,
+        "macro_f1": 0.7220421756935423,
+        "balanced_accuracy": 0.7361585782638415,
+        "accuracy": 0.7518037518037518,
+        "per_class": {
+          "aggression": {
+            "precision": 0.6206896551724138,
+            "recall": 0.7272727272727273,
+            "f1": 0.6697674418604651,
+            "support": 99,
+            "tp": 72,
+            "fp": 44,
+            "fn": 27
+          },
+          "contact": {
+            "precision": 0.8402203856749312,
+            "recall": 0.7922077922077922,
+            "f1": 0.8155080213903744,
+            "support": 385,
+            "tp": 305,
+            "fp": 58,
+            "fn": 80
+          },
+          "play": {
+            "precision": 0.6728971962616822,
+            "recall": 0.6889952153110048,
+            "f1": 0.6808510638297872,
+            "support": 209,
+            "tp": 144,
+            "fp": 70,
+            "fn": 65
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "aggression",
+            "contact",
+            "play"
+          ],
+          "matrix": [
+            [
+              72,
+              12,
+              15
+            ],
+            [
+              25,
+              305,
+              55
+            ],
+            [
+              19,
+              46,
+              144
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "Farley",
+            "status": "ok",
+            "n_test": 52,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6266666666666666,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Freid",
+            "status": "ok",
+            "n_test": 45,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6842105263157895,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Keri",
+            "status": "ok",
+            "n_test": 42,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.4980952380952381,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Louie",
+            "status": "ok",
+            "n_test": 33,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5519904931669637,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Luke",
+            "status": "ok",
+            "n_test": 117,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.7203703703703704,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Mac",
+            "status": "ok",
+            "n_test": 86,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.871023940654153,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Roodie",
+            "status": "ok",
+            "n_test": 152,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.7562119933346317,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Rudy",
+            "status": "ok",
+            "n_test": 21,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 1.0,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Siggy",
+            "status": "ok",
+            "n_test": 71,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5280830280830281,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Zoe",
+            "status": "ok",
+            "n_test": 74,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6854596384008148,
+            "selected_C": 0.01
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_dog": {
+          "ci_low": 0.6405662555100715,
+          "ci_high": 0.785443343997712,
+          "n_boot": 1000,
+          "n_groups": 10,
+          "unit": "group"
+        }
+      },
+      "lobo_yamnet_embedding_logreg": {
+        "labels": [
+          "aggression",
+          "contact",
+          "play"
+        ],
+        "n": 693,
+        "macro_f1": 0.6964727096802569,
+        "balanced_accuracy": 0.7084782663730033,
+        "accuracy": 0.7301587301587301,
+        "per_class": {
+          "aggression": {
+            "precision": 0.5929203539823009,
+            "recall": 0.6767676767676768,
+            "f1": 0.6320754716981133,
+            "support": 99,
+            "tp": 67,
+            "fp": 46,
+            "fn": 32
+          },
+          "contact": {
+            "precision": 0.8277777777777777,
+            "recall": 0.7740259740259741,
+            "f1": 0.7999999999999999,
+            "support": 385,
+            "tp": 298,
+            "fp": 62,
+            "fn": 87
+          },
+          "play": {
+            "precision": 0.6409090909090909,
+            "recall": 0.6746411483253588,
+            "f1": 0.6573426573426574,
+            "support": 209,
+            "tp": 141,
+            "fp": 79,
+            "fn": 68
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "aggression",
+            "contact",
+            "play"
+          ],
+          "matrix": [
+            [
+              67,
+              13,
+              19
+            ],
+            [
+              27,
+              298,
+              60
+            ],
+            [
+              19,
+              49,
+              141
+            ]
+          ]
+        },
+        "folds": [
+          {
+            "held_out": "Australian cattle dog",
+            "status": "ok",
+            "n_test": 226,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.7042582417582417,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Australian shepherd",
+            "status": "ok",
+            "n_test": 169,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.7032094553280994,
+            "selected_C": 0.01
+          },
+          {
+            "held_out": "Dachsund",
+            "status": "ok",
+            "n_test": 45,
+            "classes_present": [
+              "aggression",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6048387096774193,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "German shorthair pointer",
+            "status": "ok",
+            "n_test": 178,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.6791174402543515,
+            "selected_C": 0.1
+          },
+          {
+            "held_out": "Labrador mix",
+            "status": "ok",
+            "n_test": 42,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5158730158730159,
+            "selected_C": 1.0
+          },
+          {
+            "held_out": "Springer spaniel",
+            "status": "ok",
+            "n_test": 33,
+            "classes_present": [
+              "aggression",
+              "contact",
+              "play"
+            ],
+            "macro_f1_present_classes": 0.5519904931669637,
+            "selected_C": 0.01
+          }
+        ],
+        "excluded_predictions": 0,
+        "macro_f1_ci95_by_dog": {
+          "ci_low": 0.6127400327826419,
+          "ci_high": 0.7600086841874577,
+          "n_boot": 1000,
+          "n_groups": 10,
+          "unit": "group"
+        }
+      },
+      "majority": {
+        "labels": [
+          "aggression",
+          "contact",
+          "play"
+        ],
+        "n": 693,
+        "macro_f1": 0.2380952380952381,
+        "balanced_accuracy": 0.3333333333333333,
+        "accuracy": 0.5555555555555556,
+        "per_class": {
+          "aggression": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 99,
+            "tp": 0,
+            "fp": 0,
+            "fn": 99
+          },
+          "contact": {
+            "precision": 0.5555555555555556,
+            "recall": 1.0,
+            "f1": 0.7142857142857143,
+            "support": 385,
+            "tp": 385,
+            "fp": 308,
+            "fn": 0
+          },
+          "play": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 209,
+            "tp": 0,
+            "fp": 0,
+            "fn": 209
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "aggression",
+            "contact",
+            "play"
+          ],
+          "matrix": [
+            [
+              0,
+              99,
+              0
+            ],
+            [
+              0,
+              385,
+              0
+            ],
+            [
+              0,
+              209,
+              0
+            ]
+          ]
+        }
+      },
+      "stratified_random": {
+        "macro_f1_mean": 0.33314430516846755,
+        "macro_f1_sd": 0.018123046852592944
+      }
+    },
+    "leakage_diagnostic_random_split": {
+      "macro_f1": 0.8221152672593536,
+      "note": "NOT a valid estimate: the same dogs appear in training and test"
+    },
+    "dataset_observed": {
+      "recordings": 693,
+      "dogs": 10,
+      "breeds": 6,
+      "label_counts": {
+        "aggression": 99,
+        "contact": 385,
+        "play": 209
+      },
+      "dog_by_context": {
+        "Farley": {
+          "aggression": 8,
+          "contact": 33,
+          "play": 11
+        },
+        "Freid": {
+          "aggression": 13,
+          "contact": 0,
+          "play": 32
+        },
+        "Keri": {
+          "aggression": 11,
+          "contact": 15,
+          "play": 16
+        },
+        "Louie": {
+          "aggression": 9,
+          "contact": 18,
+          "play": 6
+        },
+        "Luke": {
+          "aggression": 14,
+          "contact": 86,
+          "play": 17
+        },
+        "Mac": {
+          "aggression": 14,
+          "contact": 42,
+          "play": 30
+        },
+        "Roodie": {
+          "aggression": 8,
+          "contact": 105,
+          "play": 39
+        },
+        "Rudy": {
+          "aggression": 5,
+          "contact": 0,
+          "play": 16
+        },
+        "Siggy": {
+          "aggression": 9,
+          "contact": 41,
+          "play": 21
+        },
+        "Zoe": {
+          "aggression": 8,
+          "contact": 45,
+          "play": 21
+        }
+      },
+      "breed_of_dog": {
+        "Farley": [
+          "Australian shepherd"
+        ],
+        "Freid": [
+          "Dachsund"
+        ],
+        "Keri": [
+          "Labrador mix"
+        ],
+        "Louie": [
+          "Springer spaniel"
+        ],
+        "Luke": [
+          "Australian shepherd"
+        ],
+        "Mac": [
+          "German shorthair pointer"
+        ],
+        "Roodie": [
+          "Australian cattle dog"
+        ],
+        "Rudy": [
+          "German shorthair pointer"
+        ],
+        "Siggy": [
+          "German shorthair pointer"
+        ],
+        "Zoe": [
+          "Australian cattle dog"
+        ]
+      }
+    },
+    "data_source": {
+      "source": "https://storage.googleapis.com/ml-bioacoustics-datasets/dog_barks.zip",
+      "verified": {
+        "bytes": 901568218,
+        "md5": "e8ef0441a89f8087ce8fcade3dfe6c93",
+        "sha256": "b05e745ce9a4f5666c46cf8c5b6a7d9f5ab4088acd4e75a06ec1eeff0a89057d"
+      },
+      "verify_seconds": 120.4,
+      "archive_stored": false,
+      "annotation_member": "annotations.csv",
+      "rows_in_annotations": 693,
+      "members_read": 693,
+      "rows_without_member": [],
+      "feature_seconds": 326.8,
+      "created_at": "2026-10-19T08:14:43+00:00"
+    },
+    "audio": {
+      "duration_s_median": 8.078775510204082,
+      "duration_s_total": 8849.839795918368,
+      "sample_rates_hz": {
+        "44100": 693
+      },
+      "member_sha256_digest": "935d7183cd0b630c2704b4f05cdde1b4fec597cec5249b05d3e8e8aa40c1c7bb"
+    },
+    "feature_config": {
+      "sample_rate": 16000,
+      "n_fft": 512,
+      "hop_length": 160,
+      "n_mels": 40,
+      "n_mfcc": 20,
+      "fmin": 50.0,
+      "fmax": 7500.0,
+      "trim_silence_db": 40.0,
+      "version": "mfcc-stats-v1"
+    },
+    "terms": "no data licence stated; research evaluation only; cite Yin & McCowan 2004; nothing is shipped",
+    "label_semantics": "recording context from annotations.csv (aggression / contact / play); mapping to the paper's disturbance / isolation / play is unconfirmed"
+  },
+  "runtime_s": 1016.8,
+  "created_at": "2026-10-19T08:24:13+00:00"
+}

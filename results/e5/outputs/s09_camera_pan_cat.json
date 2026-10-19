@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "analysis_id": "e5-s09_camera_pan_cat-rule_baseline",
-  "created_at": "2026-10-09T03:44:25.510880Z",
+  "created_at": "2026-10-19T07:49:46.281879Z",
   "engine_version": "0.1.0",
   "config_profile": "cpu",
-  "config_hash": "4fe67d6ca51b053e",
+  "config_hash": "cb1492b5596d4dc7",
   "media": {
     "analysis_filename": "s09_camera_pan_cat.mp4",
     "size_bytes": 45328,
@@ -60,20 +60,60 @@
       "reason": null
     },
     {
-      "name": "iou_tracker",
+      "name": "detection_verifier",
+      "kind": "visual_verifier",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "verifier-v1:efficientdet_lite0_mediapipe_v1",
+      "reason": "track-level median of per-detection rejection scores; thresholds from E7 tuning"
+    },
+    {
+      "name": "kalman_tracker",
       "kind": "tracker",
       "state": "ok",
       "model_id": null,
-      "version": "iou-hungarian-v1",
+      "version": "kalman-cv-sort-v1",
       "reason": null
     },
     {
       "name": "pose",
       "kind": "pose",
-      "state": "unavailable",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "dog_keypoints_head_v1",
+      "reason": "dogs only (research profile); no cat keypoint model is available"
+    },
+    {
+      "name": "posture",
+      "kind": "pose",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "posture_v1",
+      "reason": "coarse lying/sitting/standing from weak caption labels (E10); uncalibrated"
+    },
+    {
+      "name": "person_interaction",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "person_pet_interaction_v1",
+      "reason": "person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored"
+    },
+    {
+      "name": "object_relation",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "pet_object_relation_v2",
+      "reason": "pet on bed / couch / chair / table: at least half of the pet's box inside the furniture box (E15 rule, still images; the learned head showed no advantage); furniture is detected but not stored; under-furniture and inside-car did not pass the E15 gate"
+    },
+    {
+      "name": "behavior_segments",
+      "kind": "behavior",
+      "state": "ok",
       "model_id": null,
-      "version": null,
-      "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+      "version": "behavior-rules-v1",
+      "reason": "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)"
     },
     {
       "name": "fusion",
@@ -93,291 +133,7 @@
     }
   ],
   "observations": {
-    "animal_tracks": [
-      {
-        "track_id": "track-1",
-        "identity_note": "per-analysis track label; not a verified pet identity",
-        "species": "cat",
-        "species_scores": {
-          "cat": {
-            "mean": 0.7286340147256851,
-            "max": 0.7798370122909546,
-            "frames_top": 16.0
-          }
-        },
-        "score_kind": "detector_sigmoid_raw",
-        "first_seen_s": 0.0,
-        "last_seen_s": 7.5,
-        "duration_s": 7.5,
-        "n_detections": 16,
-        "missed_sampled_frames": 0,
-        "detections": [
-          {
-            "t_s": 0.0,
-            "box_xyxy_norm": [
-              0.5005848407745361,
-              0.2526484727859497,
-              0.9030288457870483,
-              0.7508244514465332
-            ],
-            "species_scores": {
-              "cat": 0.6792771816253662
-            },
-            "flags": []
-          },
-          {
-            "t_s": 0.5,
-            "box_xyxy_norm": [
-              0.45041877031326294,
-              0.2536955177783966,
-              0.8711106181144714,
-              0.7580651044845581
-            ],
-            "species_scores": {
-              "cat": 0.7174509167671204
-            },
-            "flags": []
-          },
-          {
-            "t_s": 1.0,
-            "box_xyxy_norm": [
-              0.43953973054885864,
-              0.2580679655075073,
-              0.858172595500946,
-              0.755577564239502
-            ],
-            "species_scores": {
-              "cat": 0.745891809463501
-            },
-            "flags": []
-          },
-          {
-            "t_s": 1.5,
-            "box_xyxy_norm": [
-              0.3881151080131531,
-              0.25364014506340027,
-              0.8180585503578186,
-              0.7586755752563477
-            ],
-            "species_scores": {
-              "cat": 0.7132664918899536
-            },
-            "flags": []
-          },
-          {
-            "t_s": 2.0,
-            "box_xyxy_norm": [
-              0.35707879066467285,
-              0.255898654460907,
-              0.7719005346298218,
-              0.7579856514930725
-            ],
-            "species_scores": {
-              "cat": 0.7681893110275269
-            },
-            "flags": []
-          },
-          {
-            "t_s": 2.5,
-            "box_xyxy_norm": [
-              0.33994260430336,
-              0.24858149886131287,
-              0.7593016624450684,
-              0.7542053461074829
-            ],
-            "species_scores": {
-              "cat": 0.7582396864891052
-            },
-            "flags": []
-          },
-          {
-            "t_s": 3.0,
-            "box_xyxy_norm": [
-              0.3092074990272522,
-              0.2522349953651428,
-              0.734008252620697,
-              0.754102885723114
-            ],
-            "species_scores": {
-              "cat": 0.7486124634742737
-            },
-            "flags": []
-          },
-          {
-            "t_s": 3.5,
-            "box_xyxy_norm": [
-              0.2651270627975464,
-              0.2552963197231293,
-              0.6769500374794006,
-              0.7613847255706787
-            ],
-            "species_scores": {
-              "cat": 0.7559279799461365
-            },
-            "flags": []
-          },
-          {
-            "t_s": 4.0,
-            "box_xyxy_norm": [
-              0.2412446141242981,
-              0.2510376572608948,
-              0.6587991118431091,
-              0.7555143237113953
-            ],
-            "species_scores": {
-              "cat": 0.7798370122909546
-            },
-            "flags": []
-          },
-          {
-            "t_s": 4.5,
-            "box_xyxy_norm": [
-              0.20506586134433746,
-              0.24927878379821777,
-              0.6391240954399109,
-              0.7539585828781128
-            ],
-            "species_scores": {
-              "cat": 0.7257552146911621
-            },
-            "flags": []
-          },
-          {
-            "t_s": 5.0,
-            "box_xyxy_norm": [
-              0.17642413079738617,
-              0.2577739357948303,
-              0.5862467885017395,
-              0.7578945755958557
-            ],
-            "species_scores": {
-              "cat": 0.7346083521842957
-            },
-            "flags": []
-          },
-          {
-            "t_s": 5.5,
-            "box_xyxy_norm": [
-              0.13189245760440826,
-              0.2511551082134247,
-              0.5596684813499451,
-              0.7528491020202637
-            ],
-            "species_scores": {
-              "cat": 0.723724365234375
-            },
-            "flags": []
-          },
-          {
-            "t_s": 6.0,
-            "box_xyxy_norm": [
-              0.10175439715385437,
-              0.2518641948699951,
-              0.5443317890167236,
-              0.7562143802642822
-            ],
-            "species_scores": {
-              "cat": 0.7004354596138
-            },
-            "flags": []
-          },
-          {
-            "t_s": 6.5,
-            "box_xyxy_norm": [
-              0.06891344487667084,
-              0.25529295206069946,
-              0.5001403093338013,
-              0.7571675181388855
-            ],
-            "species_scores": {
-              "cat": 0.7069351673126221
-            },
-            "flags": []
-          },
-          {
-            "t_s": 7.0,
-            "box_xyxy_norm": [
-              0.02649712562561035,
-              0.25072261691093445,
-              0.46189364790916443,
-              0.7597781419754028
-            ],
-            "species_scores": {
-              "cat": 0.7017214298248291
-            },
-            "flags": []
-          },
-          {
-            "t_s": 7.5,
-            "box_xyxy_norm": [
-              0.008477628231048584,
-              0.252066433429718,
-              0.44412070512771606,
-              0.7557627558708191
-            ],
-            "species_scores": {
-              "cat": 0.6982713937759399
-            },
-            "flags": [
-              "truncated_at_frame_edge"
-            ]
-          }
-        ],
-        "movement": {
-          "available": true,
-          "units": "image_diagonals_per_second",
-          "reason": null,
-          "median_speed": 0.01603885670925244,
-          "p90_speed": 0.029804584175643353,
-          "path_length_diagonals": 0.13012024695110289,
-          "moving_fraction": 0.0,
-          "moving_threshold": 0.05,
-          "median_speed_box_units_per_second": 0.051702156789654195,
-          "box_area_change_ratio": 1.0944888549705014,
-          "camera_compensated_steps": 15,
-          "steps": 15,
-          "reliability": "medium"
-        },
-        "zones": [],
-        "pose_features": [
-          {
-            "name": "ear_angle_deg",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
-          },
-          {
-            "name": "tail_height",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
-          },
-          {
-            "name": "play_bow_candidate",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
-          },
-          {
-            "name": "tail_lateral_oscillation",
-            "available": false,
-            "value": null,
-            "units": null,
-            "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
-          }
-        ],
-        "quality_flags": [
-          "truncated_at_frame_edge"
-        ],
-        "evidence_ids": [
-          "ev-track-1",
-          "ev-move-track-1"
-        ]
-      }
-    ],
+    "animal_tracks": [],
     "sound_events": [],
     "context_sounds": [],
     "audio_summary": {
@@ -389,44 +145,10 @@
       "effective_bandwidth_hz": 8000.0,
       "windows_scored": 0
     },
-    "evidence": [
-      {
-        "evidence_id": "ev-track-1",
-        "kind": "animal_track",
-        "t_start_s": 0.0,
-        "t_end_s": 7.5,
-        "summary": "cat detected (track-1) from 0.00s to 7.50s in 16 sampled frames",
-        "track_id": "track-1",
-        "value": 0.7286340147256851,
-        "value_kind": "mean_detector_score_raw",
-        "reliability": "high",
-        "provenance": {
-          "component": "visual_detector",
-          "model_id": "efficientdet_lite0_mediapipe_v1",
-          "root": "vision:detector",
-          "method": "efficientdet+iou_tracker"
-        }
-      },
-      {
-        "evidence_id": "ev-move-track-1",
-        "kind": "movement",
-        "t_start_s": 0.0,
-        "t_end_s": 7.5,
-        "summary": "low apparent movement of track-1 (median 0.016 image diagonals/s; moving in 0 of 15 sampled steps)",
-        "track_id": "track-1",
-        "value": 0.01603885670925244,
-        "value_kind": "image_diagonals_per_second",
-        "reliability": "medium",
-        "provenance": {
-          "component": "tracker",
-          "model_id": "efficientdet_lite0_mediapipe_v1",
-          "root": "vision:detector",
-          "method": "centroid displacement, camera-translation compensated when estimated"
-        }
-      }
-    ],
+    "evidence": [],
     "sampled_frames": 16,
-    "sample_fps": 2.0
+    "sample_fps": 2.0,
+    "behavior_events": []
   },
   "quality_flags": [
     {
@@ -435,6 +157,14 @@
       "t_start_s": null,
       "t_end_s": null,
       "detail": "audio is silent; silence is not evidence of relaxation or of absence of need",
+      "track_id": null
+    },
+    {
+      "code": "detections_rejected_by_verifier",
+      "severity": "info",
+      "t_start_s": 0.0,
+      "t_end_s": 7.5,
+      "detail": "1 animal-like track(s) did not pass the second-stage check and are not reported as animals",
       "track_id": null
     },
     {
@@ -454,48 +184,15 @@
       "track_id": null
     }
   ],
-  "hypotheses": [
-    {
-      "hypothesis_id": "hyp-1",
-      "name": "relaxed",
-      "semantic_type": "state",
-      "status": "insufficient_evidence",
-      "track_id": "track-1",
-      "t_start_s": 0.0,
-      "t_end_s": 7.5,
-      "supporting_evidence_ids": [
-        "ev-move-track-1"
-      ],
-      "conflicting_evidence_ids": [],
-      "independent_provenance_roots": [
-        "vision:detector"
-      ],
-      "score": 0.57,
-      "score_kind": "heuristic_support_0_1",
-      "scorer": {
-        "name": "rule_baseline:rules-v1",
-        "revision": "rules-v1+ontology-v1",
-        "kind": "rule_baseline"
-      },
-      "calibration_status": "uncalibrated",
-      "calibrated_confidence": null,
-      "reason_codes": [
-        "fusion_not_validated",
-        "single_provenance_root",
-        "audio_silent",
-        "zones_not_configured",
-        "silence_not_used_as_evidence"
-      ],
-      "explanation": "Insufficient evidence 'relaxed' (state) for track-1. Supporting observations: low apparent movement of track-1 (median 0.016 image diagonals/s; moving in 0 of 15 sampled steps) [ev-move-track-1]. Notes: the fusion rules have not been validated on paired household data; all supporting evidence comes from a single source; the audio track is silent (silence is not evidence either way); no scene zones were configured; silence is never used as evidence of relaxation. Score 0.57 is an uncalibrated heuristic_support_0_1 value, not a probability."
-    }
-  ],
+  "hypotheses": [],
   "decision": {
-    "state": "supported_observation",
-    "overall_interpretation": "insufficient_evidence",
+    "state": "abstention",
+    "overall_interpretation": "unknown",
     "reason_codes": [
-      "audio_silent"
+      "audio_silent",
+      "no_pet_detected"
     ],
-    "summary": "Observations only: 1 animal track(s), 0 pet sound event(s). Candidate interpretations lacked sufficient independent evidence."
+    "summary": "No cat or dog was detected in the available modalities; no interpretation is offered."
   },
   "suggestions": [
     {
@@ -506,12 +203,14 @@
     }
   ],
   "limitations": [
-    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
+    "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
     "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
     "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
     "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
-    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable (no verified animal pose model).",
-    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose."
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; a second-stage verifier reduces but does not remove false detections (E7, web photos).",
+    "Behavior segments (stillness, movement, zone visits, back-and-forth, startle candidates) use fixed thresholds checked only on synthetic and semi-synthetic sequences; they are not validated against labelled household behavior.",
+    "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
+    "Dog keypoints come from a research-only model evaluated on web photos (E9), not household video; no cat keypoint model is available, so cat ear/tail features are unavailable."
   ],
   "fusion": {
     "mode": "experimental",
@@ -522,15 +221,18 @@
     "note": "Experimental fusion; weights/temperature are unfitted configuration values."
   },
   "timings_ms": {
-    "probe": 58.11,
-    "hash": 0.14,
-    "decode_audio": 151.63,
-    "video_decode_detect_track": 696.14,
-    "video_detector_inference": 392.27,
-    "video_quality_and_camera_motion": 182.03,
-    "frame_gap_check": 61.71,
-    "fusion": 0.15,
-    "model_load_ms_engine_startup": 284.65
+    "probe": 73.91,
+    "hash": 0.23,
+    "decode_audio": 151.66,
+    "video_decode_detect_track": 978.95,
+    "video_detector_inference": 387.41,
+    "video_verifier": 161.8,
+    "video_pose": 151.06,
+    "video_quality_and_camera_motion": 193.75,
+    "frame_gap_check": 71.7,
+    "behavior_segments": 0.01,
+    "fusion": 0.01,
+    "model_load_ms_engine_startup": 547.62
   },
   "models": [
     {
@@ -544,7 +246,7 @@
       },
       "terms": {
         "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
-        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the pinned file ('Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.', author 'MediaPipe'), read 2026-10-10. Google also releases YAMNet in the Apache-2.0 tensorflow/models project. No separate model card exists in gs://mediapipe-assets (listed 2026-10-10).",
         "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
       },
       "use_restrictions": [
@@ -561,21 +263,39 @@
       },
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "use_restrictions": [
         "Weights fetched from Google, never committed.",
         "Do not assume commercial permission."
       ]
+    },
+    {
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "name": "EfficientNet-Lite0 (MediaPipe Image Classifier float32 build, version 1)",
+      "revision": "GCS object generation 1682480007106905 (Last-Modified 2023-04-26)",
+      "sha256": {
+        "efficientnet_lite0.tflite": "6c7ab0a6e5dcbf38a8c33b960996a55a3b4300b36a018c4545801de3a3c8bde0"
+      },
+      "terms": {
+        "code": "Apache-2.0 (MediaPipe)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the file, read from the pinned file on 2026-10-09.",
+        "training_data": "ImageNet images are provided for non-commercial research/education under the ImageNet terms of access. Whether those terms constrain use of trained weights is a legal question not settled here."
+      },
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release requires legal sign-off on the ImageNet training-data question."
+      ]
     }
   ],
   "usage_restrictions": {
     "research_only": true,
     "notices": [
-      "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
-      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
-      "Do not assume commercial permission for any bundled model or dataset."
+      "Release profile 'research': only assets permitted for this profile were loaded (manifests/resources.json).",
+      "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial use.",
+      "Do not assume commercial permission for any asset without a recorded legal approval."
     ]
   }
 }

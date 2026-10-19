@@ -1,0 +1,1726 @@
+{
+  "experiment": "E21",
+  "status": "completed",
+  "created_at": "2026-10-19T08:49:40+00:00",
+  "data": {
+    "dataset": "FSD50K v1.0 eval split (Zenodo 4060432; archive MD5s verified by the importer)",
+    "clips_scored": 10079,
+    "excluded_esc50_sources": {
+      "count": 152,
+      "fnames": [
+        "100032",
+        "100210",
+        "100786",
+        "102568",
+        "102908",
+        "104958",
+        "106019",
+        "106881",
+        "107228",
+        "108017",
+        "108677",
+        "109505",
+        "110389",
+        "110536",
+        "110537",
+        "110614",
+        "112213",
+        "112557",
+        "114254",
+        "117120",
+        "117616",
+        "117617",
+        "117625",
+        "117883",
+        "118072",
+        "118104",
+        "118817",
+        "119102",
+        "119455",
+        "126046",
+        "130584",
+        "133895",
+        "135860",
+        "138344",
+        "141563",
+        "141684",
+        "142593",
+        "143118",
+        "143119",
+        "144120",
+        "144137",
+        "144692",
+        "146873",
+        "149189",
+        "150231",
+        "152594",
+        "152958",
+        "153057",
+        "154378",
+        "154405",
+        "154439",
+        "154781",
+        "155650",
+        "156558",
+        "156907",
+        "160999",
+        "163727",
+        "169127",
+        "17124",
+        "17150",
+        "171519",
+        "172639",
+        "17742",
+        "1791",
+        "181599",
+        "18631",
+        "186693",
+        "187284",
+        "187979",
+        "188033",
+        "189332",
+        "194932",
+        "196671",
+        "196672",
+        "196688",
+        "197103",
+        "197988",
+        "198841",
+        "201274",
+        "20133",
+        "202749",
+        "204604",
+        "207124",
+        "207781",
+        "209536",
+        "209989",
+        "210571",
+        "210612",
+        "21189",
+        "213293",
+        "215634",
+        "221518",
+        "22694",
+        "232495",
+        "232816",
+        "233260",
+        "234247",
+        "234855",
+        "235507",
+        "235671",
+        "235956",
+        "23706",
+        "238926",
+        "242932",
+        "243449",
+        "251489",
+        "25293",
+        "256452",
+        "257642",
+        "257858",
+        "259514",
+        "260640",
+        "261325",
+        "261433",
+        "26188",
+        "262957",
+        "32318",
+        "43806",
+        "50454",
+        "50455",
+        "50661",
+        "50665",
+        "50666",
+        "50667",
+        "52323",
+        "54086",
+        "54961",
+        "54962",
+        "56234",
+        "56269",
+        "56380",
+        "59324",
+        "59513",
+        "59579",
+        "62594",
+        "70052",
+        "70936",
+        "70938",
+        "70939",
+        "73260",
+        "78562",
+        "79236",
+        "81883",
+        "82538",
+        "84393",
+        "84943",
+        "85292",
+        "90797",
+        "93030",
+        "94036",
+        "97392",
+        "977"
+      ]
+    },
+    "uploaders": 2284,
+    "uploaders_shared_with_dev": 0,
+    "licences": {
+      "CC0": 4838,
+      "CC BY-NC": 1421,
+      "CC BY": 3427,
+      "Sampling+": 393
+    },
+    "audio_hours": 27.377523513479467,
+    "sample_rates_hz": {
+      "44100": 10079
+    }
+  },
+  "operating_point": {
+    "thresholds": {
+      "cat_vocalization": 0.73828125,
+      "dog_vocalization": 0.80078125,
+      "growl": 0.5
+    },
+    "threshold_source": {
+      "cat_vocalization": "audio_event_thresholds.json: F1-optimal threshold on raw YAMNet group scores (max over 0.975 s windows) over all 5 ESC-50 folds; generalization estimate = nested E1 result",
+      "dog_vocalization": "audio_event_thresholds.json: F1-optimal threshold on raw YAMNet group scores (max over 0.975 s windows) over all 5 ESC-50 folds; generalization estimate = nested E1 result",
+      "growl": "config default (not selected on data)"
+    },
+    "subtype_min": 0.3,
+    "context_tag_threshold": 0.3,
+    "min_event_gap_s": 0.5,
+    "hop_s": 0.48,
+    "selected_on_fsd50k": false
+  },
+  "gate": {
+    "f1": 0.7,
+    "ci_low": 0.6
+  },
+  "results": {
+    "species_presence": {
+      "cat_vocalization": {
+        "all": {
+          "positives": 129,
+          "negatives": 9950,
+          "tp": 95,
+          "fp": 52,
+          "fn": 34,
+          "precision": 0.6462585034013606,
+          "recall": 0.7364341085271318,
+          "f1": 0.6884057971014492,
+          "false_positive_rate": 0.0052261306532663315,
+          "positive_uploaders": 114,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6229364897397685,
+            "ci_high": 0.754107111603757,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7424392314887082,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 97,
+          "negatives": 8168,
+          "tp": 70,
+          "fp": 43,
+          "fn": 27,
+          "precision": 0.6194690265486725,
+          "recall": 0.7216494845360825,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.005264446620959843,
+          "positive_uploaders": 84,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.5836820457796853,
+            "ci_high": 0.7400096153846154,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7198597490193726,
+          "passes_gate": false
+        },
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            16
+          ],
+          [
+            "Human_voice",
+            14
+          ],
+          [
+            "Vehicle",
+            13
+          ],
+          [
+            "Motor_vehicle_(road)",
+            9
+          ],
+          [
+            "Engine",
+            9
+          ],
+          [
+            "Wild_animals",
+            9
+          ],
+          [
+            "Motorcycle",
+            7
+          ],
+          [
+            "Speech",
+            6
+          ]
+        ],
+        "decision": "event of group cat_vocalization"
+      },
+      "dog_vocalization": {
+        "all": {
+          "positives": 170,
+          "negatives": 9909,
+          "tp": 103,
+          "fp": 10,
+          "fn": 67,
+          "precision": 0.911504424778761,
+          "recall": 0.6058823529411764,
+          "f1": 0.7279151943462897,
+          "false_positive_rate": 0.0010091835704914725,
+          "positive_uploaders": 126,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6666666666666666,
+            "ci_high": 0.7887721490231712,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7499721401561802,
+          "passes_gate": true
+        },
+        "cc0_ccby": {
+          "positives": 130,
+          "negatives": 8135,
+          "tp": 80,
+          "fp": 8,
+          "fn": 50,
+          "precision": 0.9090909090909091,
+          "recall": 0.6153846153846154,
+          "f1": 0.7339449541284404,
+          "false_positive_rate": 0.0009834050399508297,
+          "positive_uploaders": 94,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6635491552839683,
+            "ci_high": 0.7984883720930231,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7420588109037551,
+          "passes_gate": true
+        },
+        "false_positives_by_label": [
+          [
+            "Human_voice",
+            5
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            3
+          ],
+          [
+            "Cat",
+            3
+          ],
+          [
+            "Child_speech_and_kid_speaking",
+            2
+          ],
+          [
+            "Speech",
+            2
+          ],
+          [
+            "Meow",
+            2
+          ],
+          [
+            "Purr",
+            2
+          ],
+          [
+            "Singing",
+            2
+          ]
+        ],
+        "decision": "event of group dog_vocalization"
+      }
+    },
+    "vocalization_type": {
+      "meow": {
+        "all": {
+          "positives": 75,
+          "negatives": 10004,
+          "tp": 50,
+          "fp": 13,
+          "fn": 25,
+          "precision": 0.7936507936507936,
+          "recall": 0.6666666666666666,
+          "f1": 0.7246376811594203,
+          "false_positive_rate": 0.0012994802079168333,
+          "positive_uploaders": 63,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6371480289621883,
+            "ci_high": 0.8062169661733615,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7765323379633612,
+          "passes_gate": true
+        },
+        "cc0_ccby": {
+          "positives": 63,
+          "negatives": 8202,
+          "tp": 42,
+          "fp": 9,
+          "fn": 21,
+          "precision": 0.8235294117647058,
+          "recall": 0.6666666666666666,
+          "f1": 0.7368421052631579,
+          "false_positive_rate": 0.0010972933430870519,
+          "positive_uploaders": 53,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6336381087088301,
+            "ci_high": 0.8148327939590075,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.7662703899828184,
+          "passes_gate": true
+        },
+        "false_positives_by_label": [
+          [
+            "Human_voice",
+            7
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            4
+          ],
+          [
+            "Wild_animals",
+            4
+          ],
+          [
+            "Male_speech_and_man_speaking",
+            3
+          ],
+          [
+            "Speech",
+            3
+          ],
+          [
+            "Squeak",
+            3
+          ],
+          [
+            "Door",
+            3
+          ],
+          [
+            "Bird_vocalization_and_bird_call_and_bird_song",
+            3
+          ]
+        ],
+        "decision": "'meow' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      },
+      "purr": {
+        "all": {
+          "positives": 60,
+          "negatives": 10019,
+          "tp": 48,
+          "fp": 29,
+          "fn": 12,
+          "precision": 0.6233766233766234,
+          "recall": 0.8,
+          "f1": 0.7007299270072993,
+          "false_positive_rate": 0.0028945004491466213,
+          "positive_uploaders": 59,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.595399216009903,
+            "ci_high": 0.794569038671354,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8095510451914634,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 38,
+          "negatives": 8227,
+          "tp": 30,
+          "fp": 25,
+          "fn": 8,
+          "precision": 0.5454545454545454,
+          "recall": 0.7894736842105263,
+          "f1": 0.6451612903225806,
+          "false_positive_rate": 0.003038774766014343,
+          "positive_uploaders": 37,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.5,
+            "ci_high": 0.7727272727272727,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8208517431615344,
+          "passes_gate": false
+        },
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            7
+          ],
+          [
+            "Vehicle",
+            7
+          ],
+          [
+            "Engine",
+            6
+          ],
+          [
+            "Motorcycle",
+            6
+          ],
+          [
+            "Motor_vehicle_(road)",
+            6
+          ],
+          [
+            "Human_voice",
+            5
+          ],
+          [
+            "Liquid",
+            4
+          ],
+          [
+            "Zipper_(clothing)",
+            4
+          ]
+        ],
+        "decision": "'purr' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      },
+      "hiss_cat": {
+        "all": {
+          "positives": 2,
+          "negatives": 10077,
+          "tp": 0,
+          "fp": 13,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "false_positive_rate": 0.001290066488042076,
+          "positive_uploaders": 2,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.002003193931530093,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 2,
+          "negatives": 8263,
+          "tp": 0,
+          "fp": 12,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "false_positive_rate": 0.0014522570494977611,
+          "positive_uploaders": 2,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.0024735841885214745,
+          "passes_gate": false
+        },
+        "false_positives_by_label": [
+          [
+            "Vehicle",
+            5
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            5
+          ],
+          [
+            "Rail_transport",
+            3
+          ],
+          [
+            "Human_group_actions",
+            3
+          ],
+          [
+            "Train",
+            3
+          ],
+          [
+            "Engine",
+            3
+          ],
+          [
+            "Wild_animals",
+            3
+          ],
+          [
+            "Alarm",
+            2
+          ]
+        ],
+        "decision": "'hiss' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      },
+      "bark": {
+        "all": {
+          "positives": 115,
+          "negatives": 9964,
+          "tp": 75,
+          "fp": 16,
+          "fn": 40,
+          "precision": 0.8241758241758241,
+          "recall": 0.6521739130434783,
+          "f1": 0.7281553398058253,
+          "false_positive_rate": 0.0016057808109193096,
+          "positive_uploaders": 94,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.656050252687024,
+            "ci_high": 0.7974051088325239,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6708853265804675,
+          "passes_gate": true
+        },
+        "cc0_ccby": {
+          "positives": 91,
+          "negatives": 8174,
+          "tp": 57,
+          "fp": 13,
+          "fn": 34,
+          "precision": 0.8142857142857143,
+          "recall": 0.6263736263736264,
+          "f1": 0.7080745341614907,
+          "false_positive_rate": 0.0015904086126743333,
+          "positive_uploaders": 73,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.6216113841113841,
+            "ci_high": 0.7848430526084729,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6438982103232385,
+          "passes_gate": true
+        },
+        "false_positives_by_label": [
+          [
+            "Dog",
+            14
+          ],
+          [
+            "Growling",
+            5
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            3
+          ],
+          [
+            "Human_voice",
+            3
+          ],
+          [
+            "Speech",
+            2
+          ],
+          [
+            "Chirp_and_tweet",
+            2
+          ],
+          [
+            "Bird",
+            2
+          ],
+          [
+            "Wild_animals",
+            2
+          ]
+        ],
+        "decision": "'bark' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      },
+      "growl_any": {
+        "all": {
+          "positives": 50,
+          "negatives": 10029,
+          "tp": 22,
+          "fp": 18,
+          "fn": 28,
+          "precision": 0.55,
+          "recall": 0.44,
+          "f1": 0.4888888888888889,
+          "false_positive_rate": 0.0017947950942267424,
+          "positive_uploaders": 44,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3494976292616844,
+            "ci_high": 0.6072023809523809,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.47389559937749015,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 38,
+          "negatives": 8227,
+          "tp": 18,
+          "fp": 14,
+          "fn": 20,
+          "precision": 0.5625,
+          "recall": 0.47368421052631576,
+          "f1": 0.5142857142857142,
+          "false_positive_rate": 0.0017017138689680322,
+          "positive_uploaders": 34,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3499801587301587,
+            "ci_high": 0.6562616604477611,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.48378107407616827,
+          "passes_gate": false
+        },
+        "false_positives_by_label": [
+          [
+            "Dog",
+            7
+          ],
+          [
+            "Bark",
+            6
+          ],
+          [
+            "Human_voice",
+            4
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            3
+          ],
+          [
+            "Speech",
+            2
+          ],
+          [
+            "Cat",
+            2
+          ],
+          [
+            "Mechanisms",
+            2
+          ],
+          [
+            "Keys_jangling",
+            1
+          ]
+        ],
+        "decision": "'growl' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      },
+      "growl_dog": {
+        "all": {
+          "positives": 33,
+          "negatives": 10046,
+          "tp": 17,
+          "fp": 23,
+          "fn": 16,
+          "precision": 0.425,
+          "recall": 0.5151515151515151,
+          "f1": 0.4657534246575342,
+          "false_positive_rate": 0.0022894684451522994,
+          "positive_uploaders": 32,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.30428630024610337,
+            "ci_high": 0.6223643410852712,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.4820738455508143,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 23,
+          "negatives": 8242,
+          "tp": 15,
+          "fp": 17,
+          "fn": 8,
+          "precision": 0.46875,
+          "recall": 0.6521739130434783,
+          "f1": 0.5454545454545454,
+          "false_positive_rate": 0.002062606163552536,
+          "positive_uploaders": 22,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.36354545454545456,
+            "ci_high": 0.693891723356009,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.538778139640946,
+          "passes_gate": false
+        },
+        "false_positives_by_label": [
+          [
+            "Dog",
+            7
+          ],
+          [
+            "Bark",
+            6
+          ],
+          [
+            "Human_voice",
+            6
+          ],
+          [
+            "Growling",
+            5
+          ],
+          [
+            "Cat",
+            4
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            3
+          ],
+          [
+            "Wild_animals",
+            3
+          ],
+          [
+            "Speech",
+            2
+          ]
+        ],
+        "decision": "'growl' confident subtype (>= 0.3) of a species or growl event, or a growl event for growl"
+      }
+    },
+    "context_tags": {
+      "speech": {
+        "all": {
+          "positives": 777,
+          "negatives": 9302,
+          "tp": 649,
+          "fp": 892,
+          "fn": 128,
+          "precision": 0.42115509409474366,
+          "recall": 0.8352638352638353,
+          "f1": 0.5599654874892148,
+          "false_positive_rate": 0.09589335626746937,
+          "positive_uploaders": 391,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.5171102876912705,
+            "ci_high": 0.5948133798509004,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6748491547746839,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 648,
+          "negatives": 7617,
+          "tp": 542,
+          "fp": 730,
+          "fn": 106,
+          "precision": 0.4261006289308176,
+          "recall": 0.8364197530864198,
+          "f1": 0.5645833333333333,
+          "false_positive_rate": 0.09583825653144283,
+          "positive_uploaders": 343,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.5227095887871146,
+            "ci_high": 0.6014590801409717,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6853126991314276,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Speech",
+        "false_positives_by_label": [
+          [
+            "Human_voice",
+            425
+          ],
+          [
+            "Human_group_actions",
+            263
+          ],
+          [
+            "Chatter",
+            167
+          ],
+          [
+            "Laughter",
+            128
+          ],
+          [
+            "Vehicle",
+            109
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            108
+          ],
+          [
+            "Respiratory_sounds",
+            107
+          ],
+          [
+            "Shout",
+            97
+          ]
+        ]
+      },
+      "door": {
+        "all": {
+          "positives": 459,
+          "negatives": 9620,
+          "tp": 165,
+          "fp": 175,
+          "fn": 294,
+          "precision": 0.4852941176470588,
+          "recall": 0.35947712418300654,
+          "f1": 0.4130162703379224,
+          "false_positive_rate": 0.018191268191268192,
+          "positive_uploaders": 296,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.36787564766839376,
+            "ci_high": 0.45876479958818533,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.40487409023840437,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 408,
+          "negatives": 7857,
+          "tp": 153,
+          "fp": 142,
+          "fn": 255,
+          "precision": 0.5186440677966102,
+          "recall": 0.375,
+          "f1": 0.4352773826458037,
+          "false_positive_rate": 0.01807305587374316,
+          "positive_uploaders": 258,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3814057917888563,
+            "ci_high": 0.48213002045424985,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.4345534734390891,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Door",
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            68
+          ],
+          [
+            "Cupboard_open_or_close",
+            23
+          ],
+          [
+            "Run",
+            21
+          ],
+          [
+            "Drawer_open_or_close",
+            21
+          ],
+          [
+            "Thump_and_thud",
+            21
+          ],
+          [
+            "Walk_and_footsteps",
+            19
+          ],
+          [
+            "Human_voice",
+            17
+          ],
+          [
+            "Hands",
+            15
+          ]
+        ]
+      },
+      "doorbell": {
+        "all": {
+          "positives": 37,
+          "negatives": 10042,
+          "tp": 14,
+          "fp": 23,
+          "fn": 23,
+          "precision": 0.3783783783783784,
+          "recall": 0.3783783783783784,
+          "f1": 0.3783783783783784,
+          "false_positive_rate": 0.002290380402310297,
+          "positive_uploaders": 32,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.19351736972704714,
+            "ci_high": 0.5455086580086579,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.34837298247099835,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 27,
+          "negatives": 8238,
+          "tp": 7,
+          "fp": 21,
+          "fn": 20,
+          "precision": 0.25,
+          "recall": 0.25925925925925924,
+          "f1": 0.2545454545454545,
+          "false_positive_rate": 0.0025491624180626364,
+          "positive_uploaders": 24,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.06060606060606061,
+            "ci_high": 0.4473684210526316,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.26144309013647193,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Doorbell",
+        "false_positives_by_label": [
+          [
+            "Musical_instrument",
+            14
+          ],
+          [
+            "Music",
+            14
+          ],
+          [
+            "Percussion",
+            12
+          ],
+          [
+            "Mallet_percussion",
+            10
+          ],
+          [
+            "Glockenspiel",
+            9
+          ],
+          [
+            "Alarm",
+            7
+          ],
+          [
+            "Bell",
+            5
+          ],
+          [
+            "Telephone",
+            3
+          ]
+        ]
+      },
+      "knock": {
+        "all": {
+          "positives": 98,
+          "negatives": 9981,
+          "tp": 69,
+          "fp": 168,
+          "fn": 29,
+          "precision": 0.2911392405063291,
+          "recall": 0.7040816326530612,
+          "f1": 0.41194029850746267,
+          "false_positive_rate": 0.016831980763450556,
+          "positive_uploaders": 90,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3363593109506149,
+            "ci_high": 0.492064743878624,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.5859247682304425,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 83,
+          "negatives": 8182,
+          "tp": 60,
+          "fp": 147,
+          "fn": 23,
+          "precision": 0.2898550724637681,
+          "recall": 0.7228915662650602,
+          "f1": 0.41379310344827586,
+          "false_positive_rate": 0.017966267416279637,
+          "positive_uploaders": 76,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3319600725952813,
+            "ci_high": 0.49654150197628455,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.603704912307862,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Knock",
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            99
+          ],
+          [
+            "Door",
+            50
+          ],
+          [
+            "Slam",
+            49
+          ],
+          [
+            "Thump_and_thud",
+            25
+          ],
+          [
+            "Cupboard_open_or_close",
+            20
+          ],
+          [
+            "Wood",
+            18
+          ],
+          [
+            "Drawer_open_or_close",
+            18
+          ],
+          [
+            "Tools",
+            17
+          ]
+        ]
+      },
+      "music": {
+        "all": {
+          "positives": 1972,
+          "negatives": 8107,
+          "tp": 1675,
+          "fp": 702,
+          "fn": 297,
+          "precision": 0.704669751787968,
+          "recall": 0.8493914807302231,
+          "f1": 0.7702920211542883,
+          "false_positive_rate": 0.08659183421734304,
+          "positive_uploaders": 634,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.7422557030655105,
+            "ci_high": 0.7993230594297318,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8791111064274607,
+          "passes_gate": true
+        },
+        "cc0_ccby": {
+          "positives": 1613,
+          "negatives": 6652,
+          "tp": 1335,
+          "fp": 563,
+          "fn": 278,
+          "precision": 0.7033719704952581,
+          "recall": 0.8276503409795413,
+          "f1": 0.7604671033893478,
+          "false_positive_rate": 0.08463619963920625,
+          "positive_uploaders": 549,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.7264990118569291,
+            "ci_high": 0.790219791279574,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8644552773769747,
+          "passes_gate": true
+        },
+        "fsd50k_label": "Music",
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            164
+          ],
+          [
+            "Human_voice",
+            144
+          ],
+          [
+            "Bell",
+            120
+          ],
+          [
+            "Vehicle",
+            99
+          ],
+          [
+            "Alarm",
+            96
+          ],
+          [
+            "Human_group_actions",
+            73
+          ],
+          [
+            "Door",
+            71
+          ],
+          [
+            "Engine",
+            69
+          ]
+        ]
+      },
+      "dishes_pots_pans": {
+        "all": {
+          "positives": 149,
+          "negatives": 9930,
+          "tp": 33,
+          "fp": 56,
+          "fn": 116,
+          "precision": 0.3707865168539326,
+          "recall": 0.2214765100671141,
+          "f1": 0.2773109243697479,
+          "false_positive_rate": 0.005639476334340383,
+          "positive_uploaders": 113,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.20286810376324443,
+            "ci_high": 0.35297591477535895,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.24257665944995271,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 127,
+          "negatives": 8138,
+          "tp": 29,
+          "fp": 51,
+          "fn": 98,
+          "precision": 0.3625,
+          "recall": 0.2283464566929134,
+          "f1": 0.28019323671497587,
+          "false_positive_rate": 0.006266896043253871,
+          "positive_uploaders": 96,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.19994791666666667,
+            "ci_high": 0.36967654028436014,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.25016522096592725,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Dishes_and_pots_and_pans",
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            26
+          ],
+          [
+            "Glass",
+            22
+          ],
+          [
+            "Chink_and_clink",
+            19
+          ],
+          [
+            "Cutlery_and_silverware",
+            10
+          ],
+          [
+            "Coin_(dropping)",
+            8
+          ],
+          [
+            "Tools",
+            8
+          ],
+          [
+            "Hammer",
+            7
+          ],
+          [
+            "Shatter",
+            6
+          ]
+        ]
+      },
+      "cutlery": {
+        "all": {
+          "positives": 126,
+          "negatives": 9953,
+          "tp": 26,
+          "fp": 64,
+          "fn": 100,
+          "precision": 0.28888888888888886,
+          "recall": 0.20634920634920634,
+          "f1": 0.24074074074074073,
+          "false_positive_rate": 0.006430222043604944,
+          "positive_uploaders": 101,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.1640983606557377,
+            "ci_high": 0.3225890456989247,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.2053144666851755,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 108,
+          "negatives": 8157,
+          "tp": 24,
+          "fp": 57,
+          "fn": 84,
+          "precision": 0.2962962962962963,
+          "recall": 0.2222222222222222,
+          "f1": 0.25396825396825395,
+          "false_positive_rate": 0.006987863184994484,
+          "positive_uploaders": 87,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.1714209320091673,
+            "ci_high": 0.34092294900221726,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.20871859217176258,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Cutlery_and_silverware",
+        "false_positives_by_label": [
+          [
+            "Domestic_sounds_and_home_sounds",
+            35
+          ],
+          [
+            "Glass",
+            22
+          ],
+          [
+            "Dishes_and_pots_and_pans",
+            17
+          ],
+          [
+            "Chink_and_clink",
+            15
+          ],
+          [
+            "Coin_(dropping)",
+            12
+          ],
+          [
+            "Shatter",
+            7
+          ],
+          [
+            "Liquid",
+            7
+          ],
+          [
+            "Tools",
+            6
+          ]
+        ]
+      },
+      "thunder": {
+        "all": {
+          "positives": 127,
+          "negatives": 9952,
+          "tp": 112,
+          "fp": 42,
+          "fn": 15,
+          "precision": 0.7272727272727273,
+          "recall": 0.8818897637795275,
+          "f1": 0.797153024911032,
+          "false_positive_rate": 0.0042202572347266884,
+          "positive_uploaders": 75,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.7281522931307634,
+            "ci_high": 0.8527209972521949,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8966015904845475,
+          "passes_gate": true
+        },
+        "cc0_ccby": {
+          "positives": 120,
+          "negatives": 8145,
+          "tp": 105,
+          "fp": 36,
+          "fn": 15,
+          "precision": 0.7446808510638298,
+          "recall": 0.875,
+          "f1": 0.8045977011494253,
+          "false_positive_rate": 0.004419889502762431,
+          "positive_uploaders": 70,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.7355199724517907,
+            "ci_high": 0.8608559688738591,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.8961945978075231,
+          "passes_gate": true
+        },
+        "fsd50k_label": "Thunder",
+        "false_positives_by_label": [
+          [
+            "Vehicle",
+            18
+          ],
+          [
+            "Water",
+            12
+          ],
+          [
+            "Explosion",
+            9
+          ],
+          [
+            "Rain",
+            8
+          ],
+          [
+            "Rail_transport",
+            7
+          ],
+          [
+            "Engine",
+            7
+          ],
+          [
+            "Motor_vehicle_(road)",
+            6
+          ],
+          [
+            "Boom",
+            5
+          ]
+        ]
+      },
+      "fireworks": {
+        "all": {
+          "positives": 65,
+          "negatives": 10014,
+          "tp": 55,
+          "fp": 229,
+          "fn": 10,
+          "precision": 0.1936619718309859,
+          "recall": 0.8461538461538461,
+          "f1": 0.3151862464183381,
+          "false_positive_rate": 0.02286798482125025,
+          "positive_uploaders": 34,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.20527505196500218,
+            "ci_high": 0.42540020263424516,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6162104219131438,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 61,
+          "negatives": 8204,
+          "tp": 53,
+          "fp": 195,
+          "fn": 8,
+          "precision": 0.21370967741935484,
+          "recall": 0.8688524590163934,
+          "f1": 0.343042071197411,
+          "false_positive_rate": 0.023768893222818138,
+          "positive_uploaders": 30,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.22744156177754946,
+            "ci_high": 0.4656174686279398,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.6439122987195218,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Fireworks",
+        "false_positives_by_label": [
+          [
+            "Water",
+            45
+          ],
+          [
+            "Vehicle",
+            45
+          ],
+          [
+            "Explosion",
+            43
+          ],
+          [
+            "Thunder",
+            43
+          ],
+          [
+            "Thunderstorm",
+            43
+          ],
+          [
+            "Wild_animals",
+            37
+          ],
+          [
+            "Bird",
+            34
+          ],
+          [
+            "Gunshot_and_gunfire",
+            32
+          ]
+        ]
+      },
+      "alarm": {
+        "all": {
+          "positives": 567,
+          "negatives": 9512,
+          "tp": 194,
+          "fp": 179,
+          "fn": 373,
+          "precision": 0.5201072386058981,
+          "recall": 0.3421516754850088,
+          "f1": 0.4127659574468085,
+          "false_positive_rate": 0.01881833473507149,
+          "positive_uploaders": 333,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3573074694606731,
+            "ci_high": 0.4666179789087984,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.4299853629770148,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 465,
+          "negatives": 7800,
+          "tp": 155,
+          "fp": 138,
+          "fn": 310,
+          "precision": 0.5290102389078498,
+          "recall": 0.3333333333333333,
+          "f1": 0.40897097625329815,
+          "false_positive_rate": 0.01769230769230769,
+          "positive_uploaders": 289,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3483492992396004,
+            "ci_high": 0.4640487099377095,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.42985730031645164,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Alarm",
+        "false_positives_by_label": [
+          [
+            "Music",
+            52
+          ],
+          [
+            "Musical_instrument",
+            51
+          ],
+          [
+            "Human_voice",
+            35
+          ],
+          [
+            "Vehicle",
+            28
+          ],
+          [
+            "Domestic_sounds_and_home_sounds",
+            27
+          ],
+          [
+            "Bell",
+            21
+          ],
+          [
+            "Engine",
+            19
+          ],
+          [
+            "Speech",
+            19
+          ]
+        ]
+      },
+      "siren": {
+        "all": {
+          "positives": 49,
+          "negatives": 10030,
+          "tp": 35,
+          "fp": 78,
+          "fn": 14,
+          "precision": 0.30973451327433627,
+          "recall": 0.7142857142857143,
+          "f1": 0.43209876543209874,
+          "false_positive_rate": 0.00777666999002991,
+          "positive_uploaders": 37,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.31794701986754964,
+            "ci_high": 0.5430504455890769,
+            "n_boot": 1000,
+            "n_groups": 2284,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.4004454849152297,
+          "passes_gate": false
+        },
+        "cc0_ccby": {
+          "positives": 43,
+          "negatives": 8222,
+          "tp": 30,
+          "fp": 65,
+          "fn": 13,
+          "precision": 0.3157894736842105,
+          "recall": 0.6976744186046512,
+          "f1": 0.43478260869565216,
+          "false_positive_rate": 0.007905619070785698,
+          "positive_uploaders": 33,
+          "f1_ci95_by_uploader": {
+            "ci_low": 0.3087952488687783,
+            "ci_high": 0.5606754161331625,
+            "n_boot": 1000,
+            "n_groups": 1919,
+            "unit": "group"
+          },
+          "average_precision_ungated_score": 0.37206548282872437,
+          "passes_gate": false
+        },
+        "fsd50k_label": "Siren",
+        "false_positives_by_label": [
+          [
+            "Vehicle",
+            29
+          ],
+          [
+            "Music",
+            21
+          ],
+          [
+            "Musical_instrument",
+            21
+          ],
+          [
+            "Motor_vehicle_(road)",
+            20
+          ],
+          [
+            "Human_voice",
+            18
+          ],
+          [
+            "Engine",
+            18
+          ],
+          [
+            "Alarm",
+            17
+          ],
+          [
+            "Car",
+            14
+          ]
+        ]
+      }
+    }
+  },
+  "not_evaluable": {
+    "vocalization_type": {
+      "caterwaul": "no FSD50K label",
+      "yip": "no FSD50K label",
+      "howl": "no FSD50K label",
+      "bow_wow": "no FSD50K label",
+      "whimper_dog": "no FSD50K label"
+    },
+    "context_tags": {
+      "television": "no FSD50K label with AudioSet id /m/07c52",
+      "vacuum_cleaner": "no FSD50K label with AudioSet id /m/0d31p",
+      "baby_cry": "no FSD50K label with AudioSet id /t/dd00002"
+    }
+  },
+  "scoring_seconds": 262.27262077299974,
+  "scoring_workers": 3,
+  "runtime_s": 326.4,
+  "terms": "FSD50K: CC BY 4.0 collection, per-clip CC licences; evaluation only, nothing derived ships"
+}

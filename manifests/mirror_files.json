@@ -220,20 +220,33 @@
    "annotations": "context (brushing, isolation, waiting for food), cat id, breed, sex, owner, session in file names",
    "unblocks": "byte-level verification of the 440 WAVs E2 used (mirror pinned only at first retrieval) and the record's second file, whose content the mirror does not include",
    "files": [
-    {
-     "file": "dataset.zip",
-     "official_url": "https://zenodo.org/records/4008297/files/dataset.zip",
-     "target": "catmeows_official/dataset.zip",
-     "checksums": {},
-     "note": "the record lists two files: 8.9 MB (md5 b5fa911bcd6514e39dfef6876f747df4) and 4.1 MB (md5 7663bb5e1de2c808beeb202a52dc99ab); which md5 belongs to which name was not readable here - verify against the record JSON"
-    },
-    {
-     "file": "record.json",
-     "official_url": "https://zenodo.org/api/records/4008297",
-     "target": "catmeows_official/record.json",
-     "checksums": {},
-     "note": "the record metadata: file names, sizes, md5 and the licence field"
-    }
+     {
+       "file": "dataset.zip",
+       "official_url": "https://zenodo.org/api/records/4008297/files/dataset.zip/content",
+       "target": "catmeows_official/dataset.zip",
+       "size": 8861099,
+       "checksums": {
+         "md5": "b5fa911bcd6514e39dfef6876f747df4"
+       },
+       "note": "size and md5 from the record JSON (read 2026-10-19); fetched and verified by `fetch-data catmeows`"
+     },
+     {
+       "file": "extras.zip",
+       "official_url": "https://zenodo.org/api/records/4008297/files/extras.zip/content",
+       "target": "catmeows_official/extras.zip",
+       "size": 4142654,
+       "checksums": {
+         "md5": "7663bb5e1de2c808beeb202a52dc99ab"
+       },
+       "note": "the record's second file (other vocalizations and uncut sequences; no further metadata)"
+     },
+     {
+       "file": "record.json",
+       "official_url": "https://zenodo.org/api/records/4008297",
+       "target": "catmeows_official/record.json",
+       "checksums": {},
+       "note": "the record metadata: file names, sizes, md5 and the licence field (cc-by-nc-4.0)"
+     }
    ]
   },
   {

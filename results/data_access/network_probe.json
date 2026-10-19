@@ -1,11 +1,13 @@
 {
-  "checked_at": "2026-10-10T10:40:04+00:00",
+  "checked_at": "2026-10-19T07:47:42+00:00",
   "via": "workspace egress proxy (HTTPS_PROXY)",
   "blocked": [
+    "rr1---sn-a5mekn6d.googlevideo.com"
+  ],
+  "reachable": [
     "zenodo.org",
     "huggingface.co",
     "www.youtube.com",
-    "rr1---sn-a5mekn6d.googlevideo.com",
     "dl.fbaipublicfiles.com",
     "www.kaggle.com",
     "drive.google.com",
@@ -16,24 +18,22 @@
     "onedrive.live.com",
     "fsannotator.upf.edu",
     "visualgenome.org",
-    "ai.google.dev",
-    "www.deepmind.com"
-  ],
-  "reachable": [
     "storage.googleapis.com",
     "open-images-dataset.s3.amazonaws.com",
     "fast-ai-imageclas.s3.amazonaws.com",
     "kinetics.s3.amazonaws.com",
-    "mammalnet.s3.amazonaws.com"
+    "mammalnet.s3.amazonaws.com",
+    "ai.google.dev",
+    "www.deepmind.com"
   ],
   "hosts": [
     {
       "host": "zenodo.org",
       "operation": "GET https://zenodo.org/api/records/4008297",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "200",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "CatMeows (official copy; checksums for the mirror used now)",
         "FSD50K (cat/dog vocalization types: Bark, Meow, Purr, Hiss, Growling; per-clip CC licences)",
@@ -49,10 +49,10 @@
     {
       "host": "huggingface.co",
       "operation": "GET https://huggingface.co/api/datasets/ArlingtonCL2/Barkopedia_Dog_Act_Env",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "200",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "Barkopedia (dog bark context, arousal/valence, individual dogs)",
         "DogSpeak (77k bark sequences, 156 dogs; CC BY-NC-SA per mirrors)",
@@ -67,10 +67,10 @@
     {
       "host": "www.youtube.com",
       "operation": "GET https://www.youtube.com/watch?v=--PJHxphWEs",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "302",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "AudioSet and AudioSet Strong audio (timestamped Bark, Growling, Howl, Yip, Whimper, Meow, Purr, Hiss, Caterwaul)",
         "VGGSound (11 cat/dog classes, audio + video)",
@@ -81,10 +81,10 @@
     {
       "host": "rr1---sn-a5mekn6d.googlevideo.com",
       "operation": "GET https://rr1---sn-a5mekn6d.googlevideo.com/ (YouTube media CDN; host names vary per video)",
-      "state": "blocked_by_egress_policy",
+      "state": "dns_failure",
       "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "curl_exit": 6,
+      "error": "curl: (6) Could not resolve host: rr1---sn-a5mekn6d.googlevideo.com",
       "unblocks": [
         "the YouTube-hosted media of AudioSet, VGGSound, AVE, LLP (with www.youtube.com)"
       ],
@@ -93,10 +93,10 @@
     {
       "host": "dl.fbaipublicfiles.com",
       "operation": "GET https://dl.fbaipublicfiles.com/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "403",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "CoP3D: about 4,200 phone videos of cats and dogs in homes (CC BY-NC) - closest public match to app use",
         "LVIS v1 (dog collar masks)"
@@ -106,10 +106,10 @@
     {
       "host": "www.kaggle.com",
       "operation": "GET https://www.kaggle.com/datasets",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "200",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "CatFLW (48 cat facial landmarks, CC BY-NC 4.0)",
         "DogFLW (46 dog facial landmarks, CC BY-NC 4.0)",
@@ -120,10 +120,10 @@
     {
       "host": "drive.google.com",
       "operation": "GET https://drive.google.com/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "302",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "AP-10K (cat and dog keypoints; licence statements conflict)",
         "Animal-Pose (cat and dog keypoints; no licence)",
@@ -135,10 +135,10 @@
     {
       "host": "drive.usercontent.google.com",
       "operation": "GET https://drive.usercontent.google.com/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "404",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "large Google Drive downloads (with drive.google.com)"
       ],
@@ -147,10 +147,10 @@
     {
       "host": "www.robots.ox.ac.uk",
       "operation": "GET https://www.robots.ox.ac.uk/~vgg/data/pets/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "500",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "Oxford-IIIT Pet official copy (the fast.ai mirror is used now)",
         "VGGSound pages"
@@ -160,10 +160,10 @@
     {
       "host": "images.cocodataset.org",
       "operation": "GET https://images.cocodataset.org/annotations/annotations_trainval2017.zip",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "503",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "COCO 2017 (cat/dog with bowl, frisbee, teddy bear, bed, couch boxes; per-image Flickr licences). The same bucket answers at a path-style S3 address, which this project does not use because the official host is blocked."
       ],
@@ -172,10 +172,10 @@
     {
       "host": "cvml.ista.ac.at",
       "operation": "GET https://cvml.ista.ac.at/AwA2/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "206",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "AwA2 images for AwA-Pose (39 keypoints incl. ear and tail on 588 cat images; annotations MIT, reachable)"
       ],
@@ -184,10 +184,10 @@
     {
       "host": "onedrive.live.com",
       "operation": "GET https://onedrive.live.com/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "403",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "APT-36K / APTv2 (animal pose tracking in video; MIT)"
       ],
@@ -196,10 +196,10 @@
     {
       "host": "fsannotator.upf.edu",
       "operation": "GET https://fsannotator.upf.edu/fsd/release/FSD50K/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "200",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "FSD50K mirror (alternative to zenodo.org)"
       ],
@@ -208,10 +208,10 @@
     {
       "host": "visualgenome.org",
       "operation": "GET https://visualgenome.org/",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "202",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "Visual Genome relationships (pet-pet and pet-object, CC BY 4.0 per secondary sources)"
       ],
@@ -280,10 +280,10 @@
     {
       "host": "ai.google.dev",
       "operation": "GET https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "301",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "Primary licence statement, if any, for the MediaPipe EfficientDet-Lite0/Lite2 detector files used by the personal_noncommercial phone bundle (their embedded metadata has no licence field; docs/ASSET_TERMS.md M2)",
         "MediaPipe Audio Classifier page for the YAMNet build (its embedded metadata already states Apache-2.0)"
@@ -295,10 +295,10 @@
     {
       "host": "www.deepmind.com",
       "operation": "GET https://www.deepmind.com/open-source/kinetics",
-      "state": "blocked_by_egress_policy",
-      "http_status": "000",
-      "curl_exit": 56,
-      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "state": "reachable",
+      "http_status": "302",
+      "curl_exit": 0,
+      "error": null,
       "unblocks": [
         "Primary licence statement for Kinetics-700-2020 annotations (secondary sources say CC BY 4.0; docs/ASSET_TERMS.md D9)"
       ],

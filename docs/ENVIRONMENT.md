@@ -26,3 +26,29 @@ This is a development workspace (ephemeral cloud container), not the future host
 
 Consequences are recorded per resource in `manifests/resources.json` and
 `docs/DATA_AND_MODEL_REGISTER.md`. No paid API or paid compute was used.
+
+## Session of 2026-10-19 (re-measured at the start)
+
+A new container; nothing under `var/` survived from earlier sessions, so
+models and datasets were fetched again and verified against their pinned
+checksums.
+
+| Item | Observed |
+| --- | --- |
+| CPU | Intel Xeon @ 2.80 GHz, 4 vCPUs (AVX-512, AVX-512 VNNI), KVM guest |
+| RAM | 15.7 GB, no swap |
+| Disk | 30 GB free at start (252 GB volume); 15-23 GB free during the session, depending on which dataset archive was on disk |
+| GPU | none (no `nvidia-smi`, no `/dev/nvidia*`) |
+| Python | system 3.11.16 and 3.12; project venv 3.12 (`uv sync --frozen --extra dev --extra train`, 13 s); G1 venv 3.11 (`var/venv-g1`, `training/g1/requirements.lock.txt`, 2.3 min) |
+| uv / Node | uv 0.8.17 (CI pins 0.11.32; the lock installs unchanged); Node 22.22.0, npm 10.9.4 |
+| Browsers | Playwright Chromium at `/opt/pw-browsers` (the E2E configuration's default path) |
+
+Network, re-probed with `petperception network-probe`
+(`results/data_access/network_probe.json`): every host that blocked a data
+source before is now reachable. The exceptions are YouTube's video CDN
+(`*.googlevideo.com`) and Kaggle's download API, which answers 404 without
+credentials. Newly reachable hosts include zenodo.org, huggingface.co,
+dl.fbaipublicfiles.com, kaggle.com (pages), drive.google.com,
+cvml.ista.ac.at, robots.ox.ac.uk (answers HTTP 500), ai.google.dev and
+images.cocodataset.org. Zenodo serves about 3-7 MB/s per connection and
+ignores HTTP Range requests, so its archives are downloaded whole.

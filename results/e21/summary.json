@@ -1,0 +1,295 @@
+{
+  "experiment": "E21",
+  "gate": {
+    "f1": 0.7,
+    "ci_low": 0.6
+  },
+  "rows": {
+    "species_presence/cat_vocalization": {
+      "positives": 129,
+      "precision": 0.6462585034013606,
+      "recall": 0.7364341085271318,
+      "f1": 0.6884057971014492,
+      "f1_ci95": [
+        0.6229364897397685,
+        0.754107111603757
+      ],
+      "ap_ungated": 0.7424392314887082,
+      "fpr": 0.0052261306532663315,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.6666666666666666,
+      "positives_cc0_ccby": 97
+    },
+    "species_presence/dog_vocalization": {
+      "positives": 170,
+      "precision": 0.911504424778761,
+      "recall": 0.6058823529411764,
+      "f1": 0.7279151943462897,
+      "f1_ci95": [
+        0.6666666666666666,
+        0.7887721490231712
+      ],
+      "ap_ungated": 0.7499721401561802,
+      "fpr": 0.0010091835704914725,
+      "passes_gate": true,
+      "f1_cc0_ccby": 0.7339449541284404,
+      "positives_cc0_ccby": 130
+    },
+    "vocalization_type/meow": {
+      "positives": 75,
+      "precision": 0.7936507936507936,
+      "recall": 0.6666666666666666,
+      "f1": 0.7246376811594203,
+      "f1_ci95": [
+        0.6371480289621883,
+        0.8062169661733615
+      ],
+      "ap_ungated": 0.7765323379633612,
+      "fpr": 0.0012994802079168333,
+      "passes_gate": true,
+      "f1_cc0_ccby": 0.7368421052631579,
+      "positives_cc0_ccby": 63
+    },
+    "vocalization_type/purr": {
+      "positives": 60,
+      "precision": 0.6233766233766234,
+      "recall": 0.8,
+      "f1": 0.7007299270072993,
+      "f1_ci95": [
+        0.595399216009903,
+        0.794569038671354
+      ],
+      "ap_ungated": 0.8095510451914634,
+      "fpr": 0.0028945004491466213,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.6451612903225806,
+      "positives_cc0_ccby": 38
+    },
+    "vocalization_type/hiss_cat": {
+      "positives": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "f1_ci95": [
+        0.0,
+        0.0
+      ],
+      "ap_ungated": 0.002003193931530093,
+      "fpr": 0.001290066488042076,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.0,
+      "positives_cc0_ccby": 2
+    },
+    "vocalization_type/bark": {
+      "positives": 115,
+      "precision": 0.8241758241758241,
+      "recall": 0.6521739130434783,
+      "f1": 0.7281553398058253,
+      "f1_ci95": [
+        0.656050252687024,
+        0.7974051088325239
+      ],
+      "ap_ungated": 0.6708853265804675,
+      "fpr": 0.0016057808109193096,
+      "passes_gate": true,
+      "f1_cc0_ccby": 0.7080745341614907,
+      "positives_cc0_ccby": 91
+    },
+    "vocalization_type/growl_any": {
+      "positives": 50,
+      "precision": 0.55,
+      "recall": 0.44,
+      "f1": 0.4888888888888889,
+      "f1_ci95": [
+        0.3494976292616844,
+        0.6072023809523809
+      ],
+      "ap_ungated": 0.47389559937749015,
+      "fpr": 0.0017947950942267424,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.5142857142857142,
+      "positives_cc0_ccby": 38
+    },
+    "vocalization_type/growl_dog": {
+      "positives": 33,
+      "precision": 0.425,
+      "recall": 0.5151515151515151,
+      "f1": 0.4657534246575342,
+      "f1_ci95": [
+        0.30428630024610337,
+        0.6223643410852712
+      ],
+      "ap_ungated": 0.4820738455508143,
+      "fpr": 0.0022894684451522994,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.5454545454545454,
+      "positives_cc0_ccby": 23
+    },
+    "context_tags/speech": {
+      "positives": 777,
+      "precision": 0.42115509409474366,
+      "recall": 0.8352638352638353,
+      "f1": 0.5599654874892148,
+      "f1_ci95": [
+        0.5171102876912705,
+        0.5948133798509004
+      ],
+      "ap_ungated": 0.6748491547746839,
+      "fpr": 0.09589335626746937,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.5645833333333333,
+      "positives_cc0_ccby": 648
+    },
+    "context_tags/door": {
+      "positives": 459,
+      "precision": 0.4852941176470588,
+      "recall": 0.35947712418300654,
+      "f1": 0.4130162703379224,
+      "f1_ci95": [
+        0.36787564766839376,
+        0.45876479958818533
+      ],
+      "ap_ungated": 0.40487409023840437,
+      "fpr": 0.018191268191268192,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.4352773826458037,
+      "positives_cc0_ccby": 408
+    },
+    "context_tags/doorbell": {
+      "positives": 37,
+      "precision": 0.3783783783783784,
+      "recall": 0.3783783783783784,
+      "f1": 0.3783783783783784,
+      "f1_ci95": [
+        0.19351736972704714,
+        0.5455086580086579
+      ],
+      "ap_ungated": 0.34837298247099835,
+      "fpr": 0.002290380402310297,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.2545454545454545,
+      "positives_cc0_ccby": 27
+    },
+    "context_tags/knock": {
+      "positives": 98,
+      "precision": 0.2911392405063291,
+      "recall": 0.7040816326530612,
+      "f1": 0.41194029850746267,
+      "f1_ci95": [
+        0.3363593109506149,
+        0.492064743878624
+      ],
+      "ap_ungated": 0.5859247682304425,
+      "fpr": 0.016831980763450556,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.41379310344827586,
+      "positives_cc0_ccby": 83
+    },
+    "context_tags/music": {
+      "positives": 1972,
+      "precision": 0.704669751787968,
+      "recall": 0.8493914807302231,
+      "f1": 0.7702920211542883,
+      "f1_ci95": [
+        0.7422557030655105,
+        0.7993230594297318
+      ],
+      "ap_ungated": 0.8791111064274607,
+      "fpr": 0.08659183421734304,
+      "passes_gate": true,
+      "f1_cc0_ccby": 0.7604671033893478,
+      "positives_cc0_ccby": 1613
+    },
+    "context_tags/dishes_pots_pans": {
+      "positives": 149,
+      "precision": 0.3707865168539326,
+      "recall": 0.2214765100671141,
+      "f1": 0.2773109243697479,
+      "f1_ci95": [
+        0.20286810376324443,
+        0.35297591477535895
+      ],
+      "ap_ungated": 0.24257665944995271,
+      "fpr": 0.005639476334340383,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.28019323671497587,
+      "positives_cc0_ccby": 127
+    },
+    "context_tags/cutlery": {
+      "positives": 126,
+      "precision": 0.28888888888888886,
+      "recall": 0.20634920634920634,
+      "f1": 0.24074074074074073,
+      "f1_ci95": [
+        0.1640983606557377,
+        0.3225890456989247
+      ],
+      "ap_ungated": 0.2053144666851755,
+      "fpr": 0.006430222043604944,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.25396825396825395,
+      "positives_cc0_ccby": 108
+    },
+    "context_tags/thunder": {
+      "positives": 127,
+      "precision": 0.7272727272727273,
+      "recall": 0.8818897637795275,
+      "f1": 0.797153024911032,
+      "f1_ci95": [
+        0.7281522931307634,
+        0.8527209972521949
+      ],
+      "ap_ungated": 0.8966015904845475,
+      "fpr": 0.0042202572347266884,
+      "passes_gate": true,
+      "f1_cc0_ccby": 0.8045977011494253,
+      "positives_cc0_ccby": 120
+    },
+    "context_tags/fireworks": {
+      "positives": 65,
+      "precision": 0.1936619718309859,
+      "recall": 0.8461538461538461,
+      "f1": 0.3151862464183381,
+      "f1_ci95": [
+        0.20527505196500218,
+        0.42540020263424516
+      ],
+      "ap_ungated": 0.6162104219131438,
+      "fpr": 0.02286798482125025,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.343042071197411,
+      "positives_cc0_ccby": 61
+    },
+    "context_tags/alarm": {
+      "positives": 567,
+      "precision": 0.5201072386058981,
+      "recall": 0.3421516754850088,
+      "f1": 0.4127659574468085,
+      "f1_ci95": [
+        0.3573074694606731,
+        0.4666179789087984
+      ],
+      "ap_ungated": 0.4299853629770148,
+      "fpr": 0.01881833473507149,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.40897097625329815,
+      "positives_cc0_ccby": 465
+    },
+    "context_tags/siren": {
+      "positives": 49,
+      "precision": 0.30973451327433627,
+      "recall": 0.7142857142857143,
+      "f1": 0.43209876543209874,
+      "f1_ci95": [
+        0.31794701986754964,
+        0.5430504455890769
+      ],
+      "ap_ungated": 0.4004454849152297,
+      "fpr": 0.00777666999002991,
+      "passes_gate": false,
+      "f1_cc0_ccby": 0.43478260869565216,
+      "positives_cc0_ccby": 43
+    }
+  },
+  "clips": 10079
+}

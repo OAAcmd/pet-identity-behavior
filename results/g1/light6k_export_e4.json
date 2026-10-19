@@ -1,0 +1,144 @@
+{
+  "check": "G1 export on the E4 subset (detector only, E4 protocol)",
+  "created_at": "2026-10-19T09:21:24+00:00",
+  "images": 823,
+  "models": {
+    "light6k_float32": "var/training/g1/runs/light6k_mnv2/export/model_float32.tflite",
+    "light6k_int8": "var/training/g1/runs/light6k_mnv2/export/model_int8_ptq.tflite"
+  },
+  "operating_threshold": 0.35,
+  "results": {
+    "light6k_float32": {
+      "cat": {
+        "ap50": 0.888788646078531,
+        "ap50_ci95": [
+          0.858396444964577,
+          0.9221551533705596
+        ],
+        "image_recall_at_op": 0.8171091445427728,
+        "image_specificity_at_op": 0.6595744680851063,
+        "box_recall_at_op": 0.7513513513513513,
+        "box_precision_at_op": 0.9235880398671097,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8203492888466576,
+        "ap50_ci95": [
+          0.7683000444976079,
+          0.863994644189474
+        ],
+        "image_recall_at_op": 0.9261363636363636,
+        "image_specificity_at_op": 0.36936936936936937,
+        "box_recall_at_op": 0.8105515587529976,
+        "box_precision_at_op": 0.7347826086956522,
+        "small_box_recall_at_op": 0.0
+      },
+      "inference_ms_per_image_including_jpeg_decode": 28.417715024301053
+    },
+    "light6k_int8": {
+      "cat": {
+        "ap50": 0.8239333671192435,
+        "ap50_ci95": [
+          0.7785655026529156,
+          0.8673320709526742
+        ],
+        "image_recall_at_op": 0.6519174041297935,
+        "image_specificity_at_op": 0.7659574468085106,
+        "box_recall_at_op": 0.6,
+        "box_precision_at_op": 0.9446808510638298,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.7595919165211578,
+        "ap50_ci95": [
+          0.7058553363122669,
+          0.8100825462783914
+        ],
+        "image_recall_at_op": 0.6676136363636364,
+        "image_specificity_at_op": 0.7387387387387387,
+        "box_recall_at_op": 0.5539568345323741,
+        "box_precision_at_op": 0.8492647058823529,
+        "small_box_recall_at_op": 0.0
+      },
+      "inference_ms_per_image_including_jpeg_decode": 21.3040815601462
+    },
+    "efficientdet_lite0_tfhub_rawdecode_v1": {
+      "cat": {
+        "ap50": 0.9231842019633021,
+        "ap50_ci95": [
+          0.8945981877084483,
+          0.9474320067809158
+        ],
+        "image_recall_at_op": 0.8967551622418879,
+        "image_specificity_at_op": 0.6170212765957447,
+        "box_recall_at_op": 0.8540540540540541,
+        "box_precision_at_op": 0.9028571428571428,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8506301026498113,
+        "ap50_ci95": [
+          0.7998140905886804,
+          0.8891315252031137
+        ],
+        "image_recall_at_op": 0.8892045454545454,
+        "image_specificity_at_op": 0.6666666666666666,
+        "box_recall_at_op": 0.815347721822542,
+        "box_precision_at_op": 0.8173076923076923,
+        "small_box_recall_at_op": 0.08333333333333333
+      },
+      "inference_ms_per_image_including_jpeg_decode": 33.28587853948999
+    },
+    "efficientdet_lite0_mediapipe_v1": {
+      "cat": {
+        "ap50": 0.9233407778945855,
+        "ap50_ci95": [
+          0.8973720076415018,
+          0.9473422985777427
+        ],
+        "image_recall_at_op": 0.9262536873156342,
+        "image_specificity_at_op": 0.6170212765957447,
+        "box_recall_at_op": 0.8756756756756757,
+        "box_precision_at_op": 0.9178470254957507,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8417312985074372,
+        "ap50_ci95": [
+          0.7890123805186366,
+          0.8859573594154377
+        ],
+        "image_recall_at_op": 0.8920454545454546,
+        "image_specificity_at_op": 0.5585585585585585,
+        "box_recall_at_op": 0.8201438848920863,
+        "box_precision_at_op": 0.782608695652174,
+        "small_box_recall_at_op": 0.25
+      },
+      "inference_ms_per_image_including_jpeg_decode": 48.78214387727791
+    }
+  },
+  "ap50_difference_point": {
+    "light6k_float32-efficientdet_lite0_tfhub_rawdecode_v1/cat": -0.034395555884771056,
+    "light6k_float32-efficientdet_lite0_tfhub_rawdecode_v1/dog": -0.030280813803153728,
+    "light6k_float32-efficientdet_lite0_mediapipe_v1/cat": -0.03455213181605443,
+    "light6k_float32-efficientdet_lite0_mediapipe_v1/dog": -0.021382009660779633,
+    "light6k_int8-efficientdet_lite0_tfhub_rawdecode_v1/cat": -0.09925083484405861,
+    "light6k_int8-efficientdet_lite0_tfhub_rawdecode_v1/dog": -0.09103818612865355,
+    "light6k_int8-efficientdet_lite0_mediapipe_v1/cat": -0.09940741077534199,
+    "light6k_int8-efficientdet_lite0_mediapipe_v1/dog": -0.08213938198627946
+  },
+  "protocol": [
+    "G1 export check: a trained detector export scored with the E4 protocol, next to the shipped detectors.",
+    "",
+    "Scores a Model Maker export (float32, float16 or int8 TFLite) on the E4 Open",
+    "Images validation subset with `e4_visual.evaluate_detector`, the code that",
+    "produced E4. The same images are scored with M3 (the phone build's detector)",
+    "and M2 (the reference detector), on the same images; each AP50 carries E4's bootstrap interval over Flickr authors. G1's training",
+    "data excludes every photographer of this subset (`training/g1_data.py`).",
+    "",
+    "This is detector-only AP50 (no verifier): verifiers are fitted per detector,",
+    "and a new detector needs its own before the full E14 protocol applies",
+    "(docs/TRAINING_PROGRAM.md, G1 acceptance 1). Only cat and dog are scored;",
+    "the subset has no verified labels for the other G1 classes."
+  ]
+}

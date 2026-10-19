@@ -370,10 +370,10 @@ class RemoteZip:
         import struct
 
         self.parts, self.sleep, self._struct = parts, sleep, struct
-        self.sizes = [remote_size(u) for u in parts]
+        self.sizes = [self._size(u) for u in parts]
         last = parts[-1]
         tail_len = min(self.sizes[-1], 65557 + 20 + 56)
-        tail = _range(last, self.sizes[-1] - tail_len, self.sizes[-1] - 1, sleep=sleep)
+        tail = self._get(last, self.sizes[-1] - tail_len, self.sizes[-1] - 1)
         i = tail.rfind(b"PK\x05\x06")
         if i < 0:
             raise MirrorError(f"{redact(last)}: no end-of-central-directory record")
@@ -381,9 +381,9 @@ class RemoteZip:
         loc = tail.rfind(b"PK\x06\x07", 0, i)
         if loc >= 0 and (cd_off == 0xFFFFFFFF or n_total == 0xFFFF or cd_size == 0xFFFFFFFF):
             _, z64_disk, z64_off, _ = struct.unpack("<IIQI", tail[loc:loc + 20])
-            rec = _range(parts[z64_disk], z64_off, z64_off + 55, sleep=sleep)
+            rec = self._get(parts[z64_disk], z64_off, z64_off + 55)
             (_, _, _, _, _, cd_disk, _, n_total, cd_size, cd_off) = struct.unpack("<IQHHIIQQQQ", rec)
-        cd = _range(parts[cd_disk], cd_off, cd_off + cd_size - 1, sleep=sleep)
+        cd = self._get(parts[cd_disk], cd_off, cd_off + cd_size - 1)
         self.entries: dict[str, ZipEntry] = {}
         p = 0
         for _ in range(n_total):
@@ -409,6 +409,12 @@ class RemoteZip:
             self.entries[name] = ZipEntry(name, method, crc, csize, usize, disk, off)
             p += 46 + nlen + xlen + clen
 
+    def _size(self, part: str) -> int:
+        return remote_size(part)
+
+    def _get(self, part: str, start: int, end: int) -> bytes:
+        return _range(part, start, end, sleep=self.sleep)
+
     def names(self) -> list[str]:
         return list(self.entries)
 
@@ -418,7 +424,7 @@ class RemoteZip:
             avail = self.sizes[disk] - offset
             take = min(n, avail)
             if take > 0:
-                out += _range(self.parts[disk], offset, offset + take - 1, sleep=self.sleep)
+                out += self._get(self.parts[disk], offset, offset + take - 1)
                 n -= take
             disk, offset = disk + 1, 0
             if n > 0 and disk >= len(self.parts):
@@ -445,3 +451,16 @@ class RemoteZip:
         if zlib.crc32(data) & 0xFFFFFFFF != e.crc or len(data) != e.usize:
             raise MirrorError(f"{name}: CRC or size mismatch")
         return data
+
+
+class LocalSplitZip(RemoteZip):
+    """The same reader over local files: for split archives (name.z01 ... name.zip) that
+    Python's zipfile cannot open, from servers without Range support (downloaded whole)."""
+
+    def _size(self, part: str) -> int:
+        return Path(part).stat().st_size
+
+    def _get(self, part: str, start: int, end: int) -> bytes:
+        with open(part, "rb") as fh:
+            fh.seek(start)
+            return fh.read(end - start + 1)

@@ -18,7 +18,8 @@ Evidence levels used below:
 
 Profiles: `research` (internal evaluation), `personal_noncommercial` (the
 phone test build and a free personal-use app), `commercial`.
-Checked on 2026-10-10.
+Checked on 2026-10-10; Q-M2, D2 and the new audio datasets D10-D12 re-checked
+on 2026-10-19, when the hosts that had been blocked became reachable.
 
 ## What the phone test build actually ships
 
@@ -37,8 +38,9 @@ Every one of these is cleared for this profile. The page lists their
 credits.
 
 Until 2026-10-10 the build carried M2 (the MediaPipe detector). It was
-replaced when M2's missing licence statement was confirmed (Q-M2). M2 stays
-available for research and comes back if Q-M2 is answered. The
+replaced when M2's missing licence statement was confirmed (Q-M2). Q-M2 was
+answered on 2026-10-19: the publisher's page states no licence for the
+weights, so M2 stays research-only and the build keeps M3. The
 research-only artifacts A5, A6 and A10 are excluded by the exporter for
 this profile, as the bundle manifest notes.
 
@@ -47,22 +49,24 @@ this profile, as the bundle manifest notes.
 | # | Asset | Weights licence | Training data and its terms | Used for | research | personal_noncommercial | commercial |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | M1 | YAMNet, MediaPipe Audio Classifier build v1 (`yamnet_mediapipe_v1`) | **Apache-2.0, stated (primary)**: licence field of the TFLite metadata embedded in the pinned file (author "MediaPipe"). Google also publishes YAMNet in the Apache-2.0 `tensorflow/models` repository. | AudioSet: YouTube audio, not redistributed; AudioSet labels CC BY 4.0, ontology CC BY-SA 4.0 | sound events (cat, dog, sub-types) on both engines; phone bundle | yes | yes | open: Q-T |
-| M2 | EfficientDet-Lite0, MediaPipe Object Detector build v1, float32 (`efficientdet_lite0_mediapipe_v1`; same for the int8 / float16 builds and Lite2) | **Not stated.** The embedded metadata names author "MediaPipe" (metadata v1.5.0) and has no licence field. The MediaPipe model-card bucket (`gs://mediapipe-assets`, 9 cards listed) has no card for it. The MediaPipe Object Detector page on ai.google.dev is blocked here. | COCO 2017 (per MediaPipe documentation): annotations CC BY 4.0, images under per-image Flickr licences, including non-commercial ones | cat/dog/person/furniture detection in the Python reference engine and evaluations E4-E18; phone bundle until 2026-10-10 | yes | open: Q-M2 | not permitted (licence not stated) |
+| M2 | EfficientDet-Lite0, MediaPipe Object Detector build v1, float32 (`efficientdet_lite0_mediapipe_v1`; same for the int8 / float16 builds and Lite2) | **Not stated (primary, checked 2026-10-19).** The embedded metadata names author "MediaPipe" (metadata v1.5.0) and has no licence field. The MediaPipe model-card bucket (`gs://mediapipe-assets`, 9 cards listed) has no card for it. The MediaPipe Object Detector page on ai.google.dev (read 2026-10-19, page "last updated 2026-10-01", HTML SHA-256 `2c63d219…7222`) describes the EfficientDet-Lite0 and Lite2 builds, their COCO training data and download links, but states no licence for them and links no model card. Its footer licence (page content CC BY 4.0, code samples Apache-2.0) covers the page, not the model files. | COCO 2017 (per MediaPipe documentation): annotations CC BY 4.0, images under per-image Flickr licences, including non-commercial ones | cat/dog/person/furniture detection in the Python reference engine and evaluations E4-E18; phone bundle until 2026-10-10 | yes | open: Q-M2 | not permitted (licence not stated) |
 | M3 | EfficientDet-Lite0, TF Lite Task Library build with raw-output decoding (`efficientdet_lite0_tfhub_rawdecode_v1`) | **Apache-2.0, stated (primary)**: licence field of the embedded TFLite metadata | COCO 2017, as M2 | detection in the phone bundle since 2026-10-10; runs in the browser bit-exact (E14) | yes | yes | open: Q-T |
 | M4 | EfficientNet-Lite0, MediaPipe Image Classifier build v1 (float32; int8 likewise) | **Apache-2.0, stated (primary)**: embedded metadata | ImageNet-1k (ILSVRC 2012). The ImageNet terms of access limit the images to non-commercial research and education. | detection verifier, posture features; phone bundle | yes | yes | open: Q-T |
 | M5 | AST AudioSet candidate (`ast_audioset_candidate`) | not checked (huggingface.co blocked) | AudioSet | not used | - | - | - |
 
-**Q-M2 (one question, one owner action).** Does Google state terms for
-`storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/*`?
-The answer would be on the "Models" section of
+**Q-M2 (answered 2026-10-19: no licence stated).** Does Google state terms
+for `storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/*`?
+The "Models" section of
 `https://ai.google.dev/edge/mediapipe/solutions/vision/object_detector`
-(blocked here, `manifests/network_requirements.json`). Anyone with a browser
-can read it in a minute.
+was read from this workspace on 2026-10-19. It names the builds, says they were
+trained on COCO and links the files, but gives no licence for them and no
+model card. The rule recorded before the answer applies:
 
-* If it states Apache-2.0 (as for the classifier and YAMNet builds), M2 is
-  cleared for `personal_noncommercial` and can return to the phone build.
-* If it states nothing, the phone build keeps M3. The build already uses
-  it.
+* If it had stated Apache-2.0, M2 would have been cleared for
+  `personal_noncommercial`.
+* It states nothing, so the phone build keeps M3. M2 stays research-only.
+  Recovering the dog recall M2 has on real video is now G1's job, not a
+  terms question.
 
 What switching costs, measured on the final E4 split with the verifier (E14):
 
@@ -115,14 +119,17 @@ and backbone trained only on Open Images images under CC BY 2.0.
 | # | Dataset | Terms and evidence | How obtained here | Used for | Profiles of what is derived from it |
 | --- | --- | --- | --- | --- | --- |
 | D1 | ESC-50 | Collection CC BY-NC 3.0 (stated, repository LICENSE). Per-clip Freesound licences, parsed into `manifests/esc50_files.csv`: CC0 869, CC BY 901, CC BY-NC 170, Sampling+ 60. | GitHub, pinned commit and per-file SHA-256 | E1 evaluation; thresholds A1, A2 | research, personal_noncommercial; commercial only via A2 |
-| D2 | CatMeows v1.0.2 (Zenodo 4008297) | The Zenodo record (search snippet; zenodo.org blocked) says "open access for scientific research and non-commercial purposes", with citation required. The University of Milan repository says CC BY 4.0 (secondary). | Unofficial GitHub mirror at a pinned commit, 440 files with per-file SHA-256 pins. Whether the mirror matches Zenodo is unverified, because Zenodo's checksums cannot be read here. | E2 evaluation (G4 cats); artifact A10 | research. A10 is not shipped for accuracy reasons, so its terms block nothing now. |
+| D2 | CatMeows v1.0.2 (Zenodo 4008297) | **CC BY-NC 4.0, stated (primary)**: the licence field of the Zenodo record (read 2026-10-19), whose text adds "open access for scientific research and non-commercial purposes" and requires citation. The University of Milan repository's CC BY 4.0 (secondary) is not relied on. | Official files fetched 2026-10-19 (`dataset.zip` 8,861,099 bytes and `extras.zip` 4,142,654 bytes, both matching the record's MD5). All 440 WAVs E2 used from the unofficial mirror are byte-identical to the official `dataset.zip` (SHA-256 per file against `manifests/catmeows_mirror_sha256.csv`). | E2 evaluation (G4 cats); artifact A10 | research. A10 is not shipped for accuracy reasons, so its terms block nothing now. |
 | D3 | Open Images V7 subsets (validation detection set; test tuning set; visual relationships person-pet and pet-object; Localized Narratives captions) | Annotations CC BY 4.0, images CC BY 2.0 (stated, Google). The licence and author of every image used are recorded in the subset manifests. | storage.googleapis.com and open-images-dataset S3, SHA-256 pinned | E4, E7, E10, E13, E15; artifacts A3, A4, A7, A8; reference clip P1 | all three |
 | D4 | Ultralytics dog-pose (Stanford Dogs images, StanfordExtra-style keypoints) | Documented "Research-Only" by Ultralytics. The images are ImageNet-derived (Stanford Dogs). | GitHub release asset, pinned | E9; A5 | research only |
 | D5 | MammalNet (domestic-dog videos) | Code MIT. No dataset licence is published. Videos are third-party YouTube uploads. | annotations from mammalnet S3; video streamed frame by frame, never stored | E11; A6 | research only |
-| D6 | Oxford-IIIT Pet | Annotations CC BY-SA 4.0 (secondary; robots.ox.ac.uk blocked). Image copyright stays with the owners. | fast.ai S3 mirror, SHA-256 pinned | E16 breed robustness (evaluation only) | nothing derived is shipped |
-| D7 | Kinetics-700-2020, 6 pet-action validation classes (294 clips) | Annotations CC BY 4.0 (secondary; the DeepMind page is blocked). Clips are YouTube uploads whose rights stay with the uploaders. | CVDF mirror on S3, SHA-256 pinned; not committed | E18 full-engine evaluation (evaluation only) | nothing derived is shipped |
+| D6 | Oxford-IIIT Pet | Annotations CC BY-SA 4.0 (secondary; robots.ox.ac.uk was blocked until 2026-10-18 and answered HTTP 500 on 2026-10-19). Image copyright stays with the owners. | fast.ai S3 mirror, SHA-256 pinned | E16 breed robustness (evaluation only) | nothing derived is shipped |
+| D7 | Kinetics-700-2020, 6 pet-action validation classes (294 clips) | Annotations CC BY 4.0 (secondary; the DeepMind page now redirects to the DeepMind home page, checked 2026-10-19). Clips are YouTube uploads whose rights stay with the uploaders. | CVDF mirror on S3, SHA-256 pinned; not committed | E18 full-engine evaluation (evaluation only) | nothing derived is shipped |
 | D8 | COCO 2017 | Annotations CC BY 4.0. Images under per-image Flickr licences (ids 1-3 non-commercial; 4, 5, 7, 8 allow commercial use). | not obtained (images.cocodataset.org blocked) | training data of M2 and M3 only | - |
 | D9 | AudioSet | Labels CC BY 4.0. Media is YouTube. | label CSVs only | training data of M1 | - |
+| D10 | FSD50K v1.0 (Zenodo 4060432) | **Collection CC BY 4.0, stated (primary)**: `FSD50K.doc/LICENSE-DATASET`. Each clip keeps its Freesound licence, listed in `FSD50K.metadata/*_clips_info_FSD50K.json`; eval split: CC0 4,914, CC BY 3,489, CC BY-NC 1,425, Sampling+ 403. Attribution required. | Zenodo, each file checked against the record's MD5 by the mirror importer; audio read member by member, never extracted | E21 evaluation of species, vocalization-type and context-sound decisions | evaluation only; nothing derived ships |
+| D11 | Dog barks, Yin & McCowan (2004), as packaged in BEANS (`dog_barks.zip`, GCS generation 1728757838735376) | **No data licence stated.** BEANS code is MIT. Cite Yin & McCowan 2004. | streamed from the publisher's bucket; MD5 checked in one pass, members read by Range, archive never stored | E22 evaluation (dog bark context) | research only; nothing derived ships |
+| D12 | Barkopedia / EmotionalCanines (Hugging Face `ArlingtonCL2/BarkopediaDogEmotionClassification_Data`, commit `c0617b1`) | **CC BY-NC-SA 4.0, stated (primary)**: dataset card, read 2026-10-19. | not downloaded | none. Its labels are human-attributed arousal and valence, i.e. emotion labels, which the product does not output (`docs/MODEL_CARD.md`). | - |
 
 ## Derived artifacts (committed under `artifacts/`)
 
@@ -187,7 +194,7 @@ ffmpeg. The phone build contains no ffmpeg.
 | Profile | Blocker | What clears it |
 | --- | --- | --- |
 | personal_noncommercial | none for the shipped build (M1, M3, M4, A1, A3, A4, A7, A8, S1, S2, P1) | - |
-| personal_noncommercial, recommended | Q-M2: using M2 instead of M3 (better parity; on real video it finds the dog in 17 more of 195 clips, p = 0.0095) needs its licence statement | read the ai.google.dev Models section (one minute in a browser) and record it in `configs/release_approvals.yaml` |
+| personal_noncommercial, recommended | M2 would find the dog in 17 more of 195 real clips (p = 0.0095), but Q-M2 was answered on 2026-10-19: no licence is stated, so M2 cannot ship | G1 (a detector trained here on CC BY data) |
 | commercial | Q-T: training-data terms of M1, M3, M4 | a publisher decision recorded in `configs/release_approvals.yaml`, or G1 (Open-Images-only detector and backbone) |
 | commercial | A1 not permitted | A2 plus Q-A2 (or its re-labelling route) |
 | commercial and personal_noncommercial | dog ears/tail/keypoints (A5) and dog video behaviour (A6) are research-only | G2 and G3/G5 in `docs/TRAINING_PROGRAM.md` (new licensed annotation; household video) |

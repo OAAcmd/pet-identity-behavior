@@ -38,8 +38,10 @@ arrived yet.
 uv run ruff check src tests && uv run pytest -q
 cd web && npm run typecheck && npm test && npm run build
 bash tests/e2e/make_fixtures.sh            # needs var/examples (evaluate e5)
-uv run petperception export-ondevice --release-profile personal_noncommercial
-npx playwright test                        # E2E
+uv run petperception fetch-data openimages-tuning   # device-check reference images
+uv run petperception export-ondevice --release-profile personal_noncommercial --detector efficientdet_lite0_tfhub_rawdecode_v1
+npx playwright test                        # E2E (the phone build's bundle; without --detector the
+                                           # personal profile excludes the MediaPipe detector, Q-M2)
 uv run petperception export-parity && npx playwright test -c playwright.runtime.config.ts tests/runtime/runtime.spec.ts
 uv run petperception engine-parity reference && npx playwright test -c playwright.runtime.config.ts tests/runtime/engine.spec.ts \
   && uv run petperception engine-parity compare --write ../results/ondevice/engine_parity_chromium.json

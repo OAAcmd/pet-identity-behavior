@@ -78,6 +78,28 @@ class SoundEventRaw:
     top_audioset_labels: list[tuple[str, float]] = field(default_factory=list)
 
 
+# A subtype becomes a fusion tag when its peak score inside a species (or growl) event reaches this value.
+SUBTYPE_MIN = 0.3
+# Subtypes that make a vocalization request-like (food, outside, attention candidates).
+REQUEST_LIKE = {"meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_dog"}
+TAG_SUBTYPES = {"hiss", "growl", "purr", "bark", "howl"}
+
+
+def vocal_tags(label: str, subtypes: dict[str, float]) -> set[str]:
+    """Fusion tags of one species or growl event (the rule both engines apply).
+
+    A species-group event without any confident subtype, or with a request-like
+    one, is a request-like "vocalization"; hiss, growl and purr alone are not.
+    """
+    strong = {k for k, v in subtypes.items() if v >= SUBTYPE_MIN}
+    tags = strong & TAG_SUBTYPES
+    if label != "growl" and (strong & REQUEST_LIKE or not strong):
+        tags.add("vocalization")
+    if label == "growl":
+        tags.add("growl")
+    return tags
+
+
 def build_groups(backend: YamnetBackend) -> dict[str, GroupSpec]:
     groups: dict[str, GroupSpec] = {}
     for name, root in (("cat_vocalization", CAT_MID), ("dog_vocalization", DOG_MID)):

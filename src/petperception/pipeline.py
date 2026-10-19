@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 
 from . import __version__
-from .audio.events import SoundEventRaw, build_groups, extract_events, load_thresholds
+from .audio.events import SoundEventRaw, build_groups, extract_events, load_thresholds, vocal_tags
 from .audio.yamnet import YamnetBackend
 from .config import REPO_ROOT, Settings
 from .context.zones import ZoneConfig, occupancy
@@ -30,8 +30,6 @@ from .vision.verifier import CropClassifier, DetectionVerifier
 
 log = logging.getLogger("petperception.pipeline")
 
-REQUEST_LIKE = {"meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_dog"}
-SUBTYPE_MIN = 0.3
 STATIC_LIMITATIONS = [
     "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal "
     "language, readings of thoughts or emotions, or medical assessments.",
@@ -613,14 +611,7 @@ class AnalysisEngine:
             if is_context:
                 tags.add(ev.label.split(":", 1)[1])
             else:
-                strong = {k2 for k2, v in ev.subtypes.items() if v >= SUBTYPE_MIN}
-                tags |= strong & {"hiss", "growl", "purr", "bark", "howl"}
-                # Request-like vocalization: a request-like subtype, or a species group
-                # event without any confident subtype. Hiss/growl/purr alone are not requests.
-                if ev.label != "growl" and (strong & REQUEST_LIKE or not strong):
-                    tags.add("vocalization")
-                if ev.label == "growl":
-                    tags.add("growl")
+                tags |= vocal_tags(ev.label, ev.subtypes)
             sub_txt = ", ".join(f"{k2} {v:.2f}" for k2, v in sorted(ev.subtypes.items(), key=lambda t: -t[1])[:3])
             item = S.EvidenceItem(
                 evidence_id=eid, kind="context_sound" if is_context else "sound_event", t_start_s=ev.start_s, t_end_s=ev.end_s,

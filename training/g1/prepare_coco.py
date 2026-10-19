@@ -31,6 +31,7 @@ import gzip
 import hashlib
 import io
 import json
+import math
 import os
 import random
 import time
@@ -87,6 +88,19 @@ def store(row: dict, images_dir: Path, max_side: int, draft: bool = True) -> tup
     return row["image_id"], len(data), hashlib.sha256(data).hexdigest(), "draft2x" if draft else "full"
 
 
+def pixel_extent(start: float, end: float, size: int) -> float:
+    """Box width (or height) in pixels with start + extent <= size exactly.
+
+    Model Maker drops any box whose x + width exceeds the image width; a box
+    touching the right or bottom edge (xmax = 1.0) can exceed it by one
+    rounding step after the normalised-to-pixel conversion.
+    """
+    ext = max(0.0, min(end, float(size)) - start)
+    while start + ext > size:
+        ext = math.nextafter(ext, 0.0)
+    return ext
+
+
 def write_view(view: Path, split: str, rows: list[dict], boxes: dict[str, list[dict]], images_dir: Path, classes: list[str]) -> dict:
     cat_id = {c: i + 1 for i, c in enumerate(classes)}  # 0 = background (Model Maker convention)
     d = view / split
@@ -105,9 +119,10 @@ def write_view(view: Path, split: str, rows: list[dict], boxes: dict[str, list[d
         coco["images"].append({"id": k, "file_name": p.name, "width": w, "height": h})
         for b in boxes[r["image_id"]]:
             x0, y0, x1, y1 = (float(b[c]) for c in ("xmin", "ymin", "xmax", "ymax"))
+            px, py = x0 * w, y0 * h
+            bw, bh = pixel_extent(px, x1 * w, w), pixel_extent(py, y1 * h, h)
             coco["annotations"].append({"id": len(coco["annotations"]), "image_id": k, "category_id": cat_id[b["label"]],
-                                        "bbox": [x0 * w, y0 * h, (x1 - x0) * w, (y1 - y0) * h], "area": (x1 - x0) * w * (y1 - y0) * h,
-                                        "iscrowd": int(b["is_group_of"])})
+                                        "bbox": [px, py, bw, bh], "area": bw * bh, "iscrowd": int(b["is_group_of"])})
     (d / "labels.json").write_text(json.dumps(coco))
     return {"split": split, "images": len(coco["images"]), "boxes": len(coco["annotations"])}
 

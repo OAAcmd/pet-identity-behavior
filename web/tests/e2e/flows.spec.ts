@@ -328,8 +328,11 @@ test("a corrupt model update is rejected and the installed version keeps working
   const installed = (await page.getByText(/Installed: model bundle/).innerText()).match(/model bundle (\w+)/)![1];
   // Serve a "new" bundle whose detector bytes do not match the manifest checksum.
   const real = JSON.parse(fs.readFileSync(path.join(FIX, "../ondevice/bundle/manifest.json"), "utf8"));
+  // Whichever detector build the bundle ships (MediaPipe or TF Hub raw decoding), tamper with it.
+  const detector = real.files.find((f: { path: string }) => /^models\/efficientdet.*\.tflite$/.test(f.path));
+  expect(detector, "bundle has a detector model").toBeTruthy();
   const bad = { ...real, bundle_version: "ffffffffffffffff", files: real.files.map((f: { path: string; sha256: string }) =>
-    f.path === "models/efficientdet_lite0.tflite" ? { ...f, path: "models/tampered.tflite" } : f) };
+    f.path === detector.path ? { ...f, path: "models/tampered.tflite" } : f) };
   await page.route("**/ondevice/manifest.json", (r) => r.fulfill({ json: bad }));
   await page.route("**/ondevice/models/tampered.tflite", (r) => r.fulfill({ body: Buffer.from("not a model") }));
   await page.reload();

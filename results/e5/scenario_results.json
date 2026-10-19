@@ -2,24 +2,8 @@
   "experiment": "E5",
   "camera_compensation_diagnostic": {
     "scenario_id": "s09_camera_pan_cat",
-    "uncompensated_tracks": [
-      {
-        "available": true,
-        "units": "image_diagonals_per_second",
-        "reason": null,
-        "median_speed": 0.057316884994506836,
-        "p90_speed": 0.07028334331512451,
-        "path_length_diagonals": 0.38194228887557985,
-        "moving_fraction": 0.5333333333333333,
-        "moving_threshold": 0.05,
-        "median_speed_box_units_per_second": 0.18273704425858645,
-        "box_area_change_ratio": 1.0944888549705014,
-        "camera_compensated_steps": 0,
-        "steps": 15,
-        "reliability": "medium"
-      }
-    ],
-    "compensated_tracks_rows": 1
+    "uncompensated_tracks": [],
+    "compensated_tracks_rows": 0
   },
   "title": "Fusion/abstention behavior on synthetic-pairing scenarios",
   "status_note": "Behavioral integration checks only. Multimodal accuracy: not_evaluated (no genuine paired test set).",
@@ -874,34 +858,19 @@
       "synthetic_pairing": true,
       "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
       "error_code": null,
-      "decision_state": "supported_observation",
+      "decision_state": "abstention",
       "decision_reasons": [
-        "audio_silent"
+        "audio_silent",
+        "no_pet_detected"
       ],
-      "hypotheses": [
-        {
-          "name": "relaxed",
-          "status": "insufficient_evidence",
-          "track_id": "track-1",
-          "score": 0.57,
-          "roots": [
-            "vision:detector"
-          ],
-          "reasons": [
-            "fusion_not_validated",
-            "single_provenance_root",
-            "audio_silent",
-            "zones_not_configured",
-            "silence_not_used_as_evidence"
-          ]
-        }
-      ],
-      "tracks": 1,
+      "hypotheses": [],
+      "tracks": 0,
       "sound_events": [],
       "quality_flags": [
         "audio_silent",
         "blurry_frames",
-        "camera_motion"
+        "camera_motion",
+        "detections_rejected_by_verifier"
       ],
       "invariants": {
         "no_calibrated_confidence": true,
@@ -2110,34 +2079,19 @@
       "synthetic_pairing": true,
       "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
       "error_code": null,
-      "decision_state": "supported_observation",
+      "decision_state": "abstention",
       "decision_reasons": [
-        "audio_silent"
+        "audio_silent",
+        "no_pet_detected"
       ],
-      "hypotheses": [
-        {
-          "name": "relaxed",
-          "status": "insufficient_evidence",
-          "track_id": "track-1",
-          "score": 0.528,
-          "roots": [
-            "vision:detector"
-          ],
-          "reasons": [
-            "fusion_not_validated",
-            "single_provenance_root",
-            "audio_silent",
-            "zones_not_configured",
-            "silence_not_used_as_evidence"
-          ]
-        }
-      ],
-      "tracks": 1,
+      "hypotheses": [],
+      "tracks": 0,
       "sound_events": [],
       "quality_flags": [
         "audio_silent",
         "blurry_frames",
-        "camera_motion"
+        "camera_motion",
+        "detections_rejected_by_verifier"
       ],
       "invariants": {
         "no_calibrated_confidence": true,
@@ -3349,34 +3303,19 @@
       "synthetic_pairing": true,
       "description": "Horizontal synthetic camera pan over a still cat (no real animal motion).",
       "error_code": null,
-      "decision_state": "supported_observation",
+      "decision_state": "abstention",
       "decision_reasons": [
-        "audio_silent"
+        "audio_silent",
+        "no_pet_detected"
       ],
-      "hypotheses": [
-        {
-          "name": "relaxed",
-          "status": "insufficient_evidence",
-          "track_id": "track-1",
-          "score": 0.2859,
-          "roots": [
-            "vision:detector"
-          ],
-          "reasons": [
-            "fusion_not_validated",
-            "single_provenance_root",
-            "audio_silent",
-            "zones_not_configured",
-            "silence_not_used_as_evidence"
-          ]
-        }
-      ],
-      "tracks": 1,
+      "hypotheses": [],
+      "tracks": 0,
       "sound_events": [],
       "quality_flags": [
         "audio_silent",
         "blurry_frames",
-        "camera_motion"
+        "camera_motion",
+        "detections_rejected_by_verifier"
       ],
       "invariants": {
         "no_calibrated_confidence": true,
@@ -3753,6 +3692,6 @@
       ]
     }
   ],
-  "runtime_s": 43.365607745000034,
-  "created_at": "2026-10-09T03:44:51+00:00"
+  "runtime_s": 71.182384915,
+  "created_at": "2026-10-19T07:50:36+00:00"
 }

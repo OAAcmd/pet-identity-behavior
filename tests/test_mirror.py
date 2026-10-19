@@ -248,3 +248,25 @@ def test_remote_zip_split_archive_and_crc_check(file_server, tmp_path: Path) -> 
     (root / "c.zip").write_bytes(bytes(data))
     with pytest.raises(MR.MirrorError, match="CRC"):
         MR.RemoteZip([f"{base}/c.zip"], sleep=lambda s: None).read("x.bin")
+
+
+def test_local_split_zip_reads_members_across_parts(tmp_path: Path) -> None:
+    import subprocess
+
+    mem = _members()
+    src = tmp_path / "src"
+    for k, v in mem.items():
+        (src / k).parent.mkdir(parents=True, exist_ok=True)
+        (src / k).write_bytes(v)
+    out = tmp_path / "out"
+    out.mkdir()
+    subprocess.run(["zip", "-q", "-r", "-6", "-s", "64k", str(out / "s.zip"), "."], cwd=src, check=True)  # deflated, split into 64 KiB parts
+    parts = [str(p) for p in sorted(out.glob("s.z[0-9]*"))] + [str(out / "s.zip")]
+    assert len(parts) > 2
+    lz = MR.LocalSplitZip(parts)
+    found = 0
+    for k, v in mem.items():
+        name = k if k in lz.entries else f"./{k}"
+        assert lz.read(name) == v
+        found += 1
+    assert found == len(mem)

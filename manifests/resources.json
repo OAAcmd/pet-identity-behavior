@@ -90,7 +90,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev, read 2026-10-19, page last updated 2026-10-01, HTML SHA-256 2c63d219d0edbdb5344d8d506cdde4f2bdfabdde5a4f0698cb55cb34cdb37222) describes the builds and their COCO training data but states no licence for them and links no model card (its CC BY 4.0 / Apache-2.0 footer covers the page content and code samples). Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -101,7 +101,7 @@
         "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
+      "release_note": "Weights licence not stated: no licence field in the embedded metadata, no model card in gs://mediapipe-assets, and no licence on the MediaPipe Object Detector Models page (Q-M2 answered 2026-10-19). Do not approve for personal_noncommercial without a written licence from the publisher; use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientdet_lite2_mediapipe_v1",
@@ -293,31 +293,56 @@
       "name": "CatMeows: A Publicly-Available Dataset of Cat Vocalizations (v1.0.2)",
       "canonical_url": "https://zenodo.org/records/4008297",
       "doi": "10.5281/zenodo.4008297",
-      "status": "blocked",
-      "profiles": ["research"],
-      "retrieved_at": null,
-      "errors": [
-        "2026-10-09: zenodo.org:443 CONNECT rejected with HTTP 403 by the session egress policy (also via WebFetch: DNS ENOTFOUND).",
-        "2026-10-09: no complete official mirror reachable (huggingface.co denied; GitHub search found only 3-sample repositories)."
+      "status": "available",
+      "profiles": [
+        "research"
       ],
-      "documented_but_unverified": {
-        "description": "440 meows from 21 cats (Maine Coon, European Shorthair); contexts brushing (B), isolation in unfamiliar environment (I), waiting for food (F); filenames C_NNNNN_BB_SS_OOOOO_RXX encode context, cat ID, breed, sex, owner ID, recording session, counter; extra.zip holds excluded/non-meow recordings and uncut sequences; reported 8 kHz.",
-        "terms_discrepancy": "Zenodo text: open for scientific research and non-commercial purposes; University of Milan repository: CC BY 4.0. Research-only, non-commercial treatment applies until resolved."
-      },
-      "grouping_fields": ["cat_id", "owner_id", "recording_session"],
+      "retrieved_at": "2026-10-19",
+      "errors": [
+        "2026-10-09: zenodo.org:443 CONNECT rejected with HTTP 403 by the session egress policy (also via WebFetch: DNS ENOTFOUND). Resolved 2026-10-19: zenodo.org reachable.",
+        "2026-10-09: no complete official mirror reachable (huggingface.co denied; GitHub search found only 3-sample repositories). Resolved 2026-10-19: zenodo.org reachable."
+      ],
+      "grouping_fields": [
+        "cat_id",
+        "owner_id",
+        "recording_session"
+      ],
       "label_provenance": "Recording context assigned by experimental protocol (stimulus), not by a behavioral interpretation.",
       "use_restrictions": [
         "Research-only, non-commercial.",
         "extra.zip kept separate and excluded from context training.",
         "'isolation' is a recording context, not a fear label."
       ],
-      "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate e2",
+      "next_command": "uv run petperception fetch-data catmeows && uv run petperception evaluate --experiment e2",
       "release_suitability": {
         "research": "suitable",
         "personal_noncommercial": "not_permitted",
         "commercial": "not_permitted"
       },
-      "release_note": "Blocked; terms discrepancy (research/non-commercial vs CC BY 4.0) treated as research-only."
+      "release_note": "CC BY-NC 4.0 (stated on the Zenodo record): research and non-commercial evaluation only; nothing derived is shipped.",
+      "files": [
+        {
+          "name": "dataset.zip",
+          "url": "https://zenodo.org/api/records/4008297/files/dataset.zip/content",
+          "bytes": 8861099,
+          "md5": "b5fa911bcd6514e39dfef6876f747df4",
+          "sha256": "214000280e6ef33b10e39ef063ccc1f2f83d789ab57f2a5d111da63b06f659ae"
+        },
+        {
+          "name": "extras.zip",
+          "url": "https://zenodo.org/api/records/4008297/files/extras.zip/content",
+          "bytes": 4142654,
+          "md5": "7663bb5e1de2c808beeb202a52dc99ab",
+          "sha256": "81d1206a632f5d5052bcd9f804be10a02a6f7a2b8ab9a35858d105483159b4f2"
+        }
+      ],
+      "verified": {
+        "description": "440 meows from 21 cats (Maine Coon, European Shorthair); contexts brushing (B), isolation in an unfamiliar environment (I), waiting for food (F); file names C_NNNNN_BB_SS_OOOOO_RXX encode context, cat, breed, sex, owner, session, counter. extras.zip (43 files: other vocalizations, uncut sequences) adds no metadata.",
+        "mirror_check": "All 440 WAVs of the unofficial GitHub mirror used by E2 (manifests/catmeows_mirror_sha256.csv) are byte-identical to the official dataset.zip (2026-10-19)."
+      },
+      "terms": {
+        "data": "CC BY-NC 4.0: licence field of the Zenodo record (primary, read 2026-10-19); the record text adds 'open access for scientific research and non-commercial purposes'; citation required."
+      }
     },
     {
       "id": "barkopedia_dog_act_env",
@@ -663,7 +688,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev, read 2026-10-19, page last updated 2026-10-01, HTML SHA-256 2c63d219d0edbdb5344d8d506cdde4f2bdfabdde5a4f0698cb55cb34cdb37222) describes the builds and their COCO training data but states no licence for them and links no model card (its CC BY 4.0 / Apache-2.0 footer covers the page content and code samples). Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -677,7 +702,7 @@
         "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
+      "release_note": "Weights licence not stated: no licence field in the embedded metadata, no model card in gs://mediapipe-assets, and no licence on the MediaPipe Object Detector Models page (Q-M2 answered 2026-10-19). Do not approve for personal_noncommercial without a written licence from the publisher; use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientdet_lite0_mediapipe_f16_v1",
@@ -709,7 +734,7 @@
       "training_data": "COCO 2017 (per MediaPipe documentation).",
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev, read 2026-10-19, page last updated 2026-10-01, HTML SHA-256 2c63d219d0edbdb5344d8d506cdde4f2bdfabdde5a4f0698cb55cb34cdb37222) describes the builds and their COCO training data but states no licence for them and links no model card (its CC BY 4.0 / Apache-2.0 footer covers the page content and code samples). Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "attribution": "EfficientDet (Tan, Pang, Le, 2020); MediaPipe by Google.",
@@ -723,7 +748,7 @@
         "personal_noncommercial": "requires_legal_review",
         "commercial": "not_permitted"
       },
-      "release_note": "Weights licence not stated (no licence field in the embedded metadata, no model card in gs://mediapipe-assets; ai.google.dev blocked here). personal_noncommercial needs the statement from the MediaPipe Object Detector Models page recorded in configs/release_approvals.yaml, or use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
+      "release_note": "Weights licence not stated: no licence field in the embedded metadata, no model card in gs://mediapipe-assets, and no licence on the MediaPipe Object Detector Models page (Q-M2 answered 2026-10-19). Do not approve for personal_noncommercial without a written licence from the publisher; use efficientdet_lite0_tfhub_rawdecode_v1 / efficientdet_lite0_tfhub_v1 (Apache-2.0 in embedded metadata). docs/ASSET_TERMS.md Q-M2."
     },
     {
       "id": "efficientnet_lite0_mediapipe_int8_v1",
@@ -972,6 +997,41 @@
         "commercial": "suitable"
       },
       "release_note": "A fixed geometric rule (no fitted parameters); evaluated on Open Images relationships (CC BY 4.0 annotations, CC BY 2.0 images)."
+    },
+    {
+      "id": "fsd50k_v1",
+      "kind": "dataset",
+      "role": "E21 evaluation of species, vocalization-type and context-sound decisions",
+      "name": "FSD50K v1.0",
+      "canonical_url": "https://zenodo.org/records/4060432",
+      "doi": "10.5281/zenodo.4060432",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-19",
+      "files": "manifests/mirror_files.json (dataset fsd50k): official names and the MD5s published on the Zenodo record; provenance records next to each file under var/data/fsd50k",
+      "terms": {
+        "collection": "CC BY 4.0 (FSD50K.doc/LICENSE-DATASET, primary)",
+        "clips": "per-clip Freesound licence (CC0, CC BY, CC BY-NC 3.0, Sampling+) in FSD50K.metadata/*_clips_info_FSD50K.json; attribution required"
+      },
+      "grouping_fields": [
+        "uploader",
+        "fname (Freesound sound id)"
+      ],
+      "label_provenance": "clip-level AudioSet-ontology labels verified by human raters (Fonseca et al. 2022), propagated to ancestors",
+      "use_restrictions": [
+        "Evaluation only in this repository; nothing derived ships.",
+        "Eval clips whose Freesound id is an ESC-50 source are excluded (E1 thresholds were selected on ESC-50).",
+        "'Hiss' and 'Growling' are not species-specific in FSD50K; cat hiss and dog growl are conjunctions with 'Cat' / 'Dog'."
+      ],
+      "next_command": "uv run petperception mirror fetch --dataset fsd50k --official && uv run petperception evaluate --experiment e21",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Evaluation data; per-clip licences matter only if something is trained on it (then select CC0 / CC BY clips for commercial use)."
     }
   ]
 }

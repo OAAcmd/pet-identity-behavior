@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "analysis_id": "e5-s12_meow_8khz-rule_baseline",
-  "created_at": "2026-10-09T03:44:26.665306Z",
+  "created_at": "2026-10-19T07:49:47.856179Z",
   "engine_version": "0.1.0",
   "config_profile": "cpu",
-  "config_hash": "4fe67d6ca51b053e",
+  "config_hash": "cb1492b5596d4dc7",
   "media": {
     "analysis_filename": "s12_meow_8khz.wav",
     "size_bytes": 80078,
@@ -51,20 +51,60 @@
       "reason": null
     },
     {
-      "name": "iou_tracker",
+      "name": "detection_verifier",
+      "kind": "visual_verifier",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "verifier-v1:efficientdet_lite0_mediapipe_v1",
+      "reason": "track-level median of per-detection rejection scores; thresholds from E7 tuning"
+    },
+    {
+      "name": "kalman_tracker",
       "kind": "tracker",
       "state": "ok",
       "model_id": null,
-      "version": "iou-hungarian-v1",
+      "version": "kalman-cv-sort-v1",
       "reason": null
     },
     {
       "name": "pose",
       "kind": "pose",
-      "state": "unavailable",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "dog_keypoints_head_v1",
+      "reason": "dogs only (research profile); no cat keypoint model is available"
+    },
+    {
+      "name": "posture",
+      "kind": "pose",
+      "state": "ok",
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "version": "posture_v1",
+      "reason": "coarse lying/sitting/standing from weak caption labels (E10); uncalibrated"
+    },
+    {
+      "name": "person_interaction",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "person_pet_interaction_v1",
+      "reason": "person-pet interaction from box geometry (E13, still images, dogs evaluated); people are detected but not stored"
+    },
+    {
+      "name": "object_relation",
+      "kind": "behavior",
+      "state": "ok",
+      "model_id": "efficientdet_lite0_mediapipe_v1",
+      "version": "pet_object_relation_v2",
+      "reason": "pet on bed / couch / chair / table: at least half of the pet's box inside the furniture box (E15 rule, still images; the learned head showed no advantage); furniture is detected but not stored; under-furniture and inside-car did not pass the E15 gate"
+    },
+    {
+      "name": "behavior_segments",
+      "kind": "behavior",
+      "state": "ok",
       "model_id": null,
-      "version": null,
-      "reason": "no verified cat/dog pose checkpoint is installed (Phase 1)"
+      "version": "behavior-rules-v1",
+      "reason": "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)"
     },
     {
       "name": "fusion",
@@ -162,7 +202,8 @@
       }
     ],
     "sampled_frames": 0,
-    "sample_fps": null
+    "sample_fps": null,
+    "behavior_events": []
   },
   "quality_flags": [
     {
@@ -295,12 +336,14 @@
     }
   ],
   "limitations": [
-    "Phase 1 research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
+    "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
     "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
     "Hypothesis scores are uncalibrated; multimodal accuracy has not been evaluated (no paired household validation data).",
     "Sound events use raw YAMNet scores with thresholds selected on ESC-50 clips, which are not household recordings.",
-    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; ear, tail and posture features are unavailable (no verified animal pose model).",
+    "Cat/dog detection uses a COCO-trained EfficientDet-Lite model; a second-stage verifier reduces but does not remove false detections (E7, web photos).",
+    "Behavior segments (stillness, movement, zone visits, back-and-forth, startle candidates) use fixed thresholds checked only on synthetic and semi-synthetic sequences; they are not validated against labelled household behavior.",
     "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
+    "Dog keypoints come from a research-only model evaluated on web photos (E9), not household video; no cat keypoint model is available, so cat ear/tail features are unavailable.",
     "Low-sample-rate audio: frequency content above the Nyquist limit is missing."
   ],
   "fusion": {
@@ -312,12 +355,13 @@
     "note": "Experimental fusion; weights/temperature are unfitted configuration values."
   },
   "timings_ms": {
-    "probe": 57.22,
-    "hash": 0.17,
-    "decode_audio": 115.55,
-    "audio_inference": 13.82,
-    "fusion": 0.23,
-    "model_load_ms_engine_startup": 284.65
+    "probe": 60.11,
+    "hash": 0.33,
+    "decode_audio": 120.03,
+    "audio_inference": 34.74,
+    "behavior_segments": 0.16,
+    "fusion": 0.29,
+    "model_load_ms_engine_startup": 547.62
   },
   "models": [
     {
@@ -331,7 +375,7 @@
       },
       "terms": {
         "code": "Apache-2.0 (tensorflow/models; google-ai-edge/mediapipe)",
-        "weights": "Released by Google in the Apache-2.0 tensorflow/models YAMNet project. The MediaPipe TFLite conversion has no standalone model card reachable from this session; treat as Apache-2.0 pending primary-source re-verification.",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the pinned file ('Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.', author 'MediaPipe'), read 2026-10-10. Google also releases YAMNet in the Apache-2.0 tensorflow/models project. No separate model card exists in gs://mediapipe-assets (listed 2026-10-10).",
         "labels": "AudioSet ontology/labels: CC BY-SA 4.0 (audioset/ontology README)"
       },
       "use_restrictions": [
@@ -348,21 +392,39 @@
       },
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "No standalone model card; MediaPipe framework and TF EfficientDet-Lite releases are Apache-2.0 by secondary evidence. Primary model page not reachable from this session. Research profile only until re-verified.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "use_restrictions": [
         "Weights fetched from Google, never committed.",
         "Do not assume commercial permission."
       ]
+    },
+    {
+      "model_id": "efficientnet_lite0_mediapipe_v1",
+      "name": "EfficientNet-Lite0 (MediaPipe Image Classifier float32 build, version 1)",
+      "revision": "GCS object generation 1682480007106905 (Last-Modified 2023-04-26)",
+      "sha256": {
+        "efficientnet_lite0.tflite": "6c7ab0a6e5dcbf38a8c33b960996a55a3b4300b36a018c4545801de3a3c8bde0"
+      },
+      "terms": {
+        "code": "Apache-2.0 (MediaPipe)",
+        "weights": "Apache-2.0: stated in the license field of the TFLite ModelMetadata embedded in the file, read from the pinned file on 2026-10-09.",
+        "training_data": "ImageNet images are provided for non-commercial research/education under the ImageNet terms of access. Whether those terms constrain use of trained weights is a legal question not settled here."
+      },
+      "use_restrictions": [
+        "Weights fetched from Google, never committed.",
+        "Commercial release requires legal sign-off on the ImageNet training-data question."
+      ]
     }
   ],
   "usage_restrictions": {
     "research_only": true,
     "notices": [
-      "Research profile: model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
-      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial research use.",
-      "Do not assume commercial permission for any bundled model or dataset."
+      "Release profile 'research': only assets permitted for this profile were loaded (manifests/resources.json).",
+      "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
+      "Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial use.",
+      "Do not assume commercial permission for any asset without a recorded legal approval."
     ]
   }
 }

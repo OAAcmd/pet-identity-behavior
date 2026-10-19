@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e22"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e21", "e21b", "e22"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -223,6 +223,14 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         return E.run(s, out_dir)
     if name == "e3":
         from .eval import e3_dog_context as E
+
+        return E.run(s, out_dir)
+    if name == "e21":
+        from .eval import e21_vocal_types as E
+
+        return E.run(s, out_dir)
+    if name == "e21b":
+        from .eval import e21b_threshold_selection as E
 
         return E.run(s, out_dir)
     if name == "e22":
@@ -515,6 +523,18 @@ def cmd_train_prep(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_g1_eval(args: argparse.Namespace) -> int:
+    from .eval import g1_export_check
+
+    models = {}
+    for spec in args.model:
+        name, _, path = spec.partition("=")
+        models[name] = Path(path)
+    out = g1_export_check.run(_settings(args), Path(args.out), models)
+    print(json.dumps(out["results"], indent=2))
+    return 0
+
+
 def cmd_mirror(args: argparse.Namespace) -> int:
     from .data import mirror as MR
 
@@ -782,6 +802,10 @@ def build_parser() -> argparse.ArgumentParser:
     tp = sub.add_parser("train-prep", help="build the training-data manifests of a G-job (docs/TRAINING_PROGRAM.md)")
     tp.add_argument("job", choices=["g1", "g2"])
     tp.set_defaults(func=cmd_train_prep)
+    ge = sub.add_parser("g1-eval", help="score G1 detector exports on the E4 subset next to the shipped detectors")
+    ge.add_argument("--model", action="append", required=True, help="NAME=PATH to an exported .tflite (repeatable)")
+    ge.add_argument("--out", required=True, help="result JSON path")
+    ge.set_defaults(func=cmd_g1_eval)
     npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
     npb.set_defaults(func=cmd_network_probe)
     dt = sub.add_parser("export-device-test", help="assemble the static HTTPS phone test build (page, runtime, model bundle)")
