@@ -188,6 +188,19 @@ verifier):
 * The E4-subset AP50 of M3 (0.923 / 0.851) differs from acceptance 1's
   values (0.833 / 0.748): those are on the E4 final split with the
   verifier.
+* **On home phone video (E20, CoP3D, detector only) the light model is
+  clearly worse** (`results/g1/light6k_e20/metrics.json`):
+  - cat frames found 0.565 against M3's 0.713 (paired difference -0.148
+    [-0.182, -0.115]);
+  - dog frames found 0.539 against 0.675 (-0.135 [-0.185, -0.086]);
+  - dog frames with only a "cat": 0.154 against 0.118.
+  Photo AP50 does not predict video performance here. Likely factors: the
+  256-px input (M3: 320), little training, and no motion-blurred or
+  off-centre frames in the training data. E20 and E18 therefore decide G1
+  acceptance (criterion 2), and the full-data run is judged on them. If
+  MobileNetV2-256 cannot match M3 on video, the next candidate is the
+  MobileNet-MultiAVG 384-px model. At about 2.3 times the pixels, it is a
+  multi-session CPU job or a GPU job.
 
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):

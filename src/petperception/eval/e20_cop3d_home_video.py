@@ -163,14 +163,17 @@ def frames_all(settings: Settings, k: int = 10) -> list[cop3d.Frame]:
     return [f for sp in SPECIES for f in cop3d.sample(data_root, sp, k)]
 
 
-def run(settings: Settings, out_dir: Path, extra_models: dict[str, Path] | None = None) -> dict:
+def run(settings: Settings, out_dir: Path, extra_models: dict[str, Path] | None = None, shipped: bool = True) -> dict:
+    """shipped=False (G1 exports): only the extra models and the phone build's detector alone, the like-for-like baseline."""
     t0 = time.perf_counter()
     frames = frames_all(settings)
     configs = shipped_configs(settings)
+    if not shipped:
+        configs = {k: v for k, v in configs.items() if k == "phone_build_m3_detector_only"}
     for name, p in (extra_models or {}).items():
         configs[f"{name}_detector_only"] = (EfficientDetDetector(p, settings.runtime.num_threads), None)
     rows = {name: score_frames(det, ver, frames, settings) for name, (det, ver) in configs.items()}
-    base = "phone_build_m3+verifier"
+    base = "phone_build_m3+verifier" if shipped else "phone_build_m3_detector_only"
     res = {
         "experiment": "E20", "status": "completed", "created_at": utc_now().isoformat(timespec="seconds"),
         "data": {"dataset": "CoP3D v1 (dl.fbaipublicfiles.com/cop3d), frame archives " + ", ".join(a for v in cop3d.FRAME_ARCHIVES.values() for a in v),
@@ -182,6 +185,7 @@ def run(settings: Settings, out_dir: Path, extra_models: dict[str, Path] | None 
         "operating_point": {"score_threshold": settings.vision.score_threshold, "nms_iou": settings.vision.nms_iou,
                             "verifier": "per detection (E7 protocol); the engine decides per track"},
         "results": {name: summarize(r) for name, r in rows.items()},
+        "paired_baseline": base,
         "paired_vs_phone_build": {name: paired(r, rows[base]) for name, r in rows.items() if name != base and base in rows},
         "protocol": __doc__.strip().splitlines(),
         "runtime_s": round(time.perf_counter() - t0, 1),

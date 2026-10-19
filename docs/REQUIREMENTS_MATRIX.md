@@ -11,7 +11,7 @@ readiness are not. Every open item names what blocks it.
 | Dimension | What "accepted" requires | Status | Evidence | Blocking |
 | --- | --- | --- | --- | --- |
 | **A. Software correctness** | code does what it specifies; automated tests, lint, type checks and CI green; server and phone engines agree | **met in automated environments** | 139 Python tests, 26 TypeScript unit tests, 17 Playwright E2E tests (Chromium), model-level browser parity bit-exact / ≤ 3e-8, engine parity 38/38 decisions with the current engine (2026-10-19) ([TEST_REPORT.md](TEST_REPORT.md)) | Safari/WebKit and real phones untested (see C) |
-| **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E1-CC, E2, E4, E7, E9-E16; first real pet video with sound (E18: the pet is found in about half of the clips) ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md), per species); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
+| **B. Behavioral model validity** | each capability measured on held-out real data representative of use (household recordings), with acceptance thresholds met | **not met** | public-data validations only: E1, E1-CC, E2, E4, E7, E9-E22, E24; real pet video: YouTube (E18, the pet found in about half the clips) and home phone video (E20, cat 0.70 / dog 0.60 of frames, 14 % of dog frames only a 'cat'); audio types on FSD50K (E21: meow, bark pass; purr, growl fail); first cat keypoints (E24, research) ([CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md), per species); rule-based behavior only on semi-synthetic video (E8); hypotheses unvalidated | real paired household recordings ([EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md)); cat keypoint/face/video data; licensed dog keypoint data |
 | **C. On-device compatibility and performance** | the bundle runs offline on tier-B phones of both platforms within the budgets | **not met (pending)** | the browser inference implementation has passed desktop Chromium tests; physical Android, iPhone and Safari validation remains pending; the phone test build is published with automatic report collection ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) | physical phones and testers ([DEVICE_TEST_PROTOCOL.md](DEVICE_TEST_PROTOCOL.md)) |
 | **D. Complete product readiness** | deployed at a public HTTPS origin, release profile decided, each asset's terms cleared for it, operations in place, A-C met | **not met** | image builds in CI, compose stack (bundle step verified in the image), runbook, release gating implemented, asset terms recorded per artifact ([ASSET_TERMS.md](ASSET_TERMS.md)) | HTTPS origin (installed-app track); the specific open terms questions Q-M2, Q-T, Q-A2 in ASSET_TERMS.md; A-C |
 
@@ -57,7 +57,7 @@ what prevents the next status.
 | M1 | Capability → dataset → model → evaluation matrix with missing labels and coverage | yes | - | - | [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) |
 | M2 | Cats and dogs, breed and morphology variation | partial | E9 breed breakdown (dogs), E11 breed table | no | no cat breed metadata in any source; morphology not in any metadata |
 | M3 | Facial cues | **no** | - | - | no usable data (cats or dogs) |
-| M4 | Ear and tail cues | dogs, research profile | E9 | public photos | dog keypoint data is Research-Only; no cat data |
+| M4 | Ear and tail cues | dogs, research profile (E9); cats, research experiment (E24, not in the engines) | E9, E24 | public photos | cat ears meet the G2 PCK criterion (0.91), tails do not (0.51); all keypoint data research-only until image licences are verified (AwA2) or G2 annotation exists |
 | M5 | Posture and temporal actions | posture (cats, dogs); rule segments; dog actions (research) | E10, E8, E11 | weak labels / semi-synthetic / YouTube | household video with labels; cat action data |
 | M6 | Vocalizations | presence (YAMNet); types gated by validation (meow, bark shown; purr, growl, hiss not); bark context research-only (E22) | E1, E21, E21b, E22 | public audio: FSD50K eval (presence cat 0.69 / dog 0.73; meow 0.73 and bark 0.73 pass the gate; purr, growl fail; cat hiss not evaluable) | household audio with type labels; cat-hiss data; licensed bark-context data |
 | M7 | Interactions with people / animals / objects | people (E13, still images); objects: pet on bed / couch / chair / table (E15, still images; "under" and "inside a car" failed the pre-set gate); animals: dog fights (research) | E13, E15, E11 | public photos | interaction video; pet-pet data; detector classes for pet objects (bowls, beds, cat trees, litter boxes) |
@@ -97,9 +97,12 @@ what prevents the next status.
 ## 3. Capability gaps that block "complete"
 
 1. No household validation of any capability; hypotheses unvalidated.
-2. No cat keypoints, facial cues, cat video actions; no licensed dog
-   keypoint data for product releases.
-3. Vocal context datasets blocked by network policy.
+2. No cat facial cues or cat video actions; cat ear keypoints exist only as
+   a research model (E24, tails fail); no licence-verified keypoint data for
+   product releases.
+3. Vocalization types: only meow and bark pass validation (E21); cat hiss
+   and growl need type-labelled data; vocal context is research-only (E2,
+   E22).
 4. No pet-pet interaction data; pet-object relations limited to "on furniture"
    (under-furniture and inside-car failed the gate; no detector for pet objects).
 5. No real-phone results.

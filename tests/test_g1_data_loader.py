@@ -94,3 +94,39 @@ def test_g1_export_loads_in_the_product_detector_if_present():
         assert {"cat", "dog", "person", "dining table", "teddy bear", "couch", "bed"} <= set(det.labels)
         out = det.detect(np.zeros((240, 320, 3), np.uint8), ["cat", "dog", "dining table"], 0.05)
         assert all(d.label in {"cat", "dog", "dining table"} and 0.0 <= d.score <= 1.0 for d in out)
+
+
+def test_verifier_anchor_features_only_for_coco_label_maps():
+    import numpy as np
+
+    from petperception.vision.detector import Detection
+    from petperception.vision.verifier import describe
+
+    rgb = np.zeros((64, 64, 3), np.uint8)
+    g1 = Detection("cat", 0.8, np.array([0.1, 0.1, 0.6, 0.6]), np.full(15, 0.1))  # G1: 15 classes
+    coco = Detection("cat", 0.8, np.array([0.1, 0.1, 0.6, 0.6]), np.full(90, 0.1))  # COCO label map
+    assert describe(None, None, rgb, g1, ["cat", "dog"], {"anchor"})["anchor"] is None
+    assert describe(None, None, rgb, coco, ["cat", "dog"], {"anchor"})["anchor"]["cat"] == 0.1
+
+
+def test_tuning_images_failing_their_pin_are_excluded_and_listed(tmp_path):
+    import hashlib
+
+    import pytest
+
+    from petperception.eval.e7_fp_rejection import _verify_images
+
+    d = tmp_path / "img"
+    d.mkdir()
+    rows = []
+    for i in range(200):
+        data = f"image {i}".encode()
+        (d / f"id{i}.jpg").write_bytes(data)
+        rows.append(f"id{i},{len(data)},{hashlib.sha256(data).hexdigest()}")
+    (d / "id7.jpg").write_bytes(b"changed upstream")
+    (d / "id9.jpg").unlink()
+    sums = tmp_path / "sums.csv"
+    sums.write_text("image_id,bytes,sha256\n" + "\n".join(rows) + "\n")
+    assert _verify_images(d, sums, 0.01) == (200, ["id7", "id9"])
+    with pytest.raises(RuntimeError):
+        _verify_images(d, sums)  # evaluation sets must be complete

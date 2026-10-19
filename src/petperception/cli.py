@@ -540,10 +540,18 @@ def cmd_g1_eval(args: argparse.Namespace) -> int:
         models[name] = Path(path)
     out = g1_export_check.run(_settings(args), Path(args.out), models)
     print(json.dumps(out["results"], indent=2))
+    if args.e7:
+        from .eval import e7_fp_rejection as E7
+
+        out_dir = Path(args.e7)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        for name, path in models.items():  # verifier fitted on the tuning set, E4 final split scored once (acceptance 1)
+            r = E7.run(_settings(args), out_dir, params_out=out_dir / f"verifier_{name}.json", filename=f"e7_{name}.json", detector_files={name: path})
+            print(json.dumps({k: v for k, v in r["results"][name].items() if k == "selected"}, indent=2))
     if args.e20:
         from .eval import e20_cop3d_home_video as E20
 
-        r = E20.run(_settings(args), Path(args.e20), models)
+        r = E20.run(_settings(args), Path(args.e20), models, shipped=False)
         print(json.dumps(r["results"], indent=2))
     return 0
 
@@ -819,6 +827,7 @@ def build_parser() -> argparse.ArgumentParser:
     ge.add_argument("--model", action="append", required=True, help="NAME=PATH to an exported .tflite (repeatable)")
     ge.add_argument("--out", required=True, help="result JSON path")
     ge.add_argument("--e20", help="also run E20 (CoP3D home video) with these models; directory for its metrics.json")
+    ge.add_argument("--e7", help="also fit a verifier per model on the tuning set and score the E4 split with it (E7 protocol); output directory")
     ge.set_defaults(func=cmd_g1_eval)
     npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
     npb.set_defaults(func=cmd_network_probe)

@@ -163,7 +163,8 @@ def describe(detector, classifier: CropClassifier | None, rgb: np.ndarray, d: De
         row["groups"], row["top1"] = cs.groups, cs.top1
     if "redetect" in need:
         row["redetect"] = list(redetect(detector, rgb, d, classes))
-    if "anchor" in need and d.class_scores is not None:
+    # Anchor features index COCO label-map positions; detectors with another label map (G1) have none.
+    if "anchor" in need and d.class_scores is not None and len(d.class_scores) > max(ANCHOR_CLASSES.values()):
         row["anchor"] = {k: float(d.class_scores[i]) for k, i in ANCHOR_CLASSES.items()}
     return row
 

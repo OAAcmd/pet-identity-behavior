@@ -1,25 +1,28 @@
 {
  "schema": "petperception.status/1",
- "date": "2026-10-10",
+ "date": "2026-10-19",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending (a phone test build is published and collects reports). Behavioural validity rests on public data only; on real pet video (E18) the pet is found in about half of the clips. Required capabilities missing for cats (face, ears, tail, actions) and for dogs outside research (keypoints, actions) remain unresolved.",
+ "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending. Behavioural validity rests on public data only. New this round: home phone video (E20: the phone build finds the cat in 0.70 and the dog in 0.60 of frames, with 14 % of dog frames showing only a 'cat'), an independent audio test (E21: meow and bark pass the pre-set gate, purr and growl do not; only validated vocalization types are now shown or used as triggers in both engines), and the first cat keypoint model (E24, research only: cat ears meet the PCK criterion, tails do not). The G1 detector trains on this CPU (a 6k-image run comes within 0.03 AP50 of the shipped detectors); the full-data run is in progress.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 106,
-    "typescript_unit_tests": 21,
+    "python_tests": 139,
+    "typescript_unit_tests": 26,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
-    "ci": "green on every push",
+    "ci": "green on every push up to 2026-10-11; pushes of 2026-10-19 not yet observed from this workspace",
     "model_parity_browser": "bit-exact or <= 3e-8",
     "engine_parity_cases": 38,
     "engine_parity_reference_bundle": {
      "decisions": "38/38",
-     "tracks_f1": 0.96,
-     "segments_f1": 0.97,
-     "hypotheses_f1": 1.0
+     "tracks_f1": 0.95,
+     "sounds_f1": 1.0,
+     "segments_f1": 0.98,
+     "hypotheses_f1": 0.99,
+     "date": "2026-10-19",
+     "engine": "subtype gate, result schema 1.4.0, asset format 0.2.2"
     },
     "engine_parity_phone_build_bundle": {
      "decisions": "38/38",
@@ -35,26 +38,34 @@
   },
   "behavioral_model_validity": {
    "status": "not_met",
-   "evidence": "public data: E1, E1-CC, E2, E4, E7, E9-E18; real pet video with sound: E18 (Kinetics, 294 clips); semi-synthetic E8 and synthetic E5 are software checks, not evidence",
+   "evidence": "public data: E1, E1-CC, E2, E4, E7, E9-E22, E24; real pet video: E18 (Kinetics, YouTube) and E20 (CoP3D, home phone video); semi-synthetic E8 and synthetic E5 are software checks, not evidence",
    "key_results": {
     "real_video_pet_found_cat": "0.566 [0.47, 0.66] reference detector; 0.596 phone build",
     "real_video_pet_found_dog": "0.533 [0.46, 0.60] reference; 0.446 [0.38, 0.52] phone build (paired p = 0.0095)",
     "breed_found_rate": "cats 0.935, dogs 0.924 on breed photos; Sphynx 0.55, Newfoundland 0.71",
     "cat_vocal_context_loco_macro_f1": "0.46 [0.38, 0.55] (not shipped)",
     "dog_actions_video_macro_f1": "E11 0.638 [0.537, 0.716] (research); E17 temporal 0.590, not adopted",
-    "video_operating_point": "E19/E19b: no detector threshold or verifier scale improves both species on real video (600 additional clips); lower thresholds add cat-dog confusion; current operating point kept"
+    "video_operating_point": "E19/E19b: no detector threshold or verifier scale improves both species on real video (600 additional clips); lower thresholds add cat-dog confusion; current operating point kept",
+    "home_phone_video_found_cat": "0.697 [0.66, 0.74] of frames, phone build + verifier (E20, 209 sequences)",
+    "home_phone_video_found_dog": "0.598 [0.55, 0.64] of frames (E20, 147 sequences); 0.137 of dog frames show only a 'cat'; reference detector worse on this footage (paired -0.068)",
+    "audio_presence_fsd50k": "cat F1 0.688 [0.62, 0.75], dog 0.728 [0.67, 0.79] (E21, 10,079 clips, nothing tuned)",
+    "vocalization_types_fsd50k": "meow 0.725 and bark 0.728 pass the gate; purr 0.701 (lower bound 0.595) and growl 0.489 fail; cat hiss not evaluable (2 clips) (E21)",
+    "dog_bark_context": "leave-one-dog-out macro-F1 0.722 [0.64, 0.79] (E22, research only)",
+    "cat_keypoints": "PCK@0.1 0.760 [0.71, 0.80]; ears 0.914 (meets G2 PCK), tail 0.51 (fails) (E24, research only)",
+    "g1_light_cpu_run_e4_subset": "AP50 cat 0.889 / dog 0.820 vs phone build 0.923 / 0.851 (6k images, 4 epochs, CPU)"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
-    "cat face, ear, tail and action data",
-    "licensed dog keypoints (G2 annotation)",
-    "detector on real video (G1, GPU)",
-    "vocal type and dog context data (zenodo.org, huggingface.co blocked; terms)"
+    "cat face and action data; cat tail keypoints",
+    "licence-verified keypoint images (AwA2 variants; or G2 annotation)",
+    "G1 full-data run to finish, then its own threshold and verifier, E18/E20 and parity",
+    "cat-hiss and growl audio with type labels",
+    "CatFLW/DogFLW need a Kaggle API token"
    ]
   },
   "on_device_compatibility_and_performance": {
    "status": "pending",
-   "evidence": "desktop headless Chromium only; phone test build published at https://claude.ai/artifact/NRG1a19X1ZkPbgdigJGaf2 (version 4), no phone report yet",
+   "evidence": "desktop headless Chromium only; phone test build published at https://claude.ai/artifact/NRG1a19X1ZkPbgdigJGaf2 (version 4, asset format 0.2.1), no phone report yet; current bundles are format 0.2.2",
    "blocking": [
     "testers running the phone test on an iPhone (Safari) and an Android phone (Chrome)"
    ]
@@ -65,32 +76,32 @@
    "blocking": [
     "behavioural validity",
     "real-phone acceptance",
-    "Q-M2 (licence statement of the MediaPipe detector) or accept the phone build's lower dog recall",
-    "commercial: Q-T publisher decision or G1b",
-    "HTTPS origin under our control for the installed-app track (docs/DEVICE_TEST_PROTOCOL.md)"
+    "commercial: Q-T publisher decision or G1b (G1 trains on CPU now)",
+    "HTTPS origin under our control for the installed-app track (docs/DEVICE_TEST_PROTOCOL.md)",
+    "durable storage with write access for training checkpoints (docs/DATA_TRANSFER_REQUEST.md section 6)"
    ]
   }
  },
  "capabilities_by_species": "docs/CAPABILITY_MATRIX.md",
  "training_jobs": {
-  "G1": "data job and CPU toolchain smoke test done; GPU run pending",
-  "G2": "annotation candidates and spec done; annotation pending",
+  "G1": "CPU benchmark and 6k-image resumable run done (results/g1/cpu_training.json): within 0.03 AP50 of M2/M3 on the E4 subset; three data-path defects fixed; full-data CPU run (50,007 images, 1 + 3 epochs) in progress",
+  "G2": "annotation candidates and spec done; AwA-Pose (E24) gives a research cat keypoint model meanwhile; annotation pending",
   "G3": "E17 on dog video: temporal model 0.590 vs pooled 0.575 vs E11 logistic regression 0.638 macro-F1; not adopted",
-  "G4": "cat context done (not shipped); dog context and vocal type blocked",
+  "G4": "cat context (E2) done, not shipped; dog bark context (E22) 0.72 macro-F1, research only; vocalization types evaluated on FSD50K (E21) and gated in both engines",
   "G5": "not started"
  },
  "decisions": [
-  "The phone test build uses the licence-stated TF Hub detector; the MediaPipe detector is research-only until its licence statement is recorded (Q-M2). Measured cost: fewer dogs found on real video; measured benefit: faster in the browser on desktop.",
+  "The phone test build uses the licence-stated TF Hub detector. Q-M2 was answered on 2026-10-19: the MediaPipe Object Detector page states no licence for the weights, so the MediaPipe detector stays research-only. On home phone video (E20) the TF Hub detector is the better one anyway.",
+  "Only vocalization types that passed the pre-set FSD50K gate (meow, bark) are shown or open/support interpretations; unvalidated confident types (purr, growl, hiss) remain in the JSON and can only block an interpretation (E21).",
   "The on-furniture relation ships as the pre-specified containment rule; the learned head was not better (E15 follow-up).",
-  "Dog keypoints and MammalNet-trained heads stay research-only (data terms).",
+  "Dog keypoints, MammalNet-trained heads, the AwA-Pose cat keypoint heads and the bark-context model stay research-only (data terms).",
   "Server analysis is opt-in; the default path never uploads media."
  ],
  "resources_needed": [
   "Run the phone test on one iPhone and one Android phone",
-  "Read the MediaPipe Object Detector Models page (Q-M2) and record its licence statement",
-  "Allow zenodo.org and huggingface.co (or provide the files)",
-  "One GPU (24 GB class, 4-8 h) for G1",
-  "Annotators for G2 (70-100 h for 2,000 cats + 2,000 dogs)",
+  "Write access to an object-store prefix for training checkpoints (signed PUT URLs or a scoped service account; docs/DATA_TRANSFER_REQUEST.md section 6)",
+  "A Kaggle API token for CatFLW / DogFLW (cat and dog facial landmarks, research)",
+  "Annotators for G2 (70-100 h for 2,000 cats + 2,000 dogs), or a per-image licence check of the AwA2 cat and dog images used by E24",
   "Household recordings: participants and a data controller (docs/household/CONSENT_AND_PRIVACY.md)",
   "An HTTPS host with header control for the installed-app track (only after track A)"
  ]

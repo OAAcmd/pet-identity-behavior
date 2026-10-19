@@ -74,12 +74,18 @@ def _tuning_subset(man: Path) -> tuple[list[dict], list[OI.GtBox], list[dict]]:
     return imgs, boxes, [{"image_id": b.image_id, "label": b.label, "box": E4._xyxy(b)} for b in conf]
 
 
-def _verify_images(img_dir: Path, sums: Path) -> int:
+MAX_UNVERIFIABLE_TUNING = 0.01  # share of tuning images that may be excluded because the source no longer serves the pinned bytes
+
+
+def _verify_images(img_dir: Path, sums: Path, allow_fraction: float = 0.0) -> tuple[int, list[str]]:
+    """Pinned-image check; returns (pinned count, ids that are missing or differ). More failures than
+    allow_fraction raise. Upstream objects can change after pinning (found 2026-10-19: one Open Images
+    test image now differs from its pin); such images are excluded and listed, never silently replaced."""
     pinned = {r["image_id"]: r["sha256"] for r in csv.DictReader(open(sums, newline=""))}
-    bad = [i for i, h in pinned.items() if not (img_dir / f"{i}.jpg").exists() or sha256_file(img_dir / f"{i}.jpg") != h]
-    if bad:
+    bad = sorted(i for i, h in pinned.items() if not (img_dir / f"{i}.jpg").exists() or sha256_file(img_dir / f"{i}.jpg") != h)
+    if len(bad) > allow_fraction * len(pinned):
         raise RuntimeError(f"{len(bad)} images missing or failing their pinned SHA-256 in {img_dir}")
-    return len(pinned)
+    return len(pinned), bad
 
 
 def collect(det, clf: V.CropClassifier, images: list[dict], img_dir: Path) -> list[dict]:
@@ -182,7 +188,8 @@ def _cache_rows(path: Path, fn) -> list[dict]:
 
 
 def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, params_out: Path | None = None,
-        classifier: str = CLASSIFIER, filename: str = "metrics.json") -> dict:
+        classifier: str = CLASSIFIER, filename: str = "metrics.json", detector_files: dict[str, Path] | None = None) -> dict:
+    """detector_files: name -> exported .tflite (G1 candidates), evaluated like registered detectors."""
     man = settings.paths.resolve("manifests_root")
     data = settings.paths.resolve("data_root")
     cache = data.parent / "cache" / "e7"
@@ -193,8 +200,13 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
         raise RuntimeError(f"tuning and evaluation subsets overlap: {sorted(overlap)[:5]}")
     tune_dir = data / "openimages_test" / "images"
     e4_dir = OI.dataset_dir(data) / "images"
-    n_tune = _verify_images(tune_dir, man / "oi_test_tuning_sha256.csv")
-    n_e4 = _verify_images(e4_dir, man / "openimages_catdog_sha256.csv")
+    n_tune, tune_excluded = _verify_images(tune_dir, man / "oi_test_tuning_sha256.csv", MAX_UNVERIFIABLE_TUNING)
+    n_e4, _ = _verify_images(e4_dir, man / "openimages_catdog_sha256.csv")  # the evaluation set must be complete
+    if tune_excluded:
+        ex = set(tune_excluded)
+        tune_imgs = [r for r in tune_imgs if r["image_id"] not in ex]
+        tune_boxes = [b for b in tune_boxes if b.image_id not in ex]
+        tune_conf = [c for c in tune_conf if c["image_id"] not in ex]
     rc = check_model(settings, classifier)
     if not rc.ready:
         raise RuntimeError(f"{classifier}: {rc.reason}")
@@ -204,12 +216,18 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
     author_t = {r["image_id"]: r["author_profile_url"] or r["author"] for r in tune_imgs}
     results: dict = {}
     frozen: dict = {}
-    for mid in detectors or DETECTORS:
-        r = check_model(settings, mid)
-        if not r.ready:
-            results[mid] = {"status": "unavailable", "reason": r.reason}
-            continue
-        det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads, decode=resource(mid).get("decode"))
+    from ..vision.detector import EfficientDetDetector
+
+    todo = [(m, None) for m in (detectors if detectors is not None else ([] if detector_files else DETECTORS))] + list((detector_files or {}).items())
+    for mid, path in todo:
+        if path is not None:
+            det = EfficientDetDetector(Path(path), settings.runtime.num_threads)
+        else:
+            r = check_model(settings, mid)
+            if not r.ready:
+                results[mid] = {"status": "unavailable", "reason": r.reason}
+                continue
+            det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads, decode=resource(mid).get("decode"))
         t0 = time.perf_counter()
         trows = _cache_rows(cache / f"{mid}{suffix}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir))
         erows = _cache_rows(cache / f"{mid}{suffix}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir))
@@ -280,7 +298,8 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
         "title": "False-positive rejection for cat/dog detection: tuning on Open Images test split, final evaluation on the E4 validation subset",
         "protocol": __doc__.strip().splitlines(),
         "tested_distributions": {
-            "tuning": {"split": "Open Images V7 test", "images": n_tune,
+            "tuning": {"split": "Open Images V7 test", "images": n_tune - len(tune_excluded),
+                       "excluded_failing_pinned_sha256": tune_excluded,
                        "roles": _count(tune_imgs, "role"),
                        "confusable_boxes_by_class": _count(tune_conf, "label")},
             "final_evaluation": {"split": "Open Images V7 validation (E4 subset, unchanged)", "images": n_e4,
