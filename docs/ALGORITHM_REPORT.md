@@ -1061,6 +1061,40 @@ Findings:
   carries no keypoint model (research data), and the personal and
   commercial profiles refuse the head.
 
+### E25 - Species arbitration with the crop classifier - COMPLETED, not adopted
+
+E20 showed dogs reported as cats on home video. The verifier's ImageNet
+crop classifier separates domestic cat breeds from about 120 dog breeds, so
+it was tested as an arbiter: relabel a detection when
+log(p_crop(other) / p_crop(own)) > tau.
+
+Protocol, fixed before scoring (`src/petperception/eval/e25_species_arbitration.py`):
+* tau selected on the E7 tuning set: 1,016 phone-build detections matched
+  to cat or dog boxes;
+* tested once on the E20 frames (paired by sequence) and on E4 photos
+  (guard);
+* adoption needed all four criteria.
+
+| | Without | With arbitration (tau 2.5) |
+| --- | --- | --- |
+| Species accuracy, tuning photos | 0.939 | 0.959 |
+| Species accuracy, E4 photos (guard) | 0.948 | 0.979 |
+| Home video: dog frames found | 0.598 | 0.693 (paired +0.095 [0.073, 0.120]) |
+| Home video: dog frames with only a cat | 0.137 | **0.030** (paired -0.107 [-0.136, -0.083]) |
+| Home video: cat frames found | 0.697 | **0.570** (paired -0.127 [-0.153, -0.102]) |
+| Home video: cat frames with only a dog | 0.025 | 0.104 |
+
+* **Not adopted**: criterion 2 (cats not worse) fails clearly.
+* On photos the crop classifier is a good arbiter. On home phone video it
+  errs in the other direction: it calls many cats dogs, just as the
+  detector calls many dogs cats. Neither model separates the species
+  reliably on this footage. Re-weighting the two models cannot fix that;
+  it needs training data from this domain: home-video frames in G1 (CoP3D
+  is non-commercial, so evaluation only) or household recordings.
+* What E25 adds to E20: the dog-to-cat confusion comes from the detector,
+  not from a lack of species evidence. The species evidence itself is
+  unreliable on home video.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

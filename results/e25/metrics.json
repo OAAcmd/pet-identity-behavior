@@ -1,0 +1,314 @@
+{
+  "experiment": "E25",
+  "status": "completed",
+  "created_at": "2026-10-19T11:41:48+00:00",
+  "protocol": [
+    "E25: species arbitration with the verifier's crop classifier (cat vs dog relabelling).",
+    "",
+    "Why. On home phone video (E20) 14 % of dog frames show only a \"cat\", and on",
+    "the engine level 16 % of dog videos are reported as showing only a cat. The",
+    "verifier already runs an ImageNet classifier on every detection crop. Its",
+    "group probabilities (domestic cat breeds vs about 120 dog breeds) are",
+    "species evidence that the detector's label ignores.",
+    "",
+    "Rule. A detection labelled S is relabelled to the other species S' when",
+    "log(p_crop(S') / p_crop(S)) > tau.",
+    "",
+    "Protocol, fixed before any E20 frame was scored with it:",
+    "* Selection: the E7 tuning set (Open Images test split). The phone build's",
+    "  detections at the operating point are matched to cat or dog ground-truth",
+    "  boxes at IoU >= 0.5; the matched box gives the true species. tau is the",
+    "  grid value (0 to 6, step 0.25) with the highest species accuracy on these",
+    "  detections. Ties go to the larger tau, i.e. fewer relabels.",
+    "* Test, once:",
+    "  - E20 frames (home video), phone build with its verifier, scored as in",
+    "    E20, with and without arbitration, paired by sequence;",
+    "  - guard: the E4 subset, image-level species accuracy of matched",
+    "    detections.",
+    "* Adoption rule:",
+    "  1. the rate of dog frames with only a cat falls, with the paired 95 %",
+    "     CI's upper bound below 0;",
+    "  2. on cat sequences, frames found does not fall by more than 0.02",
+    "     (paired lower bound above -0.02);",
+    "  3. dog frames found does not fall (paired lower bound above -0.02);",
+    "  4. on E4, matched-detection species accuracy does not fall."
+  ],
+  "selection": {
+    "matched_tuning_detections": 1016,
+    "species_accuracy_without": 0.9389763779527559,
+    "tau": 2.5,
+    "species_accuracy_with": 0.9586614173228346,
+    "curve": [
+      [
+        0.0,
+        0.9350393700787402
+      ],
+      [
+        0.25,
+        0.9350393700787402
+      ],
+      [
+        0.5,
+        0.9350393700787402
+      ],
+      [
+        0.75,
+        0.937007874015748
+      ],
+      [
+        1.0,
+        0.9419291338582677
+      ],
+      [
+        1.25,
+        0.9448818897637795
+      ],
+      [
+        1.5,
+        0.9458661417322834
+      ],
+      [
+        1.75,
+        0.9517716535433071
+      ],
+      [
+        2.0,
+        0.9517716535433071
+      ],
+      [
+        2.25,
+        0.9547244094488189
+      ],
+      [
+        2.5,
+        0.9586614173228346
+      ],
+      [
+        2.75,
+        0.9576771653543307
+      ],
+      [
+        3.0,
+        0.9566929133858267
+      ],
+      [
+        3.25,
+        0.9557086614173228
+      ],
+      [
+        3.5,
+        0.9576771653543307
+      ],
+      [
+        3.75,
+        0.9557086614173228
+      ],
+      [
+        4.0,
+        0.9566929133858267
+      ],
+      [
+        4.25,
+        0.9566929133858267
+      ],
+      [
+        4.5,
+        0.9557086614173228
+      ],
+      [
+        4.75,
+        0.9566929133858267
+      ],
+      [
+        5.0,
+        0.9557086614173228
+      ],
+      [
+        5.25,
+        0.952755905511811
+      ],
+      [
+        5.5,
+        0.9507874015748031
+      ],
+      [
+        5.75,
+        0.9498031496062992
+      ],
+      [
+        6.0,
+        0.9507874015748031
+      ]
+    ],
+    "relabels_on_tuning": 46
+  },
+  "e20_frames": {
+    "without": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.6971291866028708,
+        "frame_found_ci95": {
+          "ci_low": 0.6593181818181818,
+          "ci_high": 0.7354066985645933,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.024880382775119617,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.015311004784688996,
+          "ci_high": 0.03636363636363636,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.27799043062200957,
+        "frame_found_box_iou50": 0.6844380403458213,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8736578822135925,
+        "sequence_found_half_frames": 0.8133971291866029,
+        "sequence_any_frame": 0.9712918660287081,
+        "sequence_mean_found_fraction": 0.6971291866028707,
+        "sequence_mean_wrong_only_fraction": 0.02488038277511962
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.5979591836734693,
+        "frame_found_ci95": {
+          "ci_low": 0.5503231292517007,
+          "ci_high": 0.64421768707483,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.13741496598639455,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.11018707482993198,
+          "ci_high": 0.1727891156462585,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.2646258503401361,
+        "frame_found_box_iou50": 0.5842465753424657,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8945630788803101,
+        "sequence_found_half_frames": 0.673469387755102,
+        "sequence_any_frame": 0.9795918367346939,
+        "sequence_mean_found_fraction": 0.5979591836734695,
+        "sequence_mean_wrong_only_fraction": 0.13741496598639458
+      }
+    },
+    "with": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.5698564593301435,
+        "frame_found_ci95": {
+          "ci_low": 0.5248803827751196,
+          "ci_high": 0.6124521531100479,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.10382775119617225,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.08086124401913876,
+          "ci_high": 0.13014354066985645,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.3263157894736842,
+        "frame_found_box_iou50": 0.5590778097982709,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8764665722846985,
+        "sequence_found_half_frames": 0.645933014354067,
+        "sequence_any_frame": 0.937799043062201,
+        "sequence_mean_found_fraction": 0.5698564593301435,
+        "sequence_mean_wrong_only_fraction": 0.10382775119617224
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.6925170068027211,
+        "frame_found_ci95": {
+          "ci_low": 0.6503231292517007,
+          "ci_high": 0.7360544217687075,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.029931972789115645,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.017006802721088437,
+          "ci_high": 0.04557823129251701,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.27755102040816326,
+        "frame_found_box_iou50": 0.673972602739726,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8927789926528931,
+        "sequence_found_half_frames": 0.7891156462585034,
+        "sequence_any_frame": 0.9863945578231292,
+        "sequence_mean_found_fraction": 0.6925170068027212,
+        "sequence_mean_wrong_only_fraction": 0.02993197278911565
+      }
+    },
+    "paired_found_difference": {
+      "cat": {
+        "mean_difference": -0.1272727272727273,
+        "ci95": [
+          -0.15263157894736842,
+          -0.10239234449760765
+        ],
+        "sequences_better": 4,
+        "sequences_worse": 111,
+        "sequences": 209
+      },
+      "dog": {
+        "mean_difference": 0.0945578231292517,
+        "ci95": [
+          0.07345238095238096,
+          0.1204251700680272
+        ],
+        "sequences_better": 70,
+        "sequences_worse": 0,
+        "sequences": 147
+      }
+    },
+    "paired_wrong_only_difference": {
+      "cat": {
+        "mean_difference": 0.07894736842105263,
+        "ci95": [
+          0.05933014354066986,
+          0.09952153110047846
+        ]
+      },
+      "dog": {
+        "mean_difference": -0.10748299319727893,
+        "ci95": [
+          -0.1360544217687075,
+          -0.08299319727891157
+        ]
+      }
+    }
+  },
+  "e4_guard": {
+    "accuracy_without": 0.9475920679886686,
+    "accuracy_with": 0.9787535410764873,
+    "matched_detections": 706
+  },
+  "adoption_rule": {
+    "1_dog_only_cat_frames_fall": true,
+    "2_cat_found_not_worse": false,
+    "3_dog_found_not_worse": true,
+    "4_e4_species_accuracy_not_worse": true
+  },
+  "adopt": false,
+  "runtime_s": 646.2
+}

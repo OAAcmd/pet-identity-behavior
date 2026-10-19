@@ -46,7 +46,7 @@ here on CC BY images (G1) is in training. Details: [docs/ON_DEVICE.md](docs/ON_D
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
 | What each capability can and cannot do, per species (software, behavioural evidence, device, release) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E24) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Methods and measured results (E1-E25) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
 | Data, models, licences | [ASSET_TERMS.md](docs/ASSET_TERMS.md) (per asset, open questions, replacements), [DATA_SOURCES.md](docs/DATA_SOURCES.md) (94-source survey, network blockers), [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
@@ -76,7 +76,7 @@ Analyse a file on the server engine from the command line:
 
 Experiments: `uv run petperception fetch-data <dataset>` (or `mirror fetch
 --dataset <id> --official` for archives listed in `manifests/mirror_files.json`)
-then `uv run petperception evaluate --experiment e1 ... e24` (data sources,
+then `uv run petperception evaluate --experiment e1 ... e25` (data sources,
 licences and blockers per experiment in the register). Detector training
 (G1, CPU or GPU, resumable): [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md). Tests:
 `uv run pytest -q`, `cd web && npm test && npx playwright test`
