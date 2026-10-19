@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 
 from . import __version__
-from .audio.events import SoundEventRaw, build_groups, extract_events, load_thresholds, vocal_tags
+from .audio.events import SoundEventRaw, build_groups, extract_events, load_subtype_validation, load_thresholds, shown_subtypes, vocal_conflict_tags, vocal_tags
 from .audio.yamnet import YamnetBackend
 from .config import REPO_ROOT, Settings
 from .context.zones import ZoneConfig, occupancy
@@ -64,6 +64,7 @@ class AnalysisEngine:
         self.status: dict[str, S.ComponentStatus] = {}
         self.thresholds: dict[str, float] = {}
         self.threshold_source: dict[str, str] = {}
+        self.subtype_validation: dict[str, str] = {}
         self.model_load_ms = 0.0
         self._groups = None
 
@@ -87,6 +88,8 @@ class AnalysisEngine:
                 if th_path and not td.allowed:
                     self.release_notes.append(f"ESC-50-derived thresholds not used under the '{s.release_profile}' profile; unfitted defaults apply.")
                     th_path = None
+                sv = s.audio.yamnet.subtype_validation_file
+                self.subtype_validation = load_subtype_validation((REPO_ROOT / sv) if sv and not Path(sv).is_absolute() else (Path(sv) if sv else None))
                 self.thresholds, self.threshold_source = load_thresholds(
                     (REPO_ROOT / th_path) if th_path and not Path(th_path).is_absolute() else (Path(th_path) if th_path else None),
                     s.audio.yamnet.default_thresholds)
@@ -603,23 +606,29 @@ class AnalysisEngine:
                             if len(cands) > 1 else "the only visible animal's species does not match the sound; source may be off-screen")
                     att = S.Attribution(status="unknown", candidate_track_ids=[c.track_id for c in cands], note=note)
             label_txt = ev.label.replace("context:", "").replace("_", " ")
+            if ev.label == "growl" and "growl" not in shown_subtypes(self.subtype_validation):
+                label_txt = "possible growl (unvalidated sound type)"
             sm = S.SoundEvent(event_id=f"snd-{k}", label=ev.label, t_start_s=ev.start_s, t_end_s=ev.end_s, peak_raw_score=ev.peak_score,
                               mean_raw_score=ev.mean_score, threshold=ev.threshold, threshold_source=self.threshold_source.get(ev.label, "config default (not selected on data)") if not is_context else "config context_tag_threshold (not selected on data)",
-                              subtypes=ev.subtypes, top_audioset_labels=ev.top_audioset_labels, attribution=att, evidence_id=eid)
+                              subtypes=ev.subtypes, subtype_validation={k2: self.subtype_validation.get(k2, "not_evaluated") for k2 in ev.subtypes},
+                              top_audioset_labels=ev.top_audioset_labels, attribution=att, evidence_id=eid)
             (context_models if is_context else sound_models).append(sm)
             tags: set[str] = set()
+            shown = shown_subtypes(self.subtype_validation)  # unvalidated subtypes stay in the JSON, not in the text
+            blocking: set[str] = set()
             if is_context:
                 tags.add(ev.label.split(":", 1)[1])
             else:
-                tags |= vocal_tags(ev.label, ev.subtypes)
-            sub_txt = ", ".join(f"{k2} {v:.2f}" for k2, v in sorted(ev.subtypes.items(), key=lambda t: -t[1])[:3])
+                tags |= vocal_tags(ev.label, ev.subtypes, shown)
+                blocking = vocal_conflict_tags(ev.label, ev.subtypes, shown)
+            sub_txt = ", ".join([f"{k2} {v:.2f}" for k2, v in sorted(ev.subtypes.items(), key=lambda t: -t[1]) if k2 in shown][:3])
             item = S.EvidenceItem(
                 evidence_id=eid, kind="context_sound" if is_context else "sound_event", t_start_s=ev.start_s, t_end_s=ev.end_s,
                 track_id=None, summary=f"{label_txt} sound {ev.start_s:.2f}-{ev.end_s:.2f}s (peak raw score {ev.peak_score:.2f}{'; ' + sub_txt if sub_txt else ''})",
                 value=ev.peak_score, value_kind="yamnet_sigmoid_raw", reliability=audio_rel,
                 provenance=S.Provenance(component="audio_event", model_id=s.audio.yamnet.model_id, root="audio:yamnet", method="YAMNet tags, ontology group max, thresholded"))
             attributed = att.candidate_track_ids[0] if att.status == "single_visible_candidate" else None
-            e = Ev(item, "audio:yamnet", frozenset(tags), 1.0, attributed_track=attributed)
+            e = Ev(item, "audio:yamnet", frozenset(tags), 1.0, attributed_track=attributed, conflict_tags=frozenset(blocking))
             evidence.append(e)
 
         behavior_events: list[S.BehaviorSegment] = []

@@ -136,3 +136,28 @@ export function audioLevels(x: Float32Array, sr: number, silenceDbfs: number): {
   return { rms_dbfs: 20 * Math.log10(Math.sqrt(s2 / x.length + eps)), peak_dbfs: 20 * Math.log10(peak + eps),
     silent_fraction: silent / frames, clipping_fraction: clip / x.length };
 }
+
+const REQUEST_LIKE = new Set(["meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_dog"]);
+const SUBTYPE_MIN = 0.3;
+const TAG_SUBTYPES = ["hiss", "growl", "purr", "bark", "howl"];
+
+/** Fusion tags of one species or growl event; mirrors petperception.audio.events.vocal_tags.
+ * Only subtypes in `shown` (validated, E21 gate) become tags; unvalidated confident subtypes
+ * still keep an event from counting as a request-like vocalization. */
+export function vocalTags(label: string, subtypes: Record<string, number>, shown: Set<string>): Set<string> {
+  const strong = new Set(Object.entries(subtypes).filter(([, v]) => v >= SUBTYPE_MIN).map(([k]) => k));
+  const tags = new Set<string>();
+  for (const x of TAG_SUBTYPES) if (strong.has(x) && shown.has(x)) tags.add(x);
+  if (label !== "growl" && ([...strong].some((x) => REQUEST_LIKE.has(x)) || !strong.size)) tags.add("vocalization");
+  if (label === "growl" && shown.has("growl")) tags.add("growl");
+  return tags;
+}
+
+/** Confident but unvalidated subtypes: they may block a hypothesis, never open or support one;
+ * mirrors petperception.audio.events.vocal_conflict_tags. */
+export function vocalConflictTags(label: string, subtypes: Record<string, number>, shown: Set<string>): Set<string> {
+  const out = new Set<string>();
+  for (const [k, v] of Object.entries(subtypes)) if (v >= SUBTYPE_MIN && TAG_SUBTYPES.includes(k) && !shown.has(k)) out.add(k);
+  if (label === "growl" && !shown.has("growl")) out.add("growl");
+  return out;
+}

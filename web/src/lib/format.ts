@@ -121,3 +121,16 @@ export const ATTRIBUTION_TEXT: Record<string, string> = {
 export function isTerminal(status: string): boolean {
   return status === "succeeded" || status === "failed" || status === "cancelled";
 }
+
+/** Subtypes of a sound event that passed validation (E21 gate), strongest first, at most three.
+ * Results without validation statuses (schema < 1.4.0) show none. */
+export function shownSubtypes(s: { subtypes: Record<string, number>; subtype_validation?: Record<string, string> }): string[] {
+  const v = s.subtype_validation ?? {};
+  return Object.entries(s.subtypes).filter(([k]) => v[k] === "passed").sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k.replace(/_/g, " "));
+}
+
+/** Heading of a sound event: a growl event whose type has not passed validation says so. */
+export function soundHeading(s: { label: string; subtype_validation?: Record<string, string> }): string {
+  if (s.label === "growl" && s.subtype_validation?.growl !== "passed") return "Possible growl (sound type not validated)";
+  return soundLabel(s.label);
+}

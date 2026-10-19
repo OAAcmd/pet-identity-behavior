@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { api } from "../lib/api";
 import {
-  ATTRIBUTION_TEXT, DECISION_HELP, fmtSpan, fmtTime, HYPOTHESIS_LABEL, QUALITY_TEXT, REASON_TEXT, soundLabel, STATUS_LABEL, supportWord,
+  ATTRIBUTION_TEXT, DECISION_HELP, fmtSpan, fmtTime, HYPOTHESIS_LABEL, QUALITY_TEXT, REASON_TEXT, shownSubtypes, soundHeading, soundLabel, STATUS_LABEL, supportWord,
 } from "../lib/format";
 import type { AnalysisResult, Feedback, Hypothesis } from "../lib/types";
 import { useApp } from "../state";
@@ -163,10 +163,10 @@ export function ResultView({ feedback, result, mediaUrl, mediaKind }: { feedback
         ))}
         {sounds.map((s) => (
           <div key={s.event_id} class="obs">
-            <h3>{soundLabel(s.label)}</h3>
+            <h3>{soundHeading(s)}</h3>
             <p>
               <button type="button" class="btn btn-link" onClick={() => seek(s.t_start_s)}>{fmtSpan(s.t_start_s, s.t_end_s)}</button>
-              {Object.keys(s.subtypes).length > 0 && <> - sounded like: {Object.entries(s.subtypes).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k.replace(/_/g, " ")).join(", ")}</>}
+              {shownSubtypes(s).length > 0 && <> - sounded like: {shownSubtypes(s).join(", ")}</>}
             </p>
             <p class="muted">{ATTRIBUTION_TEXT[s.attribution.status] ?? s.attribution.note}</p>
           </div>

@@ -1,7 +1,7 @@
 // Unit tests (synthetic inputs / mocked transport) for client-side logic.
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/lib/api";
-import { fmtTime, supportWord } from "../../src/lib/format";
+import { fmtTime, shownSubtypes, supportWord } from "../../src/lib/format";
 import { describeMediaError, extensionFor, pickMimeType } from "../../src/lib/recorder";
 import { parseHash } from "../../src/lib/router";
 import type { Upload } from "../../src/lib/types";
@@ -110,5 +110,15 @@ describe("display rules", () => {
     const z = rectsToZones([{ tag: "food_area", label: "Bowl", x1: 0.8, y1: 0.9, x2: 0.5, y2: 1.2 }]);
     expect(z.zones[0].polygon).toEqual([[0.5, 0.9], [0.8, 0.9], [0.8, 1], [0.5, 1]]);
     expect(z.schema).toBe("petperception.zones/1");
+  });
+});
+
+describe("shownSubtypes", () => {
+  it("lists only validated subtypes, strongest first", () => {
+    const s = { subtypes: { purr: 0.9, meow: 0.4, bark: 0.6, hiss: 0.8 }, subtype_validation: { purr: "failed", meow: "passed", bark: "passed", hiss: "not_evaluable" } };
+    expect(shownSubtypes(s)).toEqual(["bark", "meow"]);
+  });
+  it("shows nothing for results without validation statuses", () => {
+    expect(shownSubtypes({ subtypes: { meow: 0.9 } })).toEqual([]);
   });
 });

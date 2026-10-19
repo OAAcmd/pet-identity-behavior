@@ -84,7 +84,10 @@ device_check/              reference clip (WebM + MP4), expected result, referen
   outputs, so both runtimes see identical bytes (asset format 0.2).
   Asset format 0.2.1 adds the optional `object_relation` block (E15); a
   0.2 app without it ignores the block (seen in the E2E run with a stale
-  app build) and reports no on-furniture candidates.
+  app build) and reports no on-furniture candidates. Asset format 0.2.2
+  adds `audio.subtype_validation` (E21). An app reading a bundle without it
+  treats no subtype as validated, so it shows none and lets none trigger an
+  interpretation.
 
 ## Install, integrity, versioning and update recovery
 

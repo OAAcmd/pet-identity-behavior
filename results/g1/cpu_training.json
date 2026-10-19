@@ -54,6 +54,10 @@
     {
       "problem": "tensorflow-metadata 1.21 in the G1 lock needs protobuf>=5, which TensorFlow 2.15 excludes; tensorflow_datasets failed to import (Model Maker swallowed the error)",
       "fix": "pinned tensorflow-metadata==1.16.1 in training/g1/requirements{,.lock}.txt"
+    },
+    {
+      "problem": "the per-epoch shuffle used a buffer of the whole training set; Model Maker's dataset yields decoded images (~230 KB at 320 px), so the full 50k-image run reached 12.4 GB peak RSS of 15.7 GB within two minutes (the 6k-image run: 4.5 GB)",
+      "fix": "--shuffle-buffer (seeded; recorded in the configuration hash when set); the full run uses 4,096 and peaks at 2.7 GB. The cache lists images in random image-id order, so a bounded buffer still mixes classes; the order stays exactly replayable on resume"
     }
   ],
   "benchmark_idle_machine": {

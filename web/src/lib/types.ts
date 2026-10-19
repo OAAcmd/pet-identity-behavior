@@ -169,6 +169,8 @@ export interface SoundEvent {
   peak_raw_score: number;
   threshold: number;
   subtypes: Record<string, number>;
+  /** Per-subtype validation status (result schema 1.4.0); only "passed" subtypes are shown. */
+  subtype_validation?: Record<string, string>;
   attribution: { status: string; candidate_track_ids: string[]; note: string };
   evidence_id: string;
 }

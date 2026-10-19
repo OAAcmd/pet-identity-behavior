@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e21", "e21b", "e22"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -225,6 +225,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e3_dog_context as E
 
         return E.run(s, out_dir)
+    if name == "e20":
+        from .eval import e20_cop3d_home_video as E
+
+        return E.run(s, out_dir)
     if name == "e21":
         from .eval import e21_vocal_types as E
 
@@ -328,8 +332,8 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
 
 def cmd_train(args: argparse.Namespace) -> int:
     # Training produces the deployment artifacts of an experiment's protocol.
-    if args.experiment not in ("e1", "e2"):
-        print(json.dumps({"error": "trainable experiments: e1 (thresholds + MFCC baseline), e2 (CatMeows context)"}))
+    if args.experiment not in ("e1", "e2", "e21"):
+        print(json.dumps({"error": "trainable experiments: e1 (thresholds + MFCC baseline), e2 (CatMeows context), e21 (subtype validation)"}))
         return 2
     r = _run_experiment(args.experiment, args)
     print(json.dumps({"experiment": args.experiment, "status": r.get("status", "completed"), "artifacts_dir": "artifacts/"}))
@@ -532,6 +536,11 @@ def cmd_g1_eval(args: argparse.Namespace) -> int:
         models[name] = Path(path)
     out = g1_export_check.run(_settings(args), Path(args.out), models)
     print(json.dumps(out["results"], indent=2))
+    if args.e20:
+        from .eval import e20_cop3d_home_video as E20
+
+        r = E20.run(_settings(args), Path(args.e20), models)
+        print(json.dumps(r["results"], indent=2))
     return 0
 
 
@@ -805,6 +814,7 @@ def build_parser() -> argparse.ArgumentParser:
     ge = sub.add_parser("g1-eval", help="score G1 detector exports on the E4 subset next to the shipped detectors")
     ge.add_argument("--model", action="append", required=True, help="NAME=PATH to an exported .tflite (repeatable)")
     ge.add_argument("--out", required=True, help="result JSON path")
+    ge.add_argument("--e20", help="also run E20 (CoP3D home video) with these models; directory for its metrics.json")
     ge.set_defaults(func=cmd_g1_eval)
     npb = sub.add_parser("network-probe", help="re-test the hosts that blocked data sources need (manifests/network_requirements.json)")
     npb.set_defaults(func=cmd_network_probe)

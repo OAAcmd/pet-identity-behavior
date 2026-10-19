@@ -12,11 +12,11 @@ when held-out evaluation supports it (E15: the learned "on furniture" head
 was not better than the containment rule, so the rule ships, and both
 results are kept).
 
-## Status at a glance (2026-10-10)
+## Status at a glance (2026-10-19)
 
 | Job | Capability | Ran here | Blocked on |
 | --- | --- | --- | --- |
-| G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); toolchain **smoke-tested** on CPU: train, evaluate, export float32 / float16 / int8 (`results/g1/smoke_test.json`) | a GPU for the full run (estimate 4-8 GPU hours) |
+| G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); CPU benchmark and a 6k-image resumable training run **ran** (`results/g1/cpu_training.json`): within about 0.03 AP50 of M2/M3 on the E4 subset; three data-path defects fixed | the full-data CPU run (several hours, resumable), its own threshold and verifier, then E18 and parity |
 | G2 | licensed cat and dog keypoints: ears, tail, body | candidate job **ran** (4,813 cat / 6,348 dog images, split by photographer); annotation spec written | human annotation (estimate 70-100 hours for 2,000 + 2,000) |
 | G3 | temporal behaviour from video | E17 **ran on CPU**: temporal model 0.590 vs pooled 0.575 vs E11 0.638 macro-F1; not adopted | household or licensed video (cats; release) |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
@@ -143,7 +143,70 @@ on E4/E7, E16 and E18.
 | Full run: 50k images × 50 epochs at 384 px | 4-8 h on one 24 GB GPU (L4/A10 class), plus 1 h for evaluation and exports | estimate (throughput 100-200 images/s for a MobileNet RetinaNet at 384 px) |
 | GPU memory, batch 32 at 384 px | under 16 GB | estimate |
 | Disk | 7 GB images + 2 GB caches + 1 GB checkpoints | estimate |
+| CPU training throughput, MobileNetV2-256, batch 16, 4 vCPUs (Xeon 2.8 GHz), idle machine (`results/g1/cpu_training.json`) | head only 31.3, decoder + head 28.3, all layers 12.2 images/s; data pipeline alone 81 images/s; validation 14.2 images/s; peak RSS 4.6 GB | measured |
+| Checkpoint | 20.8 MB; written in 0.59 s, restored in 0.51 s, weights bit-identical | measured |
+| Full G1 set (50,007 train images) on this CPU | 68 min per all-layer epoch, 29 min per decoder + head epoch, 3 min per validation; image store at 320 px 1.24 GB | estimate from the measured throughput |
 | Phone latency | must be measured on phones; in the browser on desktop the current detector takes 74 ms per frame single-threaded | measured (desktop) |
+
+**CPU training, measured (2026-10-19).** The plan above assumed a GPU.
+The resumable trainer was first benchmarked, then run for real on a
+seeded 6,000 / 800-image sample of the G1 set (`views/bench6k`):
+one decoder + head epoch, then three all-layer epochs, COCO-initialised,
+batch 16, learning rate 0.3 × 16 / 256 with warm-up and cosine decay. About
+35 minutes of training.
+
+| Epoch | Stage | Train loss | Dev mAP50 (14 classes) | Dev AP50 cat | Dev AP50 dog |
+| --- | --- | --- | --- | --- | --- |
+| 0 | decoder + head | 1.413 | 0.225 | 0.477 | 0.610 |
+| 1 | all (interrupted at step 82 and resumed) | 0.841 | 0.301 | 0.542 | 0.692 |
+| 2 | all | 0.781 | 0.340 | 0.593 | 0.732 |
+| 3 | all | 0.750 | 0.382 | 0.640 | 0.737 |
+
+The export was then scored with E4's own code on the E4 subset (823
+images; every E4 photographer is excluded from G1 training), next to the
+shipped detectors (`results/g1/light6k_export_e4.json`; detector only, no
+verifier):
+
+| Detector | AP50 cat [95 % CI] | AP50 dog [95 % CI] | Dog image specificity at 0.35 | ms per image (CPU, incl. JPEG decode) |
+| --- | --- | --- | --- | --- |
+| G1 light run, float32 (6k images, 4 epochs) | 0.889 [0.858, 0.922] | 0.820 [0.768, 0.864] | 0.37 | 28.4 |
+| G1 light run, int8 post-training quantization | 0.824 [0.779, 0.867] | 0.760 [0.706, 0.810] | 0.74 | 21.3 |
+| M3, phone build (TF Hub, raw decoding) | 0.923 [0.895, 0.947] | 0.851 [0.800, 0.889] | 0.67 | 33.3 |
+| M2, reference (MediaPipe) | 0.923 [0.897, 0.947] | 0.842 [0.789, 0.886] | 0.56 | 48.8 |
+
+* A CPU run on 12 % of the data comes within about 0.03 AP50 of both
+  COCO-trained detectors; the intervals overlap. A GPU is not required to
+  train a usable G1a. Training on all 50k images on this CPU is a
+  several-hour, resumable job (table above).
+* At the shared operating threshold (0.35, set for M2) the G1 model
+  over-fires on dog-negative images. G1 needs its own operating threshold
+  and its own verifier, both selected on the tuning data (E7 protocol),
+  before acceptance 1 can be checked.
+* int8 post-training quantization costs 0.06-0.07 AP50 here, more than for
+  M2 (E12). The float16 build (5.7 MB) is the phone candidate until
+  quantization-aware training works for this backbone.
+* The E4-subset AP50 of M3 (0.923 / 0.851) differs from acceptance 1's
+  values (0.833 / 0.748): those are on the E4 final split with the
+  verifier.
+
+**Data-path defects found by the run and fixed** (details in
+`results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):
+* Model Maker 0.2.1.4's COCO cache writer skips every image without a box.
+  That silently removed 518 of the 707 hard-negative training images
+  (confusable animals, dolls) in the sample. At full scale it would remove
+  most of the 6,045 that G1 selects to reduce false cat and dog detections.
+  The trainer now installs its own writer that keeps them, under a new
+  cache layout name so old caches are never reused.
+* The same writer never stored `is_crowd`. Validation therefore scored
+  group-of boxes as ordinary boxes, although its docstring said they were
+  ignored. Now it is stored. Training is unchanged: Model Maker trains on
+  group-of boxes as ordinary boxes either way.
+* Boxes touching the right or bottom image edge could exceed the width by
+  one rounding step and were dropped (15 in the sample). Fixed in
+  `prepare_coco.py`.
+* The export step had never run before and crashed (missing directory).
+  Fixed. The crashed run was recovered by re-running the same command,
+  which restored the final checkpoint and exported.
 
 **Metrics and acceptance (fixed now).** G1a replaces the phone detector
 only if all of these hold:
@@ -159,8 +222,9 @@ only if all of these hold:
    measured on phones.
 
 **Checkpoints and artifacts.**
-* Model Maker writes a checkpoint per epoch in the export directory.
-* The development COCO AP selects the epoch.
+* `train_resumable.py` writes a full checkpoint every `--ckpt-minutes`, at
+  every epoch end and on SIGTERM / SIGINT (see Recoverability below).
+* The development AP50 (fast NumPy validation per epoch) selects the epoch.
 * Exports: `model_float32.tflite`, `model_float16.tflite`,
   `model_int8_ptq.tflite`, `metadata.json`, `metrics.json` (versions,
   hyperparameters, data sizes, development COCO metrics, history, wall
@@ -170,15 +234,51 @@ only if all of these hold:
 
 **Launch (reproducible).**
 ```bash
-uv run petperception train-prep g1                       # main env, CPU: manifests in var/training/g1
-docker build -f training/g1/Dockerfile -t petperception-g1 .
-docker run --gpus all -v $PWD/var:/work/var petperception-g1 --help   # image entrypoint = train.py
-# inside the G1 environment (training/g1/requirements.lock.txt, CPython 3.11):
-python -I training/g1/prepare_coco.py --manifests var/training/g1 --out var/training/g1/coco --max-side 640
-python -I training/g1/train.py --data var/training/g1/coco --export-dir var/training/g1/export \
-    --model MOBILENET_MULTI_AVG_I384 --epochs 50 --batch-size 32
-# CPU smoke test (what ran here): prepare_coco.py --limit 32, train.py --model MOBILENET_V2 --epochs 1 --batch-size 4
+uv run petperception train-prep g1                 # main env: manifests in var/training/g1 (streams Open Images metadata)
+uv venv --python 3.11 var/venv-g1 && VIRTUAL_ENV=var/venv-g1 uv pip install -r training/g1/requirements.lock.txt
+# download once into a shared 320 px store and write a COCO view (all images, or a seeded sample)
+var/venv-g1/bin/python -I training/g1/prepare_coco.py --root var/training/g1 --view full --max-side 320
+var/venv-g1/bin/python -I training/g1/prepare_coco.py --root var/training/g1 --view bench6k --train-n 6000 --dev-n 800
+# benchmark, then train (re-running the same command resumes; a changed configuration is refused)
+var/venv-g1/bin/python -I training/g1/train_resumable.py --view var/training/g1/views/bench6k --run-dir var/training/g1/runs/bench \
+    --model MOBILENET_V2 --batch-size 16 --stages 1:head,1:decoder_head,1:all --benchmark 10
+var/venv-g1/bin/python -I training/g1/train_resumable.py --view var/training/g1/views/full --run-dir var/training/g1/runs/<name> \
+    --model MOBILENET_V2 --batch-size 16 --stages 1:decoder_head,5:all --ckpt-minutes 10
+var/venv-g1/bin/python -I training/g1/train_resumable.py ... --validate-only   # restore the latest checkpoint, check its weights hash, validate
+# score an export with the E4 protocol next to the shipped detectors (main env)
+uv run petperception g1-eval --model g1=var/training/g1/runs/<name>/export/model_float32.tflite --out results/g1/<name>_e4.json
+# GPU container (Model Maker's one-shot trainer): docker build -f training/g1/Dockerfile -t petperception-g1 .
 ```
+
+**Recoverability.** A run can be interrupted at any point and continued
+in this or a new environment:
+* Checkpoint contents: model weights; optimizer slots and iteration (which
+  drive the learning-rate schedule); epoch and step within the epoch;
+  NumPy and Python RNG states; the per-epoch data-order seed. Also the
+  SHA-256 of the configuration, the training and development label files,
+  the script, and the weights themselves.
+* Resume: re-run the same command. The data order is replayed and the
+  completed steps are skipped. The run refuses to continue if the
+  configuration or data changed.
+* Verify: `--validate-only` restores the latest checkpoint, checks that
+  the weights hash matches the recorded one, and validates.
+* Durable copy: the workspace disk does not outlive the environment, and
+  weights are never committed. `training/g1/vault.py pack` turns a
+  checkpoint into SHA-256-verified text shards for object storage
+  (`docs/DATA_TRANSFER_REQUEST.md` section 6). `vault.py unpack` restores
+  it into a new run directory, which resumes or validates like the
+  original.
+* Measured on 2026-10-19 (`results/g1/cpu_training.json`):
+  - SIGTERM mid-epoch wrote a `signal` checkpoint (epoch 1, step 82) and
+    exited cleanly;
+  - a resume with a changed batch size was refused;
+  - `--validate-only` reported bit-identical weights;
+  - the vault round trip (2 shards, 20.8 MB) restored identical weights and
+    an identical development mAP50;
+  - the resumed run continued at optimizer iteration 458;
+  - a crash in the export step was recovered by re-running the command.
+* Not yet available: an object-store prefix with write access. Until one
+  exists, a checkpoint survives only as long as this environment.
 
 ## G2 - Licensed cat and dog keypoints (ears, tail, body)
 

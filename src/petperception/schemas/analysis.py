@@ -19,10 +19,11 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SCHEMA_VERSION = "1.3.0"
+SCHEMA_VERSION = "1.4.0"
 # 1.1.0 is additive (behavior segments, keypoints, verification); 1.2.0 adds person_interaction_candidate;
-# 1.3.0 adds on_furniture_candidate and BehaviorSegment.related_object.
-SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0", "1.3.0"]
+# 1.3.0 adds on_furniture_candidate and BehaviorSegment.related_object; 1.4.0 adds SoundEvent.subtype_validation.
+SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"]
+SubtypeValidation = Literal["passed", "failed", "not_evaluable", "not_evaluated"]
 
 Modality = Literal["audio", "video"]
 ComponentState = Literal["ok", "unavailable", "disabled", "failed", "skipped", "not_applicable"]
@@ -241,6 +242,8 @@ class SoundEvent(_Model):
     calibration_status: Literal["uncalibrated"] = "uncalibrated"
     calibrated_probability: None = None
     subtypes: dict[str, float] = Field(default_factory=dict)
+    subtype_validation: dict[str, SubtypeValidation] = Field(
+        default_factory=dict, description="validation status of each listed subtype (E21 gate); only 'passed' subtypes are shown or trigger interpretations")
     top_audioset_labels: list[tuple[str, float]] = Field(default_factory=list)
     attribution: Attribution
     evidence_id: str

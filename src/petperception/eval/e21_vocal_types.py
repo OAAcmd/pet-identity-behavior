@@ -89,6 +89,10 @@ TYPE_TARGETS = {
 TYPE_DECISION = {"meow": "meow", "purr": "purr", "hiss_cat": "hiss", "bark": "bark", "growl_any": "growl", "growl_dog": "growl"}
 NOT_EVALUABLE_TYPES = {k: "no FSD50K label" for k in ("caterwaul", "yip", "howl", "bow_wow", "whimper_dog")}
 GATE = {"f1": 0.7, "ci_low": 0.6}
+MIN_POSITIVES = 20  # fewer eval positives than this: "not_evaluable" (the E15 gate used the same minimum)
+# Product subtype key -> E21 target (the product's growl is species-ambiguous: growl_any).
+SUBTYPE_TARGET = {"meow": "meow", "purr": "purr", "hiss": "hiss_cat", "bark": "bark", "growl": "growl_any"}
+ARTIFACT = "artifacts/audio_subtype_validation.json"
 
 
 def _score_shard(args: tuple) -> dict:
@@ -267,7 +271,28 @@ def run(settings: Settings, out_dir: Path, workers: int = 3, n_boot: int = 1000,
     }
     write_json(out_dir / "metrics.json", out)
     write_json(out_dir / "summary.json", _summary(out))
+    write_json(REPO_ROOT / ARTIFACT, validation_artifact(out))
     return out
+
+
+def validation_artifact(out: dict) -> dict:
+    """Per-subtype status under the pre-set gate, read by both engines (shown / trigger only if 'passed')."""
+    subs: dict = {}
+    for k, t in SUBTYPE_TARGET.items():
+        a = out["results"]["vocalization_type"][t]["all"]
+        ci = a["f1_ci95_by_uploader"] or {}
+        if a["positives"] < MIN_POSITIVES:
+            subs[k] = {"status": "not_evaluable", "reason": f"{a['positives']} positives in FSD50K eval (minimum {MIN_POSITIVES})", "target": t}
+        else:
+            subs[k] = {"status": "passed" if a["passes_gate"] else "failed", "target": t, "positives": a["positives"],
+                       "f1": round(a["f1"], 4), "f1_ci95": [round(ci["ci_low"], 4), round(ci["ci_high"], 4)],
+                       "precision": round(a["precision"], 4) if a["precision"] is not None else None,
+                       "recall": round(a["recall"], 4) if a["recall"] is not None else None}
+    for k, why in NOT_EVALUABLE_TYPES.items():
+        subs[k] = {"status": "not_evaluable", "reason": why}
+    return {"format": "petperception.audio_subtype_validation/1", "source": "E21, FSD50K v1.0 eval, deployed operating point (results/e21/metrics.json)",
+            "gate": {**GATE, "min_positives": MIN_POSITIVES}, "rule": "a vocalization subtype is shown on the phone or used as an interpretation trigger only if its status is 'passed' (docs/TRAINING_PROGRAM.md G4)",
+            "created_at": out["created_at"], "subtypes": subs}
 
 
 def _summary(out: dict) -> dict:

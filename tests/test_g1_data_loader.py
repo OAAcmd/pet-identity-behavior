@@ -69,3 +69,28 @@ def test_coco_examples_keep_images_without_boxes_and_crowd_flags():
     assert a["xmin"] == [0.1, 0.0] and a["xmax"] == [0.4, 1.0] and a["ymin"] == [0.2, 0.0] and a["ymax"] == [0.6, 0.5]
     for _, _, _, _, b in out[1:]:  # the hard negative, and an image whose boxes are all invalid, stay as negatives
         assert all(b[k] == [] for k in ("xmin", "xmax", "ymin", "ymax", "category_id", "is_crowd"))
+
+
+def test_g1_labels_map_to_the_engine_names():
+    from petperception.vision.detector import label_list
+
+    assert label_list(b"background\ncat\ndog\nperson\ntable\nteddy_bear\nwindow\n") == [
+        "background", "cat", "dog", "person", "dining table", "teddy bear", "window"]
+    assert label_list(b"person\ndining table\n???\n") == ["person", "dining table", "???"]  # COCO maps unchanged
+
+
+def test_g1_export_loads_in_the_product_detector_if_present():
+    import numpy as np
+    import pytest
+
+    export = REPO / "var" / "training" / "g1" / "runs" / "light6k_mnv2" / "export"
+    paths = sorted(export.glob("model_*.tflite")) if export.exists() else []
+    if not paths:
+        pytest.skip("no G1 export in var/training/g1 (weights are never committed; see results/g1/cpu_training.json)")
+    from petperception.vision.detector import EfficientDetDetector
+
+    for p in paths:
+        det = EfficientDetDetector(p, 1)
+        assert {"cat", "dog", "person", "dining table", "teddy bear", "couch", "bed"} <= set(det.labels)
+        out = det.detect(np.zeros((240, 320, 3), np.uint8), ["cat", "dog", "dining table"], 0.05)
+        assert all(d.label in {"cat", "dog", "dining table"} and 0.0 <= d.score <= 1.0 for d in out)

@@ -782,6 +782,153 @@ Setup:
   The operating point stays 0.35 with the photo-fitted verifier, which
   both E19 and E19b confirm is worth keeping on video.
 
+### E21 - Audio decisions on FSD50K eval at the deployed operating point - COMPLETED
+
+The first large, independent test of the shipped audio decisions:
+* species presence, which E1 measured on 40 ESC-50 clips per species;
+* vocalization types (meow, purr, hiss, bark, growl) and context sounds
+  (doorbell, knock, thunder ...), never evaluated before.
+
+Data: FSD50K v1.0 eval split, 10,231 Freesound clips (27.4 h) with
+human-verified AudioSet labels. The archive MD5s match the Zenodo record.
+152 clips whose Freesound id is an ESC-50 source are removed, because E1's
+thresholds were selected on ESC-50. That leaves 10,079 clips from 2,284
+uploaders, none shared with the dev split.
+
+Protocol, fixed before scoring (`src/petperception/eval/e21_vocal_types.py`):
+* Nothing is tuned. The species thresholds (E1), growl 0.5, the subtype
+  gate 0.3 and the context threshold 0.3 are scored as shipped, through
+  `extract_events` and `vocal_tags`.
+* Targets come from the FSD50K labels. Two of them are not
+  species-specific: most "Hiss" clips are steam, fire or traffic, and
+  "Growling" includes wild animals and people. Cat hiss is therefore
+  "Hiss and Cat", and dog growl is "Growling and Dog".
+* 95 % CIs: bootstrap over uploaders.
+* Gate (`docs/TRAINING_PROGRAM.md` G4): a vocalization type is shown only
+  if F1 ≥ 0.7 and the lower bound ≥ 0.6.
+
+| Decision | Positives | Precision | Recall | F1 [95 % CI] | AP (ungated score) | Gate |
+| --- | --- | --- | --- | --- | --- | --- |
+| Cat vocalization present | 129 | 0.646 | 0.736 | 0.688 [0.623, 0.754] | 0.742 | (report only) |
+| Dog vocalization present | 170 | 0.912 | 0.606 | 0.728 [0.667, 0.789] | 0.750 | (report only) |
+| Meow | 75 | 0.794 | 0.667 | 0.725 [0.637, 0.806] | 0.777 | **pass** |
+| Purr | 60 | 0.623 | 0.800 | 0.701 [0.595, 0.795] | 0.810 | fail (lower bound) |
+| Bark | 115 | 0.824 | 0.652 | 0.728 [0.656, 0.797] | 0.671 | **pass** |
+| Growl (any species) | 50 | 0.550 | 0.440 | 0.489 [0.349, 0.607] | 0.474 | fail |
+| Growl (dog) | 33 | 0.425 | 0.515 | 0.466 [0.304, 0.622] | 0.482 | fail |
+| Cat hiss | 2 | - | - | - | - | not evaluable |
+| Caterwaul, yip, howl, bow-wow, whimper | - | - | - | - | - | not evaluable (no FSD50K label) |
+
+Context sounds at the shared threshold 0.3: music F1 0.770 and thunder
+0.797 pass the same bar. Speech 0.560, door 0.413, doorbell 0.378, knock
+0.412, dishes 0.277, cutlery 0.241, fireworks 0.315, alarm 0.413 and siren
+0.432 do not. Television, vacuum cleaner and baby cry have no FSD50K label.
+The CC0 + CC BY subset gives the same picture (`results/e21/summary.json`).
+
+Findings:
+* On independent data, species presence is lower than on ESC-50: cat
+  0.688 against 0.79 (E1), dog 0.728 against 0.90. Dog decisions are
+  precise (0.91) and miss about 40 % of barking clips.
+* Two types pass (meow, bark). Purr narrowly fails on its interval. Growl
+  is weak. Cat hiss cannot be measured: FSD50K eval has two clips.
+* False positives are acoustically plausible: purr on engines and
+  motorcycles, the hiss subtype on trains and traffic, speech on laughter
+  and chatter, fireworks on thunder and explosions.
+
+**Product consequence (implemented in both engines).** Validation status
+per subtype is written to `artifacts/audio_subtype_validation.json` and
+read by the server engine and the phone bundle (asset format 0.2.2):
+* Shown: only subtypes that passed (meow, bark), in the result text and
+  the PWA ("sounded like ...").
+* Hidden: the others remain in the JSON with their status
+  (`SoundEvent.subtype_validation`, result schema 1.4.0).
+* Triggers and support: unvalidated subtypes no longer open or support an
+  interpretation, so "tense" and "warning" (opened by hiss or growl) no
+  longer appear.
+* Conflicts: unvalidated subtypes still block one. A possible growl keeps
+  "relaxed" abstained (scenario S6), the cautious direction. A first
+  version that dropped them entirely let a growling cat be called
+  "relaxed"; E5 caught it.
+* Growl events are labelled "possible growl (unvalidated sound type)".
+
+### E21b - Audio thresholds selected on FSD50K dev, tested once on eval - COMPLETED
+
+Selection on the dev split (40,966 clips, 80.4 h, uploaders disjoint from
+eval), in two variants:
+* all clips;
+* CC0 + CC BY clips only (34,976). This variant would give thresholds
+  whose data permits commercial use.
+
+What is selected, F1-optimal on a 0.005 grid:
+* species thresholds;
+* per-subtype minimums, with growl selected jointly with the growl-event
+  threshold;
+* per-tag context thresholds.
+
+Adoption rule, fixed before the run: replace a deployed value only if the
+paired F1 difference on eval has a lower 95 % bound above 0. For the
+CC0 + CC BY variant the bound is above -0.02 (non-inferiority). The rule
+is evaluated with the exact engine rule, and the recomputed deployed-point
+F1s match E21 exactly (`results/e21b/metrics.json`).
+
+| Decision | Deployed F1 | Selected F1 (all) | Paired difference [95 % CI] | Adopted |
+| --- | --- | --- | --- | --- |
+| Cat present (threshold 0.738 → 0.855) | 0.688 | 0.702 | +0.014 [-0.045, +0.066] | no |
+| Dog present (0.801 → 0.59) | 0.728 | 0.714 | -0.014 [-0.057, +0.033] | no |
+| Dog present, CC0 + CC BY variant (0.67) | 0.728 | 0.743 | +0.015 [-0.009, +0.042] | **yes (non-inferior)** |
+| Meow / purr / bark subtype minimums | 0.725 / 0.701 / 0.728 | 0.661 / 0.724 / 0.715 | none above 0 | no |
+| Growl | 0.489 | 0.411 | -0.078 [-0.175, +0.012] | no |
+| Door / knock / thunder / fireworks | 0.413 / 0.412 / 0.797 / 0.315 | 0.466 / 0.526 / 0.840 / 0.569 | all lower bounds above 0 | **yes** |
+
+* The ESC-50 species thresholds hold up. Re-selecting them on 40k
+  Freesound clips does not improve eval F1. The selected cat threshold
+  trades recall for precision (0.65 → 0.82).
+* The subtype gate results are a property of YAMNet's scores, not of the
+  0.3 gate. No subtype threshold improves eval F1.
+* Per-tag context thresholds help door, knock, thunder and fireworks.
+  Only thunder (0.840) and music pass the gate.
+* For the commercial profile, FSD50K's CC0 + CC BY clips (collection
+  CC BY 4.0) give a licence-clean dog threshold (0.67) that is
+  non-inferior. The cat threshold from the same data was not shown to be
+  non-inferior (lower bound -0.045), so cat stays with A2 / Q-A2.
+* Out-of-domain check on ESC-50, where the deployed values are in-sample:
+  the FSD50K-selected thresholds give cat 0.738 and dog 0.879 (all) /
+  0.920 (CC0 + CC BY), against 0.816 / 0.938 in-sample.
+* Not yet applied in the engines: per-tag context thresholds and the
+  commercial dog threshold need a thresholds-file format with per-tag
+  values (both engines). Scheduled with the next audio change.
+
+### E22 - Dog bark context (Yin & McCowan 2004, via BEANS) - COMPLETED, research only
+
+The dog counterpart of E2:
+* data: 693 barks from 10 dogs of 6 breeds;
+* contexts from the package's `annotations.csv`: aggression 99, contact
+  385, play 209. The mapping to the paper's situations (stranger at the
+  door, isolation, play) is unconfirmed, so the CSV terms are reported;
+* the 901 MB archive was verified by MD5 in one streaming pass and read
+  member by member, never stored;
+* protocol as E2: outer leave-one-dog-out (and leave-one-breed-out),
+  inner grouped selection of C, dog-level bootstrap.
+
+| Features (logistic regression) | Leave-one-dog-out macro-F1 [95 % CI] | Leave-one-breed-out |
+| --- | --- | --- |
+| YAMNet embeddings (mean + max) | **0.722 [0.641, 0.785]** | 0.696 [0.613, 0.760] |
+| MFCC statistics | 0.651 [0.508, 0.749] | 0.570 [0.428, 0.657] |
+| Majority / stratified random | 0.238 / 0.333 | |
+| Random split (leakage diagnostic, invalid) | 0.822 | |
+
+* Bark context is far more learnable than meow context (E2: 0.46), and
+  it transfers across breeds. The YAMNet variant is the one the phone
+  could run, once the bundle's YAMNet exposes its embedding.
+* The random-split figure shows how much dog identity inflates a naive
+  estimate.
+* Not shipped:
+  - the data has no stated licence (research only);
+  - 10 dogs recorded by one study is narrow;
+  - the labels describe the recording situation, not the dog's state.
+  A release needs licensed, household-recorded barks with owner-reported
+  situations.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

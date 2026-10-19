@@ -61,7 +61,8 @@
      "checksums": {
       "sha256": "ce30c523eefea45d169e9ac060baae328d10f5daa5e993138729c606caf77abd"
      },
-     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+     "size": 92664584,
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; content-length measured 2026-10-19; metadata (sqlite set lists, eval batches)"
     },
     {
      "file": "cat_000.zip",
@@ -70,7 +71,8 @@
      "checksums": {
       "sha256": "e94cea08cd61dfa31f353c766316271be68c397add5586a0f4663f3816508057"
      },
-     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+     "size": 44449676,
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; content-length measured 2026-10-19; cat annotations and LICENSE (frame_annotations.jgz, sequence_annotations.jgz, set lists); no frames"
     },
     {
      "file": "cat_001.zip",
@@ -79,7 +81,8 @@
      "checksums": {
       "sha256": "7fba200b39c1e9f8a9783e54b9c1e6fb65d31b032a26b9a6f15f3dea78a44187"
      },
-     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+     "size": 19853513025,
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; content-length measured 2026-10-19; cat frames and masks: 209 sequences, 41,286 frames (central directory read 2026-10-19); read by Range, never stored"
     },
     {
      "file": "dog_000.zip",
@@ -88,7 +91,8 @@
      "checksums": {
       "sha256": "186cc7b6b8c06ff0b51f4b8d4da1d2aee085df5ec80712976580d55b9c8bce55"
      },
-     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+     "size": 66705650,
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; content-length measured 2026-10-19; dog annotations and LICENSE; no frames"
     },
     {
      "file": "dog_001.zip",
@@ -97,7 +101,8 @@
      "checksums": {
       "sha256": "6be8e1f92fa3edbb3fe86c5fb925652e2000ee799a23deabc4b09194ebd1a99b"
      },
-     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; about 20 GB per archive except metadata"
+     "size": 19882298508,
+     "note": "sha256 from links/cop3d_sha256.json in facebookresearch/cop3d; content-length measured 2026-10-19; dog frames and masks; read by Range, never stored"
     }
    ]
   },

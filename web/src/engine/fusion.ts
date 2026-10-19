@@ -16,7 +16,8 @@ export interface EvidenceItem {
   provenance: { component: string; model_id: string | null; root: string; method: string };
 }
 
-export interface Ev { item: EvidenceItem; root: string; tags: Set<string>; strength: number; attributed_track: string | null }
+/** conflict_tags: tags that may only block a hypothesis (unvalidated sound subtypes, E21), never trigger or support it. */
+export interface Ev { item: EvidenceItem; root: string; tags: Set<string>; strength: number; attributed_track: string | null; conflict_tags?: Set<string> }
 
 export interface Hypothesis {
   hypothesis_id: string; name: string; semantic_type: string; status: "experimental_hypothesis" | "insufficient_evidence" | "abstained";
@@ -145,7 +146,8 @@ export class FusionEngine {
       for (const a of relevant) for (const b of relevant) if (a.root !== b.root && c.co_occurrence_window_s < gap(a, b) && gap(a, b) <= c.max_evidence_age_s) stale.push(a);
     }
     const used = best.length ? best : relevant;
-    const conflicts = pool.filter((e) => inter(e.tags, rule.conflicts).length && (!best.length || best.some((b) => gap(e, b) <= c.co_occurrence_window_s)));
+    const conflicts = pool.filter((e) => (inter(e.tags, rule.conflicts).length || inter(e.conflict_tags ?? new Set<string>(), rule.conflicts).length)
+      && (!best.length || best.some((b) => gap(e, b) <= c.co_occurrence_window_s)));
     const op = new Map<string, number>();
     for (const e of used) for (const t of inter(e.tags, Object.keys(rule.tag_scores))) op.set(e.root, Math.max(op.get(e.root) ?? 0.5, this.expert(e, t, rule)));
     const relevantRoots = new Set(Object.keys(rule.tag_scores).map((t) => ["vocalization", "bark", "howl", "doorbell", "knock", "hiss", "growl", "purr"].includes(t)

@@ -26,7 +26,7 @@
   ],
   "assets": {
     "cat_crops": 58,
-    "dog_crops": 142,
+    "dog_crops": 144,
     "backgrounds": 60,
     "crop_screening": {
       "candidates": {
@@ -35,7 +35,7 @@
       },
       "kept": {
         "cat": 58,
-        "dog": 142
+        "dog": 144
       }
     },
     "background_fetch_errors": 0,
@@ -52,16 +52,16 @@
     "iou": {
       "tracking": {
         "gt": 381,
-        "pred": 358,
-        "tp": 322,
-        "fp": 36,
-        "fn": 59,
-        "idsw": 11,
-        "idtp": 251,
-        "mota": 0.7217847769028871,
-        "idf1": 0.6792963464140731,
-        "detection_recall": 0.8451443569553806,
-        "detection_precision": 0.8994413407821229
+        "pred": 328,
+        "tp": 326,
+        "fp": 2,
+        "fn": 55,
+        "idsw": 8,
+        "idtp": 267,
+        "mota": 0.8293963254593175,
+        "idf1": 0.7531734837799718,
+        "detection_recall": 0.8556430446194225,
+        "detection_precision": 0.9939024390243902
       },
       "tracking_by_script": {
         "still_walk_still": {
@@ -78,27 +78,27 @@
         },
         "run_burst": {
           "gt": 37,
-          "pred": 51,
-          "tp": 34,
-          "fp": 17,
-          "fn": 3,
+          "pred": 35,
+          "tp": 35,
+          "fp": 0,
+          "fn": 2,
           "idsw": 2,
           "idtp": 18,
-          "tracks": 5,
+          "tracks": 4,
           "sequences": 2,
-          "idf1": 0.4090909090909091
+          "idf1": 0.5
         },
         "pacing": {
           "gt": 62,
-          "pred": 41,
+          "pred": 22,
           "tp": 22,
-          "fp": 19,
+          "fp": 0,
           "fn": 40,
-          "idsw": 2,
-          "idtp": 9,
-          "tracks": 5,
+          "idsw": 0,
+          "idtp": 22,
+          "tracks": 1,
           "sequences": 2,
-          "idf1": 0.17475728155339806
+          "idf1": 0.5238095238095238
         },
         "zone_visit": {
           "gt": 69,
@@ -114,15 +114,15 @@
         },
         "exit_return": {
           "gt": 39,
-          "pred": 36,
-          "tp": 36,
-          "fp": 0,
-          "fn": 3,
+          "pred": 41,
+          "tp": 39,
+          "fp": 2,
+          "fn": 0,
           "idsw": 2,
-          "idtp": 19,
+          "idtp": 20,
           "tracks": 4,
           "sequences": 2,
-          "idf1": 0.5066666666666667
+          "idf1": 0.5
         },
         "two_cross": {
           "gt": 60,
@@ -142,11 +142,11 @@
           "tp": 19,
           "fp": 0,
           "fn": 6,
-          "idsw": 2,
-          "idtp": 11,
-          "tracks": 4,
+          "idsw": 1,
+          "idtp": 13,
+          "tracks": 3,
           "sequences": 2,
-          "idf1": 0.5
+          "idf1": 0.5909090909090909
         },
         "camera_pan": {
           "gt": 31,
@@ -220,43 +220,43 @@
         },
         "moving": {
           "gt": 6,
-          "pred": 7,
+          "pred": 3,
           "matched": 3,
           "recall": 0.5,
-          "precision": 0.42857142857142855,
+          "precision": 1.0,
           "median_max_boundary_error_s": 0.2999999999999998
         },
         "pacing_candidate": {
           "gt": 2,
-          "pred": 0,
-          "matched": 0,
-          "recall": 0.0,
-          "precision": null,
-          "median_max_boundary_error_s": null
+          "pred": 1,
+          "matched": 1,
+          "recall": 0.5,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.6999999999999993
         },
         "stationary": {
           "gt": 10,
-          "pred": 11,
+          "pred": 10,
           "matched": 10,
           "recall": 1.0,
-          "precision": 0.9090909090909091,
-          "median_max_boundary_error_s": 0.25
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.20000000000000018
         }
       }
     },
     "kalman": {
       "tracking": {
         "gt": 381,
-        "pred": 360,
-        "tp": 324,
-        "fp": 36,
-        "fn": 57,
-        "idsw": 10,
-        "idtp": 281,
-        "mota": 0.7296587926509186,
-        "idf1": 0.7584345479082322,
-        "detection_recall": 0.8503937007874016,
-        "detection_precision": 0.9
+        "pred": 330,
+        "tp": 328,
+        "fp": 2,
+        "fn": 53,
+        "idsw": 5,
+        "idtp": 303,
+        "mota": 0.8425196850393701,
+        "idf1": 0.8523206751054853,
+        "detection_recall": 0.8608923884514436,
+        "detection_precision": 0.9939393939393939
       },
       "tracking_by_script": {
         "still_walk_still": {
@@ -273,27 +273,27 @@
         },
         "run_burst": {
           "gt": 37,
-          "pred": 52,
-          "tp": 35,
-          "fp": 17,
-          "fn": 2,
-          "idsw": 1,
-          "idtp": 27,
-          "tracks": 4,
+          "pred": 37,
+          "tp": 37,
+          "fp": 0,
+          "fn": 0,
+          "idsw": 0,
+          "idtp": 37,
+          "tracks": 2,
           "sequences": 2,
-          "idf1": 0.6067415730337079
+          "idf1": 1.0
         },
         "pacing": {
           "gt": 62,
-          "pred": 41,
+          "pred": 22,
           "tp": 22,
-          "fp": 19,
+          "fp": 0,
           "fn": 40,
-          "idsw": 3,
-          "idtp": 13,
-          "tracks": 2,
+          "idsw": 0,
+          "idtp": 22,
+          "tracks": 1,
           "sequences": 2,
-          "idf1": 0.2524271844660194
+          "idf1": 0.5238095238095238
         },
         "zone_visit": {
           "gt": 69,
@@ -309,15 +309,15 @@
         },
         "exit_return": {
           "gt": 39,
-          "pred": 36,
-          "tp": 36,
-          "fp": 0,
-          "fn": 3,
+          "pred": 41,
+          "tp": 39,
+          "fp": 2,
+          "fn": 0,
           "idsw": 2,
-          "idtp": 19,
+          "idtp": 20,
           "tracks": 4,
           "sequences": 2,
-          "idf1": 0.5066666666666667
+          "idf1": 0.5
         },
         "two_cross": {
           "gt": 60,
@@ -333,15 +333,15 @@
         },
         "occlusion": {
           "gt": 25,
-          "pred": 20,
-          "tp": 20,
+          "pred": 19,
+          "tp": 19,
           "fp": 0,
-          "fn": 5,
-          "idsw": 1,
-          "idtp": 17,
-          "tracks": 3,
+          "fn": 6,
+          "idsw": 0,
+          "idtp": 19,
+          "tracks": 2,
           "sequences": 2,
-          "idf1": 0.7555555555555555
+          "idf1": 0.8636363636363636
         },
         "camera_pan": {
           "gt": 31,
@@ -359,11 +359,11 @@
       "segments": {
         "active_bout": {
           "gt": 2,
-          "pred": 1,
-          "matched": 1,
-          "recall": 0.5,
+          "pred": 2,
+          "matched": 2,
+          "recall": 1.0,
           "precision": 1.0,
-          "median_max_boundary_error_s": 0.0
+          "median_max_boundary_error_s": 0.10000000000000009
         },
         "approach_zone": {
           "gt": 2,
@@ -416,26 +416,26 @@
         "moving": {
           "gt": 6,
           "pred": 5,
-          "matched": 4,
-          "recall": 0.6666666666666666,
-          "precision": 0.8,
-          "median_max_boundary_error_s": 0.25
+          "matched": 5,
+          "recall": 0.8333333333333334,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.3000000000000007
         },
         "pacing_candidate": {
           "gt": 2,
-          "pred": 2,
+          "pred": 1,
           "matched": 1,
           "recall": 0.5,
-          "precision": 0.5,
+          "precision": 1.0,
           "median_max_boundary_error_s": 0.6999999999999993
         },
         "stationary": {
           "gt": 10,
-          "pred": 11,
+          "pred": 10,
           "matched": 10,
           "recall": 1.0,
-          "precision": 0.9090909090909091,
-          "median_max_boundary_error_s": 0.2999999999999998
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.30000000000000027
         }
       }
     }
@@ -445,41 +445,41 @@
     "iou": {
       "tracking": {
         "gt": 1173,
-        "pred": 1063,
-        "tp": 1026,
-        "fp": 37,
-        "fn": 147,
-        "idsw": 22,
-        "idtp": 877,
-        "mota": 0.8243819266837169,
-        "idf1": 0.7844364937388193,
-        "detection_recall": 0.8746803069053708,
-        "detection_precision": 0.9651928504233303
+        "pred": 1023,
+        "tp": 1009,
+        "fp": 14,
+        "fn": 164,
+        "idsw": 24,
+        "idtp": 871,
+        "mota": 0.8277919863597613,
+        "idf1": 0.7932604735883424,
+        "detection_recall": 0.8601875532821824,
+        "detection_precision": 0.9863147605083089
       },
       "tracking_by_script": {
         "still_walk_still": {
           "gt": 172,
-          "pred": 112,
+          "pred": 122,
           "tp": 112,
-          "fp": 0,
+          "fp": 10,
           "fn": 60,
           "idsw": 0,
           "idtp": 112,
-          "tracks": 4,
+          "tracks": 5,
           "sequences": 6,
-          "idf1": 0.7887323943661971
+          "idf1": 0.7619047619047619
         },
         "run_burst": {
           "gt": 112,
-          "pred": 106,
-          "tp": 106,
+          "pred": 107,
+          "tp": 107,
           "fp": 0,
-          "fn": 6,
-          "idsw": 6,
-          "idtp": 54,
-          "tracks": 12,
+          "fn": 5,
+          "idsw": 5,
+          "idtp": 64,
+          "tracks": 11,
           "sequences": 6,
-          "idf1": 0.4954128440366973
+          "idf1": 0.5844748858447488
         },
         "pacing": {
           "gt": 185,
@@ -507,27 +507,27 @@
         },
         "exit_return": {
           "gt": 117,
-          "pred": 143,
+          "pred": 111,
           "tp": 107,
-          "fp": 36,
+          "fp": 4,
           "fn": 10,
           "idsw": 6,
           "idtp": 55,
-          "tracks": 13,
+          "tracks": 12,
           "sequences": 6,
-          "idf1": 0.4230769230769231
+          "idf1": 0.4824561403508772
         },
         "two_cross": {
           "gt": 200,
-          "pred": 158,
-          "tp": 157,
-          "fp": 1,
-          "fn": 43,
-          "idsw": 5,
-          "idtp": 133,
+          "pred": 139,
+          "tp": 139,
+          "fp": 0,
+          "fn": 61,
+          "idsw": 8,
+          "idtp": 117,
           "tracks": 15,
           "sequences": 6,
-          "idf1": 0.7430167597765364
+          "idf1": 0.6902654867256637
         },
         "occlusion": {
           "gt": 79,
@@ -557,11 +557,11 @@
       "segments": {
         "active_bout": {
           "gt": 6,
-          "pred": 0,
-          "matched": 0,
-          "recall": 0.0,
-          "precision": null,
-          "median_max_boundary_error_s": null
+          "pred": 1,
+          "matched": 1,
+          "recall": 0.16666666666666666,
+          "precision": 1.0,
+          "median_max_boundary_error_s": 0.2999999999999998
         },
         "approach_zone": {
           "gt": 6,
@@ -613,11 +613,11 @@
         },
         "moving": {
           "gt": 18,
-          "pred": 10,
-          "matched": 10,
-          "recall": 0.5555555555555556,
+          "pred": 11,
+          "matched": 11,
+          "recall": 0.6111111111111112,
           "precision": 1.0,
-          "median_max_boundary_error_s": 0.24999999999999956
+          "median_max_boundary_error_s": 0.20000000000000018
         },
         "pacing_candidate": {
           "gt": 6,
@@ -629,10 +629,10 @@
         },
         "stationary": {
           "gt": 30,
-          "pred": 25,
+          "pred": 26,
           "matched": 25,
           "recall": 0.8333333333333334,
-          "precision": 1.0,
+          "precision": 0.9615384615384616,
           "median_max_boundary_error_s": 0.20000000000000018
         }
       }
@@ -640,29 +640,29 @@
     "kalman": {
       "tracking": {
         "gt": 1173,
-        "pred": 1075,
-        "tp": 1037,
-        "fp": 38,
-        "fn": 136,
-        "idsw": 11,
-        "idtp": 966,
-        "mota": 0.8422847399829497,
-        "idf1": 0.8594306049822064,
-        "detection_recall": 0.8840579710144928,
-        "detection_precision": 0.9646511627906976
+        "pred": 1033,
+        "tp": 1019,
+        "fp": 14,
+        "fn": 154,
+        "idsw": 14,
+        "idtp": 944,
+        "mota": 0.844842284739983,
+        "idf1": 0.8558476881233001,
+        "detection_recall": 0.8687127024722933,
+        "detection_precision": 0.9864472410454985
       },
       "tracking_by_script": {
         "still_walk_still": {
           "gt": 172,
-          "pred": 112,
+          "pred": 122,
           "tp": 112,
-          "fp": 0,
+          "fp": 10,
           "fn": 60,
           "idsw": 0,
           "idtp": 112,
-          "tracks": 4,
+          "tracks": 5,
           "sequences": 6,
-          "idf1": 0.7887323943661971
+          "idf1": 0.7619047619047619
         },
         "run_burst": {
           "gt": 112,
@@ -702,27 +702,27 @@
         },
         "exit_return": {
           "gt": 117,
-          "pred": 144,
+          "pred": 112,
           "tp": 108,
-          "fp": 36,
+          "fp": 4,
           "fn": 9,
           "idsw": 6,
           "idtp": 55,
-          "tracks": 13,
+          "tracks": 12,
           "sequences": 6,
-          "idf1": 0.421455938697318
+          "idf1": 0.48034934497816595
         },
         "two_cross": {
           "gt": 200,
-          "pred": 159,
-          "tp": 157,
-          "fp": 2,
-          "fn": 43,
-          "idsw": 5,
-          "idtp": 139,
-          "tracks": 14,
+          "pred": 139,
+          "tp": 139,
+          "fp": 0,
+          "fn": 61,
+          "idsw": 8,
+          "idtp": 117,
+          "tracks": 15,
           "sequences": 6,
-          "idf1": 0.7743732590529248
+          "idf1": 0.6902654867256637
         },
         "occlusion": {
           "gt": 79,
@@ -824,10 +824,10 @@
         },
         "stationary": {
           "gt": 30,
-          "pred": 25,
+          "pred": 26,
           "matched": 25,
           "recall": 0.8333333333333334,
-          "precision": 1.0,
+          "precision": 0.9615384615384616,
           "median_max_boundary_error_s": 0.2999999999999998
         }
       }
@@ -852,6 +852,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -860,7 +866,7 @@
                 0.0
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -874,12 +880,6 @@
                 0.0,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -900,6 +900,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -908,7 +914,7 @@
                 0.0
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -922,12 +928,6 @@
                 0.0,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -956,13 +956,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -970,12 +976,6 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -996,13 +996,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1010,12 +1016,6 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1044,6 +1044,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1052,7 +1058,7 @@
                 0.40000000000000036
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1066,17 +1072,12 @@
                 0.40000000000000036,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -1092,6 +1093,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1100,7 +1107,7 @@
                 0.40000000000000036
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1114,17 +1121,12 @@
                 0.40000000000000036,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -1148,13 +1150,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1162,12 +1170,6 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1188,13 +1190,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1202,12 +1210,6 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1227,15 +1229,21 @@
         "iou": {
           "tracking": {
             "gt": 28,
-            "pred": 28,
+            "pred": 38,
             "tp": 28,
-            "fp": 0,
+            "fp": 10,
             "fn": 0,
             "idsw": 0,
             "idtp": 28,
-            "n_tracks": 1
+            "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1244,7 +1252,7 @@
                 0.09999999999999964
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1252,22 +1260,17 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 2,
+              "pred": 3,
               "matched": 2,
               "max_boundary_errors_s": [
                 0.0,
                 0.1999999999999993
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
-          "verifier_rejections": 1,
+          "verifier_rejections": 0,
           "predicted_kinds": [
+            "left_view",
             "moving",
             "stationary"
           ]
@@ -1275,15 +1278,21 @@
         "kalman": {
           "tracking": {
             "gt": 28,
-            "pred": 28,
+            "pred": 38,
             "tp": 28,
-            "fp": 0,
+            "fp": 10,
             "fn": 0,
             "idsw": 0,
             "idtp": 28,
-            "n_tracks": 1
+            "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1292,7 +1301,7 @@
                 0.09999999999999964
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1300,22 +1309,17 @@
             },
             "stationary": {
               "gt": 2,
-              "pred": 2,
+              "pred": 3,
               "matched": 2,
               "max_boundary_errors_s": [
                 0.0,
                 0.1999999999999993
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
-          "verifier_rejections": 1,
+          "verifier_rejections": 0,
           "predicted_kinds": [
+            "left_view",
             "moving",
             "stationary"
           ]
@@ -1340,6 +1344,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1348,7 +1358,7 @@
                 0.2999999999999998
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1362,12 +1372,6 @@
                 0.2999999999999998,
                 0.3000000000000007
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -1388,6 +1392,12 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1396,7 +1406,7 @@
                 0.2999999999999998
               ]
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -1410,12 +1420,6 @@
                 0.2999999999999998,
                 0.3000000000000007
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -1444,14 +1448,20 @@
             "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
-              "gt": 1,
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1464,18 +1474,13 @@
                 0.5,
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "entered_view",
             "left_view",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -1491,6 +1496,14 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1499,13 +1512,11 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.2999999999999998
-              ]
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             },
             "stationary": {
               "gt": 2,
@@ -1515,18 +1526,13 @@
                 0.5,
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "active_bout",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -1550,14 +1556,20 @@
             "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
-              "gt": 1,
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1570,18 +1582,13 @@
                 0.5,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "entered_view",
             "left_view",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -1597,6 +1604,14 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1605,13 +1620,11 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.0
-              ]
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             },
             "stationary": {
               "gt": 2,
@@ -1621,18 +1634,13 @@
                 0.5,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "active_bout",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -1647,23 +1655,33 @@
         "iou": {
           "tracking": {
             "gt": 19,
-            "pred": 18,
-            "tp": 18,
+            "pred": 19,
+            "tp": 19,
             "fp": 0,
-            "fn": 1,
-            "idsw": 1,
-            "idtp": 9,
-            "n_tracks": 2
+            "fn": 0,
+            "idsw": 0,
+            "idtp": 19,
+            "n_tracks": 1
           },
           "segments": {
-            "moving": {
-              "gt": 1,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "active_bout": {
               "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.2999999999999998
+              ]
+            },
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1676,18 +1694,13 @@
                 0.0,
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
-            "entered_view",
-            "left_view",
+            "active_bout",
+            "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -1703,14 +1716,6 @@
             "n_tracks": 1
           },
           "segments": {
-            "moving": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.5
-              ]
-            },
             "active_bout": {
               "gt": 1,
               "pred": 1,
@@ -1719,12 +1724,11 @@
                 0.2999999999999998
               ]
             },
-            "stationary": {
-              "gt": 2,
-              "pred": 2,
-              "matched": 2,
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
               "max_boundary_errors_s": [
-                0.5,
                 0.20000000000000018
               ]
             },
@@ -1733,12 +1737,22 @@
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.0,
+                0.20000000000000018
+              ]
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "active_bout",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -1762,14 +1776,20 @@
             "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
-              "gt": 1,
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1782,18 +1802,13 @@
                 0.0,
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "entered_view",
             "left_view",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -1809,6 +1824,14 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.20000000000000018
+              ]
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -1817,13 +1840,11 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.20000000000000018
-              ]
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             },
             "stationary": {
               "gt": 2,
@@ -1833,18 +1854,13 @@
                 0.5,
                 0.2999999999999998
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "active_bout",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -1868,14 +1884,20 @@
             "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
-              "gt": 1,
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1888,12 +1910,6 @@
                 0.0,
                 0.09999999999999964
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -1915,14 +1931,6 @@
             "n_tracks": 1
           },
           "segments": {
-            "moving": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.09999999999999964
-              ]
-            },
             "active_bout": {
               "gt": 1,
               "pred": 1,
@@ -1931,13 +1939,12 @@
                 0.09999999999999964
               ]
             },
-            "stationary": {
-              "gt": 2,
-              "pred": 2,
-              "matched": 2,
+            "moving": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
               "max_boundary_errors_s": [
-                0.0,
-                0.09999999999999964
+                0.5
               ]
             },
             "pacing_candidate": {
@@ -1945,6 +1952,15 @@
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
+            },
+            "stationary": {
+              "gt": 2,
+              "pred": 2,
+              "matched": 2,
+              "max_boundary_errors_s": [
+                0.5,
+                0.09999999999999964
+              ]
             }
           },
           "verifier_rejections": 0,
@@ -1974,14 +1990,20 @@
             "n_tracks": 2
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 1,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
-              "gt": 1,
+            "pacing_candidate": {
+              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -1991,15 +2013,9 @@
               "pred": 2,
               "matched": 2,
               "max_boundary_errors_s": [
-                0.0,
+                0.5,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2021,6 +2037,14 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.0
+              ]
+            },
             "moving": {
               "gt": 1,
               "pred": 1,
@@ -2029,13 +2053,11 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.0
-              ]
+            "pacing_candidate": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             },
             "stationary": {
               "gt": 2,
@@ -2045,12 +2067,6 @@
                 0.5,
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2088,12 +2104,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2101,6 +2111,12 @@
               "max_boundary_errors_s": [
                 0.5999999999999996
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2129,12 +2145,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2142,6 +2152,12 @@
               "max_boundary_errors_s": [
                 0.5999999999999996
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2178,12 +2194,6 @@
                 0.0
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2191,11 +2201,18 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "pacing_candidate"
           ]
         },
@@ -2219,12 +2236,6 @@
                 0.0
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2232,11 +2243,18 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "pacing_candidate"
           ]
         }
@@ -2268,12 +2286,6 @@
                 0.1999999999999993
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2281,6 +2293,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2309,12 +2327,6 @@
                 0.1999999999999993
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2322,6 +2334,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2358,12 +2376,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2371,6 +2383,12 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2401,12 +2419,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2414,6 +2426,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2450,12 +2468,6 @@
                 0.0
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2463,6 +2475,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2491,12 +2509,6 @@
                 0.0
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2504,6 +2516,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2540,12 +2558,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2553,11 +2565,18 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "pacing_candidate"
           ]
         },
@@ -2581,12 +2600,6 @@
                 0.5
               ]
             },
-            "active_bout": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "pacing_candidate": {
               "gt": 1,
               "pred": 1,
@@ -2594,11 +2607,18 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
             "moving",
+            "on_furniture_candidate",
             "pacing_candidate"
           ]
         }
@@ -2622,15 +2642,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2638,7 +2650,7 @@
                 0.2999999999999998
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2653,6 +2665,14 @@
               "max_boundary_errors_s": [
                 0.40000000000000036
               ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
             }
           },
           "verifier_rejections": 0,
@@ -2662,6 +2682,7 @@
             "enter_zone",
             "leave_zone",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -2677,15 +2698,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2693,7 +2706,7 @@
                 0.2999999999999998
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2708,6 +2721,14 @@
               "max_boundary_errors_s": [
                 0.40000000000000036
               ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
+              ]
             }
           },
           "verifier_rejections": 0,
@@ -2717,6 +2738,7 @@
             "enter_zone",
             "leave_zone",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -2740,15 +2762,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2756,7 +2770,7 @@
                 0.9000000000000004
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2770,6 +2784,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 1.0
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -2795,15 +2817,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2811,7 +2825,7 @@
                 0.9000000000000004
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2825,6 +2839,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 1.0
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -2858,13 +2880,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2872,7 +2888,7 @@
                 0.0
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2887,6 +2903,12 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2910,13 +2932,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2924,7 +2940,7 @@
                 0.0
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2939,6 +2955,12 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -2970,15 +2992,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -2986,7 +3000,7 @@
                 0.09999999999999964
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3000,6 +3014,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 0.40000000000000036
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3025,15 +3047,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3041,7 +3055,7 @@
                 0.09999999999999964
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3055,6 +3069,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 0.40000000000000036
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3088,12 +3110,12 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
-                2.0
+                0.40000000000000036
               ]
             },
             "enter_zone": {
@@ -3104,20 +3126,20 @@
                 0.20000000000000018
               ]
             },
-            "dwell_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.40000000000000036
-              ]
-            },
             "leave_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.09999999999999964
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3128,6 +3150,7 @@
             "enter_zone",
             "leave_zone",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -3143,12 +3166,12 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
-                2.0
+                0.40000000000000036
               ]
             },
             "enter_zone": {
@@ -3159,20 +3182,20 @@
                 0.20000000000000018
               ]
             },
-            "dwell_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.40000000000000036
-              ]
-            },
             "leave_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.09999999999999964
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3183,6 +3206,7 @@
             "enter_zone",
             "leave_zone",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -3206,15 +3230,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3222,7 +3238,7 @@
                 0.40000000000000036
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3236,6 +3252,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 0.40000000000000036
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3261,15 +3285,7 @@
             "n_tracks": 1
           },
           "segments": {
-            "approach_zone": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                2.0
-              ]
-            },
-            "enter_zone": {
+            "dwell_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3277,7 +3293,7 @@
                 0.40000000000000036
               ]
             },
-            "dwell_zone": {
+            "enter_zone": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
@@ -3291,6 +3307,14 @@
               "matched": 1,
               "max_boundary_errors_s": [
                 0.40000000000000036
+              ]
+            },
+            "approach_zone": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                2.0
               ]
             }
           },
@@ -3324,12 +3348,6 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
@@ -3337,6 +3355,12 @@
               "max_boundary_errors_s": [
                 0.5
               ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -3359,20 +3383,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.5999999999999996
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.5
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.5999999999999996
               ]
             }
           },
@@ -3404,12 +3428,6 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
@@ -3417,6 +3435,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -3439,12 +3463,6 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
@@ -3452,6 +3470,12 @@
               "max_boundary_errors_s": [
                 1.0
               ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 0,
+              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -3473,23 +3497,15 @@
         "iou": {
           "tracking": {
             "gt": 20,
-            "pred": 53,
+            "pred": 21,
             "tp": 20,
-            "fp": 33,
+            "fp": 1,
             "fn": 0,
             "idsw": 1,
             "idtp": 10,
-            "n_tracks": 3
+            "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.40000000000000036
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
@@ -3497,36 +3513,37 @@
               "max_boundary_errors_s": [
                 0.0
               ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
             }
           },
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
             "entered_view",
             "left_view",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         },
         "kalman": {
           "tracking": {
             "gt": 20,
-            "pred": 53,
+            "pred": 21,
             "tp": 20,
-            "fp": 33,
+            "fp": 1,
             "fn": 0,
             "idsw": 1,
             "idtp": 10,
-            "n_tracks": 3
+            "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.40000000000000036
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
@@ -3534,13 +3551,22 @@
               "max_boundary_errors_s": [
                 0.0
               ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.40000000000000036
+              ]
             }
           },
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
             "entered_view",
             "left_view",
             "moving",
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -3564,20 +3590,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.09999999999999964
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.5
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
               ]
             }
           },
@@ -3601,20 +3627,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.09999999999999964
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.5
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
               ]
             }
           },
@@ -3646,20 +3672,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.1999999999999993
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.0
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
               ]
             }
           },
@@ -3683,20 +3709,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.1999999999999993
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.0
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.1999999999999993
               ]
             }
           },
@@ -3728,20 +3754,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.09999999999999964
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.0
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
               ]
             }
           },
@@ -3765,20 +3791,20 @@
             "n_tracks": 2
           },
           "segments": {
-            "entered_view": {
-              "gt": 1,
-              "pred": 1,
-              "matched": 1,
-              "max_boundary_errors_s": [
-                0.09999999999999964
-              ]
-            },
             "left_view": {
               "gt": 1,
               "pred": 1,
               "matched": 1,
               "max_boundary_errors_s": [
                 0.0
+              ]
+            },
+            "entered_view": {
+              "gt": 1,
+              "pred": 1,
+              "matched": 1,
+              "max_boundary_errors_s": [
+                0.09999999999999964
               ]
             }
           },
@@ -3845,12 +3871,12 @@
         "iou": {
           "tracking": {
             "gt": 34,
-            "pred": 32,
-            "tp": 31,
-            "fp": 1,
-            "fn": 3,
-            "idsw": 2,
-            "idtp": 24,
+            "pred": 29,
+            "tp": 29,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 23,
             "n_tracks": 3
           },
           "segments": {},
@@ -3864,17 +3890,19 @@
         "kalman": {
           "tracking": {
             "gt": 34,
-            "pred": 32,
-            "tp": 31,
-            "fp": 1,
-            "fn": 3,
-            "idsw": 2,
-            "idtp": 30,
-            "n_tracks": 2
+            "pred": 29,
+            "tp": 29,
+            "fp": 0,
+            "fn": 5,
+            "idsw": 1,
+            "idtp": 23,
+            "n_tracks": 3
           },
           "segments": {},
           "verifier_rejections": 0,
           "predicted_kinds": [
+            "entered_view",
+            "left_view",
             "moving"
           ]
         }
@@ -3935,10 +3963,10 @@
         "iou": {
           "tracking": {
             "gt": 32,
-            "pred": 30,
-            "tp": 30,
+            "pred": 29,
+            "tp": 29,
             "fp": 0,
-            "fn": 2,
+            "fn": 3,
             "idsw": 1,
             "idtp": 23,
             "n_tracks": 3
@@ -3948,16 +3976,17 @@
           "predicted_kinds": [
             "entered_view",
             "left_view",
-            "moving"
+            "moving",
+            "on_furniture_candidate"
           ]
         },
         "kalman": {
           "tracking": {
             "gt": 32,
-            "pred": 31,
-            "tp": 30,
-            "fp": 1,
-            "fn": 2,
+            "pred": 29,
+            "tp": 29,
+            "fp": 0,
+            "fn": 3,
             "idsw": 1,
             "idtp": 23,
             "n_tracks": 3
@@ -3967,7 +3996,8 @@
           "predicted_kinds": [
             "entered_view",
             "left_view",
-            "moving"
+            "moving",
+            "on_furniture_candidate"
           ]
         }
       }
@@ -3981,17 +4011,18 @@
         "iou": {
           "tracking": {
             "gt": 34,
-            "pred": 29,
-            "tp": 29,
+            "pred": 11,
+            "tp": 11,
             "fp": 0,
-            "fn": 5,
-            "idsw": 0,
-            "idtp": 29,
-            "n_tracks": 2
+            "fn": 23,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 3
           },
           "segments": {},
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
+            "entered_view",
             "left_view",
             "moving"
           ]
@@ -3999,17 +4030,18 @@
         "kalman": {
           "tracking": {
             "gt": 34,
-            "pred": 29,
-            "tp": 29,
+            "pred": 11,
+            "tp": 11,
             "fp": 0,
-            "fn": 5,
-            "idsw": 0,
-            "idtp": 29,
-            "n_tracks": 2
+            "fn": 23,
+            "idsw": 1,
+            "idtp": 9,
+            "n_tracks": 3
           },
           "segments": {},
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
+            "entered_view",
             "left_view",
             "moving"
           ]
@@ -4025,39 +4057,37 @@
         "iou": {
           "tracking": {
             "gt": 34,
-            "pred": 27,
-            "tp": 27,
+            "pred": 30,
+            "tp": 30,
             "fp": 0,
-            "fn": 7,
-            "idsw": 1,
-            "idtp": 22,
-            "n_tracks": 3
+            "fn": 4,
+            "idsw": 4,
+            "idtp": 27,
+            "n_tracks": 2
           },
           "segments": {},
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
-            "entered_view",
-            "left_view",
-            "moving"
+            "moving",
+            "stationary"
           ]
         },
         "kalman": {
           "tracking": {
             "gt": 34,
-            "pred": 27,
-            "tp": 27,
+            "pred": 30,
+            "tp": 30,
             "fp": 0,
-            "fn": 7,
-            "idsw": 1,
-            "idtp": 22,
-            "n_tracks": 3
+            "fn": 4,
+            "idsw": 4,
+            "idtp": 27,
+            "n_tracks": 2
           },
           "segments": {},
-          "verifier_rejections": 0,
+          "verifier_rejections": 1,
           "predicted_kinds": [
-            "entered_view",
-            "left_view",
-            "moving"
+            "moving",
+            "stationary"
           ]
         }
       }
@@ -4256,7 +4286,8 @@
           "predicted_kinds": [
             "entered_view",
             "left_view",
-            "moving"
+            "moving",
+            "on_furniture_candidate"
           ]
         },
         "kalman": {
@@ -4273,7 +4304,8 @@
           "segments": {},
           "verifier_rejections": 0,
           "predicted_kinds": [
-            "moving"
+            "moving",
+            "on_furniture_candidate"
           ]
         }
       }
@@ -4341,13 +4373,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4360,12 +4398,6 @@
               "max_boundary_errors_s": [
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4385,13 +4417,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4404,12 +4442,6 @@
               "max_boundary_errors_s": [
                 0.20000000000000018
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4437,13 +4469,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4451,12 +4489,6 @@
             },
             "stationary": {
               "gt": 1,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -4477,13 +4509,19 @@
             "n_tracks": 0
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4491,12 +4529,6 @@
             },
             "stationary": {
               "gt": 1,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
-            },
-            "pacing_candidate": {
-              "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
@@ -4525,13 +4557,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4544,16 +4582,11 @@
               "max_boundary_errors_s": [
                 0.0
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -4569,13 +4602,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4588,16 +4627,11 @@
               "max_boundary_errors_s": [
                 0.0
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -4621,13 +4655,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4640,16 +4680,11 @@
               "max_boundary_errors_s": [
                 0.09999999999999964
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
+            "on_furniture_candidate",
             "stationary"
           ]
         },
@@ -4665,13 +4700,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4684,16 +4725,11 @@
               "max_boundary_errors_s": [
                 0.09999999999999964
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
           "predicted_kinds": [
+            "on_furniture_candidate",
             "stationary"
           ]
         }
@@ -4717,13 +4753,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4736,12 +4778,6 @@
               "max_boundary_errors_s": [
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4761,13 +4797,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4780,12 +4822,6 @@
               "max_boundary_errors_s": [
                 0.40000000000000036
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4813,13 +4849,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4832,12 +4874,6 @@
               "max_boundary_errors_s": [
                 0.1999999999999993
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4857,13 +4893,19 @@
             "n_tracks": 1
           },
           "segments": {
+            "active_bout": {
+              "gt": 0,
+              "pred": 0,
+              "matched": 0,
+              "max_boundary_errors_s": []
+            },
             "moving": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
               "max_boundary_errors_s": []
             },
-            "active_bout": {
+            "pacing_candidate": {
               "gt": 0,
               "pred": 0,
               "matched": 0,
@@ -4876,12 +4918,6 @@
               "max_boundary_errors_s": [
                 0.1999999999999993
               ]
-            },
-            "pacing_candidate": {
-              "gt": 0,
-              "pred": 0,
-              "matched": 0,
-              "max_boundary_errors_s": []
             }
           },
           "verifier_rejections": 0,
@@ -4892,5 +4928,5 @@
       }
     }
   ],
-  "created_at": "2026-10-09T07:25:46+00:00"
+  "created_at": "2026-10-19T10:10:54+00:00"
 }

@@ -1,7 +1,7 @@
 {
  "schema": "petperception.device_check/2",
- "created_at": "2026-10-19T08:03:50.416Z",
- "bundle_version": "25ef964c591425d8",
+ "created_at": "2026-10-19T10:27:53.409Z",
+ "bundle_version": "a5fdd4a37009d4d4",
  "environment": {
   "user_agent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Mobile Safari/537.36",
   "platform": "Android",
@@ -38,29 +38,29 @@
   "device_check/expected.json": true,
   "device_check/reference_outputs.json": true,
   "engine_assets.json": true,
-  "models/efficientdet_lite0_rawdecode.tflite": true,
+  "models/efficientdet_lite0.tflite": true,
   "models/efficientnet_lite0_features_v1.tflite": true,
   "models/yamnet.tflite": true
  },
- "engine_load_ms": 0.6850000000558794,
+ "engine_load_ms": 0.9250000007450581,
  "models": {
   "yamnet": {
-   "median_ms": 5.340000000083819,
-   "min_ms": 4.505000000121072,
+   "median_ms": 8.350000001490116,
+   "min_ms": 5.6650000009685755,
    "max_abs_diff_first_values": 0,
    "mean_abs_relative_diff": 2.9802321664662564e-9,
    "argmax_equal": true
   },
   "detector_float": {
-   "median_ms": 38.264999999897555,
-   "min_ms": 36.03000000002794,
+   "median_ms": 81.59500000067055,
+   "min_ms": 75.92500000074506,
    "max_abs_diff_first_values": 0,
-   "mean_abs_relative_diff": 5.537557291339256e-8,
+   "mean_abs_relative_diff": 2.4793600293289583e-8,
    "argmax_equal": true
   },
   "backbone": {
-   "median_ms": 17.625,
-   "min_ms": 14.690000000176951,
+   "median_ms": 34.21000000089407,
+   "min_ms": 29.53999999910593,
    "max_abs_diff_first_values": 0,
    "mean_abs_relative_diff": 6.018626370215246e-8,
    "argmax_equal": true
@@ -76,7 +76,6 @@
     "cat"
    ],
    "segment_kinds": [
-    "entered_view",
     "moving",
     "on_furniture_candidate",
     "stationary"
@@ -87,24 +86,23 @@
   "runs": [
    {
     "run": 1,
-    "wall_ms": 3768.8950000000186,
+    "wall_ms": 6607.674999998882,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 13.79,
-     "decode_audio": 2.89,
-     "video_decode_detect_track": 3746.18,
-     "video_detector_inference": 1402.64,
-     "video_verifier": 393.3,
-     "video_posture": 367.31,
-     "video_quality_and_camera_motion": 606.33,
-     "fusion_and_behavior": 3.03
+     "probe_and_hash": 17.94,
+     "decode_audio": 1.81,
+     "video_decode_detect_track": 6573.95,
+     "video_detector_inference": 2505,
+     "video_verifier": 1072.29,
+     "video_posture": 1016.68,
+     "video_quality_and_camera_motion": 587.28,
+     "fusion_and_behavior": 3.06
     },
     "tracks": 1,
     "species": [
      "cat"
     ],
     "segment_kinds": [
-     "entered_view",
      "moving",
      "on_furniture_candidate",
      "stationary"
@@ -115,16 +113,16 @@
    },
    {
     "run": 2,
-    "wall_ms": 3774.3600000001024,
+    "wall_ms": 6101.9000000003725,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 7.89,
-     "decode_audio": 1.73,
-     "video_decode_detect_track": 3763.86,
-     "video_detector_inference": 1404.71,
-     "video_verifier": 357.94,
-     "video_posture": 429.59,
-     "video_quality_and_camera_motion": 528.11,
+     "probe_and_hash": 16.97,
+     "decode_audio": 2.19,
+     "video_decode_detect_track": 6081.89,
+     "video_detector_inference": 2188.86,
+     "video_verifier": 870.07,
+     "video_posture": 1071.69,
+     "video_quality_and_camera_motion": 581.76,
      "fusion_and_behavior": 0.51
     },
     "tracks": 1,
@@ -132,7 +130,6 @@
      "cat"
     ],
     "segment_kinds": [
-     "entered_view",
      "moving",
      "on_furniture_candidate",
      "stationary"
@@ -143,24 +140,23 @@
    },
    {
     "run": 3,
-    "wall_ms": 3531.284999999916,
+    "wall_ms": 6351.47500000149,
     "media_duration_s": 11.2,
     "timings_ms": {
-     "probe_and_hash": 20.25,
-     "decode_audio": 1.6,
-     "video_decode_detect_track": 3507.67,
-     "video_detector_inference": 1340.14,
-     "video_verifier": 307.73,
-     "video_posture": 325.55,
-     "video_quality_and_camera_motion": 539.85,
-     "fusion_and_behavior": 1.1
+     "probe_and_hash": 16.43,
+     "decode_audio": 1.68,
+     "video_decode_detect_track": 6332.66,
+     "video_detector_inference": 2345.72,
+     "video_verifier": 1170.05,
+     "video_posture": 901.52,
+     "video_quality_and_camera_motion": 484.1,
+     "fusion_and_behavior": 0.43
     },
     "tracks": 1,
     "species": [
      "cat"
     ],
     "segment_kinds": [
-     "entered_view",
      "moving",
      "on_furniture_candidate",
      "stationary"
@@ -171,8 +167,8 @@
    }
   ],
   "online_during_test": true,
-  "wall_ms_median": 3768.8950000000186,
-  "realtime_factor": 0.33650848214285883,
+  "wall_ms_median": 6351.47500000149,
+  "realtime_factor": 0.5670959821429902,
   "sustained_slowdown": null,
   "battery": {
    "start": {
@@ -188,16 +184,16 @@
   }
  },
  "js_heap": {
-  "used": 61121381,
+  "used": 42972932,
   "limit": 4294705152
  },
  "page_memory_bytes": null,
  "storage": {
-  "usage": 37711382,
-  "quota": 844465249
+  "usage": 46997751,
+  "quota": 945706030
  },
  "download_bytes": {
-  "bundle": 27903972,
+  "bundle": 37190415,
   "runtime": 9763309
  },
  "budgets": {
@@ -212,7 +208,7 @@
     "id": "download_mb",
     "label": "One-time model download (bundle + runtime)",
     "unit": "MB",
-    "value": 35.92231845855713,
+    "value": 44.778560638427734,
     "limit": 50,
     "status": "pass",
     "assumption": true,
@@ -222,7 +218,7 @@
     "id": "storage_mb",
     "label": "Storage used by the app (origin total)",
     "unit": "MB",
-    "value": 35.96437644958496,
+    "value": 44.82054805755615,
     "limit": 120,
     "status": "pass",
     "assumption": true,
@@ -232,7 +228,7 @@
     "id": "engine_load_ms",
     "label": "Model load from cache (cold)",
     "unit": "ms",
-    "value": 0.6850000000558794,
+    "value": 0.9250000007450581,
     "limit": 4000,
     "status": "pass",
     "assumption": true,
@@ -242,7 +238,7 @@
     "id": "realtime_factor",
     "label": "Analysis time / recording duration (audio + video, 2 frames per second)",
     "unit": "x",
-    "value": 0.33650848214285883,
+    "value": 0.5670959821429902,
     "limit": 1,
     "status": "pass",
     "assumption": true,
@@ -252,7 +248,7 @@
     "id": "detector_ms",
     "label": "Detector inference, one frame (median)",
     "unit": "ms",
-    "value": 38.264999999897555,
+    "value": 81.59500000067055,
     "limit": 160,
     "status": "pass",
     "assumption": true,

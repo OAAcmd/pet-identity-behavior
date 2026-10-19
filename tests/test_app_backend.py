@@ -223,7 +223,7 @@ def test_analysis_lifecycle_retention_and_deletion(app_settings, tmp_path):
         assert c.get(f"/api/v1/analyses/{aid}").json()["status"] == "queued"
         assert runner.run_pending() == 1
         a = c.get(f"/api/v1/analyses/{aid}").json()
-        assert a["status"] == "succeeded" and a["result"]["schema_version"] == "1.3.0" and a["decision_state"] == "abstention"
+        assert a["status"] == "succeeded" and a["result"]["schema_version"] == "1.4.0" and a["decision_state"] == "abstention"
         assert a["media_available"] is False  # default retention 0: media deleted right after processing
         assert not list((tmp_path / "media").rglob("analysis-*"))
         # With retention, media can be replayed with range requests, then deleted on demand.

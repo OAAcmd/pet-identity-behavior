@@ -16,6 +16,8 @@ export interface AudioAssets {
   min_event_gap_s: number;
   silence_dbfs: number;
   clipping_fraction: number;
+  /** Validation status per vocalization subtype (E21 gate; asset format 0.2.2). Absent: none validated. */
+  subtype_validation?: Record<string, string>;
 }
 
 export interface DetectorAssets {

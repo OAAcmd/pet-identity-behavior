@@ -53,6 +53,16 @@ def nms(boxes: np.ndarray, scores: np.ndarray, iou_thr: float, max_out: int) -> 
     return keep
 
 
+# G1 detectors (training/g1, Open Images class names) name two classes differently from the
+# COCO label maps of the other detectors; the engines, verifier and relation rules use the COCO names.
+LABEL_ALIASES = {"table": "dining table", "teddy_bear": "teddy bear"}
+
+
+def label_list(text: bytes) -> list[str]:
+    """Detector label map from the model's embedded label file, with LABEL_ALIASES applied."""
+    return [LABEL_ALIASES.get(x.strip(), x.strip()) for x in text.decode().splitlines()]
+
+
 class EfficientDetDetector:
     name = "efficientdet_lite_mediapipe"
 
@@ -64,7 +74,7 @@ class EfficientDetDetector:
         files = associated_files(data)
         if "labels.txt" not in files:
             raise RuntimeError("labels.txt missing from model metadata")
-        self._setup(model_path, data, mediapipe_detector_options(data), [l.strip() for l in files["labels.txt"].decode().splitlines()], norm, num_threads)
+        self._setup(model_path, data, mediapipe_detector_options(data), label_list(files["labels.txt"]), norm, num_threads)
 
     @classmethod
     def from_postprocessed(cls, model_path: Path, num_threads: int = 2) -> EfficientDetDetector:
@@ -88,7 +98,7 @@ class EfficientDetDetector:
                                x_scale=float(opt["x_scale"]), y_scale=float(opt["y_scale"]), w_scale=float(opt["w_scale"]),
                                h_scale=float(opt["h_scale"]), apply_exponential_on_box_size=True, sigmoid_score=False)
         det = cls.__new__(cls)
-        det._setup(model_path, data, dec, [l.strip() for l in lab.decode().splitlines()], norm, num_threads)
+        det._setup(model_path, data, dec, label_list(lab), norm, num_threads)
         det.model_bytes = data
         return det
 

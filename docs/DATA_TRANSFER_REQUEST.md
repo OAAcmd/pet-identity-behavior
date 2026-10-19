@@ -1,5 +1,23 @@
 # Data transfer request
 
+**Update 2026-10-19: most of this request is no longer needed.** The
+workspace's network policy now reaches zenodo.org, huggingface.co,
+dl.fbaipublicfiles.com, kaggle.com pages and cvml.ista.ac.at
+(`results/data_access/network_probe.json`). Per item:
+
+| Item | Status 2026-10-19 |
+| --- | --- |
+| P1 CoP3D | **Read directly** by HTTP Range (no transfer). The layout differs from what this request assumed: `cat_000.zip` (44 MB) and `dog_000.zip` (67 MB) hold annotations and LICENSE only, and the frames start at `cat_001.zip` / `dog_001.zip` (about 20 GB each). E20 sampled 10 frames from each of the 209 cat and 147 dog sequences of the `_001` archives (CRC-checked members). The whole-archive SHA-256 has not been checked: that would mean streaming 40 GB. |
+| P2 FSD50K | **Fetched**: all 11 files, each matching the MD5 on the Zenodo record. Used by E21 and E21b. Then deleted; the YAMNet scores are cached. |
+| P2 Yin & McCowan barks | used by E22 (direct, as before) |
+| P3 CatMeows | **Fetched**: `record.json`, `dataset.zip` and `extras.zip`, all matching the record. All 440 WAVs used by E2 are byte-identical to the official release. Licence on the record: CC BY-NC 4.0. |
+| P3 Barkopedia | Dataset card read: **CC BY-NC-SA 4.0**. Its labels are arousal and valence (emotion attributions), which the product does not output, so it was not downloaded. |
+| P4 CatFLW / DogFLW | **Still blocked**: Kaggle's download API needs an account token (`KAGGLE_USERNAME` / `KAGGLE_KEY`). The pages are reachable. |
+| P4 AwA2 cat images | the host is reachable; not fetched yet (research-only cat ear and tail keypoints, 588 images) |
+| Section 6, write access for checkpoints | **still needed**: training checkpoints still cannot be made durable outside this environment |
+
+The original request follows unchanged, as the record of what was asked.
+
 Status: 2026-10-11. Machine-readable source:
 [`manifests/mirror_files.json`](../manifests/mirror_files.json). Live status:
 `uv run petperception mirror status`.

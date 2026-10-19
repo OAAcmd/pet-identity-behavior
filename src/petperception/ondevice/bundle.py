@@ -31,6 +31,7 @@ import numpy as np
 from ..config import REPO_ROOT, Settings
 from ..registry import check_model, model_dir, release_decision, resource
 from ..utils import sha256_file, utc_now
+from ..vision.detector import label_list
 from ..vision.tflite_io import dequantize
 from ..vision.tflite_meta import associated_files, input_normalization, mediapipe_detector_options
 from .tflite_patch import expose_outputs
@@ -39,7 +40,8 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 # Format of engine_assets.json as consumed by the TypeScript engine. Change the
 # major.minor only together with SUPPORTED_BUNDLE_ENGINE in web/src/engine/modelstore.ts:
 # the app refuses bundles whose major.minor it does not support.
-ENGINE_ASSET_FORMAT = "0.2.1"  # 0.2: quantized model inputs/outputs (input_quant, output_quant); 0.2.1: optional object_relation
+ENGINE_ASSET_FORMAT = "0.2.2"  # 0.2: quantized model inputs/outputs (input_quant, output_quant); 0.2.1: optional object_relation;
+# 0.2.2: audio.subtype_validation (absent in older bundles: no subtype counts as validated)
 LITERT_JS_VERSION = "2.5.3"
 BACKBONE_OUTPUTS = [118, 140, 158, 159]  # 28x28x40, 14x14x112, 7x7x320, 7x7x1280 (see vision/keypoints.py)
 WEB_DETECTORS = ("efficientdet_lite0_mediapipe_v1", "efficientdet_lite0_mediapipe_int8_v1", "efficientdet_lite0_mediapipe_f16_v1",
@@ -51,7 +53,7 @@ def _b64(a: np.ndarray) -> str:
 
 
 def _audio_assets(settings: Settings, notes: list[str]) -> dict:
-    from ..audio.events import CONTEXT_TAG_MIDS, SUBTYPE_MIDS, build_groups, load_thresholds
+    from ..audio.events import CONTEXT_TAG_MIDS, SUBTYPE_MIDS, build_groups, load_subtype_validation, load_thresholds
     from ..audio.yamnet import YamnetBackend
 
     mid = settings.audio.yamnet.model_id
@@ -70,6 +72,7 @@ def _audio_assets(settings: Settings, notes: list[str]) -> dict:
         "context_tags": {k: be.mid_to_index[m] for k, m in CONTEXT_TAG_MIDS.items() if m in be.mid_to_index},
         "thresholds": th, "threshold_source": src, "context_tag_threshold": settings.audio.yamnet.context_tag_threshold,
         "min_event_gap_s": settings.audio.yamnet.min_event_gap_s, "silence_dbfs": settings.audio.silence_dbfs,
+        "subtype_validation": load_subtype_validation((REPO_ROOT / sv) if (sv := settings.audio.yamnet.subtype_validation_file) else None),
         "clipping_fraction": settings.audio.clipping_fraction,
     }
 
@@ -88,7 +91,7 @@ def _detector_assets(path: Path, settings: Settings, mid: str) -> dict:
     data = path.read_bytes()
     dec = mediapipe_detector_options(data)
     norm = input_normalization(data)
-    labels = [x.strip() for x in associated_files(data)["labels.txt"].decode().splitlines()]
+    labels = label_list(associated_files(data)["labels.txt"])
     from ai_edge_litert.interpreter import Interpreter
 
     it = Interpreter(model_content=data)

@@ -190,6 +190,9 @@ def main() -> None:
     ap.add_argument("--init", choices=["coco", "scratch"], default="coco", help="COCO-pretrained RetinaNet weights or random initialisation")
     ap.add_argument("--val-every", type=int, default=1, help="validate every K epochs (the last epoch is always validated)")
     ap.add_argument("--seed", type=int, default=20261019)
+    ap.add_argument("--shuffle-buffer", type=int, default=0,
+                    help="seeded shuffle buffer in examples (0 = the whole training set). Model Maker yields decoded images (~230 KB at "
+                         "320 px), so a full buffer over 50k images needs ~12 GB of RAM; the cache is in random image-id order already")
     ap.add_argument("--ckpt-minutes", type=float, default=10.0)
     ap.add_argument("--max-minutes", type=float, default=0.0, help="stop cleanly (with a checkpoint) after this wall time; 0 = no limit")
     ap.add_argument("--max-steps", type=int, default=0, help="stop cleanly after this many steps in this invocation (tests)")
@@ -217,6 +220,8 @@ def main() -> None:
               "cache_layout": CACHE_LAYOUT}
     if a.init != "coco":
         config["init"] = a.init
+    if a.shuffle_buffer:  # recorded only when set, so earlier runs keep their configuration hash
+        config["shuffle_buffer"] = a.shuffle_buffer
     config_sha = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     data_ids = {s: sha256_file(view / s / "labels.json") for s in ("train", "development")}
     code_sha = sha256_file(Path(__file__))
@@ -280,7 +285,7 @@ def main() -> None:
         st = {"checkpoint": path, "reason": reason, "epoch": int(epoch_v.numpy()), "step_in_epoch": int(step_v.numpy()),
               "optimizer_iterations": int(opt.iterations.numpy()), "steps_per_epoch": steps_per_epoch, "total_epochs": total_epochs,
               "config": config, "config_sha256": config_sha, "data_sha256": data_ids, "code_sha256": code_sha,
-              "data_order": "per-epoch shuffle seeded with seed*1000+epoch; completed steps are skipped on resume",
+              "data_order": "per-epoch shuffle (buffer: config shuffle_buffer, default the whole set) seeded with seed*1000+epoch; completed steps are skipped on resume",
               "tf_augmentation_seed_rule": "tf.random.set_seed(seed*1000+epoch) before each epoch iterator",
               "numpy_rng_state": [ns[0], ns[1].tolist(), ns[2], ns[3], ns[4]], "python_rng_state": [random.getstate()[0], list(random.getstate()[1]), random.getstate()[2]],
               "weights_sha256": weights_sha(), "history": history, "saved_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -309,7 +314,7 @@ def main() -> None:
     def epoch_dataset(epoch: int):
         seed = a.seed * 1000 + epoch
         tf.random.set_seed(seed)
-        raw = train_data._dataset.shuffle(n_train, seed=seed, reshuffle_each_iteration=False)
+        raw = train_data._dataset.shuffle(a.shuffle_buffer or n_train, seed=seed, reshuffle_each_iteration=False)
         ep = object_detector.Dataset(raw, train_data.label_names, n_train)
         return ep.gen_tf_dataset(batch_size=a.batch_size, is_training=True, shuffle=False, preprocess=pre, drop_remainder=True)
 

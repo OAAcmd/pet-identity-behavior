@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "analysis_id": "e5-s13_low_light_cat-rule_baseline",
-  "created_at": "2026-10-19T07:49:48.874911Z",
+  "created_at": "2026-10-19T09:45:48.693134Z",
   "engine_version": "0.1.0",
   "config_profile": "cpu",
-  "config_hash": "cb1492b5596d4dc7",
+  "config_hash": "1d6848f51f5cafb6",
   "media": {
     "analysis_filename": "s13_low_light_cat.mp4",
     "size_bytes": 532501,
@@ -331,6 +331,9 @@
         "subtypes": {
           "meow": 0.8515625
         },
+        "subtype_validation": {
+          "meow": "passed"
+        },
         "top_audioset_labels": [
           [
             "Animal",
@@ -622,19 +625,19 @@
     "note": "Experimental fusion; weights/temperature are unfitted configuration values."
   },
   "timings_ms": {
-    "probe": 67.77,
-    "hash": 1.55,
-    "decode_audio": 149.72,
-    "audio_inference": 43.36,
-    "video_decode_detect_track": 693.69,
-    "video_detector_inference": 460.04,
-    "video_verifier": 30.96,
-    "video_pose": 0.18,
-    "video_quality_and_camera_motion": 111.84,
-    "frame_gap_check": 57.88,
-    "behavior_segments": 1.27,
-    "fusion": 0.37,
-    "model_load_ms_engine_startup": 547.62
+    "probe": 74.79,
+    "hash": 1.63,
+    "decode_audio": 203.49,
+    "audio_inference": 72.29,
+    "video_decode_detect_track": 2181.31,
+    "video_detector_inference": 1462.99,
+    "video_verifier": 134.18,
+    "video_pose": 0.23,
+    "video_quality_and_camera_motion": 332.96,
+    "frame_gap_check": 54.21,
+    "behavior_segments": 0.97,
+    "fusion": 0.2,
+    "model_load_ms_engine_startup": 712.46
   },
   "models": [
     {
@@ -665,7 +668,7 @@
       },
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev, read 2026-10-19, page last updated 2026-10-01, HTML SHA-256 2c63d219d0edbdb5344d8d506cdde4f2bdfabdde5a4f0698cb55cb34cdb37222) describes the builds and their COCO training data but states no licence for them and links no model card (its CC BY 4.0 / Apache-2.0 footer covers the page content and code samples). Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "use_restrictions": [

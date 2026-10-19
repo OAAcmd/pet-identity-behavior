@@ -1,0 +1,86 @@
+{
+  "format": "petperception.audio_subtype_validation/1",
+  "source": "E21, FSD50K v1.0 eval, deployed operating point (results/e21/metrics.json)",
+  "gate": {
+    "f1": 0.7,
+    "ci_low": 0.6,
+    "min_positives": 20
+  },
+  "rule": "a vocalization subtype is shown on the phone or used as an interpretation trigger only if its status is 'passed' (docs/TRAINING_PROGRAM.md G4)",
+  "created_at": "2026-10-19T08:49:40+00:00",
+  "subtypes": {
+    "meow": {
+      "status": "passed",
+      "target": "meow",
+      "positives": 75,
+      "f1": 0.7246,
+      "f1_ci95": [
+        0.6371,
+        0.8062
+      ],
+      "precision": 0.7937,
+      "recall": 0.6667
+    },
+    "purr": {
+      "status": "failed",
+      "target": "purr",
+      "positives": 60,
+      "f1": 0.7007,
+      "f1_ci95": [
+        0.5954,
+        0.7946
+      ],
+      "precision": 0.6234,
+      "recall": 0.8
+    },
+    "hiss": {
+      "status": "not_evaluable",
+      "reason": "2 positives in FSD50K eval (minimum 20)",
+      "target": "hiss_cat"
+    },
+    "bark": {
+      "status": "passed",
+      "target": "bark",
+      "positives": 115,
+      "f1": 0.7282,
+      "f1_ci95": [
+        0.6561,
+        0.7974
+      ],
+      "precision": 0.8242,
+      "recall": 0.6522
+    },
+    "growl": {
+      "status": "failed",
+      "target": "growl_any",
+      "positives": 50,
+      "f1": 0.4889,
+      "f1_ci95": [
+        0.3495,
+        0.6072
+      ],
+      "precision": 0.55,
+      "recall": 0.44
+    },
+    "caterwaul": {
+      "status": "not_evaluable",
+      "reason": "no FSD50K label"
+    },
+    "yip": {
+      "status": "not_evaluable",
+      "reason": "no FSD50K label"
+    },
+    "howl": {
+      "status": "not_evaluable",
+      "reason": "no FSD50K label"
+    },
+    "bow_wow": {
+      "status": "not_evaluable",
+      "reason": "no FSD50K label"
+    },
+    "whimper_dog": {
+      "status": "not_evaluable",
+      "reason": "no FSD50K label"
+    }
+  }
+}

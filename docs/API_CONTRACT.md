@@ -1,4 +1,4 @@
-# API contract (`/api/v1`, result schema 1.3.0)
+# API contract (`/api/v1`, result schema 1.4.0)
 
 Generated, always-current artifacts (CI fails if they are stale):
 
@@ -45,7 +45,7 @@ Outside `/api/v1`: `GET /ondevice/<path>` serves the checksummed on-device
 bundle (`manifest.json` → 503 `ondevice_bundle_missing` when not published;
 path traversal rejected); `/` serves the PWA.
 
-## Analysis result (schema 1.3.0)
+## Analysis result (schema 1.4.0)
 
 Top level: `schema_version`, `analysis_id`, `created_at`, `engine_version`,
 `engine` (runtime, model ids and versions, component states with reasons),
@@ -71,9 +71,17 @@ candidates, `per_frame_model_public_still_images`); on-furniture candidates
 name the object in `related_object` (`bed`, `couch`, `chair`, `table`; null
 for every other kind). Person and furniture boxes are not stored.
 
+Per sound event (1.4.0): `subtypes` (raw YAMNet subtype peaks, at least 0.1)
+and `subtype_validation`, the status of each listed subtype under the
+pre-set gate of E21 (`passed`, `failed`, `not_evaluable`, `not_evaluated`;
+`artifacts/audio_subtype_validation.json`). Clients show only `passed`
+subtypes, and only those can open or support a hypothesis. The others can
+only appear as conflicting evidence.
+
 Versioning: additive changes bump the minor version (1.1.0 added behavior
 segments, keypoints and verification; 1.2.0 added interaction candidates;
-1.3.0 added on-furniture candidates and `related_object`);
+1.3.0 added on-furniture candidates and `related_object`; 1.4.0 added
+`subtype_validation`);
 readers accept older minor versions. Scores are never presented as
 probabilities: every score has a `score_kind` such as `detector_sigmoid_raw`
 or `posture_softmax_uncalibrated`.

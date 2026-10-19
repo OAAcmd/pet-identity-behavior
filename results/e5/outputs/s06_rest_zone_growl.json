@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "analysis_id": "e5-s06_rest_zone_growl-rule_baseline",
-  "created_at": "2026-10-19T07:49:43.582245Z",
+  "created_at": "2026-10-19T09:45:40.835284Z",
   "engine_version": "0.1.0",
   "config_profile": "cpu",
-  "config_hash": "cb1492b5596d4dc7",
+  "config_hash": "1d6848f51f5cafb6",
   "media": {
     "analysis_filename": "s06_rest_zone_growl.mp4",
     "size_bytes": 111018,
@@ -587,6 +587,9 @@
         "subtypes": {
           "meow": 0.5859375
         },
+        "subtype_validation": {
+          "meow": "passed"
+        },
         "top_audioset_labels": [
           [
             "Cat",
@@ -634,6 +637,10 @@
         "subtypes": {
           "bark": 0.109375,
           "growl": 0.5
+        },
+        "subtype_validation": {
+          "bark": "passed",
+          "growl": "failed"
         },
         "top_audioset_labels": [
           [
@@ -752,7 +759,7 @@
         "kind": "sound_event",
         "t_start_s": 5.28,
         "t_end_s": 6.255,
-        "summary": "growl sound 5.28-6.25s (peak raw score 0.50; growl 0.50, bark 0.11)",
+        "summary": "possible growl (unvalidated sound type) sound 5.28-6.25s (peak raw score 0.50; bark 0.11)",
         "track_id": null,
         "value": 0.5,
         "value_kind": "yamnet_sigmoid_raw",
@@ -876,70 +883,6 @@
     },
     {
       "hypothesis_id": "hyp-4",
-      "name": "tense",
-      "semantic_type": "state",
-      "status": "experimental_hypothesis",
-      "track_id": "track-1",
-      "t_start_s": 0.0,
-      "t_end_s": 7.5,
-      "supporting_evidence_ids": [
-        "ev-snd-2",
-        "ev-move-track-1"
-      ],
-      "conflicting_evidence_ids": [],
-      "independent_provenance_roots": [
-        "audio:yamnet",
-        "vision:detector"
-      ],
-      "score": 0.575,
-      "score_kind": "heuristic_support_0_1",
-      "scorer": {
-        "name": "rule_baseline:rules-v1",
-        "revision": "rules-v1+ontology-v1",
-        "kind": "rule_baseline"
-      },
-      "calibration_status": "uncalibrated",
-      "calibrated_confidence": null,
-      "reason_codes": [
-        "fusion_not_validated",
-        "audio_attribution_unverified"
-      ],
-      "explanation": "Experimental hypothesis 'tense' (state) for track-1. Supporting observations: growl sound 5.28-6.25s (peak raw score 0.50; growl 0.50, bark 0.11) [ev-snd-2]; low apparent movement of track-1 (median 0.000 image diagonals/s; moving in 0 of 15 sampled steps) [ev-move-track-1]. Notes: the fusion rules have not been validated on paired household data; attributing the sound to this animal is unverified (one visible candidate). Score 0.57 is an uncalibrated heuristic_support_0_1 value, not a probability."
-    },
-    {
-      "hypothesis_id": "hyp-5",
-      "name": "warning",
-      "semantic_type": "communicative_signal",
-      "status": "experimental_hypothesis",
-      "track_id": "track-1",
-      "t_start_s": 0.0,
-      "t_end_s": 7.5,
-      "supporting_evidence_ids": [
-        "ev-snd-2",
-        "ev-track-1"
-      ],
-      "conflicting_evidence_ids": [],
-      "independent_provenance_roots": [
-        "audio:yamnet",
-        "vision:detector"
-      ],
-      "score": 0.6,
-      "score_kind": "heuristic_support_0_1",
-      "scorer": {
-        "name": "rule_baseline:rules-v1",
-        "revision": "rules-v1+ontology-v1",
-        "kind": "rule_baseline"
-      },
-      "calibration_status": "uncalibrated",
-      "calibrated_confidence": null,
-      "reason_codes": [
-        "fusion_not_validated",
-        "audio_attribution_unverified"
-      ],
-      "explanation": "Experimental hypothesis 'warning' (communicative_signal) for track-1. Supporting observations: growl sound 5.28-6.25s (peak raw score 0.50; growl 0.50, bark 0.11) [ev-snd-2]; cat detected (track-1) from 0.00s to 7.50s in 16 sampled frames [ev-track-1]. Notes: the fusion rules have not been validated on paired household data; attributing the sound to this animal is unverified (one visible candidate). Score 0.60 is an uncalibrated heuristic_support_0_1 value, not a probability."
-    },
-    {
-      "hypothesis_id": "hyp-6",
       "name": "relaxed",
       "semantic_type": "state",
       "status": "abstained",
@@ -971,35 +914,16 @@
         "conflicting_evidence",
         "silence_not_used_as_evidence"
       ],
-      "explanation": "Abstained 'relaxed' (state) for track-1. Supporting observations: low apparent movement of track-1 (median 0.000 image diagonals/s; moving in 0 of 15 sampled steps) [ev-move-track-1]; track-1 in owner-marked zone 'owner-marked rest area (synthetic test zone)' (rest_area) for 7.5s [ev-zone-track-1-rest_area]. Conflicting observations: growl sound 5.28-6.25s (peak raw score 0.50; growl 0.50, bark 0.11) [ev-snd-2]. Notes: the fusion rules have not been validated on paired household data; co-occurring evidence points in a different direction; silence is never used as evidence of relaxation. Score 0.58 is an uncalibrated heuristic_support_0_1 value, not a probability."
+      "explanation": "Abstained 'relaxed' (state) for track-1. Supporting observations: low apparent movement of track-1 (median 0.000 image diagonals/s; moving in 0 of 15 sampled steps) [ev-move-track-1]; track-1 in owner-marked zone 'owner-marked rest area (synthetic test zone)' (rest_area) for 7.5s [ev-zone-track-1-rest_area]. Conflicting observations: possible growl (unvalidated sound type) sound 5.28-6.25s (peak raw score 0.50; bark 0.11) [ev-snd-2]. Notes: the fusion rules have not been validated on paired household data; co-occurring evidence points in a different direction; silence is never used as evidence of relaxation. Score 0.58 is an uncalibrated heuristic_support_0_1 value, not a probability."
     }
   ],
   "decision": {
-    "state": "experimental_hypothesis",
-    "overall_interpretation": "experimental_hypotheses_present",
+    "state": "supported_observation",
+    "overall_interpretation": "insufficient_evidence",
     "reason_codes": [],
-    "summary": "2 experimental hypothesis(es) with co-occurring independent evidence; scores are uncalibrated."
+    "summary": "Observations only: 1 animal track(s), 2 pet sound event(s). Candidate interpretations lacked sufficient independent evidence."
   },
-  "suggestions": [
-    {
-      "suggestion_id": "sug-1",
-      "text": "Hiss- or growl-like sounds were observed together with a visible animal. Giving animals space and not reaching toward them is a common precaution. If such signals are new or frequent, consider asking a veterinarian or a qualified behavior professional.",
-      "based_on_evidence_ids": [
-        "ev-snd-2",
-        "ev-move-track-1"
-      ],
-      "kind": "safety_general"
-    },
-    {
-      "suggestion_id": "sug-2",
-      "text": "Hiss- or growl-like sounds were observed together with a visible animal. Giving animals space and not reaching toward them is a common precaution. If such signals are new or frequent, consider asking a veterinarian or a qualified behavior professional.",
-      "based_on_evidence_ids": [
-        "ev-snd-2",
-        "ev-track-1"
-      ],
-      "kind": "safety_general"
-    }
-  ],
+  "suggestions": [],
   "limitations": [
     "Research engine: outputs are observations plus unvalidated heuristics. They are not translations of animal language, readings of thoughts or emotions, or medical assessments.",
     "Track IDs are per-analysis labels for linked detections, not verified pet identities.",
@@ -1019,19 +943,19 @@
     "note": "Experimental fusion; weights/temperature are unfitted configuration values."
   },
   "timings_ms": {
-    "probe": 56.82,
-    "hash": 0.39,
-    "decode_audio": 155.99,
-    "audio_inference": 49.86,
-    "video_decode_detect_track": 1020.09,
-    "video_detector_inference": 397.63,
-    "video_verifier": 142.86,
-    "video_pose": 158.51,
-    "video_quality_and_camera_motion": 231.94,
-    "frame_gap_check": 71.67,
-    "behavior_segments": 1.89,
-    "fusion": 0.3,
-    "model_load_ms_engine_startup": 547.62
+    "probe": 127.87,
+    "hash": 0.4,
+    "decode_audio": 231.78,
+    "audio_inference": 39.28,
+    "video_decode_detect_track": 1427.29,
+    "video_detector_inference": 567.01,
+    "video_verifier": 221.88,
+    "video_pose": 201.15,
+    "video_quality_and_camera_motion": 280.5,
+    "frame_gap_check": 67.75,
+    "behavior_segments": 3.04,
+    "fusion": 0.55,
+    "model_load_ms_engine_startup": 712.46
   },
   "models": [
     {
@@ -1062,7 +986,7 @@
       },
       "terms": {
         "code": "Apache-2.0 (google-ai-edge/mediapipe)",
-        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev) is blocked here. Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
+        "weights": "Not stated. The embedded TFLite ModelMetadata names author 'MediaPipe' (metadata version 1.5.0) and has no license field (read 2026-10-10); gs://mediapipe-assets holds 9 MediaPipe model cards, none for the object detector (listed 2026-10-10); the MediaPipe Object Detector page (ai.google.dev, read 2026-10-19, page last updated 2026-10-01, HTML SHA-256 2c63d219d0edbdb5344d8d506cdde4f2bdfabdde5a4f0698cb55cb34cdb37222) describes the builds and their COCO training data but states no licence for them and links no model card (its CC BY 4.0 / Apache-2.0 footer covers the page content and code samples). Google distributes the file publicly as the default model of the MediaPipe Object Detector task. Licence-stated replacement: efficientdet_lite0_tfhub_rawdecode_v1 (E14). See docs/ASSET_TERMS.md M2.",
         "training_data": "COCO annotations CC BY 4.0; COCO images carry Flickr terms."
       },
       "use_restrictions": [

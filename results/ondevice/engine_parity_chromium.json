@@ -6,8 +6,8 @@
   "tracks": {
    "matched": 40,
    "only_reference": 2,
-   "only_web": 1,
-   "f1": 0.963855421686747,
+   "only_web": 2,
+   "f1": 0.9523809523809523,
    "median_boundary_error_s": 0.4990000000000001
   },
   "sounds": {
@@ -18,29 +18,29 @@
    "median_boundary_error_s": 0.0
   },
   "segments": {
-   "matched": 98,
-   "only_reference": 6,
+   "matched": 101,
+   "only_reference": 3,
    "only_web": 1,
-   "f1": 0.9655172413793104,
+   "f1": 0.9805825242718447,
    "median_boundary_error_s": 0.0
   },
   "hypotheses": {
-   "matched": 43,
-   "only_reference": 0,
+   "matched": 42,
+   "only_reference": 1,
    "only_web": 0,
-   "f1": 1.0,
+   "f1": 0.9882352941176471,
    "median_boundary_error_s": 0.0
   }
  },
  "posture": {
-  "reference_frames": 491,
-  "web_frames": 513,
-  "frames_matched_by_species_and_time": 471,
-  "label_agreement": 0.8343949044585988,
-  "both_reported": 157,
+  "reference_frames": 503,
+  "web_frames": 527,
+  "frames_matched_by_species_and_time": 484,
+  "label_agreement": 0.8305785123966942,
+  "both_reported": 154,
   "label_agreement_when_both_reported": 1.0,
-  "gate_flips_one_side_uncertain": 78,
-  "median_abs_score_diff": 0.02300000000000002
+  "gate_flips_one_side_uncertain": 82,
+  "median_abs_score_diff": 0.02499999999999994
  },
  "rows": [
   {
@@ -68,29 +68,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 27.91,
-    "decode_audio": 34.77,
-    "audio_inference": 96.52,
-    "video_decode_detect_track": 3380.16,
-    "video_detector_inference": 1250.72,
-    "video_verifier": 387.11,
-    "video_posture": 445.77,
-    "video_quality_and_camera_motion": 385.96,
-    "fusion_and_behavior": 4.87
+    "probe_and_hash": 38.73,
+    "decode_audio": 39.96,
+    "audio_inference": 149.37,
+    "video_decode_detect_track": 5024.74,
+    "video_detector_inference": 1889.24,
+    "video_verifier": 651.46,
+    "video_posture": 714.03,
+    "video_quality_and_camera_motion": 469.75,
+    "fusion_and_behavior": 8.8
    },
    "ref_timings_ms": {
-    "probe": 290.87,
-    "hash": 1.14,
-    "decode_audio": 236.27,
-    "audio_inference": 64.97,
-    "video_decode_detect_track": 1248.33,
-    "video_detector_inference": 476.27,
-    "video_verifier": 182.86,
-    "video_pose": 214.58,
-    "video_quality_and_camera_motion": 274.92,
-    "frame_gap_check": 67.48,
-    "behavior_segments": 3.82,
-    "fusion": 0.51
+    "probe": 59.68,
+    "hash": 3.09,
+    "decode_audio": 228.63,
+    "audio_inference": 75.43,
+    "video_decode_detect_track": 1866.74,
+    "video_detector_inference": 732.23,
+    "video_verifier": 285.64,
+    "video_pose": 346.95,
+    "video_quality_and_camera_motion": 374.59,
+    "frame_gap_check": 61.96,
+    "behavior_segments": 2.49,
+    "fusion": 0.39
    }
   },
   {
@@ -118,27 +118,27 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 5.75,
-    "decode_audio": 25.56,
-    "video_decode_detect_track": 3090.34,
-    "video_detector_inference": 1093,
-    "video_verifier": 391.77,
-    "video_posture": 434.26,
-    "video_quality_and_camera_motion": 361.11,
-    "fusion_and_behavior": 0.78
+    "probe_and_hash": 10.29,
+    "decode_audio": 28.81,
+    "video_decode_detect_track": 4707.62,
+    "video_detector_inference": 1777.07,
+    "video_verifier": 659.52,
+    "video_posture": 739.9,
+    "video_quality_and_camera_motion": 418.79,
+    "fusion_and_behavior": 1.54
    },
    "ref_timings_ms": {
-    "probe": 84.67,
-    "hash": 0.17,
-    "decode_audio": 173.03,
-    "video_decode_detect_track": 1141.78,
-    "video_detector_inference": 435.39,
-    "video_verifier": 158.83,
-    "video_pose": 170.61,
-    "video_quality_and_camera_motion": 286.07,
-    "frame_gap_check": 58.36,
-    "behavior_segments": 2.08,
-    "fusion": 0.19
+    "probe": 59.76,
+    "hash": 0.25,
+    "decode_audio": 202.74,
+    "video_decode_detect_track": 1835.35,
+    "video_detector_inference": 752.32,
+    "video_verifier": 286.65,
+    "video_pose": 288.97,
+    "video_quality_and_camera_motion": 371.31,
+    "frame_gap_check": 67.55,
+    "behavior_segments": 2.39,
+    "fusion": 0.34
    }
   },
   {
@@ -166,29 +166,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.24,
-    "decode_audio": 32.04,
-    "audio_inference": 81.48,
-    "video_decode_detect_track": 3970.48,
-    "video_detector_inference": 989.67,
-    "video_verifier": 806.09,
-    "video_posture": 888.76,
-    "video_quality_and_camera_motion": 376.16,
-    "fusion_and_behavior": 1.97
+    "probe_and_hash": 7.51,
+    "decode_audio": 44.12,
+    "audio_inference": 86.81,
+    "video_decode_detect_track": 5728.65,
+    "video_detector_inference": 1628.89,
+    "video_verifier": 1223.9,
+    "video_posture": 1255.29,
+    "video_quality_and_camera_motion": 419.42,
+    "fusion_and_behavior": 0.85
    },
    "ref_timings_ms": {
-    "probe": 70.88,
-    "hash": 0.72,
-    "decode_audio": 213.01,
-    "audio_inference": 88.5,
-    "video_decode_detect_track": 1546.77,
-    "video_detector_inference": 447.02,
-    "video_verifier": 325.93,
-    "video_pose": 353.18,
-    "video_quality_and_camera_motion": 294.45,
-    "frame_gap_check": 64.53,
-    "behavior_segments": 3.27,
-    "fusion": 0.33
+    "probe": 62.3,
+    "hash": 0.6,
+    "decode_audio": 209.94,
+    "audio_inference": 75.05,
+    "video_decode_detect_track": 2294.57,
+    "video_detector_inference": 692.5,
+    "video_verifier": 473.33,
+    "video_pose": 526.35,
+    "video_quality_and_camera_motion": 423.32,
+    "frame_gap_check": 79.32,
+    "behavior_segments": 3.16,
+    "fusion": 3.99
    }
   },
   {
@@ -216,29 +216,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.89,
-    "decode_audio": 45.06,
-    "audio_inference": 69.8,
-    "video_decode_detect_track": 2317.01,
-    "video_detector_inference": 1066.06,
-    "video_verifier": 0.02,
-    "video_posture": 0.02,
-    "video_quality_and_camera_motion": 411.7,
-    "fusion_and_behavior": 0.55
+    "probe_and_hash": 8.03,
+    "decode_audio": 51.78,
+    "audio_inference": 93.63,
+    "video_decode_detect_track": 3271.9,
+    "video_detector_inference": 1740.07,
+    "video_verifier": 0.05,
+    "video_posture": 0,
+    "video_quality_and_camera_motion": 405.96,
+    "fusion_and_behavior": 0.21
    },
    "ref_timings_ms": {
-    "probe": 210.63,
-    "hash": 0.53,
-    "decode_audio": 215.29,
-    "audio_inference": 49.63,
-    "video_decode_detect_track": 732.78,
-    "video_detector_inference": 420.17,
-    "video_verifier": 0.06,
-    "video_pose": 0.17,
-    "video_quality_and_camera_motion": 229.45,
-    "frame_gap_check": 59.33,
-    "behavior_segments": 0.13,
-    "fusion": 0.03
+    "probe": 58.39,
+    "hash": 0.57,
+    "decode_audio": 237.15,
+    "audio_inference": 55.72,
+    "video_decode_detect_track": 1066.61,
+    "video_detector_inference": 647.1,
+    "video_verifier": 0.05,
+    "video_pose": 0.15,
+    "video_quality_and_camera_motion": 298.54,
+    "frame_gap_check": 70.48,
+    "behavior_segments": 0.16,
+    "fusion": 0.04
    }
   },
   {
@@ -266,29 +266,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 10.45,
-    "decode_audio": 30.16,
-    "audio_inference": 76.29,
-    "video_decode_detect_track": 3100.35,
-    "video_detector_inference": 998.17,
-    "video_verifier": 409.16,
-    "video_posture": 455.8,
-    "video_quality_and_camera_motion": 366.73,
-    "fusion_and_behavior": 2.41
+    "probe_and_hash": 9.96,
+    "decode_audio": 23.33,
+    "audio_inference": 78.59,
+    "video_decode_detect_track": 4799.13,
+    "video_detector_inference": 1766.4,
+    "video_verifier": 705.64,
+    "video_posture": 638.25,
+    "video_quality_and_camera_motion": 381.34,
+    "fusion_and_behavior": 0.57
    },
    "ref_timings_ms": {
-    "probe": 185.8,
-    "hash": 0.58,
-    "decode_audio": 235.08,
-    "audio_inference": 54.48,
-    "video_decode_detect_track": 1257.95,
-    "video_detector_inference": 487.67,
-    "video_verifier": 184.74,
-    "video_pose": 190.17,
-    "video_quality_and_camera_motion": 294.2,
-    "frame_gap_check": 65.38,
-    "behavior_segments": 2.25,
-    "fusion": 0.25
+    "probe": 63.43,
+    "hash": 0.52,
+    "decode_audio": 167.31,
+    "audio_inference": 75.82,
+    "video_decode_detect_track": 1963.1,
+    "video_detector_inference": 691.87,
+    "video_verifier": 304.02,
+    "video_pose": 286.05,
+    "video_quality_and_camera_motion": 413.14,
+    "frame_gap_check": 60.98,
+    "behavior_segments": 4.49,
+    "fusion": 1.57
    }
   },
   {
@@ -316,29 +316,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.32,
-    "decode_audio": 25.69,
-    "audio_inference": 71.87,
-    "video_decode_detect_track": 3351.95,
-    "video_detector_inference": 1234.72,
-    "video_verifier": 397.2,
-    "video_posture": 499.07,
-    "video_quality_and_camera_motion": 404.81,
-    "fusion_and_behavior": 1.2
+    "probe_and_hash": 10.45,
+    "decode_audio": 56.57,
+    "audio_inference": 100.29,
+    "video_decode_detect_track": 4612.23,
+    "video_detector_inference": 1733.71,
+    "video_verifier": 631.78,
+    "video_posture": 666.66,
+    "video_quality_and_camera_motion": 399.41,
+    "fusion_and_behavior": 11.45
    },
    "ref_timings_ms": {
-    "probe": 221.24,
-    "hash": 1.03,
-    "decode_audio": 185.98,
-    "audio_inference": 55.62,
-    "video_decode_detect_track": 1136.47,
-    "video_detector_inference": 432.18,
-    "video_verifier": 160.67,
-    "video_pose": 183.7,
-    "video_quality_and_camera_motion": 269.48,
-    "frame_gap_check": 61.45,
-    "behavior_segments": 2.86,
-    "fusion": 0.3
+    "probe": 74.46,
+    "hash": 0.78,
+    "decode_audio": 164.16,
+    "audio_inference": 75.76,
+    "video_decode_detect_track": 1808.69,
+    "video_detector_inference": 716.48,
+    "video_verifier": 260.56,
+    "video_pose": 320.83,
+    "video_quality_and_camera_motion": 394.38,
+    "frame_gap_check": 85.74,
+    "behavior_segments": 3.03,
+    "fusion": 0.43
    }
   },
   {
@@ -366,18 +366,18 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 10.94,
-    "decode_audio": 8.83,
-    "audio_inference": 31.87,
-    "fusion_and_behavior": 0.22
+    "probe_and_hash": 19.54,
+    "decode_audio": 44.92,
+    "audio_inference": 91.4,
+    "fusion_and_behavior": 0.21
    },
    "ref_timings_ms": {
-    "probe": 62.1,
-    "hash": 1.62,
-    "decode_audio": 163.55,
-    "audio_inference": 34.81,
-    "behavior_segments": 0.15,
-    "fusion": 0.27
+    "probe": 61.89,
+    "hash": 1.37,
+    "decode_audio": 206.2,
+    "audio_inference": 42.07,
+    "behavior_segments": 0.16,
+    "fusion": 0.34
    }
   },
   {
@@ -405,26 +405,26 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.06,
-    "decode_audio": 1.61,
-    "video_decode_detect_track": 3022.63,
-    "video_detector_inference": 1217.98,
-    "video_verifier": 388.26,
-    "video_posture": 479.39,
-    "video_quality_and_camera_motion": 359.98,
-    "fusion_and_behavior": 0.53
+    "probe_and_hash": 8.03,
+    "decode_audio": 4.56,
+    "video_decode_detect_track": 4424.22,
+    "video_detector_inference": 1901.18,
+    "video_verifier": 738.02,
+    "video_posture": 689.8,
+    "video_quality_and_camera_motion": 388.58,
+    "fusion_and_behavior": 1.4
    },
    "ref_timings_ms": {
-    "probe": 66.31,
-    "hash": 0.16,
-    "video_decode_detect_track": 1112.56,
-    "video_detector_inference": 427.2,
-    "video_verifier": 144.83,
-    "video_pose": 170.14,
-    "video_quality_and_camera_motion": 264.02,
-    "frame_gap_check": 59.41,
-    "behavior_segments": 2.09,
-    "fusion": 0.18
+    "probe": 60.07,
+    "hash": 0.14,
+    "video_decode_detect_track": 1592.8,
+    "video_detector_inference": 661.59,
+    "video_verifier": 233.96,
+    "video_pose": 275.5,
+    "video_quality_and_camera_motion": 319.09,
+    "frame_gap_check": 53.25,
+    "behavior_segments": 1.65,
+    "fusion": 0.19
    }
   },
   {
@@ -452,27 +452,27 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 8.82,
-    "decode_audio": 26.09,
-    "video_decode_detect_track": 3226.54,
-    "video_detector_inference": 981.68,
-    "video_verifier": 395.51,
-    "video_posture": 464.55,
-    "video_quality_and_camera_motion": 377.64,
-    "fusion_and_behavior": 0.53
+    "probe_and_hash": 10.31,
+    "decode_audio": 35.4,
+    "video_decode_detect_track": 5460,
+    "video_detector_inference": 1905.09,
+    "video_verifier": 938.01,
+    "video_posture": 762.88,
+    "video_quality_and_camera_motion": 446.14,
+    "fusion_and_behavior": 0.66
    },
    "ref_timings_ms": {
-    "probe": 59.91,
-    "hash": 0.23,
-    "decode_audio": 203.78,
-    "video_decode_detect_track": 1173.95,
-    "video_detector_inference": 476.96,
-    "video_verifier": 175.82,
-    "video_pose": 180.38,
-    "video_quality_and_camera_motion": 245.32,
-    "frame_gap_check": 76.2,
-    "behavior_segments": 2.86,
-    "fusion": 0.17
+    "probe": 53.13,
+    "hash": 0.21,
+    "decode_audio": 230.16,
+    "video_decode_detect_track": 1680.33,
+    "video_detector_inference": 714.41,
+    "video_verifier": 259.04,
+    "video_pose": 279.3,
+    "video_quality_and_camera_motion": 296.35,
+    "frame_gap_check": 55.73,
+    "behavior_segments": 1.82,
+    "fusion": 0.16
    }
   },
   {
@@ -500,27 +500,27 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.33,
-    "decode_audio": 23.04,
-    "video_decode_detect_track": 3359.11,
-    "video_detector_inference": 1160,
-    "video_verifier": 422.77,
-    "video_posture": 498.21,
-    "video_quality_and_camera_motion": 340.3,
-    "fusion_and_behavior": 1.03
+    "probe_and_hash": 12.13,
+    "decode_audio": 54.85,
+    "video_decode_detect_track": 4863.19,
+    "video_detector_inference": 1918.88,
+    "video_verifier": 665.51,
+    "video_posture": 604.53,
+    "video_quality_and_camera_motion": 406.49,
+    "fusion_and_behavior": 2.01
    },
    "ref_timings_ms": {
-    "probe": 207.11,
-    "hash": 0.55,
-    "decode_audio": 206.32,
-    "video_decode_detect_track": 1091.14,
-    "video_detector_inference": 452.6,
-    "video_verifier": 157.95,
-    "video_pose": 155.51,
-    "video_quality_and_camera_motion": 232.12,
-    "frame_gap_check": 62.09,
-    "behavior_segments": 1.92,
-    "fusion": 0.15
+    "probe": 63.0,
+    "hash": 0.61,
+    "decode_audio": 206.06,
+    "video_decode_detect_track": 1589.09,
+    "video_detector_inference": 642.26,
+    "video_verifier": 234.86,
+    "video_pose": 271.53,
+    "video_quality_and_camera_motion": 302.86,
+    "frame_gap_check": 61.82,
+    "behavior_segments": 3.06,
+    "fusion": 0.23
    }
   },
   {
@@ -553,18 +553,18 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.86,
-    "decode_audio": 7.52,
-    "audio_inference": 33.34,
-    "fusion_and_behavior": 0.23
+    "probe_and_hash": 8.53,
+    "decode_audio": 10.1,
+    "audio_inference": 46.57,
+    "fusion_and_behavior": 0.34
    },
    "ref_timings_ms": {
-    "probe": 61.15,
-    "hash": 0.29,
-    "decode_audio": 125.85,
-    "audio_inference": 21.94,
-    "behavior_segments": 0.12,
-    "fusion": 0.27
+    "probe": 61.93,
+    "hash": 0.41,
+    "decode_audio": 142.72,
+    "audio_inference": 27.94,
+    "behavior_segments": 0.14,
+    "fusion": 0.21
    }
   },
   {
@@ -592,29 +592,29 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.16,
-    "decode_audio": 24.1,
-    "audio_inference": 55.91,
-    "video_decode_detect_track": 2412.08,
-    "video_detector_inference": 1030.36,
+    "probe_and_hash": 8.82,
+    "decode_audio": 23.55,
+    "audio_inference": 55.36,
+    "video_decode_detect_track": 3327.16,
+    "video_detector_inference": 1604.93,
     "video_verifier": 0.03,
-    "video_posture": 0.02,
-    "video_quality_and_camera_motion": 420.61,
-    "fusion_and_behavior": 0.23
+    "video_posture": 0.03,
+    "video_quality_and_camera_motion": 503.94,
+    "fusion_and_behavior": 0.38
    },
    "ref_timings_ms": {
-    "probe": 60.97,
-    "hash": 0.98,
-    "decode_audio": 208.54,
-    "audio_inference": 53.57,
-    "video_decode_detect_track": 680.48,
-    "video_detector_inference": 470.35,
-    "video_verifier": 0.07,
-    "video_pose": 0.23,
-    "video_quality_and_camera_motion": 129.2,
-    "frame_gap_check": 59.12,
-    "behavior_segments": 0.15,
-    "fusion": 0.35
+    "probe": 49.96,
+    "hash": 0.47,
+    "decode_audio": 177.98,
+    "audio_inference": 83.7,
+    "video_decode_detect_track": 883.19,
+    "video_detector_inference": 651.65,
+    "video_verifier": 0.06,
+    "video_pose": 0.17,
+    "video_quality_and_camera_motion": 142.39,
+    "frame_gap_check": 59.26,
+    "behavior_segments": 0.12,
+    "fusion": 0.19
    }
   },
   {
@@ -642,27 +642,27 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.61,
-    "decode_audio": 19.51,
-    "video_decode_detect_track": 3816.57,
-    "video_detector_inference": 1651.66,
-    "video_verifier": 519.19,
-    "video_posture": 557.06,
-    "video_quality_and_camera_motion": 327.29,
-    "fusion_and_behavior": 1.19
+    "probe_and_hash": 7.06,
+    "decode_audio": 17.69,
+    "video_decode_detect_track": 4143.2,
+    "video_detector_inference": 1732.94,
+    "video_verifier": 621.82,
+    "video_posture": 615.13,
+    "video_quality_and_camera_motion": 337.79,
+    "fusion_and_behavior": 0.43
    },
    "ref_timings_ms": {
-    "probe": 59.45,
-    "hash": 0.24,
-    "decode_audio": 226.83,
-    "video_decode_detect_track": 1138.17,
-    "video_detector_inference": 430.41,
-    "video_verifier": 161.06,
-    "video_pose": 184.04,
-    "video_quality_and_camera_motion": 245.18,
-    "frame_gap_check": 64.63,
-    "behavior_segments": 3.61,
-    "fusion": 0.24
+    "probe": 74.34,
+    "hash": 0.28,
+    "decode_audio": 227.59,
+    "video_decode_detect_track": 1652.13,
+    "video_detector_inference": 651.64,
+    "video_verifier": 256.97,
+    "video_pose": 266.83,
+    "video_quality_and_camera_motion": 334.54,
+    "frame_gap_check": 66.42,
+    "behavior_segments": 2.42,
+    "fusion": 0.14
    }
   },
   {
@@ -690,25 +690,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 8.96,
-    "video_decode_detect_track": 7705.81,
-    "video_detector_inference": 3200.7,
-    "video_verifier": 1096.39,
-    "video_posture": 1029.41,
-    "video_quality_and_camera_motion": 609.62,
-    "fusion_and_behavior": 0.51
+    "probe_and_hash": 11,
+    "video_decode_detect_track": 8094.54,
+    "video_detector_inference": 3195.39,
+    "video_verifier": 1154.35,
+    "video_posture": 1067.45,
+    "video_quality_and_camera_motion": 734.8,
+    "fusion_and_behavior": 0.41
    },
    "ref_timings_ms": {
-    "probe": 289.9,
-    "hash": 1.49,
-    "video_decode_detect_track": 2254.82,
-    "video_detector_inference": 826.64,
-    "video_verifier": 291.38,
-    "video_pose": 277.48,
-    "video_quality_and_camera_motion": 695.25,
-    "frame_gap_check": 69.3,
-    "behavior_segments": 2.97,
-    "fusion": 0.13
+    "probe": 60.03,
+    "hash": 0.93,
+    "video_decode_detect_track": 2991.06,
+    "video_detector_inference": 1129.75,
+    "video_verifier": 433.09,
+    "video_pose": 450.57,
+    "video_quality_and_camera_motion": 836.18,
+    "frame_gap_check": 63.66,
+    "behavior_segments": 2.7,
+    "fusion": 0.04
    }
   },
   {
@@ -736,23 +736,23 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.27,
-    "video_decode_detect_track": 5671.75,
-    "video_detector_inference": 3337.27,
-    "video_verifier": 0.09,
+    "probe_and_hash": 11.68,
+    "video_decode_detect_track": 5246.95,
+    "video_detector_inference": 2696.5,
+    "video_verifier": 0.07,
     "video_posture": 0.03,
-    "video_quality_and_camera_motion": 794.56,
-    "fusion_and_behavior": 0.04
+    "video_quality_and_camera_motion": 830.42,
+    "fusion_and_behavior": 0.05
    },
    "ref_timings_ms": {
-    "probe": 79.93,
-    "hash": 0.68,
-    "video_decode_detect_track": 1654.98,
-    "video_detector_inference": 860.93,
-    "video_verifier": 0.18,
-    "video_pose": 0.35,
-    "video_quality_and_camera_motion": 670.73,
-    "frame_gap_check": 70.91,
+    "probe": 71.36,
+    "hash": 0.61,
+    "video_decode_detect_track": 1876.11,
+    "video_detector_inference": 1117.37,
+    "video_verifier": 0.11,
+    "video_pose": 0.32,
+    "video_quality_and_camera_motion": 650.81,
+    "frame_gap_check": 59.8,
     "behavior_segments": 0.01,
     "fusion": 0.02
    }
@@ -782,25 +782,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.75,
-    "video_decode_detect_track": 4851.8,
-    "video_detector_inference": 1972.43,
-    "video_verifier": 705.31,
-    "video_posture": 671.33,
-    "video_quality_and_camera_motion": 430.97,
-    "fusion_and_behavior": 0.88
+    "probe_and_hash": 8.83,
+    "video_decode_detect_track": 4406.13,
+    "video_detector_inference": 1894.47,
+    "video_verifier": 624.13,
+    "video_posture": 616.55,
+    "video_quality_and_camera_motion": 377,
+    "fusion_and_behavior": 0.62
    },
    "ref_timings_ms": {
-    "probe": 82.04,
-    "hash": 0.49,
-    "video_decode_detect_track": 1530.97,
-    "video_detector_inference": 597.78,
-    "video_verifier": 203.89,
-    "video_pose": 220.47,
-    "video_quality_and_camera_motion": 372.08,
-    "frame_gap_check": 75.13,
-    "behavior_segments": 2.04,
-    "fusion": 0.04
+    "probe": 55.68,
+    "hash": 0.31,
+    "video_decode_detect_track": 1823.54,
+    "video_detector_inference": 743.48,
+    "video_verifier": 280.09,
+    "video_pose": 297.34,
+    "video_quality_and_camera_motion": 383.43,
+    "frame_gap_check": 87.76,
+    "behavior_segments": 4.38,
+    "fusion": 0.05
    }
   },
   {
@@ -828,25 +828,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 14.72,
-    "video_decode_detect_track": 5398.32,
-    "video_detector_inference": 2323.39,
-    "video_verifier": 741.63,
-    "video_posture": 766.66,
-    "video_quality_and_camera_motion": 489.68,
-    "fusion_and_behavior": 0.37
+    "probe_and_hash": 7.89,
+    "video_decode_detect_track": 4996.5,
+    "video_detector_inference": 1987.35,
+    "video_verifier": 787.62,
+    "video_posture": 798.69,
+    "video_quality_and_camera_motion": 441.84,
+    "fusion_and_behavior": 0.29
    },
    "ref_timings_ms": {
-    "probe": 70.48,
-    "hash": 0.52,
-    "video_decode_detect_track": 1578.65,
-    "video_detector_inference": 568.71,
-    "video_verifier": 205.76,
-    "video_pose": 218.65,
-    "video_quality_and_camera_motion": 383.87,
-    "frame_gap_check": 91.19,
-    "behavior_segments": 2.44,
-    "fusion": 0.05
+    "probe": 95.83,
+    "hash": 0.46,
+    "video_decode_detect_track": 1811.0,
+    "video_detector_inference": 718.85,
+    "video_verifier": 255.36,
+    "video_pose": 283.66,
+    "video_quality_and_camera_motion": 423.05,
+    "frame_gap_check": 97.73,
+    "behavior_segments": 2.15,
+    "fusion": 0.04
    }
   },
   {
@@ -874,25 +874,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.79,
-    "video_decode_detect_track": 6446.39,
-    "video_detector_inference": 2328.07,
-    "video_verifier": 905.33,
-    "video_posture": 970.62,
-    "video_quality_and_camera_motion": 559.81,
-    "fusion_and_behavior": 0.34
+    "probe_and_hash": 10.48,
+    "video_decode_detect_track": 6297.27,
+    "video_detector_inference": 2213.16,
+    "video_verifier": 980.02,
+    "video_posture": 928.71,
+    "video_quality_and_camera_motion": 549.77,
+    "fusion_and_behavior": 0.45
    },
    "ref_timings_ms": {
-    "probe": 205.02,
-    "hash": 0.94,
-    "video_decode_detect_track": 1943.88,
-    "video_detector_inference": 712.7,
-    "video_verifier": 284.92,
-    "video_pose": 292.83,
-    "video_quality_and_camera_motion": 506.84,
-    "frame_gap_check": 65.95,
-    "behavior_segments": 2.62,
-    "fusion": 0.04
+    "probe": 88.12,
+    "hash": 0.97,
+    "video_decode_detect_track": 2578.76,
+    "video_detector_inference": 1000.47,
+    "video_verifier": 358.82,
+    "video_pose": 426.4,
+    "video_quality_and_camera_motion": 647.09,
+    "frame_gap_check": 86.34,
+    "behavior_segments": 7.43,
+    "fusion": 0.05
    }
   },
   {
@@ -920,24 +920,24 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 8.95,
-    "video_decode_detect_track": 10283.64,
-    "video_detector_inference": 4014.7,
-    "video_verifier": 1410.2,
-    "video_posture": 1314.14,
-    "video_quality_and_camera_motion": 769.79,
-    "fusion_and_behavior": 0.42
+    "probe_and_hash": 16.47,
+    "video_decode_detect_track": 9779.9,
+    "video_detector_inference": 3562.04,
+    "video_verifier": 1373.68,
+    "video_posture": 1285.07,
+    "video_quality_and_camera_motion": 886.28,
+    "fusion_and_behavior": 0.4
    },
    "ref_timings_ms": {
-    "probe": 73.27,
-    "hash": 3.58,
-    "video_decode_detect_track": 2424.95,
-    "video_detector_inference": 943.16,
-    "video_verifier": 330.71,
-    "video_pose": 388.42,
-    "video_quality_and_camera_motion": 631.05,
-    "frame_gap_check": 73.33,
-    "behavior_segments": 2.52,
+    "probe": 70.51,
+    "hash": 1.44,
+    "video_decode_detect_track": 3195.29,
+    "video_detector_inference": 1246.99,
+    "video_verifier": 471.06,
+    "video_pose": 552.29,
+    "video_quality_and_camera_motion": 796.51,
+    "frame_gap_check": 72.04,
+    "behavior_segments": 2.51,
     "fusion": 0.04
    }
   },
@@ -966,25 +966,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 11.65,
-    "video_decode_detect_track": 9672.19,
-    "video_detector_inference": 3981.57,
-    "video_verifier": 1313.78,
-    "video_posture": 1282.98,
-    "video_quality_and_camera_motion": 805.91,
-    "fusion_and_behavior": 2.06
+    "probe_and_hash": 15.71,
+    "video_decode_detect_track": 8466.68,
+    "video_detector_inference": 3247.38,
+    "video_verifier": 1164.76,
+    "video_posture": 1113.71,
+    "video_quality_and_camera_motion": 763.63,
+    "fusion_and_behavior": 2.42
    },
    "ref_timings_ms": {
-    "probe": 130.16,
-    "hash": 2.83,
-    "video_decode_detect_track": 2213.2,
-    "video_detector_inference": 829.28,
-    "video_verifier": 342.74,
-    "video_pose": 319.53,
-    "video_quality_and_camera_motion": 584.3,
-    "frame_gap_check": 77.69,
-    "behavior_segments": 2.9,
-    "fusion": 0.15
+    "probe": 70.24,
+    "hash": 1.28,
+    "video_decode_detect_track": 3263.53,
+    "video_detector_inference": 1265.61,
+    "video_verifier": 488.35,
+    "video_pose": 472.55,
+    "video_quality_and_camera_motion": 780.69,
+    "frame_gap_check": 60.06,
+    "behavior_segments": 4.87,
+    "fusion": 0.18
    }
   },
   {
@@ -1012,25 +1012,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 9.03,
-    "video_decode_detect_track": 8674.79,
-    "video_detector_inference": 3405.25,
-    "video_verifier": 1241.91,
-    "video_posture": 1275.57,
-    "video_quality_and_camera_motion": 735.93,
-    "fusion_and_behavior": 0.54
+    "probe_and_hash": 8.56,
+    "video_decode_detect_track": 9507.72,
+    "video_detector_inference": 3335.47,
+    "video_verifier": 1361.48,
+    "video_posture": 1213.22,
+    "video_quality_and_camera_motion": 785.18,
+    "fusion_and_behavior": 0.58
    },
    "ref_timings_ms": {
-    "probe": 166.63,
-    "hash": 1.3,
-    "video_decode_detect_track": 2299.79,
-    "video_detector_inference": 863.37,
-    "video_verifier": 322.97,
-    "video_pose": 354.54,
-    "video_quality_and_camera_motion": 627.87,
-    "frame_gap_check": 65.36,
-    "behavior_segments": 2.92,
-    "fusion": 0.14
+    "probe": 71.7,
+    "hash": 1.18,
+    "video_decode_detect_track": 3810.98,
+    "video_detector_inference": 1447.36,
+    "video_verifier": 634.14,
+    "video_pose": 613.75,
+    "video_quality_and_camera_motion": 952.71,
+    "frame_gap_check": 65.53,
+    "behavior_segments": 2.9,
+    "fusion": 0.13
    }
   },
   {
@@ -1058,25 +1058,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 9.97,
-    "video_decode_detect_track": 7892.97,
-    "video_detector_inference": 4008.07,
-    "video_verifier": 599.2,
-    "video_posture": 547.16,
-    "video_quality_and_camera_motion": 788.55,
-    "fusion_and_behavior": 0.45
+    "probe_and_hash": 10.75,
+    "video_decode_detect_track": 7891.49,
+    "video_detector_inference": 3389.07,
+    "video_verifier": 740.58,
+    "video_posture": 636.34,
+    "video_quality_and_camera_motion": 801.99,
+    "fusion_and_behavior": 0.37
    },
    "ref_timings_ms": {
-    "probe": 65.54,
-    "hash": 1.15,
-    "video_decode_detect_track": 2004.11,
-    "video_detector_inference": 853.32,
-    "video_verifier": 154.71,
-    "video_pose": 192.02,
-    "video_quality_and_camera_motion": 682.45,
-    "frame_gap_check": 71.38,
-    "behavior_segments": 2.57,
-    "fusion": 0.2
+    "probe": 63.56,
+    "hash": 0.93,
+    "video_decode_detect_track": 2843.13,
+    "video_detector_inference": 1293.3,
+    "video_verifier": 229.84,
+    "video_pose": 262.0,
+    "video_quality_and_camera_motion": 918.19,
+    "frame_gap_check": 97.15,
+    "behavior_segments": 2.32,
+    "fusion": 0.18
    }
   },
   {
@@ -1104,25 +1104,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 11.92,
-    "video_decode_detect_track": 9164.13,
-    "video_detector_inference": 3839.24,
-    "video_verifier": 600.33,
-    "video_posture": 688.27,
-    "video_quality_and_camera_motion": 905.33,
-    "fusion_and_behavior": 1.65
+    "probe_and_hash": 12.85,
+    "video_decode_detect_track": 8053.92,
+    "video_detector_inference": 3625.25,
+    "video_verifier": 606.25,
+    "video_posture": 586.61,
+    "video_quality_and_camera_motion": 756.19,
+    "fusion_and_behavior": 0.52
    },
    "ref_timings_ms": {
-    "probe": 311.37,
-    "hash": 1.73,
-    "video_decode_detect_track": 2203.63,
-    "video_detector_inference": 873.3,
-    "video_verifier": 167.18,
-    "video_pose": 167.47,
-    "video_quality_and_camera_motion": 813.54,
-    "frame_gap_check": 70.61,
-    "behavior_segments": 2.98,
-    "fusion": 0.06
+    "probe": 95.26,
+    "hash": 1.72,
+    "video_decode_detect_track": 3018.13,
+    "video_detector_inference": 1318.05,
+    "video_verifier": 239.05,
+    "video_pose": 225.15,
+    "video_quality_and_camera_motion": 1053.33,
+    "frame_gap_check": 75.68,
+    "behavior_segments": 2.22,
+    "fusion": 0.05
    }
   },
   {
@@ -1150,25 +1150,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 12.16,
-    "video_decode_detect_track": 4321.71,
-    "video_detector_inference": 1352.53,
-    "video_verifier": 752.81,
-    "video_posture": 633.85,
-    "video_quality_and_camera_motion": 418.72,
-    "fusion_and_behavior": 0.74
+    "probe_and_hash": 13.15,
+    "video_decode_detect_track": 5155.05,
+    "video_detector_inference": 1613.78,
+    "video_verifier": 936.38,
+    "video_posture": 664.44,
+    "video_quality_and_camera_motion": 396.63,
+    "fusion_and_behavior": 0.34
    },
    "ref_timings_ms": {
-    "probe": 393.6,
-    "hash": 3.84,
-    "video_decode_detect_track": 1430.03,
-    "video_detector_inference": 480.26,
-    "video_verifier": 262.3,
-    "video_pose": 185.27,
-    "video_quality_and_camera_motion": 377.87,
-    "frame_gap_check": 66.4,
-    "behavior_segments": 3.21,
-    "fusion": 0.06
+    "probe": 75.25,
+    "hash": 1.66,
+    "video_decode_detect_track": 2038.47,
+    "video_detector_inference": 691.36,
+    "video_verifier": 428.96,
+    "video_pose": 276.06,
+    "video_quality_and_camera_motion": 510.73,
+    "frame_gap_check": 75.85,
+    "behavior_segments": 1.69,
+    "fusion": 0.04
    }
   },
   {
@@ -1176,7 +1176,7 @@
    "decision_ref": "supported_observation",
    "decision_web": "supported_observation",
    "tracks": [
-    2,
+    3,
     0,
     0
    ],
@@ -1186,35 +1186,35 @@
     0
    ],
    "segments": [
-    1,
-    2,
-    1
+    5,
+    0,
+    0
    ],
    "hypotheses": [
-    1,
+    0,
     0,
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 11.24,
-    "video_decode_detect_track": 3559.92,
-    "video_detector_inference": 942.54,
-    "video_verifier": 691.5,
-    "video_posture": 786.72,
-    "video_quality_and_camera_motion": 307.25,
-    "fusion_and_behavior": 1.39
+    "probe_and_hash": 7.86,
+    "video_decode_detect_track": 5420.41,
+    "video_detector_inference": 1730.92,
+    "video_verifier": 1138.55,
+    "video_posture": 1054.66,
+    "video_quality_and_camera_motion": 348.88,
+    "fusion_and_behavior": 0.71
    },
    "ref_timings_ms": {
-    "probe": 280.53,
-    "hash": 0.86,
-    "video_decode_detect_track": 1507.94,
-    "video_detector_inference": 448.39,
-    "video_verifier": 324.87,
-    "video_pose": 321.11,
-    "video_quality_and_camera_motion": 305.6,
-    "frame_gap_check": 63.53,
-    "behavior_segments": 3.54,
-    "fusion": 0.16
+    "probe": 59.32,
+    "hash": 1.23,
+    "video_decode_detect_track": 2089.37,
+    "video_detector_inference": 708.4,
+    "video_verifier": 384.82,
+    "video_pose": 452.44,
+    "video_quality_and_camera_motion": 410.52,
+    "frame_gap_check": 71.69,
+    "behavior_segments": 3.93,
+    "fusion": 0.07
    }
   },
   {
@@ -1242,24 +1242,24 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 10.89,
-    "video_decode_detect_track": 2350.06,
-    "video_detector_inference": 886.3,
-    "video_verifier": 227.29,
-    "video_posture": 224.5,
-    "video_quality_and_camera_motion": 271.53,
-    "fusion_and_behavior": 0.39
+    "probe_and_hash": 9.03,
+    "video_decode_detect_track": 3325.05,
+    "video_detector_inference": 1396.03,
+    "video_verifier": 383.64,
+    "video_posture": 317.02,
+    "video_quality_and_camera_motion": 394.34,
+    "fusion_and_behavior": 0.37
    },
    "ref_timings_ms": {
-    "probe": 69.34,
-    "hash": 1.62,
-    "video_decode_detect_track": 1047.71,
-    "video_detector_inference": 413.64,
-    "video_verifier": 98.08,
-    "video_pose": 88.74,
-    "video_quality_and_camera_motion": 337.49,
-    "frame_gap_check": 68.91,
-    "behavior_segments": 1.98,
+    "probe": 68.3,
+    "hash": 0.85,
+    "video_decode_detect_track": 1468.12,
+    "video_detector_inference": 640.68,
+    "video_verifier": 159.59,
+    "video_pose": 138.1,
+    "video_quality_and_camera_motion": 418.6,
+    "frame_gap_check": 64.38,
+    "behavior_segments": 1.42,
     "fusion": 0.04
    }
   },
@@ -1288,25 +1288,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 10.43,
-    "video_decode_detect_track": 2504.01,
-    "video_detector_inference": 910.96,
-    "video_verifier": 289.37,
-    "video_posture": 325.84,
-    "video_quality_and_camera_motion": 282.57,
-    "fusion_and_behavior": 0.25
+    "probe_and_hash": 11.37,
+    "video_decode_detect_track": 4049.97,
+    "video_detector_inference": 1749.15,
+    "video_verifier": 487.29,
+    "video_posture": 478.77,
+    "video_quality_and_camera_motion": 343.03,
+    "fusion_and_behavior": 0.36
    },
    "ref_timings_ms": {
-    "probe": 74.54,
-    "hash": 0.53,
-    "video_decode_detect_track": 978.9,
-    "video_detector_inference": 376.58,
-    "video_verifier": 115.13,
-    "video_pose": 102.96,
-    "video_quality_and_camera_motion": 239.29,
-    "frame_gap_check": 68.88,
-    "behavior_segments": 1.67,
-    "fusion": 0.04
+    "probe": 64.96,
+    "hash": 0.81,
+    "video_decode_detect_track": 1612.53,
+    "video_detector_inference": 725.89,
+    "video_verifier": 167.13,
+    "video_pose": 170.89,
+    "video_quality_and_camera_motion": 416.57,
+    "frame_gap_check": 89.32,
+    "behavior_segments": 1.45,
+    "fusion": 0.03
    }
   },
   {
@@ -1334,25 +1334,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 9.24,
-    "video_decode_detect_track": 2806.53,
-    "video_detector_inference": 944.85,
-    "video_verifier": 359.03,
-    "video_posture": 391.99,
-    "video_quality_and_camera_motion": 289.27,
-    "fusion_and_behavior": 0.42
+    "probe_and_hash": 9.62,
+    "video_decode_detect_track": 4667.18,
+    "video_detector_inference": 1901.45,
+    "video_verifier": 648.42,
+    "video_posture": 653.75,
+    "video_quality_and_camera_motion": 312.16,
+    "fusion_and_behavior": 0.5
    },
    "ref_timings_ms": {
-    "probe": 62.61,
-    "hash": 0.78,
-    "video_decode_detect_track": 1199.69,
-    "video_detector_inference": 440.63,
-    "video_verifier": 166.56,
-    "video_pose": 169.41,
-    "video_quality_and_camera_motion": 312.86,
-    "frame_gap_check": 62.98,
-    "behavior_segments": 2.57,
-    "fusion": 0.14
+    "probe": 62.06,
+    "hash": 0.49,
+    "video_decode_detect_track": 1617.78,
+    "video_detector_inference": 660.68,
+    "video_verifier": 228.14,
+    "video_pose": 246.53,
+    "video_quality_and_camera_motion": 363.6,
+    "frame_gap_check": 66.89,
+    "behavior_segments": 1.84,
+    "fusion": 0.13
    }
   },
   {
@@ -1380,24 +1380,24 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.55,
-    "video_decode_detect_track": 2551.63,
-    "video_detector_inference": 1002.68,
-    "video_verifier": 208.98,
-    "video_posture": 111.85,
-    "video_quality_and_camera_motion": 361.82,
-    "fusion_and_behavior": 0.05
+    "probe_and_hash": 8.22,
+    "video_decode_detect_track": 3821.49,
+    "video_detector_inference": 1616.53,
+    "video_verifier": 361.28,
+    "video_posture": 137.84,
+    "video_quality_and_camera_motion": 498.17,
+    "fusion_and_behavior": 0.15
    },
    "ref_timings_ms": {
-    "probe": 63.56,
-    "hash": 0.88,
-    "video_decode_detect_track": 1071.52,
-    "video_detector_inference": 487.17,
-    "video_verifier": 89.45,
-    "video_pose": 33.14,
-    "video_quality_and_camera_motion": 357.67,
-    "frame_gap_check": 90.47,
-    "behavior_segments": 0.02,
+    "probe": 77.87,
+    "hash": 0.81,
+    "video_decode_detect_track": 1500.84,
+    "video_detector_inference": 723.75,
+    "video_verifier": 157.05,
+    "video_pose": 52.4,
+    "video_quality_and_camera_motion": 433.56,
+    "frame_gap_check": 65.32,
+    "behavior_segments": 0.01,
     "fusion": 0.02
    }
   },
@@ -1426,25 +1426,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 8.07,
-    "video_decode_detect_track": 1287.47,
-    "video_detector_inference": 452.68,
-    "video_verifier": 186.71,
-    "video_posture": 186.09,
-    "video_quality_and_camera_motion": 177.52,
-    "fusion_and_behavior": 0.38
+    "probe_and_hash": 13.55,
+    "video_decode_detect_track": 1942.81,
+    "video_detector_inference": 758.52,
+    "video_verifier": 396.8,
+    "video_posture": 239.8,
+    "video_quality_and_camera_motion": 183.34,
+    "fusion_and_behavior": 0.29
    },
    "ref_timings_ms": {
-    "probe": 76.13,
-    "hash": 0.4,
-    "video_decode_detect_track": 458.08,
-    "video_detector_inference": 149.98,
-    "video_verifier": 55.7,
-    "video_pose": 55.71,
-    "video_quality_and_camera_motion": 93.19,
-    "frame_gap_check": 71.42,
-    "behavior_segments": 1.37,
-    "fusion": 0.04
+    "probe": 77.23,
+    "hash": 0.42,
+    "video_decode_detect_track": 816.81,
+    "video_detector_inference": 283.83,
+    "video_verifier": 101.45,
+    "video_pose": 102.22,
+    "video_quality_and_camera_motion": 185.17,
+    "frame_gap_check": 114.08,
+    "behavior_segments": 1.84,
+    "fusion": 0.06
    }
   },
   {
@@ -1472,25 +1472,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.3,
-    "video_decode_detect_track": 1316.6,
-    "video_detector_inference": 422.95,
-    "video_verifier": 340.67,
-    "video_posture": 184.96,
-    "video_quality_and_camera_motion": 148.77,
-    "fusion_and_behavior": 0.55
+    "probe_and_hash": 13.94,
+    "video_decode_detect_track": 1676,
+    "video_detector_inference": 586.8,
+    "video_verifier": 518.46,
+    "video_posture": 256.02,
+    "video_quality_and_camera_motion": 113.05,
+    "fusion_and_behavior": 0.38
    },
    "ref_timings_ms": {
-    "probe": 90.54,
-    "hash": 0.37,
-    "video_decode_detect_track": 539.05,
-    "video_detector_inference": 162.24,
-    "video_verifier": 114.99,
-    "video_pose": 58.43,
-    "video_quality_and_camera_motion": 112.21,
-    "frame_gap_check": 70.74,
-    "behavior_segments": 3.08,
-    "fusion": 0.06
+    "probe": 80.78,
+    "hash": 0.33,
+    "video_decode_detect_track": 949.01,
+    "video_detector_inference": 324.64,
+    "video_verifier": 230.3,
+    "video_pose": 113.83,
+    "video_quality_and_camera_motion": 158.38,
+    "frame_gap_check": 62.27,
+    "behavior_segments": 2.22,
+    "fusion": 0.05
    }
   },
   {
@@ -1518,25 +1518,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.86,
-    "video_decode_detect_track": 1178.68,
-    "video_detector_inference": 420.14,
-    "video_verifier": 307.19,
-    "video_posture": 175.96,
-    "video_quality_and_camera_motion": 85.71,
-    "fusion_and_behavior": 0.36
+    "probe_and_hash": 11.13,
+    "video_decode_detect_track": 1797.21,
+    "video_detector_inference": 679.6,
+    "video_verifier": 527.24,
+    "video_posture": 261.86,
+    "video_quality_and_camera_motion": 96.94,
+    "fusion_and_behavior": 0.24
    },
    "ref_timings_ms": {
-    "probe": 73.55,
-    "hash": 0.65,
-    "video_decode_detect_track": 544.4,
-    "video_detector_inference": 156.06,
-    "video_verifier": 115.97,
-    "video_pose": 60.67,
-    "video_quality_and_camera_motion": 107.64,
-    "frame_gap_check": 71.33,
-    "behavior_segments": 1.93,
-    "fusion": 0.06
+    "probe": 90.42,
+    "hash": 0.93,
+    "video_decode_detect_track": 914.7,
+    "video_detector_inference": 267.98,
+    "video_verifier": 246.58,
+    "video_pose": 90.4,
+    "video_quality_and_camera_motion": 117.69,
+    "frame_gap_check": 75.27,
+    "behavior_segments": 1.3,
+    "fusion": 0.04
    }
   },
   {
@@ -1564,25 +1564,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.9,
-    "video_decode_detect_track": 1323.53,
-    "video_detector_inference": 404.09,
-    "video_verifier": 296.74,
-    "video_posture": 338.88,
-    "video_quality_and_camera_motion": 106.15,
-    "fusion_and_behavior": 0.43
+    "probe_and_hash": 23.38,
+    "video_decode_detect_track": 1900.91,
+    "video_detector_inference": 624.99,
+    "video_verifier": 426.56,
+    "video_posture": 504.56,
+    "video_quality_and_camera_motion": 89.18,
+    "fusion_and_behavior": 0.75
    },
    "ref_timings_ms": {
-    "probe": 71.28,
-    "hash": 0.81,
-    "video_decode_detect_track": 615.97,
-    "video_detector_inference": 161.88,
-    "video_verifier": 123.54,
-    "video_pose": 124.5,
-    "video_quality_and_camera_motion": 111.14,
-    "frame_gap_check": 89.38,
-    "behavior_segments": 2.43,
-    "fusion": 0.06
+    "probe": 127.41,
+    "hash": 20.98,
+    "video_decode_detect_track": 812.95,
+    "video_detector_inference": 218.02,
+    "video_verifier": 178.32,
+    "video_pose": 196.73,
+    "video_quality_and_camera_motion": 116.2,
+    "frame_gap_check": 91.65,
+    "behavior_segments": 3.87,
+    "fusion": 0.28
    }
   },
   {
@@ -1610,25 +1610,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.03,
-    "video_decode_detect_track": 1511.51,
-    "video_detector_inference": 389.07,
-    "video_verifier": 502.48,
-    "video_posture": 352.89,
-    "video_quality_and_camera_motion": 82.04,
-    "fusion_and_behavior": 0.69
+    "probe_and_hash": 7.37,
+    "video_decode_detect_track": 2308.54,
+    "video_detector_inference": 610.56,
+    "video_verifier": 873.32,
+    "video_posture": 475.04,
+    "video_quality_and_camera_motion": 88.64,
+    "fusion_and_behavior": 0.36
    },
    "ref_timings_ms": {
-    "probe": 89.24,
-    "hash": 0.51,
-    "video_decode_detect_track": 650.94,
-    "video_detector_inference": 160.41,
-    "video_verifier": 193.05,
-    "video_pose": 123.28,
-    "video_quality_and_camera_motion": 65.36,
-    "frame_gap_check": 65.06,
-    "behavior_segments": 3.3,
-    "fusion": 0.13
+    "probe": 72.87,
+    "hash": 0.29,
+    "video_decode_detect_track": 1091.59,
+    "video_detector_inference": 267.38,
+    "video_verifier": 340.1,
+    "video_pose": 213.93,
+    "video_quality_and_camera_motion": 108.83,
+    "frame_gap_check": 90.5,
+    "behavior_segments": 6.46,
+    "fusion": 0.37
    }
   },
   {
@@ -1656,24 +1656,24 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 6.97,
-    "video_decode_detect_track": 942.84,
-    "video_detector_inference": 368.36,
-    "video_verifier": 167.96,
-    "video_posture": 161.21,
-    "video_quality_and_camera_motion": 94.37,
-    "fusion_and_behavior": 0.23
+    "probe_and_hash": 7.97,
+    "video_decode_detect_track": 1418.47,
+    "video_detector_inference": 611.11,
+    "video_verifier": 251.49,
+    "video_posture": 283.79,
+    "video_quality_and_camera_motion": 81.11,
+    "fusion_and_behavior": 0.19
    },
    "ref_timings_ms": {
-    "probe": 61.49,
-    "hash": 0.29,
-    "video_decode_detect_track": 495.98,
-    "video_detector_inference": 170.55,
-    "video_verifier": 70.5,
-    "video_pose": 64.7,
-    "video_quality_and_camera_motion": 106.29,
-    "frame_gap_check": 61.66,
-    "behavior_segments": 1.22,
+    "probe": 76.95,
+    "hash": 0.41,
+    "video_decode_detect_track": 702.54,
+    "video_detector_inference": 269.14,
+    "video_verifier": 95.37,
+    "video_pose": 114.57,
+    "video_quality_and_camera_motion": 129.23,
+    "frame_gap_check": 77.29,
+    "behavior_segments": 1.56,
     "fusion": 0.04
    }
   },
@@ -1702,25 +1702,25 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 7.56,
-    "video_decode_detect_track": 1383.3,
-    "video_detector_inference": 560.22,
-    "video_verifier": 159.61,
-    "video_posture": 194.37,
-    "video_quality_and_camera_motion": 182.19,
-    "fusion_and_behavior": 0.34
+    "probe_and_hash": 8.64,
+    "video_decode_detect_track": 1788.27,
+    "video_detector_inference": 770.76,
+    "video_verifier": 265.27,
+    "video_posture": 261.96,
+    "video_quality_and_camera_motion": 181.52,
+    "fusion_and_behavior": 0.16
    },
    "ref_timings_ms": {
-    "probe": 138.28,
-    "hash": 0.55,
-    "video_decode_detect_track": 522.51,
-    "video_detector_inference": 153.81,
-    "video_verifier": 50.41,
-    "video_pose": 54.37,
-    "video_quality_and_camera_motion": 133.11,
-    "frame_gap_check": 71.81,
-    "behavior_segments": 1.29,
-    "fusion": 0.05
+    "probe": 85.59,
+    "hash": 0.65,
+    "video_decode_detect_track": 699.86,
+    "video_detector_inference": 217.14,
+    "video_verifier": 79.6,
+    "video_pose": 82.16,
+    "video_quality_and_camera_motion": 175.6,
+    "frame_gap_check": 74.61,
+    "behavior_segments": 1.8,
+    "fusion": 0.04
    }
   },
   {
@@ -1748,24 +1748,24 @@
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 10.14,
-    "video_decode_detect_track": 1155.24,
-    "video_detector_inference": 431.97,
-    "video_verifier": 183.07,
-    "video_posture": 212.46,
-    "video_quality_and_camera_motion": 145.6,
+    "probe_and_hash": 6.8,
+    "video_decode_detect_track": 1953.41,
+    "video_detector_inference": 1082.53,
+    "video_verifier": 295.77,
+    "video_posture": 243.09,
+    "video_quality_and_camera_motion": 137.93,
     "fusion_and_behavior": 0.32
    },
    "ref_timings_ms": {
-    "probe": 73.87,
-    "hash": 0.51,
-    "video_decode_detect_track": 486.08,
-    "video_detector_inference": 152.92,
-    "video_verifier": 63.65,
-    "video_pose": 65.37,
-    "video_quality_and_camera_motion": 87.94,
-    "frame_gap_check": 69.5,
-    "behavior_segments": 1.39,
+    "probe": 73.78,
+    "hash": 0.38,
+    "video_decode_detect_track": 677.6,
+    "video_detector_inference": 194.93,
+    "video_verifier": 94.17,
+    "video_pose": 118.69,
+    "video_quality_and_camera_motion": 120.13,
+    "frame_gap_check": 69.34,
+    "behavior_segments": 1.18,
     "fusion": 0.04
    }
   },
@@ -1774,9 +1774,9 @@
    "decision_ref": "supported_observation",
    "decision_web": "supported_observation",
    "tracks": [
-    2,
     1,
-    0
+    1,
+    1
    ],
    "sounds": [
     1,
@@ -1784,39 +1784,39 @@
     0
    ],
    "segments": [
-    3,
     2,
-    0
+    1,
+    1
    ],
    "hypotheses": [
     3,
-    0,
+    1,
     0
    ],
    "web_timings_ms": {
-    "probe_and_hash": 96.53,
-    "decode_audio": 51.08,
-    "audio_inference": 78.94,
-    "video_decode_detect_track": 8099.07,
-    "video_detector_inference": 1009.64,
-    "video_verifier": 112.17,
-    "video_posture": 22.95,
-    "video_quality_and_camera_motion": 356.76,
-    "fusion_and_behavior": 0.77
+    "probe_and_hash": 187.26,
+    "decode_audio": 65.84,
+    "audio_inference": 75.03,
+    "video_decode_detect_track": 11540.03,
+    "video_detector_inference": 1901.52,
+    "video_verifier": 172.37,
+    "video_posture": 149.52,
+    "video_quality_and_camera_motion": 532.17,
+    "fusion_and_behavior": 0.96
    },
    "ref_timings_ms": {
-    "probe": 103.76,
-    "hash": 374.16,
-    "decode_audio": 225.75,
-    "audio_inference": 74.29,
-    "video_decode_detect_track": 1200.1,
-    "video_detector_inference": 558.52,
-    "video_verifier": 99.97,
-    "video_pose": 13.53,
-    "video_quality_and_camera_motion": 367.55,
-    "frame_gap_check": 107.39,
-    "behavior_segments": 1.78,
-    "fusion": 0.25
+    "probe": 81.16,
+    "hash": 28.8,
+    "decode_audio": 210.11,
+    "audio_inference": 70.61,
+    "video_decode_detect_track": 1566.48,
+    "video_detector_inference": 754.25,
+    "video_verifier": 156.26,
+    "video_pose": 93.48,
+    "video_quality_and_camera_motion": 376.4,
+    "frame_gap_check": 99.54,
+    "behavior_segments": 1.51,
+    "fusion": 0.24
    }
   }
  ],
@@ -1826,5 +1826,5 @@
   "segments_s": 1.1
  },
  "note": "Desktop headless Chromium (LiteRT.js WASM) vs Python LiteRT; media decoded by the browser vs FFmpeg.",
- "created_at": "2026-10-10T09:29:41+00:00"
+ "created_at": "2026-10-19T10:25:01+00:00"
 }

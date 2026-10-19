@@ -43,6 +43,8 @@ class Ev:
     tags: frozenset[str]
     strength: float = 1.0  # [0, 1] how strongly the item expresses its tags
     attributed_track: str | None = None  # for audio: track it may be attached to
+    # Tags that may only block a hypothesis (unvalidated sound subtypes, E21): never triggers or support.
+    conflict_tags: frozenset[str] = frozenset()
 
     @property
     def id(self) -> str:
@@ -210,7 +212,8 @@ class FusionEngine:
                         stale.append(a)
         support_ids = [e.id for e in (best or relevant)]
         roots_used = sorted({e.root for e in (best or relevant)})
-        conflicts = [e for e in pool if e.tags & rule.conflicts and (not best or any(_gap(e, b) <= c.co_occurrence_window_s for b in best))]
+        conflicts = [e for e in pool if (e.tags | e.conflict_tags) & rule.conflicts
+                     and (not best or any(_gap(e, b) <= c.co_occurrence_window_s for b in best))]
         opinions: dict[str, float] = {}
         for e in best or relevant:
             for tag in e.tags & set(rule.tag_scores):

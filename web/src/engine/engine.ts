@@ -1,7 +1,7 @@
 // On-device analysis engine: the browser twin of src/petperception/pipeline.py.
 // Everything runs locally (LiteRT.js WASM); no media leaves the device.
 import type { EngineAssets } from "./assets";
-import { audioLevels, extractEvents, scoreWaveform16k, type SoundEventRaw } from "./audio";
+import { audioLevels, extractEvents, scoreWaveform16k, vocalConflictTags, vocalTags, type SoundEventRaw } from "./audio";
 import * as BH from "./behavior";
 import { Detector } from "./detector";
 import { explainHypothesis, FusionEngine, suggestionsFor, type Ev, type EvidenceItem, type Hypothesis } from "./fusion";
@@ -33,8 +33,7 @@ const STATIC_LIMITATIONS = [
   "For veterinary or behavioral concerns, consult a qualified professional; this system does not diagnose.",
   "Analysed on this device (browser runtime). Results can differ slightly from the server reference because the browser decodes and scales media differently.",
 ];
-const REQUEST_LIKE = new Set(["meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_dog"]);
-const SUBTYPE_MIN = 0.3;
+
 const POSE_FEATURES = ["ear_tip_elevation", "tail_elevation", "play_bow_candidate", "tail_lateral_oscillation"];
 
 export class LocalEngine {
@@ -321,6 +320,8 @@ export class LocalEngine {
 
     const soundModels: Record<string, unknown>[] = [], contextModels: Record<string, unknown>[] = [];
     const videoOk = videoState === "present" && !!this.detector;
+    const validation = a.audio?.subtype_validation ?? {};
+    const shown = new Set(Object.entries(validation).filter(([, v]) => v === "passed").map(([k2]) => k2));
     rawEvents.forEach((ev, idx) => {
       const k = idx + 1;
       const eid = `ev-snd-${k}`;
@@ -339,24 +340,20 @@ export class LocalEngine {
       }
       const sm = { event_id: `snd-${k}`, label: ev.label, t_start_s: ev.start_s, t_end_s: ev.end_s, peak_raw_score: ev.peak_score, mean_raw_score: ev.mean_score,
         threshold: ev.threshold, threshold_source: isContext ? "config context_tag_threshold (not selected on data)" : (a.audio!.threshold_source[ev.label] ?? "config default (not selected on data)"),
-        score_kind: "yamnet_sigmoid_raw", calibration_status: "uncalibrated", calibrated_probability: null, subtypes: ev.subtypes, top_audioset_labels: ev.top_audioset_labels,
+        score_kind: "yamnet_sigmoid_raw", calibration_status: "uncalibrated", calibrated_probability: null, subtypes: ev.subtypes,
+        subtype_validation: Object.fromEntries(Object.keys(ev.subtypes).map((k2) => [k2, validation[k2] ?? "not_evaluated"])), top_audioset_labels: ev.top_audioset_labels,
         attribution: att, evidence_id: eid };
       (isContext ? contextModels : soundModels).push(sm);
-      const tags = new Set<string>();
-      if (isContext) tags.add(ev.label.split(":")[1]);
-      else {
-        const strong = new Set(Object.entries(ev.subtypes).filter(([, v]) => v >= SUBTYPE_MIN).map(([k2]) => k2));
-        for (const x of ["hiss", "growl", "purr", "bark", "howl"]) if (strong.has(x)) tags.add(x);
-        if (ev.label !== "growl" && ([...strong].some((x) => REQUEST_LIKE.has(x)) || !strong.size)) tags.add("vocalization");
-        if (ev.label === "growl") tags.add("growl");
-      }
-      const subTxt = Object.entries(ev.subtypes).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k2, v2]) => `${k2} ${v2.toFixed(2)}`).join(", ");
-      const labelTxt = ev.label.replace("context:", "").replace(/_/g, " ");
+      const tags = isContext ? new Set<string>([ev.label.split(":")[1]]) : vocalTags(ev.label, ev.subtypes, shown);
+      // Unvalidated subtypes stay in the JSON (with their status), not in the text.
+      const subTxt = Object.entries(ev.subtypes).filter(([k2]) => shown.has(k2)).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k2, v2]) => `${k2} ${v2.toFixed(2)}`).join(", ");
+      const labelTxt = ev.label === "growl" && !shown.has("growl") ? "possible growl (unvalidated sound type)" : ev.label.replace("context:", "").replace(/_/g, " ");
       const item: EvidenceItem = { evidence_id: eid, kind: isContext ? "context_sound" : "sound_event", t_start_s: ev.start_s, t_end_s: ev.end_s, track_id: null,
         summary: `${labelTxt} sound ${ev.start_s.toFixed(2)}-${ev.end_s.toFixed(2)}s (peak raw score ${ev.peak_score.toFixed(2)}${subTxt ? "; " + subTxt : ""})`,
         value: ev.peak_score, value_kind: "yamnet_sigmoid_raw", reliability: "high",
         provenance: { component: "audio_event", model_id: a.audio!.model_id, root: "audio:yamnet", method: "YAMNet tags, ontology group max, thresholded" } };
-      evidence.push({ item, root: "audio:yamnet", tags, strength: 1, attributed_track: att.status === "single_visible_candidate" ? att.candidate_track_ids[0] : null });
+      evidence.push({ item, root: "audio:yamnet", tags, strength: 1, attributed_track: att.status === "single_visible_candidate" ? att.candidate_track_ids[0] : null,
+        conflict_tags: isContext ? new Set<string>() : vocalConflictTags(ev.label, ev.subtypes, shown) });
     });
 
     const behaviorEvents = bp.enabled ? [...BH.vocalBouts(soundModels.map((m) => [m.label as string, m.t_start_s as number, m.t_end_s as number]), bp),
@@ -407,7 +404,7 @@ export class LocalEngine {
     if (videoOk && nFrames) avail.push("video");
     report("done", 1);
     return {
-      schema_version: "1.3.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
+      schema_version: "1.4.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
       config_profile: "ondevice", config_hash: this.info.bundle_version,
       media: { analysis_filename: opts.name.replace(/[^A-Za-z0-9._-]/g, "_").slice(0, 120) || "recording", size_bytes: file.size, sha256: digest, container: p.mime,
         duration_s: p.duration_s, start_time_s: 0,

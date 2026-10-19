@@ -85,19 +85,52 @@ REQUEST_LIKE = {"meow", "caterwaul", "bark", "yip", "bow_wow", "howl", "whimper_
 TAG_SUBTYPES = {"hiss", "growl", "purr", "bark", "howl"}
 
 
-def vocal_tags(label: str, subtypes: dict[str, float]) -> set[str]:
+SubtypeStatus = str  # passed | failed | not_evaluable | not_evaluated
+
+
+def load_subtype_validation(path: Path | None) -> dict[str, SubtypeStatus]:
+    """Validation status per vocalization subtype (E21 gate, artifacts/audio_subtype_validation.json).
+
+    Without the file no subtype counts as validated, so none is shown or used
+    as an interpretation trigger.
+    """
+    if not path or not path.exists():
+        return {}
+    return {k: v["status"] for k, v in read_json(path)["subtypes"].items()}
+
+
+def shown_subtypes(validation: dict[str, SubtypeStatus]) -> set[str]:
+    """Subtypes that passed the pre-set gate (F1 >= 0.7, lower 95 % bound >= 0.6) and may be shown."""
+    return {k for k, v in validation.items() if v == "passed"}
+
+
+def vocal_tags(label: str, subtypes: dict[str, float], shown: set[str] | None = None) -> set[str]:
     """Fusion tags of one species or growl event (the rule both engines apply).
 
     A species-group event without any confident subtype, or with a request-like
     one, is a request-like "vocalization"; hiss, growl and purr alone are not.
+    Only subtypes in `shown` (validated, see `shown_subtypes`) become tags;
+    `shown=None` means every subtype counts (detection-only analyses such as E21).
+    Unvalidated confident subtypes still keep an event from counting as a request.
     """
     strong = {k for k, v in subtypes.items() if v >= SUBTYPE_MIN}
-    tags = strong & TAG_SUBTYPES
+    eligible = TAG_SUBTYPES if shown is None else TAG_SUBTYPES & shown
+    tags = strong & eligible
     if label != "growl" and (strong & REQUEST_LIKE or not strong):
         tags.add("vocalization")
-    if label == "growl":
+    if label == "growl" and (shown is None or "growl" in shown):
         tags.add("growl")
     return tags
+
+
+def vocal_conflict_tags(label: str, subtypes: dict[str, float], shown: set[str]) -> set[str]:
+    """Confident subtypes that are not validated: they may block a hypothesis (a possible growl
+    rules out "relaxed") but never open or support one."""
+    strong = {k for k, v in subtypes.items() if v >= SUBTYPE_MIN}
+    out = (strong & TAG_SUBTYPES) - shown
+    if label == "growl" and "growl" not in shown:
+        out.add("growl")
+    return out
 
 
 def build_groups(backend: YamnetBackend) -> dict[str, GroupSpec]:
