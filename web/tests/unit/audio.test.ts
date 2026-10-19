@@ -31,3 +31,17 @@ describe("conflict-only tags", () => {
     expect([...vocalConflictTags("dog_vocalization", { bark: 0.9 }, shown)]).toEqual([]);
   });
 });
+
+describe("per-tag context thresholds", () => {
+  it("override the shared threshold for listed tags only (same case as Python)", async () => {
+    const { extractEvents } = await import("../../src/engine/audio");
+    const scores = [[0, 0, 0], [0.4, 0, 0], [0, 0.4, 0], [0, 0, 0]];
+    const t = scores.map((_, i) => i * 0.48);
+    const ws = { tStart: t, tEnd: t.map((x) => x + 0.975), scores, padded: 0 };
+    const base = { groups: {}, subtypes: { growl: 2 }, context_tags: { knock: 0, door: 1 }, thresholds: { growl: 0.5 }, context_tag_threshold: 0.3,
+      min_event_gap_s: 0.5, labels: ["knock", "door", "growl"] } as never;
+    const labels = (a: unknown) => extractEvents(ws as never, a as never).map((e) => e.label).sort();
+    expect(labels(base)).toEqual(["context:door", "context:knock"]);
+    expect(labels({ ...(base as object), context_thresholds: { knock: 0.59 } })).toEqual(["context:door"]);
+  });
+});

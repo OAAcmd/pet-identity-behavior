@@ -1,0 +1,59 @@
+{
+  "format": "petperception.audio_context_thresholds/1",
+  "source": "E21b, variant cc0_ccby (FSD50K dev CC0 / CC BY clips; FSD50K is CC BY 4.0)",
+  "rule": "paired F1 difference lower 95% bound > -0.02",
+  "other_tags": "context_tag_threshold from the configuration",
+  "created_at": "2026-10-19T09:30:31+00:00",
+  "tags": {
+    "door": {
+      "threshold": 0.15,
+      "eval_f1_deployed": 0.413,
+      "eval_f1_selected": 0.4662,
+      "paired_f1_difference_ci95": [
+        0.0214,
+        0.0852
+      ],
+      "passes_gate": false
+    },
+    "knock": {
+      "threshold": 0.59,
+      "eval_f1_deployed": 0.4119,
+      "eval_f1_selected": 0.5258,
+      "paired_f1_difference_ci95": [
+        0.0464,
+        0.1761
+      ],
+      "passes_gate": false
+    },
+    "dishes_pots_pans": {
+      "threshold": 0.2,
+      "eval_f1_deployed": 0.2773,
+      "eval_f1_selected": 0.296,
+      "paired_f1_difference_ci95": [
+        -0.0184,
+        0.0607
+      ],
+      "passes_gate": false
+    },
+    "thunder": {
+      "threshold": 0.415,
+      "eval_f1_deployed": 0.7972,
+      "eval_f1_selected": 0.8397,
+      "paired_f1_difference_ci95": [
+        0.0182,
+        0.0701
+      ],
+      "passes_gate": true
+    },
+    "fireworks": {
+      "threshold": 0.805,
+      "eval_f1_deployed": 0.3152,
+      "eval_f1_selected": 0.5694,
+      "paired_f1_difference_ci95": [
+        0.134,
+        0.3373
+      ],
+      "passes_gate": false
+    }
+  }
+}

@@ -75,3 +75,35 @@ def test_unvalidated_growl_blocks_relaxed_but_opens_nothing():
     assert relaxed and all(h.status == "abstained" and "snd" in h.conflicting_evidence_ids for h in relaxed)
     assert all(h.status not in ("experimental_hypothesis", "supported_observation") for n in ("tense", "warning") for h in hyps.get(n, []))
 
+
+
+def test_per_tag_context_thresholds_override_the_shared_one():
+    import numpy as np
+
+    from petperception.audio.events import CONTEXT_TAG_MIDS, extract_events
+    from petperception.audio.yamnet import WindowScores
+
+    class _Backend:  # just what extract_events reads
+        mid_to_index = {CONTEXT_TAG_MIDS["knock"]: 0, CONTEXT_TAG_MIDS["door"]: 1, "/m/0ghcn6": 2}
+        labels = ["knock", "door", "growl"]
+
+    scores = np.zeros((4, 3), np.float32)
+    scores[1, 0] = 0.4  # knock at 0.4
+    scores[2, 1] = 0.4  # door at 0.4
+    t = np.arange(4) * 0.48
+    ws = WindowScores(t, t + 0.975, scores)
+    labels = lambda ev: sorted(e.label for e in ev)  # noqa: E731
+    shared = extract_events(ws, _Backend(), {}, {"growl": 0.5}, 0.3, 0.5)
+    per_tag = extract_events(ws, _Backend(), {}, {"growl": 0.5}, 0.3, 0.5, {"knock": 0.59})
+    assert labels(shared) == ["context:door", "context:knock"]
+    assert labels(per_tag) == ["context:door"]  # knock now needs 0.59; door keeps the shared 0.3
+
+
+def test_committed_context_thresholds_were_adopted_by_e21b():
+    from petperception.audio.events import load_context_thresholds
+
+    th = load_context_thresholds(REPO / "artifacts" / "audio_context_thresholds.json")
+    e21b = json.loads((REPO / "results" / "e21b" / "metrics.json").read_text())["variants"]["cc0_ccby"]
+    for tag, v in th.items():
+        r = e21b["results"][f"context:{tag}"]
+        assert r["adopt"] and e21b["selected"]["context"][tag] == v

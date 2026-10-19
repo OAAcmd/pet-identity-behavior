@@ -11,7 +11,18 @@ from pathlib import Path
 import numpy as np
 
 from . import __version__
-from .audio.events import SoundEventRaw, build_groups, extract_events, load_subtype_validation, load_thresholds, shown_subtypes, vocal_conflict_tags, vocal_tags
+from .audio.events import (
+    CONTEXT_SOURCE,
+    SoundEventRaw,
+    build_groups,
+    extract_events,
+    load_context_thresholds,
+    load_subtype_validation,
+    load_thresholds,
+    shown_subtypes,
+    vocal_conflict_tags,
+    vocal_tags,
+)
 from .audio.yamnet import YamnetBackend
 from .config import REPO_ROOT, Settings
 from .context.zones import ZoneConfig, occupancy
@@ -65,6 +76,7 @@ class AnalysisEngine:
         self.thresholds: dict[str, float] = {}
         self.threshold_source: dict[str, str] = {}
         self.subtype_validation: dict[str, str] = {}
+        self.context_thresholds: dict[str, float] = {}
         self.model_load_ms = 0.0
         self._groups = None
 
@@ -90,6 +102,8 @@ class AnalysisEngine:
                     th_path = None
                 sv = s.audio.yamnet.subtype_validation_file
                 self.subtype_validation = load_subtype_validation((REPO_ROOT / sv) if sv and not Path(sv).is_absolute() else (Path(sv) if sv else None))
+                ct = s.audio.yamnet.context_thresholds_file
+                self.context_thresholds = load_context_thresholds((REPO_ROOT / ct) if ct and not Path(ct).is_absolute() else (Path(ct) if ct else None))
                 self.thresholds, self.threshold_source = load_thresholds(
                     (REPO_ROOT / th_path) if th_path and not Path(th_path).is_absolute() else (Path(th_path) if th_path else None),
                     s.audio.yamnet.default_thresholds)
@@ -340,7 +354,7 @@ class AnalysisEngine:
                 with timer.stage("audio_inference"):
                     ws = self.audio_backend.score_track(track_audio, s.audio.yamnet.hop_s)
                     raw_events = extract_events(ws, self.audio_backend, self._groups, self.thresholds,
-                                                s.audio.yamnet.context_tag_threshold, s.audio.yamnet.min_event_gap_s)
+                                                s.audio.yamnet.context_tag_threshold, s.audio.yamnet.min_event_gap_s, self.context_thresholds)
                 audio_summary.windows_scored = int(ws.scores.shape[0])
                 if ws.padded_windows:
                     qflags.append(S.QualityFlag(code="audio_end_padded", severity="info", detail="final analysis window zero-padded"))
@@ -615,7 +629,7 @@ class AnalysisEngine:
             if ev.label == "growl" and "growl" not in shown_subtypes(self.subtype_validation):
                 label_txt = "possible growl (unvalidated sound type)"
             sm = S.SoundEvent(event_id=f"snd-{k}", label=ev.label, t_start_s=ev.start_s, t_end_s=ev.end_s, peak_raw_score=ev.peak_score,
-                              mean_raw_score=ev.mean_score, threshold=ev.threshold, threshold_source=self.threshold_source.get(ev.label, "config default (not selected on data)") if not is_context else "config context_tag_threshold (not selected on data)",
+                              mean_raw_score=ev.mean_score, threshold=ev.threshold, threshold_source=self.threshold_source.get(ev.label, "config default (not selected on data)") if not is_context else (CONTEXT_SOURCE if ev.label.split(":", 1)[1] in self.context_thresholds else "config context_tag_threshold (not selected on data)"),
                               subtypes=ev.subtypes, subtype_validation={k2: self.subtype_validation.get(k2, "not_evaluated") for k2 in ev.subtypes},
                               top_audioset_labels=ev.top_audioset_labels, attribution=att, evidence_id=eid)
             (context_models if is_context else sound_models).append(sm)

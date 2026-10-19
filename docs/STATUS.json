@@ -8,8 +8,8 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 139,
-    "typescript_unit_tests": 26,
+    "python_tests": 145,
+    "typescript_unit_tests": 27,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
     "ci": "green on every push up to 2026-10-11; pushes of 2026-10-19 not yet observed from this workspace",

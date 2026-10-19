@@ -254,7 +254,26 @@ def run(settings: Settings, out_dir: Path, workers: int = 3, n_boot: int = 1000,
                     "dev_audio_hours": float(np.sum(sc_dev["duration_s"]) / 3600), "dev_scoring_seconds": float(sc_dev["elapsed_s"][0])},
            **out, "runtime_s": round(time.perf_counter() - t0, 1)}
     write_json(out_dir / "metrics.json", res)
+    write_json(REPO_ROOT / CONTEXT_ARTIFACT, context_artifact(res))
     return res
+
+
+CONTEXT_ARTIFACT = "artifacts/audio_context_thresholds.json"
+
+
+def context_artifact(res: dict, variant: str = "cc0_ccby") -> dict:
+    """Context-tag thresholds adopted under the pre-set rule, from the licence-clean variant (usable in every profile)."""
+    v = res["variants"][variant]
+    tags = {}
+    for k, r in v["results"].items():
+        if k.startswith("context:") and r["adopt"]:
+            t = k.split(":", 1)[1]
+            tags[t] = {"threshold": v["selected"]["context"][t], "eval_f1_deployed": round(r["eval_f1_deployed"], 4),
+                       "eval_f1_selected": round(r["eval_f1_selected"], 4),
+                       "paired_f1_difference_ci95": [round(r["paired_f1_difference_ci95"]["ci_low"], 4), round(r["paired_f1_difference_ci95"]["ci_high"], 4)],
+                       "passes_gate": r["passes_gate_selected"]}
+    return {"format": "petperception.audio_context_thresholds/1", "source": f"E21b, variant {variant} (FSD50K dev CC0 / CC BY clips; FSD50K is CC BY 4.0)",
+            "rule": v["adoption_rule"], "other_tags": "context_tag_threshold from the configuration", "created_at": res["created_at"], "tags": tags}
 
 
 def _e21_consistency(f1_deployed: dict[str, float]) -> dict:

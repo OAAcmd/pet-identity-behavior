@@ -34,6 +34,7 @@ const STATIC_LIMITATIONS = [
   "Analysed on this device (browser runtime). Results can differ slightly from the server reference because the browser decodes and scales media differently.",
 ];
 
+const CONTEXT_SOURCE = "audio_context_thresholds.json: E21b, selected on FSD50K dev CC0 / CC BY clips, paired gain on eval";
 const POSE_FEATURES = ["ear_tip_elevation", "tail_elevation", "play_bow_candidate", "tail_lateral_oscillation"];
 
 export class LocalEngine {
@@ -339,7 +340,8 @@ export class LocalEngine {
           note: cands.length > 1 ? "several animals visible; no evaluated audio-visual association method, so attribution is unknown" : "the only visible animal's species does not match the sound; source may be off-screen" };
       }
       const sm = { event_id: `snd-${k}`, label: ev.label, t_start_s: ev.start_s, t_end_s: ev.end_s, peak_raw_score: ev.peak_score, mean_raw_score: ev.mean_score,
-        threshold: ev.threshold, threshold_source: isContext ? "config context_tag_threshold (not selected on data)" : (a.audio!.threshold_source[ev.label] ?? "config default (not selected on data)"),
+        threshold: ev.threshold, threshold_source: isContext ? (a.audio!.context_thresholds?.[ev.label.split(":")[1]] !== undefined ? CONTEXT_SOURCE : "config context_tag_threshold (not selected on data)")
+          : (a.audio!.threshold_source[ev.label] ?? "config default (not selected on data)"),
         score_kind: "yamnet_sigmoid_raw", calibration_status: "uncalibrated", calibrated_probability: null, subtypes: ev.subtypes,
         subtype_validation: Object.fromEntries(Object.keys(ev.subtypes).map((k2) => [k2, validation[k2] ?? "not_evaluated"])), top_audioset_labels: ev.top_audioset_labels,
         attribution: att, evidence_id: eid };

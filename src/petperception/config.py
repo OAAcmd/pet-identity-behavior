@@ -80,6 +80,8 @@ class YamnetConfig(_Strict):
     # Which vocalization subtypes passed the pre-set validation gate (E21, FSD50K eval); only those
     # are shown or used as interpretation triggers. None: no subtype counts as validated.
     subtype_validation_file: str | None = "artifacts/audio_subtype_validation.json"
+    # Per-tag context thresholds adopted in E21b (selected on FSD50K dev CC0 / CC BY clips); other tags use context_tag_threshold.
+    context_thresholds_file: str | None = "artifacts/audio_context_thresholds.json"
 
 
 class AudioConfig(_Strict):

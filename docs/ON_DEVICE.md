@@ -87,7 +87,8 @@ device_check/              reference clip (WebM + MP4), expected result, referen
   app build) and reports no on-furniture candidates. Asset format 0.2.2
   adds `audio.subtype_validation` (E21). An app reading a bundle without it
   treats no subtype as validated, so it shows none and lets none trigger an
-  interpretation.
+  interpretation. The same format adds the optional
+  `audio.context_thresholds` (E21b, per context tag).
 
 ## Install, integrity, versioning and update recovery
 

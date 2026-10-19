@@ -940,9 +940,15 @@ F1s match E21 exactly (`results/e21b/metrics.json`).
 * Out-of-domain check on ESC-50, where the deployed values are in-sample:
   the FSD50K-selected thresholds give cat 0.738 and dog 0.879 (all) /
   0.920 (CC0 + CC BY), against 0.816 / 0.938 in-sample.
-* Not yet applied in the engines: per-tag context thresholds and the
-  commercial dog threshold need a thresholds-file format with per-tag
-  values (both engines). Scheduled with the next audio change.
+* Applied in both engines: the adopted context thresholds of the
+  licence-clean variant are in `artifacts/audio_context_thresholds.json`
+  (door 0.15, knock 0.59, dishes 0.2, thunder 0.415, fireworks 0.805; other
+  tags keep 0.3). They ship in the bundle as `audio.context_thresholds`, and
+  each context event names its threshold source. For door, knock, thunder
+  and fireworks the values equal those of the all-clips variant.
+* Not applied: the commercial dog threshold (0.67). The commercial profile
+  is blocked by Q-T, and its cat threshold has no licence-clean
+  replacement that passed the rule.
 
 ### E22 - Dog bark context (Yin & McCowan 2004, via BEANS) - COMPLETED, research only
 

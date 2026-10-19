@@ -18,6 +18,8 @@ export interface AudioAssets {
   clipping_fraction: number;
   /** Validation status per vocalization subtype (E21 gate; asset format 0.2.2). Absent: none validated. */
   subtype_validation?: Record<string, string>;
+  /** Per-tag context thresholds adopted in E21b (asset format 0.2.2). Absent tags use context_tag_threshold. */
+  context_thresholds?: Record<string, number>;
 }
 
 export interface DetectorAssets {

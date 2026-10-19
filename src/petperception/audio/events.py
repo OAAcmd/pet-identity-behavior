@@ -171,8 +171,19 @@ def _segments(mask: np.ndarray) -> list[tuple[int, int]]:
     return segs
 
 
+CONTEXT_SOURCE = "audio_context_thresholds.json: E21b, selected on FSD50K dev CC0 / CC BY clips, paired gain on eval"
+
+
+def load_context_thresholds(path: Path | None) -> dict[str, float]:
+    """Per-tag context thresholds adopted in E21b (artifacts/audio_context_thresholds.json); {} when absent."""
+    if not path or not path.exists():
+        return {}
+    return {k: float(v["threshold"]) for k, v in read_json(path)["tags"].items()}
+
+
 def extract_events(ws: WindowScores, backend: YamnetBackend, groups: dict[str, GroupSpec],
-                   thresholds: dict[str, float], context_threshold: float, min_gap_s: float) -> list[SoundEventRaw]:
+                   thresholds: dict[str, float], context_threshold: float, min_gap_s: float,
+                   context_thresholds: dict[str, float] | None = None) -> list[SoundEventRaw]:
     """Merge above-threshold windows into intervals per group/tag."""
     if ws.scores.shape[0] == 0:
         return []
@@ -183,7 +194,7 @@ def extract_events(ws: WindowScores, backend: YamnetBackend, groups: dict[str, G
     series["growl"] = (ws.scores[:, sub_idx["growl"]], thresholds.get("growl", 0.5))
     for tag, mid in CONTEXT_TAG_MIDS.items():
         if mid in backend.mid_to_index:
-            series[f"context:{tag}"] = (ws.scores[:, backend.mid_to_index[mid]], context_threshold)
+            series[f"context:{tag}"] = (ws.scores[:, backend.mid_to_index[mid]], (context_thresholds or {}).get(tag, context_threshold))
     for label, (s, th) in series.items():
         segs = _segments(s >= th)
         merged: list[tuple[int, int]] = []

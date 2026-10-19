@@ -79,7 +79,7 @@ export function extractEvents(ws: WindowScores, a: AudioAssets): SoundEventRaw[]
     series.push([g, ws.scores.map((s) => Math.max(...idx.map((i) => s[i]))), a.thresholds[g]]);
   }
   series.push(["growl", ws.scores.map((s) => s[a.subtypes.growl]), a.thresholds.growl ?? 0.5]);
-  for (const [tag, i] of Object.entries(a.context_tags)) series.push([`context:${tag}`, ws.scores.map((s) => s[i]), a.context_tag_threshold]);
+  for (const [tag, i] of Object.entries(a.context_tags)) series.push([`context:${tag}`, ws.scores.map((s) => s[i]), a.context_thresholds?.[tag] ?? a.context_tag_threshold]);
   const events: SoundEventRaw[] = [];
   for (const [label, s, th] of series) {
     const merged: [number, number][] = [];
