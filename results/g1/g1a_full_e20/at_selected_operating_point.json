@@ -1,0 +1,227 @@
+{
+  "experiment": "E20 (G1 at its tuning-selected operating point)",
+  "created_at": "2026-10-19T14:49:01+00:00",
+  "note": "second E20 evaluation of the G1 export: operating point 0.16 selected on the Open Images tuning set (recall-matched to M3), verifier fitted there (results/g1/g1a_full_e7); the first evaluation at 0.35 is in results/g1/g1a_full_e20/metrics.json",
+  "results": {
+    "phone_build_m3+verifier": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.6971291866028708,
+        "frame_found_ci95": {
+          "ci_low": 0.6593181818181818,
+          "ci_high": 0.7354066985645933,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.024880382775119617,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.015311004784688996,
+          "ci_high": 0.03636363636363636,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.27799043062200957,
+        "frame_found_box_iou50": 0.6844380403458213,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8736578822135925,
+        "sequence_found_half_frames": 0.8133971291866029,
+        "sequence_any_frame": 0.9712918660287081,
+        "sequence_mean_found_fraction": 0.6971291866028707,
+        "sequence_mean_wrong_only_fraction": 0.02488038277511962
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.5979591836734693,
+        "frame_found_ci95": {
+          "ci_low": 0.5503231292517007,
+          "ci_high": 0.64421768707483,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.13741496598639455,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.11018707482993198,
+          "ci_high": 0.1727891156462585,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.2646258503401361,
+        "frame_found_box_iou50": 0.5842465753424657,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8945630788803101,
+        "sequence_found_half_frames": 0.673469387755102,
+        "sequence_any_frame": 0.9795918367346939,
+        "sequence_mean_found_fraction": 0.5979591836734695,
+        "sequence_mean_wrong_only_fraction": 0.13741496598639458
+      }
+    },
+    "g1a_full@0.16_detector_only": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.8885167464114833,
+        "frame_found_ci95": {
+          "ci_low": 0.863145933014354,
+          "ci_high": 0.9114952153110049,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.06842105263157895,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.050705741626794254,
+          "ci_high": 0.08947368421052632,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.0430622009569378,
+        "frame_found_box_iou50": 0.8549471661863592,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.84159255027771,
+        "sequence_found_half_frames": 0.9521531100478469,
+        "sequence_any_frame": 1.0,
+        "sequence_mean_found_fraction": 0.8885167464114831,
+        "sequence_mean_wrong_only_fraction": 0.06842105263157895
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.9571428571428572,
+        "frame_found_ci95": {
+          "ci_low": 0.9408163265306122,
+          "ci_high": 0.9700680272108844,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.014965986394557823,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.00816326530612245,
+          "ci_high": 0.021768707482993196,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.027891156462585033,
+        "frame_found_box_iou50": 0.9328767123287671,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8673982620239258,
+        "sequence_found_half_frames": 1.0,
+        "sequence_any_frame": 1.0,
+        "sequence_mean_found_fraction": 0.9571428571428571,
+        "sequence_mean_wrong_only_fraction": 0.014965986394557824
+      }
+    },
+    "g1a_full@0.16+own_verifier": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.8105263157894737,
+        "frame_found_ci95": {
+          "ci_low": 0.778456937799043,
+          "ci_high": 0.8421291866028707,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.038755980861244016,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.02631578947368421,
+          "ci_high": 0.051686602870813385,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.1507177033492823,
+        "frame_found_box_iou50": 0.7800192122958693,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8449581265449524,
+        "sequence_found_half_frames": 0.8899521531100478,
+        "sequence_any_frame": 1.0,
+        "sequence_mean_found_fraction": 0.8105263157894735,
+        "sequence_mean_wrong_only_fraction": 0.038755980861244016
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.8564625850340136,
+        "frame_found_ci95": {
+          "ci_low": 0.8224489795918367,
+          "ci_high": 0.8870918367346939,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.058503401360544216,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.04013605442176871,
+          "ci_high": 0.0789285714285714,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.08503401360544217,
+        "frame_found_box_iou50": 0.834931506849315,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8718816041946411,
+        "sequence_found_half_frames": 0.9523809523809523,
+        "sequence_any_frame": 0.9931972789115646,
+        "sequence_mean_found_fraction": 0.8564625850340135,
+        "sequence_mean_wrong_only_fraction": 0.058503401360544216
+      }
+    }
+  },
+  "paired_vs_phone_build": {
+    "g1a_full@0.16_detector_only": {
+      "cat": {
+        "mean_difference": 0.19138755980861244,
+        "ci95": [
+          0.15933014354066985,
+          0.22535885167464112
+        ],
+        "sequences_better": 132,
+        "sequences_worse": 18,
+        "sequences": 209
+      },
+      "dog": {
+        "mean_difference": 0.35918367346938784,
+        "ci95": [
+          0.3149489795918367,
+          0.4027210884353742
+        ],
+        "sequences_better": 126,
+        "sequences_worse": 1,
+        "sequences": 147
+      }
+    },
+    "g1a_full@0.16+own_verifier": {
+      "cat": {
+        "mean_difference": 0.11339712918660287,
+        "ci95": [
+          0.0861244019138756,
+          0.14162679425837318
+        ],
+        "sequences_better": 110,
+        "sequences_worse": 33,
+        "sequences": 209
+      },
+      "dog": {
+        "mean_difference": 0.2585034013605442,
+        "ci95": [
+          0.22107142857142856,
+          0.3
+        ],
+        "sequences_better": 115,
+        "sequences_worse": 8,
+        "sequences": 147
+      }
+    }
+  }
+}

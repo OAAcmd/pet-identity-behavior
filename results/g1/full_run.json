@@ -1,0 +1,175 @@
+{
+  "job": "G1 full-data CPU training run",
+  "created_at": "2026-10-19",
+  "kind": "measured",
+  "command": "var/venv-g1/bin/python -I training/g1/train_resumable.py --view var/training/g1/views/full --run-dir var/training/g1/runs/g1a_full_mnv2_sb4096 --model MOBILENET_V2 --batch-size 16 --stages 1:decoder_head,3:all --shuffle-buffer 4096 --ckpt-minutes 10",
+  "config": {
+    "view": "var/training/g1/views/full",
+    "model": "MOBILENET_V2",
+    "batch_size": 16,
+    "learning_rate": 0.3,
+    "stages": "1:decoder_head,3:all",
+    "seed": 20261019,
+    "cache_layout": "coco-v2-negatives-crowd",
+    "shuffle_buffer": 4096
+  },
+  "config_sha256": "9955bad8182ecbd60c11a220e3dcd45c81960aa9cbb8381e45983b04e7a62799",
+  "data_sha256": {
+    "train": "092a815a6ee5a658ef814ec7036e2234ea7467f7b074ac79f437c3971ae9c288",
+    "development": "3e1d6031b4b9fa87db4d703ab43a48f759f1e2fbad14d790b35799e12e59013f"
+  },
+  "code_sha256": "f322dcda8a6029d8dc9209066a2c1c69959eb59e964f63116492ddc06657ef91",
+  "data": {
+    "view": "var/training/g1/views/full: all 52,599 G1 images stored at 320 px (1.24 GB); 50,007 train / 2,592 development images, 176,145 / 8,446 boxes; hard negatives kept by the fixed cache writer",
+    "download": {
+      "images": 45799,
+      "seconds": 1663,
+      "note": "plus 6,800 already stored for the 6k view"
+    }
+  },
+  "initialisation": "Model Maker's COCO-trained RetinaNet (MobileNetV2, 256 px); classifier re-initialised for the 14 G1 classes",
+  "environment": "4 vCPUs Xeon 2.8 GHz, no GPU; other jobs shared the CPU during epochs 0-1 (see images_per_second)",
+  "steps_per_epoch": 3125,
+  "optimizer_iterations": 12500,
+  "wall_time_hours": 4.41,
+  "history": [
+    {
+      "epoch": 0,
+      "stage": "decoder_head",
+      "train_loss_mean": 1.0369,
+      "epoch_minutes": 38.5535,
+      "images_per_second": 21.615,
+      "dev_total_loss": 0.7506,
+      "dev_cls_loss": 0.4513,
+      "dev_box_loss": 0.0049,
+      "dev_model_loss": 0.6956,
+      "dev_map50": 0.3633,
+      "seconds": 224.1164,
+      "dev_ap50": {
+        "cat": 0.605,
+        "dog": 0.6498,
+        "person": 0.5067,
+        "bed": 0.6993,
+        "couch": 0.3247,
+        "chair": 0.2625,
+        "table": 0.2662,
+        "car": 0.4026,
+        "bowl": 0.486,
+        "toy": 0.0973,
+        "teddy_bear": 0.5288,
+        "door": 0.1517,
+        "window": 0.0776,
+        "stairs": 0.028
+      }
+    },
+    {
+      "epoch": 1,
+      "stage": "all",
+      "train_loss_mean": 0.7597,
+      "epoch_minutes": 80.3336,
+      "images_per_second": 10.3734,
+      "dev_total_loss": 0.7029,
+      "dev_cls_loss": 0.415,
+      "dev_box_loss": 0.0046,
+      "dev_model_loss": 0.6467,
+      "dev_map50": 0.4287,
+      "seconds": 163.7274,
+      "dev_ap50": {
+        "cat": 0.6647,
+        "dog": 0.7268,
+        "person": 0.5253,
+        "bed": 0.7047,
+        "couch": 0.4114,
+        "chair": 0.2693,
+        "table": 0.3427,
+        "car": 0.4308,
+        "bowl": 0.4773,
+        "toy": 0.1592,
+        "teddy_bear": 0.6184,
+        "door": 0.3137,
+        "window": 0.1634,
+        "stairs": 0.1937
+      }
+    },
+    {
+      "epoch": 2,
+      "stage": "all",
+      "train_loss_mean": 0.7276,
+      "epoch_minutes": 65.7255,
+      "images_per_second": 12.679,
+      "dev_total_loss": 0.6968,
+      "dev_cls_loss": 0.4065,
+      "dev_box_loss": 0.0047,
+      "dev_model_loss": 0.6399,
+      "dev_map50": 0.4462,
+      "seconds": 150.1269,
+      "dev_ap50": {
+        "cat": 0.6933,
+        "dog": 0.7648,
+        "person": 0.5238,
+        "bed": 0.7181,
+        "couch": 0.4459,
+        "chair": 0.2898,
+        "table": 0.3532,
+        "car": 0.4479,
+        "bowl": 0.4765,
+        "toy": 0.1739,
+        "teddy_bear": 0.5837,
+        "door": 0.3252,
+        "window": 0.1851,
+        "stairs": 0.265
+      }
+    },
+    {
+      "epoch": 3,
+      "stage": "all",
+      "train_loss_mean": 0.7133,
+      "epoch_minutes": 67.901,
+      "images_per_second": 12.2728,
+      "dev_total_loss": 0.6856,
+      "dev_cls_loss": 0.4003,
+      "dev_box_loss": 0.0046,
+      "dev_model_loss": 0.6282,
+      "dev_map50": 0.4569,
+      "seconds": 174.1986,
+      "dev_ap50": {
+        "cat": 0.7408,
+        "dog": 0.7645,
+        "person": 0.5288,
+        "bed": 0.7163,
+        "couch": 0.4751,
+        "chair": 0.2519,
+        "table": 0.3614,
+        "car": 0.4331,
+        "bowl": 0.5181,
+        "toy": 0.195,
+        "teddy_bear": 0.5933,
+        "door": 0.3488,
+        "window": 0.1759,
+        "stairs": 0.294
+      }
+    }
+  ],
+  "peak_rss_mb": 5604.38671875,
+  "exports": {
+    "model_float16.tflite": {
+      "bytes": 5741688,
+      "sha256": "7f62522dab258fd47e5005c07308637a545da591cfdbcaa42c234674fb0d2879"
+    },
+    "model_float32.tflite": {
+      "bytes": 10962672,
+      "sha256": "3806c6ff7a5ddaa23ee295816907fb99e62c6825523f2410c6ac2e170757ed37"
+    },
+    "model_int8_ptq.tflite": {
+      "bytes": 3391672,
+      "sha256": "d249c6d3d8c356194632b64a0350b83a7684c98690d77786191c837bafd129de"
+    }
+  },
+  "durable_copy": "vault shards with checkpoint and exports outside git (manifest: results/g1/g1a_full_vault_manifest.json)",
+  "weights_committed": false,
+  "evaluation": {
+    "e4_subset": "results/g1/g1a_full_export_e4.json",
+    "e7_protocol": "results/g1/g1a_full_e7/",
+    "e20_home_video": "results/g1/g1a_full_e20/metrics.json"
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "experiment": "E20",
+  "status": "completed",
+  "created_at": "2026-10-19T14:32:28+00:00",
+  "data": {
+    "dataset": "CoP3D v1 (dl.fbaipublicfiles.com/cop3d), frame archives cat_001.zip, dog_001.zip",
+    "terms": "CC BY-NC 4.0 (LICENSE in the archive); research evaluation only",
+    "frames_per_sequence": 10,
+    "frames": 3560,
+    "sequences": {
+      "cat": 209,
+      "dog": 147
+    },
+    "frame_sha256_digest": "2b32e51a9176957e1fd4c63f08cba1ada30b1f52bd45ff918fcaebcdeccbe5f9",
+    "frames_without_usable_mask": 18
+  },
+  "operating_point": {
+    "score_threshold": 0.35,
+    "nms_iou": 0.5,
+    "verifier": "per detection (E7 protocol); the engine decides per track"
+  },
+  "results": {
+    "phone_build_m3_detector_only": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.7133971291866029,
+        "frame_found_ci95": {
+          "ci_low": 0.6760526315789475,
+          "ci_high": 0.7497727272727273,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.0784688995215311,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.062188995215311,
+          "ci_high": 0.09665071770334928,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.20813397129186603,
+        "frame_found_box_iou50": 0.7002881844380403,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8731156587600708,
+        "sequence_found_half_frames": 0.8181818181818182,
+        "sequence_any_frame": 0.9712918660287081,
+        "sequence_mean_found_fraction": 0.7133971291866028,
+        "sequence_mean_wrong_only_fraction": 0.07846889952153109
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.6748299319727891,
+        "frame_found_ci95": {
+          "ci_low": 0.6278911564625851,
+          "ci_high": 0.7177040816326531,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.11768707482993197,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.09387755102040816,
+          "ci_high": 0.14559523809523808,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.20748299319727892,
+        "frame_found_box_iou50": 0.6575342465753424,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8905128240585327,
+        "sequence_found_half_frames": 0.782312925170068,
+        "sequence_any_frame": 0.9795918367346939,
+        "sequence_mean_found_fraction": 0.6748299319727892,
+        "sequence_mean_wrong_only_fraction": 0.11768707482993197
+      }
+    },
+    "g1a_full_detector_only": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "frame_found": 0.5282296650717704,
+        "frame_found_ci95": {
+          "ci_low": 0.4870574162679426,
+          "ci_high": 0.5736842105263158,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.1645933014354067,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.1382775119617225,
+          "ci_high": 0.19379186602870813,
+          "n_boot": 1000,
+          "n_groups": 209,
+          "unit": "group"
+        },
+        "frame_missed": 0.307177033492823,
+        "frame_found_box_iou50": 0.5129682997118156,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8638232946395874,
+        "sequence_found_half_frames": 0.5741626794258373,
+        "sequence_any_frame": 0.8947368421052632,
+        "sequence_mean_found_fraction": 0.5282296650717704,
+        "sequence_mean_wrong_only_fraction": 0.16459330143540668
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "frame_found": 0.6993197278911565,
+        "frame_found_ci95": {
+          "ci_low": 0.6530612244897959,
+          "ci_high": 0.745578231292517,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.08979591836734693,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.07005102040816327,
+          "ci_high": 0.11226190476190474,
+          "n_boot": 1000,
+          "n_groups": 147,
+          "unit": "group"
+        },
+        "frame_missed": 0.2108843537414966,
+        "frame_found_box_iou50": 0.6828767123287671,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8796218633651733,
+        "sequence_found_half_frames": 0.8231292517006803,
+        "sequence_any_frame": 0.9727891156462585,
+        "sequence_mean_found_fraction": 0.6993197278911565,
+        "sequence_mean_wrong_only_fraction": 0.08979591836734695
+      }
+    }
+  },
+  "paired_baseline": "phone_build_m3_detector_only",
+  "paired_vs_phone_build": {
+    "g1a_full_detector_only": {
+      "cat": {
+        "mean_difference": -0.18516746411483254,
+        "ci95": [
+          -0.21770334928229665,
+          -0.15263157894736842
+        ],
+        "sequences_better": 26,
+        "sequences_worse": 147,
+        "sequences": 209
+      },
+      "dog": {
+        "mean_difference": 0.02448979591836735,
+        "ci95": [
+          -0.022482993197278915,
+          0.0714455782312925
+        ],
+        "sequences_better": 58,
+        "sequences_worse": 56,
+        "sequences": 147
+      }
+    }
+  },
+  "protocol": [
+    "E20: pet detection on home smartphone video (CoP3D), per species and per detector.",
+    "",
+    "Question. E18 measured detection on YouTube clips (person-centred actions).",
+    "How often do the product's detectors find the pet in people's own phone",
+    "videos of their cat or dog at home, and how often do they report the other",
+    "species?",
+    "",
+    "Data. CoP3D v1 (`petperception.data.cop3d`): every sequence of `cat_001.zip`",
+    "and `dog_001.zip`, 10 frames per sequence, evenly spaced. The sequence's",
+    "category is the species label. Each frame has a model-generated foreground",
+    "mask; its bounding box serves as the reference box. Terms: CC BY-NC 4.0,",
+    "research evaluation only.",
+    "",
+    "Protocol, fixed before scoring:",
+    "* Detector configurations:",
+    "  - the phone build (TF Hub EfficientDet-Lite0, raw decoding, M3) with its",
+    "    verifier;",
+    "  - the reference detector (MediaPipe EfficientDet-Lite0, M2) with its",
+    "    verifier;",
+    "  - both detector-only;",
+    "  - optionally G1 exports, detector-only (`petperception g1-eval --e20`).",
+    "  At the product operating point: score >= `vision.score_threshold`,",
+    "  per-class NMS, classes cat and dog.",
+    "* Verifier: applied per detection (E7 protocol). The engine decides per",
+    "  track by the median verifier score, so this is a per-frame",
+    "  approximation of the engine.",
+    "* Frame outcome for species S:",
+    "  - found: an accepted S detection;",
+    "  - found (box): an accepted S detection with IoU >= 0.5 against the mask",
+    "    box, scored only on frames whose mask covers 0.5 % to 95 % of the image;",
+    "  - wrong species only: no accepted S detection but an accepted detection",
+    "    of the other species;",
+    "  - missed: neither.",
+    "* Sequence outcome: the share of its frames with the pet found; a sequence",
+    "  counts as found when at least half its frames are.",
+    "* 95 % CIs: bootstrap over sequences (the frames of one video are",
+    "  correlated). Comparisons with the phone build are paired by sequence.",
+    "",
+    "Limitations stated up front: the reference boxes come from model-generated",
+    "masks; CoP3D videos circle a mostly static, centred pet (unlike home-camera",
+    "footage); each sequence is a different video, but the owner and household",
+    "are not identified, so two sequences can share a pet."
+  ],
+  "runtime_s": 185.8
+}

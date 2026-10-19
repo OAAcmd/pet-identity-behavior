@@ -1,0 +1,112 @@
+{
+  "check": "G1 export on the E4 subset (detector only, E4 protocol)",
+  "created_at": "2026-10-19T14:26:39+00:00",
+  "images": 823,
+  "models": {
+    "g1a_full": "var/training/g1/runs/g1a_full_mnv2_sb4096/export/model_float32.tflite"
+  },
+  "operating_threshold": 0.35,
+  "results": {
+    "g1a_full": {
+      "cat": {
+        "ap50": 0.897679940175288,
+        "ap50_ci95": [
+          0.8673387370694818,
+          0.9234558101545634
+        ],
+        "image_recall_at_op": 0.6017699115044248,
+        "image_specificity_at_op": 0.8723404255319149,
+        "box_recall_at_op": 0.5594594594594594,
+        "box_precision_at_op": 0.9452054794520548,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8641034686860161,
+        "ap50_ci95": [
+          0.817382478634127,
+          0.9031142088297618
+        ],
+        "image_recall_at_op": 0.84375,
+        "image_specificity_at_op": 0.6846846846846847,
+        "box_recall_at_op": 0.7434052757793765,
+        "box_precision_at_op": 0.8757062146892656,
+        "small_box_recall_at_op": 0.0
+      },
+      "inference_ms_per_image_including_jpeg_decode": 24.661904014583353
+    },
+    "efficientdet_lite0_tfhub_rawdecode_v1": {
+      "cat": {
+        "ap50": 0.9231842019633021,
+        "ap50_ci95": [
+          0.8945981877084483,
+          0.9474320067809158
+        ],
+        "image_recall_at_op": 0.8967551622418879,
+        "image_specificity_at_op": 0.6170212765957447,
+        "box_recall_at_op": 0.8540540540540541,
+        "box_precision_at_op": 0.9028571428571428,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8506301026498113,
+        "ap50_ci95": [
+          0.7998140905886804,
+          0.8891315252031137
+        ],
+        "image_recall_at_op": 0.8892045454545454,
+        "image_specificity_at_op": 0.6666666666666666,
+        "box_recall_at_op": 0.815347721822542,
+        "box_precision_at_op": 0.8173076923076923,
+        "small_box_recall_at_op": 0.08333333333333333
+      },
+      "inference_ms_per_image_including_jpeg_decode": 27.315708673146972
+    },
+    "efficientdet_lite0_mediapipe_v1": {
+      "cat": {
+        "ap50": 0.9233407778945855,
+        "ap50_ci95": [
+          0.8973720076415018,
+          0.9473422985777427
+        ],
+        "image_recall_at_op": 0.9262536873156342,
+        "image_specificity_at_op": 0.6170212765957447,
+        "box_recall_at_op": 0.8756756756756757,
+        "box_precision_at_op": 0.9178470254957507,
+        "small_box_recall_at_op": null
+      },
+      "dog": {
+        "ap50": 0.8417312985074372,
+        "ap50_ci95": [
+          0.7890123805186366,
+          0.8859573594154377
+        ],
+        "image_recall_at_op": 0.8920454545454546,
+        "image_specificity_at_op": 0.5585585585585585,
+        "box_recall_at_op": 0.8201438848920863,
+        "box_precision_at_op": 0.782608695652174,
+        "small_box_recall_at_op": 0.25
+      },
+      "inference_ms_per_image_including_jpeg_decode": 37.18693436573762
+    }
+  },
+  "ap50_difference_point": {
+    "g1a_full-efficientdet_lite0_tfhub_rawdecode_v1/cat": -0.025504261788014126,
+    "g1a_full-efficientdet_lite0_tfhub_rawdecode_v1/dog": 0.013473366036204748,
+    "g1a_full-efficientdet_lite0_mediapipe_v1/cat": -0.025660837719297502,
+    "g1a_full-efficientdet_lite0_mediapipe_v1/dog": 0.022372170178578843
+  },
+  "protocol": [
+    "G1 export check: a trained detector export scored with the E4 protocol, next to the shipped detectors.",
+    "",
+    "Scores a Model Maker export (float32, float16 or int8 TFLite) on the E4 Open",
+    "Images validation subset with `e4_visual.evaluate_detector`, the code that",
+    "produced E4. The same images are scored with M3 (the phone build's detector)",
+    "and M2 (the reference detector), on the same images; each AP50 carries E4's bootstrap interval over Flickr authors. G1's training",
+    "data excludes every photographer of this subset (`training/g1_data.py`).",
+    "",
+    "This is detector-only AP50 (no verifier): verifiers are fitted per detector,",
+    "and a new detector needs its own before the full E14 protocol applies",
+    "(docs/TRAINING_PROGRAM.md, G1 acceptance 1). Only cat and dog are scored;",
+    "the subset has no verified labels for the other G1 classes."
+  ]
+}

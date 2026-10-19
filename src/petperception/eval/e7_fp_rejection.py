@@ -88,11 +88,11 @@ def _verify_images(img_dir: Path, sums: Path, allow_fraction: float = 0.0) -> tu
     return len(pinned), bad
 
 
-def collect(det, clf: V.CropClassifier, images: list[dict], img_dir: Path) -> list[dict]:
+def collect(det, clf: V.CropClassifier, images: list[dict], img_dir: Path, floor: float = FLOOR) -> list[dict]:
     rows = []
     for r in images:
         rgb = cv2.cvtColor(cv2.imread(str(img_dir / f"{r['image_id']}.jpg")), cv2.COLOR_BGR2RGB)
-        for d in det.detect(rgb, CLASSES, FLOOR, 0.5, 20):
+        for d in det.detect(rgb, CLASSES, floor, 0.5, 20):
             rows.append({"image_id": r["image_id"], **V.describe(det, clf, rgb, d, CLASSES)})
     return rows
 
@@ -188,8 +188,14 @@ def _cache_rows(path: Path, fn) -> list[dict]:
 
 
 def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, params_out: Path | None = None,
-        classifier: str = CLASSIFIER, filename: str = "metrics.json", detector_files: dict[str, Path] | None = None) -> dict:
-    """detector_files: name -> exported .tflite (G1 candidates), evaluated like registered detectors."""
+        classifier: str = CLASSIFIER, filename: str = "metrics.json", detector_files: dict[str, Path] | None = None,
+        op: float | dict[str, float] = OP, floor: float = FLOOR) -> dict:
+    """detector_files: name -> exported .tflite (G1 candidates), evaluated like registered detectors.
+    op / floor: the detector's operating threshold and collection floor (default: the values fixed for the COCO
+    detectors; a new detector's own operating point is selected on the tuning set, see select_operating_point)."""
+    OP, FLOOR = op, floor  # noqa: N806 - local overrides of the module defaults
+    thr = (lambda lab: OP[lab]) if isinstance(OP, dict) else (lambda lab: OP)  # noqa: E731 - per-class operating thresholds
+    op_min = min(OP.values()) if isinstance(OP, dict) else OP  # predictions are pre-filtered per class; scoring needs the lowest
     man = settings.paths.resolve("manifests_root")
     data = settings.paths.resolve("data_root")
     cache = data.parent / "cache" / "e7"
@@ -229,15 +235,17 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
                 continue
             det = load_detector(Path(next(iter(r.files.values()))), settings.runtime.num_threads, decode=resource(mid).get("decode"))
         t0 = time.perf_counter()
-        trows = _cache_rows(cache / f"{mid}{suffix}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir))
-        erows = _cache_rows(cache / f"{mid}{suffix}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir))
+        fsuf = "" if FLOOR == 0.20 else f"_floor{FLOOR:g}"
+        trows = _cache_rows(cache / f"{mid}{suffix}{fsuf}_tuning.json", lambda: collect(det, clf, tune_imgs, tune_dir, FLOOR))
+        erows = _cache_rows(cache / f"{mid}{suffix}{fsuf}_e4.json", lambda: collect(det, clf, e4_imgs, e4_dir, FLOOR))
         collect_s = time.perf_counter() - t0
         tlab = label_tuning(trows, tune_imgs, tune_boxes, tune_conf)
         fsets = [f for f in FEATURE_SETS if trows and (trows[0]["anchor"] is not None or "anchor" not in f and f != "all")]
         res_m: dict = {"tuning_detections": len(trows), "e4_detections": len(erows), "collect_seconds_incl_cache": round(collect_s, 1),
                        "tuning": {}, "e4": {}}
-        base_keep = np.array([x["score"] >= OP for x in erows])
-        res_m["e4"]["detector_only@0.35"] = E4.score_predictions(_preds(erows, base_keep, [i["image_id"] for i in e4_imgs]), e4_imgs, e4_boxes, OP,
+        base_keep = np.array([x["score"] >= thr(x["label"]) for x in erows])
+        res_m["operating_threshold"] = OP
+        res_m["e4"]["detector_only@0.35"] = E4.score_predictions(_preds(erows, base_keep, [i["image_id"] for i in e4_imgs]), e4_imgs, e4_boxes, op_min,
                                                                  extra_ci=True)
         choice: dict[str, dict] = {}
         for c in CLASSES:
@@ -245,15 +253,15 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
             y = np.array([tlab[k] for k in idx])
             g = np.array([author_t[trows[k]["image_id"]] for k in idx])
             sc = np.array([trows[k]["score"] for k in idx])
-            at_op = sc >= OP
+            at_op = sc >= thr(c)
             tp_scores = sc[(y == 1) & at_op]
             # Baseline: raise the detector threshold under the same recall budget.
-            thr_raise = max(OP, _tau_for_retention(tp_scores, RETAIN))
+            thr_raise = max(thr(c), _tau_for_retention(tp_scores, RETAIN))
             spec_raise = _image_spec(trows, np.array([x["score"] >= thr_raise for x in trows]), tune_imgs, c)
             tune_c: dict = {"labelled_detections": len(idx), "positives": int(y.sum()), "negatives": int((y == 0).sum()),
                             "negatives_on_verified_negative_images": int(sum(1 for k in idx if tlab[k] == 0 and
                                                                              next(r for r in tune_imgs if r["image_id"] == trows[k]["image_id"])[f"{c}_status"] == "neg")),
-                            "detector_only@0.35": _image_spec(trows, np.array([x["score"] >= OP for x in trows]), tune_imgs, c),
+                            "detector_only@0.35": _image_spec(trows, np.array([x["score"] >= thr(x["label"]) for x in trows]), tune_imgs, c),
                             "raised_threshold": {"threshold": thr_raise, **spec_raise}, "verifier": {}}
             for fs in fsets:
                 X = np.stack([features(trows[k], fs) for k in idx])
@@ -263,7 +271,7 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
                 v_all[idx] = oof
                 # Unlabelled detections on verified-negative images do not exist (all are labelled 0), so
                 # specificity uses the out-of-fold scores directly.
-                keep_t = np.array([x["score"] >= OP and x["label"] == c for x in trows]) & (v_all >= tau)
+                keep_t = np.array([x["score"] >= thr(c) and x["label"] == c for x in trows]) & (v_all >= tau)
                 tune_c["verifier"][fs] = {"tau": tau, "oof_ap_detection": M.average_precision(oof, y == 1), **_image_spec(trows, keep_t, tune_imgs, c)}
             best = max(tune_c["verifier"], key=lambda f: (tune_c["verifier"][f]["specificity"], -len(f)))
             tune_c["selected_feature_set"] = best
@@ -280,12 +288,12 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
         ids = [i["image_id"] for i in e4_imgs]
         keep_raise = np.array([x["score"] >= choice[x["label"]]["raise_thr"] for x in erows])
         res_m["e4"]["raised_threshold"] = {"thresholds": {c: choice[c]["raise_thr"] for c in CLASSES},
-                                           **E4.score_predictions(_preds(erows, keep_raise, ids), e4_imgs, e4_boxes, OP, extra_ci=True)}
+                                           **E4.score_predictions(_preds(erows, keep_raise, ids), e4_imgs, e4_boxes, op_min, extra_ci=True)}
         for fs in fsets:
             v = np.array([models[fs][x["label"]][0].predict_proba(features(x, fs)[None])[0, 1] for x in erows]) if erows else np.zeros(0)
             keep = base_keep & np.array([v[k] >= models[fs][x["label"]][1] for k, x in enumerate(erows)])
             res_m["e4"][f"verifier[{fs}]"] = {"tau": {c: models[fs][c][1] for c in CLASSES},
-                                              **E4.score_predictions(_preds(erows, keep, ids), e4_imgs, e4_boxes, OP, extra_ci=True)}
+                                              **E4.score_predictions(_preds(erows, keep, ids), e4_imgs, e4_boxes, op_min, extra_ci=True)}
         res_m["selected"] = {c: choice[c]["feature_set"] for c in CLASSES}
         for k in list(res_m["e4"]):
             for c in CLASSES:
@@ -314,7 +322,7 @@ def run(settings: Settings, out_dir: Path, detectors: list[str] | None = None, p
     summary["classifier"] = classifier
     write_json(out_dir / filename, summary)
     if params_out is not None:
-        _export_params(frozen, results, params_out)
+        _export_params(frozen, results, params_out, OP)
     return summary
 
 
@@ -334,7 +342,7 @@ def _count(rows: list[dict], key: str) -> dict[str, int]:
     return dict(sorted(out.items()))
 
 
-def _export_params(frozen: dict, results: dict, out: Path) -> None:
+def _export_params(frozen: dict, results: dict, out: Path, op: float | dict[str, float] = OP) -> None:
     """Write the frozen per-class verifier parameters for the runtime DetectionVerifier."""
     for mid, per in frozen.items():
         classes = {}
@@ -345,7 +353,7 @@ def _export_params(frozen: dict, results: dict, out: Path) -> None:
                           "e4_final": _e4_digest(results[mid]["e4"], f["feature_set"], c)}
         write_json(out / f"verifier_{mid}.json", {
             "schema": "petperception.verifier/1", "detector_id": mid, "classifier_id": CLASSIFIER,
-            "operating_threshold": OP, "retain_target": RETAIN, "classes": classes,
+            "operating_threshold": op, "retain_target": RETAIN, "classes": classes,
             "fitted_on": "openimages_v7_test_tuning (manifests/oi_test_tuning_images.csv)",
             "note": "Verification scores are rejection scores fitted on the tuning distribution, not calibrated probabilities.",
             "created_at": utc_now().isoformat(timespec="seconds")})
@@ -386,3 +394,34 @@ def export_feature_set(settings: Settings, detector_id: str, fset: str, out: Pat
            "created_at": utc_now().isoformat(timespec="seconds")}
     write_json(out, doc)
     return doc
+
+
+def tuning_recall_curve(det, settings: Settings, thresholds: list[float]) -> dict[float, dict[str, float]]:
+    """Image-level recall per class on the tuning set (E4 scoring rules) at each detector threshold."""
+    man, data = settings.paths.resolve("manifests_root"), settings.paths.resolve("data_root")
+    imgs, boxes, _ = _tuning_subset(man)
+    img_dir = data / "openimages_test" / "images"
+    imgs = [r for r in imgs if (img_dir / f"{r['image_id']}.jpg").exists()]
+    raw = {}
+    for r in imgs:
+        rgb = cv2.cvtColor(cv2.imread(str(img_dir / f"{r['image_id']}.jpg")), cv2.COLOR_BGR2RGB)
+        raw[r["image_id"]] = det.detect(rgb, CLASSES, min(thresholds), 0.5, 20)
+    out = {}
+    for t in thresholds:
+        preds = {i: [d for d in ds if d.score >= t] for i, ds in raw.items()}
+        sc = E4.score_predictions(preds, imgs, boxes, t, n_boot=1)["classes"]
+        out[t] = {c: sc[c]["image_level"]["recall"] for c in CLASSES}
+    return out
+
+
+def select_operating_point(candidate, reference, settings: Settings, ref_threshold: float = OP) -> dict:
+    """Recall-matched operating point for a new detector, chosen on the tuning set only: the threshold whose mean
+    (cat, dog) image-level tuning recall is closest to the reference detector's at ref_threshold (ties: the higher)."""
+    grid = [round(x, 2) for x in np.arange(0.05, 0.501, 0.01)]
+    ref = tuning_recall_curve(reference, settings, [ref_threshold])[ref_threshold]
+    target = float(np.mean([ref[c] for c in CLASSES]))
+    cur = tuning_recall_curve(candidate, settings, grid)
+    best = min(grid, key=lambda t: (abs(float(np.mean([cur[t][c] for c in CLASSES])) - target), -t))
+    return {"rule": "recall-matched on the tuning set (mean of cat and dog image-level recall)", "reference_threshold": ref_threshold,
+            "reference_tuning_recall": ref, "target_mean_recall": target, "selected_threshold": best, "candidate_tuning_recall_at_selected": cur[best],
+            "curve": {str(t): cur[t] for t in grid}}

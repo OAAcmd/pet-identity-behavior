@@ -3,7 +3,7 @@
  "date": "2026-10-19",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending. Behavioural validity rests on public data only. New this round: home phone video (E20: the phone build finds the cat in 0.70 and the dog in 0.60 of frames, with 14 % of dog frames showing only a 'cat'), an independent audio test (E21: meow and bark pass the pre-set gate, purr and growl do not; only validated vocalization types are now shown or used as triggers in both engines), and the first cat keypoint model (E24, research only: cat ears meet the PCK criterion, tails do not). The G1 detector trains on this CPU (a 6k-image run comes within 0.03 AP50 of the shipped detectors); the full-data run is in progress.",
+ "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending. Behavioural validity rests on public data only. New this round: home phone video (E20: the phone build finds the cat in 0.70 and the dog in 0.60 of frames; 14 % of dog frames show only a 'cat'), an independent audio test (E21: meow and bark pass the pre-set gate, purr and growl do not; only validated vocalization types are now shown or used as triggers in both engines), the first cat keypoint model (E24, research only), and the first detector trained here on CC BY images (G1, full 50k-image CPU run, 4.4 h): at its own operating point it finds far more pets on home video than the shipped detector (cat 0.81 vs 0.70, dog 0.86 vs 0.60 of frames), but it misses acceptance 1 on cat AP50 by 0.019, so the phone build keeps its detector for now.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
@@ -54,15 +54,16 @@
     "cat_keypoints": "PCK@0.1 0.760 [0.71, 0.80]; ears 0.914 (meets G2 PCK), tail 0.51 (fails) (E24, research only)",
     "g1_light_cpu_run_e4_subset": "AP50 cat 0.889 / dog 0.820 vs phone build 0.923 / 0.851 (6k images, 4 epochs, CPU)",
     "home_video_engine_level": "right-species track in 0.646 of cat and 0.605 of dog videos; only a cat in 0.163 of dog videos (E20b)",
-    "species_arbitration": "crop-classifier relabelling fixes dogs but breaks cats on home video; not adopted (E25)"
+    "species_arbitration": "crop-classifier relabelling fixes dogs but breaks cats on home video; not adopted (E25)",
+    "g1_full_cpu_run": "E4 full-curve AP50 cat 0.898 / dog 0.864 (M3 0.923 / 0.851); acceptance 1 with per-class operating points and its own verifier: cat 0.814 (needs 0.833), dog 0.749 (passes), specificity intervals overlap M3's; home video at the single tuning-selected point: cat frames 0.811, dog 0.856 vs phone build 0.697 / 0.598"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
     "cat face and action data; cat tail keypoints",
     "licence-verified keypoint images (AwA2 variants; or G2 annotation)",
-    "G1 full-data run to finish, then its own threshold and verifier, E18/E20 and parity",
     "cat-hiss and growl audio with type labels",
-    "CatFLW/DogFLW need a Kaggle API token"
+    "CatFLW/DogFLW need a Kaggle API token",
+    "G1: cat AP50 at the operating point 0.019 short of acceptance 1 (more epochs need a warm-start option); acceptance 2 (E18) not yet run for G1"
    ]
   },
   "on_device_compatibility_and_performance": {
@@ -86,7 +87,7 @@
  },
  "capabilities_by_species": "docs/CAPABILITY_MATRIX.md",
  "training_jobs": {
-  "G1": "CPU benchmark and 6k-image resumable run done (results/g1/cpu_training.json): within 0.03 AP50 of M2/M3 on the E4 subset; three data-path defects fixed; full-data CPU run (50,007 images, 1 + 3 epochs) in progress",
+  "G1": "full-data CPU run done (results/g1/full_run.json: 4 epochs, 4.4 h, dev mAP50 0.457); E4 cat 0.898 / dog 0.864; acceptance 1 not met (cat AP50 0.814 vs 0.833 with per-class points); home video far better than M3 at its own operating point; checkpoint and exports kept as vault shards outside git",
   "G2": "annotation candidates and spec done; AwA-Pose (E24) gives a research cat keypoint model meanwhile; annotation pending",
   "G3": "E17 on dog video: temporal model 0.590 vs pooled 0.575 vs E11 logistic regression 0.638 macro-F1; not adopted",
   "G4": "cat context (E2) done, not shipped; dog bark context (E22) 0.72 macro-F1, research only; vocalization types evaluated on FSD50K (E21) and gated in both engines",

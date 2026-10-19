@@ -65,7 +65,7 @@ what prevents the next status.
 | M9 | Multimodal interpretation with uncertainty and abstention | yes (rule-based) | E5 synthetic checks | **no** | real paired recordings |
 | M10 | Splits by identity / household / source / breed where metadata supports; no invented metadata | yes | split tests (ESC-50 sources), protocols in each experiment | - | - |
 | M11 | Real training with preserved configs, checkpoints, seeds, learning curves, independent evaluation | yes (E7, E9-E13, E15) | experiments reproduce from commands | - | - |
-| M12 | Compute requirements and reproducible jobs where CPU is insufficient | specified and measured | G1 data-path tests | - | G1 trains on this CPU (benchmark, 6k-image run within 0.03 AP50 of the shipped detectors on E4; full-data run in progress, resumable); durable checkpoint storage needs write access ([TRAINING_PROGRAM.md](TRAINING_PROGRAM.md)) |
+| M12 | Compute requirements and reproducible jobs where CPU is insufficient | specified and measured | G1 data-path tests | - | G1 trained on this CPU (full 50k-image run, 4.4 h): dog AP50 above the shipped detector, cat AP50 0.019 short of acceptance 1 at per-class operating points; much better on home video at its own operating point; durable checkpoint storage needs write access ([TRAINING_PROGRAM.md](TRAINING_PROGRAM.md)) |
 | M13 | Synthetic data only as integration/behavior checks | yes | E5, E8 labelled as such | - | - |
 | M14 | Evaluation plan for real paired data | yes | - | - | [EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md); not started |
 

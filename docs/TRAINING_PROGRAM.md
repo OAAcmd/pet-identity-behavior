@@ -216,6 +216,99 @@ verifier):
   MobileNet-MultiAVG 384-px model. At about 2.3 times the pixels, it is a
   multi-session CPU job or a GPU job.
 
+**Full-data CPU run, measured (2026-10-19).** All 50,007 training images,
+one decoder + head epoch and three all-layer epochs, otherwise as the light
+run (`results/g1/full_run.json`). Wall time 4.4 h on the 4 vCPUs; other jobs
+shared the CPU during epochs 0-1. Peak RSS 5.6 GB, with the shuffle buffer
+bounded at 4,096. The checkpoint and the three exports are kept outside git
+as vault shards (`results/g1/g1a_full_vault_manifest.json`).
+
+| Epoch | Stage | Train loss | Minutes | Images/s | Dev mAP50 | Dev AP50 cat | Dev AP50 dog |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | decoder + head | 1.037 | 38.6 | 21.6 | 0.363 | 0.605 | 0.650 |
+| 1 | all | 0.760 | 80.3 | 10.4 | 0.429 | 0.665 | 0.727 |
+| 2 | all | 0.728 | 65.7 | 12.7 | 0.446 | 0.693 | 0.765 |
+| 3 | all | 0.713 | 67.9 | 12.3 | 0.457 | 0.741 | 0.765 |
+
+Evaluation against the acceptance rules (float32 export):
+
+* E4 subset, full-curve AP50 (detector only; `results/g1/g1a_full_export_e4.json`):
+  - cat 0.898 [0.867, 0.923] against M3's 0.923;
+  - dog **0.864 [0.817, 0.903]**, above both M3 (0.851) and M2 (0.842);
+  - 24.7 ms per image on this CPU (M3: 27.3).
+* The G1 scores are calibrated lower than the COCO detectors'. At M3's
+  operating threshold (0.35), G1's cat image recall is only 0.60.
+  Comparing at another detector's threshold is unfair to G1, so an
+  operating point was selected on the tuning set before scoring E4 at it
+  (`E7.select_operating_point`, recall-matched to M3's tuning recall;
+  `results/g1/g1a_full_e7/operating_point.json`). Selected: 0.16 (tuning
+  recall cat 0.85, dog 0.96, against M3's 0.92 / 0.88 at 0.35). G1 ranks dogs
+  higher than cats, which a single threshold cannot equalise.
+* **Acceptance 1 (E7 protocol on E4, own verifier fitted at 0.16): not met.**
+
+  | | AP50 cat | AP50 dog | Specificity cat [95 % CI] | Specificity dog [95 % CI] |
+  | --- | --- | --- | --- | --- |
+  | M3 + verifier (thresholds) | 0.833 | 0.748 | 0.660 [0.52, 0.79] | 0.919 [0.865, 0.966] |
+  | G1 full @ 0.16 + own verifier | 0.766 (fail) | **0.828** (pass) | 0.702 [0.568, 0.826] | 0.703 [0.615, 0.793] (fail: worse, intervals do not overlap) |
+  | G1 full @ 0.35 + own verifier (for reference) | 0.543 | 0.700 | 0.936 | 0.946 |
+  | **G1 full, per-class points (cat 0.11, dog 0.28) + own verifier** | 0.814 (fail by 0.019) | 0.749 (pass) | 0.574 [0.43, 0.71] (overlaps: pass) | 0.901 [0.84, 0.95] (overlaps: pass) |
+
+  The per-class points were chosen on the tuning set with the same rule,
+  applied per class (each class's tuning recall matched to M3's;
+  `results/g1/g1a_full_e7_perclass/`). They remove the dog-specificity
+  failure. Acceptance 1 then fails only on cat AP50, by 0.019.
+
+* Home phone video (E20, CoP3D):
+  - at 0.35, detector only (`results/g1/g1a_full_e20/metrics.json`), against
+    M3 detector only: cat frames found 0.528 vs 0.713 (paired -0.185
+    [-0.218, -0.153]); dog 0.699 vs 0.675 (+0.024 [-0.022, +0.071]); dog
+    frames with only a cat 0.090 vs 0.118 (better); cat frames with only a
+    dog 0.165 vs 0.078 (worse);
+  - at the selected point 0.16 with its own verifier
+    (`results/g1/g1a_full_e20/at_selected_operating_point.json`; a second
+    E20 evaluation, the operating point having been chosen on the tuning set
+    only), against the phone build with its verifier:
+    - cat frames found **0.811** [0.778, 0.842] vs 0.697 (paired +0.113
+      [0.086, 0.142]);
+    - dog frames found **0.856** [0.822, 0.887] vs 0.598 (+0.259
+      [0.221, 0.300]);
+    - dog frames with only a cat 0.059 vs 0.137; cat frames with only a dog
+      0.039 vs 0.025.
+    Detector only at 0.16: cat 0.889, dog 0.957.
+  - at the per-class points (cat 0.11, dog 0.28) with their verifier
+    (`results/g1/g1a_full_e20/at_per_class_operating_points.json`, a third
+    E20 evaluation): cat frames found **0.908** [0.887, 0.929] vs 0.697
+    (paired +0.211), with only a dog in 0.006; dog frames 0.720 vs 0.598
+    (+0.122 [0.081, 0.164]), but only a cat in **0.167** vs 0.137. The low
+    cat threshold now catches dogs as cats: the per-class points trade dog
+    confusion for cat recall.
+  - Every CoP3D frame contains a pet, so E20 rewards lower thresholds and
+    cannot show false positives.
+    The specificity cost appears on E4's verified negatives (table above),
+    which is why acceptance rests on E4 and E18, not on E20.
+* Decision: **G1a (MobileNetV2-256, 4 epochs) does not replace the phone
+  detector yet.** It is the first detector trained here on CC BY images. At
+  its own operating point it finds far more pets on home phone video than
+  the shipped detector, with less species confusion for dogs, and it has
+  the higher dog AP50 on photos. But it fails acceptance 1: cat AP50 at the
+  operating point is too low, and dog specificity on verified negative
+  photos is worse at matched recall.
+  With per-class operating points it misses acceptance 1 only on cat AP50
+  (0.814 against 0.833). Next, in order:
+  1. more epochs. Cat development AP50 was still rising (0.693 → 0.741 in
+     the last epoch). Continuing from these weights needs a warm-start
+     option in `train_resumable.py` (`--init-from <checkpoint>`; not
+     written yet), because the configuration hash rightly refuses to
+     stretch a finished schedule. Alternatively, a fresh run with a longer
+     schedule takes about 70 minutes per epoch on this CPU;
+  2. acceptance 2 (E18) for the best candidate, with the engine wired to a
+     G1 export, its per-class points and its verifier;
+  3. the 384-px MobileNet-MultiAVG model, a multi-session CPU job or a GPU
+     job.
+  Acceptance 2 (E18) was not run for G1. E18 needs the Kinetics clips and
+  the engine wired to a G1 export plus its verifier; it is only worth
+  running once acceptance 1 passes.
+
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):
 * Model Maker 0.2.1.4's COCO cache writer skips every image without a box.

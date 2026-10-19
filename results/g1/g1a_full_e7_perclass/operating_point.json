@@ -1,0 +1,15 @@
+{
+ "rule": "per-class recall-matched on the tuning set: for each class the grid threshold whose tuning image-level recall is closest to M3 at 0.35 (ties: higher); curve in results/g1/g1a_full_e7/operating_point.json",
+ "thresholds": {
+  "cat": 0.11,
+  "dog": 0.28
+ },
+ "reference_tuning_recall": {
+  "cat": 0.9182,
+  "dog": 0.8839
+ },
+ "candidate_tuning_recall": {
+  "cat": 0.9202,
+  "dog": 0.8819
+ }
+}

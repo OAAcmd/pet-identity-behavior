@@ -550,7 +550,7 @@ def cmd_g1_eval(args: argparse.Namespace) -> int:
         out_dir = Path(args.e7)
         out_dir.mkdir(parents=True, exist_ok=True)
         for name, path in models.items():  # verifier fitted on the tuning set, E4 final split scored once (acceptance 1)
-            r = E7.run(_settings(args), out_dir, params_out=out_dir / f"verifier_{name}.json", filename=f"e7_{name}.json", detector_files={name: path})
+            r = E7.run(_settings(args), out_dir, params_out=out_dir, filename=f"e7_{name}.json", detector_files={name: path})  # writes verifier_<name>.json
             print(json.dumps({k: v for k, v in r["results"][name].items() if k == "selected"}, indent=2))
     if args.e20:
         from .eval import e20_cop3d_home_video as E20
