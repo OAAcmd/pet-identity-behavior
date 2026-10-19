@@ -1,0 +1,33 @@
+{
+  "experiment": "E20b",
+  "status": "completed",
+  "created_at": "2026-10-19T11:29:05+00:00",
+  "detector": "efficientdet_lite0_tfhub_rawdecode_v1",
+  "clips": "the 10 sampled frames of each sequence at 2 fps (the engine's sampling rate), H.264, video only",
+  "results": {
+    "cat": {
+      "sequences": 209,
+      "right_species_track": 0.645933014354067,
+      "right_species_track_ci95": [
+        0.583732057416268,
+        0.703468899521531
+      ],
+      "only_other_species": 0.05263157894736842,
+      "no_track": 0.3014354066985646,
+      "mean_tracks_per_sequence": 0.7607655502392344
+    },
+    "dog": {
+      "sequences": 147,
+      "right_species_track": 0.6054421768707483,
+      "right_species_track_ci95": [
+        0.5306122448979592,
+        0.6870748299319728
+      ],
+      "only_other_species": 0.16326530612244897,
+      "no_track": 0.23129251700680273,
+      "mean_tracks_per_sequence": 0.8027210884353742
+    }
+  },
+  "runtime_s": 544.7,
+  "note": "engine-level species decisions (track verifier median, species merge); frames 1/20 of the sequence apart, so camera motion between samples is large"
+}

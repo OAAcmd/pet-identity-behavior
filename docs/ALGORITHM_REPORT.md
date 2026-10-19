@@ -824,6 +824,17 @@ Findings:
 * Nearly every sequence has the pet found in some frame (0.97 / 0.98), so
   tracking across frames recovers much of the per-frame miss rate. The
   engine's track-level decision is not measured here.
+* Engine level (E20b, `results/e20/engine_level.json`): the full engine
+  (tracker, track-level verifier, species merge; phone build) on each
+  sequence's 10 frames shown as a 5 s clip at the engine's 2 fps.
+  - Cat sequences: a right-species track in 0.646 [0.58, 0.70], only a dog
+    in 0.053, no track in 0.30.
+  - Dog sequences: 0.605 [0.53, 0.69], only a cat in **0.163**, no track
+    in 0.23.
+  This is pessimistic: the sampled frames are 1/20 of a sequence apart, so
+  the tracker sees large camera jumps. Still, one dog video in six would be
+  reported as showing only a cat. The figures sit close to E18's YouTube
+  figures for the phone build (0.60 cat, 0.45 dog clips).
 * Limits: CoP3D videos circle a mostly static, centred pet in good light
   (unlike wall-mounted home cameras); the masks are model-generated; the
   owner and household are not identified.

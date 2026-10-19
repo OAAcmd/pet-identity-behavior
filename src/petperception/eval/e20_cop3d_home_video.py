@@ -192,3 +192,58 @@ def run(settings: Settings, out_dir: Path, extra_models: dict[str, Path] | None 
     }
     write_json(out_dir / "metrics.json", res)
     return res
+
+
+def _clip(frames: list[cop3d.Frame], dst: Path, fps: float = 2.0) -> Path:
+    """The sequence's sampled frames as a short H.264 clip, one frame per engine sample (2 fps)."""
+    import subprocess
+
+    if dst.exists():
+        return dst
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    lst = dst.with_suffix(".txt")
+    lst.write_text("".join(f"file '{Path(f.path).resolve()}'\nduration {1 / fps}\n" for f in frames) + f"file '{Path(frames[-1].path).resolve()}'\n")
+    subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2,fps=10",
+                    "-pix_fmt", "yuv420p", "-c:v", "libx264", "-preset", "veryfast", str(dst)], check=True)
+    return dst
+
+
+def engine_level(settings: Settings, out_dir: Path, detector_id: str = "efficientdet_lite0_tfhub_rawdecode_v1", n_boot: int = 1000) -> dict:
+    """E20b: the whole engine (detector, verifier at track level, tracker, species merge) on each sequence's frames
+    shown as a 5 s clip; the outcome is the species of the reported tracks."""
+    from ..pipeline import AnalysisEngine
+
+    t0 = time.perf_counter()
+    s = settings.model_copy(deep=True)
+    s.vision.detector = detector_id
+    s.audio.enabled = False
+    eng = AnalysisEngine(s).load()
+    frames = frames_all(settings)
+    by_seq: dict[tuple[str, str], list[cop3d.Frame]] = {}
+    for f in frames:
+        by_seq.setdefault((f.species, f.sequence), []).append(f)
+    clip_dir = settings.paths.resolve("data_root").parent / "cache" / "e20_clips"
+    rows = []
+    for (sp, seq), fr in sorted(by_seq.items()):
+        r = eng.analyze(_clip(sorted(fr, key=lambda x: x.frame), clip_dir / sp / f"{seq}.mp4"), modalities=("video",))
+        species = [t.species for t in r.observations.animal_tracks]
+        right = sp in species
+        rows.append({"species": sp, "sequence": seq, "right_species_track": right, "only_other_species": bool(species) and not right,
+                     "no_track": not species, "tracks": len(species),
+                     "right_species_duration_s": sum(t.duration_s for t in r.observations.animal_tracks if t.species == sp)})
+    res = {}
+    for sp in SPECIES:
+        rr = [x for x in rows if x["species"] == sp]
+        y = np.array([x["right_species_track"] for x in rr])
+        w = np.array([x["only_other_species"] for x in rr])
+        rng = np.random.default_rng(0)
+        boot = [float(y[rng.integers(0, len(y), len(y))].mean()) for _ in range(n_boot)]
+        res[sp] = {"sequences": len(rr), "right_species_track": float(y.mean()), "right_species_track_ci95": [float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
+                   "only_other_species": float(w.mean()), "no_track": float(np.mean([x["no_track"] for x in rr])),
+                   "mean_tracks_per_sequence": float(np.mean([x["tracks"] for x in rr]))}
+    out = {"experiment": "E20b", "status": "completed", "created_at": utc_now().isoformat(timespec="seconds"), "detector": detector_id,
+           "clips": "the 10 sampled frames of each sequence at 2 fps (the engine's sampling rate), H.264, video only",
+           "results": res, "runtime_s": round(time.perf_counter() - t0, 1),
+           "note": "engine-level species decisions (track verifier median, species merge); frames 1/20 of the sequence apart, so camera motion between samples is large"}
+    write_json(out_dir / "engine_level.json", out)
+    return out
