@@ -44,6 +44,42 @@
     "playing_object"
    ],
    "sha256": "1346f7d7580912dd989dc76846b5f2a5b3c0f8a29c7b205d7bdb046a7999f633"
+  },
+  {
+   "id": "ia_cat_tail_flick_rest",
+   "file": "ia_cat_tail_flick_rest.mp4",
+   "species": "cat",
+   "identifier": "OldCatTryingToSleepButTheTailTellsTheTaleShesPeevedMqz2kexbntrMp4CatTailTale",
+   "title": "Old #cat trying to sleep but the #tail tells the #tale - she's peeved.",
+   "uploader": "simplify3@gmail.com",
+   "date": "2014-03-07",
+   "licence": "none stated (Internet Archive upload; research analysis only, not redistributed)",
+   "source_labels": [
+    "resting"
+   ],
+   "role": "confuser: tail movement while resting, no tail chasing",
+   "sha256": "bc7934c124937d1a6cba6bc3a3750b2275b5f92d28a74bd5e3bcac2018f13d92"
+  },
+  {
+   "id": "ia_kitten_mother_tail",
+   "file": "ia_kitten_mother_tail.mp4",
+   "species": "cat",
+   "identifier": "youtube-YTQVDzFItLs",
+   "title": "Mama Cat's Reaction to her kitten, When Kitten biting her tail (Internet Archive mirror of a YouTube upload)",
+   "uploader": "cdlarramore1@gmail.com",
+   "date": null,
+   "licence": "none stated (Internet Archive upload; research analysis only, not redistributed)",
+   "source_labels": [
+    "social_play"
+   ],
+   "role": "confuser: kittens biting another cat's tail (not self-directed)",
+   "sha256": "1c8a360cce342b04eb4c14e6ef196b759604f2aeb9925f304c8e0e3c757844cd"
+  }
+ ],
+ "excluded": [
+  {
+   "identifier": "kitten-vs-bani-the-tail-war-fluffy-contest-entry-and-we-won-d",
+   "reason": "animated cartoon, not a recording of an animal (frame review)"
   }
  ]
 }

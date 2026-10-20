@@ -107,6 +107,28 @@ SOURCES: dict[str, dict] = {
     "ellis2013": {"tier": "clinical_review", "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg "
                                                        "15:219-230 (as summarized by Veterinary Partner).", "url": "https://doi.org/10.1177/1098612X13477537",
                   "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"},
+    "bekoff1995": {"tier": "peer_reviewed_study", "citation": "Bekoff M (1995) Play signals as punctuation: the structure of social play in "
+                                                          "canids. Behaviour 132(5-6):419-429.", "url": "https://doi.org/10.1163/156853995X00649",
+                   "supports": "play bows occur around play bites and other actions that could be misread, marking them as play"},
+    "cornell_aggression": {"tier": "veterinary_school", "citation": "Cornell Feline Health Center: Feline behavior problems: aggression.",
+                           "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/"
+                                  "feline-health-topics/feline-behavior-problems-aggression",
+                           "supports": "petting-induced aggression (over-stimulation, the cat controlling when petting ends) is often preceded by "
+                                       "dilated pupils, tail lashing and ears moved back; a relaxed cat holds its tail up with no flicking or "
+                                       "twitching; seeing an outdoor cat through a window can trigger redirected aggression; cats in pain may "
+                                       "act aggressively to avoid touch"},
+    "ahs_petting": {"tier": "animal_welfare_organization", "citation": "Animal Humane Society: Petting-induced and play aggression in cats.",
+                    "url": "https://www.animalhumanesociety.org/resource/petting-induced-and-play-aggression-cats",
+                    "supports": "tail lashing or thumping, shifting body position, skin twitching and direct stares indicate the cat has had "
+                                "enough petting"},
+    "merck_cat_behavior": {"tier": "clinical_review", "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+                           "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+                           "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; "
+                                       "some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out "
+                                       "before a problem is called behavioural"},
+    "snapcats_aggression": {"tier": "animal_welfare_organization", "citation": "SNAP Cats: Feline aggression.",
+                            "url": "https://www.snapcats.org/2018/05/08/feline-aggression/",
+                            "supports": "a hunting cat slinks with a lowered head and a twitching tail and lunges when prey is in reach"},
 }
 
 KINDS = ("request", "play_or_normal", "arousal_or_stress", "compulsive", "medical")
@@ -254,9 +276,16 @@ _add(Entry("social_play", ("cat",), "Close-contact interaction with another cat.
            ("Do the cats take turns chasing and being on top?", "Are there hisses, growls or yowls, and does one cat try to leave?"),
            ("injuries or one cat persistently hiding or avoiding the other",)))
 
+_add(Entry("social_play", ("dog",), "Chasing, wrestling or mouthing with another dog.",
+           (Candidate("sp_dog_play", "play_or_normal", "social play: play bows and role reversals mark rough contact as play", ("bekoff1995",),
+                      {"puppies": 0.6, "puppy": 0.6, "ball": 0.4, "bow": 1.0, "take turns": 1.0, "wrestl": 0.6}),),
+           ("Do the dogs take turns (chaser and chased, on top and below) and pause with play bows?",
+            "Does one dog try to leave or hide while the other keeps going?"),
+           ("one dog repeatedly trying to escape, yelping or being injured",)))
+
 _add(Entry("threat_display", ("cat", "dog"), "Hissing, growling, flattened ears, arched back or bared teeth directed at something.",
            (Candidate("td_defensive", "arousal_or_stress", "a defensive warning: the animal feels threatened and wants the trigger to keep away",
-                      ("gajdos2023",), {"stranger": 0.6, "other cat": 0.6, "dog": 0.4, "vet": 0.6}),
+                      ("gajdos2023", "merck_cat_behavior"), {"stranger": 0.6, "other cat": 0.6, "dog": 0.4, "vet": 0.6}),
             Candidate("td_pain_threat", "medical", "pain can lower the threshold for warning signals, especially when the animal is touched",
                       ("tvp_fhs", "cornell_fhs"), {"touch": 0.8, "when i pet": 0.8, "pick up": 0.8, "sudden": 0.6})),
            ("What is the animal looking at or reacting to?", "Does it happen only when touched at a particular place?"),
@@ -278,9 +307,63 @@ _add(Entry("vocalizing", ("dog",), "Barking, whining or howling.",
             Candidate("vd_play", "play_or_normal", "play barking during games", ("yin2004",), {"play": 0.9, "ball": 0.6, "toy": 0.6})),
            ("What happens just before the barking (a sound outside, being left, a game)?",), ()))
 
+_add(Entry("tail_flicking", ("cat",), "Flicking, twitching or lashing the tail while the rest of the body may be still.",
+           (Candidate("tf_prey", "play_or_normal", "attention to prey or a moving target (for example birds outside a window): a hunting cat "
+                      "watches with a twitching tail before it lunges", ("snapcats_aggression",),
+                      {"bird": 1.0, "window": 0.6, "watching": 0.8, "prey": 1.0, "toy": 0.5, "mouse": 0.8}),
+            Candidate("tf_stop", "request", "a signal that the cat wants contact to stop: during petting or handling, tail lashing or twitching "
+                      "often comes before a swat or bite", ("cornell_aggression", "ahs_petting", "merck_cat_behavior"),
+                      {"pet": 0.8, "petting": 1.0, "stroking": 1.0, "touch": 0.6, "lap": 0.6, "handled": 0.8, "brushing": 0.6}),
+            Candidate("tf_irritation", "arousal_or_stress", "irritation or arousal from something it cannot reach or does not like (an outdoor cat "
+                      "seen through a window, being disturbed while resting)", ("cornell_aggression",),
+                      {"peeved": 1.0, "annoyed": 1.0, "disturb": 0.8, "trying to sleep": 0.8, "other cat": 0.6, "outside": 0.4}),
+            Candidate("tf_fhs", "medical", "with rippling skin over the back and sudden running, part of an episode of feline hyperaesthesia",
+                      ("cornell_fhs", "tvp_fhs"), {"ripple": 1.2, "rippling": 1.2, "skin twitch": 1.2, "runs off": 0.8})),
+           ("What is the cat looking at or reacting to while the tail moves?", "Does it happen while it is being petted or handled, and does a swat "
+            "or bite follow?", "Does the skin on the back ripple at the same time?"),
+           ("tail flicking with skin rippling, dilated pupils and sudden running or self-attack (possible hyperaesthesia episode)",),
+           "A relaxed cat holds its tail up without flicking; the speed and context of the movement matter."))
+
+_add(Entry("staring_snapping", ("dog",), "Staring fixedly, or snapping at the air as if catching flies.",
+           (Candidate("ss_insect", "play_or_normal", "snapping at a real insect or reacting to something actually in view", (),
+                      {"fly": 0.4, "insect": 1.0, "bee": 1.0, "summer": 0.4}),
+            Candidate("ss_seizure", "medical", "focal (impaired-awareness) seizures: fly-catching, air snapping, staring and lip licking with "
+                      "reduced responsiveness, which can be mistaken for a behavioural problem", ("frontiers2026_focal",),
+                      {"suddenly": 0.8, "sudden": 0.8, "not notice": 1.0, "doesn't respond": 1.0, "unresponsive": 1.0, "trance": 0.8,
+                       "staring": 0.6, "nothing": 0.6, "drool": 0.8, "episode": 0.8}),
+            Candidate("ss_compulsive", "compulsive", "a compulsive behaviour, the main non-medical explanation weighed for such episodes",
+                      ("frontiers2026_focal", "tiira2012"), {"every day": 0.6, "all the time": 0.6, "shadows": 0.8, "lights": 0.8})),
+           ("Does the dog respond to its name or a touch during an episode?", "Is anything actually there (an insect, a shadow, a light)?",
+            "How long do episodes last, and do they look the same each time?"),
+           ("episodes of unresponsiveness, drooling, collapse or loss of bladder control (possible seizures)",)))
+
+_add(Entry("self_biting", ("cat", "dog"), "Biting, sucking or chewing at its own flank, leg or body.",
+           (Candidate("sb_neuropathic", "medical", "pain, including neuropathic pain after an injury or spinal surgery (in the published "
+                      "Dachshund case biting and licking at the flank followed a hemilaminectomy)", ("frontiers2023_dachshund",),
+                      {"surgery": 1.2, "operation": 1.0, "since": 0.3, "injury": 0.8, "back": 0.5, "touch": 0.5}),
+            Candidate("sb_itch", "medical", "itch or skin disease at the place it bites (parasites, allergy)", ("vin_pa", "waisglass2006"),
+                      {"fleas": 1.2, "hair loss": 1.0, "red": 0.6, "scratch": 0.6}),
+            Candidate("sb_behavioural", "compulsive", "a behavioural cause (a compulsive or attention-related pattern), the alternative the "
+                      "published case weighed against pain", ("frontiers2023_dachshund", "cliniciansbrief_pa"),
+                      {"every day": 0.6, "when alone": 0.6, "attention": 0.6, "only at home": 0.6, "bad behavior": 0.4, "bad behaviour": 0.4})),
+           ("Did it start after an injury, surgery or a change at home?", "Is there hair loss, redness or a wound where it bites?",
+            "Does it stop when the animal is distracted, and does it happen when nobody is watching?"),
+           ("open wounds, bleeding or the animal cannot be distracted from biting itself",
+            "biting at the body after spinal surgery or with weakness of the legs")))
+
+_add(Entry("being_petted", ("cat",), "Being touched or stroked by a person.",
+           (Candidate("bp_accepts", "play_or_normal", "the cat accepts or seeks the contact; many cats like being stroked on the head and neck", (), {}),
+            Candidate("bp_overstim", "request", "a wish for the contact to stop when signs such as tail lashing, skin twitching, ears back or a "
+                      "direct stare appear (petting-induced aggression may follow)", ("cornell_aggression", "ahs_petting", "merck_cat_behavior"),
+                      {"belly": 0.8, "bite": 1.0, "bites": 1.0, "swat": 1.0, "scratch": 0.6, "too long": 0.8, "tail": 0.4}),
+            Candidate("bp_pain", "medical", "pain at the place touched, when the cat reacts at one spot (a cat in pain may act aggressively to "
+                      "avoid touch)", ("cornell_aggression",), {"one spot": 1.0, "back": 0.6, "suddenly": 0.6, "hiss": 0.6})),
+           ("Where is the cat touched when it reacts, and what does its tail and ears do just before?", "Does it seek contact again afterwards?"),
+           ("sudden new sensitivity to touch at one place (possible pain)",)))
+
 for _b, _summary in (("eating", "Eating."), ("drinking", "Drinking."), ("resting", "Lying down, resting or sleeping."),
                      ("locomotion", "Walking or running."), ("being_petted", "Being touched or stroked by a person.")):
-    _add(Entry(_b, ("cat", "dog"), _summary + " Ordinary activity; no request or problem is implied by the behaviour itself.",
+    _add(Entry(_b, ("dog",) if _b == "being_petted" else ("cat", "dog"), _summary + " Ordinary activity; no request or problem is implied by the behaviour itself.",
                (Candidate(f"{_b}_normal", "play_or_normal", "ordinary activity", (), {}),), (), ()))
 
 

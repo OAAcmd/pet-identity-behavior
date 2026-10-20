@@ -13,10 +13,10 @@ from dataclasses import asdict, dataclass, field
 from . import knowledge as K
 from . import vocab as V
 from .question import Query, cue_score
-from .recognize import BehaviorReading
+from .recognize import BehaviorReading, RecognizerConfig
 
 ANSWER_VERSION = "behavior-answer-v1"
-DEFAULT_SEEN = 0.30  # replaced by thresholds selected on development clips (artifacts/understand/thresholds.json)
+MAX_SEEN_EXPLAINED = 2  # behaviours seen but not asked about that also get explanations
 
 
 @dataclass
@@ -49,14 +49,14 @@ def _fmt_bouts(r: BehaviorReading, limit: int = 4) -> str:
     return ", ".join(parts) + more
 
 
-def compose(q: Query, readings: list[BehaviorReading], pattern: dict, thresholds: dict[str, float] | None = None,
+def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: RecognizerConfig | None = None,
             quality: list[str] | None = None) -> Answer:
-    th = thresholds or {}
-    seen = [r for r in readings if r.score >= th.get(r.behavior, DEFAULT_SEEN) and (r.bouts or r.behavior == "vocalizing")]
+    cfg = config or RecognizerConfig()
+    seen = [r for r in readings if r.score >= cfg.threshold(r.behavior) and (r.bouts or r.behavior == "vocalizing" or r.evidence.get("clip_level"))]
     seen_names = {r.behavior for r in seen}
     by_name = {r.behavior: r for r in readings}
     behaviors_seen = [{"behavior": r.behavior, "description": V.BEHAVIORS[r.behavior].description, "score": r.score,
-                       "threshold": th.get(r.behavior, DEFAULT_SEEN), "bouts_s": [[round(b.t0, 2), round(b.t1, 2)] for b in r.bouts],
+                       "threshold": cfg.threshold(r.behavior), "bouts_s": [[round(b.t0, 2), round(b.t1, 2)] for b in r.bouts],
                        "evidence": r.evidence} for r in seen]
     reported = []
     for b in q.reported:
@@ -69,7 +69,7 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, thresholds
             status = "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)"
         reported.append({"behavior": b, "status": status, "recording_score": None if r is None else r.score})
     # which behaviours to explain: those the user asks about first, then those seen
-    targets = list(dict.fromkeys(q.reported + [r.behavior for r in seen]))
+    targets = list(dict.fromkeys(q.reported + [r.behavior for r in seen if r.behavior not in q.reported][:MAX_SEEN_EXPLAINED]))
     explained, sources_used, observations, urgent = [], {}, [], []
     for b in targets:
         e = K.entry(b, q.species)
@@ -105,8 +105,9 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, thresholds
     vote = pattern.get("detector_dog_vote")
     if vote is not None and ((q.species == "cat" and vote > 0.5) or (q.species == "dog" and vote < 0.5)):
         unc.append(f"The detector's species vote disagrees with the species you gave ({q.species}); your answer is used, and the detector only locates the animal.")
-    unc.append("Behaviour recognition uses a general vision-language model without pet-specific training for most behaviours; scores are relative, "
-               "not probabilities (see the benchmark in results/e31).")
+    unc.append("Behaviour recognition uses a general vision-language model (" + ("zero-shot" if cfg.method == "zero_shot" else
+               "zero-shot, plus a head trained on a few hundred public clips for " + ", ".join(cfg.head_behaviors)) +
+               "); scores are relative, not probabilities, and its measured accuracy is in results/e31.")
     if quality:
         unc += quality
     summary = _summary(q, seen, explained, pattern, by_name)
@@ -138,3 +139,28 @@ def _summary(q: Query, seen: list[BehaviorReading], explained: list[dict], patte
                      + "; ".join(K.KIND_TEXT[k] for k in kinds) + "." + ("" if ex["request_or_intention_possible"] else " No request is implied by it."))
     parts.append("The cause is not established from the recording; the questions listed would help tell the candidates apart.")
     return " ".join(parts)
+
+
+def render_markdown(ans: dict, title: str = "") -> str:
+    """A readable version of an answer (``Answer.to_dict()``)."""
+    lines = ([f"### {title}", ""] if title else []) + [f"**Species (given):** {ans['species']}  ", f"**Scene:** {ans['scene'] or '-'}  ",
+                                                         f"**Question:** {ans['question'] or '-'}", "", f"**Summary:** {ans['summary']}", "",
+                                                         "**Seen in the recording:**"]
+    lines += [f"- {b['behavior']} (score {b['score']:.2f}, threshold {b['threshold']:.2f}; bouts {b['bouts_s'][:4] or 'clip level'})"
+              for b in ans["behaviors_seen"]] or ["- nothing above threshold"]
+    lines += ["", "**What you reported:**"] + ([f"- {u['behavior']}: {u['status']}" for u in ans["user_reported"]] or ["- no behaviour recognized in the question"])
+    for e in ans["explained_behaviors"]:
+        lines += ["", f"**Possible explanations for {e['behavior']}** ({e['basis']}; kinds in order of fit to your description: "
+                  f"{', '.join(dict.fromkeys(e['kind_order_by_context']))}):"]
+        for kind, g in e["candidates_by_kind"].items():
+            for c in g:
+                lines.append(f"- [{kind}] {c['explanation']} (sources: {', '.join(c['sources']) or 'none'}; matched in your description: "
+                             f"{', '.join(c['context_match']) or '-'})")
+        lines.append(f"- request or intention possible: {'yes' if e['request_or_intention_possible'] else 'no'}"
+                     + (f" - {e['no_request_note']}" if e["no_request_note"] else ""))
+    lines += ["", "**Would help tell them apart:**"] + [f"- {o}" for o in ans["observations_needed"]]
+    if ans["urgent_signs"]:
+        lines += ["", "**See a veterinarian promptly if:**"] + [f"- {u}" for u in ans["urgent_signs"]]
+    lines += ["", "**Uncertainty:**"] + [f"- {u}" for u in ans["uncertainty"]]
+    lines += ["", "**Sources:**"] + [f"- [{x['id']}] {x['citation']} ({x['tier']}) {x['url']}" for x in ans["sources"]]
+    return "\n".join(lines) + "\n"

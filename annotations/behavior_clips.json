@@ -1,0 +1,709 @@
+{
+ "schema": "petperception.behavior_clips/1",
+ "label_source": "assistant_frame_review",
+ "method": "Contact sheets: each clip decoded at 4 fps (first 60 s at most), 8 or 16 frames spread evenly with their timestamps; reviewed by the AI coding assistant (Claude) during development on 2026-10-20. These are machine-assisted labels, not human annotation: they are stored and scored apart from the uploaders' labels (source) and the paper authors' captions (expert), and are never merged into them. Temporal boundaries are coarse (about one sheet interval, 1-4 s). Behaviour names follow src/petperception/understand/vocab.py; 'absent' lists behaviours checked and not seen (confusers).",
+ "reviewed_at": "2026-10-20",
+ "clips": [
+  {
+   "key": "paper_tiira2012_s1",
+   "behaviors": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 10
+    },
+    {
+     "behavior": "tail_chasing",
+     "t0": 19,
+     "t1": 30
+    },
+    {
+     "behavior": "tail_directed",
+     "t0": 31,
+     "t1": 39
+    }
+   ],
+   "absent": [],
+   "setting": "living room: rug, sofa, people seated next to the puppy",
+   "quality": "",
+   "note": "curled lying 31-39 s with the tail at the mouth"
+  },
+  {
+   "key": "paper_tiira2012_s2",
+   "behaviors": [
+    "tail_chasing"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 23
+    }
+   ],
+   "absent": [],
+   "setting": "garden lawn by a birch tree",
+   "quality": "dog small and distant 6-12 s",
+   "note": ""
+  },
+  {
+   "key": "paper_tiira2012_s3",
+   "behaviors": [
+    "tail_chasing",
+    "locomotion"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 5
+    },
+    {
+     "behavior": "locomotion",
+     "t0": 5,
+     "t1": 8.8
+    }
+   ],
+   "absent": [],
+   "setting": "gravel yard",
+   "quality": "portrait video, pillarboxed",
+   "note": ""
+  },
+  {
+   "key": "commons_9aa65b0449e8",
+   "behaviors": [
+    "tail_chasing",
+    "locomotion"
+   ],
+   "bouts": [
+    {
+     "behavior": "locomotion",
+     "t0": 0.5,
+     "t1": 3.5
+    },
+    {
+     "behavior": "tail_chasing",
+     "t0": 3.5,
+     "t1": 11.5
+    },
+    {
+     "behavior": "locomotion",
+     "t0": 11.5,
+     "t1": 15.5
+    }
+   ],
+   "absent": [],
+   "setting": "front yard behind a metal fence",
+   "quality": "seen through fence bars",
+   "note": "turning in place; tail focus not resolvable at sheet resolution"
+  },
+  {
+   "key": "commons_7f743aa53c22",
+   "behaviors": [],
+   "bouts": [],
+   "absent": [],
+   "setting": "yard",
+   "quality": "picture content rotated sideways inside a pillarboxed frame; dog small and far",
+   "note": "the uploader's 'spinning' is not verifiable at sheet resolution; excluded from the question benchmark"
+  },
+  {
+   "key": "archive_ia_dog_spin_1",
+   "behaviors": [
+    "locomotion"
+   ],
+   "bouts": [],
+   "absent": [],
+   "setting": "city park at night; person holding a long leash",
+   "quality": "night, dog small",
+   "note": "the uploader's 'spinning' is not verifiable at sheet resolution"
+  },
+  {
+   "key": "paper_fhs_cat_2026_m1",
+   "behaviors": [
+    "tail_directed",
+    "tail_chasing"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_directed",
+     "t0": 0,
+     "t1": 15
+    },
+    {
+     "behavior": "tail_chasing",
+     "t0": 15.5,
+     "t1": 21
+    }
+   ],
+   "absent": [],
+   "setting": "indoors, striped mat on a tiled floor",
+   "quality": "close view from above and behind",
+   "note": "sitting and turning toward the tail and lower back, then turning around"
+  },
+  {
+   "key": "paper_fhs_cat_2026_m2",
+   "behaviors": [
+    "tail_chasing"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 8.8
+    }
+   ],
+   "absent": [],
+   "setting": "children's play mat",
+   "quality": "top view",
+   "note": "turning in circles after the tail"
+  },
+  {
+   "key": "paper_fhs_cat_2026_m3",
+   "behaviors": [
+    "playing_object"
+   ],
+   "bouts": [
+    {
+     "behavior": "playing_object",
+     "t0": 0,
+     "t1": 27
+    }
+   ],
+   "absent": [
+    "tail_chasing"
+   ],
+   "setting": "tiled floor; a person dangles a strap",
+   "quality": "",
+   "note": "lying on its side batting at a strap; the case-level expert labels (tail chasing) do not describe this video"
+  },
+  {
+   "key": "archive_ia_cat_tail_1",
+   "behaviors": [
+    "tail_chasing"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 6.5
+    }
+   ],
+   "absent": [],
+   "setting": "living room: recliners, a red suitcase",
+   "quality": "cat small in the frame",
+   "note": "turning in place on top of the suitcase"
+  },
+  {
+   "key": "archive_ia_cat_tail_2",
+   "behaviors": [
+    "tail_chasing"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_chasing",
+     "t0": 0,
+     "t1": 3.2
+    }
+   ],
+   "absent": [],
+   "setting": "bathtub",
+   "quality": "top view, motion blur",
+   "note": "spinning after the tail"
+  },
+  {
+   "key": "commons_226a8cfdeb4d",
+   "behaviors": [
+    "tail_directed",
+    "resting"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_directed",
+     "t0": 0,
+     "t1": 13
+    },
+    {
+     "behavior": "resting",
+     "t0": 13,
+     "t1": 26
+    }
+   ],
+   "absent": [],
+   "setting": "curled on a red cushion",
+   "quality": "dim",
+   "note": "licking the tail held between the front paws"
+  },
+  {
+   "key": "paper_dachshund_flank_2023",
+   "behaviors": [
+    "self_biting"
+   ],
+   "bouts": [
+    {
+     "behavior": "self_biting",
+     "t0": 0,
+     "t1": 9
+    },
+    {
+     "behavior": "self_biting",
+     "t0": 15,
+     "t1": 34
+    }
+   ],
+   "absent": [],
+   "setting": "sofa with a checked blanket",
+   "quality": "",
+   "note": "turning to bite at the flank and back; it turns in circles while doing so"
+  },
+  {
+   "key": "paper_focal_seizures_dogs_2026",
+   "behaviors": [
+    "staring_snapping"
+   ],
+   "bouts": [
+    {
+     "behavior": "staring_snapping",
+     "t0": 0,
+     "t1": 14
+    },
+    {
+     "behavior": "staring_snapping",
+     "t0": 16,
+     "t1": 36
+    },
+    {
+     "behavior": "staring_snapping",
+     "t0": 39,
+     "t1": 57
+    }
+   ],
+   "absent": [],
+   "setting": "home: hallway and living room",
+   "quality": "caption overlays in the video; the second case starts at 59 s",
+   "note": "standing still staring (0-14 s, caption 'staring into space'); close-up (16-36 s, caption 'hallucinations and anxiety'); standing (39-57 s, caption 'impaired awareness')"
+  },
+  {
+   "key": "archive_ia_cat_tail_flick_rest",
+   "behaviors": [
+    "resting",
+    "tail_flicking"
+   ],
+   "bouts": [
+    {
+     "behavior": "resting",
+     "t0": 0,
+     "t1": 6.5
+    },
+    {
+     "behavior": "tail_flicking",
+     "t0": 0,
+     "t1": 6.5
+    }
+   ],
+   "absent": [
+    "tail_chasing"
+   ],
+   "setting": "lying on a green blanket",
+   "quality": "close-up",
+   "note": "the tail moves beside the head while the cat lies still"
+  },
+  {
+   "key": "archive_ia_kitten_mother_tail",
+   "behaviors": [
+    "social_play"
+   ],
+   "bouts": [
+    {
+     "behavior": "social_play",
+     "t0": 0,
+     "t1": 60
+    }
+   ],
+   "absent": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "setting": "wooden garden table outdoors",
+   "quality": "",
+   "note": "a kitten pounces on and bites an adult cat's tail; nobody chases its own tail"
+  },
+  {
+   "key": "commons_200930f8d690",
+   "behaviors": [
+    "tail_flicking"
+   ],
+   "bouts": [
+    {
+     "behavior": "tail_flicking",
+     "t0": 0,
+     "t1": 3.5
+    }
+   ],
+   "absent": [
+    "tail_chasing"
+   ],
+   "setting": "two cats sitting at a window",
+   "quality": "",
+   "note": "hanging tails move while the cats look out"
+  },
+  {
+   "key": "commons_c74a52667c09",
+   "behaviors": [],
+   "bouts": [],
+   "absent": [],
+   "setting": "fluffy blanket",
+   "quality": "face close-up",
+   "note": "kneading not visible (paws out of view); purring not checkable from frames"
+  },
+  {
+   "key": "commons_25a6515f82e6",
+   "behaviors": [
+    "kneading"
+   ],
+   "bouts": [
+    {
+     "behavior": "kneading",
+     "t0": 0,
+     "t1": 12.5
+    }
+   ],
+   "absent": [],
+   "setting": "soft blanket",
+   "quality": "close-up of the paws",
+   "note": ""
+  },
+  {
+   "key": "commons_a4614b1b91d5",
+   "behaviors": [
+    "kneading"
+   ],
+   "bouts": [
+    {
+     "behavior": "kneading",
+     "t0": 0,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "red blanket on a bed",
+   "quality": "",
+   "note": "kneading while sucking the blanket, lying"
+  },
+  {
+   "key": "commons_21dcab74d428",
+   "behaviors": [
+    "threat_display",
+    "resting"
+   ],
+   "bouts": [
+    {
+     "behavior": "threat_display",
+     "t0": 14,
+     "t1": 17
+    },
+    {
+     "behavior": "resting",
+     "t0": 0,
+     "t1": 35.5
+    }
+   ],
+   "absent": [],
+   "setting": "wooden floor",
+   "quality": "",
+   "note": "lying, looking to the side; open-mouth hiss at about 15 s"
+  },
+  {
+   "key": "commons_b40cf00f4f7a",
+   "behaviors": [
+    "playing_object"
+   ],
+   "bouts": [
+    {
+     "behavior": "playing_object",
+     "t0": 0.8,
+     "t1": 1.8
+    }
+   ],
+   "absent": [],
+   "setting": "cork floor",
+   "quality": "",
+   "note": "lunge at a moving shadow; the hiss is not visible in the frames"
+  },
+  {
+   "key": "commons_9db2231c588f",
+   "behaviors": [
+    "self_grooming"
+   ],
+   "bouts": [
+    {
+     "behavior": "self_grooming",
+     "t0": 5,
+     "t1": 22
+    },
+    {
+     "behavior": "self_grooming",
+     "t0": 30,
+     "t1": 35
+    }
+   ],
+   "absent": [],
+   "setting": "carpet in a living room",
+   "quality": "",
+   "note": "sitting kitten"
+  },
+  {
+   "key": "commons_62f82faa497c",
+   "behaviors": [
+    "self_grooming",
+    "resting"
+   ],
+   "bouts": [
+    {
+     "behavior": "self_grooming",
+     "t0": 0,
+     "t1": 56
+    }
+   ],
+   "absent": [],
+   "setting": "dark blanket",
+   "quality": "close-up",
+   "note": "lying on its back washing its face"
+  },
+  {
+   "key": "commons_624fbe589e28",
+   "behaviors": [
+    "self_grooming"
+   ],
+   "bouts": [
+    {
+     "behavior": "self_grooming",
+     "t0": 0,
+     "t1": 40
+    },
+    {
+     "behavior": "self_grooming",
+     "t0": 48,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "cat bed in a cardboard box",
+   "quality": "dim",
+   "note": ""
+  },
+  {
+   "key": "commons_b7bd05adb3a5",
+   "behaviors": [
+    "social_play"
+   ],
+   "bouts": [
+    {
+     "behavior": "social_play",
+     "t0": 0,
+     "t1": 15
+    },
+    {
+     "behavior": "social_play",
+     "t0": 20,
+     "t1": 50
+    },
+    {
+     "behavior": "social_play",
+     "t0": 52,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "checked blanket",
+   "quality": "",
+   "note": "two young cats wrestling"
+  },
+  {
+   "key": "commons_c44f55ec8378",
+   "behaviors": [
+    "threat_display"
+   ],
+   "bouts": [
+    {
+     "behavior": "threat_display",
+     "t0": 0,
+     "t1": 45
+    }
+   ],
+   "absent": [],
+   "setting": "garden path",
+   "quality": "",
+   "note": "two tomcats standing face to face, tense standoff"
+  },
+  {
+   "key": "commons_0c532f735238",
+   "behaviors": [
+    "vocalizing"
+   ],
+   "bouts": [],
+   "absent": [],
+   "setting": "indoors, kitten in front of the camera",
+   "quality": "blurry; watermark",
+   "note": "open-mouth meow at about 13 s"
+  },
+  {
+   "key": "commons_3dc1f7929fee",
+   "behaviors": [],
+   "bouts": [],
+   "absent": [],
+   "setting": "garden gate",
+   "quality": "dog far away",
+   "note": "whimpering not checkable from frames"
+  },
+  {
+   "key": "commons_b1cbe3feb94e",
+   "behaviors": [
+    "vocalizing",
+    "resting"
+   ],
+   "bouts": [],
+   "absent": [],
+   "setting": "back seat of a car",
+   "quality": "",
+   "note": "open-mouth howls at about 6, 20, 27 and 40 s"
+  },
+  {
+   "key": "commons_9f22d724f678",
+   "behaviors": [
+    "playing_object"
+   ],
+   "bouts": [
+    {
+     "behavior": "playing_object",
+     "t0": 5,
+     "t1": 7
+    },
+    {
+     "behavior": "playing_object",
+     "t0": 12,
+     "t1": 14
+    }
+   ],
+   "absent": [],
+   "setting": "hallway wall",
+   "quality": "dim",
+   "note": "reaching up the wall after a laser dot"
+  },
+  {
+   "key": "commons_bfd87d96a088",
+   "behaviors": [
+    "vocalizing"
+   ],
+   "bouts": [],
+   "absent": [],
+   "setting": "office floor",
+   "quality": "",
+   "note": "sitting facing the camera; mouth opens briefly at about 3.5 s"
+  },
+  {
+   "key": "commons_daa6d5f0696e",
+   "behaviors": [
+    "playing_object",
+    "being_petted"
+   ],
+   "bouts": [
+    {
+     "behavior": "playing_object",
+     "t0": 5,
+     "t1": 12
+    },
+    {
+     "behavior": "being_petted",
+     "t0": 40,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "campsite lawn",
+   "quality": "",
+   "note": "brings a toy to the person's hand; later petted"
+  },
+  {
+   "key": "commons_aec6f6b08cce",
+   "behaviors": [],
+   "bouts": [],
+   "absent": [
+    "scratching_self"
+   ],
+   "setting": "carpet",
+   "quality": "",
+   "note": "rubs its body along the carpet with the legs spread (not in the vocabulary); no hind-foot scratching"
+  },
+  {
+   "key": "commons_9094fd492063",
+   "behaviors": [
+    "being_petted"
+   ],
+   "bouts": [
+    {
+     "behavior": "being_petted",
+     "t0": 0,
+     "t1": 13
+    }
+   ],
+   "absent": [],
+   "setting": "bed",
+   "quality": "",
+   "note": "a person scratches the chest; the hind leg kicks (scratch reflex)"
+  },
+  {
+   "key": "commons_4293f1a461a1",
+   "behaviors": [
+    "being_petted"
+   ],
+   "bouts": [
+    {
+     "behavior": "being_petted",
+     "t0": 0,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "garden",
+   "quality": "",
+   "note": "lying on its back while the belly is rubbed"
+  },
+  {
+   "key": "commons_8820a1b04d0a",
+   "behaviors": [
+    "social_play"
+   ],
+   "bouts": [
+    {
+     "behavior": "social_play",
+     "t0": 0,
+     "t1": 40
+    }
+   ],
+   "absent": [],
+   "setting": "grassy yard with a ball",
+   "quality": "slow motion",
+   "note": "two puppies chasing and wrestling"
+  },
+  {
+   "key": "commons_ba56bde9d4ea",
+   "behaviors": [
+    "eating"
+   ],
+   "bouts": [
+    {
+     "behavior": "eating",
+     "t0": 0,
+     "t1": 60
+    }
+   ],
+   "absent": [],
+   "setting": "kitchen floor, food plate",
+   "quality": "",
+   "note": "two cats eating from one plate"
+  }
+ ]
+}

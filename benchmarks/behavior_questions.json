@@ -1,0 +1,988 @@
+{
+ "schema": "petperception.behavior_questions/1",
+ "version": "behavior-questions-v1",
+ "created_at": "2026-10-20",
+ "description": "Real recordings (Wikimedia Commons, CC BY paper supplements, Internet Archive) paired with an owner-style question. q08 uses the question from the task statement verbatim; the other questions were written by the assistant from the source's own caption, title or description (or, where marked, from the frame review), without adding facts that the source does not state. They are not questions collected from real owners.",
+ "fields": {
+  "asked": "behaviours the question asks about (must all be parsed)",
+  "asked_ok": "behaviours whose parsing is acceptable but not required",
+  "reference_present": "behaviours present in the clip according to the reference (basis given per item); recognition is scored on these",
+  "must_not_recognize": "confusers: behaviours checked as absent",
+  "source_interpretation": "the interpretation stated by the source (expert = paper authors; lay = uploader), as explanation kinds",
+  "request_expected": "per asked behaviour: whether a request/intention candidate should be offered (from the cited literature)",
+  "gap": "set when the behaviour or its explanation is outside the vocabulary or the knowledge base"
+ },
+ "questions": [
+  {
+   "id": "q01",
+   "clip": "paper_tiira2012_s1",
+   "species": "dog",
+   "scene": "Living room with a rug and a sofa; people are sitting nearby.",
+   "question": "My 4-month-old Bull Terrier puppy chases her tail several times a day, even when nothing seems to be going on. She started at 9 weeks. What could this behavior mean?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "reference_basis": "expert (case) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "compulsive"
+    ],
+    "text": "compulsive tail chasing, TC index 9 of 12; no clear reason seen",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q02",
+   "clip": "paper_tiira2012_s2",
+   "species": "dog",
+   "scene": "Garden lawn by a tree.",
+   "question": "My 4-year-old German Shepherd chases his tail many times a day, usually while he waits for his food or when I talk with other people. Why does he do this?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "arousal_or_stress",
+     "compulsive"
+    ],
+    "text": "compulsive tail chasing that starts in waiting situations (food) or when the owner talks to others",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q03",
+   "clip": "paper_tiira2012_s3",
+   "species": "dog",
+   "scene": "Gravel yard outside the house.",
+   "question": "My 10-month-old Staffordshire Bull Terrier starts chasing his tail when nobody pays attention to him, and sometimes he seems to be in a trance. His littermates do it too. What could this mean?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "compulsive",
+     "request"
+    ],
+    "text": "compulsive, familial tail chasing with trance-like behaviour; starts when nobody pays attention",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q04",
+   "clip": "commons_9aa65b0449e8",
+   "species": "dog",
+   "scene": "Front yard behind a metal fence.",
+   "question": "My dog spins in circles in the front yard behind the fence. Is he asking for something?",
+   "question_origin": "authored_from_source_title",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q05",
+   "clip": "archive_ia_dog_spin_1",
+   "species": "dog",
+   "scene": "A city park at night; we play fetch with a long leash.",
+   "question": "During our late-night games of fetch, my dog keeps spinning around. What does this mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [
+    "playing_object"
+   ],
+   "reference_present": [],
+   "reference_basis": "source title only (spinning not verifiable in the frames)",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q06",
+   "clip": "paper_fhs_cat_2026_m2",
+   "species": "cat",
+   "scene": "On a children's play mat at home; it started about a year ago, after our baby was born.",
+   "question": "My 3-year-old cat turns in circles after her tail and attacks it, and her lower back sometimes twitches. Why is she doing this?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [
+    "tail_directed"
+   ],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "expert (case) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical",
+     "arousal_or_stress"
+    ],
+    "text": "presumptive feline hyperaesthesia syndrome, temporally associated with a stressful household change (causality not established)",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q07",
+   "clip": "paper_fhs_cat_2026_m1",
+   "species": "cat",
+   "scene": "Indoors on a striped mat on a tiled floor.",
+   "question": "Since our child was born, our cat has episodes where she sits, turns toward her tail and lower back, and then spins around. What could be going on?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [
+    "tail_directed"
+   ],
+   "reference_present": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "reference_basis": "expert (case) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical",
+     "arousal_or_stress"
+    ],
+    "text": "presumptive feline hyperaesthesia syndrome, temporally associated with a stressful household change (causality not established)",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q08",
+   "clip": "archive_ia_cat_tail_1",
+   "species": "cat",
+   "scene": "An open living room.",
+   "question": "In an open living room, my cat keeps turning in circles while biting its own tail. What could this behavior mean?",
+   "question_origin": "user_example_verbatim",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "play_or_normal"
+    ],
+    "text": "uploader: 'playing with yourself ... chasing her tail again'",
+    "authority": "lay"
+   },
+   "request_expected": {
+    "tail_chasing": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q09",
+   "clip": "archive_ia_cat_tail_2",
+   "species": "cat",
+   "scene": "In the empty bathtub.",
+   "question": "My cat chases her tail in the empty bathtub. Is she playing, or is something wrong?",
+   "question_origin": "authored_from_source_title",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_chasing"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "tail_chasing": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q10",
+   "clip": "commons_226a8cfdeb4d",
+   "species": "cat",
+   "scene": "Curled up on a red cushion.",
+   "question": "My young cat keeps licking her tail while she lies curled up. Should I be worried?",
+   "question_origin": "authored_from_source_description",
+   "category": "tail_directed",
+   "asked": [
+    "tail_directed"
+   ],
+   "asked_ok": [
+    "self_grooming"
+   ],
+   "reference_present": [
+    "tail_directed",
+    "resting"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "tail_directed": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q11",
+   "clip": "paper_dachshund_flank_2023",
+   "species": "dog",
+   "scene": "On the sofa at home; he had back surgery (a hemilaminectomy) recently.",
+   "question": "Since his back surgery, my Dachshund barks and bites at his flank, mostly at home. Is this just bad behavior?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "self_directed",
+   "asked": [
+    "self_biting",
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "self_biting",
+    "vocalizing"
+   ],
+   "reference_basis": "expert + assistant (vocalizing: expert)",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical",
+     "compulsive"
+    ],
+    "text": "neuropathic pain weighed against undesirable behaviour after hemilaminectomy",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "self_biting": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q12",
+   "clip": "paper_focal_seizures_dogs_2026",
+   "species": "dog",
+   "scene": "At home in the hallway and the living room.",
+   "question": "My Border Terrier suddenly stands still, staring into space, and doesn't seem to notice us. Is he just daydreaming?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "self_directed",
+   "asked": [
+    "staring_snapping"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "staring_snapping"
+   ],
+   "reference_basis": "expert (video captions) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "suspected focal impaired-awareness seizures (supported by interictal EEG)",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "staring_snapping": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q13",
+   "clip": "archive_ia_cat_tail_flick_rest",
+   "species": "cat",
+   "scene": "Lying on a green blanket, trying to sleep.",
+   "question": "My old cat is lying down trying to sleep, but her tail keeps flicking and moving. Is she chasing her tail? What does it mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "confuser",
+   "asked": [
+    "tail_flicking",
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "resting",
+    "tail_flicking"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [
+    "tail_chasing"
+   ],
+   "source_interpretation": {
+    "kinds": [
+     "arousal_or_stress"
+    ],
+    "text": "uploader: 'the tail tells the tale - she's peeved'",
+    "authority": "lay"
+   },
+   "request_expected": {
+    "tail_flicking": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q14",
+   "clip": "archive_ia_kitten_mother_tail",
+   "species": "cat",
+   "scene": "On a wooden garden table outdoors, a kitten and an adult cat.",
+   "question": "A kitten keeps pouncing on and biting the adult cat's tail. Is the kitten playing?",
+   "question_origin": "authored_from_source_title",
+   "category": "confuser",
+   "asked": [
+    "social_play"
+   ],
+   "asked_ok": [
+    "playing_object"
+   ],
+   "reference_present": [
+    "social_play"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": null
+  },
+  {
+   "id": "q15",
+   "clip": "paper_fhs_cat_2026_m3",
+   "species": "cat",
+   "scene": "On the tiled floor at home, with a strap to play with.",
+   "question": "My cat, who has had tail-chasing episodes, is lying on the floor batting at a strap. Is this one of her episodes?",
+   "question_origin": "authored_from_frame_review",
+   "category": "confuser",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [
+    "tail_chasing"
+   ],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "assistant (the case-level expert labels do not describe this video)",
+   "must_not_recognize": [
+    "tail_chasing"
+   ],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q16",
+   "clip": "commons_200930f8d690",
+   "species": "cat",
+   "scene": "Two cats sitting at a window, looking out at birds.",
+   "question": "My cats sit at the window watching birds and flick their tails quickly. What does that mean?",
+   "question_origin": "authored_from_source_description",
+   "category": "confuser",
+   "asked": [
+    "tail_flicking"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "tail_flicking"
+   ],
+   "reference_basis": "source description + assistant",
+   "must_not_recognize": [
+    "tail_chasing"
+   ],
+   "source_interpretation": {
+    "kinds": [
+     "play_or_normal"
+    ],
+    "text": "uploader: cats watching birds through a window flick their tails",
+    "authority": "lay"
+   },
+   "request_expected": {
+    "tail_flicking": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q17",
+   "clip": "commons_aec6f6b08cce",
+   "species": "dog",
+   "scene": "Indoors on a carpet.",
+   "question": "My dog drags himself along the carpet on his belly with his legs spread out. Is something itching him?",
+   "question_origin": "authored_from_frame_review",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [
+    "scratching_self"
+   ],
+   "reference_present": [],
+   "reference_basis": "assistant",
+   "must_not_recognize": [
+    "scratching_self"
+   ],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "rubbing the body along the floor is not in the vocabulary or the knowledge base"
+  },
+  {
+   "id": "q18",
+   "clip": "commons_9094fd492063",
+   "species": "dog",
+   "scene": "Lying on a bed while I scratch her chest.",
+   "question": "When I scratch my dog's chest, her back leg starts kicking. What does that mean?",
+   "question_origin": "authored_from_source_description",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [
+    "scratching_self",
+    "being_petted"
+   ],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "the scratch reflex is not in the vocabulary or the knowledge base"
+  },
+  {
+   "id": "q19",
+   "clip": "commons_bfd87d96a088",
+   "species": "dog",
+   "scene": "Sitting in front of me in the office.",
+   "question": "My Labrador barks when I tell him to. Is he upset?",
+   "question_origin": "authored_from_source_description",
+   "category": "gap",
+   "asked": [
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "vocalizing"
+   ],
+   "reference_basis": "source",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [],
+    "text": "trained to bark on command",
+    "authority": "lay"
+   },
+   "request_expected": {
+    "vocalizing": true
+   },
+   "gap": "barking on cue (a trained response) is not in the knowledge base"
+  },
+  {
+   "id": "q20",
+   "clip": "commons_c74a52667c09",
+   "species": "cat",
+   "scene": "On a fluffy blanket.",
+   "question": "My cat purrs and kneads the blanket before settling down. What does this mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "kneading",
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "vocalizing"
+   ],
+   "reference_basis": "source (kneading not visible in the frames)",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "kneading": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q21",
+   "clip": "commons_25a6515f82e6",
+   "species": "cat",
+   "scene": "On a soft blanket.",
+   "question": "Why does my cat push her paws into the blanket over and over?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "kneading"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "kneading"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "kneading": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q22",
+   "clip": "commons_a4614b1b91d5",
+   "species": "cat",
+   "scene": "Lying on a red blanket on the bed.",
+   "question": "My cat kneads and sucks on the blanket for minutes at a time. Is this normal?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "kneading"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "kneading"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "kneading": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q23",
+   "clip": "commons_21dcab74d428",
+   "species": "cat",
+   "scene": "Lying on the wooden floor, looking at something to the side.",
+   "question": "My cat lies on the floor and suddenly growls and hisses toward something. What is she trying to tell me?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "threat_display"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "threat_display"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "threat_display": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q24",
+   "clip": "commons_b40cf00f4f7a",
+   "species": "cat",
+   "scene": "Lying on a cork floor while a shadow moves past.",
+   "question": "My cat lunges at a moving shadow and then hisses. Why?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "threat_display"
+   ],
+   "asked_ok": [
+    "playing_object"
+   ],
+   "reference_present": [
+    "playing_object",
+    "threat_display"
+   ],
+   "reference_basis": "source + assistant (hiss: source only)",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "threat_display": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q25",
+   "clip": "commons_9db2231c588f",
+   "species": "cat",
+   "scene": "Sitting on a carpet in the living room.",
+   "question": "My kitten spends a lot of time grooming herself. Is that normal?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "self_grooming"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "self_grooming"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "self_grooming": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q26",
+   "clip": "commons_62f82faa497c",
+   "species": "cat",
+   "scene": "Lying on her back on a dark blanket.",
+   "question": "My cat licks her paw and washes her face while purring. Is she stressed?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "self_grooming",
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "self_grooming",
+    "vocalizing"
+   ],
+   "reference_basis": "source + assistant (purring: source)",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "self_grooming": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q27",
+   "clip": "commons_624fbe589e28",
+   "species": "cat",
+   "scene": "In her cat bed inside a cardboard box.",
+   "question": "My cat licks the same favorite places on her body again and again. Should I worry?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "self_grooming"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "self_grooming"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "self_grooming": false
+   },
+   "gap": null
+  },
+  {
+   "id": "q28",
+   "clip": "commons_b7bd05adb3a5",
+   "species": "cat",
+   "scene": "Two 14-week-old littermates on a blanket.",
+   "question": "My two young cats from the same litter wrestle a lot. Are they fighting or playing?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "social_play"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "social_play"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "play_or_normal"
+    ],
+    "text": "uploader: two young cats in playful fight",
+    "authority": "lay"
+   },
+   "request_expected": {},
+   "gap": null
+  },
+  {
+   "id": "q29",
+   "clip": "commons_c44f55ec8378",
+   "species": "cat",
+   "scene": "In our garden; two tomcats face each other.",
+   "question": "Two tomcats stand facing each other in our garden and make loud calls. Are they playing?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "vocalizing"
+   ],
+   "asked_ok": [
+    "social_play",
+    "threat_display"
+   ],
+   "reference_present": [
+    "threat_display",
+    "vocalizing"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "arousal_or_stress"
+    ],
+    "text": "uploader: two tomcats in a conflict situation making loud calls",
+    "authority": "lay"
+   },
+   "request_expected": {},
+   "gap": null
+  },
+  {
+   "id": "q30",
+   "clip": "commons_0c532f735238",
+   "species": "cat",
+   "scene": "A kitten in front of the camera at home.",
+   "question": "My kitten meows at me again and again. What does she want?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "vocalizing"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "vocalizing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q31",
+   "clip": "commons_3dc1f7929fee",
+   "species": "dog",
+   "scene": "Standing at the garden gate.",
+   "question": "My dog stands at the garden gate and whimpers. What does it mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "vocalizing"
+   ],
+   "reference_basis": "source",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "vocalizing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q32",
+   "clip": "commons_b1cbe3feb94e",
+   "species": "dog",
+   "scene": "Lying in the back seat of the car.",
+   "question": "My husky howls in the car. Why?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "vocalizing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "vocalizing",
+    "resting"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "vocalizing": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q33",
+   "clip": "commons_9f22d724f678",
+   "species": "cat",
+   "scene": "In the hallway, by a wall.",
+   "question": "My cat jumps up the wall after the laser pointer dot. Is she just playing?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q34",
+   "clip": "commons_daa6d5f0696e",
+   "species": "dog",
+   "scene": "At a campsite; he brings his toy to my hand.",
+   "question": "At the campsite my rat terrier keeps bringing his toy and dropping it at my hand. Does he want me to play?",
+   "question_origin": "authored_from_frame_review",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "playing_object",
+    "being_petted"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q35",
+   "clip": "commons_8820a1b04d0a",
+   "species": "dog",
+   "scene": "Two puppies in a grassy yard with a ball.",
+   "question": "Our two puppies chase each other and play fight in the yard. Is this normal play?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "social_play"
+   ],
+   "asked_ok": [
+    "playing_object"
+   ],
+   "reference_present": [
+    "social_play"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "play_or_normal"
+    ],
+    "text": "uploader: puppies play fighting",
+    "authority": "lay"
+   },
+   "request_expected": {},
+   "gap": null
+  },
+  {
+   "id": "q36",
+   "clip": "commons_4293f1a461a1",
+   "species": "cat",
+   "scene": "Lying on her back in the garden while I rub her belly.",
+   "question": "My cat rolls onto her back and lets me rub her belly, making little sounds. Does she want more?",
+   "question_origin": "authored_from_source_description",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [
+    "vocalizing"
+   ],
+   "reference_present": [
+    "being_petted",
+    "vocalizing"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": true
+   },
+   "gap": null
+  },
+  {
+   "id": "q37",
+   "clip": "commons_ba56bde9d4ea",
+   "species": "cat",
+   "scene": "Two cats eating from one plate in the kitchen.",
+   "question": "My two cats eat side by side from one plate. Does this behavior mean anything?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null
+  }
+ ]
+}

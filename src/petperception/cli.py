@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25", "e26", "e27", "e28", "e29", "e30"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25", "e26", "e27", "e28", "e29", "e30", "e31"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -245,6 +245,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e27_dog_audio_intent as E
 
         return E.run(s, out_dir, REPO_ROOT / "artifacts" / "intent" / "dog_audio_activity_v1")
+    if name == "e31":
+        from .eval import e31_behavior_questions as E
+
+        return E.run(s, out_dir)
     if name == "e30":
         from .eval import e30_degraded_video as E
 
@@ -408,6 +412,23 @@ def cmd_intent(args: argparse.Namespace) -> int:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
         Path(args.out).write_text(js + "\n", encoding="utf-8")
     else:
+        print(js)
+    return 0
+
+
+def cmd_explain(args: argparse.Namespace) -> int:
+    from .understand.explain import render_markdown
+    from .understand.run import Explainer
+
+    ans = Explainer.load(args.threads, args.detector).explain(Path(args.media), args.species, args.scene or "", args.question or "").to_dict()
+    js = json.dumps(ans, indent=2)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(js + "\n", encoding="utf-8")
+    if args.markdown:
+        Path(args.markdown).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.markdown).write_text(render_markdown(ans), encoding="utf-8")
+    if not args.out and not args.markdown:
         print(js)
     return 0
 
@@ -855,6 +876,16 @@ def build_parser() -> argparse.ArgumentParser:
     it.add_argument("--threads", type=int, default=2)
     it.add_argument("--out")
     it.set_defaults(func=cmd_intent)
+    xp = sub.add_parser("explain", help="explain a pet's behaviour in a recording in the context of your question (source-grounded candidates)")
+    xp.add_argument("media")
+    xp.add_argument("--species", required=True, choices=["cat", "dog"], help="the species of your pet (never overridden by the detector)")
+    xp.add_argument("--scene", help="where it happens and anything relevant (age, situation, recent changes)")
+    xp.add_argument("--question", help="your question, e.g. 'my cat keeps turning in circles while biting its tail - why?'")
+    xp.add_argument("--detector", help="alternative detector .tflite (default: the configured phone detector)")
+    xp.add_argument("--threads", type=int, default=2)
+    xp.add_argument("--out", help="write the JSON answer here")
+    xp.add_argument("--markdown", help="write a readable answer here")
+    xp.set_defaults(func=cmd_explain)
     sv = sub.add_parser("serve", help="run the web app + API (+ in-process workers); loopback by default")
     sv.add_argument("--host")
     sv.add_argument("--port", type=int)

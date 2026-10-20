@@ -10,13 +10,16 @@ length, recurrence, turning in place).
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
 
 import numpy as np
 
 from . import vocab as V
 from .features import EMB_FPS, MOTION_FPS
 
+DEFAULT_SEEN = 0.30  # zero-shot clip score above which a behaviour with a bout counts as seen, fixed before E31
 VOCAL_CLASSES = {"cat": ("Cat", "Meow", "Purr", "Hiss", "Caterwaul"), "dog": ("Dog", "Bark", "Yip", "Howl", "Bow-wow", "Growling", "Whimper (dog)")}
 VOCAL_HEARD = 0.3
 BOUT_MIN_P = 0.35
@@ -36,6 +39,32 @@ class BehaviorReading:
     score: float
     bouts: list[Bout]
     evidence: dict = field(default_factory=dict)
+
+
+@dataclass
+class RecognizerConfig:
+    """Which scorer each behaviour uses and the score above which it counts as seen (artifacts/understand/recognizer.json)."""
+
+    version: str = "zero-shot-v1"
+    method: str = "zero_shot"  # zero_shot | head | mean (of zero-shot and head)
+    head_behaviors: list[str] = field(default_factory=list)
+    thresholds: dict[str, float] = field(default_factory=dict)
+    default_threshold: float = DEFAULT_SEEN
+    vocal_threshold: float = VOCAL_HEARD
+    provenance: dict = field(default_factory=dict)
+
+    def threshold(self, behavior: str) -> float:
+        if behavior == "vocalizing":
+            return self.thresholds.get(behavior, self.vocal_threshold)
+        return self.thresholds.get(behavior, self.default_threshold)
+
+    def save(self, path: Path) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(asdict(self), indent=1) + "\n")
+
+    @classmethod
+    def load(cls, path: Path) -> RecognizerConfig:
+        return cls(**json.loads(Path(path).read_text()))
 
 
 class ZeroShot:
@@ -113,7 +142,7 @@ def temporal_pattern(z) -> dict:
                 best_r = float(curve[k] - curve[: k + 1].min())
                 best_lag = (k + 2) / MOTION_FPS
     out.update({"available": True, "mean_speed_body_per_s": round(speed, 4), "path_body_lengths": round(path, 3), "net_displacement_body_lengths": round(net, 3),
-                "stays_in_place": bool(path > 0 and net < 1.0 and speed > 0.08), "turned_rad": round(turned, 3), "abs_turned_rad": round(abs_turn, 3),
+                "stays_in_place": bool(net < 1.0 and speed > 0.08), "turned_rad": round(turned, 3), "abs_turned_rad": round(abs_turn, 3),
                 "turning_consistency": round(abs(turned) / max(abs_turn, 1e-6), 3), "repetition_strength": round(best_r, 3),
                 "repetition_period_s": round(best_lag, 2) if best_lag else None,
                 "detector_dog_vote": round(float(np.mean(z["det"][ok, 1])), 3)})
@@ -132,7 +161,18 @@ def vocal_bouts(z, species: str, labels: list[str]) -> tuple[float, list[Bout]]:
     return float(v.max()) if len(v) else 0.0, b
 
 
-def recognize(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None = None, head=None) -> tuple[list[BehaviorReading], dict]:
+def zero_shot_scores(z, species: str, zs: ZeroShot) -> dict[str, float]:
+    """Clip-level zero-shot score per visual behaviour: mean of the top quarter of per-frame probabilities."""
+    emb = z["emb"].astype(np.float32) if "emb" in z.files else np.zeros((0, 768), np.float32)
+    if not len(emb):
+        return {}
+    p, names = zs.frame_probs(emb, species)
+    return {n: float(np.mean(np.sort(p[:, j])[-max(1, len(p) // 4):])) for j, n in enumerate(names) if n != "neutral"}
+
+
+def recognize(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None = None, head=None,
+              config: RecognizerConfig | None = None) -> tuple[list[BehaviorReading], dict]:
+    cfg = config or RecognizerConfig()
     readings: list[BehaviorReading] = []
     pattern = temporal_pattern(z) if "box" in z.files else {"available": False}
     emb = z["emb"].astype(np.float32) if "emb" in z.files else np.zeros((0, 768), np.float32)
@@ -140,16 +180,18 @@ def recognize(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None = N
         p, names = zs.frame_probs(emb, species)
         t = z["emb_t"]
         top = p.argmax(axis=1)
-        trained = head.predict(z, species) if head is not None else {}
+        trained = head.predict(z, species) if head is not None and cfg.method != "zero_shot" else {}
         for j, n in enumerate(names):
             if n == "neutral":
                 continue
             frac_top = float(np.mean(top == j))
             zscore = float(np.mean(np.sort(p[:, j])[-max(1, len(p) // 4):]))
-            score = zscore if n not in trained else 0.5 * zscore + 0.5 * trained[n]
             ev = {"zero_shot_top_quartile_mean": round(zscore, 4), "share_of_frames_most_likely": round(frac_top, 3)}
-            if n in trained:
+            score = zscore
+            if n in trained and n in cfg.head_behaviors:
+                score = trained[n] if cfg.method == "head" else 0.5 * zscore + 0.5 * trained[n]
                 ev["trained_head"] = round(trained[n], 4)
+                ev["clip_level"] = True
             readings.append(BehaviorReading(n, round(score, 4), bouts_from(t, p[:, j], top == j, 1.0 / EMB_FPS), ev))
     if yamnet_labels is not None:
         vmax, vb = vocal_bouts(z, species, yamnet_labels)
