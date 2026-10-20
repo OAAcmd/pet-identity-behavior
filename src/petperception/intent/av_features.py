@@ -113,61 +113,70 @@ def audio_features(c: Components, y: np.ndarray | None, hop_s: float = 0.48) -> 
         rms.append(20 * np.log10(max(1e-6, float(np.sqrt(np.mean(seg ** 2))) if seg.size else 1e-6)))
     rms = np.array(rms, np.float32)
     state = "silent" if float(np.max(rms)) < SILENT_DBFS else "present"
-    return {"a_t": ws.t_start.astype(np.float32), "a_emb": ws.embeddings.astype(np.float16), "a_scores": ws.scores.astype(np.float16), "a_rms_db": rms,
-            "audio_state": np.array(state)}
+    out = {"a_t": ws.t_start.astype(np.float32), "a_scores": ws.scores.astype(np.float16), "a_rms_db": rms, "audio_state": np.array(state)}
+    if ws.embeddings is not None:
+        out["a_emb"] = ws.embeddings.astype(np.float16)
+    return out
 
 
-def video_features(c: Components, frames: list[np.ndarray], fps: float) -> dict:
+def empty_video(T: int, n_objects: int, fps: float) -> dict:
+    return {"v_t": np.arange(T, dtype=np.float32) / fps, "v_whole": np.zeros((T, 1280), np.float16), "v_crop": np.zeros((T, 1280), np.float16),
+            "v_box": np.zeros((T, 4), np.float32), "v_pet": np.zeros((T, 4), np.float32), "v_posture": np.zeros((T, 3), np.float32),
+            "v_kp": np.zeros((T, 24, 3), np.float32), "v_person": np.zeros((T, 4), np.float32),
+            "v_objects": np.zeros((T, n_objects), np.float16), "v_motion": np.zeros(T, np.float32)}
+
+
+def frame_features(c: Components, rgb: np.ndarray, t_s: float, prev_gray: np.ndarray | None, out: dict, i: int) -> np.ndarray:
+    """Fill row i of the per-frame arrays in ``out`` for one RGB frame; returns this frame's 64x48 grey image."""
     from ..vision.detector import Detection
     from ..vision.interaction import _iou
     from ..vision.keypoints import square_crop
     from ..vision.posture import posture_features
 
     s = c.settings
-    T = len(frames)
-    out = {"v_t": np.arange(T, dtype=np.float32) / fps, "v_whole": np.zeros((T, 1280), np.float16), "v_crop": np.zeros((T, 1280), np.float16),
-           "v_box": np.zeros((T, 4), np.float32), "v_pet": np.zeros((T, 4), np.float32), "v_posture": np.zeros((T, 3), np.float32),
-           "v_kp": np.zeros((T, 24, 3), np.float32), "v_person": np.zeros((T, 4), np.float32),
-           "v_objects": np.zeros((T, len(c.object_classes)), np.float16), "v_motion": np.zeros(T, np.float32)}
-    classes = ["cat", "dog", "person"] + c.object_classes
+    hw = rgb.shape[:2]
+    g = cv2.resize(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY), (64, 48), interpolation=cv2.INTER_AREA).astype(np.float32) / 255.0
+    out["v_motion"][i] = float(np.mean(np.abs(g - prev_gray))) if prev_gray is not None else 0.0
+    out["v_whole"][i] = c.backbone.features(cv2.resize(rgb, (224, 224), interpolation=cv2.INTER_AREA))["pooled"]
+    dets = c.detector.detect(rgb, ["cat", "dog", "person"] + c.object_classes, s.vision.score_threshold, s.vision.nms_iou, 25)
+    for d in dets:
+        if d.label in c.object_classes:
+            j = c.object_classes.index(d.label)
+            out["v_objects"][i, j] = max(float(out["v_objects"][i, j]), d.score)
+    pets = [d for d in dets if d.label in ("cat", "dog")]
+    people = [d for d in dets if d.label == "person" and d.score >= s.interaction.min_person_score]
+    if people:
+        out["v_person"][i, :2] = [len(people), max(p.score for p in people)]
+    if not pets:
+        return g
+    a = max(pets, key=lambda d: d.area)
+    vs = -1.0
+    if c.verifier is not None:
+        vr = c.verifier.verify(rgb, Detection(a.label, a.score, a.box, getattr(a, "class_scores", None)))
+        vs = vr[0] if vr is not None else -1.0
+    out["v_pet"][i] = [1.0, a.score, vs, 1.0 if a.label == "dog" else 0.0]
+    out["v_box"][i] = a.box
+    feats = c.backbone.features(square_crop(rgb, a.box)[0])
+    out["v_crop"][i] = feats["pooled"]
+    if c.posture is not None:
+        out["v_posture"][i] = c.posture.scores(posture_features(feats["pooled"], a.box, hw, a.label))
+    if c.pose is not None:
+        kp = c.pose.estimate(rgb, a.box, t_s, feats)
+        bw, bh = max(a.box[2] - a.box[0], 1e-4), max(a.box[3] - a.box[1], 1e-4)
+        out["v_kp"][i, :, 0] = (kp.xy[:, 0] - a.box[0]) / bw
+        out["v_kp"][i, :, 1] = (kp.xy[:, 1] - a.box[1]) / bh
+        out["v_kp"][i, :, 2] = kp.visibility
+    if people and c.interaction is not None:
+        out["v_person"][i, 2] = max(c.interaction.score(p.box, a.box, hw, a.label) for p in people)
+        out["v_person"][i, 3] = max(_iou(p.box, a.box) for p in people)
+    return g
+
+
+def video_features(c: Components, frames: list[np.ndarray], fps: float) -> dict:
+    out = empty_video(len(frames), len(c.object_classes), fps)
     prev = None
     for i, rgb in enumerate(frames):
-        hw = rgb.shape[:2]
-        g = cv2.resize(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY), (64, 48), interpolation=cv2.INTER_AREA).astype(np.float32) / 255.0
-        out["v_motion"][i] = float(np.mean(np.abs(g - prev))) if prev is not None else 0.0
-        prev = g
-        out["v_whole"][i] = c.backbone.features(cv2.resize(rgb, (224, 224), interpolation=cv2.INTER_AREA))["pooled"]
-        dets = c.detector.detect(rgb, classes, s.vision.score_threshold, s.vision.nms_iou, 25)
-        for d in dets:
-            if d.label in c.object_classes:
-                j = c.object_classes.index(d.label)
-                out["v_objects"][i, j] = max(float(out["v_objects"][i, j]), d.score)
-        pets = [d for d in dets if d.label in ("cat", "dog")]
-        people = [d for d in dets if d.label == "person" and d.score >= s.interaction.min_person_score]
-        if people:
-            out["v_person"][i, :2] = [len(people), max(p.score for p in people)]
-        if not pets:
-            continue
-        a = max(pets, key=lambda d: d.area)
-        vs = -1.0
-        if c.verifier is not None:
-            vr = c.verifier.verify(rgb, Detection(a.label, a.score, a.box, getattr(a, "class_scores", None)))
-            vs = vr[0] if vr is not None else -1.0
-        out["v_pet"][i] = [1.0, a.score, vs, 1.0 if a.label == "dog" else 0.0]
-        out["v_box"][i] = a.box
-        feats = c.backbone.features(square_crop(rgb, a.box)[0])
-        out["v_crop"][i] = feats["pooled"]
-        if c.posture is not None:
-            out["v_posture"][i] = c.posture.scores(posture_features(feats["pooled"], a.box, hw, a.label))
-        if c.pose is not None:
-            kp = c.pose.estimate(rgb, a.box, float(out["v_t"][i]), feats)
-            bw, bh = max(a.box[2] - a.box[0], 1e-4), max(a.box[3] - a.box[1], 1e-4)
-            out["v_kp"][i, :, 0] = (kp.xy[:, 0] - a.box[0]) / bw
-            out["v_kp"][i, :, 1] = (kp.xy[:, 1] - a.box[1]) / bh
-            out["v_kp"][i, :, 2] = kp.visibility
-        if people and c.interaction is not None:
-            out["v_person"][i, 2] = max(c.interaction.score(p.box, a.box, hw, a.label) for p in people)
-            out["v_person"][i, 3] = max(_iou(p.box, a.box) for p in people)
+        prev = frame_features(c, rgb, float(out["v_t"][i]), prev, out, i)
     return out
 
 

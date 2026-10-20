@@ -87,7 +87,7 @@ def _L(raw, layer, concept, hyps=None, qualifier=None, note=""):
 DATASETS: dict[str, DatasetDef] = {
     "catmeows": DatasetDef(
         "CatMeows (Ludovico et al. 2020, Zenodo 4008297)", ("cat",), ("audio",), False, "meow clip (8 kHz)", "cat id (21) and owner (12)",
-        "recording protocol: the owner placed the cat in the situation", "CC BY 4.0", "var/data/catmeows (440 clips)", ("E2", "E27"),
+        "recording protocol: the owner placed the cat in the situation", "CC BY-NC 4.0", "var/data/catmeows (440 clips)", ("E2", "E27"),
         (_L("brushing", CONTEXT, "being_brushed", {}, "handling", "owner brushing the cat at home"),
          _L("isolation", CONTEXT, "isolation_unfamiliar_environment", {"attention": "context_for"}, "isolation",
             "cat alone in an unfamiliar room; contact-seeking is plausible, not shown"),

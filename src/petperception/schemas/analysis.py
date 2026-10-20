@@ -19,10 +19,11 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SCHEMA_VERSION = "1.4.0"
+SCHEMA_VERSION = "1.5.0"
 # 1.1.0 is additive (behavior segments, keypoints, verification); 1.2.0 adds person_interaction_candidate;
-# 1.3.0 adds on_furniture_candidate and BehaviorSegment.related_object; 1.4.0 adds SoundEvent.subtype_validation.
-SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"]
+# 1.3.0 adds on_furniture_candidate and BehaviorSegment.related_object; 1.4.0 adds SoundEvent.subtype_validation;
+# 1.5.0 adds the optional ``intent`` block (trained behaviour/intent channels and their combination).
+SchemaVersion = Literal["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0"]
 SubtypeValidation = Literal["passed", "failed", "not_evaluable", "not_evaluated"]
 
 Modality = Literal["audio", "video"]
@@ -333,6 +334,60 @@ class UsageRestrictions(_Model):
     notices: list[str]
 
 
+class IntentReading(_Model):
+    channel: str
+    model: str
+    label_space: str
+    species: str
+    scores: dict[str, float] = Field(description="temperature-scaled softmax on the training data; NOT a probability of truth")
+    top: str
+    top_score: float
+    threshold: float = Field(description="abstention threshold fitted on out-of-fold training scores")
+    confident: bool
+    inputs: list[str]
+    evidence_gate_passed: bool = True
+    note: str = ""
+
+
+class IntentHypothesis(_Model):
+    name: HypothesisName
+    status: Literal["supported", "supported_corroborated", "tentative", "context_only", "conflict"]
+    support: float | None = None
+    supporting: list[str] = Field(default_factory=list)
+    qualifying: list[str] = Field(default_factory=list)
+    contradicting: list[str] = Field(default_factory=list)
+    explanation: str = ""
+
+
+class IntentSituation(_Model):
+    label: str
+    score: float
+    status: Literal["interpretation", "uncertain", "conflict"]
+    branches_used: list[str]
+    qualifier: str | None = None
+
+
+class IntentOutput(_Model):
+    """Trained behaviour/intent channels and their combination (intent/inference.py). Context labels qualify; they
+    never stand for what the animal wants. The cross-channel combination is not validated (no synchronized
+    intent-labelled recordings exist)."""
+
+    version: str
+    species: str
+    species_source: str
+    inputs: dict[str, str]
+    missing_inputs: dict[str, str]
+    observations: list[str] = Field(default_factory=list)
+    readings: list[IntentReading]
+    situation: IntentSituation | None = None
+    qualifiers: list[str] = Field(default_factory=list)
+    hypotheses: list[IntentHypothesis]
+    conflicts: list[str] = Field(default_factory=list)
+    status: Literal["interpretation", "conflict", "situation_only", "insufficient_evidence"]
+    summary: str
+    caveats: list[str] = Field(default_factory=list)
+
+
 class AnalysisResult(_Model):
     schema_version: SchemaVersion = SCHEMA_VERSION
     analysis_id: str
@@ -353,6 +408,7 @@ class AnalysisResult(_Model):
     timings_ms: dict[str, float]
     models: list[ModelInfo]
     usage_restrictions: UsageRestrictions
+    intent: IntentOutput | None = None
 
 
 class AnalysisError(_Model):

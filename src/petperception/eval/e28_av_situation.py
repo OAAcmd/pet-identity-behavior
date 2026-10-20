@@ -71,10 +71,13 @@ def _matrix(rows: list[dict], b: str, dim: int | None = None) -> np.ndarray:
 def _metrics(y: np.ndarray, pred: np.ndarray, classes: list[str], n_boot: int = N_BOOT, seed: int = 0) -> dict:
     from . import metrics as M
 
-    rep = M.classification_report(y.tolist(), pred.tolist(), classes)
+    rep = M.classification_report(y.tolist(), pred.tolist(), classes) if set(pred.tolist()) <= set(classes) else None
     ci = M.group_bootstrap(lambda ix: M.macro_f1(y[ix].tolist(), pred[ix].tolist(), classes), [str(i) for i in range(len(y))], n_boot, seed)
-    return {"n": int(len(y)), "macro_f1": rep["macro_f1"], "macro_f1_ci95": [ci["ci_low"], ci["ci_high"]], "accuracy": rep["accuracy"],
-            "per_class_f1": {c: rep["per_class"][c]["f1"] for c in classes}, "confusion": rep.get("confusion_matrix")}
+    cols = classes + sorted(set(pred.tolist()) - set(classes))  # e.g. "(no output)" when the branch input is missing
+    return {"n": int(len(y)), "macro_f1": M.macro_f1(y.tolist(), pred.tolist(), classes), "macro_f1_ci95": [ci["ci_low"], ci["ci_high"]],
+            "accuracy": float(np.mean(y == pred)), "per_class_f1": {c: v["f1"] for c, v in M.per_class(y.tolist(), pred.tolist(), classes).items()},
+            "confusion": {"rows_true": classes, "cols_pred": cols, "matrix": [[int(np.sum((y == t) & (pred == q))) for q in cols] for t in classes]},
+            **({} if rep is None else {"balanced_accuracy": rep["balanced_accuracy"]})}
 
 
 def _paired(y: np.ndarray, a: np.ndarray, b: np.ndarray, classes: list[str], n_boot: int = N_BOOT, seed: int = 0) -> dict:

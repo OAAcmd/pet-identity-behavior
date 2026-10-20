@@ -192,6 +192,8 @@ export function ResultView({ feedback, result, mediaUrl, mediaKind }: { feedback
         )}
       </div>
 
+      {result.intent && <IntentCard intent={result.intent} />}
+
       {result.suggestions.length > 0 && (
         <div class="card">
           <h2>Suggestions</h2>
@@ -209,6 +211,58 @@ export function ResultView({ feedback, result, mediaUrl, mediaKind }: { feedback
       </details>
 
       <FeedbackForm sink={feedback} />
+    </div>
+  );
+}
+
+const INTENT_STATUS: Record<string, string> = {
+  interpretation: "Possible interpretation", conflict: "Channels disagree", situation_only: "Situation only", insufficient_evidence: "Not enough evidence",
+};
+const HYP_STATUS: Record<string, string> = {
+  supported: "supported by one channel", supported_corroborated: "supported, situation consistent", tentative: "weak evidence",
+  context_only: "situation only (not evidence of what the animal wants)", conflict: "conflicting evidence",
+};
+
+function IntentCard({ intent }: { intent: NonNullable<AnalysisResult["intent"]> }) {
+  const shown = intent.hypotheses.filter((h) => h.status !== "context_only");
+  const ctx = intent.hypotheses.filter((h) => h.status === "context_only");
+  return (
+    <div class="card exp-card" data-testid="intent-card">
+      <h2>{INTENT_STATUS[intent.status] ?? intent.status} <Chip tone="exp">Trained models, experimental</Chip></h2>
+      <p>{intent.summary}</p>
+      <p class="hint">
+        Each channel is a model trained on public recordings (barks, meows, pet videos), not on your household. Recording situations
+        (being bathed, walked, petted) are context; they never stand for what your pet wants. Scores are not probabilities.
+      </p>
+      {intent.situation && (
+        <p>Situation: <strong>{intent.situation.label}</strong> ({intent.situation.status}, {intent.situation.score.toFixed(2)};
+          from {intent.situation.branches_used.join(", ")})</p>
+      )}
+      {shown.length > 0 && (
+        <ul aria-label="Intent hypotheses">
+          {shown.map((h) => (
+            <li key={h.name}>
+              <strong>{h.name}</strong>: {HYP_STATUS[h.status] ?? h.status}{h.support !== null ? ` (${h.support.toFixed(2)})` : ""}
+              {h.supporting.length > 0 && <div class="muted">{h.supporting.join("; ")}</div>}
+              {h.qualifying.length > 0 && <div class="muted">{h.qualifying.join("; ")}</div>}
+              {h.contradicting.length > 0 && <div class="muted">Against: {h.contradicting.join("; ")}</div>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {ctx.length > 0 && <p class="muted">Context makes plausible (not shown by the animal): {ctx.map((h) => h.name).join(", ")}.</p>}
+      {intent.conflicts.length > 0 && <InfoBanner tone="warn">{intent.conflicts.join("; ")}</InfoBanner>}
+      <details>
+        <summary>Channels and missing inputs</summary>
+        <ul>
+          {intent.readings.map((r, i) => (
+            <li key={i}>{r.channel}: {r.top} ({r.top_score.toFixed(2)}; {r.confident ? "above" : "below"} its threshold {r.threshold.toFixed(2)})
+              {!r.evidence_gate_passed ? " - hint only, below the evidence gate" : ""}</li>
+          ))}
+          {Object.entries(intent.missing_inputs).map(([k, v]) => <li key={k} class="muted">{k}: {v}</li>)}
+        </ul>
+        <ul>{intent.caveats.map((c, i) => <li key={i} class="muted">{c}</li>)}</ul>
+      </details>
     </div>
   );
 }

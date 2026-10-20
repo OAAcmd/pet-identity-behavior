@@ -193,6 +193,16 @@ class ObjectRelationConfig(_Strict):
     min_frames: int = 2
 
 
+class IntentConfig(_Strict):
+    """Trained behaviour/intent channels and their combination (src/petperception/intent/, E26-E28).
+    Off by default: the extra per-frame passes (whole-frame embedding, all COCO object classes, largest-animal
+    crop) roughly double the video cost. "phone_now" uses only what the phone bundle computes (YAMNet class
+    scores, no research-only keypoints); "full" adds the YAMNet embedding and the cat/dog keypoint head."""
+
+    enabled: bool = False
+    variant: Literal["phone_now", "full"] = "phone_now"
+
+
 class PostureConfig(_Strict):
     """Coarse posture from weak caption labels (E10); cats and dogs."""
 
@@ -342,6 +352,7 @@ class Settings(_Strict):
     posture: PostureConfig = Field(default_factory=PostureConfig)
     interaction: InteractionConfig = Field(default_factory=InteractionConfig)
     object_relation: ObjectRelationConfig = Field(default_factory=ObjectRelationConfig)
+    intent: IntentConfig = Field(default_factory=IntentConfig)
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)

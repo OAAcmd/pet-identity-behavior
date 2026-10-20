@@ -50,7 +50,7 @@ resource.
 | `esc50` | dataset | available | E1 | CC BY-NC 3.0 (collection), CC BY 3.0 (ESC-10), per-clip Freesound licenses | upstream repo |
 | `openimages_v7_val_catdog` | dataset | available | E4, scenario media | annotations CC BY 4.0; images CC BY 2.0 (per-image) | n/a |
 | `catmeows` | dataset | **blocked** | E2 implemented, not run | research / non-commercial (Zenodo text) vs CC BY 4.0 (Univ. Milan page): discrepancy, treated as research-only | n/a |
-| `barkopedia_dog_act_env` | dataset | **blocked + pending review** | E3 disabled | card claims MIT (*unverified*); media provenance unreviewed | n/a |
+| `barkopedia_dog_act_env` | dataset | available (research) | E26, E27 (dog audio channel) | MIT (card at revision 60a721a7, read 2026-10-20); source-audio provenance not stated (unresolved permission) | n/a |
 | `ultralytics_dog_pose` | dataset/model | **blocked** | none (pose unavailable) | images and checkpoint terms unverified; Ultralytics code AGPL-3.0 | AGPL-3.0 |
 
 ## Models
@@ -163,14 +163,32 @@ resource.
   names are reported, never guessed), `extra.zip` kept separate, E2 protocol.
 - Next: `uv run petperception fetch-data catmeows && uv run petperception evaluate --experiment e2`.
 
-### Barkopedia Dog Act/Env - `barkopedia_dog_act_env` (BLOCKED, PENDING REVIEW)
+### Barkopedia Dog Act/Env - `barkopedia_dog_act_env` (available, research)
 
-- Canonical: <https://huggingface.co/datasets/ArlingtonCL2/Barkopedia_Dog_Act_Env>.
-- Error: huggingface.co denied. Card license (MIT per the brief), media provenance, split
-  formats, and the existence of animal/source IDs are all unverified.
-- Importer is audit-only: `fetch-data barkopedia --audit-only` fetches repository metadata;
-  media ingestion stays disabled until `var/data/barkopedia/audit_review.json` marks
-  provenance, license, splits, grouping and test labels as reviewed. No dog-intent claim.
+- Canonical: <https://huggingface.co/datasets/ArlingtonCL2/Barkopedia_Dog_Act_Env>, revision
+  `60a721a7f9477634971f6b3df29dc2a5e56994d8`; archives match the published LFS SHA-256.
+- Card (read 2026-10-20): licence MIT; labels "initially generated using video-assisted
+  inference via a visual-language model (Janus-Pro-7B), and later manually verified".
+- Unresolved permission: the card does not state where the source audio/video came from or
+  under which rights; recorded as unresolved, research use only until clarified.
+- No dog, video or uploader ids: held-out evaluation uses embedding pseudo-groups
+  (E26 shows they cannot establish independence). Test split (`test/test.zip`) has no labels.
+- Used by E26 (activity from a bark) and E27 (dog audio channel of the intent layer:
+  `artifacts/intent/dog_audio_activity_v1/`). Label layers: `docs/BEHAVIOR_INTENT_DATA.md`.
+
+### Intent-layer artifacts (2026-10-20)
+
+| Resource id | Path | Trained on | Release suitability (research / personal NC / commercial) |
+| --- | --- | --- | --- |
+| `intent_situation_kinetics_v1` | `artifacts/intent/kinetics_situation_v1/{full,phone_now}/` | Kinetics-700 pet clips (YouTube; E28) | suitable / not permitted / not permitted |
+| `intent_dog_audio_activity_v1` | `artifacts/intent/dog_audio_activity_v1/` | Barkopedia (MIT, provenance unresolved; E27) | suitable / legal review / legal review |
+| `intent_cat_audio_context_v1` | `artifacts/intent/cat_audio_context_v1/` | CatMeows (CC BY-NC 4.0; E2 evaluation) | suitable / legal review / not permitted |
+| `intent_dog_bark_context_v1` | `artifacts/intent/dog_bark_context_v1/` | Yin & McCowan barks via BEANS (no licence; E22 evaluation) | suitable / not permitted / not permitted |
+
+All heads are JSON (`petperception.intent_head/1`, `petperception.intent_late_fusion/1`):
+standardization, coefficients, temperature and abstention threshold, plus metadata naming
+the data, label layer and held-out evaluation. New dataset entries: `kinetics700_pet_clips`
+(research only) and `yin_mccowan_barks_beans` (research only).
 
 ## Artifacts produced in Phase 1
 

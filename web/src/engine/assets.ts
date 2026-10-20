@@ -1,4 +1,5 @@
 // Types for engine_assets.json (written by petperception.ondevice.bundle).
+import type { IntentAssets } from "./intent";
 
 export interface AudioAssets {
   model_id: string;
@@ -108,6 +109,8 @@ export interface EngineAssets {
   posture?: PostureAssets;
   interaction?: InteractionAssets;
   object_relation?: ObjectRelationAssets;
+  /** Behaviour / intent heads (asset format 0.2.3; present only when exported with intent.enabled). */
+  intent?: IntentAssets;
   vision: {
     sample_fps: number; max_side: number;
     quality: { low_light_luma: number; blur_laplacian_var: number; tiny_area_fraction: number; camera_motion_threshold: number; frame_gap_factor: number };

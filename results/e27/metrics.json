@@ -1,0 +1,989 @@
+{
+  "experiment": "E27",
+  "status": "completed",
+  "created_at": "2026-10-20T02:43:32+00:00",
+  "protocol": [
+    "E27: the dog audio channel for intent hypotheses (Barkopedia activities), with environment context, noise and coverage.",
+    "",
+    "Labels (intent/taxonomy.py): of the eight Barkopedia activities, \"begging for",
+    "food\" and \"seeking attention\" are annotated intent (a vision-language model",
+    "proposed them from the video, people verified); rest, alerting to sounds and",
+    "the three kinds of playing are observable behaviour; \"taking shower\" is a",
+    "recorded context. Hypothesis-level view: food, attention, play (three play",
+    "labels pooled), alert, relaxed (rest), bathing (context qualifier).",
+    "",
+    "Protocol (fixed before the validation clips were scored by E27; E26 had",
+    "scored the same clips with the embedding model only):",
+    "* Features: YAMNet embedding mean | max (E26 cache) and YAMNet class scores",
+    "  mean | max (phone-ready today); environment = the dataset's environment",
+    "  label merged to 8 categories (indoor, near door, near window, near other",
+    "  animals, bathroom, vehicle, outdoor, other), standing in for context the",
+    "  product may know (camera scene, owner-configured zone).",
+    "* Heads (intent/heads.py): logistic regression, C by 5-fold CV grouped by",
+    "  near-duplicate pseudo-group (E26), temperature and abstention threshold",
+    "  (OOF selective accuracy 0.8) from OOF scores. Late fusion of the audio and",
+    "  environment heads with availability flags and modality dropout.",
+    "* Rule baseline: intent/rules.py barkopedia_activity (committed before",
+    "  scoring).",
+    "* Test: the provider's validation clips; CIs bootstrap validation",
+    "  pseudo-groups. Conditions: clean; ESC-50 appliance noise at 10 and 0 dB",
+    "  SNR (audio re-embedded); audio missing (environment only); environment",
+    "  missing (audio only).",
+    "* External checks with mappings fixed in advance, on data never used for",
+    "  training: (a) BEANS / Yin & McCowan barks (10 dogs): play -> play,",
+    "  aggression (stranger at the door) -> alert, contact (isolation) ->",
+    "  attention; restricted 3-way decision; dog-level bootstrap. (b) Kinetics dog",
+    "  clips (all 595, train and validation; never used here): does the",
+    "  \"taking shower\" score separate \"bathing dog\" clips from the other three",
+    "  dog situations (ROC AUC, top-1 rate)?"
+  ],
+  "rules_sha256": "b35016f334f24711887f5d4fe6afbab545140b6a1c312b185e68d2d38f3e7cef",
+  "results": {
+    "classes": [
+      "alerting to sounds",
+      "begging for food",
+      "playing with human",
+      "playing with other animals",
+      "playing with toy",
+      "rest",
+      "seeking attention",
+      "taking shower"
+    ],
+    "hypotheses": [
+      "alert",
+      "attention",
+      "bathing",
+      "food",
+      "play",
+      "relaxed"
+    ],
+    "label_to_hypothesis": {
+      "begging for food": "food",
+      "seeking attention": "attention",
+      "playing with human": "play",
+      "playing with other animals": "play",
+      "playing with toy": "play",
+      "alerting to sounds": "alert",
+      "rest": "relaxed",
+      "taking shower": "bathing"
+    },
+    "clean": {
+      "branch:audio": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.22169473189912292,
+          "macro_f1_ci95": [
+            0.18382176014752946,
+            0.2688188275664181
+          ],
+          "accuracy": 0.232,
+          "per_class_f1": {
+            "alerting to sounds": 0.24324324324324323,
+            "begging for food": 0.05970149253731344,
+            "playing with human": 0.2518518518518519,
+            "playing with other animals": 0.15267175572519084,
+            "playing with toy": 0.23008849557522124,
+            "rest": 0.2682926829268293,
+            "seeking attention": 0.234375,
+            "taking shower": 0.33333333333333337
+          },
+          "ece": 0.03484149320615773
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.1637862085926862,
+          "macro_f1_ci95": [
+            0.12840091267458137,
+            0.20525631909281167
+          ],
+          "accuracy": 0.448,
+          "per_class_f1": {
+            "alert": 0.08219178082191782,
+            "attention": 0.12903225806451613,
+            "bathing": 0.11764705882352941,
+            "food": 0.0,
+            "play": 0.6153846153846154,
+            "relaxed": 0.038461538461538464
+          },
+          "ece": 0.06696636997614058
+        }
+      },
+      "branch:audio_scores": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.2049211637437266,
+          "macro_f1_ci95": [
+            0.16649951623345485,
+            0.25114553796748057
+          ],
+          "accuracy": 0.212,
+          "per_class_f1": {
+            "alerting to sounds": 0.18348623853211007,
+            "begging for food": 0.019801980198019802,
+            "playing with human": 0.30656934306569344,
+            "playing with other animals": 0.17931034482758623,
+            "playing with toy": 0.19819819819819823,
+            "rest": 0.25,
+            "seeking attention": 0.20512820512820512,
+            "taking shower": 0.29687499999999994
+          },
+          "ece": 0.04692859887555447
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.13943405688086538,
+          "macro_f1_ci95": [
+            0.11541751824325314,
+            0.17369120309943367
+          ],
+          "accuracy": 0.448,
+          "per_class_f1": {
+            "alert": 0.1111111111111111,
+            "attention": 0.07272727272727272,
+            "bathing": 0.0,
+            "food": 0.0,
+            "play": 0.6127659574468085,
+            "relaxed": 0.04
+          },
+          "ece": 0.07372518693189155
+        }
+      },
+      "branch:environment": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.18411250519729638,
+          "macro_f1_ci95": [
+            0.14804077518276604,
+            0.21381429327620996
+          ],
+          "accuracy": 0.296,
+          "per_class_f1": {
+            "alerting to sounds": 0.0,
+            "begging for food": 0.0,
+            "playing with human": 0.2782608695652174,
+            "playing with other animals": 0.328125,
+            "playing with toy": 0.21621621621621623,
+            "rest": 0.3910386965376782,
+            "seeking attention": 0.0,
+            "taking shower": 0.25925925925925924
+          },
+          "ece": 0.08868864424613469
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.14541334583528676,
+          "macro_f1_ci95": [
+            0.11806571451500796,
+            0.1706365859693198
+          ],
+          "accuracy": 0.45,
+          "per_class_f1": {
+            "alert": 0.0,
+            "attention": 0.0,
+            "bathing": 0.25925925925925924,
+            "food": 0.0,
+            "play": 0.6132208157524613,
+            "relaxed": 0.0
+          },
+          "ece": 0.058140626506281025
+        }
+      },
+      "full:audio+environment": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.2896444358063941,
+          "macro_f1_ci95": [
+            0.251342634294988,
+            0.32759709466228826
+          ],
+          "accuracy": 0.302,
+          "per_class_f1": {
+            "alerting to sounds": 0.30057803468208094,
+            "begging for food": 0.11363636363636365,
+            "playing with human": 0.27184466019417475,
+            "playing with other animals": 0.33082706766917297,
+            "playing with toy": 0.31481481481481477,
+            "rest": 0.34545454545454546,
+            "seeking attention": 0.24,
+            "taking shower": 0.39999999999999997
+          },
+          "ece": 0.04267015762351178
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.24029871540773629,
+          "macro_f1_ci95": [
+            0.19023443036016022,
+            0.297081638978434
+          ],
+          "accuracy": 0.454,
+          "per_class_f1": {
+            "alert": 0.21238938053097345,
+            "attention": 0.16129032258064516,
+            "bathing": 0.32352941176470584,
+            "food": 0.08,
+            "play": 0.6272,
+            "relaxed": 0.037383177570093455
+          },
+          "ece": 0.0485331826525572
+        }
+      },
+      "full:audio_only(fusion, environment missing)": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.19679667832668965,
+          "macro_f1_ci95": [
+            0.16531813124598163,
+            0.2313617738858208
+          ],
+          "accuracy": 0.206,
+          "per_class_f1": {
+            "alerting to sounds": 0.22972972972972971,
+            "begging for food": 0.07407407407407407,
+            "playing with human": 0.1818181818181818,
+            "playing with other animals": 0.1702127659574468,
+            "playing with toy": 0.19417475728155337,
+            "rest": 0.23129251700680273,
+            "seeking attention": 0.2016806722689076,
+            "taking shower": 0.2913907284768212
+          },
+          "ece": 0.011805848153073267
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.17945973624246073,
+          "macro_f1_ci95": [
+            0.13987307147042113,
+            0.22297874149409447
+          ],
+          "accuracy": 0.446,
+          "per_class_f1": {
+            "alert": 0.14285714285714285,
+            "attention": 0.14925373134328357,
+            "bathing": 0.1694915254237288,
+            "food": 0.0,
+            "play": 0.6151560178306092,
+            "relaxed": 0.0
+          },
+          "ece": 0.06638256201998538
+        }
+      },
+      "full:environment_only(fusion, audio missing)": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.1872220750257273,
+          "macro_f1_ci95": [
+            0.14420835136808918,
+            0.21747972273799188
+          ],
+          "accuracy": 0.29,
+          "per_class_f1": {
+            "alerting to sounds": 0.0,
+            "begging for food": 0.0,
+            "playing with human": 0.1935483870967742,
+            "playing with other animals": 0.328125,
+            "playing with toy": 0.21621621621621623,
+            "rest": 0.3910386965376782,
+            "seeking attention": 0.10958904109589042,
+            "taking shower": 0.25925925925925924
+          },
+          "ece": 0.07171170281441988
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.14541334583528676,
+          "macro_f1_ci95": [
+            0.11806571451500796,
+            0.1706365859693198
+          ],
+          "accuracy": 0.45,
+          "per_class_f1": {
+            "alert": 0.0,
+            "attention": 0.0,
+            "bathing": 0.25925925925925924,
+            "food": 0.0,
+            "play": 0.6132208157524613,
+            "relaxed": 0.0
+          },
+          "ece": 0.06294042394892607
+        }
+      },
+      "phone_now:audio+environment": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.2310797966801793,
+          "macro_f1_ci95": [
+            0.19404989340816658,
+            0.2634729762922413
+          ],
+          "accuracy": 0.25,
+          "per_class_f1": {
+            "alerting to sounds": 0.2983425414364641,
+            "begging for food": 0.049586776859504134,
+            "playing with human": 0.16666666666666666,
+            "playing with other animals": 0.3181818181818182,
+            "playing with toy": 0.2857142857142857,
+            "rest": 0.3291139240506329,
+            "seeking attention": 0.0821917808219178,
+            "taking shower": 0.31884057971014496
+          },
+          "ece": 0.04571267955686107
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.19932830445910663,
+          "macro_f1_ci95": [
+            0.16460885552886756,
+            0.23601676096508944
+          ],
+          "accuracy": 0.454,
+          "per_class_f1": {
+            "alert": 0.24999999999999994,
+            "attention": 0.0,
+            "bathing": 0.26666666666666666,
+            "food": 0.0,
+            "play": 0.6226993865030674,
+            "relaxed": 0.05660377358490566
+          },
+          "ece": 0.06385118742453487
+        }
+      },
+      "phone_now:audio_only(fusion, environment missing)": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.19372980857713828,
+          "macro_f1_ci95": [
+            0.15813229988290886,
+            0.22868439123400602
+          ],
+          "accuracy": 0.21,
+          "per_class_f1": {
+            "alerting to sounds": 0.20634920634920637,
+            "begging for food": 0.030303030303030304,
+            "playing with human": 0.12244897959183672,
+            "playing with other animals": 0.2391304347826087,
+            "playing with toy": 0.21311475409836064,
+            "rest": 0.23611111111111108,
+            "seeking attention": 0.21666666666666665,
+            "taking shower": 0.2857142857142857
+          },
+          "ece": 0.03902569220217537
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.1578762361220533,
+          "macro_f1_ci95": [
+            0.12795573162489793,
+            0.19609595505559232
+          ],
+          "accuracy": 0.446,
+          "per_class_f1": {
+            "alert": 0.14457831325301207,
+            "attention": 0.07142857142857142,
+            "bathing": 0.11764705882352941,
+            "food": 0.0,
+            "play": 0.6136034732272069,
+            "relaxed": 0.0
+          },
+          "ece": 0.07264879827438035
+        }
+      },
+      "phone_now:environment_only(fusion, audio missing)": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.1872220750257273,
+          "macro_f1_ci95": [
+            0.14420835136808918,
+            0.21747972273799188
+          ],
+          "accuracy": 0.29,
+          "per_class_f1": {
+            "alerting to sounds": 0.0,
+            "begging for food": 0.0,
+            "playing with human": 0.1935483870967742,
+            "playing with other animals": 0.328125,
+            "playing with toy": 0.21621621621621623,
+            "rest": 0.3910386965376782,
+            "seeking attention": 0.10958904109589042,
+            "taking shower": 0.25925925925925924
+          },
+          "ece": 0.07355684761639446
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.14541334583528676,
+          "macro_f1_ci95": [
+            0.11806571451500796,
+            0.1706365859693198
+          ],
+          "accuracy": 0.45,
+          "per_class_f1": {
+            "alert": 0.0,
+            "attention": 0.0,
+            "bathing": 0.25925925925925924,
+            "food": 0.0,
+            "play": 0.6132208157524613,
+            "relaxed": 0.0
+          },
+          "ece": 0.06333077830944686
+        }
+      },
+      "rules": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.07536875910037674,
+          "macro_f1_ci95": [
+            0.05653796228534052,
+            0.09671811202606337
+          ],
+          "accuracy": 0.14,
+          "per_class_f1": {
+            "alerting to sounds": 0.20454545454545459,
+            "begging for food": 0.0,
+            "playing with human": 0.03809523809523809,
+            "playing with other animals": 0.0625,
+            "playing with toy": 0.031746031746031744,
+            "rest": 0.23529411764705882,
+            "seeking attention": 0.030769230769230767,
+            "taking shower": 0.0
+          },
+          "ece": 0.86
+        },
+        "hypothesis": {
+          "n": 500,
+          "macro_f1": 0.11334471040353393,
+          "macro_f1_ci95": [
+            0.09311146986334973,
+            0.13552693799471563
+          ],
+          "accuracy": 0.188,
+          "per_class_f1": {
+            "alert": 0.20454545454545459,
+            "attention": 0.030769230769230767,
+            "bathing": 0.0,
+            "food": 0.0,
+            "play": 0.20945945945945943,
+            "relaxed": 0.23529411764705882
+          },
+          "ece": 0.812
+        }
+      },
+      "majority": {
+        "activity": {
+          "n": 500,
+          "macro_f1": 0.023139745916515422,
+          "macro_f1_ci95": [
+            0.015966992744234257,
+            0.028214822618817623
+          ],
+          "accuracy": 0.102,
+          "per_class_f1": {
+            "alerting to sounds": 0.0,
+            "begging for food": 0.0,
+            "playing with human": 0.0,
+            "playing with other animals": 0.0,
+            "playing with toy": 0.0,
+            "rest": 0.0,
+            "seeking attention": 0.18511796733212338,
+            "taking shower": 0.0
+          },
+          "ece": 0.898
+        }
+      }
+    },
+    "environment_contribution": {
+      "full: audio+environment - audio": {
+        "difference": 0.06794970390727118,
+        "ci95": [
+          0.016295918754498272,
+          0.10553894970897557
+        ]
+      },
+      "phone_now: audio+environment - audio_scores": {
+        "difference": 0.026158632936452708,
+        "ci95": [
+          -0.030338019378134257,
+          0.07038462599509382
+        ]
+      },
+      "full: audio+environment - environment only": {
+        "difference": 0.10553193060909771,
+        "ci95": [
+          0.0709491764950831,
+          0.15282296039355456
+        ]
+      },
+      "audio - rules": {
+        "difference": 0.14632597279874618,
+        "ci95": [
+          0.11143806018911856,
+          0.19096019704432102
+        ]
+      },
+      "audio_scores - audio": {
+        "difference": -0.016773568155396323,
+        "ci95": [
+          -0.054341605745247754,
+          0.019903293108789792
+        ]
+      }
+    },
+    "selective": {
+      "branch:audio": {
+        "threshold": 0.9999729006294878,
+        "coverage": 0.0,
+        "selective_accuracy": null
+      },
+      "branch:audio_scores": {
+        "threshold": 1.01,
+        "coverage": 0.0,
+        "selective_accuracy": null
+      },
+      "full:audio+environment": {
+        "threshold": 0.6663119796611621,
+        "coverage": 0.038,
+        "selective_accuracy": 0.6842105263157895
+      },
+      "phone_now:audio+environment": {
+        "threshold": 0.6732072161911913,
+        "coverage": 0.034,
+        "selective_accuracy": 0.7647058823529411
+      }
+    },
+    "noisy": {
+      "snr10": {
+        "branch:audio": {
+          "n": 500,
+          "macro_f1": 0.14724351680640518,
+          "macro_f1_ci95": [
+            0.11451576624279165,
+            0.17853132370337702
+          ],
+          "accuracy": 0.178,
+          "per_class_f1": {
+            "alerting to sounds": 0.19801980198019803,
+            "begging for food": 0.0,
+            "playing with human": 0.23204419889502761,
+            "playing with other animals": 0.07692307692307691,
+            "playing with toy": 0.15094339622641512,
+            "rest": 0.22929936305732485,
+            "seeking attention": 0.029411764705882353,
+            "taking shower": 0.2613065326633166
+          },
+          "ece": 0.046611234350110484
+        },
+        "branch:audio_scores": {
+          "n": 500,
+          "macro_f1": 0.15435727467801058,
+          "macro_f1_ci95": [
+            0.12938215703958308,
+            0.18959591333890616
+          ],
+          "accuracy": 0.174,
+          "per_class_f1": {
+            "alerting to sounds": 0.12903225806451613,
+            "begging for food": 0.0588235294117647,
+            "playing with human": 0.2598870056497175,
+            "playing with other animals": 0.11347517730496454,
+            "playing with toy": 0.1797752808988764,
+            "rest": 0.2038216560509554,
+            "seeking attention": 0.07792207792207793,
+            "taking shower": 0.21212121212121213
+          },
+          "ece": 0.11123626335795567
+        },
+        "full:audio+environment": {
+          "n": 500,
+          "macro_f1": 0.22649834433239605,
+          "macro_f1_ci95": [
+            0.19695482382973187,
+            0.25940965273260674
+          ],
+          "accuracy": 0.264,
+          "per_class_f1": {
+            "alerting to sounds": 0.1758241758241758,
+            "begging for food": 0.06249999999999999,
+            "playing with human": 0.25225225225225223,
+            "playing with other animals": 0.3111111111111111,
+            "playing with toy": 0.2931034482758621,
+            "rest": 0.3981481481481481,
+            "seeking attention": 0.03333333333333333,
+            "taking shower": 0.28571428571428575
+          },
+          "ece": 0.07655990029433454
+        },
+        "selective:branch:audio": {
+          "threshold": 0.9999729006294878,
+          "coverage": 0.0,
+          "selective_accuracy": null
+        },
+        "selective:full:audio+environment": {
+          "threshold": 0.6663119796611621,
+          "coverage": 0.054,
+          "selective_accuracy": 0.5925925925925926
+        }
+      },
+      "snr0": {
+        "branch:audio": {
+          "n": 500,
+          "macro_f1": 0.11538327821601979,
+          "macro_f1_ci95": [
+            0.08805064290015133,
+            0.14977852380063278
+          ],
+          "accuracy": 0.136,
+          "per_class_f1": {
+            "alerting to sounds": 0.13953488372093023,
+            "begging for food": 0.06666666666666667,
+            "playing with human": 0.20833333333333334,
+            "playing with other animals": 0.06611570247933884,
+            "playing with toy": 0.0808080808080808,
+            "rest": 0.1142857142857143,
+            "seeking attention": 0.05263157894736842,
+            "taking shower": 0.19469026548672566
+          },
+          "ece": 0.15565009037451202
+        },
+        "branch:audio_scores": {
+          "n": 500,
+          "macro_f1": 0.10077228540324301,
+          "macro_f1_ci95": [
+            0.08122570856752952,
+            0.13362087358646701
+          ],
+          "accuracy": 0.126,
+          "per_class_f1": {
+            "alerting to sounds": 0.0975609756097561,
+            "begging for food": 0.0,
+            "playing with human": 0.1575757575757576,
+            "playing with other animals": 0.10144927536231883,
+            "playing with toy": 0.06,
+            "rest": 0.125,
+            "seeking attention": 0.05,
+            "taking shower": 0.21459227467811157
+          },
+          "ece": 0.19434797027690337
+        },
+        "full:audio+environment": {
+          "n": 500,
+          "macro_f1": 0.19219122810907027,
+          "macro_f1_ci95": [
+            0.15964975925420477,
+            0.22666923369220204
+          ],
+          "accuracy": 0.212,
+          "per_class_f1": {
+            "alerting to sounds": 0.1627906976744186,
+            "begging for food": 0.0606060606060606,
+            "playing with human": 0.2905982905982906,
+            "playing with other animals": 0.27142857142857146,
+            "playing with toy": 0.25,
+            "rest": 0.23783783783783785,
+            "seeking attention": 0.032786885245901634,
+            "taking shower": 0.23148148148148148
+          },
+          "ece": 0.1508908409901267
+        },
+        "selective:branch:audio": {
+          "threshold": 0.9999729006294878,
+          "coverage": 0.006,
+          "selective_accuracy": 0.6666666666666666
+        },
+        "selective:full:audio+environment": {
+          "threshold": 0.6663119796611621,
+          "coverage": 0.104,
+          "selective_accuracy": 0.38461538461538464
+        }
+      }
+    },
+    "leakage_audit": {
+      "validation_max_cos_>=0.95": 329,
+      "clips": 500,
+      "branch:audio_without_near_duplicates": {
+        "n": 171,
+        "macro_f1": 0.1934967719281445,
+        "macro_f1_ci95": [
+          0.13618850222168682,
+          0.24561613100220733
+        ],
+        "accuracy": 0.23976608187134502,
+        "per_class_f1": {
+          "alerting to sounds": 0.058823529411764705,
+          "begging for food": 0.0,
+          "playing with human": 0.2222222222222222,
+          "playing with other animals": 0.14285714285714285,
+          "playing with toy": 0.15384615384615383,
+          "rest": 0.39506172839506176,
+          "seeking attention": 0.2222222222222222,
+          "taking shower": 0.3529411764705882
+        },
+        "ece": 0.05091478616830336
+      },
+      "full:audio+environment_without_near_duplicates": {
+        "n": 171,
+        "macro_f1": 0.1997163024248601,
+        "macro_f1_ci95": [
+          0.1491990764756927,
+          0.2416330538264642
+        ],
+        "accuracy": 0.2807017543859649,
+        "per_class_f1": {
+          "alerting to sounds": 0.05714285714285714,
+          "begging for food": 0.0,
+          "playing with human": 0.2916666666666667,
+          "playing with other animals": 0.1,
+          "playing with toy": 0.2631578947368421,
+          "rest": 0.45098039215686275,
+          "seeking attention": 0.0,
+          "taking shower": 0.4347826086956522
+        },
+        "ece": 0.08137332542290021
+      }
+    },
+    "external_beans": {
+      "mapping": {
+        "play": "play",
+        "aggression": "alert",
+        "contact": "attention"
+      },
+      "n": 693,
+      "dogs": 10,
+      "macro_f1": 0.2256048800226369,
+      "macro_f1_ci95_by_dog": [
+        0.1863100412304673,
+        0.2646142488096208
+      ],
+      "per_class_f1": {
+        "alert": 0.06756756756756757,
+        "attention": 0.13908872901678657,
+        "play": 0.4701583434835566
+      },
+      "confusion": {
+        "rows_true_cols_pred": [
+          "alert",
+          "attention",
+          "play"
+        ],
+        "matrix": [
+          [
+            5,
+            1,
+            93
+          ],
+          [
+            30,
+            29,
+            326
+          ],
+          [
+            14,
+            2,
+            193
+          ]
+        ]
+      },
+      "chance_macro_f1_uniform": 0.3333333333333333,
+      "caveat": "CSV terms -> paper situations unconfirmed; recording situations, not annotated intent"
+    },
+    "external_kinetics_bathing": {
+      "clips": 574,
+      "roc_auc_bathing_vs_other_dog_situations": 0.5777424431716776,
+      "by_label": {
+        "bathing dog": {
+          "n": 143,
+          "top1_taking_shower": 0.34265734265734266,
+          "top1_distribution": {
+            "alerting to sounds": 10,
+            "begging for food": 9,
+            "playing with human": 6,
+            "playing with other animals": 11,
+            "playing with toy": 18,
+            "rest": 16,
+            "seeking attention": 24,
+            "taking shower": 49
+          }
+        },
+        "grooming dog": {
+          "n": 138,
+          "top1_taking_shower": 0.34057971014492755,
+          "top1_distribution": {
+            "alerting to sounds": 13,
+            "begging for food": 12,
+            "playing with human": 5,
+            "playing with other animals": 8,
+            "playing with toy": 10,
+            "rest": 39,
+            "seeking attention": 4,
+            "taking shower": 47
+          }
+        },
+        "training dog": {
+          "n": 147,
+          "top1_taking_shower": 0.19727891156462585,
+          "top1_distribution": {
+            "alerting to sounds": 9,
+            "begging for food": 7,
+            "playing with human": 22,
+            "playing with other animals": 22,
+            "playing with toy": 34,
+            "rest": 19,
+            "seeking attention": 5,
+            "taking shower": 29
+          }
+        },
+        "walking the dog": {
+          "n": 146,
+          "top1_taking_shower": 0.0684931506849315,
+          "top1_distribution": {
+            "alerting to sounds": 17,
+            "begging for food": 10,
+            "playing with human": 30,
+            "playing with other animals": 24,
+            "playing with toy": 34,
+            "rest": 19,
+            "seeking attention": 2,
+            "taking shower": 10
+          }
+        }
+      },
+      "note": "Kinetics clips never used to train this head; audio of YouTube uploads (music overdubs occur)"
+    },
+    "training": {
+      "audio": {
+        "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "oof_macro_f1_by_C": {
+          "0.001": 0.22569518301268507,
+          "0.01": 0.214391383846754,
+          "0.1": 0.2001716966897178,
+          "1.0": 0.18471668847059342
+        },
+        "selected_C": 0.001,
+        "temperature": 1.8591844867225564,
+        "oof_macro_f1": 0.22569518301268507,
+        "oof_ece_raw": 0.04155728140661824,
+        "oof_ece_calibrated": 0.04654274426281197,
+        "abstain_below": 0.9999729006294878,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 8.012820512820513e-05
+      },
+      "audio_scores": {
+        "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "oof_macro_f1_by_C": {
+          "0.001": 0.20227071349014544,
+          "0.01": 0.19517809149540088,
+          "0.1": 0.18355866159131345,
+          "1.0": 0.17409938909898318
+        },
+        "selected_C": 0.001,
+        "temperature": 1.8926409905520338,
+        "oof_macro_f1": 0.20227071349014544,
+        "oof_ece_raw": 0.03637694467107824,
+        "oof_ece_calibrated": 0.05395135012846285,
+        "abstain_below": 1.01,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 0.0
+      },
+      "environment": {
+        "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "oof_macro_f1_by_C": {
+          "0.001": 0.20211843798049464,
+          "0.01": 0.19113539525196693,
+          "0.1": 0.20187789572126724,
+          "1.0": 0.20187789572126724
+        },
+        "selected_C": 0.001,
+        "temperature": 0.5560267482199571,
+        "oof_macro_f1": 0.20211843798049464,
+        "oof_ece_raw": 0.06071131047872988,
+        "oof_ece_calibrated": 0.029199981729462986,
+        "abstain_below": 0.6763863838278902,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 0.031169871794871795
+      },
+      "late_fusion:full": {
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "oof_macro_f1_by_C": {
+          "0.001": 0.24507413746239232,
+          "0.01": 0.24540226568248674,
+          "0.1": 0.24607696161232298,
+          "1.0": 0.24169778227848848
+        },
+        "selected_C": 0.1,
+        "temperature": 0.9742335483438854,
+        "abstain_below": 0.6663119796611621,
+        "patterns": 3,
+        "oof_macro_f1_all_present": 0.28394816346842344
+      },
+      "late_fusion:phone_now": {
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "oof_macro_f1_by_C": {
+          "0.001": 0.2226109436434835,
+          "0.01": 0.2256559942977774,
+          "0.1": 0.2255436835380002,
+          "1.0": 0.22128882306572212
+        },
+        "selected_C": 0.01,
+        "temperature": 0.9952246438100165,
+        "abstain_below": 0.6732072161911913,
+        "patterns": 3,
+        "oof_macro_f1_all_present": 0.25593516657976223
+      }
+    },
+    "data": {
+      "train_clips": 12480,
+      "validation_clips": 500,
+      "train_pseudo_groups": 4548,
+      "validation_pseudo_groups": 365,
+      "environment_counts_train": {
+        "bathroom": 285,
+        "indoor": 9546,
+        "near_door": 734,
+        "near_other_animals": 910,
+        "near_window": 624,
+        "other": 4,
+        "outdoor": 132,
+        "vehicle": 245
+      },
+      "environment_counts_validation": {
+        "bathroom": 9,
+        "indoor": 394,
+        "near_door": 22,
+        "near_other_animals": 37,
+        "near_window": 17,
+        "other": 0,
+        "outdoor": 6,
+        "vehicle": 15
+      }
+    }
+  },
+  "runtime_s": 2420.7,
+  "terms": "Barkopedia MIT; BEANS/Yin & McCowan research only; Kinetics research only; heads trained on MIT data"
+}

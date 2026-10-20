@@ -40,7 +40,7 @@ BUNDLE_SCHEMA = "petperception.ondevice_bundle/1"
 # Format of engine_assets.json as consumed by the TypeScript engine. Change the
 # major.minor only together with SUPPORTED_BUNDLE_ENGINE in web/src/engine/modelstore.ts:
 # the app refuses bundles whose major.minor it does not support.
-ENGINE_ASSET_FORMAT = "0.2.2"  # 0.2: quantized model inputs/outputs (input_quant, output_quant); 0.2.1: optional object_relation;
+ENGINE_ASSET_FORMAT = "0.2.3"  # 0.2.3: optional intent heads (intent.enabled); 0.2: quantized model inputs/outputs (input_quant, output_quant); 0.2.1: optional object_relation;
 # 0.2.2: audio.subtype_validation (absent in older bundles: no subtype counts as validated) and optional
 # audio.context_thresholds (per tag; absent: context_tag_threshold for every tag)
 LITERT_JS_VERSION = "2.5.3"
@@ -124,6 +124,44 @@ def _detector_assets_from(d, settings: Settings, mid: str) -> dict:
         "score_threshold": settings.vision.score_threshold, "nms_iou": settings.vision.nms_iou,
         "max_detections_per_frame": settings.vision.max_detections_per_frame, "target_classes": settings.vision.target_classes,
     }
+
+
+def _head_assets(path: Path) -> dict:
+    d = json.loads(path.read_text())
+    coef = np.asarray(d["coef"], np.float32)
+    return {"classes": d["classes"], "mean_b64": _b64(np.asarray(d["standardize_mean"], np.float32)),
+            "scale_b64": _b64(np.asarray(d["standardize_scale"], np.float32)), "coef_b64": _b64(coef), "coef_shape": list(coef.shape),
+            "intercept": [float(v) for v in d["intercept"]], "temperature": float(d["temperature"]), "abstain_below": float(d["abstain_below"]),
+            **({"branches": d["branches"]} if "branches" in d else {})}
+
+
+def _intent_assets(allowed) -> dict | None:
+    from ..intent import inference as I
+    from ..intent import taxonomy as T
+    from ..intent.av_features import load_components
+
+    art = REPO_ROOT / "artifacts" / "intent"
+    sd = art / "kinetics_situation_v1" / "phone_now"
+    if not (sd / "late_fusion.json").exists() or not allowed("intent_situation_kinetics_v1"):
+        return None
+    pol = json.loads((sd / "policy.json").read_text())
+    out: dict = {"version": I.INFERENCE_VERSION, "taxonomy_version": T.TAXONOMY_VERSION, "variant": "phone_now", "vocal_heard": I.VOCAL_HEARD,
+                 "dog_sounds": list(I.DOG_SOUND), "cat_sounds": list(I.CAT_SOUND),
+                 "object_classes": load_components(1, with_audio=False).object_classes,
+                 "situation": {"heads": {b: _head_assets(sd / f"head_{b}.json") for b in pol["branches"]},
+                               "fusion": _head_assets(sd / "late_fusion.json"), "visual_only_abstain_below": pol["visual_only_abstain_below"],
+                               "species": I.SITUATION_SPECIES,
+                               "qualifier": {lab.raw: lab.qualifier for lab in T.DATASETS["kinetics_pets"].labels},
+                               "context_for": {lab.raw: [h for h, r in lab.hypotheses.items() if r == "context_for"] for lab in T.DATASETS["kinetics_pets"].labels}},
+                 "dog_activity_hypothesis": I.DOG_ACTIVITY_HYP}
+    da = art / "dog_audio_activity_v1" / "head_audio_scores.json"
+    if da.exists() and allowed("intent_dog_audio_activity_v1"):
+        out["dog_audio"] = _head_assets(da)
+    ca = art / "cat_audio_context_v1" / "head_audio_scores.json"
+    if ca.exists() and allowed("intent_cat_audio_context_v1"):
+        out["cat_context"] = {**_head_assets(ca), "evidence_gate_passed": False,
+                              "context_for": {lab.raw: [h for h, r in lab.hypotheses.items() if r == "context_for"] for lab in T.DATASETS["catmeows"].labels}}
+    return out
 
 
 def export_bundle(settings: Settings, out: Path) -> dict:
@@ -226,6 +264,12 @@ def export_bundle(settings: Settings, out: Path) -> dict:
             assets["object_relation"] = {"version": str(z["version"]), "groups": list(GROUPS), "detector_class": DETECTOR_CLASS, "heads": heads,
                                          "min_object_score": settings.object_relation.min_object_score,
                                          "min_frames": settings.object_relation.min_frames}
+    # Behaviour / intent heads, "phone_now" variant (YAMNet class scores, no keypoints): situation fusion (E28),
+    # dog vocal activity (E27), cat meow context (E2 data). Each part follows its own release decision.
+    if settings.intent.enabled and all(k in assets for k in ("audio", "detector", "backbone")):
+        ia = _intent_assets(allowed)
+        if ia:
+            assets["intent"] = ia
     assets["vision"] = {"sample_fps": settings.vision.sample_fps, "max_side": settings.vision.max_side, "quality": settings.vision.quality.model_dump(),
                         "tracker": settings.vision.tracker.model_dump(), "camera_motion_compensation": settings.vision.camera_motion_compensation}
     assets["behavior"] = settings.behavior.model_dump()

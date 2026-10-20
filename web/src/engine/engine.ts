@@ -3,9 +3,10 @@
 import type { EngineAssets } from "./assets";
 import { audioLevels, extractEvents, scoreWaveform16k, vocalConflictTags, vocalTags, type SoundEventRaw } from "./audio";
 import * as BH from "./behavior";
-import { Detector } from "./detector";
+import { Detector, iou } from "./detector";
 import { explainHypothesis, FusionEngine, suggestionsFor, type Ev, type EvidenceItem, type Hypothesis } from "./fusion";
-import { grayscale, lumaAndLaplacianVar } from "./imageops";
+import { grayscale, lumaAndLaplacianVar, resizeArea, squareCrop, type RGBImage } from "./imageops";
+import { IntentModels, pool as intentPool, type IntentAudio, type IntentFrame } from "./intent";
 import { decodeAudio16k, probe, sampleFrames, sha256Hex, type Probe } from "./media";
 import type { LoadedModel } from "./runtime";
 import { detectionFlags, estimateCameraMotion, firstT, lastT, makeTracker, mergeSpecies, movementSummary, score as detScore, species,
@@ -43,13 +44,17 @@ export class LocalEngine {
   readonly posture?: Posture;
   readonly interaction?: Interaction;
   readonly objectRelation?: ObjectRelation;
+  readonly backbone?: Backbone;
+  readonly intent?: IntentModels;
   readonly fusion: FusionEngine;
   constructor(readonly a: EngineAssets, readonly m: LocalModels, readonly info: EngineInfo) {
     if (a.detector && m.detector) this.detector = new Detector(m.detector, a.detector);
     if (a.backbone && m.backbone) {
       const bb = new Backbone(m.backbone, a.backbone.norm_mean, a.backbone.norm_std, a.backbone.input_quant ?? null);
+      this.backbone = bb;
       if (a.verifier) this.verifier = new Verifier(bb, a.verifier);
       if (a.posture) this.posture = new Posture(bb, a.posture);
+      if (a.intent && this.detector && m.yamnet) this.intent = new IntentModels(a.intent);
     }
     if (a.interaction && this.detector) this.interaction = new Interaction(a.interaction);
     if (a.object_relation && this.detector) this.objectRelation = new ObjectRelation(a.object_relation);
@@ -69,8 +74,56 @@ export class LocalEngine {
       { name: "object_relation", kind: "behavior", state: this.objectRelation ? "ok" : "unavailable", model_id: this.objectRelation ? (a.detector?.model_id ?? null) : null, version: a.object_relation?.version ?? null, reason: this.objectRelation ? "pet on bed / couch / chair / table: at least half of the pet's box inside the furniture box (E15 rule, still images; the learned head showed no advantage); furniture is detected but not stored; under-furniture and inside-car did not pass the E15 gate" : "object relation model not in the on-device bundle" },
       { name: "behavior_segments", kind: "behavior", state: this.detector && a.behavior.enabled ? "ok" : "unavailable", model_id: null, version: "behavior-rules-v1", reason: "fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)" },
       { name: "fusion", kind: "fusion", state: "ok", model_id: null, version: this.fusion.scorer.revision, reason: "experimental; not validated on paired data" },
+      ...(this.intent ? [{ name: "intent", kind: "fusion", state: "ok", model_id: null, version: `${this.a.intent!.version}:${this.a.intent!.variant}`,
+        reason: "trained channels (E26-E28); the cross-channel intent combination is not validated" }] : []),
       { name: "runtime", kind: "ingest", state: "ok", model_id: null, version: `${this.info.runtime}/${this.info.accelerator}`, reason: `on-device bundle ${this.info.bundle_version}` },
     ];
+  }
+
+  /** Per-frame inputs of the intent channels; mirrors intent/av_features.py frame_features (phone_now variant). */
+  private async intentFrame(img: RGBImage, t: number, prevGray: Uint8Array | null): Promise<{ frame: IntentFrame; gray: Uint8Array }> {
+    const ia = this.a.intent!, det = this.a.detector!;
+    const g0 = grayscale(img);
+    const rgbGray = new Uint8Array(g0.length * 3);
+    for (let i = 0; i < g0.length; i++) rgbGray[i * 3] = rgbGray[i * 3 + 1] = rgbGray[i * 3 + 2] = g0[i];
+    const small = resizeArea({ width: img.width, height: img.height, data: rgbGray }, 64, 48);
+    const gray = new Uint8Array(64 * 48);
+    for (let i = 0; i < gray.length; i++) gray[i] = small.data[i * 3];
+    let motion = 0;
+    if (prevGray) {
+      let s = 0;
+      for (let i = 0; i < gray.length; i++) s += Math.abs(gray[i] - prevGray[i]);
+      motion = s / gray.length / 255;
+    }
+    const whole = (await this.backbone!.run(resizeArea(img, 224, 224))).pooled;
+    const dets = await this.detector!.detect(img, ["cat", "dog", "person", ...ia.object_classes], det.score_threshold, det.nms_iou, 25);
+    const objects = new Float32Array(ia.object_classes.length);
+    for (const d of dets) {
+      const j = ia.object_classes.indexOf(d.label);
+      if (j >= 0) objects[j] = Math.max(objects[j], d.score);
+    }
+    const pets = dets.filter((d) => d.label === "cat" || d.label === "dog");
+    const people = dets.filter((d) => d.label === "person" && d.score >= (this.a.interaction?.min_person_score ?? 0.5));
+    const frame: IntentFrame = { t, whole, objects, pet: [0, 0, 0, 0], box: [0, 0, 0, 0], crop: null,
+      person: [people.length, people.length ? Math.max(...people.map((q) => q.score)) : 0, 0, 0], motion };
+    if (pets.length) {
+      const area = (b: ArrayLike<number>) => (b[2] - b[0]) * (b[3] - b[1]);
+      let a0 = pets[0];
+      for (const d of pets) if (area(d.box) > area(a0.box)) a0 = d;
+      let vs = -1;
+      if (this.verifier) {
+        const r = await this.verifier.verify(img, a0);
+        vs = r ? r.score : -1;
+      }
+      frame.pet = [1, a0.score, vs, a0.label === "dog" ? 1 : 0];
+      frame.box = [...a0.box] as [number, number, number, number];
+      frame.crop = (await this.backbone!.run(squareCrop(img, a0.box).crop)).pooled;
+      if (people.length && this.interaction) {
+        frame.person[2] = Math.max(...people.map((q) => this.interaction!.score(q.box, a0.box, img.width, img.height, a0.label)));
+        frame.person[3] = Math.max(...people.map((q) => iou(q.box, a0.box)));
+      }
+    }
+    return { frame, gray };
   }
 
   async analyze(file: Blob, opts: { name: string; zones: ZoneConfig | null; modalities: ("audio" | "video")[]; analysisId: string;
@@ -97,6 +150,7 @@ export class LocalEngine {
     let rawEvents: SoundEventRaw[] = [];
     let audioSummary: Record<string, unknown> = { state: "disabled", windows_scored: 0 };
     let decodedDuration = 0;
+    let intentAudio: IntentAudio | null = null;
     if (opts.modalities.includes("audio") && a.audio) {
       if (p.kind === "image") audioState = "absent";
       else {
@@ -121,6 +175,17 @@ export class LocalEngine {
               (k, n) => report("audio", 0.1 + 0.2 * (k / n)));
             rawEvents = extractEvents(ws, a.audio);
             timings.audio_inference = tick() - t;
+            if (this.intent) {
+              // per-window RMS (dBFS) over 0.96 s windows, as intent/av_features.py audio_features
+              const win = Math.floor(0.96 * a.audio.sample_rate), hop = Math.round(a.audio.hop_s * a.audio.sample_rate);
+              const rmsDb = ws.scores.map((_, k) => {
+                const seg = clipped.subarray(k * hop, k * hop + win);
+                let e = 0;
+                for (const v of seg) e += v * v;
+                return 20 * Math.log10(Math.max(1e-6, seg.length ? Math.sqrt(e / seg.length) : 1e-6));
+              });
+              intentAudio = { scores: ws.scores, rmsDb };
+            }
             audioSummary.windows_scored = ws.scores.length;
             if (ws.padded) qflags.push({ code: "audio_end_padded", severity: "info", detail: "final analysis window zero-padded" });
           }
@@ -132,6 +197,7 @@ export class LocalEngine {
     }
 
     // ---------------- video ----------------
+    const intentFrames: IntentFrame[] = [];
     let videoState = "disabled";
     let tracks: Track[] = [];
     const cameraShift = new Map<number, [number, number]>();
@@ -150,7 +216,8 @@ export class LocalEngine {
       let prevGray: Uint8Array | null = null;
       let prevBoxes: ArrayLike<number>[] = [];
       const expected = Math.max(1, Math.min(a.limits.max_video_frames, Math.floor((p.duration_s ?? 0) * v.sample_fps) + 1));
-      let detMs = 0, verMs = 0, posMs = 0, qMs = 0;
+      let detMs = 0, verMs = 0, posMs = 0, qMs = 0, intentMs = 0;
+      let intentGray: Uint8Array | null = null;
       t = tick();
       for await (const fr of sampleFrames(file, p, v.sample_fps, v.max_side, a.limits.max_video_frames, opts.shouldCancel)) {
         nFrames++;
@@ -207,7 +274,15 @@ export class LocalEngine {
         tracker.update(fr.t_s, adets, shift);
         prevGray = gray;
         prevBoxes = adets.map((d) => d.box);
+        if (this.intent) {
+          td = tick();
+          const r = await this.intentFrame(fr.rgb, fr.t_s, intentGray);
+          intentFrames.push(r.frame);
+          intentGray = r.gray;
+          intentMs += tick() - td;
+        }
       }
+      timings.intent_video_features = intentMs;
       timings.video_decode_detect_track = tick() - t;
       timings.video_detector_inference = detMs;
       timings.video_verifier = verMs;
@@ -404,9 +479,18 @@ export class LocalEngine {
     const avail: string[] = [];
     if (audioState === "present") avail.push("audio");
     if (videoOk && nFrames) avail.push("video");
+    let intent: Record<string, unknown> | null = null;
+    if (this.intent) {
+      t = tick();
+      const vs = opts.modalities.includes("video") && p.kind !== "audio" && intentFrames.length ? "present" : (videoState === "present" ? "absent" : videoState);
+      const as = intentAudio ? "present" : (audioState === "present" ? "absent" : audioState);
+      const { branches, cues } = intentPool(intentFrames.length ? intentFrames : null, intentAudio, vs, as, a.audio?.silence_dbfs ?? -60);
+      intent = { observations: [], ...this.intent.infer(branches, cues, a.audio?.labels ?? []) };
+      timings.intent_inference = tick() - t;
+    }
     report("done", 1);
     return {
-      schema_version: "1.4.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
+      schema_version: "1.5.0", analysis_id: opts.analysisId, created_at: new Date().toISOString(), engine_version: ENGINE_VERSION,
       config_profile: "ondevice", config_hash: this.info.bundle_version,
       media: { analysis_filename: opts.name.replace(/[^A-Za-z0-9._-]/g, "_").slice(0, 120) || "recording", size_bytes: file.size, sha256: digest, container: p.mime,
         duration_s: p.duration_s, start_time_s: 0,
@@ -430,6 +514,7 @@ export class LocalEngine {
       models: this.info.models.map((m) => ({ model_id: m.model_id, name: m.file, revision: `on-device bundle ${this.info.bundle_version}`, sha256: { [m.file]: m.sha256 }, terms: {}, use_restrictions: [] })),
       usage_restrictions: { research_only: a.release_profile === "research", notices: [`Release profile '${a.release_profile}': only assets permitted for this profile are in the on-device bundle.`,
         "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).", "Media were analysed on this device and were not uploaded."] },
+      ...(intent ? { intent } : {}),
     };
   }
 }

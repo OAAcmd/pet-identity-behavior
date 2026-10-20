@@ -12,7 +12,7 @@ from . import kinetics as K
 class IntentAnalyzer:
     def __init__(self, num_threads: int = 2, situation_variant: str = "full"):
         self.components = AF.load_components(num_threads)
-        self.models = I.IntentModels(situation_variant=situation_variant)
+        self.models = I.IntentModels(variant=situation_variant)
         self.labels = self.components.yamnet.labels
 
     def features(self, path: Path, modalities: tuple[str, ...] = ("audio", "video"), **kw) -> tuple[dict, dict]:

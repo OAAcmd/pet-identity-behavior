@@ -10269,7 +10269,7 @@
   "score_semantics": "softmax(logits / temperature); temperature fitted on out-of-fold training scores; not a probability of truth",
   "metadata": {
     "branch": "audio",
-    "dataset": "CatMeows (Zenodo 4008297, CC BY 4.0)",
+    "dataset": "CatMeows (Zenodo 4008297, CC BY-NC 4.0)",
     "label_layer": "recorded_context",
     "label_to_qualifier": {
       "brushing": "handling",

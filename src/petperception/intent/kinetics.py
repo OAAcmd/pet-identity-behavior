@@ -86,10 +86,14 @@ def pool(z) -> tuple[dict[str, np.ndarray | None], dict]:
     cues: dict = {"missing": {}}
     a_state = str(z["audio_state"]) if "audio_state" in z.files else "absent"
     if a_state == "present":
-        e, s = z["a_emb"].astype(np.float32), z["a_scores"].astype(np.float32)
-        b["audio"] = np.concatenate([e.mean(0), e.max(0)])
+        s = z["a_scores"].astype(np.float32)
         b["audio_scores"] = np.concatenate([s.mean(0), s.max(0)])
         cues["yamnet_max"] = s.max(0)
+        if "a_emb" in z.files:
+            e = z["a_emb"].astype(np.float32)
+            b["audio"] = np.concatenate([e.mean(0), e.max(0)])
+        else:
+            cues["missing"]["audio"] = "YAMNet embedding not computed (phone_now variant)"
     else:
         cues["missing"]["audio"] = f"audio {a_state}"
     v_state = str(z["video_state"]) if "video_state" in z.files else "absent"

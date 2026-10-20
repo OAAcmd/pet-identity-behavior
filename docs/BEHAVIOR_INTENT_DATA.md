@@ -35,7 +35,7 @@ isolation, disturbance, food_routine, location.
 
 | Dataset | Species | Modality | Synchronized A+V | Unit | Grouping / leakage control | Label source | Layer(s) | Terms | On disk |
 |---|---|---|---|---|---|---|---|---|---|
-| CatMeows | cat | audio | no | meow (8 kHz) | cat (21), owner (12): leave-one-cat-out | owner protocol | context | CC BY 4.0 | 440 clips |
+| CatMeows | cat | audio | no | meow (8 kHz) | cat (21), owner (12): leave-one-cat-out | owner protocol | context | CC BY-NC 4.0 | 440 clips |
 | Yin & McCowan barks (BEANS) | dog | audio | no | bark | dog (10), breed (6): leave-one-dog-out | protocol (CSV terms) | context | none stated; research | features only |
 | Barkopedia Dog Act/Env | dog | audio | no (source videos not released) | bark from a video | no ids: near-duplicate pseudo-groups (cos >= 0.95) + max-similarity audit | VLM + human verification | behaviour, intent, context (activity); context (environment) | MIT | 12,480 + 499 clips |
 | Kinetics-700 pet classes | cat, dog | audio + video | **yes** | 10 s clip | YouTube id (no id in train and test) + embedding near-duplicate audit | annotators (human action) | context | annotations CC BY 4.0; clips research only | 600 train + 294 val clips |

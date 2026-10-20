@@ -193,6 +193,21 @@ export interface Hypothesis {
   explanation: string;
 }
 
+export interface IntentResultView {
+  version: string;
+  species: string;
+  species_source: string;
+  missing_inputs: Record<string, string>;
+  readings: { channel: string; top: string; top_score: number; threshold: number; confident: boolean; evidence_gate_passed: boolean; note: string }[];
+  situation: { label: string; score: number; status: string; branches_used: string[]; qualifier: string | null } | null;
+  qualifiers: string[];
+  hypotheses: { name: string; status: string; support: number | null; supporting: string[]; qualifying: string[]; contradicting: string[]; explanation: string }[];
+  conflicts: string[];
+  status: string;
+  summary: string;
+  caveats: string[];
+}
+
 export interface AnalysisResult {
   schema_version: string;
   analysis_id: string;
@@ -213,6 +228,8 @@ export interface AnalysisResult {
   suggestions: { suggestion_id: string; text: string; based_on_evidence_ids: string[]; kind: string }[];
   limitations: string[];
   fusion: { mode: string; method: string; validated: boolean; multimodal_accuracy: string };
+  /** Trained behaviour/intent channels (result schema 1.5.0; absent unless the intent stage ran). */
+  intent?: IntentResultView | null;
 }
 
 export interface Capabilities {

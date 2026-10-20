@@ -1,6 +1,6 @@
 """Train the remaining audio channel heads as intent-layer artifacts (no new test data is scored here).
 
-* cat audio context (CatMeows, CC BY 4.0): brushing / isolation /
+* cat audio context (CatMeows, CC BY-NC 4.0): brushing / isolation /
   waiting_for_food, the recording situation of a meow. Held-out evaluation is
   E2 (leave-one-cat-out macro-F1 0.46 with YAMNet embeddings, below the
   evidence gate), so the head is used as weak context evidence only.
@@ -52,7 +52,7 @@ def train_catmeows(settings: Settings, out_dir: Path) -> dict:
     info = {}
     for b, X in (("audio", np.array(E)), ("audio_scores", np.array(S))):
         head, inf, _ = H.fit_head(b, X, y, g, classes, metadata={
-            "branch": b, "dataset": "CatMeows (Zenodo 4008297, CC BY 4.0)", "label_layer": "recorded_context",
+            "branch": b, "dataset": "CatMeows (Zenodo 4008297, CC BY-NC 4.0)", "label_layer": "recorded_context",
             "label_to_qualifier": {"brushing": "handling", "isolation": "isolation", "waiting_for_food": "food_routine"},
             "label_to_hypothesis": {"isolation": {"attention": "context_for"}, "waiting_for_food": {"food": "context_for"}},
             "held_out_evaluation": "results/e2/metrics.json (leave-one-cat-out macro-F1 0.464 YAMNet embedding; below the 0.7 evidence gate)",

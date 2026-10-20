@@ -108,20 +108,27 @@ class IntentResult:
 
 
 class IntentModels:
-    def __init__(self, art: Path = ART, situation_variant: str = "full"):
-        sd = art / "kinetics_situation_v1" / situation_variant
-        self.situation_heads = {p.stem.removeprefix("head_"): H.Head.from_json(p) for p in sorted(sd.glob("head_*.json"))}
-        self.situation_fusion = H.LateFusion.from_json(sd / "late_fusion.json")
+    """Trained channel models. ``variant`` "full" uses YAMNet embeddings and the research keypoint head;
+    "phone_now" uses only what the phone bundle computes today (YAMNet class scores, no keypoints), so the
+    embedding-only dog bark context head is unavailable there."""
+
+    def __init__(self, art: Path = ART, variant: str = "full"):
         from ..utils import read_json
 
+        self.variant = variant
+        sd = art / "kinetics_situation_v1" / variant
+        self.situation_heads = {p.stem.removeprefix("head_"): H.Head.from_json(p) for p in sorted(sd.glob("head_*.json"))}
+        self.situation_fusion = H.LateFusion.from_json(sd / "late_fusion.json")
         self.situation_policy = read_json(sd / "policy.json")
         da = art / "dog_audio_activity_v1"
-        self.dog_audio = H.Head.from_json(da / "head_audio.json")
+        a = "audio" if variant == "full" else "audio_scores"
+        self.dog_audio = H.Head.from_json(da / f"head_{a}.json")
         self.dog_env = H.Head.from_json(da / "head_environment.json")
-        self.dog_audio_env = H.LateFusion.from_json(da / "late_fusion_full.json")
-        self.dog_bark_context = H.Head.from_json(art / "dog_bark_context_v1" / "head_audio.json")
-        self.cat_context = H.Head.from_json(art / "cat_audio_context_v1" / "head_audio.json")
+        self.dog_audio_env = H.LateFusion.from_json(da / f"late_fusion_{variant}.json")
+        self.dog_bark_context = H.Head.from_json(art / "dog_bark_context_v1" / "head_audio.json") if variant == "full" else None
+        self.cat_context = H.Head.from_json(art / "cat_audio_context_v1" / f"head_{a}.json")
         self.audio_branch = self.situation_policy["branches"][0]
+        self.audio_input = a
 
 
 def _reading(channel: str, model: str, space: str, species: str, head: H.Head, p: np.ndarray, inputs: list[str], gate: bool = True,
@@ -136,7 +143,8 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
           environment: str | None = None) -> IntentResult:
     """branches/cues as produced by intent.kinetics.pool; environment: optional known location (E27 categories)."""
     missing = dict(cues.get("missing", {}))
-    inputs = {b: ("present" if branches.get(b) is not None else "missing") for b in ("audio", "animal", "environment", "interaction")}
+    inputs = {b: ("present" if branches.get(b) is not None else "missing") for b in ("audio", "audio_scores", "animal", "animal_phone", "environment",
+                                                                                  "interaction") if b in branches}
     obs: list[str] = []
     caveats = ["cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
                "scores are temperature-scaled on training data, not probabilities of truth"]
@@ -202,28 +210,32 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
     else:
         missing["situation"] = "no audio or video branch available"
     # ---- dog audio channels
-    if species in ("dog", "unknown") and branches.get("audio") is not None and dog_v >= VOCAL_HEARD:
-        pa = models.dog_audio.proba(branches["audio"])[0]
+    ai = getattr(models, "audio_input", "audio")
+    if species in ("dog", "unknown") and branches.get(ai) is not None and dog_v >= VOCAL_HEARD:
+        pa = models.dog_audio.proba(branches[ai])[0]
         if environment is not None:
             from ..eval.e27_dog_audio_intent import env_onehot
 
             pe = models.dog_env.proba(env_onehot([environment]))[0]
-            pf = models.dog_audio_env.proba({"audio": pa[None, :], "environment": pe[None, :]})[0]
+            pf = models.dog_audio_env.proba({models.dog_audio_env.branches[0]: pa[None, :], "environment": pe[None, :]})[0]
             readings.append(_reading("dog_vocal_activity", "dog_audio_activity_v1+environment", "barkopedia_activity", "dog", models.dog_audio, pf,
                                      ["audio", "environment(context)"], threshold=models.dog_audio_env.abstain_below,
                                      note=f"environment given as context: {environment}"))
         else:
             readings.append(_reading("dog_vocal_activity", "dog_audio_activity_v1", "barkopedia_activity", "dog", models.dog_audio, pa, ["audio"]))
-        pb = models.dog_bark_context.proba(branches["audio"])[0]
-        readings.append(_reading("dog_bark_context", "dog_bark_context_v1", "yin_bark_context", "dog", models.dog_bark_context, pb, ["audio"]))
+        if models.dog_bark_context is not None and branches.get("audio") is not None:
+            pb = models.dog_bark_context.proba(branches["audio"])[0]
+            readings.append(_reading("dog_bark_context", "dog_bark_context_v1", "yin_bark_context", "dog", models.dog_bark_context, pb, ["audio"]))
+        else:
+            missing["dog_bark_context"] = "model needs the YAMNet embedding (not in this variant)"
     elif species in ("dog", "unknown"):
-        missing["dog_vocal_activity"] = "audio missing" if branches.get("audio") is None else "no dog vocalization heard"
-    if species in ("cat", "unknown") and branches.get("audio") is not None and cat_v >= VOCAL_HEARD:
-        pc = models.cat_context.proba(branches["audio"])[0]
+        missing["dog_vocal_activity"] = "audio missing" if branches.get(ai) is None else "no dog vocalization heard"
+    if species in ("cat", "unknown") and branches.get(ai) is not None and cat_v >= VOCAL_HEARD:
+        pc = models.cat_context.proba(branches[ai])[0]
         readings.append(_reading("cat_meow_context", "cat_audio_context_v1", "catmeows_context", "cat", models.cat_context, pc, ["audio"], gate=False,
                                  note="below the evidence gate (E2 leave-one-cat-out macro-F1 0.46): context hint only"))
     elif species in ("cat", "unknown"):
-        missing["cat_meow_context"] = "audio missing" if branches.get("audio") is None else "no cat vocalization heard"
+        missing["cat_meow_context"] = "audio missing" if branches.get(ai) is None else "no cat vocalization heard"
     # ---- hypotheses
     hyps = _hypotheses(readings, qualifiers, conflicts)
     if any(h.status == "conflict" for h in hyps) or (situation and situation["status"] == "conflict"):

@@ -29,6 +29,7 @@ from .context.zones import ZoneConfig, occupancy
 from .explain.templates import explain_hypothesis, suggestions_for
 from .fusion.engine import Ev, FusionContext, FusionEngine
 from .ingest import media as M
+from .intent import av_features as AF
 from .registry import check_model, model_dir, model_terms_summary, release_decision, resource
 from .schemas import analysis as S
 from .utils import StageTimer, sha256_file, utc_now
@@ -68,6 +69,7 @@ class AnalysisEngine:
         self.pose = UnavailablePoseProvider()
         self.posture = None
         self.interaction = None
+        self.intent = None  # (IntentModels, av_features.Components) when settings.intent.enabled
         self.object_relation = None
         self._backbone = None
         self.release_notes: list[str] = []
@@ -132,6 +134,7 @@ class AnalysisEngine:
         self._load_posture()
         self._load_interaction()
         self._load_object_relation()
+        self._load_intent()
         self.status["behavior"] = S.ComponentStatus(name="behavior_segments", kind="behavior", state="ok" if (self.detector and s.behavior.enabled) else
                                                     ("disabled" if not s.behavior.enabled else "unavailable"), version="behavior-rules-v1",
                                                     reason="fixed thresholds; validated on synthetic/semi-synthetic sequences only (E8)")
@@ -273,6 +276,57 @@ class AnalysisEngine:
             name=name, kind="behavior", state="ok", model_id=s.vision.detector, version=self.object_relation.version,
             reason=OBJECT_RELATION_REASON)
 
+    def _load_intent(self) -> None:
+        s = self.settings
+        name = "intent"
+        if not s.intent.enabled:
+            return  # no component entry: results stay identical to engines without the intent stage
+        from .intent import inference as IN
+
+        need = ["intent_situation_kinetics_v1", "intent_dog_audio_activity_v1", "intent_cat_audio_context_v1"]
+        if s.intent.variant == "full":
+            need.append("intent_dog_bark_context_v1")
+        blocked = [d for d in (release_decision(s.release_profile, r) for r in need) if not d.allowed]
+        reason = ("requires the visual detector and the EfficientNet-Lite0 backbone (enable posture or pose)" if self.detector is None or self._backbone is None
+                  else "requires the YAMNet audio backend" if self.audio_backend is None
+                  else blocked[0].reason if blocked
+                  else "the full variant needs pose.provider catdog_keypoints_awa_v1" if s.intent.variant == "full" and not self.pose.available
+                  else None)
+        art = IN.ART / "kinetics_situation_v1" / s.intent.variant / "late_fusion.json"
+        if reason is None and not art.exists():
+            reason = f"{art.relative_to(REPO_ROOT)} missing; run: petperception evaluate --experiment e28"
+        if reason:
+            self.status["intent"] = S.ComponentStatus(name=name, kind="fusion", state="unavailable", reason=reason)
+            return
+        from .intent.av_features import Components
+
+        objects = [lab for lab in self.detector.labels if lab not in ("???", "cat", "dog", "person")]
+        yam = self.audio_backend
+        if s.intent.variant == "full":
+            yam = YamnetBackend(model_dir(s, s.audio.yamnet.model_id), s.runtime.num_threads, with_embeddings=True)
+        comp = Components(s, self.detector, self.verifier, self._backbone, self.posture, self.pose if s.intent.variant == "full" else None,
+                          self.interaction, yam, objects, {})
+        self.intent = (IN.IntentModels(variant=s.intent.variant), comp)
+        self.status["intent"] = S.ComponentStatus(name=name, kind="fusion", state="ok", version=f"{IN.INFERENCE_VERSION}:{s.intent.variant}",
+                                                  reason="trained channels (E26-E28); the cross-channel intent combination is not validated")
+
+    def _intent_output(self, audio: dict | None, audio_state: str, rows: list[dict], video_state: str) -> S.IntentOutput:
+        from .intent import kinetics as K
+        from .intent.inference import infer as IN_infer
+        from .intent.run import _NpzLike
+
+        models, comp = self.intent
+        z: dict = {"audio_state": np.array(audio["audio_state"] if audio else ("absent" if audio_state in ("absent", "disabled") else audio_state))}
+        if audio:
+            z.update({k: v for k, v in audio.items() if k != "audio_state"})
+        if rows:
+            z.update({k: np.concatenate([r[k] for r in rows]) for k in rows[0]})
+        z["video_state"] = np.array("present" if rows else video_state)
+        br, cues = K.pool(_NpzLike(z))
+        labels = comp.yamnet.labels if comp.yamnet is not None else []
+        res = IN_infer(models, {b: (None if v is None else v[None, :].astype(np.float64)) for b, v in br.items()}, cues, labels)
+        return S.IntentOutput(**res.to_dict())
+
     def capabilities(self) -> dict:
         s = self.settings
         return {
@@ -320,6 +374,7 @@ class AnalysisEngine:
 
         # ---------------- audio ----------------
         audio_state: str
+        intent_audio: dict | None = None
         track_audio: M.AudioTrack | None = None
         raw_events: list[SoundEventRaw] = []
         audio_summary = S.AudioSummary(state="disabled")
@@ -355,6 +410,10 @@ class AnalysisEngine:
                     ws = self.audio_backend.score_track(track_audio, s.audio.yamnet.hop_s)
                     raw_events = extract_events(ws, self.audio_backend, self._groups, self.thresholds,
                                                 s.audio.yamnet.context_tag_threshold, s.audio.yamnet.min_event_gap_s, self.context_thresholds)
+                if self.intent is not None:
+                    with timer.stage("intent_audio"):
+                        intent_audio = AF.audio_features(self.intent[1], M.resample(np.clip(track_audio.samples, -1.0, 1.0), track_audio.sample_rate_hz,
+                                                                                     AF.YAMNET_SR), s.audio.yamnet.hop_s)
                 audio_summary.windows_scored = int(ws.scores.shape[0])
                 if ws.padded_windows:
                     qflags.append(S.QualityFlag(code="audio_end_padded", severity="info", detail="final analysis window zero-padded"))
@@ -368,6 +427,8 @@ class AnalysisEngine:
         camera_unknown = 0
         frame_size = (0, 0)
         frame_report = M.FrameSamplingReport(s.vision.sample_fps)
+        intent_rows: list[dict] = []
+        intent_s = 0.0
         low_light_times: list[float] = []
         blurry_times: list[float] = []
         n_frames = 0
@@ -386,6 +447,7 @@ class AnalysisEngine:
                                          + object_classes))
             prev_gray, prev_t, prev_boxes = None, None, []
             detect_s = quality_s = 0.0
+            intent_gray = None
             report("video", 0.30)
             expected = max(1, min(s.limits.max_video_frames, int((mp.duration_s or 0.0) * s.vision.sample_fps) + 1))
             with timer.stage("video_decode_detect_track"):
@@ -457,6 +519,13 @@ class AnalysisEngine:
                         quality_s += time.perf_counter() - tq
                     tracker.update(fr.t_s, adets, shift)
                     prev_gray, prev_t, prev_boxes = gray, fr.t_s, [a.box for a in adets]
+                    if self.intent is not None:
+                        ti = time.perf_counter()
+                        row = AF.empty_video(1, len(self.intent[1].object_classes), s.vision.sample_fps)
+                        row["v_t"][0] = fr.t_s
+                        intent_gray = AF.frame_features(self.intent[1], fr.rgb, fr.t_s, intent_gray, row, 0)
+                        intent_rows.append(row)
+                        intent_s += time.perf_counter() - ti
                     frame_size = (fr.rgb.shape[1], fr.rgb.shape[0])
             timer.timings_ms["video_detector_inference"] = detect_s * 1000.0
             timer.timings_ms["video_verifier"] = verify_s * 1000.0
@@ -742,6 +811,12 @@ class AnalysisEngine:
             av.append("audio")
         if video_ok and n_frames:
             av.append("video")
+        intent_out = None
+        if self.intent is not None:
+            ti = time.perf_counter()
+            intent_out = self._intent_output(intent_audio, audio_state, intent_rows, video_state)
+            timer.timings_ms["intent_video_features"] = intent_s * 1000.0
+            timer.timings_ms["intent_inference"] = (time.perf_counter() - ti) * 1000.0
         result = S.AnalysisResult(
             analysis_id=aid, created_at=utc_now(), engine_version=__version__, config_profile=s.profile, config_hash=s.config_hash(),
             media=S.MediaInfo(
@@ -768,6 +843,7 @@ class AnalysisEngine:
                 "Model weights and evaluation data carry third-party terms (see docs/DATA_AND_MODEL_REGISTER.md).",
                 *(["Audio-event thresholds derive from ESC-50 (CC BY-NC 3.0): non-commercial use."] if self.thresholds and s.release_profile != "commercial" else []),
                 "Do not assume commercial permission for any asset without a recorded legal approval."]),
+            intent=intent_out,
         )
         return result
 
