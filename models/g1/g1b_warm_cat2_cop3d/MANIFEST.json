@@ -1,0 +1,63 @@
+{
+ "schema": "petperception.g1_published/1",
+ "run": "g1b_warm_cat2_cop3d",
+ "checkpoint": "ckpt-21",
+ "epoch": 2,
+ "step_in_epoch": 0,
+ "total_epochs": 2,
+ "config": {
+  "view": "var/training/g1/views/full_cat2_cop3d",
+  "model": "MOBILENET_V2",
+  "batch_size": 16,
+  "learning_rate": 0.1,
+  "stages": "2:all",
+  "seed": 20261019,
+  "cache_layout": "coco-v2-negatives-crowd",
+  "init_from": {
+   "checkpoint": "models/g1/g1a_full_mnv2_sb4096/ckpt/ckpt-27",
+   "weights_sha256": "ef364f054ffc4d83af0a4e0d2a0ec2287e40c86019419e325bed91322c0bb956"
+  },
+  "shuffle_buffer": 4096
+ },
+ "config_sha256": "8685caa811c5bedf0af809fad68b406c44acdf2a59d0a5846438e57e36e0bed9",
+ "data_sha256": {
+  "train": "ac1af09eea2846efb0792bbdc3144fa943f4e62c61f48513f86f88cd4e22c6d1",
+  "development": "3e1d6031b4b9fa87db4d703ab43a48f759f1e2fbad14d790b35799e12e59013f"
+ },
+ "weights_sha256": "1a53f4b3c979802f921e384c7e858ede9d627bfbbe148b0a25a14298fa016aad",
+ "files": {
+  "ckpt/ckpt-21.data-00000-of-00001": {
+   "bytes": 20698212,
+   "sha256": "b487012c7e6d928cba369109b0dbde3e4fde124d0141298dbec47b3c6510a49a"
+  },
+  "ckpt/ckpt-21.index": {
+   "bytes": 50330,
+   "sha256": "298aae4374c58238a1febc35c3af4f861d75d58dfb7fbe46e8f88d36e806d918"
+  },
+  "state.json": {
+   "bytes": 22907,
+   "sha256": "f719f648a49470b898f3ef59b9de74959f5ea0e78cdbd33a8e4d8d2322eae6da"
+  },
+  "export/metadata.json": {
+   "bytes": 2482678,
+   "sha256": "9d894a0d4bdcfb0a509d0c18fe7d7804b20d18177e061feef6fdb16b20fb4a55"
+  },
+  "export/model_float16.tflite": {
+   "bytes": 5741688,
+   "sha256": "dfdd7bba362496578e1cd634b0748c0cf7cfa5b67e171c0e7f226ff3c72d6772"
+  },
+  "export/model_float32.tflite": {
+   "bytes": 10962672,
+   "sha256": "8e47751e4b9bf34c6bef6790d6df4a7d0823cfb8c218d41be4030f3fca097fbe"
+  },
+  "export/model_int8_ptq.tflite": {
+   "bytes": 3375280,
+   "sha256": "d8ebc07a63bcdb9941143704fafa1d2f1ebb02f7efd254fb4ef7b1652e1e6f2e"
+  },
+  "final.json": {
+   "bytes": 4393,
+   "sha256": "ad336155847ee7002f9d41ec912fef0283a9a2a01f0f972d917435278186ea6d"
+  }
+ },
+ "restore": "python -I training/g1/vault.py restore --src models/g1/g1b_warm_cat2_cop3d --run-dir var/training/g1/runs/g1b_warm_cat2_cop3d"
+}
