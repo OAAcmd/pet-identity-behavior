@@ -8,7 +8,9 @@ translate animal language, read minds or emotions, or diagnose.
 
 Sections 1-7 are the Phase 1 report, kept as written. Section 8 covers Phase 2
 (false-positive rejection, temporal behavior, keypoints, posture, video
-behavior, quantization, interaction, on-device execution).
+behavior, quantization, interaction, on-device execution, and the trained
+behaviour/intent channels E26-E28). Section 9 describes the behaviour/intent
+inference built on them.
 
 All numbers below were measured in this workspace (4 vCPU Intel Xeon @ 2.10 GHz,
 15.7 GB RAM, no GPU, Python 3.12.3, FFmpeg 6.1.1) and can be regenerated with
@@ -1182,6 +1184,87 @@ pseudo-groups; differences are paired.
   The heads are kept as tentative evidence with explicit thresholds; none
   passes the gate.
 
+### E28 - Situation from synchronized audio and video (Kinetics pet clips) - COMPLETED
+
+The only labelled source with genuine synchronized audio and video. Labels
+are recorded contexts (what a person does with the animal), used by the
+product only as context qualifiers, never as intent
+(`src/petperception/eval/e28_av_situation.py`; protocol fixed before the
+test clips were scored; rules committed in 48e0c82).
+* Data: 600 Kinetics train-split clips for training (selection by 5-fold
+  CV grouped by YouTube id), the 294 validation clips as test, scored once;
+  no YouTube id in both. The sealed E23 set was not read.
+* Branches (frozen product encoders, `intent/kinetics.py`): audio (YAMNet
+  embedding), audio_scores (YAMNet class scores, the phone today), animal
+  (largest cat/dog crop embedding, posture, keypoints, box motion; missing in
+  33 test clips where no animal was detected), animal_phone (no posture, no
+  research keypoints), environment (whole-frame embedding, COCO objects),
+  interaction (person presence, interaction geometry, frame motion).
+* 95 % CIs bootstrap clips (one clip per YouTube id); differences paired.
+
+| Model (test, 294 clips, 6 situations) | Macro-F1 [95 % CI] | Accuracy |
+| --- | --- | --- |
+| Audio branch (YAMNet embedding) | 0.457 [0.397, 0.512] | 0.459 |
+| Audio branch (class scores) | 0.431 [0.374, 0.483] | 0.425 |
+| Animal branch | 0.611 [0.555, 0.665] | 0.578 |
+| Environment branch | 0.643 [0.588, 0.695] | 0.646 |
+| Interaction branch | 0.341 [0.286, 0.389] | 0.378 |
+| Visual only (late fusion, audio absent) | 0.689 [0.635, 0.740] | 0.690 |
+| Audio only (late fusion, video absent) | 0.456 [0.396, 0.510] | 0.473 |
+| **Combined, late fusion** | **0.730 [0.678, 0.777]** | 0.731 |
+| Combined, early fusion | 0.681 [0.626, 0.735] | 0.684 |
+| Combined without environment | 0.657 [0.605, 0.711] | 0.660 |
+| Phone variant, late fusion (class scores, no keypoints) | 0.687 [0.637, 0.737] | 0.687 |
+| Phone variant, visual only | 0.706 [0.652, 0.756] | 0.707 |
+| Rule baseline (fixed in advance) | 0.282 [0.229, 0.334] | 0.320 |
+| Majority | 0.046 | 0.160 |
+
+Paired differences (macro-F1): combined - best single branch
+(environment) +0.087 [+0.041, +0.136]; combined - visual only +0.041
+[+0.002, +0.083] (audio adds a little); combined - without environment
++0.073 [+0.026, +0.123] (the scene carries much of the situation); combined
+- rules +0.448 [+0.383, +0.521]; late - early fusion +0.049 [+0.014,
++0.086]; phone variant - full -0.043 [-0.073, -0.014]. Per class
+(combined): petting cat 0.81, walking 0.80, training 0.73, grooming dog
+0.71, bathing 0.67, grooming cat 0.66. Leakage audit: no test clip has a
+training whole-frame embedding with cosine >= 0.95; 28 have such an audio
+neighbour (music, silence); without them 0.735.
+
+Output policy (interpretation when the combined score passes its
+training-fitted threshold and no audio-video conflict is flagged):
+
+| Condition (full variant) | Coverage | Selective accuracy | Top-label accuracy, all clips |
+| --- | --- | --- | --- |
+| Clean | 0.878 | 0.764 | 0.731 |
+| Audio missing | 0.867 | 0.741 | 0.690 |
+| Video missing | 0.194 | 0.614 | 0.473 |
+| Animal not available | 0.765 | 0.782 | 0.670 |
+| Environment missing | 0.694 | 0.784 | 0.660 |
+| Audio noise 10 dB / 0 dB SNR | 0.888 / 0.881 | 0.739 / 0.737 | 0.724 / 0.701 |
+| Poor video (dark, noisy, blurred) | 0.844 | 0.540 | 0.514 |
+| Audio swapped, same species | 0.861 | 0.680 | 0.656 (follows foreign audio 0.17) |
+| Audio swapped, other species | 0.884 | 0.681 | 0.656 (follows foreign audio 0.04) |
+
+* Missing inputs are handled by the same trained stacker: performance falls
+  to that of the remaining branches, and the policy abstains more when
+  little remains (video missing: coverage 0.19).
+* Audio noise costs little because the stacker leans on video; poor video
+  costs a lot (0.476 macro-F1 combined, still above either channel alone)
+  and the policy does **not** abstain more under it (coverage 0.84,
+  selective accuracy 0.54): the thresholds are not robust to visual shift.
+* **The pre-registered conflict flag never fired** (conflict rate 0 in every
+  condition): it needs the audio head to pass its own threshold, which is
+  unattainable (the audio head never reaches 0.8 out-of-fold selective
+  accuracy). Swapped audio lowers accuracy (0.731 -> 0.656) without being
+  flagged. An exploratory follow-up (`results/e28/conflict_diagnostic.json`,
+  after the result) shows a weak continuous signal: the Jensen-Shannon
+  divergence between the audio-only and visual-only distributions separates
+  swapped from genuine pairs with ROC AUC 0.69 (same species) and 0.71
+  (other species); it is not adopted, since adopting it would need a fresh
+  pre-registered test.
+* The selective accuracy targeted on training data (0.8) is missed on test
+  (0.764): the abstention thresholds are optimistic.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
@@ -1194,3 +1277,72 @@ on-furniture segments identical on their clips), hypotheses 1.00; every
 phone result validates against the server result schema. With the int8
 bundle: 0.87 / 1.00 / 0.83 / 0.99; with the TF Hub detector: 0.91 / 1.00 /
 0.91 / 0.96. Details: [ON_DEVICE.md](ON_DEVICE.md).
+
+## 9. Behaviour and intent inference (2026-10-20)
+
+Code: `src/petperception/intent/`; label layers and data:
+[BEHAVIOR_INTENT_DATA.md](BEHAVIOR_INTENT_DATA.md); training:
+[TRAINING_PROGRAM.md](TRAINING_PROGRAM.md) (I1).
+
+**Channels (trained).** situation (E28 late fusion over audio, animal,
+environment, interaction; cats and dogs), dog vocal activity / intent (E27;
+Barkopedia, with optional location context), dog bark context (E22 data),
+cat meow context (E2 data; below the gate, hint only). Each head carries its
+temperature and its abstention threshold fitted on training data.
+
+**Combination.**
+* A hypothesis (ontology: food, outside, attention, play, alert, tense,
+  warning, relaxed) is *supported* only when a channel whose label is an
+  intent annotation (food, attention) or a consistent behaviour (play,
+  alert, relaxed) has that label on top above its threshold; *tentative*
+  below it.
+* Contexts (situation, bark or meow context) *qualify* or *corroborate*
+  (`supported_corroborated` when the synchronized situation is consistent).
+  Context alone gives `context_only`, never a supported hypothesis.
+* Qualifiers change the reading: vocal signals while handled or bathed are
+  marked as possibly a reaction to the handling.
+* *Conflict* (no single interpretation): audio and video name different
+  situations (both above threshold), a confident visual situation
+  contradicts the detected species, or two soft-conflicting hypotheses are
+  both supported.
+* Every missing or unusable input is listed with its reason (no audio
+  stream, silence, no animal detected, video removed, no vocalization
+  heard, a model absent from the variant).
+
+**Decisions taken after E28, both conservative and documented in the code:**
+(1) a situation from audio alone is never an interpretation (E28 video
+missing: selective accuracy 0.61 against the 0.8 target); (2) a confident
+situation that contradicts the detected species is a conflict.
+
+**End-to-end status on all held-out clips** (`results/intent/end_to_end_status.json`;
+descriptive: the policy was informed by these clips):
+
+| Data | Interpretation of an intent hypothesis | Situation only | Conflict | Insufficient evidence | Situation correct when given |
+| --- | --- | --- | --- | --- | --- |
+| Kinetics validation, 294 clips, full | 0 | 208 | 50 (species) | 36 | 0.779 |
+| Kinetics validation, phone variant | 0 | 194 | 51 (species) | 49 | 0.768 |
+| Barkopedia validation, 500 barks (audio only) | 0 | 0 | 0 | 500 | - |
+
+* No intent hypothesis reaches *supported* on held-out data: the only
+  channel with intent annotations (dog barks) never passes its threshold.
+  On Barkopedia, 367 of 500 clips get a *tentative* vocal hypothesis; the
+  first one matches the label's hypothesis in 43.9 % of them, equal to the
+  base rate of the most common hypothesis (play, 44 %).
+* What the combination adds today is the situation (context) with honest
+  abstention, the explicit list of missing inputs, and species conflicts.
+  Intent itself needs the synchronized intent-labelled recordings listed in
+  `taxonomy.MISSING`.
+
+**On the phone.** `web/src/engine/intent.ts` mirrors pooling, heads, late
+fusion and the combination for the phone variant; the browser engine computes
+the per-frame inputs when the bundle carries `intent` assets (asset format
+0.2.3; exported with `intent.enabled: true`, research profile because the
+situation heads are trained on YouTube clips). Feature-level parity against
+the Python reference: 10 cases (real clips, missing audio, no animal, silence,
+heard bark and meow, flipped species), pooled vectors within 1e-5 relative,
+identical readings, hypotheses, statuses, conflicts and missing inputs
+(`web/tests/unit/intent.test.ts`). Engine level, desktop Chromium, 12
+held-out Kinetics clips as WebM: situation label 12/12, overall status 9/12
+(threshold-boundary cases), species 11/12, median situation-score difference
+0.039, 0 schema errors (`results/ondevice/intent_engine_parity_chromium.json`).
+No phone measurement yet.

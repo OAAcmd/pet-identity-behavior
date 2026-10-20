@@ -10,8 +10,8 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../../..");
-const parity = path.join(root, "var/ondevice/engine_parity");
-const bundleDir = path.join(root, "var/ondevice/bundle");
+const parity = path.resolve(root, process.env.PARITY_DIR ?? "var/ondevice/engine_parity");
+const bundleDir = path.resolve(root, process.env.BUNDLE_DIR ?? "var/ondevice/bundle");
 const wasmDir = path.join(here, "../../node_modules/@litertjs/core/wasm");
 
 test("on-device engine analyses the parity media set", async ({ page }) => {

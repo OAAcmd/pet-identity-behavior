@@ -1,0 +1,297 @@
+{
+ "cases": 12,
+ "compared": 12,
+ "status_agree": 9,
+ "situation_label_agree": 12,
+ "situation_status_agree": 9,
+ "species_agree": 11,
+ "hypotheses_agree": 11,
+ "situation_score_abs_diff_median": 0.03859999999999997,
+ "situation_label_correct_ref": 8,
+ "situation_label_correct_web": 8,
+ "schema_errors_web": 0,
+ "rows": [
+  {
+   "case": "kinetics-bathing_dog-FB3qGJzp5XA",
+   "label": "bathing dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "bathing dog",
+   "situation_web": "bathing dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.05740000000000001,
+   "species_ref": "unknown",
+   "species_web": "unknown",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 6991.25,
+   "intent_ms_web": 2090.88
+  },
+  {
+   "case": "kinetics-bathing_dog-FGGb6wQvYBM",
+   "label": "bathing dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "bathing dog",
+   "situation_web": "bathing dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.0,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [
+    [
+     "play",
+     "tentative"
+    ],
+    [
+     "relaxed",
+     "tentative"
+    ]
+   ],
+   "hypotheses_web": [
+    [
+     "play",
+     "tentative"
+    ],
+    [
+     "relaxed",
+     "tentative"
+    ]
+   ],
+   "schema_errors_web": 0,
+   "wall_ms_web": 7813.0600000005215,
+   "intent_ms_web": 2701.45
+  },
+  {
+   "case": "kinetics-grooming_cat-7HLNu4fEym8",
+   "label": "grooming cat",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "grooming dog",
+   "situation_web": "grooming dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.00869999999999993,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 7315.345000000671,
+   "intent_ms_web": 2185.35
+  },
+  {
+   "case": "kinetics-grooming_cat-7IaNcARqah0",
+   "label": "grooming cat",
+   "status_ref": "conflict",
+   "status_web": "conflict",
+   "situation_ref": "grooming cat",
+   "situation_web": "grooming cat",
+   "situation_status_ref": "conflict",
+   "situation_status_web": "conflict",
+   "situation_score_abs_diff": 0.006300000000000083,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5635.0600000005215,
+   "intent_ms_web": 2401.08
+  },
+  {
+   "case": "kinetics-grooming_dog-BLspcuDr2r8",
+   "label": "grooming dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "grooming dog",
+   "situation_web": "grooming dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.01550000000000007,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 8411.655000001192,
+   "intent_ms_web": 2829.91
+  },
+  {
+   "case": "kinetics-grooming_dog-BP0g0T7ZDfs",
+   "label": "grooming dog",
+   "status_ref": "insufficient_evidence",
+   "status_web": "situation_only",
+   "situation_ref": "grooming dog",
+   "situation_web": "grooming dog",
+   "situation_status_ref": "uncertain",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.2534,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5599.4749999996275,
+   "intent_ms_web": 2291.5
+  },
+  {
+   "case": "kinetics-petting_cat--07WVYMSwac",
+   "label": "petting cat",
+   "status_ref": "conflict",
+   "status_web": "situation_only",
+   "situation_ref": "petting cat",
+   "situation_web": "petting cat",
+   "situation_status_ref": "conflict",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.05180000000000007,
+   "species_ref": "dog",
+   "species_web": "cat",
+   "hypotheses_ref": [],
+   "hypotheses_web": [
+    [
+     "attention",
+     "context_only"
+    ],
+    [
+     "relaxed",
+     "context_only"
+    ]
+   ],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5440.109999999404,
+   "intent_ms_web": 2331.3
+  },
+  {
+   "case": "kinetics-petting_cat-2Q_N-85UX24",
+   "label": "petting cat",
+   "status_ref": "insufficient_evidence",
+   "status_web": "insufficient_evidence",
+   "situation_ref": "petting cat",
+   "situation_web": "petting cat",
+   "situation_status_ref": "uncertain",
+   "situation_status_web": "uncertain",
+   "situation_score_abs_diff": 0.08919999999999995,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [
+    [
+     "play",
+     "tentative"
+    ]
+   ],
+   "hypotheses_web": [
+    [
+     "play",
+     "tentative"
+    ]
+   ],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5983.904999999329,
+   "intent_ms_web": 1967.33
+  },
+  {
+   "case": "kinetics-training_dog--CkUzbeMLe0",
+   "label": "training dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "bathing dog",
+   "situation_web": "bathing dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.02729999999999999,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5626.819999998435,
+   "intent_ms_web": 2063.46
+  },
+  {
+   "case": "kinetics-training_dog--Om3w3mak9o",
+   "label": "training dog",
+   "status_ref": "insufficient_evidence",
+   "status_web": "conflict",
+   "situation_ref": "petting cat",
+   "situation_web": "petting cat",
+   "situation_status_ref": "uncertain",
+   "situation_status_web": "conflict",
+   "situation_score_abs_diff": 0.049899999999999944,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [
+    [
+     "alert",
+     "tentative"
+    ],
+    [
+     "play",
+     "tentative"
+    ]
+   ],
+   "hypotheses_web": [
+    [
+     "alert",
+     "tentative"
+    ],
+    [
+     "play",
+     "tentative"
+    ]
+   ],
+   "schema_errors_web": 0,
+   "wall_ms_web": 8036.485000001267,
+   "intent_ms_web": 2649.65
+  },
+  {
+   "case": "kinetics-walking_the_dog-0vhwiO66Tig",
+   "label": "walking the dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "bathing dog",
+   "situation_web": "bathing dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.10060000000000002,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [],
+   "hypotheses_web": [],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5984.785000000149,
+   "intent_ms_web": 2686.24
+  },
+  {
+   "case": "kinetics-walking_the_dog-0y0TrAHeHNo",
+   "label": "walking the dog",
+   "status_ref": "situation_only",
+   "status_web": "situation_only",
+   "situation_ref": "walking the dog",
+   "situation_web": "walking the dog",
+   "situation_status_ref": "interpretation",
+   "situation_status_web": "interpretation",
+   "situation_score_abs_diff": 0.024499999999999966,
+   "species_ref": "dog",
+   "species_web": "dog",
+   "hypotheses_ref": [
+    [
+     "outside",
+     "context_only"
+    ]
+   ],
+   "hypotheses_web": [
+    [
+     "outside",
+     "context_only"
+    ]
+   ],
+   "schema_errors_web": 0,
+   "wall_ms_web": 5800.190000001341,
+   "intent_ms_web": 2359.66
+  }
+ ],
+ "note": "desktop headless Chromium, not a phone; media decoded by FFmpeg (reference) vs the browser (web)"
+}

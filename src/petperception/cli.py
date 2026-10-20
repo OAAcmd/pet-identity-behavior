@@ -500,6 +500,9 @@ def cmd_export_ondevice(args: argparse.Namespace) -> int:
     # One backbone serves the verifier and posture; posture parameters must match it.
     s.vision.verifier.classifier = s.posture.backbone = s.ondevice.backbone
     s.posture.model_file = s.ondevice.posture_model
+    if args.intent:
+        s.intent.enabled = True
+        s.intent.variant = "phone_now"
     if args.fetch_missing:
         from .registry import check_model, fetch_model
 
@@ -694,7 +697,10 @@ def cmd_engine_parity(args: argparse.Namespace) -> int:
     if args.action == "reference":
         print(json.dumps(P.write_reference(s, out)))
         return 0
-    summary = P.compare(out)
+    if args.action == "intent-reference":
+        print(json.dumps(P.write_intent_reference(s, out)))
+        return 0
+    summary = P.compare_intent(out) if args.action == "intent-compare" else P.compare(out)
     if args.write:
         Path(args.write).parent.mkdir(parents=True, exist_ok=True)
         Path(args.write).write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
@@ -866,6 +872,7 @@ def build_parser() -> argparse.ArgumentParser:
     od.add_argument("--backbone", help="EfficientNet-Lite0 build for the verifier and posture (default: ondevice.backbone)")
     od.add_argument("--posture-model", help="posture parameters valid for that backbone's features (default: ondevice.posture_model)")
     od.add_argument("--fetch-missing", action="store_true", help="download (checksum-verified) any bundle model not yet present")
+    od.add_argument("--intent", action="store_true", help="include the behaviour/intent heads (phone variant; research profile)")
     od.set_defaults(func=cmd_export_ondevice)
     he = sub.add_parser("household-eval", help="score app results against household annotations (docs/household/)")
     he.add_argument("--dataset", help="directory with recordings/, annotations/, adjudicated/, results/")
@@ -900,7 +907,7 @@ def build_parser() -> argparse.ArgumentParser:
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))
     ep.set_defaults(func=cmd_export_parity)
     pp = sub.add_parser("engine-parity", help="engine-level parity: write Python reference results, or score the browser results against them")
-    pp.add_argument("action", choices=["reference", "compare"])
+    pp.add_argument("action", choices=["reference", "compare", "intent-reference", "intent-compare"])
     pp.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice" / "engine_parity"))
     pp.add_argument("--write", help="compare: also write the summary JSON to this file")
     pp.set_defaults(func=cmd_engine_parity)

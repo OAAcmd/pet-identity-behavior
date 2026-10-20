@@ -121,3 +121,27 @@ Listed exactly in `taxonomy.MISSING`:
 4. Face / ear / tail annotations linked to situations (e.g. CatFACS/DogFACS-coded
    bouts); keypoint models give geometry but nothing links it to context or intent.
 5. Animal and household ids for Barkopedia clips (source video, dog, uploader).
+
+## 6. What was trained and what it showed (2026-10-20)
+
+All figures are measured on held-out data (details and CIs in
+`docs/ALGORITHM_REPORT.md`, E26-E28 and section 9).
+
+| Channel | Data (layer) | Held-out result | Use in the combined inference |
+| --- | --- | --- | --- |
+| Situation, synchronized audio + video | Kinetics (context) | late fusion macro-F1 0.730 [0.678, 0.777] on 294 validation clips; visual only 0.689, audio only 0.456; environment adds +0.073 [+0.026, +0.123]; audio adds +0.041 [+0.002, +0.083] | context qualifier (handling, bathing, training, walk); `context_for` links only |
+| Dog vocal activity / intent | Barkopedia (intent, behaviour, context) | macro-F1 0.222 (8 activities) audio only; 0.290 with the location as context (+0.068 [+0.016, +0.106]); no activity passes the gate; no transfer to Yin barks | at most *tentative* (its threshold is never reached on validation) |
+| Dog bark context | Yin & McCowan (context) | leave-one-dog-out 0.722 (E22) | context only |
+| Cat meow context | CatMeows (context) | leave-one-cat-out 0.46 (E2) | hint only, below the gate |
+
+What this establishes and what it does not:
+* The product can tell, from synchronized audio and video of public clips,
+  in which situation a cat or dog is (being petted, groomed, bathed, trained,
+  walked) about three times in four, abstaining on about one clip in eight;
+  the scene (environment) is the strongest single cue.
+* It cannot yet tell what an animal wants. The only intent-annotated data
+  (dog barks, labelled by a vision-language model and verified by people)
+  supports nothing above chance-adjacent levels from a single bark. No cat
+  intent data exists. Every hypothesis link from a situation is a context,
+  not evidence of a mental state.
+* The missing data that would change this is listed in section 5.

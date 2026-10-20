@@ -1,4 +1,4 @@
-# API contract (`/api/v1`, result schema 1.4.0)
+# API contract (`/api/v1`, result schema 1.5.0)
 
 Generated, always-current artifacts (CI fails if they are stale):
 
@@ -45,7 +45,7 @@ Outside `/api/v1`: `GET /ondevice/<path>` serves the checksummed on-device
 bundle (`manifest.json` → 503 `ondevice_bundle_missing` when not published;
 path traversal rejected); `/` serves the PWA.
 
-## Analysis result (schema 1.4.0)
+## Analysis result (schema 1.5.0)
 
 Top level: `schema_version`, `analysis_id`, `created_at`, `engine_version`,
 `engine` (runtime, model ids and versions, component states with reasons),
@@ -78,10 +78,24 @@ pre-set gate of E21 (`passed`, `failed`, `not_evaluable`, `not_evaluated`;
 subtypes, and only those can open or support a hypothesis. The others can
 only appear as conflicting evidence.
 
+Optional `intent` block (1.5.0; present only when the intent stage ran,
+`intent.enabled`): `species` and its source; `inputs` and `missing_inputs`
+(every absent or unusable input with its reason); `readings` per trained
+channel (`situation`, `dog_vocal_activity`, `dog_bark_context`,
+`cat_meow_context`: temperature-scaled scores, top label, the channel's
+fitted abstention threshold, whether it was passed, evidence-gate status);
+`situation` (label, score, `interpretation` / `uncertain` / `conflict`,
+branches used, context qualifier); `hypotheses` (ontology names with status
+`supported`, `supported_corroborated`, `tentative`, `context_only` or
+`conflict`, plus supporting, qualifying and contradicting statements);
+`conflicts`; overall `status` (`interpretation`, `conflict`,
+`situation_only`, `insufficient_evidence`); `summary`; `caveats`. Recorded
+contexts never appear as supported hypotheses.
+
 Versioning: additive changes bump the minor version (1.1.0 added behavior
 segments, keypoints and verification; 1.2.0 added interaction candidates;
 1.3.0 added on-furniture candidates and `related_object`; 1.4.0 added
-`subtype_validation`);
+`subtype_validation`; 1.5.0 added the optional `intent` block);
 readers accept older minor versions. Scores are never presented as
 probabilities: every score has a `score_kind` such as `detector_sigmoid_raw`
 or `posture_softmax_uncalibrated`.

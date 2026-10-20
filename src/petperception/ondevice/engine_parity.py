@@ -243,3 +243,70 @@ def compare(out: Path) -> dict:
         "created_at": utc_now().isoformat(timespec="seconds"),
     }
     return summary
+
+
+# ---------------------------------------------------------------- intent stage
+def write_intent_reference(settings: Settings, out: Path, per_class: int = 2) -> dict:
+    """Held-out Kinetics validation clips (WebM copies) analysed by the Python engine with the intent stage on
+    (phone variant), for engine-level parity of the intent block. Writes cases.json and reference/*.json under out."""
+    from ..intent import kinetics as K
+    from ..pipeline import AnalysisEngine
+
+    s = reference_settings(settings)
+    s.intent.enabled = True
+    s.intent.variant = "phone_now"
+    eng = AnalysisEngine(s).load()
+    if eng.intent is None:
+        raise RuntimeError(f"intent stage unavailable: {eng.status.get('intent')}")
+    data = settings.paths.resolve("data_root")
+    picks: dict[str, list] = {}
+    for c in K.list_clips(data):
+        if c.split == "test" and len(picks.setdefault(c.label, [])) < per_class:
+            picks[c.label].append(c)
+    cases = []
+    (out / "reference").mkdir(parents=True, exist_ok=True)
+    for lab, cs in sorted(picks.items()):
+        for c in cs:
+            name = f"kinetics-{lab.replace(' ', '_')}-{c.youtube_id}"
+            media = to_webm(c.path, out / "media" / f"{name}.webm")
+            cases.append({"name": name, "media": str(media), "zones": None, "modalities": ["audio", "video"], "label": lab,
+                          "source": "Kinetics-700 validation clip (YouTube; research only)"})
+            r = eng.analyze(media, analysis_id=name)
+            (out / "reference" / f"{name}.json").write_text(r.model_dump_json())
+    write_json(out / "cases.json", {"cases": cases, "created_at": utc_now().isoformat(timespec="seconds"),
+                                    "components": {k: v.model_dump() for k, v in eng.status.items()}})
+    return {"cases": len(cases)}
+
+
+def compare_intent(out: Path) -> dict:
+    cases = json.loads((out / "cases.json").read_text())["cases"]
+    rows = []
+    for c in cases:
+        ref = json.loads((out / "reference" / f"{c['name']}.json").read_text())
+        wp = out / "web" / f"{c['name']}.json"
+        if not wp.exists():
+            rows.append({"case": c["name"], "status": "missing web result"})
+            continue
+        web = json.loads(wp.read_text())
+        a, b = ref.get("intent"), web.get("intent")
+        if not a or not b:
+            rows.append({"case": c["name"], "status": "intent block missing", "reference": bool(a), "web": bool(b)})
+            continue
+        sa, sb = a.get("situation") or {}, b.get("situation") or {}
+        rows.append({"case": c["name"], "label": c.get("label"), "status_ref": a["status"], "status_web": b["status"],
+                     "situation_ref": sa.get("label"), "situation_web": sb.get("label"), "situation_status_ref": sa.get("status"),
+                     "situation_status_web": sb.get("status"), "situation_score_abs_diff": abs((sa.get("score") or 0) - (sb.get("score") or 0)),
+                     "species_ref": a["species"], "species_web": b["species"],
+                     "hypotheses_ref": sorted((h["name"], h["status"]) for h in a["hypotheses"]),
+                     "hypotheses_web": sorted((h["name"], h["status"]) for h in b["hypotheses"]),
+                     "schema_errors_web": _schema_errors(web), "wall_ms_web": web.get("wall_ms"),
+                     "intent_ms_web": (web.get("timings_ms") or {}).get("intent_video_features")})
+    ok = [r for r in rows if "status_ref" in r]
+    agree = lambda k: sum(r[f"{k}_ref"] == r[f"{k}_web"] for r in ok)  # noqa: E731
+    return {"cases": len(cases), "compared": len(ok), "status_agree": agree("status"), "situation_label_agree": agree("situation"),
+            "situation_status_agree": agree("situation_status"), "species_agree": agree("species"), "hypotheses_agree": agree("hypotheses"),
+            "situation_score_abs_diff_median": float(np.median([r["situation_score_abs_diff"] for r in ok])) if ok else None,
+            "situation_label_correct_ref": sum(r["situation_ref"] == r["label"] for r in ok),
+            "situation_label_correct_web": sum(r["situation_web"] == r["label"] for r in ok),
+            "schema_errors_web": sum(r["schema_errors_web"] for r in ok), "rows": rows,
+            "note": "desktop headless Chromium, not a phone; media decoded by FFmpeg (reference) vs the browser (web)"}

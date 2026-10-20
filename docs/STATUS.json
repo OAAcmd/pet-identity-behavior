@@ -1,15 +1,15 @@
 {
  "schema": "petperception.status/1",
- "date": "2026-10-19",
+ "date": "2026-10-20",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "The browser inference implementation has passed desktop Chromium tests, while physical Android, iPhone and Safari validation remains pending. Behavioural validity rests on public data only. New this round: home phone video (E20: the phone build finds the cat in 0.70 and the dog in 0.60 of frames; 14 % of dog frames show only a 'cat'), an independent audio test (E21: meow and bark pass the pre-set gate, purr and growl do not; only validated vocalization types are now shown or used as triggers in both engines), the first cat keypoint model (E24, research only), and the first detector trained here on CC BY images (G1, full 50k-image CPU run, 4.4 h): at its own operating point it finds far more pets on home video than the shipped detector (cat 0.81 vs 0.70, dog 0.86 vs 0.60 of frames), but it misses acceptance 1 on cat AP50 by 0.019, so the phone build keeps its detector for now.",
+ "summary": "Milestone of 2026-10-20: trained behaviour/intent inference. Observable behaviour, recorded context and intent are separate label layers (docs/BEHAVIOR_INTENT_DATA.md). Trained channels: situation from synchronized audio and video (E28, Kinetics: late fusion macro-F1 0.730 on 294 held-out clips, visual only 0.689, audio only 0.456; the scene adds +0.073), dog vocal activity / intent from barks (E26/E27, Barkopedia: 0.222 from audio, 0.290 with the location as context; no class passes the gate), dog bark and cat meow context heads. A combination layer reports single-channel readings, the combined situation, explicit missing inputs and conflicts; no intent hypothesis reaches 'supported' on held-out data because no intent-labelled synchronized data exists (exact missing examples listed). The phone engine mirrors the intent stage (feature-level parity on 10 cases); phones remain untested. Earlier rounds: E20 home video, E21 audio, E24 cat keypoints, G1 detector (paused G1b ablation).",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 148,
-    "typescript_unit_tests": 27,
+    "python_tests": 170,
+    "typescript_unit_tests": 37,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
     "ci": "green on every push up to 2026-10-11; pushes of 2026-10-19 not yet observed from this workspace",
@@ -29,7 +29,9 @@
      "tracks_f1": 0.91,
      "segments_f1": 0.91,
      "hypotheses_f1": 0.96
-    }
+    },
+    "intent_phone_parity": "feature-level, 10 cases (real Kinetics clips and edge cases): pooled branches within 1e-5 relative; identical readings, hypotheses, statuses, conflicts, missing inputs",
+    "intent_engine_parity": "12 held-out Kinetics clips, desktop Chromium: situation label 12/12, status 9/12, species 11/12, median score diff 0.039, 0 schema errors"
    },
    "open": [
     "Safari/WebKit never run",
@@ -38,7 +40,7 @@
   },
   "behavioral_model_validity": {
    "status": "not_met",
-   "evidence": "public data: E1, E1-CC, E2, E4, E7, E9-E22, E24, E25; real pet video: E18 (Kinetics, YouTube) and E20 (CoP3D, home phone video); semi-synthetic E8 and synthetic E5 are software checks, not evidence",
+   "evidence": "public data: E1, E1-CC, E2, E4, E7, E9-E22, E24-E28; real pet video: E18 (Kinetics, YouTube) and E20 (CoP3D, home phone video); semi-synthetic E8 and synthetic E5 are software checks, not evidence",
    "key_results": {
     "real_video_pet_found_cat": "0.566 [0.47, 0.66] reference detector; 0.596 phone build",
     "real_video_pet_found_dog": "0.533 [0.46, 0.60] reference; 0.446 [0.38, 0.52] phone build (paired p = 0.0095)",
@@ -55,7 +57,10 @@
     "g1_light_cpu_run_e4_subset": "AP50 cat 0.889 / dog 0.820 vs phone build 0.923 / 0.851 (6k images, 4 epochs, CPU)",
     "home_video_engine_level": "right-species track in 0.646 of cat and 0.605 of dog videos; only a cat in 0.163 of dog videos (E20b)",
     "species_arbitration": "crop-classifier relabelling fixes dogs but breaks cats on home video; not adopted (E25)",
-    "g1_full_cpu_run": "E4 full-curve AP50 cat 0.898 / dog 0.864 (M3 0.923 / 0.851); acceptance 1 with per-class operating points and its own verifier: cat 0.814 (needs 0.833), dog 0.749 (passes), specificity intervals overlap M3's; home video at the single tuning-selected point: cat frames 0.811, dog 0.856 vs phone build 0.697 / 0.598"
+    "g1_full_cpu_run": "E4 full-curve AP50 cat 0.898 / dog 0.864 (M3 0.923 / 0.851); acceptance 1 with per-class operating points and its own verifier: cat 0.814 (needs 0.833), dog 0.749 (passes), specificity intervals overlap M3's; home video at the single tuning-selected point: cat frames 0.811, dog 0.856 vs phone build 0.697 / 0.598",
+    "situation_synchronized_av_e28": "late fusion macro-F1 0.730 [0.678, 0.777] (294 Kinetics validation clips, 6 situations); visual only 0.689; audio only 0.456; rules 0.282; coverage 0.88 at selective accuracy 0.76",
+    "dog_bark_activity_e26_e27": "macro-F1 0.222 [0.184, 0.269] audio only; 0.290 [0.251, 0.328] with location context; no activity passes the gate; coverage 0-4 % at fitted thresholds",
+    "intent_end_to_end": "no intent hypothesis reaches 'supported' on held-out Kinetics or Barkopedia clips; situation interpretations on 208/294 Kinetics clips (0.779 correct); 50 species conflicts"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
@@ -90,14 +95,44 @@
   "G2": "annotation candidates and spec done; AwA-Pose (E24) gives a research cat keypoint model meanwhile; annotation pending",
   "G3": "E17 on dog video: temporal model 0.590 vs pooled 0.575 vs E11 logistic regression 0.638 macro-F1; not adopted",
   "G4": "cat context (E2) done, not shipped; dog bark context (E22) 0.72 macro-F1, research only; vocalization types evaluated on FSD50K (E21) and gated in both engines",
-  "G5": "not started"
+  "G5": "not started",
+  "I1": {
+   "capability": "behaviour / intent heads (intent layer)",
+   "status": "trained on CPU: E27 (40 min), E28 features 894 clips + fit/eval (~70 min), context heads (<2 min)",
+   "artifacts": "artifacts/intent/",
+   "evaluation": "results/e27, results/e28, results/intent"
+  },
+  "G1b": {
+   "status": "paused 2026-10-20 (signal checkpoints saved, resumable); selection rule fixed",
+   "reason": "priority moved to behaviour/intent inference"
+  }
  },
  "decisions": [
   "The phone test build uses the licence-stated TF Hub detector. Q-M2 was answered on 2026-10-19: the MediaPipe Object Detector page states no licence for the weights, so the MediaPipe detector stays research-only. On home phone video (E20) the TF Hub detector is the better one anyway.",
   "Only vocalization types that passed the pre-set FSD50K gate (meow, bark) are shown or open/support interpretations; unvalidated confident types (purr, growl, hiss) remain in the JSON and can only block an interpretation (E21).",
   "The on-furniture relation ships as the pre-specified containment rule; the learned head was not better (E15 follow-up).",
   "Dog keypoints, MammalNet-trained heads, the AwA-Pose cat keypoint heads and the bark-context model stay research-only (data terms).",
-  "Server analysis is opt-in; the default path never uploads media."
+  "Server analysis is opt-in; the default path never uploads media.",
+  {
+   "date": "2026-10-20",
+   "decision": "situation from audio alone is never an interpretation",
+   "basis": "E28 video missing: selective accuracy 0.61 vs 0.8 target (taken after the result; conservative)"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "a confident situation contradicting the detected species is a conflict",
+   "basis": "example review after E28; conservative"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "intent stage off by default in both engines; bundle carries it only when exported with intent.enabled (research profile)",
+   "basis": "situation heads trained on YouTube clips; extra per-frame cost"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "JS-divergence audio-video conflict score not adopted",
+   "basis": "exploratory after E28 (AUC 0.69-0.71); needs a fresh pre-registered test"
+  }
  ],
  "resources_needed": [
   "Run the phone test on one iPhone and one Android phone",
@@ -109,6 +144,7 @@
  "artifacts_in_repository": {
   "g1_detector_full_run": "models/g1/g1a_full_mnv2_sb4096/ (checkpoint ckpt-27 with optimizer state, float32/float16/int8 exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check.json)",
   "keypoint_heads": "artifacts/keypoints/*.npz",
-  "audio_artifacts": "artifacts/audio_*.json"
+  "audio_artifacts": "artifacts/audio_*.json",
+  "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)"
  }
 }

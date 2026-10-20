@@ -145,6 +145,46 @@ and explanation templates → result JSON (same schema as the server,
 cancel at any stage. The default path makes no upload request (asserted by
 an E2E test). Server analysis exists only as an explicit setting.
 
+## Behaviour / intent stage (optional, research profile)
+
+When the bundle is exported with `intent.enabled: true`, `engine_assets.json`
+(asset format 0.2.3) carries the `intent` section: the E28 situation heads and
+late fusion of the phone variant (YAMNet class scores, the largest cat/dog
+crop embedding without posture or keypoints, the whole-frame embedding with
+COCO object scores, person interaction), the E27 dog vocal-activity head on
+class scores, and the cat meow context head (below the gate). The browser
+engine then computes per sampled frame a whole-frame embedding, detection of
+all COCO object classes and a crop of the largest cat/dog
+(`LocalEngine.intentFrame`), keeps the YAMNet window scores and their RMS,
+pools them (`web/src/engine/intent.ts`, mirroring
+`src/petperception/intent/kinetics.py`) and runs the same combination as the
+server (`intent/inference.py`), adding the `intent` block to the result
+(schema 1.5.0) and an `intent` card to the result page.
+
+Validated so far (desktop headless Chromium, not a phone):
+* feature-level parity with the Python reference on 10 cases
+  (`web/tests/unit/intent.test.ts`, fixture from
+  `python -m petperception.intent.parity`): pooled branch vectors agree within
+  1e-5 relative and readings, hypotheses, statuses, conflicts and missing
+  inputs are identical;
+* engine-level parity on 12 held-out Kinetics clips (2 per situation, WebM
+  copies; `results/ondevice/intent_engine_parity_chromium.json`): situation
+  label 12/12, species 11/12, hypotheses 11/12, overall status 9/12, median
+  situation-score difference 0.039, 0 schema errors. The three status
+  differences are threshold-boundary cases: one situation score differs by
+  0.25 (0.50 vs 0.75 around the 0.59 threshold), one clip's species vote is
+  55/45 and flips, one score sits at the threshold. Media are decoded by
+  FFmpeg on one side and by the browser on the other, so frames differ.
+  Analysis of a 10 s clip took 5.4-8.4 s in desktop Chromium (WASM), of which
+  the intent per-frame inputs took 2.0-2.8 s.
+
+Reproduce: `petperception export-ondevice --intent --out var/ondevice/bundle_intent`,
+`petperception engine-parity intent-reference --out var/ondevice/intent_parity`,
+`cd web && PARITY_DIR=var/ondevice/intent_parity BUNDLE_DIR=var/ondevice/bundle_intent npx playwright test -c playwright.runtime.config.ts tests/runtime/engine.spec.ts`,
+`petperception engine-parity intent-compare --out var/ondevice/intent_parity`.
+Not yet done: any phone measurement (the extra cost is about three backbone
+passes and one detector pass per frame).
+
 ## Evidence and how to reproduce it
 
 | Evidence | Command | Result file |
