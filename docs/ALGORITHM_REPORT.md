@@ -1303,6 +1303,32 @@ E28's test clips (0.435 full, 0.423 phone).
   two in five (other species) is now reported as a conflict instead of an
   interpretation, at the price of one genuine clip in ten.
 
+### E30 - Degraded-video rule for the intent stage - COMPLETED, not adopted
+
+E28 showed that poor video (dark, noisy, blurred copies) lowers the situation
+model to 0.476 macro-F1 while the policy keeps interpreting 84 % of clips.
+Rule tested (fixed before any E30 number,
+`src/petperception/eval/e30_degraded_video.py`): the video is degraded when at
+least half of the sampled frames are low-light (mean grey < 40) or blurry
+(Laplacian variance < 25), the engine's untuned frame-quality defaults; then
+no situation interpretation. Development: E28's test clips; test: E29's 300
+fresh clips with the same synthetic degradation.
+
+| Fresh clips (test) | Flagged degraded | Full variant: coverage / selective accuracy without -> with the rule |
+| --- | --- | --- |
+| Clean | 0.080 [0.054, 0.116] | 0.92 / 0.732 -> 0.86 / 0.733 |
+| Poor copies | 0.987 [0.966, 0.995] | 0.89 / 0.584 -> 0.01 / 0.333 |
+
+* Criteria 1 (poor flagged >= 0.80) and 3 (no loss of selective accuracy
+  on clean clips) are met; criterion 2 fails: 8 % of ordinary clips are
+  flagged (dim YouTube footage), above the 5 % limit. **Not adopted**: the
+  rule is implemented in both engines but stays inactive.
+* What it shows: the frame-quality signal does catch degraded video, but
+  the default darkness threshold is too strict for ordinary indoor footage;
+  a threshold chosen on development data (not tried here) or a learned
+  quality input would need its own fresh test. The degradation is
+  synthetic; real dark or blurred home video is unmeasured.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

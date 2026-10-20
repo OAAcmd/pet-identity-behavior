@@ -184,7 +184,9 @@ Reproduce: `petperception export-ondevice --intent --out var/ondevice/bundle_int
 `petperception engine-parity intent-compare --out var/ondevice/intent_parity`.
 The E29 audio-video divergence detector is implemented in both engines but
 active only where it was adopted (full variant, server); the phone variant
-did not meet its adoption rule, so its bundle carries no threshold.
+did not meet its adoption rule, so its bundle carries no threshold. The E30
+degraded-video rule is implemented in both engines and inactive (not
+adopted).
 Not yet done: any phone measurement (the extra cost is about three backbone
 passes and one detector pass per frame).
 

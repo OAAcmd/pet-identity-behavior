@@ -1,0 +1,215 @@
+{
+  "experiment": "E30",
+  "status": "completed",
+  "created_at": "2026-10-20T04:11:34+00:00",
+  "protocol": [
+    "E30: should the intent stage stop interpreting the situation when the video is too dark or blurred?",
+    "",
+    "Why: in E28 poor video (dark, noisy, blurred copies of the test clips)",
+    "dropped the combined situation model to 0.476 macro-F1, yet the policy kept",
+    "interpreting 84 % of clips (selective accuracy 0.54). The engine already",
+    "measures per frame the mean grey level and the variance of the Laplacian",
+    "(vision/quality.py; flags at luma < 40 and variance < 25, configuration",
+    "defaults never tuned on these data).",
+    "",
+    "Rule under test (fixed before any E30 number was computed): the video is",
+    "*degraded* when at least half of the sampled frames are low-light or blurry",
+    "by those default thresholds. With degraded video the situation is not",
+    "reported as an interpretation, and the result names the degraded input.",
+    "",
+    "Data: development = E28's 294 test clips, clean and poor copies (reported,",
+    "nothing tuned); test = E29's 300 fresh clips, clean and a poor copy made",
+    "with the same degradation (intent/robustness.py), scored once.",
+    "",
+    "Adoption (all required, per variant):",
+    "1. degraded flag on poor fresh clips >= 0.80;",
+    "2. degraded flag on clean fresh clips <= 0.05 with Wilson upper bound <= 0.10;",
+    "3. selective accuracy of the policy on clean fresh clips not lower by more",
+    "   than 0.01 with the rule.",
+    "Caveat: the degradation is synthetic; real dark or blurred home video is",
+    "not measured."
+  ],
+  "rule": {
+    "poor_flagged_min": 0.8,
+    "clean_flagged_max": 0.05,
+    "clean_wilson_high_max": 0.1,
+    "clean_selective_accuracy_drop_max": 0.01
+  },
+  "results": {
+    "thresholds": {
+      "low_light_luma": 40.0,
+      "blur_laplacian_var": 25.0,
+      "fraction": 0.5
+    },
+    "dev": {
+      "clips": 294,
+      "flagged_clean": {
+        "k": 30,
+        "n": 294,
+        "rate": 0.10204081632653061,
+        "wilson95": [
+          0.07241481598785623,
+          0.14193267610189889
+        ]
+      },
+      "flagged_poor": {
+        "k": 294,
+        "n": 294,
+        "rate": 1.0,
+        "wilson95": [
+          0.9871018689128719,
+          1.0
+        ]
+      },
+      "full": {
+        "clean": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8775510204081632,
+              "selective_accuracy": 0.7635658914728682
+            },
+            "with_rule": {
+              "coverage": 0.7857142857142857,
+              "selective_accuracy": 0.7489177489177489
+            }
+          },
+          "macro_f1": 0.7300495657112779
+        },
+        "poor": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8435374149659864,
+              "selective_accuracy": 0.5403225806451613
+            },
+            "with_rule": {
+              "coverage": 0.0,
+              "selective_accuracy": null
+            }
+          },
+          "macro_f1": 0.4764511589111442
+        }
+      },
+      "phone_now": {
+        "clean": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8333333333333334,
+              "selective_accuracy": 0.7306122448979592
+            },
+            "with_rule": {
+              "coverage": 0.7448979591836735,
+              "selective_accuracy": 0.7214611872146118
+            }
+          },
+          "macro_f1": 0.687476523525742
+        },
+        "poor": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8163265306122449,
+              "selective_accuracy": 0.4875
+            },
+            "with_rule": {
+              "coverage": 0.0,
+              "selective_accuracy": null
+            }
+          },
+          "macro_f1": 0.3901224109963591
+        }
+      }
+    },
+    "test": {
+      "clips": 300,
+      "flagged_clean": {
+        "k": 24,
+        "n": 300,
+        "rate": 0.08,
+        "wilson95": [
+          0.05434646978454494,
+          0.11627401141355304
+        ]
+      },
+      "flagged_poor": {
+        "k": 296,
+        "n": 300,
+        "rate": 0.9866666666666667,
+        "wilson95": [
+          0.9662239391535502,
+          0.9948031223153205
+        ]
+      },
+      "full": {
+        "clean": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.92,
+              "selective_accuracy": 0.7318840579710145
+            },
+            "with_rule": {
+              "coverage": 0.86,
+              "selective_accuracy": 0.7325581395348837
+            }
+          },
+          "macro_f1": 0.7019058912725017
+        },
+        "poor": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.89,
+              "selective_accuracy": 0.5842696629213483
+            },
+            "with_rule": {
+              "coverage": 0.01,
+              "selective_accuracy": 0.3333333333333333
+            }
+          },
+          "macro_f1": 0.5258771423109506
+        },
+        "clean_selective_accuracy_drop": -0.0006740815638691666,
+        "adoption_checks": {
+          "1_poor_flagged": true,
+          "2_clean_flagged": false,
+          "3_clean_selective_accuracy": true
+        },
+        "adopt": false
+      },
+      "phone_now": {
+        "clean": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8666666666666667,
+              "selective_accuracy": 0.7653846153846153
+            },
+            "with_rule": {
+              "coverage": 0.8133333333333334,
+              "selective_accuracy": 0.7663934426229508
+            }
+          },
+          "macro_f1": 0.7234361618364402
+        },
+        "poor": {
+          "policy": {
+            "without_rule": {
+              "coverage": 0.8533333333333334,
+              "selective_accuracy": 0.5625
+            },
+            "with_rule": {
+              "coverage": 0.006666666666666667,
+              "selective_accuracy": 0.5
+            }
+          },
+          "macro_f1": 0.4868466742764928
+        },
+        "clean_selective_accuracy_drop": -0.001008827238335508,
+        "adoption_checks": {
+          "1_poor_flagged": true,
+          "2_clean_flagged": false,
+          "3_clean_selective_accuracy": true
+        },
+        "adopt": false
+      }
+    }
+  },
+  "runtime_s": 712.3,
+  "terms": "Kinetics clips: research only; degradation synthetic"
+}

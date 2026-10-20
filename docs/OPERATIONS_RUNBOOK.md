@@ -52,6 +52,16 @@ passwords are not logged (tested).
   phones offer the update in Settings, verify every file, start the engine
   from the new files and only then switch; an interrupted or failing update
   leaves the previous version working.
+* **Behaviour / intent stage (research deployments only):** set
+  `intent: {enabled: true, variant: phone_now}` in the server configuration
+  and export the phone bundle with `petperception export-ondevice --intent`
+  (release profile `research`; the situation heads are trained on YouTube
+  clips). Results then carry the `intent` block (schema 1.5.0) and the
+  result page shows the intent card. Check after a change:
+  `petperception intent <clip>` on a known clip, the engine-level parity in
+  [ON_DEVICE.md](ON_DEVICE.md), and the component state `intent: ok` in a
+  result. If the component says `unavailable`, its reason names the missing
+  artifact or the release-profile decision.
 * **Upgrades:** `git pull && $dc up -d --build`; migrations run at start.
   Read the release notes for asset-format changes (bundle `engine_version`):
   app and bundle must come from the same release.

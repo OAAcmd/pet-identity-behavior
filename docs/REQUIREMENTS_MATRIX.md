@@ -69,7 +69,7 @@ what prevents the next status.
 | M13 | Synthetic data only as integration/behavior checks | yes | E5, E8 labelled as such | - | - |
 | M14 | Evaluation plan for real paired data | yes | - | - | [EVALUATION_PLAN_REAL_PAIRED.md](EVALUATION_PLAN_REAL_PAIRED.md); not started |
 | M15 | Observable behaviour, recorded context and intent kept as separate label layers; context never treated as a mental state | yes (`intent/taxonomy.py`, [BEHAVIOR_INTENT_DATA.md](BEHAVIOR_INTENT_DATA.md)) | taxonomy tests (a context is never an intent annotation; every link names an ontology hypothesis) | - | - |
-| M16 | Trained behaviour/intent models compared with single branches, combined models and a transparent rule baseline, with audio-only / visual-only / combined, missing / noisy / conflicting inputs and coverage | yes (E27, E28; rules fixed before scoring) | experiment protocols; artifacts in `artifacts/intent/` | public data (Kinetics, Barkopedia) | intent-level combination unvalidated (no data); abstention thresholds optimistic on test (E28 0.764 vs 0.8 target) and not robust to poor video |
+| M16 | Trained behaviour/intent models compared with single branches, combined models and a transparent rule baseline, with audio-only / visual-only / combined, missing / noisy / conflicting inputs and coverage | yes (E27, E28; rules fixed before scoring) | experiment protocols; artifacts in `artifacts/intent/` | public data (Kinetics, Barkopedia) | intent-level combination unvalidated (no data); abstention thresholds optimistic on test (E28 0.764 vs 0.8 target) and not robust to poor video; a frame-quality rule (E30) caught 99 % of degraded copies but flagged 8 % of ordinary clips, so it was not adopted |
 
 ### 2.4 Algorithm gaps from Phase 1
 

@@ -61,7 +61,8 @@
     "situation_synchronized_av_e28": "late fusion macro-F1 0.730 [0.678, 0.777] (294 Kinetics validation clips, 6 situations); visual only 0.689; audio only 0.456; rules 0.282; coverage 0.88 at selective accuracy 0.76",
     "dog_bark_activity_e26_e27": "macro-F1 0.222 [0.184, 0.269] audio only; 0.290 [0.251, 0.328] with location context; no activity passes the gate; coverage 0-4 % at fitted thresholds",
     "intent_end_to_end": "no intent hypothesis reaches 'supported' on held-out Kinetics or Barkopedia clips; full variant: situation interpretations on 188/294 Kinetics clips (0.787 correct), 74 conflicts (50 species, 29 audio-video)",
-    "e29_conflict_detector": "fresh 300 Kinetics clips: E28 replicates (combined 0.702, visual 0.705); divergence detector flags 30 % of same-species and 43 % of other-species foreign soundtracks at 11 % false flags (full variant, adopted); phone variant 29 % (not adopted)"
+    "e29_conflict_detector": "fresh 300 Kinetics clips: E28 replicates (combined 0.702, visual 0.705); divergence detector flags 30 % of same-species and 43 % of other-species foreign soundtracks at 11 % false flags (full variant, adopted); phone variant 29 % (not adopted)",
+    "e30_degraded_video": "frame-quality rule flags 0.987 of poor and 0.080 of clean fresh clips; not adopted (clean limit 0.05)"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
@@ -133,6 +134,11 @@
    "date": "2026-10-20",
    "decision": "E29 divergence conflict detector adopted for the full variant, not for the phone variant",
    "basis": "pre-registered rule on 300 fresh clips (full: all 3 criteria; phone: same-species detection 0.287 < 0.30)"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "E30 degraded-video rule not adopted",
+   "basis": "pre-registered: flags 98.7 % of poor fresh clips but 8.0 % of clean ones (limit 5 %); implemented, inactive"
   }
  ],
  "resources_needed": [
