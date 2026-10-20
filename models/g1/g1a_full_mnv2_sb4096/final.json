@@ -1,0 +1,304 @@
+{
+  "config": {
+    "view": "var/training/g1/views/full",
+    "model": "MOBILENET_V2",
+    "batch_size": 16,
+    "learning_rate": 0.3,
+    "stages": "1:decoder_head,3:all",
+    "seed": 20261019,
+    "cache_layout": "coco-v2-negatives-crowd",
+    "shuffle_buffer": 4096
+  },
+  "history": [
+    {
+      "epoch": 0,
+      "stage": "decoder_head",
+      "train_loss_mean": 1.0369089856243134,
+      "epoch_minutes": 38.55348604917526,
+      "images_per_second": 21.614993009473242,
+      "dev_total_loss": 0.7505658864974976,
+      "dev_cls_loss": 0.45128175616264343,
+      "dev_box_loss": 0.004886374808847904,
+      "dev_model_loss": 0.6956007480621338,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.6050154279428618,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.6497540529172137,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.5067142659891548,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.699341535768042,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.3246779851388239,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.2624928642065294,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.2662391985888074,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.402611063233771,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.485956614070901,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.09733058340831001,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.5287828691584081,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.1516680619765517,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.07756411696745756,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.0279734502606526,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.36329443497339176,
+      "seconds": 224.11644458770752
+    },
+    {
+      "epoch": 1,
+      "stage": "all",
+      "train_loss_mean": 0.7597409209823608,
+      "epoch_minutes": 80.33362936576208,
+      "images_per_second": 10.373405743019392,
+      "dev_total_loss": 0.7029445171356201,
+      "dev_cls_loss": 0.4149925410747528,
+      "dev_box_loss": 0.004633513279259205,
+      "dev_model_loss": 0.6466681957244873,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.6646521855927494,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.7268130966296734,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.5252840907091685,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.7047164014158287,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.411411949466415,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.26933149692427777,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.34273591984251117,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.4307687129554282,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.47732622713739165,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.15918010637688823,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.6183888037646207,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.31367826745542166,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.16338612882266587,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.19374923370156352,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.4286730443424716,
+      "seconds": 163.72743248939514
+    },
+    {
+      "epoch": 2,
+      "stage": "all",
+      "train_loss_mean": 0.7275961273002625,
+      "epoch_minutes": 65.72545320192972,
+      "images_per_second": 12.679004735285893,
+      "dev_total_loss": 0.696823239326477,
+      "dev_cls_loss": 0.406509667634964,
+      "dev_box_loss": 0.004668408539146185,
+      "dev_model_loss": 0.6399301886558533,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.6933402816884192,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.7648055775866465,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.5237919500059718,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.7180615028598861,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.44594313753433856,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.28979611745795375,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.35320583048605897,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.4478505068490367,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.4764712078897875,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.17394930491255947,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.5837184246845178,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.32518931284874514,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.18508335483906774,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.26499221124375566,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.4461570514919103,
+      "seconds": 150.12688946723938
+    },
+    {
+      "epoch": 3,
+      "stage": "all",
+      "train_loss_mean": 0.7133440391540528,
+      "epoch_minutes": 67.90098160107931,
+      "images_per_second": 12.27277298430945,
+      "dev_total_loss": 0.6856231093406677,
+      "dev_cls_loss": 0.40033647418022156,
+      "dev_box_loss": 0.0045579224824905396,
+      "dev_model_loss": 0.6282328367233276,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.7407718214905565,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.7645387424685439,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.5287636141532971,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.7163195433366967,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.47508946210188024,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.2519166769119457,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.3614306325268158,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.4331477351209758,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.5180962898382079,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.1950023892552731,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.5932798496575726,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.348773767187916,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.1758873025217336,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.29401539575231733,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.4569309444516951,
+      "seconds": 174.19858765602112
+    }
+  ],
+  "exported": {
+    "model_float16.tflite": "7f62522dab258fd47e5005c07308637a545da591cfdbcaa42c234674fb0d2879",
+    "model_float32.tflite": "3806c6ff7a5ddaa23ee295816907fb99e62c6825523f2410c6ac2e170757ed37",
+    "model_int8_ptq.tflite": "d249c6d3d8c356194632b64a0350b83a7684c98690d77786191c837bafd129de"
+  },
+  "peak_rss_mb": 5604.38671875
+}

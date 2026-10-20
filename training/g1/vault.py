@@ -21,6 +21,8 @@ copy independent of where it goes:
   recorded weights SHA-256.
 
 The manifest (small, no weights) can be committed; the shards cannot.
+
+`publish` / `restore` do the same for plain files committed to Git (checkpoints of about 21 MB fit ordinary Git).
 """
 
 from __future__ import annotations
@@ -110,6 +112,68 @@ def unpack(manifest_p: Path, shards_dir: Path, run: Path) -> dict:
             "step_in_epoch": state["step_in_epoch"], "weights_sha256": state["weights_sha256"], "members_verified": len(want)}
 
 
+def publish(run: Path, out: Path) -> dict:
+    """Copy a run's latest checkpoint, its exports and run record into a folder committed to Git.
+
+    Plain files with a SHA-256 manifest. Used when the files are small enough for ordinary Git (a
+    MobileNetV2 checkpoint is about 21 MB, the exports 3-11 MB), so no extra storage service is needed.
+    """
+    import shutil
+
+    state = json.loads((run / "latest.json").read_text())
+    prefix = Path(state["checkpoint"])
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "ckpt").mkdir(exist_ok=True)
+    files = []
+    for p in sorted(prefix.parent.glob(prefix.name + ".*")):
+        if p.is_file() and not p.name.endswith(".state.json"):
+            shutil.copy2(p, out / "ckpt" / p.name)
+            files.append(f"ckpt/{p.name}")
+    st = dict(state)
+    st["checkpoint"] = f"ckpt/{prefix.name}"  # relative to the published folder; restore rewrites it
+    (out / "state.json").write_text(json.dumps(st, indent=1))
+    files.append("state.json")
+    for p in sorted((run / "export").glob("*")) if (run / "export").exists() else []:
+        (out / "export").mkdir(exist_ok=True)
+        shutil.copy2(p, out / "export" / p.name)
+        files.append(f"export/{p.name}")
+    if (run / "final.json").exists():
+        shutil.copy2(run / "final.json", out / "final.json")
+        files.append("final.json")
+    manifest = {"schema": "petperception.g1_published/1", "run": run.name, "checkpoint": prefix.name, "epoch": state["epoch"],
+                "step_in_epoch": state["step_in_epoch"], "total_epochs": state["total_epochs"], "config": state["config"],
+                "config_sha256": state["config_sha256"], "data_sha256": state["data_sha256"], "weights_sha256": state["weights_sha256"],
+                "files": {f: {"bytes": (out / f).stat().st_size, "sha256": hashlib.sha256((out / f).read_bytes()).hexdigest()} for f in files},
+                "restore": f"python -I training/g1/vault.py restore --src {out} --run-dir var/training/g1/runs/{run.name}"}
+    (out / "MANIFEST.json").write_text(json.dumps(manifest, indent=1))
+    return manifest
+
+
+def restore(src: Path, run: Path) -> dict:
+    """Verify a published folder against its manifest and make it a resumable run directory."""
+    import shutil
+
+    m = json.loads((src / "MANIFEST.json").read_text())
+    for f, meta in m["files"].items():
+        if hashlib.sha256((src / f).read_bytes()).hexdigest() != meta["sha256"]:
+            raise SystemExit(f"{src / f} does not match MANIFEST.json")
+    if (run / "latest.json").exists():
+        raise SystemExit(f"{run} already holds a run; restore into a new directory")
+    (run / "ckpt").mkdir(parents=True, exist_ok=True)
+    for f in m["files"]:
+        dst = run / f if not f.startswith("state") else None
+        if dst is not None:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src / f, dst)
+    state = json.loads((src / "state.json").read_text())
+    state["checkpoint"] = str(run / "ckpt" / m["checkpoint"])
+    state["restored_from"] = str(src)
+    (run / "ckpt" / (m["checkpoint"] + ".state.json")).write_text(json.dumps(state))
+    (run / "latest.json").write_text(json.dumps(state))
+    return {"restored": str(src), "run_dir": str(run), "checkpoint": state["checkpoint"], "epoch": state["epoch"],
+            "weights_sha256": state["weights_sha256"], "files_verified": len(m["files"])}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -124,7 +188,20 @@ def main() -> None:
     u.add_argument("--manifest", required=True)
     u.add_argument("--shards-dir", required=True)
     u.add_argument("--run-dir", required=True)
+    pb = sub.add_parser("publish", help="copy the latest checkpoint, exports and run record into a folder committed to Git")
+    pb.add_argument("--run-dir", required=True)
+    pb.add_argument("--out", required=True)
+    rs = sub.add_parser("restore", help="verify a published folder and make it a resumable run directory")
+    rs.add_argument("--src", required=True)
+    rs.add_argument("--run-dir", required=True)
     a = ap.parse_args()
+    if a.cmd == "publish":
+        m = publish(Path(a.run_dir), Path(a.out))
+        print(json.dumps({k: m[k] for k in ("run", "checkpoint", "epoch", "weights_sha256")} | {"files": len(m["files"])}))
+        return
+    if a.cmd == "restore":
+        print(json.dumps(restore(Path(a.src), Path(a.run_dir))))
+        return
     if a.cmd == "pack":
         m = pack(Path(a.run_dir), a.checkpoint, Path(a.out), a.shard_mb, a.include_exports, a.name)
         print(json.dumps({k: m[k] for k in ("name", "epoch", "step_in_epoch", "tar_bytes", "tar_sha256", "weights_sha256")} | {"shards": len(m["shards"])}))
