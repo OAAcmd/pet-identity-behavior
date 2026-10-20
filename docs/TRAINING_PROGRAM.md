@@ -344,7 +344,11 @@ stopped with SIGTERM; each wrote its signal checkpoint
 (`g1b_warm_cat2`: epoch 0, step 106 of 3,489; `g1b_warm_cat2_cop3d`: epoch
 0, step 230 of 3,772) under `var/training/g1/runs/` and resumes with the
 same command. No G1b result exists; the selection rule above stays fixed
-for when the runs are resumed.
+for when the runs are resumed. Later the same day `g1b_warm_cat2_cop3d` was
+resumed (2 threads, same command; it restored the signal checkpoint at step
+230), because the intent stage measured a downstream cost of the detector's
+species confusion: 50 of 294 Kinetics test clips end in a species conflict
+(`results/intent/end_to_end_status.json`). `g1b_warm_cat2` stays paused.
 
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):
