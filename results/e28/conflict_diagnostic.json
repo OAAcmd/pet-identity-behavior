@@ -1,0 +1,51 @@
+{
+  "experiment": "E28-conflict-diagnostic",
+  "status": "completed (exploratory)",
+  "created_at": "2026-10-20T03:03:07+00:00",
+  "protocol": [
+    "E28 follow-up (exploratory, after the pre-registered result): is there any conflict signal at all?",
+    "",
+    "The pre-registered conflict flag (both the audio head and the visual-only",
+    "model pass their own abstention thresholds and disagree) never fired in E28,",
+    "because the audio head never reaches its threshold (it cannot attain 0.8",
+    "out-of-fold selective accuracy, so its threshold is unattainable). This",
+    "follow-up asks whether a continuous disagreement score separates genuine",
+    "audio-video pairs from swapped ones (audio of a different-situation clip),",
+    "without choosing any threshold on the test clips:",
+    "",
+    "* score = Jensen-Shannon divergence between the audio-only and the",
+    "  visual-only situation distributions (both from the trained E28 models);",
+    "* reported: ROC AUC genuine vs swapped (same species, cross species), and",
+    "  the rate at which the swapped score exceeds the 95th percentile of the",
+    "  genuine *training* out-of-fold scores (a threshold from training data).",
+    "",
+    "Exploratory: it does not change E28's result or the shipped policy."
+  ],
+  "results": {
+    "full": {
+      "threshold_95th_percentile_genuine_train": 0.4060933809311513,
+      "genuine_test_above_threshold": 0.1360544217687075,
+      "swapped_same_species": {
+        "roc_auc_vs_genuine": 0.6893013429907953,
+        "above_threshold": 0.35714285714285715
+      },
+      "swapped_cross_species": {
+        "roc_auc_vs_genuine": 0.7149791257985011,
+        "above_threshold": 0.4489795918367347
+      }
+    },
+    "phone_now": {
+      "threshold_95th_percentile_genuine_train": 0.426577737293575,
+      "genuine_test_above_threshold": 0.08843537414965986,
+      "swapped_same_species": {
+        "roc_auc_vs_genuine": 0.6113626075147125,
+        "above_threshold": 0.22108843537414966
+      },
+      "swapped_cross_species": {
+        "roc_auc_vs_genuine": 0.648772697550425,
+        "above_threshold": 0.2619047619047619
+      }
+    }
+  },
+  "caveat": "training-set reference scores use heads fitted on those clips (in-sample), so the threshold is lenient"
+}

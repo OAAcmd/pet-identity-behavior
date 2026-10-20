@@ -1,0 +1,131 @@
+{
+  "example": "barkopedia_playing_with_toy_audio_only",
+  "source": "Barkopedia validation clip audio_00002",
+  "dataset_label": "playing with toy",
+  "label_layer": "observable_behavior",
+  "dataset_environment": "near other animals",
+  "note": "held out: provider validation split",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "sound",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "missing",
+      "animal_phone": "missing",
+      "environment": "missing",
+      "interaction": "missing"
+    },
+    "missing_inputs": {
+      "animal": "audio-only recording",
+      "animal_phone": "audio-only recording",
+      "environment": "audio-only recording",
+      "interaction": "audio-only recording"
+    },
+    "observations": [
+      "dog vocalization heard (YAMNet max 0.59)",
+      "sounds: Dog 0.59, Animal 0.50, Domestic animals, pets 0.50, Bark 0.41, Bow-wow 0.41"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.1169,
+          "grooming cat": 0.1443,
+          "grooming dog": 0.136,
+          "petting cat": 0.1475,
+          "training dog": 0.3364,
+          "walking the dog": 0.1189
+        },
+        "top": "training dog",
+        "top_score": 0.3364,
+        "threshold": 0.5437,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_vocal_activity",
+        "model": "dog_audio_activity_v1",
+        "label_space": "barkopedia_activity",
+        "species": "dog",
+        "scores": {
+          "alerting to sounds": 0.071,
+          "begging for food": 0.108,
+          "playing with human": 0.1784,
+          "playing with other animals": 0.1611,
+          "playing with toy": 0.1128,
+          "rest": 0.1077,
+          "seeking attention": 0.1325,
+          "taking shower": 0.1284
+        },
+        "top": "playing with human",
+        "top_score": 0.1784,
+        "threshold": 1.0,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_bark_context",
+        "model": "dog_bark_context_v1",
+        "label_space": "yin_bark_context",
+        "species": "dog",
+        "scores": {
+          "aggression": 0.1891,
+          "contact": 0.3081,
+          "play": 0.5028
+        },
+        "top": "play",
+        "top_score": 0.5028,
+        "threshold": 0.5586,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "training dog",
+      "score": 0.3364,
+      "status": "uncertain",
+      "branches_used": [
+        "audio"
+      ],
+      "qualifier": null
+    },
+    "qualifiers": [],
+    "hypotheses": [
+      {
+        "name": "play",
+        "status": "tentative",
+        "support": 0.4523,
+        "supporting": [
+          "dog_vocal_activity: 'playing with human' 0.18 (behaviour consistent with 'play')"
+        ],
+        "qualifying": [],
+        "contradicting": [],
+        "explanation": "evidence present but below the channel's abstention threshold"
+      }
+    ],
+    "conflicts": [],
+    "status": "insufficient_evidence",
+    "summary": "Weaker: play. Situation: training dog (0.34, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation.",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}

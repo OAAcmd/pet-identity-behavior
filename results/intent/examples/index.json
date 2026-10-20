@@ -1,0 +1,292 @@
+{
+  "examples": [
+    {
+      "example": "kinetics_bathing_dog_all_channels",
+      "source": "Kinetics-700 validation clip FB3qGJzp5XA (FB3qGJzp5XA_000379_000389.mp4)",
+      "dataset_label": "bathing dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: bathing dog (0.94, interpretation). Missing: animal (no cat or dog detected in any sampled frame); animal_phone (no cat or dog detected in any sampled frame); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "kinetics_bathing_dog_audio_removed",
+      "source": "Kinetics-700 validation clip FB3qGJzp5XA (FB3qGJzp5XA_000379_000389.mp4)",
+      "dataset_label": "bathing dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: bathing dog (0.66, interpretation). Missing: animal (no cat or dog detected in any sampled frame); animal_phone (no cat or dog detected in any sampled frame); audio (audio removed for this example); audio_scores (audio removed for this example); cat_meow_context (audio missing); dog_vocal_activity (audio missing)."
+    },
+    {
+      "example": "kinetics_bathing_dog_video_removed",
+      "source": "Kinetics-700 validation clip FB3qGJzp5XA (FB3qGJzp5XA_000379_000389.mp4)",
+      "dataset_label": "bathing dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: bathing dog (0.57, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_grooming_cat_all_channels",
+      "source": "Kinetics-700 validation clip 7HLNu4fEym8 (7HLNu4fEym8_000048_000058.mp4)",
+      "dataset_label": "grooming cat",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: grooming dog (0.70, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "kinetics_grooming_cat_audio_removed",
+      "source": "Kinetics-700 validation clip 7HLNu4fEym8 (7HLNu4fEym8_000048_000058.mp4)",
+      "dataset_label": "grooming cat",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: grooming dog (0.65, interpretation). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing)."
+    },
+    {
+      "example": "kinetics_grooming_cat_video_removed",
+      "source": "Kinetics-700 validation clip 7HLNu4fEym8 (7HLNu4fEym8_000048_000058.mp4)",
+      "dataset_label": "grooming cat",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: grooming dog (0.53, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_grooming_dog_all_channels",
+      "source": "Kinetics-700 validation clip BLspcuDr2r8 (BLspcuDr2r8_000031_000041.mp4)",
+      "dataset_label": "grooming dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: grooming dog (0.99, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "kinetics_grooming_dog_audio_removed",
+      "source": "Kinetics-700 validation clip BLspcuDr2r8 (BLspcuDr2r8_000031_000041.mp4)",
+      "dataset_label": "grooming dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: grooming dog (0.99, interpretation). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing)."
+    },
+    {
+      "example": "kinetics_grooming_dog_video_removed",
+      "source": "Kinetics-700 validation clip BLspcuDr2r8 (BLspcuDr2r8_000031_000041.mp4)",
+      "dataset_label": "grooming dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: grooming cat (0.35, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_petting_cat_all_channels",
+      "source": "Kinetics-700 validation clip -07WVYMSwac (-07WVYMSwac_000020_000030.mp4)",
+      "dataset_label": "petting cat",
+      "label_layer": "recorded_context",
+      "status": "conflict",
+      "summary": "Conflicting evidence: situation 'petting cat' implies a cat but the detector indicates a dog. No single interpretation. Situation: petting cat (0.85, conflict). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "kinetics_petting_cat_audio_removed",
+      "source": "Kinetics-700 validation clip -07WVYMSwac (-07WVYMSwac_000020_000030.mp4)",
+      "dataset_label": "petting cat",
+      "label_layer": "recorded_context",
+      "status": "conflict",
+      "summary": "Conflicting evidence: situation 'petting cat' implies a cat but the detector indicates a dog. No single interpretation. Situation: petting cat (0.79, conflict). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing)."
+    },
+    {
+      "example": "kinetics_petting_cat_video_removed",
+      "source": "Kinetics-700 validation clip -07WVYMSwac (-07WVYMSwac_000020_000030.mp4)",
+      "dataset_label": "petting cat",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: petting cat (0.27, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_training_dog_all_channels",
+      "source": "Kinetics-700 validation clip -CkUzbeMLe0 (-CkUzbeMLe0_000072_000082.mp4)",
+      "dataset_label": "training dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: bathing dog (0.91, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "kinetics_training_dog_audio_removed",
+      "source": "Kinetics-700 validation clip -CkUzbeMLe0 (-CkUzbeMLe0_000072_000082.mp4)",
+      "dataset_label": "training dog",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: bathing dog (0.90, interpretation). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing)."
+    },
+    {
+      "example": "kinetics_training_dog_video_removed",
+      "source": "Kinetics-700 validation clip -CkUzbeMLe0 (-CkUzbeMLe0_000072_000082.mp4)",
+      "dataset_label": "training dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: grooming dog (0.27, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_walking_the_dog_all_channels",
+      "source": "Kinetics-700 validation clip 0vhwiO66Tig (0vhwiO66Tig_000017_000027.mp4)",
+      "dataset_label": "walking the dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: bathing dog (0.54, uncertain). Missing: dog_vocal_activity (no dog vocalization heard). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_walking_the_dog_audio_removed",
+      "source": "Kinetics-700 validation clip 0vhwiO66Tig (0vhwiO66Tig_000017_000027.mp4)",
+      "dataset_label": "walking the dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: bathing dog (0.54, uncertain). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "kinetics_walking_the_dog_video_removed",
+      "source": "Kinetics-700 validation clip 0vhwiO66Tig (0vhwiO66Tig_000017_000027.mp4)",
+      "dataset_label": "walking the dog",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Situation: training dog (0.29, uncertain). Missing: animal (video removed for this example); animal_phone (video removed for this example); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard); environment (video removed for this example); interaction (video removed for this example). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "fixture_swap_walking_the_dog_video_bathing_dog_audio",
+      "source": "FIXTURE: video 0vhwiO66Tig_000017_000027.mp4 + audio FB3qGJzp5XA_000379_000389.mp4 (unrelated recordings)",
+      "dataset_label": "walking the dog (video) / bathing dog (audio)",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: bathing dog (0.90, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "fixture_swap_grooming_dog_video_petting_cat_audio",
+      "source": "FIXTURE: video BLspcuDr2r8_000031_000041.mp4 + audio -07WVYMSwac_000020_000030.mp4 (unrelated recordings)",
+      "dataset_label": "grooming dog (video) / petting cat (audio)",
+      "label_layer": "recorded_context",
+      "status": "situation_only",
+      "summary": "Situation: grooming dog (0.99, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+    },
+    {
+      "example": "barkopedia_alerting_to_sounds_audio_only",
+      "source": "Barkopedia validation clip audio_00006",
+      "dataset_label": "alerting to sounds",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play, alert. Situation: training dog (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_alerting_to_sounds_audio_with_location",
+      "source": "Barkopedia validation clip audio_00006",
+      "dataset_label": "alerting to sounds",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: alert. Situation: training dog (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_begging_for_food_audio_only",
+      "source": "Barkopedia validation clip audio_00011",
+      "dataset_label": "begging for food",
+      "label_layer": "annotated_intent",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: alert. Situation: petting cat (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_begging_for_food_audio_with_location",
+      "source": "Barkopedia validation clip audio_00011",
+      "dataset_label": "begging for food",
+      "label_layer": "annotated_intent",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: alert. Situation: petting cat (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_human_audio_only",
+      "source": "Barkopedia validation clip audio_00005",
+      "dataset_label": "playing with human",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.33, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_human_audio_with_location",
+      "source": "Barkopedia validation clip audio_00005",
+      "dataset_label": "playing with human",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.33, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_other_animals_audio_only",
+      "source": "Barkopedia validation clip audio_00015",
+      "dataset_label": "playing with other animals",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play, food. Situation: training dog (0.42, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_other_animals_audio_with_location",
+      "source": "Barkopedia validation clip audio_00015",
+      "dataset_label": "playing with other animals",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play, food. Situation: training dog (0.42, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_toy_audio_only",
+      "source": "Barkopedia validation clip audio_00002",
+      "dataset_label": "playing with toy",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.34, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_playing_with_toy_audio_with_location",
+      "source": "Barkopedia validation clip audio_00002",
+      "dataset_label": "playing with toy",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.34, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_rest_audio_only",
+      "source": "Barkopedia validation clip audio_00000",
+      "dataset_label": "rest",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Situation: petting cat (0.87, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_rest_audio_with_location",
+      "source": "Barkopedia validation clip audio_00000",
+      "dataset_label": "rest",
+      "label_layer": "observable_behavior",
+      "status": "insufficient_evidence",
+      "summary": "Situation: petting cat (0.87, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_seeking_attention_audio_only",
+      "source": "Barkopedia validation clip audio_00001",
+      "dataset_label": "seeking attention",
+      "label_layer": "annotated_intent",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play, food. Situation: training dog (0.38, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_seeking_attention_audio_with_location",
+      "source": "Barkopedia validation clip audio_00001",
+      "dataset_label": "seeking attention",
+      "label_layer": "annotated_intent",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play, attention. Situation: training dog (0.38, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_taking_shower_audio_only",
+      "source": "Barkopedia validation clip audio_00031",
+      "dataset_label": "taking shower",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.22, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    },
+    {
+      "example": "barkopedia_taking_shower_audio_with_location",
+      "source": "Barkopedia validation clip audio_00031",
+      "dataset_label": "taking shower",
+      "label_layer": "recorded_context",
+      "status": "insufficient_evidence",
+      "summary": "Weaker: play. Situation: training dog (0.22, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation."
+    }
+  ]
+}

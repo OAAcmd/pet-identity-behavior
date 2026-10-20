@@ -1,0 +1,96 @@
+{
+  "example": "barkopedia_rest_audio_only",
+  "source": "Barkopedia validation clip audio_00000",
+  "dataset_label": "rest",
+  "label_layer": "observable_behavior",
+  "dataset_environment": "indoor (general)",
+  "note": "held out: provider validation split",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "cat",
+    "species_source": "sound",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "missing",
+      "animal_phone": "missing",
+      "environment": "missing",
+      "interaction": "missing"
+    },
+    "missing_inputs": {
+      "animal": "audio-only recording",
+      "animal_phone": "audio-only recording",
+      "environment": "audio-only recording",
+      "interaction": "audio-only recording"
+    },
+    "observations": [
+      "dog vocalization heard (YAMNet max 0.33)",
+      "cat vocalization heard (YAMNet max 0.92)",
+      "sounds: Animal 0.92, Cat 0.92, Domestic animals, pets 0.89, Meow 0.59, Dog 0.33"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "cat",
+        "scores": {
+          "bathing dog": 0.0024,
+          "grooming cat": 0.0847,
+          "grooming dog": 0.0182,
+          "petting cat": 0.8715,
+          "training dog": 0.0172,
+          "walking the dog": 0.006
+        },
+        "top": "petting cat",
+        "top_score": 0.8715,
+        "threshold": 0.5437,
+        "confident": true,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "cat_meow_context",
+        "model": "cat_audio_context_v1",
+        "label_space": "catmeows_context",
+        "species": "cat",
+        "scores": {
+          "brushing": 0.3723,
+          "isolation": 0.3822,
+          "waiting_for_food": 0.2455
+        },
+        "top": "isolation",
+        "top_score": 0.3822,
+        "threshold": 0.9453,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": false,
+        "note": "below the evidence gate (E2 leave-one-cat-out macro-F1 0.46): context hint only"
+      }
+    ],
+    "situation": {
+      "label": "petting cat",
+      "score": 0.8715,
+      "status": "uncertain",
+      "branches_used": [
+        "audio"
+      ],
+      "qualifier": null
+    },
+    "qualifiers": [],
+    "hypotheses": [],
+    "conflicts": [],
+    "status": "insufficient_evidence",
+    "summary": "Situation: petting cat (0.87, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation.",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth",
+      "situation from audio alone is not reported as an interpretation (E28: selective accuracy 0.61 without video)"
+    ]
+  }
+}

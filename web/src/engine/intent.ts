@@ -203,6 +203,7 @@ export interface IntentResult {
 }
 
 const r4 = (v: number) => Math.round(v * 1e4) / 1e4;
+const AUDIO_ONLY_SITUATION = "situation from audio alone is not reported as an interpretation (E28: selective accuracy 0.61 without video)";
 const SOFT_CONFLICTS: Record<string, string[]> = {
   play: ["tense", "warning"], alert: ["relaxed"], tense: ["relaxed", "play"], warning: ["relaxed", "play"], relaxed: ["tense", "warning", "alert"],
   food: [], outside: [], attention: [],
@@ -281,9 +282,13 @@ export class IntentModels {
           conflicts.push("situation: " + sitConflict);
         }
       }
-      if ((species === "cat" || species === "dog") && a.situation.species[r.top] !== species && r.confident)
-        conflicts.push(`situation '${r.top}' implies a ${a.situation.species[r.top]} but the ${src.split(" ")[0]} indicates a ${species}`);
-      const status = sitConflict ? "conflict" : r.confident ? "interpretation" : "uncertain";
+      if ((species === "cat" || species === "dog") && a.situation.species[r.top] !== species && r.confident && vis.length) {
+        sitConflict = `situation '${r.top}' implies a ${a.situation.species[r.top]} but the ${src.split(" ")[0]} indicates a ${species}`;
+        conflicts.push(sitConflict);
+      }
+      // Decided after E28: without video the situation model reached only 0.61 selective accuracy (target 0.8).
+      const status = sitConflict ? "conflict" : r.confident && vis.length ? "interpretation" : "uncertain";
+      if (r.confident && !vis.length && !sitConflict) caveats.push(AUDIO_ONLY_SITUATION);
       situation = { label: r.top, score: r.top_score, status, branches_used: present, qualifier: status === "interpretation" ? a.situation.qualifier[r.top] ?? null : null };
       if (situation.qualifier) qualifiers.push(situation.qualifier);
     } else {
@@ -303,9 +308,9 @@ export class IntentModels {
     } else if (species === "cat" || species === "unknown") {
       missing.cat_meow_context = !audio ? "audio missing" : this.catContext ? "no cat vocalization heard" : "model not in this bundle";
     }
-    const hyps = this.hypotheses(readings, qualifiers, conflicts);
+    const hyps = this.hypotheses(readings, qualifiers, conflicts, situation?.status === "interpretation");
     let status: string;
-    if (hyps.some((h) => h.status === "conflict") || situation?.status === "conflict") status = "conflict";
+    if (conflicts.length || hyps.some((h) => h.status === "conflict")) status = "conflict";
     else if (hyps.some((h) => h.status.startsWith("supported"))) status = "interpretation";
     else if (situation?.status === "interpretation") status = "situation_only";
     else status = "insufficient_evidence";
@@ -314,7 +319,7 @@ export class IntentModels {
       qualifiers: [...new Set(qualifiers)].sort(), hypotheses: hyps, conflicts, status, summary: summary(status, hyps, situation, conflicts, missing), caveats };
   }
 
-  private hypotheses(readings: IntentReading[], qualifiers: string[], conflicts: string[]): IntentHypothesis[] {
+  private hypotheses(readings: IntentReading[], qualifiers: string[], conflicts: string[], situationOk: boolean): IntentHypothesis[] {
     const a = this.a;
     const out = new Map<string, IntentHypothesis>();
     for (const r of readings.filter((x) => x.channel === "dog_vocal_activity")) {
@@ -336,6 +341,7 @@ export class IntentModels {
       }
     }
     for (const r of readings.filter((x) => x.channel === "situation" || x.channel === "cat_meow_context")) {
+      if (r.channel === "situation" && !situationOk) continue; // a situation in conflict or below its threshold qualifies nothing
       if (!r.confident) continue;
       const ctx = r.channel === "situation" ? a.situation.context_for : a.cat_context!.context_for;
       for (const h of ctx[r.top] ?? []) {

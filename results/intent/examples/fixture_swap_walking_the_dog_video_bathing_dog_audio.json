@@ -1,0 +1,80 @@
+{
+  "example": "fixture_swap_walking_the_dog_video_bathing_dog_audio",
+  "source": "FIXTURE: video 0vhwiO66Tig_000017_000027.mp4 + audio FB3qGJzp5XA_000379_000389.mp4 (unrelated recordings)",
+  "dataset_label": "walking the dog (video) / bathing dog (audio)",
+  "label_layer": "recorded_context",
+  "note": "unrelated pair: tests the conflict logic only; not multimodal evidence",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "detector (dog in 100% of 6 animal frames)",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "present",
+      "animal_phone": "present",
+      "environment": "present",
+      "interaction": "present"
+    },
+    "missing_inputs": {
+      "dog_vocal_activity": "no dog vocalization heard"
+    },
+    "observations": [
+      "sounds: Speech 0.89, Water tap, faucet 0.50, Child speech, kid speaking 0.41, Sink (filling or washing) 0.41, Frying (food) 0.33, Water 0.26",
+      "animal visible in 6/20 sampled frames",
+      "person visible in 5/20 frames; best person-animal interaction score 0.62",
+      "posture scores (lying/sitting/standing) 0.12/0.61/0.27"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.9042,
+          "grooming cat": 0.0,
+          "grooming dog": 0.0002,
+          "petting cat": 0.0,
+          "training dog": 0.0123,
+          "walking the dog": 0.0833
+        },
+        "top": "bathing dog",
+        "top_score": 0.9042,
+        "threshold": 0.5437,
+        "confident": true,
+        "inputs": [
+          "audio",
+          "animal",
+          "environment",
+          "interaction"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "bathing dog",
+      "score": 0.9042,
+      "status": "interpretation",
+      "branches_used": [
+        "audio",
+        "animal",
+        "environment",
+        "interaction"
+      ],
+      "qualifier": "bathing"
+    },
+    "qualifiers": [
+      "bathing"
+    ],
+    "hypotheses": [],
+    "conflicts": [],
+    "status": "situation_only",
+    "summary": "Situation: bathing dog (0.90, interpretation). Missing: dog_vocal_activity (no dog vocalization heard).",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}

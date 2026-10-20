@@ -1,0 +1,20 @@
+{
+  "visual_only_abstain_below": 0.4703848898212022,
+  "combined_abstain_below": 0.5900023873613832,
+  "audio_abstain_below": 1.01,
+  "classes": [
+    "bathing dog",
+    "grooming cat",
+    "grooming dog",
+    "petting cat",
+    "training dog",
+    "walking the dog"
+  ],
+  "branches": [
+    "audio_scores",
+    "animal_phone",
+    "environment",
+    "interaction"
+  ],
+  "feature_pooling": "petperception.intent.kinetics.pool"
+}

@@ -1,0 +1,100 @@
+{
+  "created_at": "2026-10-20T03:07:12+00:00",
+  "protocol": [
+    "End-to-end status of the combined inference on every held-out clip (descriptive; written to results/intent/).",
+    "",
+    "Runs intent.inference.infer (the product policy, both variants) on all 294",
+    "Kinetics validation clips and all 500 Barkopedia validation clips and counts",
+    "the output statuses. For Kinetics it also reports how often the situation",
+    "label is right when the policy gives an interpretation. The policy includes",
+    "two rules added after E28 (both make it more conservative): no",
+    "interpretation from audio alone, and a conflict when the situation",
+    "contradicts the detected species. These figures therefore describe the",
+    "shipped policy on data that informed it; they are not a fresh test."
+  ],
+  "kinetics_validation:full": {
+    "clips": 294,
+    "status": {
+      "conflict": 50,
+      "situation_only": 208,
+      "insufficient_evidence": 36
+    },
+    "conflict_kinds": {
+      "species": 50
+    },
+    "situation_interpretations": 208,
+    "situation_accuracy_when_interpreted": 0.7788461538461539,
+    "hypothesis_statuses": {
+      "attention:context_only": 73,
+      "relaxed:context_only": 33,
+      "food:context_only": 35,
+      "relaxed:tentative": 5,
+      "play:context_only": 1,
+      "outside:context_only": 47,
+      "play:tentative": 20,
+      "alert:context_only": 2,
+      "warning:context_only": 2,
+      "alert:tentative": 1
+    }
+  },
+  "kinetics_validation:phone_now": {
+    "clips": 294,
+    "status": {
+      "conflict": 51,
+      "insufficient_evidence": 49,
+      "situation_only": 194
+    },
+    "conflict_kinds": {
+      "species": 51
+    },
+    "situation_interpretations": 194,
+    "situation_accuracy_when_interpreted": 0.7680412371134021,
+    "hypothesis_statuses": {
+      "attention:context_only": 67,
+      "relaxed:context_only": 29,
+      "food:context_only": 38,
+      "relaxed:tentative": 5,
+      "alert:tentative": 4,
+      "play:tentative": 18,
+      "outside:context_only": 43,
+      "attention:tentative": 3,
+      "food:tentative": 1
+    }
+  },
+  "barkopedia_validation:full": {
+    "clips": 500,
+    "status": {
+      "insufficient_evidence": 500
+    },
+    "hypothesis_statuses": {
+      "play:tentative": 323,
+      "food:tentative": 42,
+      "alert:context_only": 87,
+      "warning:context_only": 96,
+      "attention:tentative": 63,
+      "alert:tentative": 65,
+      "attention:context_only": 99,
+      "play:context_only": 10,
+      "relaxed:tentative": 33
+    },
+    "clips_with_a_vocal_hypothesis": 367,
+    "first_vocal_hypothesis_matches_label": 0.43869209809264303,
+    "base_rate_most_common_hypothesis": 0.44
+  },
+  "barkopedia_validation:phone_now": {
+    "clips": 500,
+    "status": {
+      "insufficient_evidence": 500
+    },
+    "hypothesis_statuses": {
+      "play:tentative": 341,
+      "food:tentative": 79,
+      "attention:tentative": 56,
+      "alert:tentative": 33,
+      "relaxed:tentative": 16
+    },
+    "clips_with_a_vocal_hypothesis": 373,
+    "first_vocal_hypothesis_matches_label": 0.43967828418230565,
+    "base_rate_most_common_hypothesis": 0.44
+  }
+}

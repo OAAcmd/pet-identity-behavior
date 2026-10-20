@@ -92,6 +92,7 @@ def test_species_contradiction_is_reported():
     r = I.infer(Models(), _branches(_audio("walking the dog"), "walking the dog"), _cues(dog_frac=0.0), YL)
     assert r.species == "cat"
     assert any("implies a dog" in c for c in r.conflicts)
+    assert r.status == "conflict" and r.situation["status"] == "conflict" and r.situation["qualifier"] is None
 
 
 def test_context_alone_never_supports_a_hypothesis():

@@ -55,6 +55,10 @@ CAT_SOUND = ("Cat", "Purr", "Meow", "Hiss", "Caterwaul")
 VOCAL_HEARD = 0.2
 SITUATION_SPECIES = {"petting cat": "cat", "grooming cat": "cat", "grooming dog": "dog", "bathing dog": "dog", "training dog": "dog",
                      "walking the dog": "dog"}
+# Decided after E28 (conservative, documented in docs/ALGORITHM_REPORT.md): without any video branch the situation
+# model reached only 0.61 selective accuracy at its threshold (target 0.8), so an audio-only situation is never
+# reported as an interpretation.
+AUDIO_ONLY_SITUATION = "situation from audio alone is not reported as an interpretation (E28: selective accuracy 0.61 without video)"
 DOG_ACTIVITY_HYP = {"begging for food": "food", "seeking attention": "attention", "playing with human": "play", "playing with other animals": "play",
                     "playing with toy": "play", "alerting to sounds": "alert", "rest": "relaxed", "taking shower": None}
 
@@ -200,9 +204,12 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
             if a_top != v_top and pa[a_top] >= models.situation_heads[ab].abstain_below and pv[v_top] >= models.situation_policy["visual_only_abstain_below"]:
                 sit_conflict = f"audio suggests '{classes[a_top]}' ({pa[a_top]:.2f}) but video suggests '{classes[v_top]}' ({pv[v_top]:.2f})"
                 conflicts.append("situation: " + sit_conflict)
-        if species in ("cat", "dog") and SITUATION_SPECIES[r.top] != species and r.confident:
-            conflicts.append(f"situation '{r.top}' implies a {SITUATION_SPECIES[r.top]} but the {src.split(' ')[0]} indicates a {species}")
-        status = "conflict" if sit_conflict else ("interpretation" if r.confident else "uncertain")
+        if species in ("cat", "dog") and SITUATION_SPECIES[r.top] != species and r.confident and vis:
+            sit_conflict = f"situation '{r.top}' implies a {SITUATION_SPECIES[r.top]} but the {src.split(' ')[0]} indicates a {species}"
+            conflicts.append(sit_conflict)
+        status = "conflict" if sit_conflict else ("interpretation" if r.confident and vis else "uncertain")
+        if r.confident and not vis and not sit_conflict:
+            caveats.append(AUDIO_ONLY_SITUATION)
         situation = {"label": r.top, "score": r.top_score, "status": status, "branches_used": present,
                      "qualifier": T.label("kinetics_pets", r.top).qualifier if status == "interpretation" else None}
         if situation["qualifier"]:
@@ -237,8 +244,8 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
     elif species in ("cat", "unknown"):
         missing["cat_meow_context"] = "audio missing" if branches.get(ai) is None else "no cat vocalization heard"
     # ---- hypotheses
-    hyps = _hypotheses(readings, qualifiers, conflicts)
-    if any(h.status == "conflict" for h in hyps) or (situation and situation["status"] == "conflict"):
+    hyps = _hypotheses(readings, qualifiers, conflicts, bool(situation and situation["status"] == "interpretation"))
+    if conflicts or any(h.status == "conflict" for h in hyps):
         status = "conflict"
     elif any(h.status.startswith("supported") for h in hyps):
         status = "interpretation"
@@ -252,7 +259,7 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
                         _summary(status, hyps, situation, conflicts, missing), caveats)
 
 
-def _hypotheses(readings: list[Reading], qualifiers: list[str], conflicts: list[str]) -> list[HypothesisOut]:
+def _hypotheses(readings: list[Reading], qualifiers: list[str], conflicts: list[str], situation_ok: bool = True) -> list[HypothesisOut]:
     out: dict[str, HypothesisOut] = {}
     direct = [r for r in readings if r.channel == "dog_vocal_activity"]
     context = [r for r in readings if r.channel in ("situation", "dog_bark_context", "cat_meow_context")]
@@ -276,8 +283,8 @@ def _hypotheses(readings: list[Reading], qualifiers: list[str], conflicts: list[
             out[h] = HypothesisOut(h, st, round(m, 4), [f"{r.channel}: '{r.top}' {r.top_score:.2f} ({rel} '{h}')" if h == top_h else
                                                         f"{r.channel}: {m:.2f} of the score mass maps to '{h}'"])
     for r in context:
-        if not r.evidence_gate_passed and not r.confident:
-            continue
+        if r.channel == "situation" and not situation_ok:
+            continue  # a situation in conflict or below its threshold qualifies nothing
         ds = {"situation": "kinetics_pets", "dog_bark_context": "beans_dog_barks", "cat_meow_context": "catmeows"}[r.channel]
         if not r.confident:
             continue

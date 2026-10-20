@@ -85,15 +85,17 @@ def main() -> None:
             br, cues = _drop(r["branches"], r["cues"], which)
             index.append(_write(f"kinetics_{slug}_{which}_removed", meta | {"note": f"{which} removed to show missing-input handling"},
                                 I.infer(models, _as_batch(br), cues, labels)))
-    # conflict fixture: video of a walking clip + audio of a bathing clip
-    v, a = picks["walking the dog"], picks["bathing dog"]
-    br = dict(v["branches"])
-    br["audio"], br["audio_scores"] = a["branches"]["audio"], a["branches"]["audio_scores"]
-    cues = {**v["cues"], "yamnet_max": a["cues"].get("yamnet_max")}
-    meta = {"source": f"FIXTURE: video {v['clip'].path.name} + audio {a['clip'].path.name} (unrelated recordings)",
-            "dataset_label": "walking the dog (video) / bathing dog (audio)", "label_layer": "recorded_context",
-            "note": "unrelated pair: tests the conflict logic only; not multimodal evidence"}
-    index.append(_write("fixture_conflict_walking_video_bathing_audio", meta, I.infer(models, _as_batch(br), cues, labels)))
+    # conflict fixtures: video of one clip + audio of a clip from another situation (unrelated recordings)
+    for vl, al in (("walking the dog", "bathing dog"), ("grooming dog", "petting cat")):
+        v, a = picks[vl], picks[al]
+        br = dict(v["branches"])
+        br["audio"], br["audio_scores"] = a["branches"]["audio"], a["branches"]["audio_scores"]
+        cues = {**v["cues"], "yamnet_max": a["cues"].get("yamnet_max")}
+        meta = {"source": f"FIXTURE: video {v['clip'].path.name} + audio {a['clip'].path.name} (unrelated recordings)",
+                "dataset_label": f"{vl} (video) / {al} (audio)", "label_layer": "recorded_context",
+                "note": "unrelated pair: tests the conflict logic only; not multimodal evidence"}
+        index.append(_write(f"fixture_swap_{vl.replace(' ', '_')}_video_{al.replace(' ', '_')}_audio", meta,
+                            I.infer(models, _as_batch(br), cues, labels)))
     # Barkopedia validation, audio only
     from ..eval import e26_bark_activity as E26
 

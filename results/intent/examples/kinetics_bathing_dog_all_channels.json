@@ -1,0 +1,80 @@
+{
+  "example": "kinetics_bathing_dog_all_channels",
+  "source": "Kinetics-700 validation clip FB3qGJzp5XA (FB3qGJzp5XA_000379_000389.mp4)",
+  "dataset_label": "bathing dog",
+  "label_layer": "recorded_context",
+  "note": "held out: never used to train any head",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "unknown",
+    "species_source": "no animal seen or heard",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "missing",
+      "animal_phone": "missing",
+      "environment": "present",
+      "interaction": "present"
+    },
+    "missing_inputs": {
+      "animal": "no cat or dog detected in any sampled frame",
+      "animal_phone": "no cat or dog detected in any sampled frame",
+      "dog_vocal_activity": "no dog vocalization heard",
+      "cat_meow_context": "no cat vocalization heard"
+    },
+    "observations": [
+      "sounds: Speech 0.89, Water tap, faucet 0.50, Child speech, kid speaking 0.41, Sink (filling or washing) 0.41, Frying (food) 0.33, Water 0.26",
+      "person visible in 9/20 frames; best person-animal interaction score 0.00"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "unknown",
+        "scores": {
+          "bathing dog": 0.9379,
+          "grooming cat": 0.0114,
+          "grooming dog": 0.0144,
+          "petting cat": 0.0038,
+          "training dog": 0.0012,
+          "walking the dog": 0.0313
+        },
+        "top": "bathing dog",
+        "top_score": 0.9379,
+        "threshold": 0.5437,
+        "confident": true,
+        "inputs": [
+          "audio",
+          "environment",
+          "interaction"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "bathing dog",
+      "score": 0.9379,
+      "status": "interpretation",
+      "branches_used": [
+        "audio",
+        "environment",
+        "interaction"
+      ],
+      "qualifier": "bathing"
+    },
+    "qualifiers": [
+      "bathing"
+    ],
+    "hypotheses": [],
+    "conflicts": [],
+    "status": "situation_only",
+    "summary": "Situation: bathing dog (0.94, interpretation). Missing: animal (no cat or dog detected in any sampled frame); animal_phone (no cat or dog detected in any sampled frame); cat_meow_context (no cat vocalization heard); dog_vocal_activity (no dog vocalization heard).",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth",
+      "species unknown: neither seen nor heard"
+    ]
+  }
+}

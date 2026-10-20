@@ -1130,6 +1130,58 @@ with lower bound >= 0.6 per class.
 * E27 builds the product's dog audio channel on this data and adds the
   environment context, noise and coverage.
 
+### E27 - Dog audio channel for intent hypotheses, with environment context - COMPLETED
+
+Same data and splits as E26 (`src/petperception/eval/e27_dog_audio_intent.py`;
+protocol fixed before E27 scored the validation clips). Trained heads
+(`artifacts/intent/dog_audio_activity_v1/`): logistic regression per input,
+C by 5-fold CV grouped by E26 pseudo-group, temperature and abstention
+threshold (out-of-fold selective accuracy 0.8) from training scores; late
+fusion of audio and environment with availability flags and modality
+dropout. Environment = the dataset's location label (8 merged categories),
+standing in for context the product may know (camera scene, owner zone).
+Hypothesis view: begging for food -> food, seeking attention -> attention
+(both annotated intent), playing x3 -> play, alerting -> alert, rest ->
+relaxed, taking shower -> bathing (context). 95 % CIs bootstrap validation
+pseudo-groups; differences are paired.
+
+| Input (validation, 500 clips) | Activity macro-F1 (8) | Hypothesis macro-F1 (6) | ECE |
+| --- | --- | --- | --- |
+| Audio, YAMNet embedding | 0.222 [0.184, 0.269] | 0.164 | 0.035 |
+| Audio, YAMNet class scores (phone today) | 0.205 [0.166, 0.251] | 0.139 | 0.047 |
+| Environment only | 0.184 [0.148, 0.214] | 0.145 | 0.089 |
+| **Audio + environment (late fusion)** | **0.290 [0.251, 0.328]** | 0.240 | 0.043 |
+| Audio scores + environment (phone) | 0.231 [0.194, 0.263] | 0.199 | 0.046 |
+| Rule baseline (`intent/rules.py`, fixed in advance) | 0.075 [0.057, 0.097] | 0.113 | |
+| Majority | 0.023 | | |
+
+* Environment context helps: audio + environment - audio = +0.068
+  [+0.016, +0.106]; versus environment alone +0.106 [+0.071, +0.153]. With
+  class scores instead of the embedding the gain is +0.026 [-0.030, +0.070].
+* The trained audio head beats the transparent rules by +0.146 [+0.111,
+  +0.191]; the rules mostly fire on sounds that are rare in barks.
+* Coverage: at the thresholds fitted for 0.8 selective accuracy the audio
+  head almost never commits (validation coverage 0.0 %); audio + environment
+  commits on 3.8 % of clips with selective accuracy 0.68 (target missed).
+  The channel therefore reports at most *tentative* evidence.
+* Noise (ESC-50 appliance noise, audio re-embedded): audio 0.147 at 10 dB
+  SNR and 0.115 at 0 dB; audio + environment 0.226 and 0.192.
+* External checks (mappings fixed in advance, data never used for training):
+  - Yin & McCowan barks (10 dogs): restricted alert / attention / play
+    decision macro-F1 0.226 [0.186, 0.265], below uniform chance (0.333):
+    the head calls almost every bark "play". No transfer to those recording
+    situations.
+  - Kinetics dog clips (574 with audio): the "taking shower" score separates
+    bathing from the other three dog situations with ROC AUC 0.578; top-1
+    "taking shower" on 34 % of bathing, 34 % of grooming, 20 % of training
+    and 7 % of walking clips.
+* Leakage: 329 of 500 validation clips have a training clip with cosine
+  >= 0.95; without them audio macro-F1 is 0.193 [0.136, 0.246].
+* Reading: a single bark carries little information about what the dog
+  was doing or wanted; context helps but does not make the channel reliable.
+  The heads are kept as tentative evidence with explicit thresholds; none
+  passes the gate.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

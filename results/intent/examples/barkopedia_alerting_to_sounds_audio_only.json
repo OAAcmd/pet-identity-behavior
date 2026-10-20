@@ -1,0 +1,155 @@
+{
+  "example": "barkopedia_alerting_to_sounds_audio_only",
+  "source": "Barkopedia validation clip audio_00006",
+  "dataset_label": "alerting to sounds",
+  "label_layer": "observable_behavior",
+  "dataset_environment": "indoor (general)",
+  "note": "held out: provider validation split",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "sound",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "missing",
+      "animal_phone": "missing",
+      "environment": "missing",
+      "interaction": "missing"
+    },
+    "missing_inputs": {
+      "animal": "audio-only recording",
+      "animal_phone": "audio-only recording",
+      "environment": "audio-only recording",
+      "interaction": "audio-only recording"
+    },
+    "observations": [
+      "dog vocalization heard (YAMNet max 0.89)",
+      "sounds: Animal 0.92, Domestic animals, pets 0.89, Dog 0.89, Bark 0.67, Yip 0.26, Bow-wow 0.26"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.0809,
+          "grooming cat": 0.1774,
+          "grooming dog": 0.1391,
+          "petting cat": 0.2301,
+          "training dog": 0.2777,
+          "walking the dog": 0.0948
+        },
+        "top": "training dog",
+        "top_score": 0.2777,
+        "threshold": 0.5437,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_vocal_activity",
+        "model": "dog_audio_activity_v1",
+        "label_space": "barkopedia_activity",
+        "species": "dog",
+        "scores": {
+          "alerting to sounds": 0.2097,
+          "begging for food": 0.1002,
+          "playing with human": 0.0849,
+          "playing with other animals": 0.1206,
+          "playing with toy": 0.1552,
+          "rest": 0.099,
+          "seeking attention": 0.123,
+          "taking shower": 0.1074
+        },
+        "top": "alerting to sounds",
+        "top_score": 0.2097,
+        "threshold": 1.0,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_bark_context",
+        "model": "dog_bark_context_v1",
+        "label_space": "yin_bark_context",
+        "species": "dog",
+        "scores": {
+          "aggression": 0.8042,
+          "contact": 0.0211,
+          "play": 0.1747
+        },
+        "top": "aggression",
+        "top_score": 0.8042,
+        "threshold": 0.5586,
+        "confident": true,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "training dog",
+      "score": 0.2777,
+      "status": "uncertain",
+      "branches_used": [
+        "audio"
+      ],
+      "qualifier": null
+    },
+    "qualifiers": [],
+    "hypotheses": [
+      {
+        "name": "play",
+        "status": "tentative",
+        "support": 0.3607,
+        "supporting": [
+          "dog_vocal_activity: 0.36 of the score mass maps to 'play'"
+        ],
+        "qualifying": [],
+        "contradicting": [],
+        "explanation": "evidence present but below the channel's abstention threshold"
+      },
+      {
+        "name": "alert",
+        "status": "tentative",
+        "support": 0.2097,
+        "supporting": [
+          "dog_vocal_activity: 'alerting to sounds' 0.21 (behaviour consistent with 'alert')"
+        ],
+        "qualifying": [
+          "dog_bark_context: context 'aggression' 0.80 makes 'alert' plausible"
+        ],
+        "contradicting": [],
+        "explanation": "evidence present but below the channel's abstention threshold"
+      },
+      {
+        "name": "warning",
+        "status": "context_only",
+        "support": null,
+        "supporting": [],
+        "qualifying": [
+          "dog_bark_context: context 'aggression' 0.80 makes 'warning' plausible"
+        ],
+        "contradicting": [],
+        "explanation": "context alone is not evidence of what the animal wants"
+      }
+    ],
+    "conflicts": [],
+    "status": "insufficient_evidence",
+    "summary": "Weaker: play, alert. Situation: training dog (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation.",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}

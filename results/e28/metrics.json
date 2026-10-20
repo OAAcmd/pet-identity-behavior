@@ -1,0 +1,4925 @@
+{
+  "experiment": "E28",
+  "status": "completed",
+  "created_at": "2026-10-20T03:01:12+00:00",
+  "protocol": [
+    "E28: situation (recorded context) from synchronized audio and video: single channels, combined, rules.",
+    "",
+    "Data: Kinetics-700-2020 pet clips (intent/kinetics.py). Six labels describe",
+    "what a person does with the animal: petting cat, grooming cat, grooming dog,",
+    "bathing dog, training dog, walking the dog. They are recorded contexts, not",
+    "the animal's intent (intent/taxonomy.py); the product uses them only as",
+    "context qualifiers. Train: 600 Kinetics train-split clips; test: 294",
+    "validation clips, scored once by this protocol; no YouTube id in both.",
+    "",
+    "Protocol (fixed before the test clips were scored):",
+    "* Branches (clip-level pooling, intent/kinetics.py): audio (YAMNet embedding),",
+    "  audio_scores (YAMNet class scores; what the phone computes today), animal",
+    "  (crop appearance, posture, keypoints, box motion), environment (whole-frame",
+    "  embedding and COCO objects), interaction (person presence and person-animal",
+    "  interaction geometry, frame motion). A branch is missing for a clip when its",
+    "  input is absent (no audio stream, silent audio, no detected animal).",
+    "* Heads: multinomial logistic regression per branch, C by 5-fold",
+    "  cross-validation grouped by YouTube id on the training clips, temperature",
+    "  and abstention threshold (OOF selective accuracy 0.8) from OOF scores.",
+    "* Combined: (a) late fusion: logistic regression on the branches' OOF",
+    "  log-probabilities with availability flags, trained with modality dropout;",
+    "  (b) early fusion: concatenated standardized features with flags, trained",
+    "  on five availability patterns (all present; audio, video, animal or",
+    "  environment missing). Visual-only and audio-only are the combined models with the",
+    "  other channel absent. Variant \"phone_now\" uses audio_scores instead of the",
+    "  embedding and animal_phone (no posture, no research-only keypoints): the",
+    "  features the phone bundle computes today.",
+    "* Rule baseline: intent/rules.py (committed before scoring; SHA-256 stored).",
+    "* Test conditions: clean; missing (audio absent, video absent, animal branch",
+    "  absent, environment absent); noisy (ESC-50 appliance noise at 10 and 0 dB",
+    "  SNR; poor visual conditions); conflicting (audio from a different-label",
+    "  test clip, same species and cross species).",
+    "* Conflict flag: the audio head and the visual-only combined model each pass",
+    "  their own abstention threshold and name different labels.",
+    "* Output policy: interpretation when the combined top score passes its",
+    "  threshold and no conflict is flagged; otherwise uncertain / conflict.",
+    "  Coverage = share of clips with an interpretation.",
+    "* Metrics: macro-F1 and accuracy with 95 % bootstrap CIs over clips (one clip",
+    "  per YouTube id); paired bootstrap for differences.",
+    "* Leakage audit: each test clip's maximum cosine similarity to any training",
+    "  clip (whole-frame and audio embeddings); results repeated without clips",
+    "  >= 0.95."
+  ],
+  "rules_sha256": "b35016f334f24711887f5d4fe6afbab545140b6a1c312b185e68d2d38f3e7cef",
+  "results": {
+    "classes": [
+      "bathing dog",
+      "grooming cat",
+      "grooming dog",
+      "petting cat",
+      "training dog",
+      "walking the dog"
+    ],
+    "train_clips": 600,
+    "test_clips": 294,
+    "missing_branches_test": {
+      "audio": 12,
+      "animal": 33,
+      "environment": 0,
+      "interaction": 0
+    },
+    "missing_branches_train": {
+      "audio": 29,
+      "animal": 74,
+      "environment": 0,
+      "interaction": 0
+    },
+    "rules_commit_note": "intent/rules.py committed in 48e0c82 before any E28 scoring",
+    "clean": {
+      "branch:audio": {
+        "n": 294,
+        "macro_f1": 0.4566608451794702,
+        "macro_f1_ci95": [
+          0.3973822823350547,
+          0.5115097359384988
+        ],
+        "accuracy": 0.45918367346938777,
+        "per_class_f1": {
+          "bathing dog": 0.5057471264367817,
+          "grooming cat": 0.20779220779220778,
+          "grooming dog": 0.41584158415841577,
+          "petting cat": 0.5192307692307692,
+          "training dog": 0.4842105263157895,
+          "walking the dog": 0.6071428571428572
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog",
+            "(no output)"
+          ],
+          "matrix": [
+            [
+              22,
+              2,
+              5,
+              3,
+              4,
+              11,
+              0
+            ],
+            [
+              6,
+              8,
+              14,
+              13,
+              4,
+              1,
+              4
+            ],
+            [
+              4,
+              8,
+              21,
+              5,
+              6,
+              2,
+              4
+            ],
+            [
+              3,
+              3,
+              5,
+              27,
+              4,
+              4,
+              3
+            ],
+            [
+              3,
+              5,
+              4,
+              3,
+              23,
+              11,
+              0
+            ],
+            [
+              2,
+              1,
+              2,
+              4,
+              5,
+              34,
+              1
+            ]
+          ]
+        },
+        "coverage_branch_present": 0.9591836734693877,
+        "macro_f1_on_present": 0.4648985839375248
+      },
+      "branch:audio_scores": {
+        "n": 294,
+        "macro_f1": 0.43066480650128786,
+        "macro_f1_ci95": [
+          0.3738517101279197,
+          0.48267600790056814
+        ],
+        "accuracy": 0.42517006802721086,
+        "per_class_f1": {
+          "bathing dog": 0.44999999999999996,
+          "grooming cat": 0.25882352941176473,
+          "grooming dog": 0.44036697247706424,
+          "petting cat": 0.47058823529411764,
+          "training dog": 0.45871559633027525,
+          "walking the dog": 0.5054945054945055
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog",
+            "(no output)"
+          ],
+          "matrix": [
+            [
+              18,
+              7,
+              5,
+              6,
+              5,
+              6,
+              0
+            ],
+            [
+              5,
+              11,
+              13,
+              10,
+              4,
+              3,
+              4
+            ],
+            [
+              3,
+              9,
+              24,
+              4,
+              6,
+              0,
+              4
+            ],
+            [
+              3,
+              3,
+              8,
+              24,
+              6,
+              2,
+              3
+            ],
+            [
+              3,
+              2,
+              6,
+              5,
+              25,
+              8,
+              0
+            ],
+            [
+              1,
+              3,
+              3,
+              4,
+              14,
+              23,
+              1
+            ]
+          ]
+        },
+        "coverage_branch_present": 0.9591836734693877,
+        "macro_f1_on_present": 0.4389038312840556
+      },
+      "branch:animal": {
+        "n": 294,
+        "macro_f1": 0.6110606139827345,
+        "macro_f1_ci95": [
+          0.5553959808937774,
+          0.6651044367568613
+        ],
+        "accuracy": 0.5782312925170068,
+        "per_class_f1": {
+          "bathing dog": 0.4651162790697675,
+          "grooming cat": 0.5833333333333334,
+          "grooming dog": 0.6041666666666666,
+          "petting cat": 0.6382978723404255,
+          "training dog": 0.6744186046511628,
+          "walking the dog": 0.7010309278350516
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog",
+            "(no output)"
+          ],
+          "matrix": [
+            [
+              20,
+              2,
+              6,
+              0,
+              4,
+              7,
+              8
+            ],
+            [
+              2,
+              28,
+              4,
+              11,
+              0,
+              0,
+              5
+            ],
+            [
+              9,
+              2,
+              29,
+              3,
+              1,
+              1,
+              5
+            ],
+            [
+              1,
+              12,
+              1,
+              30,
+              1,
+              1,
+              3
+            ],
+            [
+              6,
+              2,
+              5,
+              1,
+              29,
+              5,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              2,
+              34,
+              11
+            ]
+          ]
+        },
+        "coverage_branch_present": 0.8877551020408163,
+        "macro_f1_on_present": 0.6496598400839166
+      },
+      "branch:animal_phone": {
+        "n": 294,
+        "macro_f1": 0.6111024096730553,
+        "macro_f1_ci95": [
+          0.5554688569689875,
+          0.6625667630129571
+        ],
+        "accuracy": 0.5782312925170068,
+        "per_class_f1": {
+          "bathing dog": 0.48275862068965514,
+          "grooming cat": 0.6021505376344087,
+          "grooming dog": 0.6122448979591836,
+          "petting cat": 0.6373626373626373,
+          "training dog": 0.6516853932584269,
+          "walking the dog": 0.6804123711340205
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog",
+            "(no output)"
+          ],
+          "matrix": [
+            [
+              21,
+              1,
+              6,
+              0,
+              4,
+              7,
+              8
+            ],
+            [
+              2,
+              28,
+              5,
+              9,
+              0,
+              1,
+              5
+            ],
+            [
+              8,
+              1,
+              30,
+              3,
+              2,
+              1,
+              5
+            ],
+            [
+              1,
+              12,
+              1,
+              29,
+              2,
+              1,
+              3
+            ],
+            [
+              7,
+              1,
+              5,
+              1,
+              29,
+              5,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              3,
+              33,
+              11
+            ]
+          ]
+        },
+        "coverage_branch_present": 0.8877551020408163,
+        "macro_f1_on_present": 0.6497990291589008
+      },
+      "branch:environment": {
+        "n": 294,
+        "macro_f1": 0.6434885504367823,
+        "macro_f1_ci95": [
+          0.5878626691653612,
+          0.6947665807314067
+        ],
+        "accuracy": 0.6462585034013606,
+        "per_class_f1": {
+          "bathing dog": 0.6262626262626262,
+          "grooming cat": 0.5376344086021505,
+          "grooming dog": 0.62,
+          "petting cat": 0.6804123711340205,
+          "training dog": 0.6373626373626373,
+          "walking the dog": 0.7592592592592592
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              31,
+              2,
+              4,
+              1,
+              3,
+              6
+            ],
+            [
+              7,
+              25,
+              8,
+              9,
+              1,
+              0
+            ],
+            [
+              8,
+              4,
+              31,
+              3,
+              3,
+              1
+            ],
+            [
+              1,
+              10,
+              2,
+              33,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              4,
+              1,
+              29,
+              10
+            ],
+            [
+              2,
+              0,
+              1,
+              1,
+              4,
+              41
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6469358807352729,
+        "coverage_branch_present": 1.0,
+        "macro_f1_on_present": 0.6434885504367823
+      },
+      "branch:interaction": {
+        "n": 294,
+        "macro_f1": 0.3414632020969976,
+        "macro_f1_ci95": [
+          0.2863972707944712,
+          0.38870935848913996
+        ],
+        "accuracy": 0.37755102040816324,
+        "per_class_f1": {
+          "bathing dog": 0.1714285714285714,
+          "grooming cat": 0.20289855072463772,
+          "grooming dog": 0.29729729729729726,
+          "petting cat": 0.4038461538461538,
+          "training dog": 0.44776119402985076,
+          "walking the dog": 0.5255474452554745
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              6,
+              4,
+              6,
+              5,
+              9,
+              17
+            ],
+            [
+              6,
+              7,
+              3,
+              14,
+              12,
+              8
+            ],
+            [
+              4,
+              2,
+              11,
+              8,
+              14,
+              11
+            ],
+            [
+              4,
+              4,
+              1,
+              21,
+              11,
+              8
+            ],
+            [
+              2,
+              1,
+              3,
+              5,
+              30,
+              8
+            ],
+            [
+              1,
+              1,
+              0,
+              2,
+              9,
+              36
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.3771949630916196,
+        "coverage_branch_present": 1.0,
+        "macro_f1_on_present": 0.3414632020969976
+      },
+      "full:late:combined": {
+        "n": 294,
+        "macro_f1": 0.7300495657112779,
+        "macro_f1_ci95": [
+          0.6775887308086179,
+          0.776779071053686
+        ],
+        "accuracy": 0.7312925170068028,
+        "per_class_f1": {
+          "bathing dog": 0.6666666666666666,
+          "grooming cat": 0.6595744680851063,
+          "grooming dog": 0.7070707070707072,
+          "petting cat": 0.8118811881188118,
+          "training dog": 0.7311827956989247,
+          "walking the dog": 0.803921568627451
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              33,
+              2,
+              3,
+              0,
+              2,
+              7
+            ],
+            [
+              6,
+              31,
+              5,
+              8,
+              0,
+              0
+            ],
+            [
+              7,
+              4,
+              35,
+              2,
+              2,
+              0
+            ],
+            [
+              0,
+              6,
+              1,
+              41,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              5,
+              1,
+              34,
+              5
+            ],
+            [
+              3,
+              0,
+              0,
+              0,
+              5,
+              41
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.7315790997249964
+      },
+      "full:late:visual_only": {
+        "n": 294,
+        "macro_f1": 0.6890553224038638,
+        "macro_f1_ci95": [
+          0.6349131389436576,
+          0.7396480687085535
+        ],
+        "accuracy": 0.6904761904761905,
+        "per_class_f1": {
+          "bathing dog": 0.6060606060606061,
+          "grooming cat": 0.6170212765957446,
+          "grooming dog": 0.6274509803921569,
+          "petting cat": 0.7422680412371135,
+          "training dog": 0.7191011235955055,
+          "walking the dog": 0.822429906542056
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              2,
+              4,
+              1,
+              2,
+              8
+            ],
+            [
+              5,
+              29,
+              9,
+              7,
+              0,
+              0
+            ],
+            [
+              9,
+              4,
+              32,
+              2,
+              3,
+              0
+            ],
+            [
+              1,
+              8,
+              2,
+              36,
+              1,
+              1
+            ],
+            [
+              5,
+              1,
+              5,
+              1,
+              32,
+              5
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              2,
+              44
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6906686930091185
+      },
+      "full:late:audio_only": {
+        "n": 294,
+        "macro_f1": 0.455510866674766,
+        "macro_f1_ci95": [
+          0.3956103438896568,
+          0.5099736423669975
+        ],
+        "accuracy": 0.47278911564625853,
+        "per_class_f1": {
+          "bathing dog": 0.5148514851485149,
+          "grooming cat": 0.25,
+          "grooming dog": 0.4565217391304348,
+          "petting cat": 0.5048543689320388,
+          "training dog": 0.4222222222222223,
+          "walking the dog": 0.5846153846153846
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              26,
+              2,
+              3,
+              2,
+              3,
+              11
+            ],
+            [
+              9,
+              9,
+              10,
+              14,
+              3,
+              5
+            ],
+            [
+              5,
+              7,
+              21,
+              3,
+              7,
+              7
+            ],
+            [
+              3,
+              4,
+              5,
+              26,
+              3,
+              8
+            ],
+            [
+              9,
+              0,
+              3,
+              6,
+              19,
+              12
+            ],
+            [
+              2,
+              0,
+              0,
+              3,
+              6,
+              38
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.47451150673035164
+      },
+      "full:late:no_environment": {
+        "n": 294,
+        "macro_f1": 0.6570982128721353,
+        "macro_f1_ci95": [
+          0.6047608592366792,
+          0.7105326802323363
+        ],
+        "accuracy": 0.6598639455782312,
+        "per_class_f1": {
+          "bathing dog": 0.6326530612244897,
+          "grooming cat": 0.6021505376344087,
+          "grooming dog": 0.6666666666666666,
+          "petting cat": 0.7254901960784315,
+          "training dog": 0.5934065934065934,
+          "walking the dog": 0.7222222222222222
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              31,
+              1,
+              3,
+              0,
+              3,
+              9
+            ],
+            [
+              4,
+              28,
+              7,
+              9,
+              0,
+              2
+            ],
+            [
+              7,
+              5,
+              32,
+              3,
+              3,
+              0
+            ],
+            [
+              0,
+              8,
+              0,
+              37,
+              2,
+              2
+            ],
+            [
+              7,
+              1,
+              4,
+              3,
+              27,
+              7
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              7,
+              39
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6602692140686063
+      },
+      "full:late:audio+environment": {
+        "n": 294,
+        "macro_f1": 0.6784774196095263,
+        "macro_f1_ci95": [
+          0.6238774577726377,
+          0.7244333195312678
+        ],
+        "accuracy": 0.6802721088435374,
+        "per_class_f1": {
+          "bathing dog": 0.68,
+          "grooming cat": 0.5625000000000001,
+          "grooming dog": 0.6597938144329897,
+          "petting cat": 0.7326732673267328,
+          "training dog": 0.6666666666666666,
+          "walking the dog": 0.7692307692307693
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              34,
+              2,
+              2,
+              1,
+              2,
+              6
+            ],
+            [
+              5,
+              27,
+              8,
+              10,
+              0,
+              0
+            ],
+            [
+              5,
+              8,
+              32,
+              2,
+              3,
+              0
+            ],
+            [
+              0,
+              8,
+              1,
+              37,
+              2,
+              1
+            ],
+            [
+              5,
+              1,
+              3,
+              2,
+              30,
+              8
+            ],
+            [
+              4,
+              0,
+              1,
+              0,
+              4,
+              40
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.681179620784484
+      },
+      "full:late:animal+interaction": {
+        "n": 294,
+        "macro_f1": 0.6120779488323403,
+        "macro_f1_ci95": [
+          0.5536564012001959,
+          0.6637162614272224
+        ],
+        "accuracy": 0.6156462585034014,
+        "per_class_f1": {
+          "bathing dog": 0.5,
+          "grooming cat": 0.5806451612903226,
+          "grooming dog": 0.5940594059405941,
+          "petting cat": 0.6444444444444445,
+          "training dog": 0.6813186813186813,
+          "walking the dog": 0.672
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              22,
+              2,
+              7,
+              0,
+              2,
+              14
+            ],
+            [
+              2,
+              27,
+              7,
+              9,
+              0,
+              5
+            ],
+            [
+              9,
+              2,
+              30,
+              2,
+              2,
+              5
+            ],
+            [
+              1,
+              11,
+              1,
+              29,
+              2,
+              5
+            ],
+            [
+              6,
+              1,
+              5,
+              1,
+              31,
+              5
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              5,
+              42
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6149529599073672
+      },
+      "full:late:audio+animal+interaction": {
+        "n": 294,
+        "macro_f1": 0.6570982128721353,
+        "macro_f1_ci95": [
+          0.6047608592366792,
+          0.7105326802323363
+        ],
+        "accuracy": 0.6598639455782312,
+        "per_class_f1": {
+          "bathing dog": 0.6326530612244897,
+          "grooming cat": 0.6021505376344087,
+          "grooming dog": 0.6666666666666666,
+          "petting cat": 0.7254901960784315,
+          "training dog": 0.5934065934065934,
+          "walking the dog": 0.7222222222222222
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              31,
+              1,
+              3,
+              0,
+              3,
+              9
+            ],
+            [
+              4,
+              28,
+              7,
+              9,
+              0,
+              2
+            ],
+            [
+              7,
+              5,
+              32,
+              3,
+              3,
+              0
+            ],
+            [
+              0,
+              8,
+              0,
+              37,
+              2,
+              2
+            ],
+            [
+              7,
+              1,
+              4,
+              3,
+              27,
+              7
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              7,
+              39
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6602692140686063
+      },
+      "full:early:combined": {
+        "n": 294,
+        "macro_f1": 0.6813885715494626,
+        "macro_f1_ci95": [
+          0.6255135921791721,
+          0.735310346564912
+        ],
+        "accuracy": 0.6836734693877551,
+        "per_class_f1": {
+          "bathing dog": 0.625,
+          "grooming cat": 0.6041666666666666,
+          "grooming dog": 0.6732673267326733,
+          "petting cat": 0.75,
+          "training dog": 0.6666666666666667,
+          "walking the dog": 0.7692307692307693
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              2,
+              4,
+              1,
+              2,
+              8
+            ],
+            [
+              5,
+              29,
+              7,
+              9,
+              0,
+              0
+            ],
+            [
+              5,
+              4,
+              34,
+              5,
+              1,
+              1
+            ],
+            [
+              0,
+              8,
+              1,
+              39,
+              1,
+              0
+            ],
+            [
+              5,
+              3,
+              5,
+              1,
+              29,
+              6
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              5,
+              40
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6837299174989143
+      },
+      "full:early:visual_only": {
+        "n": 294,
+        "macro_f1": 0.6696108557690602,
+        "macro_f1_ci95": [
+          0.6131622238187215,
+          0.7198340110879345
+        ],
+        "accuracy": 0.6700680272108843,
+        "per_class_f1": {
+          "bathing dog": 0.6185567010309279,
+          "grooming cat": 0.6019417475728155,
+          "grooming dog": 0.6597938144329897,
+          "petting cat": 0.631578947368421,
+          "training dog": 0.7096774193548386,
+          "walking the dog": 0.796116504854369
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              2,
+              4,
+              2,
+              2,
+              7
+            ],
+            [
+              4,
+              31,
+              5,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              3,
+              32,
+              2,
+              2,
+              1
+            ],
+            [
+              0,
+              15,
+              1,
+              30,
+              2,
+              1
+            ],
+            [
+              4,
+              2,
+              5,
+              1,
+              33,
+              4
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              5,
+              41
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6701244753220438
+      },
+      "phone_now:late:combined": {
+        "n": 294,
+        "macro_f1": 0.687476523525742,
+        "macro_f1_ci95": [
+          0.6366636236370604,
+          0.7370504206465102
+        ],
+        "accuracy": 0.6870748299319728,
+        "per_class_f1": {
+          "bathing dog": 0.6153846153846153,
+          "grooming cat": 0.6451612903225806,
+          "grooming dog": 0.6464646464646464,
+          "petting cat": 0.7835051546391752,
+          "training dog": 0.6666666666666666,
+          "walking the dog": 0.7676767676767676
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              32,
+              0,
+              6,
+              0,
+              3,
+              6
+            ],
+            [
+              7,
+              30,
+              6,
+              7,
+              0,
+              0
+            ],
+            [
+              10,
+              3,
+              32,
+              2,
+              3,
+              0
+            ],
+            [
+              0,
+              9,
+              1,
+              38,
+              1,
+              0
+            ],
+            [
+              5,
+              1,
+              4,
+              1,
+              32,
+              6
+            ],
+            [
+              3,
+              0,
+              0,
+              0,
+              8,
+              38
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6874887827471413
+      },
+      "phone_now:late:visual_only": {
+        "n": 294,
+        "macro_f1": 0.7063137623977372,
+        "macro_f1_ci95": [
+          0.6524763162762656,
+          0.7556538231533089
+        ],
+        "accuracy": 0.7074829931972789,
+        "per_class_f1": {
+          "bathing dog": 0.62,
+          "grooming cat": 0.6521739130434783,
+          "grooming dog": 0.6470588235294118,
+          "petting cat": 0.7628865979381444,
+          "training dog": 0.7333333333333334,
+          "walking the dog": 0.822429906542056
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              31,
+              1,
+              5,
+              0,
+              2,
+              8
+            ],
+            [
+              5,
+              30,
+              8,
+              7,
+              0,
+              0
+            ],
+            [
+              9,
+              3,
+              33,
+              2,
+              3,
+              0
+            ],
+            [
+              1,
+              7,
+              2,
+              37,
+              1,
+              1
+            ],
+            [
+              5,
+              1,
+              4,
+              1,
+              33,
+              5
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              2,
+              44
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.7076841800550007
+      },
+      "phone_now:late:audio_only": {
+        "n": 294,
+        "macro_f1": 0.3654260933418993,
+        "macro_f1_ci95": [
+          0.3117425670280664,
+          0.41713325438854976
+        ],
+        "accuracy": 0.3843537414965986,
+        "per_class_f1": {
+          "bathing dog": 0.4339622641509434,
+          "grooming cat": 0.15384615384615383,
+          "grooming dog": 0.46728971962616817,
+          "petting cat": 0.39583333333333326,
+          "training dog": 0.28260869565217395,
+          "walking the dog": 0.45901639344262296
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              23,
+              4,
+              2,
+              3,
+              5,
+              10
+            ],
+            [
+              10,
+              5,
+              15,
+              10,
+              2,
+              8
+            ],
+            [
+              6,
+              3,
+              25,
+              4,
+              7,
+              5
+            ],
+            [
+              7,
+              2,
+              5,
+              19,
+              7,
+              9
+            ],
+            [
+              10,
+              1,
+              6,
+              6,
+              13,
+              13
+            ],
+            [
+              3,
+              0,
+              4,
+              5,
+              9,
+              28
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.38564191634100453
+      },
+      "phone_now:late:no_environment": {
+        "n": 294,
+        "macro_f1": 0.618169717511214,
+        "macro_f1_ci95": [
+          0.5627788703138034,
+          0.6750043198646073
+        ],
+        "accuracy": 0.6190476190476191,
+        "per_class_f1": {
+          "bathing dog": 0.5882352941176471,
+          "grooming cat": 0.5842696629213484,
+          "grooming dog": 0.6122448979591836,
+          "petting cat": 0.6451612903225806,
+          "training dog": 0.6185567010309279,
+          "walking the dog": 0.6605504587155964
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              1,
+              5,
+              0,
+              3,
+              8
+            ],
+            [
+              5,
+              26,
+              7,
+              9,
+              0,
+              3
+            ],
+            [
+              8,
+              1,
+              30,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              10,
+              1,
+              30,
+              2,
+              4
+            ],
+            [
+              8,
+              1,
+              4,
+              1,
+              30,
+              5
+            ],
+            [
+              2,
+              0,
+              1,
+              1,
+              9,
+              36
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6195802576349689
+      },
+      "phone_now:late:audio+environment": {
+        "n": 294,
+        "macro_f1": 0.6562963470152084,
+        "macro_f1_ci95": [
+          0.5999710903497454,
+          0.70568185654036
+        ],
+        "accuracy": 0.6598639455782312,
+        "per_class_f1": {
+          "bathing dog": 0.6407766990291263,
+          "grooming cat": 0.5617977528089888,
+          "grooming dog": 0.6464646464646464,
+          "petting cat": 0.7524752475247524,
+          "training dog": 0.5934065934065934,
+          "walking the dog": 0.7428571428571428
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              33,
+              2,
+              3,
+              1,
+              2,
+              6
+            ],
+            [
+              8,
+              25,
+              7,
+              9,
+              1,
+              0
+            ],
+            [
+              6,
+              5,
+              32,
+              3,
+              4,
+              0
+            ],
+            [
+              1,
+              5,
+              2,
+              38,
+              2,
+              1
+            ],
+            [
+              5,
+              2,
+              4,
+              1,
+              27,
+              10
+            ],
+            [
+              3,
+              0,
+              1,
+              0,
+              6,
+              39
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6607627731943841
+      },
+      "phone_now:late:animal+interaction": {
+        "n": 294,
+        "macro_f1": 0.5948754085378795,
+        "macro_f1_ci95": [
+          0.53977767062655,
+          0.6495073107973142
+        ],
+        "accuracy": 0.5986394557823129,
+        "per_class_f1": {
+          "bathing dog": 0.4888888888888889,
+          "grooming cat": 0.5494505494505494,
+          "grooming dog": 0.5882352941176471,
+          "petting cat": 0.6292134831460674,
+          "training dog": 0.6521739130434783,
+          "walking the dog": 0.6612903225806451
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              22,
+              2,
+              7,
+              0,
+              2,
+              14
+            ],
+            [
+              3,
+              25,
+              8,
+              9,
+              0,
+              5
+            ],
+            [
+              9,
+              1,
+              30,
+              2,
+              3,
+              5
+            ],
+            [
+              1,
+              12,
+              1,
+              28,
+              2,
+              5
+            ],
+            [
+              7,
+              1,
+              5,
+              1,
+              30,
+              5
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              6,
+              41
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.5980822116080474
+      },
+      "phone_now:late:audio+animal+interaction": {
+        "n": 294,
+        "macro_f1": 0.618169717511214,
+        "macro_f1_ci95": [
+          0.5627788703138034,
+          0.6750043198646073
+        ],
+        "accuracy": 0.6190476190476191,
+        "per_class_f1": {
+          "bathing dog": 0.5882352941176471,
+          "grooming cat": 0.5842696629213484,
+          "grooming dog": 0.6122448979591836,
+          "petting cat": 0.6451612903225806,
+          "training dog": 0.6185567010309279,
+          "walking the dog": 0.6605504587155964
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              1,
+              5,
+              0,
+              3,
+              8
+            ],
+            [
+              5,
+              26,
+              7,
+              9,
+              0,
+              3
+            ],
+            [
+              8,
+              1,
+              30,
+              3,
+              4,
+              4
+            ],
+            [
+              2,
+              10,
+              1,
+              30,
+              2,
+              4
+            ],
+            [
+              8,
+              1,
+              4,
+              1,
+              30,
+              5
+            ],
+            [
+              2,
+              0,
+              1,
+              1,
+              9,
+              36
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6195802576349689
+      },
+      "phone_now:early:combined": {
+        "n": 294,
+        "macro_f1": 0.6660708797743015,
+        "macro_f1_ci95": [
+          0.612306791031564,
+          0.7191606159243457
+        ],
+        "accuracy": 0.6666666666666666,
+        "per_class_f1": {
+          "bathing dog": 0.6122448979591838,
+          "grooming cat": 0.5894736842105264,
+          "grooming dog": 0.6336633663366336,
+          "petting cat": 0.7128712871287128,
+          "training dog": 0.6881720430107526,
+          "walking the dog": 0.76
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              30,
+              1,
+              7,
+              0,
+              2,
+              7
+            ],
+            [
+              5,
+              28,
+              7,
+              10,
+              0,
+              0
+            ],
+            [
+              8,
+              4,
+              32,
+              4,
+              1,
+              1
+            ],
+            [
+              0,
+              10,
+              1,
+              36,
+              2,
+              0
+            ],
+            [
+              5,
+              2,
+              4,
+              1,
+              32,
+              5
+            ],
+            [
+              3,
+              0,
+              0,
+              1,
+              7,
+              38
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6669271964104789
+      },
+      "phone_now:early:visual_only": {
+        "n": 294,
+        "macro_f1": 0.671569200779727,
+        "macro_f1_ci95": [
+          0.6171294504522472,
+          0.7211595059549919
+        ],
+        "accuracy": 0.673469387755102,
+        "per_class_f1": {
+          "bathing dog": 0.5833333333333334,
+          "grooming cat": 0.6105263157894737,
+          "grooming dog": 0.6666666666666666,
+          "petting cat": 0.6799999999999999,
+          "training dog": 0.711111111111111,
+          "walking the dog": 0.7777777777777777
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              28,
+              2,
+              4,
+              2,
+              2,
+              9
+            ],
+            [
+              4,
+              29,
+              6,
+              11,
+              0,
+              0
+            ],
+            [
+              10,
+              2,
+              33,
+              2,
+              2,
+              1
+            ],
+            [
+              1,
+              11,
+              1,
+              34,
+              1,
+              1
+            ],
+            [
+              4,
+              1,
+              5,
+              1,
+              32,
+              6
+            ],
+            [
+              2,
+              0,
+              0,
+              1,
+              4,
+              42
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.6733043855840207
+      },
+      "rules": {
+        "n": 294,
+        "macro_f1": 0.28205758037218714,
+        "macro_f1_ci95": [
+          0.2293787563932678,
+          0.3335430664627376
+        ],
+        "accuracy": 0.3197278911564626,
+        "per_class_f1": {
+          "bathing dog": 0.33766233766233766,
+          "grooming cat": 0.07272727272727272,
+          "grooming dog": 0.14285714285714285,
+          "petting cat": 0.44755244755244755,
+          "training dog": 0.30952380952380953,
+          "walking the dog": 0.38202247191011235
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              13,
+              1,
+              0,
+              13,
+              13,
+              7
+            ],
+            [
+              3,
+              2,
+              2,
+              30,
+              11,
+              2
+            ],
+            [
+              6,
+              2,
+              4,
+              6,
+              29,
+              3
+            ],
+            [
+              2,
+              0,
+              0,
+              32,
+              14,
+              1
+            ],
+            [
+              5,
+              0,
+              0,
+              8,
+              26,
+              10
+            ],
+            [
+              1,
+              0,
+              0,
+              5,
+              26,
+              17
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.3212013315964684
+      },
+      "rules_video_only": {
+        "n": 294,
+        "macro_f1": 0.17356610878623457,
+        "macro_f1_ci95": [
+          0.1390194509447458,
+          0.21037020615764418
+        ],
+        "accuracy": 0.25170068027210885,
+        "per_class_f1": {
+          "bathing dog": 0.07142857142857142,
+          "grooming cat": 0.03773584905660377,
+          "grooming dog": 0.0,
+          "petting cat": 0.45925925925925926,
+          "training dog": 0.3063063063063063,
+          "walking the dog": 0.16666666666666666
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              2,
+              1,
+              0,
+              10,
+              27,
+              7
+            ],
+            [
+              2,
+              1,
+              0,
+              29,
+              17,
+              1
+            ],
+            [
+              4,
+              1,
+              0,
+              6,
+              38,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              31,
+              16,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              8,
+              34,
+              7
+            ],
+            [
+              0,
+              0,
+              0,
+              2,
+              41,
+              6
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.25192213055434937
+      },
+      "rules_audio_only": {
+        "n": 294,
+        "macro_f1": 0.22428232430575198,
+        "macro_f1_ci95": [
+          0.17644003102941774,
+          0.27315582768265867
+        ],
+        "accuracy": 0.25170068027210885,
+        "per_class_f1": {
+          "bathing dog": 0.25,
+          "grooming cat": 0.10714285714285712,
+          "grooming dog": 0.11320754716981131,
+          "petting cat": 0.24793388429752064,
+          "training dog": 0.2986425339366516,
+          "walking the dog": 0.3287671232876712
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              8,
+              0,
+              0,
+              15,
+              22,
+              2
+            ],
+            [
+              3,
+              3,
+              0,
+              16,
+              23,
+              5
+            ],
+            [
+              1,
+              3,
+              3,
+              9,
+              33,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              15,
+              32,
+              1
+            ],
+            [
+              4,
+              0,
+              0,
+              9,
+              33,
+              3
+            ],
+            [
+              0,
+              0,
+              0,
+              8,
+              29,
+              12
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.25245042697930237
+      },
+      "majority": {
+        "n": 294,
+        "macro_f1": 0.04594330400782013,
+        "macro_f1_ci95": [
+          0.035460992907801414,
+          0.054924242424242424
+        ],
+        "accuracy": 0.1598639455782313,
+        "per_class_f1": {
+          "bathing dog": 0.2756598240469208,
+          "grooming cat": 0.0,
+          "grooming dog": 0.0,
+          "petting cat": 0.0,
+          "training dog": 0.0,
+          "walking the dog": 0.0
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              47,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              49,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              49,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              49,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.16666666666666666
+      }
+    },
+    "paired_differences": {
+      "full:late:combined - best single branch (branch:environment)": {
+        "difference": 0.08656101527449556,
+        "ci95": [
+          0.04052465790331368,
+          0.13554805532896166
+        ]
+      },
+      "full:late:combined - full:late:visual_only": {
+        "difference": 0.04099424330741408,
+        "ci95": [
+          0.0017835808476598936,
+          0.08285561894486142
+        ]
+      },
+      "full:late:combined - full:late:audio_only": {
+        "difference": 0.2745386990365119,
+        "ci95": [
+          0.20732599938545002,
+          0.3408947187541185
+        ]
+      },
+      "full:late:combined - full:late:no_environment": {
+        "difference": 0.07295135283914256,
+        "ci95": [
+          0.026343214368547224,
+          0.12276591124138661
+        ]
+      },
+      "full:late:combined - rules": {
+        "difference": 0.44799198533909074,
+        "ci95": [
+          0.38281249173186127,
+          0.5213425684423856
+        ]
+      },
+      "full:late:combined - full:early:combined": {
+        "difference": 0.04866099416181524,
+        "ci95": [
+          0.013946845586610813,
+          0.08647183187437558
+        ]
+      },
+      "phone_now:late:combined - full:late:combined": {
+        "difference": -0.042573042185535925,
+        "ci95": [
+          -0.07342762756627044,
+          -0.013547227166602949
+        ]
+      }
+    },
+    "output_policy": {
+      "full:clean": {
+        "coverage": 0.8775510204081632,
+        "selective_accuracy": 0.7635658914728682,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.12244897959183673,
+        "accuracy_all_clips_top_label": 0.7312925170068028
+      },
+      "full:audio_missing": {
+        "coverage": 0.8673469387755102,
+        "selective_accuracy": 0.7411764705882353,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.1326530612244898,
+        "accuracy_all_clips_top_label": 0.6904761904761905
+      },
+      "full:video_missing": {
+        "coverage": 0.19387755102040816,
+        "selective_accuracy": 0.6140350877192983,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.8061224489795918,
+        "accuracy_all_clips_top_label": 0.47278911564625853
+      },
+      "full:animal_missing": {
+        "coverage": 0.7653061224489796,
+        "selective_accuracy": 0.7822222222222223,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.23469387755102042,
+        "accuracy_all_clips_top_label": 0.6700680272108843
+      },
+      "full:environment_missing": {
+        "coverage": 0.6938775510204082,
+        "selective_accuracy": 0.7843137254901961,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.30612244897959184,
+        "accuracy_all_clips_top_label": 0.6598639455782312
+      },
+      "full:audio_swapped_same_species": {
+        "coverage": 0.8605442176870748,
+        "selective_accuracy": 0.6798418972332015,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.13945578231292516,
+        "accuracy_all_clips_top_label": 0.6564625850340136,
+        "follows_foreign_audio": 0.17006802721088435,
+        "top_label_matches_video": 0.6564625850340136
+      },
+      "full:audio_swapped_cross_species": {
+        "coverage": 0.8843537414965986,
+        "selective_accuracy": 0.6807692307692308,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.11564625850340136,
+        "accuracy_all_clips_top_label": 0.6564625850340136,
+        "follows_foreign_audio": 0.04081632653061224,
+        "top_label_matches_video": 0.6564625850340136
+      },
+      "phone_now:clean": {
+        "coverage": 0.8333333333333334,
+        "selective_accuracy": 0.7306122448979592,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.16666666666666666,
+        "accuracy_all_clips_top_label": 0.6870748299319728
+      },
+      "phone_now:audio_missing": {
+        "coverage": 0.8231292517006803,
+        "selective_accuracy": 0.7520661157024794,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.17687074829931973,
+        "accuracy_all_clips_top_label": 0.7074829931972789
+      },
+      "phone_now:video_missing": {
+        "coverage": 0.07482993197278912,
+        "selective_accuracy": 0.5,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.9251700680272109,
+        "accuracy_all_clips_top_label": 0.3843537414965986
+      },
+      "phone_now:animal_missing": {
+        "coverage": 0.6394557823129252,
+        "selective_accuracy": 0.7712765957446809,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.36054421768707484,
+        "accuracy_all_clips_top_label": 0.6496598639455783
+      },
+      "phone_now:environment_missing": {
+        "coverage": 0.6054421768707483,
+        "selective_accuracy": 0.7359550561797753,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.3945578231292517,
+        "accuracy_all_clips_top_label": 0.6190476190476191
+      },
+      "phone_now:audio_swapped_same_species": {
+        "coverage": 0.8231292517006803,
+        "selective_accuracy": 0.7355371900826446,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.17687074829931973,
+        "accuracy_all_clips_top_label": 0.6836734693877551,
+        "follows_foreign_audio": 0.11904761904761904,
+        "top_label_matches_video": 0.6836734693877551
+      },
+      "phone_now:audio_swapped_cross_species": {
+        "coverage": 0.8197278911564626,
+        "selective_accuracy": 0.7261410788381742,
+        "conflict_rate": 0.0,
+        "uncertain_rate": 0.18027210884353742,
+        "accuracy_all_clips_top_label": 0.6870748299319728,
+        "follows_foreign_audio": 0.03741496598639456,
+        "top_label_matches_video": 0.6870748299319728
+      }
+    },
+    "noisy": {
+      "audio_snr10": {
+        "full:late:combined": {
+          "n": 294,
+          "macro_f1": 0.7235759023251367,
+          "macro_f1_ci95": [
+            0.6688536581004579,
+            0.7734269060028732
+          ],
+          "accuracy": 0.7244897959183674,
+          "per_class_f1": {
+            "bathing dog": 0.6666666666666666,
+            "grooming cat": 0.6458333333333334,
+            "grooming dog": 0.693069306930693,
+            "petting cat": 0.7835051546391752,
+            "training dog": 0.7333333333333334,
+            "walking the dog": 0.819047619047619
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                33,
+                2,
+                3,
+                0,
+                1,
+                8
+              ],
+              [
+                5,
+                31,
+                7,
+                7,
+                0,
+                0
+              ],
+              [
+                7,
+                4,
+                35,
+                2,
+                2,
+                0
+              ],
+              [
+                1,
+                8,
+                1,
+                38,
+                1,
+                0
+              ],
+              [
+                4,
+                1,
+                5,
+                1,
+                33,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                4,
+                43
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7247763786365611
+        },
+        "full:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.6890553224038638,
+          "macro_f1_ci95": [
+            0.6393171678641776,
+            0.7336253208858463
+          ],
+          "accuracy": 0.6904761904761905,
+          "per_class_f1": {
+            "bathing dog": 0.6060606060606061,
+            "grooming cat": 0.6170212765957446,
+            "grooming dog": 0.6274509803921569,
+            "petting cat": 0.7422680412371135,
+            "training dog": 0.7191011235955055,
+            "walking the dog": 0.822429906542056
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                30,
+                2,
+                4,
+                1,
+                2,
+                8
+              ],
+              [
+                5,
+                29,
+                9,
+                7,
+                0,
+                0
+              ],
+              [
+                9,
+                4,
+                32,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                8,
+                2,
+                36,
+                1,
+                1
+              ],
+              [
+                5,
+                1,
+                5,
+                1,
+                32,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                1,
+                2,
+                44
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.6906686930091185
+        },
+        "full:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.38099994339164334,
+          "macro_f1_ci95": [
+            0.33248824937987825,
+            0.43030852400238034
+          ],
+          "accuracy": 0.3945578231292517,
+          "per_class_f1": {
+            "bathing dog": 0.47311827956989244,
+            "grooming cat": 0.24242424242424243,
+            "grooming dog": 0.4150943396226415,
+            "petting cat": 0.45652173913043476,
+            "training dog": 0.27499999999999997,
+            "walking the dog": 0.423841059602649
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                22,
+                2,
+                3,
+                0,
+                3,
+                17
+              ],
+              [
+                4,
+                8,
+                16,
+                8,
+                4,
+                10
+              ],
+              [
+                6,
+                2,
+                22,
+                2,
+                7,
+                11
+              ],
+              [
+                5,
+                3,
+                2,
+                21,
+                2,
+                16
+              ],
+              [
+                7,
+                0,
+                8,
+                7,
+                11,
+                16
+              ],
+              [
+                2,
+                1,
+                5,
+                5,
+                4,
+                32
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.39570125922709515
+        },
+        "full:policy": {
+          "coverage": 0.8877551020408163,
+          "selective_accuracy": 0.7394636015325671,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.11224489795918367,
+          "accuracy_all_clips_top_label": 0.7244897959183674
+        },
+        "phone_now:late:combined": {
+          "n": 294,
+          "macro_f1": 0.7065459003765544,
+          "macro_f1_ci95": [
+            0.6549362471909068,
+            0.7496281455825559
+          ],
+          "accuracy": 0.7074829931972789,
+          "per_class_f1": {
+            "bathing dog": 0.6534653465346535,
+            "grooming cat": 0.6516853932584269,
+            "grooming dog": 0.6666666666666666,
+            "petting cat": 0.7878787878787878,
+            "training dog": 0.6875000000000001,
+            "walking the dog": 0.7920792079207921
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                33,
+                0,
+                5,
+                0,
+                3,
+                6
+              ],
+              [
+                7,
+                29,
+                7,
+                7,
+                0,
+                0
+              ],
+              [
+                7,
+                4,
+                34,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                6,
+                2,
+                39,
+                1,
+                0
+              ],
+              [
+                4,
+                0,
+                4,
+                2,
+                33,
+                6
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                7,
+                40
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7079736575481256
+        },
+        "phone_now:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.7063137623977372,
+          "macro_f1_ci95": [
+            0.6596591096689999,
+            0.7551399823754162
+          ],
+          "accuracy": 0.7074829931972789,
+          "per_class_f1": {
+            "bathing dog": 0.62,
+            "grooming cat": 0.6521739130434783,
+            "grooming dog": 0.6470588235294118,
+            "petting cat": 0.7628865979381444,
+            "training dog": 0.7333333333333334,
+            "walking the dog": 0.822429906542056
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                31,
+                1,
+                5,
+                0,
+                2,
+                8
+              ],
+              [
+                5,
+                30,
+                8,
+                7,
+                0,
+                0
+              ],
+              [
+                9,
+                3,
+                33,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                7,
+                2,
+                37,
+                1,
+                1
+              ],
+              [
+                5,
+                1,
+                4,
+                1,
+                33,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                1,
+                2,
+                44
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7076841800550007
+        },
+        "phone_now:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.2859122444355051,
+          "macro_f1_ci95": [
+            0.23281465270760485,
+            0.3319362798589546
+          ],
+          "accuracy": 0.30272108843537415,
+          "per_class_f1": {
+            "bathing dog": 0.4380952380952381,
+            "grooming cat": 0.0967741935483871,
+            "grooming dog": 0.3703703703703704,
+            "petting cat": 0.32183908045977017,
+            "training dog": 0.1702127659574468,
+            "walking the dog": 0.3181818181818182
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                23,
+                2,
+                1,
+                2,
+                4,
+                15
+              ],
+              [
+                6,
+                3,
+                18,
+                10,
+                3,
+                10
+              ],
+              [
+                7,
+                3,
+                20,
+                3,
+                11,
+                6
+              ],
+              [
+                6,
+                3,
+                6,
+                14,
+                7,
+                13
+              ],
+              [
+                10,
+                0,
+                9,
+                4,
+                8,
+                18
+              ],
+              [
+                6,
+                1,
+                4,
+                5,
+                12,
+                21
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.30448545375597047
+        },
+        "phone_now:policy": {
+          "coverage": 0.8333333333333334,
+          "selective_accuracy": 0.7428571428571429,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.16666666666666666,
+          "accuracy_all_clips_top_label": 0.7074829931972789
+        },
+        "rules": {
+          "n": 294,
+          "macro_f1": 0.25955378766782283,
+          "macro_f1_ci95": [
+            0.20970514211543553,
+            0.30960876019887723
+          ],
+          "accuracy": 0.29591836734693877,
+          "per_class_f1": {
+            "bathing dog": 0.34666666666666673,
+            "grooming cat": 0.07407407407407407,
+            "grooming dog": 0.10714285714285712,
+            "petting cat": 0.4305555555555556,
+            "training dog": 0.2807017543859649,
+            "walking the dog": 0.31818181818181823
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                13,
+                1,
+                0,
+                12,
+                14,
+                7
+              ],
+              [
+                2,
+                2,
+                2,
+                31,
+                10,
+                3
+              ],
+              [
+                6,
+                1,
+                3,
+                7,
+                31,
+                2
+              ],
+              [
+                2,
+                0,
+                0,
+                31,
+                15,
+                1
+              ],
+              [
+                4,
+                0,
+                1,
+                8,
+                24,
+                12
+              ],
+              [
+                1,
+                0,
+                0,
+                6,
+                28,
+                14
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.29745983499782885
+        },
+        "missing_branches": {
+          "audio": 12,
+          "animal": 33,
+          "environment": 0,
+          "interaction": 0
+        }
+      },
+      "audio_snr0": {
+        "full:late:combined": {
+          "n": 294,
+          "macro_f1": 0.6994105019726237,
+          "macro_f1_ci95": [
+            0.6492330990857752,
+            0.7483220658276533
+          ],
+          "accuracy": 0.7006802721088435,
+          "per_class_f1": {
+            "bathing dog": 0.64,
+            "grooming cat": 0.6382978723404256,
+            "grooming dog": 0.6534653465346535,
+            "petting cat": 0.7499999999999999,
+            "training dog": 0.6956521739130435,
+            "walking the dog": 0.819047619047619
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                32,
+                2,
+                4,
+                0,
+                1,
+                8
+              ],
+              [
+                5,
+                30,
+                8,
+                7,
+                0,
+                0
+              ],
+              [
+                9,
+                3,
+                33,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                8,
+                1,
+                36,
+                3,
+                0
+              ],
+              [
+                4,
+                1,
+                5,
+                2,
+                32,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                4,
+                43
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7010261977131278
+        },
+        "full:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.6890553224038638,
+          "macro_f1_ci95": [
+            0.6393171678641776,
+            0.7336253208858463
+          ],
+          "accuracy": 0.6904761904761905,
+          "per_class_f1": {
+            "bathing dog": 0.6060606060606061,
+            "grooming cat": 0.6170212765957446,
+            "grooming dog": 0.6274509803921569,
+            "petting cat": 0.7422680412371135,
+            "training dog": 0.7191011235955055,
+            "walking the dog": 0.822429906542056
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                30,
+                2,
+                4,
+                1,
+                2,
+                8
+              ],
+              [
+                5,
+                29,
+                9,
+                7,
+                0,
+                0
+              ],
+              [
+                9,
+                4,
+                32,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                8,
+                2,
+                36,
+                1,
+                1
+              ],
+              [
+                5,
+                1,
+                5,
+                1,
+                32,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                1,
+                2,
+                44
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.6906686930091185
+        },
+        "full:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.29877045249272277,
+          "macro_f1_ci95": [
+            0.258092004613977,
+            0.34997916177029387
+          ],
+          "accuracy": 0.30952380952380953,
+          "per_class_f1": {
+            "bathing dog": 0.3333333333333333,
+            "grooming cat": 0.18181818181818182,
+            "grooming dog": 0.3304347826086957,
+            "petting cat": 0.4096385542168675,
+            "training dog": 0.18604651162790697,
+            "walking the dog": 0.35135135135135137
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                15,
+                1,
+                8,
+                1,
+                5,
+                17
+              ],
+              [
+                3,
+                6,
+                15,
+                7,
+                7,
+                12
+              ],
+              [
+                7,
+                3,
+                19,
+                2,
+                6,
+                13
+              ],
+              [
+                9,
+                1,
+                2,
+                17,
+                5,
+                15
+              ],
+              [
+                6,
+                2,
+                15,
+                2,
+                8,
+                16
+              ],
+              [
+                3,
+                3,
+                6,
+                5,
+                6,
+                26
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.3099942104501375
+        },
+        "full:policy": {
+          "coverage": 0.8809523809523809,
+          "selective_accuracy": 0.7374517374517374,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.11904761904761904,
+          "accuracy_all_clips_top_label": 0.7006802721088435
+        },
+        "phone_now:late:combined": {
+          "n": 294,
+          "macro_f1": 0.7066300583657058,
+          "macro_f1_ci95": [
+            0.6623323023610908,
+            0.7582728043391779
+          ],
+          "accuracy": 0.7074829931972789,
+          "per_class_f1": {
+            "bathing dog": 0.6530612244897959,
+            "grooming cat": 0.6444444444444445,
+            "grooming dog": 0.6542056074766356,
+            "petting cat": 0.7551020408163265,
+            "training dog": 0.7252747252747253,
+            "walking the dog": 0.8076923076923076
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                32,
+                0,
+                6,
+                0,
+                2,
+                7
+              ],
+              [
+                5,
+                29,
+                9,
+                7,
+                0,
+                0
+              ],
+              [
+                7,
+                2,
+                35,
+                3,
+                3,
+                0
+              ],
+              [
+                1,
+                8,
+                2,
+                37,
+                1,
+                0
+              ],
+              [
+                4,
+                1,
+                4,
+                1,
+                33,
+                6
+              ],
+              [
+                2,
+                0,
+                1,
+                1,
+                3,
+                42
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7077608915906789
+        },
+        "phone_now:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.7063137623977372,
+          "macro_f1_ci95": [
+            0.6596591096689999,
+            0.7551399823754162
+          ],
+          "accuracy": 0.7074829931972789,
+          "per_class_f1": {
+            "bathing dog": 0.62,
+            "grooming cat": 0.6521739130434783,
+            "grooming dog": 0.6470588235294118,
+            "petting cat": 0.7628865979381444,
+            "training dog": 0.7333333333333334,
+            "walking the dog": 0.822429906542056
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                31,
+                1,
+                5,
+                0,
+                2,
+                8
+              ],
+              [
+                5,
+                30,
+                8,
+                7,
+                0,
+                0
+              ],
+              [
+                9,
+                3,
+                33,
+                2,
+                3,
+                0
+              ],
+              [
+                1,
+                7,
+                2,
+                37,
+                1,
+                1
+              ],
+              [
+                5,
+                1,
+                4,
+                1,
+                33,
+                5
+              ],
+              [
+                2,
+                0,
+                0,
+                1,
+                2,
+                44
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7076841800550007
+        },
+        "phone_now:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.29280834444173826,
+          "macro_f1_ci95": [
+            0.24612380582721266,
+            0.3399192498641709
+          ],
+          "accuracy": 0.30952380952380953,
+          "per_class_f1": {
+            "bathing dog": 0.3368421052631579,
+            "grooming cat": 0.14285714285714285,
+            "grooming dog": 0.3448275862068965,
+            "petting cat": 0.3838383838383838,
+            "training dog": 0.2,
+            "walking the dog": 0.34848484848484856
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                16,
+                0,
+                7,
+                4,
+                7,
+                13
+              ],
+              [
+                5,
+                4,
+                15,
+                10,
+                4,
+                12
+              ],
+              [
+                5,
+                0,
+                20,
+                7,
+                9,
+                9
+              ],
+              [
+                7,
+                1,
+                4,
+                19,
+                6,
+                12
+              ],
+              [
+                9,
+                0,
+                11,
+                6,
+                9,
+                14
+              ],
+              [
+                6,
+                1,
+                9,
+                4,
+                6,
+                23
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.3102069764075843
+        },
+        "phone_now:policy": {
+          "coverage": 0.8163265306122449,
+          "selective_accuracy": 0.7458333333333333,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.1836734693877551,
+          "accuracy_all_clips_top_label": 0.7074829931972789
+        },
+        "rules": {
+          "n": 294,
+          "macro_f1": 0.22806085986275892,
+          "macro_f1_ci95": [
+            0.18803495799843525,
+            0.27020177269385487
+          ],
+          "accuracy": 0.272108843537415,
+          "per_class_f1": {
+            "bathing dog": 0.22857142857142854,
+            "grooming cat": 0.07407407407407407,
+            "grooming dog": 0.07142857142857142,
+            "petting cat": 0.4161073825503356,
+            "training dog": 0.2771084337349397,
+            "walking the dog": 0.30107526881720426
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                8,
+                1,
+                0,
+                14,
+                14,
+                10
+              ],
+              [
+                2,
+                2,
+                2,
+                31,
+                11,
+                2
+              ],
+              [
+                5,
+                1,
+                2,
+                8,
+                29,
+                5
+              ],
+              [
+                1,
+                0,
+                0,
+                31,
+                15,
+                2
+              ],
+              [
+                5,
+                0,
+                2,
+                8,
+                23,
+                11
+              ],
+              [
+                2,
+                0,
+                0,
+                8,
+                25,
+                14
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.2729946446663772
+        },
+        "missing_branches": {
+          "audio": 11,
+          "animal": 33,
+          "environment": 0,
+          "interaction": 0
+        }
+      },
+      "video_poor": {
+        "full:late:combined": {
+          "n": 294,
+          "macro_f1": 0.4764511589111442,
+          "macro_f1_ci95": [
+            0.4103605448616327,
+            0.5313615507425328
+          ],
+          "accuracy": 0.5136054421768708,
+          "per_class_f1": {
+            "bathing dog": 0.4571428571428571,
+            "grooming cat": 0.2903225806451613,
+            "grooming dog": 0.547945205479452,
+            "petting cat": 0.547486033519553,
+            "training dog": 0.36363636363636365,
+            "walking the dog": 0.6521739130434783
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                16,
+                0,
+                1,
+                12,
+                1,
+                17
+              ],
+              [
+                0,
+                9,
+                1,
+                37,
+                0,
+                3
+              ],
+              [
+                6,
+                3,
+                20,
+                14,
+                4,
+                3
+              ],
+              [
+                0,
+                0,
+                0,
+                49,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                15,
+                12,
+                21
+              ],
+              [
+                1,
+                0,
+                0,
+                3,
+                0,
+                45
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.5139484730062237
+        },
+        "full:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.39171535513193706,
+          "macro_f1_ci95": [
+            0.3336544006589755,
+            0.4479692198552517
+          ],
+          "accuracy": 0.4557823129251701,
+          "per_class_f1": {
+            "bathing dog": 0.26666666666666666,
+            "grooming cat": 0.17857142857142858,
+            "grooming dog": 0.5070422535211268,
+            "petting cat": 0.5051546391752577,
+            "training dog": 0.25396825396825395,
+            "walking the dog": 0.6388888888888888
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                8,
+                1,
+                1,
+                21,
+                1,
+                15
+              ],
+              [
+                2,
+                5,
+                1,
+                40,
+                1,
+                1
+              ],
+              [
+                3,
+                0,
+                18,
+                17,
+                4,
+                8
+              ],
+              [
+                0,
+                0,
+                0,
+                49,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                15,
+                8,
+                25
+              ],
+              [
+                0,
+                0,
+                0,
+                3,
+                0,
+                46
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.4553755970473296
+        },
+        "full:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.455510866674766,
+          "macro_f1_ci95": [
+            0.39147070027776326,
+            0.5053450261056759
+          ],
+          "accuracy": 0.47278911564625853,
+          "per_class_f1": {
+            "bathing dog": 0.5148514851485149,
+            "grooming cat": 0.25,
+            "grooming dog": 0.4565217391304348,
+            "petting cat": 0.5048543689320388,
+            "training dog": 0.4222222222222223,
+            "walking the dog": 0.5846153846153846
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                26,
+                2,
+                3,
+                2,
+                3,
+                11
+              ],
+              [
+                9,
+                9,
+                10,
+                14,
+                3,
+                5
+              ],
+              [
+                5,
+                7,
+                21,
+                3,
+                7,
+                7
+              ],
+              [
+                3,
+                4,
+                5,
+                26,
+                3,
+                8
+              ],
+              [
+                9,
+                0,
+                3,
+                6,
+                19,
+                12
+              ],
+              [
+                2,
+                0,
+                0,
+                3,
+                6,
+                38
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.47451150673035164
+        },
+        "full:policy": {
+          "coverage": 0.8435374149659864,
+          "selective_accuracy": 0.5403225806451613,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.1564625850340136,
+          "accuracy_all_clips_top_label": 0.5136054421768708
+        },
+        "phone_now:late:combined": {
+          "n": 294,
+          "macro_f1": 0.3901224109963591,
+          "macro_f1_ci95": [
+            0.3303173949937805,
+            0.4422346985557059
+          ],
+          "accuracy": 0.445578231292517,
+          "per_class_f1": {
+            "bathing dog": 0.3225806451612903,
+            "grooming cat": 0.14545454545454545,
+            "grooming dog": 0.4927536231884058,
+            "petting cat": 0.48999999999999994,
+            "training dog": 0.28125,
+            "walking the dog": 0.6086956521739131
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                10,
+                0,
+                1,
+                18,
+                1,
+                17
+              ],
+              [
+                1,
+                4,
+                1,
+                42,
+                1,
+                1
+              ],
+              [
+                4,
+                1,
+                17,
+                18,
+                3,
+                7
+              ],
+              [
+                0,
+                0,
+                0,
+                49,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                18,
+                9,
+                22
+              ],
+              [
+                0,
+                0,
+                0,
+                6,
+                1,
+                42
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.4455970473295701
+        },
+        "phone_now:late:visual_only": {
+          "n": 294,
+          "macro_f1": 0.38090031856888457,
+          "macro_f1_ci95": [
+            0.3229270717847828,
+            0.43478575363864136
+          ],
+          "accuracy": 0.4421768707482993,
+          "per_class_f1": {
+            "bathing dog": 0.26666666666666666,
+            "grooming cat": 0.17857142857142858,
+            "grooming dog": 0.47058823529411764,
+            "petting cat": 0.48756218905472637,
+            "training dog": 0.2622950819672131,
+            "walking the dog": 0.6197183098591549
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                8,
+                1,
+                1,
+                21,
+                1,
+                15
+              ],
+              [
+                2,
+                5,
+                1,
+                41,
+                0,
+                1
+              ],
+              [
+                3,
+                0,
+                16,
+                20,
+                3,
+                8
+              ],
+              [
+                0,
+                0,
+                0,
+                49,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                16,
+                8,
+                25
+              ],
+              [
+                0,
+                0,
+                0,
+                5,
+                0,
+                44
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.4419062092922275
+        },
+        "phone_now:late:audio_only": {
+          "n": 294,
+          "macro_f1": 0.3654260933418993,
+          "macro_f1_ci95": [
+            0.31596602030504667,
+            0.41406344541994017
+          ],
+          "accuracy": 0.3843537414965986,
+          "per_class_f1": {
+            "bathing dog": 0.4339622641509434,
+            "grooming cat": 0.15384615384615383,
+            "grooming dog": 0.46728971962616817,
+            "petting cat": 0.39583333333333326,
+            "training dog": 0.28260869565217395,
+            "walking the dog": 0.45901639344262296
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                23,
+                4,
+                2,
+                3,
+                5,
+                10
+              ],
+              [
+                10,
+                5,
+                15,
+                10,
+                2,
+                8
+              ],
+              [
+                6,
+                3,
+                25,
+                4,
+                7,
+                5
+              ],
+              [
+                7,
+                2,
+                5,
+                19,
+                7,
+                9
+              ],
+              [
+                10,
+                1,
+                6,
+                6,
+                13,
+                13
+              ],
+              [
+                3,
+                0,
+                4,
+                5,
+                9,
+                28
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.38564191634100453
+        },
+        "phone_now:policy": {
+          "coverage": 0.8163265306122449,
+          "selective_accuracy": 0.4875,
+          "conflict_rate": 0.0,
+          "uncertain_rate": 0.1836734693877551,
+          "accuracy_all_clips_top_label": 0.445578231292517
+        },
+        "rules": {
+          "n": 294,
+          "macro_f1": 0.27626390347749324,
+          "macro_f1_ci95": [
+            0.22768546544943502,
+            0.32346961207198605
+          ],
+          "accuracy": 0.3197278911564626,
+          "per_class_f1": {
+            "bathing dog": 0.2727272727272727,
+            "grooming cat": 0.07547169811320754,
+            "grooming dog": 0.17857142857142858,
+            "petting cat": 0.42105263157894735,
+            "training dog": 0.34831460674157305,
+            "walking the dog": 0.3614457831325301
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                9,
+                0,
+                0,
+                21,
+                15,
+                2
+              ],
+              [
+                4,
+                2,
+                1,
+                20,
+                17,
+                6
+              ],
+              [
+                1,
+                1,
+                5,
+                13,
+                29,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                32,
+                16,
+                1
+              ],
+              [
+                5,
+                0,
+                0,
+                4,
+                31,
+                9
+              ],
+              [
+                0,
+                0,
+                0,
+                13,
+                21,
+                15
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.3205543493993342
+        },
+        "missing_branches": {
+          "audio": 12,
+          "animal": 22,
+          "environment": 0,
+          "interaction": 0
+        }
+      }
+    },
+    "leakage_audit": {
+      "environment_max_cos": {
+        "median": 0.7338336049127521,
+        ">=0.95": 0
+      },
+      "audio_max_cos": {
+        "median": 0.9056936457420258,
+        ">=0.95": 28
+      },
+      "clips_kept": 266,
+      "full:late:combined_without_near_duplicates": {
+        "n": 266,
+        "macro_f1": 0.7353281299292656,
+        "macro_f1_ci95": [
+          0.6813440492066261,
+          0.7818693791510964
+        ],
+        "accuracy": 0.7368421052631579,
+        "per_class_f1": {
+          "bathing dog": 0.6881720430107526,
+          "grooming cat": 0.6666666666666666,
+          "grooming dog": 0.7073170731707318,
+          "petting cat": 0.8172043010752689,
+          "training dog": 0.7499999999999999,
+          "walking the dog": 0.7826086956521738
+        },
+        "confusion": {
+          "rows_true": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "cols_pred": [
+            "bathing dog",
+            "grooming cat",
+            "grooming dog",
+            "petting cat",
+            "training dog",
+            "walking the dog"
+          ],
+          "matrix": [
+            [
+              32,
+              2,
+              3,
+              0,
+              2,
+              7
+            ],
+            [
+              5,
+              28,
+              4,
+              7,
+              0,
+              0
+            ],
+            [
+              5,
+              4,
+              29,
+              2,
+              2,
+              0
+            ],
+            [
+              0,
+              5,
+              1,
+              38,
+              1,
+              0
+            ],
+            [
+              2,
+              1,
+              3,
+              1,
+              33,
+              5
+            ],
+            [
+              3,
+              0,
+              0,
+              0,
+              5,
+              36
+            ]
+          ]
+        },
+        "balanced_accuracy": 0.7364085994520777
+      }
+    },
+    "training": {
+      "full": {
+        "audio": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.41324057865597236,
+            "0.01": 0.4048007385080677,
+            "0.1": 0.40056331049211574,
+            "1.0": 0.39279182625693504
+          },
+          "selected_C": 0.001,
+          "temperature": 1.1410240468175379,
+          "oof_macro_f1": 0.41324057865597236,
+          "oof_ece_raw": 0.06373027491309399,
+          "oof_ece_calibrated": 0.08712971569895009,
+          "abstain_below": 1.01,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.0,
+          "train_rows": 571
+        },
+        "animal": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.7277551176324809,
+            "0.01": 0.7229715588298237,
+            "0.1": 0.7140510819742264,
+            "1.0": 0.7121724405150048
+          },
+          "selected_C": 0.001,
+          "temperature": 0.574102913443215,
+          "oof_macro_f1": 0.7277551176324809,
+          "oof_ece_raw": 0.16852198981923458,
+          "oof_ece_calibrated": 0.051637284408249357,
+          "abstain_below": 0.6055250395536325,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.714828897338403,
+          "train_rows": 526
+        },
+        "environment": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.7442264716185881,
+            "0.01": 0.748421135784351,
+            "0.1": 0.7342072973232269,
+            "1.0": 0.7275954862147286
+          },
+          "selected_C": 0.01,
+          "temperature": 0.9251761042388036,
+          "oof_macro_f1": 0.748421135784351,
+          "oof_ece_raw": 0.05842459349455322,
+          "oof_ece_calibrated": 0.04819666283409704,
+          "abstain_below": 0.474611809685473,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.8683333333333333,
+          "train_rows": 600
+        },
+        "interaction": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.24979177523199414,
+            "0.01": 0.27296215463858764,
+            "0.1": 0.29287146088485394,
+            "1.0": 0.30562590663352884
+          },
+          "selected_C": 1.0,
+          "temperature": 1.2134692104535965,
+          "oof_macro_f1": 0.30562590663352884,
+          "oof_ece_raw": 0.03229313603761951,
+          "oof_ece_calibrated": 0.05507982915078236,
+          "abstain_below": 0.5715767409414783,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.0016666666666666668,
+          "train_rows": 600
+        },
+        "late_fusion": {
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.6317596163329743,
+            "0.01": 0.6365626086533954,
+            "0.1": 0.6336225146000894,
+            "1.0": 0.6331839429306095
+          },
+          "selected_C": 0.01,
+          "temperature": 0.8712511136646099,
+          "abstain_below": 0.5437046119597742,
+          "patterns": 15,
+          "oof_macro_f1_all_present": 0.7484631588691691
+        },
+        "early_fusion": {
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.6382097272830519,
+            "0.01": 0.6245729727515649,
+            "0.1": 0.6072856323696737,
+            "1.0": 0.5892572759023205
+          },
+          "selected_C": 0.001,
+          "temperature": 0.904048581299512,
+          "patterns": 5
+        },
+        "visual_only_abstain_below": 0.492485247290192
+      },
+      "phone_now": {
+        "audio_scores": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.39108964190856194,
+            "0.01": 0.36657324826335685,
+            "0.1": 0.34168767820786744,
+            "1.0": 0.29652974134823457
+          },
+          "selected_C": 0.001,
+          "temperature": 1.5735248763007106,
+          "oof_macro_f1": 0.39108964190856194,
+          "oof_ece_raw": 0.08879702588039763,
+          "oof_ece_calibrated": 0.13010641551460037,
+          "abstain_below": 1.01,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.0,
+          "train_rows": 571
+        },
+        "animal_phone": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.7226432093883733,
+            "0.01": 0.7211549220748319,
+            "0.1": 0.7110906873779538,
+            "1.0": 0.7000397000006765
+          },
+          "selected_C": 0.001,
+          "temperature": 0.5709157098373308,
+          "oof_macro_f1": 0.7226432093883733,
+          "oof_ece_raw": 0.16703959933996465,
+          "oof_ece_calibrated": 0.0397665829301436,
+          "abstain_below": 0.6089408983037129,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.6977186311787072,
+          "train_rows": 526
+        },
+        "environment": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.7442264716185881,
+            "0.01": 0.748421135784351,
+            "0.1": 0.7342072973232269,
+            "1.0": 0.7275954862147286
+          },
+          "selected_C": 0.01,
+          "temperature": 0.9251761042388036,
+          "oof_macro_f1": 0.748421135784351,
+          "oof_ece_raw": 0.05842459349455322,
+          "oof_ece_calibrated": 0.04819666283409704,
+          "abstain_below": 0.474611809685473,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.8683333333333333,
+          "train_rows": 600
+        },
+        "interaction": {
+          "cv": "GroupKFold(5) pooled out-of-fold macro-F1",
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.24979177523199414,
+            "0.01": 0.27296215463858764,
+            "0.1": 0.29287146088485394,
+            "1.0": 0.30562590663352884
+          },
+          "selected_C": 1.0,
+          "temperature": 1.2134692104535965,
+          "oof_macro_f1": 0.30562590663352884,
+          "oof_ece_raw": 0.03229313603761951,
+          "oof_ece_calibrated": 0.05507982915078236,
+          "abstain_below": 0.5715767409414783,
+          "target_selective_accuracy": 0.8,
+          "oof_coverage_at_threshold": 0.0016666666666666668,
+          "train_rows": 600
+        },
+        "late_fusion": {
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.6284676460466662,
+            "0.01": 0.628981206651866,
+            "0.1": 0.622328964410983,
+            "1.0": 0.6214938264349316
+          },
+          "selected_C": 0.01,
+          "temperature": 0.8744514757225934,
+          "abstain_below": 0.5900023873613832,
+          "patterns": 15,
+          "oof_macro_f1_all_present": 0.7393210511159647
+        },
+        "early_fusion": {
+          "C_grid": [
+            0.001,
+            0.01,
+            0.1,
+            1.0
+          ],
+          "oof_macro_f1_by_C": {
+            "0.001": 0.6471459168836208,
+            "0.01": 0.6316910212359105,
+            "0.1": 0.5943270150649567,
+            "1.0": 0.5486929494226648
+          },
+          "selected_C": 0.001,
+          "temperature": 0.8419450823374013,
+          "patterns": 5
+        },
+        "visual_only_abstain_below": 0.4703848898212022
+      }
+    }
+  },
+  "runtime_s": 548.4,
+  "terms": "Kinetics annotations CC BY 4.0; clips are YouTube uploads (research only); no clip or frame is committed"
+}

@@ -1,0 +1,79 @@
+{
+  "example": "kinetics_petting_cat_audio_removed",
+  "source": "Kinetics-700 validation clip -07WVYMSwac (-07WVYMSwac_000020_000030.mp4)",
+  "dataset_label": "petting cat",
+  "label_layer": "recorded_context",
+  "note": "audio removed to show missing-input handling",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "detector (dog in 55% of 11 animal frames)",
+    "inputs": {
+      "audio": "missing",
+      "audio_scores": "missing",
+      "animal": "present",
+      "animal_phone": "present",
+      "environment": "present",
+      "interaction": "present"
+    },
+    "missing_inputs": {
+      "audio": "audio removed for this example",
+      "audio_scores": "audio removed for this example",
+      "dog_vocal_activity": "audio missing"
+    },
+    "observations": [
+      "animal visible in 11/20 sampled frames",
+      "person visible in 11/20 frames; best person-animal interaction score 1.00",
+      "posture scores (lying/sitting/standing) 0.67/0.33/0.00"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.0001,
+          "grooming cat": 0.2084,
+          "grooming dog": 0.0001,
+          "petting cat": 0.7907,
+          "training dog": 0.0007,
+          "walking the dog": 0.0001
+        },
+        "top": "petting cat",
+        "top_score": 0.7907,
+        "threshold": 0.5437,
+        "confident": true,
+        "inputs": [
+          "animal",
+          "environment",
+          "interaction"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "petting cat",
+      "score": 0.7907,
+      "status": "conflict",
+      "branches_used": [
+        "animal",
+        "environment",
+        "interaction"
+      ],
+      "qualifier": null
+    },
+    "qualifiers": [],
+    "hypotheses": [],
+    "conflicts": [
+      "situation 'petting cat' implies a cat but the detector indicates a dog"
+    ],
+    "status": "conflict",
+    "summary": "Conflicting evidence: situation 'petting cat' implies a cat but the detector indicates a dog. No single interpretation. Situation: petting cat (0.79, conflict). Missing: audio (audio removed for this example); audio_scores (audio removed for this example); dog_vocal_activity (audio missing).",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}

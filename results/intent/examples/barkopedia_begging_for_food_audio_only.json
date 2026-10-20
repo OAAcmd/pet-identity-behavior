@@ -1,0 +1,142 @@
+{
+  "example": "barkopedia_begging_for_food_audio_only",
+  "source": "Barkopedia validation clip audio_00011",
+  "dataset_label": "begging for food",
+  "label_layer": "annotated_intent",
+  "dataset_environment": "indoor (general)",
+  "note": "held out: provider validation split",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "sound",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "missing",
+      "animal_phone": "missing",
+      "environment": "missing",
+      "interaction": "missing"
+    },
+    "missing_inputs": {
+      "animal": "audio-only recording",
+      "animal_phone": "audio-only recording",
+      "environment": "audio-only recording",
+      "interaction": "audio-only recording"
+    },
+    "observations": [
+      "dog vocalization heard (YAMNet max 0.67)",
+      "sounds: Dog 0.67, Howl 0.67, Animal 0.59, Domestic animals, pets 0.59, Canidae, dogs, wolves 0.41, Yip 0.33"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.1069,
+          "grooming cat": 0.2365,
+          "grooming dog": 0.1645,
+          "petting cat": 0.2762,
+          "training dog": 0.1595,
+          "walking the dog": 0.0564
+        },
+        "top": "petting cat",
+        "top_score": 0.2762,
+        "threshold": 0.5437,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_vocal_activity",
+        "model": "dog_audio_activity_v1",
+        "label_space": "barkopedia_activity",
+        "species": "dog",
+        "scores": {
+          "alerting to sounds": 0.1674,
+          "begging for food": 0.1641,
+          "playing with human": 0.0953,
+          "playing with other animals": 0.0896,
+          "playing with toy": 0.1013,
+          "rest": 0.0944,
+          "seeking attention": 0.1587,
+          "taking shower": 0.1291
+        },
+        "top": "alerting to sounds",
+        "top_score": 0.1674,
+        "threshold": 1.0,
+        "confident": false,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      },
+      {
+        "channel": "dog_bark_context",
+        "model": "dog_bark_context_v1",
+        "label_space": "yin_bark_context",
+        "species": "dog",
+        "scores": {
+          "aggression": 0.0005,
+          "contact": 0.9783,
+          "play": 0.0212
+        },
+        "top": "contact",
+        "top_score": 0.9783,
+        "threshold": 0.5586,
+        "confident": true,
+        "inputs": [
+          "audio"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "petting cat",
+      "score": 0.2762,
+      "status": "uncertain",
+      "branches_used": [
+        "audio"
+      ],
+      "qualifier": null
+    },
+    "qualifiers": [],
+    "hypotheses": [
+      {
+        "name": "alert",
+        "status": "tentative",
+        "support": 0.1674,
+        "supporting": [
+          "dog_vocal_activity: 'alerting to sounds' 0.17 (behaviour consistent with 'alert')"
+        ],
+        "qualifying": [],
+        "contradicting": [],
+        "explanation": "evidence present but below the channel's abstention threshold"
+      },
+      {
+        "name": "attention",
+        "status": "context_only",
+        "support": null,
+        "supporting": [],
+        "qualifying": [
+          "dog_bark_context: context 'contact' 0.98 makes 'attention' plausible"
+        ],
+        "contradicting": [],
+        "explanation": "context alone is not evidence of what the animal wants"
+      }
+    ],
+    "conflicts": [],
+    "status": "insufficient_evidence",
+    "summary": "Weaker: alert. Situation: petting cat (0.28, uncertain). Missing: animal (audio-only recording); animal_phone (audio-only recording); environment (audio-only recording); interaction (audio-only recording). Insufficient evidence for an interpretation.",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}

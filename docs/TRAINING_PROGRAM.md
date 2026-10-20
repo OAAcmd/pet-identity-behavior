@@ -625,6 +625,51 @@ phones.
 
 **Status.** Not started: depends on household data and G1.
 
+## I1 - Behaviour and intent heads (intent layer, 2026-10-20)
+
+**Capability.** What a cat or dog may want or be doing, from trained
+channels: situation from synchronized audio and video (both species), dog
+vocal activity / intent (barks), dog bark context, cat meow context; and
+their combination with explicit missing inputs and conflicts
+(`src/petperception/intent/`, label layers in
+[BEHAVIOR_INTENT_DATA.md](BEHAVIOR_INTENT_DATA.md)).
+
+**Encoders reused, frozen.** YAMNet (521 class scores and the 1,024-d
+embedding), the EfficientNet-Lite0 backbone (pooled 1,280-d embedding of the
+largest cat/dog crop and of the whole frame), the COCO detector (77 object
+classes, person boxes), the crop verifier, the posture head, the person-pet
+interaction model and (research variant only) the AwA cat/dog keypoint head.
+Features are cached once per clip (`python -m petperception.intent.kinetics`,
+resumable per clip; Barkopedia features cached by E26/E27).
+
+**Heads.** Multinomial logistic regression per branch (class-balanced),
+C by grouped 5-fold cross-validation on training data only, temperature
+(NLL on out-of-fold scores) and an abstention threshold (out-of-fold
+selective accuracy 0.8). Late fusion: logistic regression on the branches'
+centred log-probabilities times availability flags, trained with modality
+dropout (every subset of branches), so one stacker serves any combination of
+present inputs. Early fusion for comparison. Transparent rule baselines
+fixed before scoring (`intent/rules.py`, committed in 48e0c82).
+
+| Job | Data (train / test) | Grouping | Command | CPU time (measured) | Artifacts |
+| --- | --- | --- | --- | --- | --- |
+| E27 dog audio channel | Barkopedia 12,480 / 500 | near-duplicate pseudo-groups (no ids) | `petperception evaluate --experiment e27` | 40 min (incl. YAMNet scores for 13k clips) | `artifacts/intent/dog_audio_activity_v1/` |
+| E28 situation, synchronized A+V | Kinetics 600 train-split / 294 validation clips | YouTube id + embedding audit | `python -m petperception.intent.kinetics` (features, 894 clips, 3.3-4.5 s/clip with 2 threads), then `petperception evaluate --experiment e28` | see results/e28 | `artifacts/intent/kinetics_situation_v1/{full,phone_now}/` |
+| cat meow / dog bark context heads | CatMeows 440 (21 cats); Yin barks 693 (10 dogs) | cat; dog | `python -m petperception.intent.train_heads` | < 2 min | `artifacts/intent/{cat_audio_context_v1,dog_bark_context_v1}/` |
+
+Held-out evaluation of the last row is E2 / E22 (leave-one-animal-out); the
+training script records only out-of-fold figures.
+
+**Recovery.** Feature extraction skips clips whose cache file exists (atomic
+rename per clip). E28 caches its fitted models with a digest of the training
+inputs (`var/intent/e28_models.pkl`) and reuses them after an interruption;
+a changed training set refits.
+
+**Acceptance for use as evidence.** A channel's top label counts as
+*supported* only above its own fitted threshold; a channel below the
+per-class gate (F1 >= 0.7, lower bound >= 0.6) is reported with its gate
+status. Context channels never support a hypothesis alone.
+
 ## Already-trained artifacts and how to reproduce them
 
 All commands: `uv sync --extra dev --extra train`, then

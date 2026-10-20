@@ -245,6 +245,35 @@ def swap_audio(rows: list[dict], same_species: bool, seed: int = 0) -> tuple[lis
     return out, np.array(src, dtype=object)
 
 
+def _fit_or_resume(train: list[dict], classes: list[str], cache: Path) -> dict[str, Model]:
+    """Fitted models are cached with a digest of the training inputs, so an interrupted evaluation resumes
+    without refitting (and a changed training set never reuses a stale fit)."""
+    import hashlib
+    import pickle
+
+    h = hashlib.sha256()
+    for r in train:
+        h.update(r["clip"].key.encode())
+        for b in sorted(r["branches"]):
+            v = r["branches"][b]
+            h.update(b"-" if v is None else np.ascontiguousarray(v, np.float32).tobytes())
+    digest = h.hexdigest()
+    if cache.exists():
+        with open(cache, "rb") as fh:
+            saved = pickle.load(fh)
+        if saved.get("digest") == digest and set(saved["models"]) == set(BRANCH_SETS):
+            return saved["models"]
+    models = {}
+    for name, branches in BRANCH_SETS.items():
+        m = Model(branches, classes)
+        m.fit(train)
+        models[name] = m
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    with open(cache, "wb") as fh:
+        pickle.dump({"digest": digest, "models": models}, fh)
+    return models
+
+
 def run(settings: Settings, out_dir: Path, artifact_dir: Path | None = None) -> dict:
     t0 = time.perf_counter()
     data_root = settings.paths.resolve("data_root")
@@ -269,11 +298,7 @@ def run(settings: Settings, out_dir: Path, artifact_dir: Path | None = None) -> 
                  "missing_branches_test": {b: int(sum(r["branches"][b] is None for r in test)) for b in K.BRANCHES},
                  "missing_branches_train": {b: int(sum(r["branches"][b] is None for r in train)) for b in K.BRANCHES},
                  "rules_commit_note": "intent/rules.py committed in 48e0c82 before any E28 scoring"}
-    models = {}
-    for name, branches in BRANCH_SETS.items():
-        m = Model(branches, classes)
-        m.fit(train)
-        models[name] = m
+    models = _fit_or_resume(train, classes, var_root / "intent" / "e28_models.pkl")
     m = models["full"]
     clean: dict = {}
     for b in ("audio", "audio_scores", "animal", "animal_phone", "environment", "interaction"):

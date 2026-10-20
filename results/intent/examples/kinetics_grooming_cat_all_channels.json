@@ -1,0 +1,80 @@
+{
+  "example": "kinetics_grooming_cat_all_channels",
+  "source": "Kinetics-700 validation clip 7HLNu4fEym8 (7HLNu4fEym8_000048_000058.mp4)",
+  "dataset_label": "grooming cat",
+  "label_layer": "recorded_context",
+  "note": "held out: never used to train any head",
+  "output": {
+    "version": "intent-inference-v1",
+    "species": "dog",
+    "species_source": "detector (dog in 78% of 9 animal frames)",
+    "inputs": {
+      "audio": "present",
+      "audio_scores": "present",
+      "animal": "present",
+      "animal_phone": "present",
+      "environment": "present",
+      "interaction": "present"
+    },
+    "missing_inputs": {
+      "dog_vocal_activity": "no dog vocalization heard"
+    },
+    "observations": [
+      "sounds: Electric shaver, electric razor 0.92, Tools 0.41, Electric toothbrush 0.33, Toothbrush 0.26, Inside, small room 0.26",
+      "animal visible in 9/20 sampled frames",
+      "person visible in 18/20 frames; best person-animal interaction score 1.00",
+      "posture scores (lying/sitting/standing) 0.96/0.04/0.00"
+    ],
+    "readings": [
+      {
+        "channel": "situation",
+        "model": "kinetics_situation_v1",
+        "label_space": "kinetics_situation",
+        "species": "dog",
+        "scores": {
+          "bathing dog": 0.0004,
+          "grooming cat": 0.3016,
+          "grooming dog": 0.6978,
+          "petting cat": 0.0001,
+          "training dog": 0.0,
+          "walking the dog": 0.0
+        },
+        "top": "grooming dog",
+        "top_score": 0.6978,
+        "threshold": 0.5437,
+        "confident": true,
+        "inputs": [
+          "audio",
+          "animal",
+          "environment",
+          "interaction"
+        ],
+        "evidence_gate_passed": true,
+        "note": ""
+      }
+    ],
+    "situation": {
+      "label": "grooming dog",
+      "score": 0.6978,
+      "status": "interpretation",
+      "branches_used": [
+        "audio",
+        "animal",
+        "environment",
+        "interaction"
+      ],
+      "qualifier": "handling"
+    },
+    "qualifiers": [
+      "handling"
+    ],
+    "hypotheses": [],
+    "conflicts": [],
+    "status": "situation_only",
+    "summary": "Situation: grooming dog (0.70, interpretation). Missing: dog_vocal_activity (no dog vocalization heard).",
+    "caveats": [
+      "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
+      "scores are temperature-scaled on training data, not probabilities of truth"
+    ]
+  }
+}
