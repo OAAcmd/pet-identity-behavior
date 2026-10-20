@@ -392,14 +392,13 @@ def summarize_c(rows: list[dict]) -> dict:
     return out
 
 
-def part_b(settings: Settings, clips, zs, state: dict, zsm: R.ZeroShot, yam_labels: list[str], out_dir: Path) -> tuple[list[dict], list[dict]]:
+def part_b(settings: Settings, clips, zs, state: dict, zsm: R.ZeroShot, yam_labels: list[str], out_dir: Path | None) -> tuple[list[dict], list[dict]]:
     items = json.loads(BENCHMARK.read_text())["questions"]
     by_key = {c.key: (c, z) for c, z in zip(clips, zs)}
     ann = D.load_assistant()
     pos = {k: i for i, k in enumerate(state["keys"])}
     full_head = BehaviorHead.fit(state["Xv"], {b: state["Y"][b] for b in state["eligible"]}, state["groups"]) if state["adopted"] != "R0_zero_shot" else None
     rows, answers = [], []
-    (out_dir / "answers").mkdir(parents=True, exist_ok=True)
     for it in items:
         c, z = by_key[it["clip"]]
         if it["clip"] in pos:
@@ -419,7 +418,8 @@ def part_b(settings: Settings, clips, zs, state: dict, zsm: R.ZeroShot, yam_labe
         rows.append(row)
         a = {"benchmark_item": it, "answer": ans.to_dict(), "scores": {r.behavior: r.score for r in readings}}
         answers.append(a)
-        write_json(out_dir / "answers" / f"{it['id']}.json", a)
+        if out_dir is not None:
+            write_json(out_dir / "answers" / f"{it['id']}.json", a)
     return rows, answers
 
 
@@ -460,3 +460,55 @@ def run(settings: Settings, out_dir: Path) -> dict:
     md += [render_example(x) for x in answers]
     (out_dir / "answers.md").write_text("\n".join(md), encoding="utf-8")
     return res
+
+
+def run_downstream(settings: Settings, out_dir: Path, subdir: str, detector_label: str) -> dict:
+    """Part C: the same protocol on features extracted with another detector (``var/understand/<subdir>``), next to the default ones."""
+    from ..intent import av_features as AF
+
+    base_clips, base_zs, base_info = load_pool(settings)
+    alt_clips, alt_zs, alt_info = load_pool(settings, settings.paths.resolve("data_root").parent / "understand" / subdir)
+    common = sorted({c.key for c in base_clips} & {c.key for c in alt_clips})
+    bz = {c.key: z for c, z in zip(base_clips, base_zs)}
+    az = {c.key: z for c, z in zip(alt_clips, alt_zs)}
+
+    def found(z):
+        return float(np.mean(~np.isnan(z["box"][:, 0]))) if "box" in z.files and len(z["box"]) else 0.0
+
+    fb = np.array([found(bz[k]) for k in common])
+    fa = np.array([found(az[k]) for k in common])
+    from ..understand.features import SiglipEncoder
+
+    zsm = R.ZeroShot(SiglipEncoder(threads=settings.runtime.num_threads))
+    yam = AF.load_components(1, with_audio=True).yamnet.labels
+    keep = set(common)
+    res = {"detector": detector_label, "clips_compared": len(common), "base_pool": base_info, "alt_pool": alt_info,
+           "located_fraction_mean": {"default": float(fb.mean()), "alternative": float(fa.mean())},
+           "clips_located_in_more_frames": int(np.sum(fa > fb + 0.05)), "clips_located_in_fewer_frames": int(np.sum(fa < fb - 0.05))}
+    for name, (cl, zz) in (("default", (base_clips, base_zs)), ("alternative", (alt_clips, alt_zs))):
+        idx = [i for i, c in enumerate(cl) if c.key in keep]
+        a, state = part_a([cl[i] for i in idx], [zz[i] for i in idx], zsm, yam)
+        rows, _ = part_b(settings, [cl[i] for i in idx], [zz[i] for i in idx], state, zsm, yam, None)
+        res[name] = {"part_a_R0_macro_ap": a["methods"]["R0_zero_shot"]["macro_ap"], "part_a_R0_ci95": a["methods"]["R0_zero_shot"]["macro_ap_ci95"],
+                     "part_a_adopted": a["adopted"], "part_a_adopted_macro_ap": a["methods"][a["adopted"]]["macro_ap"],
+                     "B": {k: v for k, v in summarize_b(rows).items() if k in ("B1_all", "B1_behavior_tail_chasing", "B2_present_seen",
+                                                                            "B4_confuser_rejection", "B4_tail_chasing_rejection")}}
+    write_json(out_dir / f"downstream_{subdir}.json", res)
+    return res
+
+
+def main() -> None:
+    import argparse
+
+    from ..config import load_settings
+
+    ap = argparse.ArgumentParser(description="E31 part C: downstream effect of another detector (features in var/understand/<subdir>).")
+    ap.add_argument("--subdir", required=True)
+    ap.add_argument("--label", required=True)
+    a = ap.parse_args()
+    s = load_settings()
+    print(json.dumps(run_downstream(s, s.paths.resolve("results_root") / "e31", a.subdir, a.label), indent=1, default=str)[:4000])
+
+
+if __name__ == "__main__":
+    main()
