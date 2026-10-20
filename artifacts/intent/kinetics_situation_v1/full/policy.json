@@ -16,5 +16,7 @@
     "environment",
     "interaction"
   ],
-  "feature_pooling": "petperception.intent.kinetics.pool"
+  "feature_pooling": "petperception.intent.kinetics.pool",
+  "conflict_js_threshold": 0.4345456031636382,
+  "conflict_detector": "E29: Jensen-Shannon divergence between the audio-only and visual-only situation distributions; threshold = 90th percentile of genuine pairs on E28's test clips; adopted under the pre-registered rule"
 }

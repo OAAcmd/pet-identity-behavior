@@ -93,8 +93,8 @@
   },
   {
    "path": "artifacts/intent/kinetics_situation_v1/full/policy.json",
-   "sha256": "aeaa2001a9accb0e3aa174062c43dcf71a20ffce6d2b7b6f6d07eaa0ea35c01d",
-   "bytes": 416
+   "sha256": "fdbf2dc920c1a9239bb21506b66896e87fdbdea57cc7a00874884e0234d5dbed",
+   "bytes": 688
   },
   {
    "path": "artifacts/intent/kinetics_situation_v1/phone_now/head_animal_phone.json",
@@ -123,8 +123,9 @@
   },
   {
    "path": "artifacts/intent/kinetics_situation_v1/phone_now/policy.json",
-   "sha256": "b5b4656565fa2cad88498b60518f485a025fcfc023359b2d2d96ec84c982bc02",
-   "bytes": 430
+   "sha256": "0b7847805b30c7a8473893d7ed4afae8571f7155dcd7292979e48d1c3bfb75d4",
+   "bytes": 520
   }
- ]
+ ],
+ "conflict_detector": "full variant policy.json carries conflict_js_threshold adopted by E29 (results/e29/metrics.json); phone variant: not adopted"
 }

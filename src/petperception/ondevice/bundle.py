@@ -150,6 +150,7 @@ def _intent_assets(allowed) -> dict | None:
                  "object_classes": load_components(1, with_audio=False).object_classes,
                  "situation": {"heads": {b: _head_assets(sd / f"head_{b}.json") for b in pol["branches"]},
                                "fusion": _head_assets(sd / "late_fusion.json"), "visual_only_abstain_below": pol["visual_only_abstain_below"],
+                               "conflict_js_threshold": pol.get("conflict_js_threshold"),
                                "species": I.SITUATION_SPECIES,
                                "qualifier": {lab.raw: lab.qualifier for lab in T.DATASETS["kinetics_pets"].labels},
                                "context_for": {lab.raw: [h for h, r in lab.hypotheses.items() if r == "context_for"] for lab in T.DATASETS["kinetics_pets"].labels}},

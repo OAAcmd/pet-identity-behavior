@@ -26,7 +26,8 @@ describe("intent inference matches the Python reference", () => {
         for (let i = 0; i < r.length; i++) maxErr = Math.max(maxErr, Math.abs(got[i] - r[i]) / Math.max(1, Math.abs(r[i])));
         expect(maxErr).toBeLessThan(1e-5);
       }
-      const res = models.infer(branches, cues, fx.yamnet_labels);
+      const m = c.situation_patch ? new IntentModels({ ...fx.assets, situation: { ...fx.assets.situation, ...c.situation_patch } }) : models;
+      const res = m.infer(branches, cues, fx.yamnet_labels);
       const e = c.expected;
       expect(res.species).toBe(e.species);
       expect(res.status).toBe(e.status);

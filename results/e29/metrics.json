@@ -1,0 +1,727 @@
+{
+  "experiment": "E29",
+  "status": "completed",
+  "created_at": "2026-10-20T03:36:35+00:00",
+  "protocol": [
+    "E29: a pre-registered audio-video conflict detector, and a replication of E28, on fresh Kinetics clips.",
+    "",
+    "Why: in E28 the pre-registered conflict flag never fired (the audio head",
+    "never passes its own threshold) and swapped audio went unnoticed. An",
+    "exploratory follow-up found a continuous signal (Jensen-Shannon divergence",
+    "between the audio-only and the visual-only situation distributions, ROC AUC",
+    "0.69-0.71 on E28's test clips). Adopting it needs a fresh test, fixed here",
+    "before those clips were fetched.",
+    "",
+    "Data (fresh): Kinetics-700 *train*-split clips 161-210 of each of the six",
+    "classes (300 clips), fetched once for this experiment",
+    "(`kinetics_pets_train_conflict_sha256.csv`). Clips 1-160 (tuning, holdout,",
+    "and the sealed E23 set) are streamed past, never extracted. No YouTube id",
+    "may be shared with any other split (checked).",
+    "",
+    "Frozen models: the E28 heads and late fusion (both variants), unchanged.",
+    "",
+    "Detector: score = JS divergence between the audio head's distribution and",
+    "the late-fusion distribution with audio absent (visual only). Threshold per",
+    "variant = the 90th percentile of the genuine-pair scores on E28's 294 test",
+    "clips (development data for E29; E28's own result is already reported).",
+    "Conflict = audio and video both present and score > threshold.",
+    "",
+    "Test (once): genuine fresh clips; swapped pairs built inside the fresh set",
+    "(audio of a random clip with a different label; same species and cross",
+    "species; seed 0).",
+    "",
+    "Adoption into the product policy, all three required:",
+    "1. same-species swaps flagged >= 0.30 with Wilson lower bound >= 0.20;",
+    "2. genuine clips flagged <= 0.15 with Wilson upper bound <= 0.20;",
+    "3. the policy's selective accuracy on genuine fresh clips drops by at most",
+    "   0.02 (point) when flagged clips lose their interpretation.",
+    "",
+    "Also reported: E28's models on the fresh clips (macro-F1 combined, visual",
+    "only, audio only; bootstrap CIs over clips) as an independent replication."
+  ],
+  "rule": {
+    "same_species_flagged_min": 0.3,
+    "same_species_wilson_low_min": 0.2,
+    "genuine_flagged_max": 0.15,
+    "genuine_wilson_high_max": 0.2,
+    "selective_accuracy_drop_max": 0.02
+  },
+  "percentile": 90.0,
+  "results": {
+    "fresh_clips": 300,
+    "label_counts": {
+      "bathing dog": 50,
+      "grooming cat": 50,
+      "grooming dog": 50,
+      "petting cat": 50,
+      "training dog": 50,
+      "walking the dog": 50
+    },
+    "missing_branches": {
+      "audio": 9,
+      "animal": 33,
+      "environment": 0,
+      "interaction": 0
+    },
+    "full": {
+      "replication": {
+        "combined": {
+          "n": 300,
+          "macro_f1": 0.7019058912725017,
+          "macro_f1_ci95": [
+            0.6464618472893318,
+            0.7488772524706265
+          ],
+          "accuracy": 0.7033333333333334,
+          "per_class_f1": {
+            "bathing dog": 0.7766990291262137,
+            "grooming cat": 0.5684210526315789,
+            "grooming dog": 0.7234042553191491,
+            "petting cat": 0.6470588235294118,
+            "training dog": 0.7115384615384615,
+            "walking the dog": 0.7843137254901961
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                40,
+                1,
+                3,
+                1,
+                2,
+                3
+              ],
+              [
+                4,
+                27,
+                2,
+                15,
+                2,
+                0
+              ],
+              [
+                5,
+                3,
+                34,
+                2,
+                6,
+                0
+              ],
+              [
+                1,
+                13,
+                1,
+                33,
+                1,
+                1
+              ],
+              [
+                3,
+                1,
+                1,
+                0,
+                37,
+                8
+              ],
+              [
+                0,
+                0,
+                3,
+                1,
+                6,
+                40
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7033333333333333
+        },
+        "visual_only": {
+          "n": 300,
+          "macro_f1": 0.7047852032607834,
+          "macro_f1_ci95": [
+            0.6521515611272268,
+            0.7506961704210706
+          ],
+          "accuracy": 0.7066666666666667,
+          "per_class_f1": {
+            "bathing dog": 0.796116504854369,
+            "grooming cat": 0.574468085106383,
+            "grooming dog": 0.7446808510638298,
+            "petting cat": 0.6464646464646464,
+            "training dog": 0.7169811320754718,
+            "walking the dog": 0.7500000000000001
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                41,
+                1,
+                2,
+                1,
+                2,
+                3
+              ],
+              [
+                6,
+                27,
+                1,
+                14,
+                2,
+                0
+              ],
+              [
+                4,
+                3,
+                35,
+                2,
+                5,
+                1
+              ],
+              [
+                1,
+                12,
+                2,
+                32,
+                1,
+                2
+              ],
+              [
+                1,
+                1,
+                1,
+                0,
+                38,
+                9
+              ],
+              [
+                0,
+                0,
+                3,
+                0,
+                8,
+                39
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7066666666666667
+        },
+        "audio_only": {
+          "n": 300,
+          "macro_f1": 0.4384445119490931,
+          "macro_f1_ci95": [
+            0.3792599066178467,
+            0.49017572466208514
+          ],
+          "accuracy": 0.46,
+          "per_class_f1": {
+            "bathing dog": 0.6019417475728155,
+            "grooming cat": 0.23529411764705882,
+            "grooming dog": 0.2826086956521739,
+            "petting cat": 0.5714285714285714,
+            "training dog": 0.3838383838383838,
+            "walking the dog": 0.5555555555555555
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                31,
+                3,
+                3,
+                2,
+                5,
+                6
+              ],
+              [
+                2,
+                8,
+                14,
+                18,
+                3,
+                5
+              ],
+              [
+                9,
+                5,
+                13,
+                2,
+                11,
+                10
+              ],
+              [
+                3,
+                1,
+                0,
+                32,
+                9,
+                5
+              ],
+              [
+                7,
+                0,
+                6,
+                3,
+                19,
+                15
+              ],
+              [
+                1,
+                1,
+                6,
+                5,
+                2,
+                35
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.45999999999999996
+        }
+      },
+      "threshold": 0.4345456031636382,
+      "genuine": {
+        "k": 31,
+        "n": 291,
+        "rate": 0.10652920962199312,
+        "wilson95": [
+          0.07606898150694952,
+          0.14724278996627543
+        ]
+      },
+      "swapped_same_species": {
+        "k": 91,
+        "n": 300,
+        "rate": 0.30333333333333334,
+        "wilson95": [
+          0.25407027929306525,
+          0.35756946983937743
+        ],
+        "roc_auc_vs_genuine": 0.6671390276449263,
+        "policy": {
+          "without_detector": {
+            "coverage": 0.89,
+            "selective_accuracy": 0.7116104868913857
+          },
+          "with_detector": {
+            "coverage": 0.5966666666666667,
+            "selective_accuracy": 0.6201117318435754
+          }
+        }
+      },
+      "swapped_cross_species": {
+        "k": 128,
+        "n": 300,
+        "rate": 0.4266666666666667,
+        "wilson95": [
+          0.37197260006995525,
+          0.4832151029963794
+        ],
+        "roc_auc_vs_genuine": 0.7489283310305735,
+        "policy": {
+          "without_detector": {
+            "coverage": 0.88,
+            "selective_accuracy": 0.696969696969697
+          },
+          "with_detector": {
+            "coverage": 0.47,
+            "selective_accuracy": 0.6099290780141844
+          }
+        }
+      },
+      "genuine_policy": {
+        "without_detector": {
+          "coverage": 0.92,
+          "selective_accuracy": 0.7318840579710145
+        },
+        "with_detector": {
+          "coverage": 0.82,
+          "selective_accuracy": 0.7276422764227642
+        }
+      },
+      "selective_accuracy_drop_on_genuine": 0.0042417815482502785,
+      "adoption_checks": {
+        "1_same_species_flagged": true,
+        "2_genuine_flagged": true,
+        "3_selective_accuracy_drop": true
+      },
+      "adopt": true
+    },
+    "phone_now": {
+      "replication": {
+        "combined": {
+          "n": 300,
+          "macro_f1": 0.7234361618364402,
+          "macro_f1_ci95": [
+            0.6689237395476447,
+            0.7691597236219878
+          ],
+          "accuracy": 0.7266666666666667,
+          "per_class_f1": {
+            "bathing dog": 0.8037383177570094,
+            "grooming cat": 0.5714285714285714,
+            "grooming dog": 0.7446808510638298,
+            "petting cat": 0.673076923076923,
+            "training dog": 0.74,
+            "walking the dog": 0.8076923076923077
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                43,
+                2,
+                2,
+                0,
+                1,
+                2
+              ],
+              [
+                5,
+                26,
+                1,
+                16,
+                2,
+                0
+              ],
+              [
+                5,
+                3,
+                35,
+                2,
+                5,
+                0
+              ],
+              [
+                1,
+                10,
+                2,
+                35,
+                1,
+                1
+              ],
+              [
+                2,
+                0,
+                1,
+                1,
+                37,
+                9
+              ],
+              [
+                1,
+                0,
+                3,
+                0,
+                4,
+                42
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7266666666666667
+        },
+        "visual_only": {
+          "n": 300,
+          "macro_f1": 0.7071590720419006,
+          "macro_f1_ci95": [
+            0.652680156375826,
+            0.754753811234446
+          ],
+          "accuracy": 0.71,
+          "per_class_f1": {
+            "bathing dog": 0.8000000000000002,
+            "grooming cat": 0.5555555555555556,
+            "grooming dog": 0.7422680412371133,
+            "petting cat": 0.6407766990291262,
+            "training dog": 0.7307692307692308,
+            "walking the dog": 0.7735849056603773
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                40,
+                1,
+                3,
+                1,
+                2,
+                3
+              ],
+              [
+                5,
+                25,
+                2,
+                16,
+                2,
+                0
+              ],
+              [
+                3,
+                3,
+                36,
+                2,
+                5,
+                1
+              ],
+              [
+                1,
+                11,
+                2,
+                33,
+                1,
+                2
+              ],
+              [
+                1,
+                0,
+                1,
+                1,
+                38,
+                9
+              ],
+              [
+                0,
+                0,
+                3,
+                0,
+                6,
+                41
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.7100000000000001
+        },
+        "audio_only": {
+          "n": 300,
+          "macro_f1": 0.3958799610472186,
+          "macro_f1_ci95": [
+            0.341164304771454,
+            0.44829109754160135
+          ],
+          "accuracy": 0.42,
+          "per_class_f1": {
+            "bathing dog": 0.5940594059405941,
+            "grooming cat": 0.10526315789473684,
+            "grooming dog": 0.3716814159292035,
+            "petting cat": 0.44859813084112143,
+            "training dog": 0.34285714285714286,
+            "walking the dog": 0.5128205128205128
+          },
+          "confusion": {
+            "rows_true": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "cols_pred": [
+              "bathing dog",
+              "grooming cat",
+              "grooming dog",
+              "petting cat",
+              "training dog",
+              "walking the dog"
+            ],
+            "matrix": [
+              [
+                30,
+                1,
+                5,
+                2,
+                7,
+                5
+              ],
+              [
+                4,
+                3,
+                17,
+                15,
+                5,
+                6
+              ],
+              [
+                8,
+                0,
+                21,
+                7,
+                7,
+                7
+              ],
+              [
+                3,
+                3,
+                2,
+                24,
+                13,
+                5
+              ],
+              [
+                4,
+                0,
+                10,
+                4,
+                18,
+                14
+              ],
+              [
+                2,
+                0,
+                8,
+                5,
+                5,
+                30
+              ]
+            ]
+          },
+          "balanced_accuracy": 0.42
+        }
+      },
+      "threshold": 0.42344859434082666,
+      "genuine": {
+        "k": 37,
+        "n": 291,
+        "rate": 0.12714776632302405,
+        "wilson95": [
+          0.09367022980445566,
+          0.17034136150423346
+        ]
+      },
+      "swapped_same_species": {
+        "k": 86,
+        "n": 300,
+        "rate": 0.2866666666666667,
+        "wilson95": [
+          0.238445210315098,
+          0.3402826531506026
+        ],
+        "roc_auc_vs_genuine": 0.6007250741016285,
+        "policy": {
+          "without_detector": {
+            "coverage": 0.8466666666666667,
+            "selective_accuracy": 0.7440944881889764
+          },
+          "with_detector": {
+            "coverage": 0.56,
+            "selective_accuracy": 0.6547619047619048
+          }
+        }
+      },
+      "swapped_cross_species": {
+        "k": 100,
+        "n": 300,
+        "rate": 0.3333333333333333,
+        "wilson95": [
+          0.2823925597902556,
+          0.3884885835423229
+        ],
+        "roc_auc_vs_genuine": 0.6511732265797523,
+        "policy": {
+          "without_detector": {
+            "coverage": 0.8533333333333334,
+            "selective_accuracy": 0.7265625
+          },
+          "with_detector": {
+            "coverage": 0.5233333333333333,
+            "selective_accuracy": 0.6496815286624203
+          }
+        }
+      },
+      "genuine_policy": {
+        "without_detector": {
+          "coverage": 0.8666666666666667,
+          "selective_accuracy": 0.7653846153846153
+        },
+        "with_detector": {
+          "coverage": 0.7466666666666667,
+          "selective_accuracy": 0.7455357142857143
+        }
+      },
+      "selective_accuracy_drop_on_genuine": 0.01984890109890103,
+      "adoption_checks": {
+        "1_same_species_flagged": false,
+        "2_genuine_flagged": true,
+        "3_selective_accuracy_drop": true
+      },
+      "adopt": false
+    }
+  },
+  "runtime_s": 28.3,
+  "terms": "Kinetics annotations CC BY 4.0; clips are YouTube uploads (research only); no clip committed"
+}

@@ -53,8 +53,8 @@
       "source": "Kinetics-700 validation clip BLspcuDr2r8 (BLspcuDr2r8_000031_000041.mp4)",
       "dataset_label": "grooming dog",
       "label_layer": "recorded_context",
-      "status": "situation_only",
-      "summary": "Situation: grooming dog (0.99, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+      "status": "conflict",
+      "summary": "Conflicting evidence: situation: audio and video disagree about the situation (divergence 0.45 > 0.43; audio leans to 'grooming cat', video to 'grooming dog'). No single interpretation. Situation: grooming dog (0.99, conflict). Missing: dog_vocal_activity (no dog vocalization heard)."
     },
     {
       "example": "kinetics_grooming_dog_audio_removed",
@@ -157,8 +157,8 @@
       "source": "FIXTURE: video BLspcuDr2r8_000031_000041.mp4 + audio -07WVYMSwac_000020_000030.mp4 (unrelated recordings)",
       "dataset_label": "grooming dog (video) / petting cat (audio)",
       "label_layer": "recorded_context",
-      "status": "situation_only",
-      "summary": "Situation: grooming dog (0.99, interpretation). Missing: dog_vocal_activity (no dog vocalization heard)."
+      "status": "conflict",
+      "summary": "Conflicting evidence: situation: audio and video disagree about the situation (divergence 0.47 > 0.43; audio leans to 'petting cat', video to 'grooming dog'). No single interpretation. Situation: grooming dog (0.99, conflict). Missing: dog_vocal_activity (no dog vocalization heard)."
     },
     {
       "example": "barkopedia_alerting_to_sounds_audio_only",

@@ -135,6 +135,14 @@ class IntentModels:
         self.audio_input = a
 
 
+def js_divergence(p: np.ndarray, q: np.ndarray) -> float:
+    """Jensen-Shannon divergence (natural log) between two distributions; the E29 conflict score."""
+    p, q = np.asarray(p, np.float64), np.asarray(q, np.float64)
+    m = (p + q) / 2
+    kl = lambda a, b: float(np.sum(a * (np.log(np.maximum(a, 1e-9)) - np.log(np.maximum(b, 1e-9)))))  # noqa: E731
+    return 0.5 * kl(p, m) + 0.5 * kl(q, m)
+
+
 def _reading(channel: str, model: str, space: str, species: str, head: H.Head, p: np.ndarray, inputs: list[str], gate: bool = True,
              note: str = "", threshold: float | None = None) -> Reading:
     k = int(np.argmax(p))
@@ -201,8 +209,14 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
             pa = bp[ab][0]
             pv = models.situation_fusion.proba({**dict.fromkeys(sb), **{b: bp[b] for b in vis}})[0]
             a_top, v_top = int(np.argmax(pa)), int(np.argmax(pv))
+            js = js_divergence(pa, pv)
+            thr = models.situation_policy.get("conflict_js_threshold")
             if a_top != v_top and pa[a_top] >= models.situation_heads[ab].abstain_below and pv[v_top] >= models.situation_policy["visual_only_abstain_below"]:
                 sit_conflict = f"audio suggests '{classes[a_top]}' ({pa[a_top]:.2f}) but video suggests '{classes[v_top]}' ({pv[v_top]:.2f})"
+                conflicts.append("situation: " + sit_conflict)
+            elif thr is not None and js > thr:
+                sit_conflict = (f"audio and video disagree about the situation (divergence {js:.2f} > {thr:.2f}; audio leans to "
+                                f"'{classes[a_top]}', video to '{classes[v_top]}')")
                 conflicts.append("situation: " + sit_conflict)
         if species in ("cat", "dog") and SITUATION_SPECIES[r.top] != species and r.confident and vis:
             sit_conflict = f"situation '{r.top}' implies a {SITUATION_SPECIES[r.top]} but the {src.split(' ')[0]} indicates a {species}"

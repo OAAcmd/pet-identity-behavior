@@ -16,6 +16,8 @@ export interface IntentAssets {
   dog_sounds: string[]; cat_sounds: string[]; object_classes: string[];
   situation: {
     heads: Record<string, IntentHeadAssets>; fusion: IntentHeadAssets; visual_only_abstain_below: number;
+    /** E29 conflict detector threshold; present only for variants where it was adopted. */
+    conflict_js_threshold?: number | null;
     species: Record<string, string>; qualifier: Record<string, string | null>; context_for: Record<string, string[]>;
   };
   dog_activity_hypothesis: Record<string, string | null>;
@@ -59,6 +61,17 @@ export class LinearHead {
     }
     return softmax(z);
   }
+}
+
+/** Jensen-Shannon divergence (natural log); the E29 conflict score. */
+export function jsDivergence(p: number[], q: number[]): number {
+  let a = 0, b = 0;
+  for (let i = 0; i < p.length; i++) {
+    const m = (p[i] + q[i]) / 2;
+    a += p[i] * (Math.log(Math.max(p[i], 1e-9)) - Math.log(Math.max(m, 1e-9)));
+    b += q[i] * (Math.log(Math.max(q[i], 1e-9)) - Math.log(Math.max(m, 1e-9)));
+  }
+  return 0.5 * a + 0.5 * b;
 }
 
 export function softmax(z: number[]): number[] {
@@ -277,8 +290,12 @@ export class IntentModels {
         for (const b of sitBranches) vb[b] = vis.includes(b) ? bp[b] : null;
         const pv = lateFusion(this.fusion, vb);
         const aTop = pa.indexOf(Math.max(...pa)), vTop = pv.indexOf(Math.max(...pv));
+        const js = jsDivergence(pa, pv), thr = a.situation.conflict_js_threshold;
         if (aTop !== vTop && pa[aTop] >= this.heads[ab].threshold && pv[vTop] >= a.situation.visual_only_abstain_below) {
           sitConflict = `audio suggests '${classes[aTop]}' (${pa[aTop].toFixed(2)}) but video suggests '${classes[vTop]}' (${pv[vTop].toFixed(2)})`;
+          conflicts.push("situation: " + sitConflict);
+        } else if (thr !== undefined && thr !== null && js > thr) {
+          sitConflict = `audio and video disagree about the situation (divergence ${js.toFixed(2)} > ${thr.toFixed(2)}; audio leans to '${classes[aTop]}', video to '${classes[vTop]}')`;
           conflicts.push("situation: " + sitConflict);
         }
       }

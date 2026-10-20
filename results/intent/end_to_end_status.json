@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-20T03:07:12+00:00",
+  "created_at": "2026-10-20T03:38:15+00:00",
   "protocol": [
     "End-to-end status of the combined inference on every held-out clip (descriptive; written to results/intent/).",
     "",
@@ -15,22 +15,23 @@
   "kinetics_validation:full": {
     "clips": 294,
     "status": {
-      "conflict": 50,
-      "situation_only": 208,
-      "insufficient_evidence": 36
+      "conflict": 74,
+      "situation_only": 188,
+      "insufficient_evidence": 32
     },
     "conflict_kinds": {
-      "species": 50
+      "species": 50,
+      "audio_vs_video": 29
     },
-    "situation_interpretations": 208,
-    "situation_accuracy_when_interpreted": 0.7788461538461539,
+    "situation_interpretations": 188,
+    "situation_accuracy_when_interpreted": 0.7872340425531915,
     "hypothesis_statuses": {
-      "attention:context_only": 73,
-      "relaxed:context_only": 33,
-      "food:context_only": 35,
+      "attention:context_only": 66,
+      "relaxed:context_only": 29,
+      "food:context_only": 32,
       "relaxed:tentative": 5,
       "play:context_only": 1,
-      "outside:context_only": 47,
+      "outside:context_only": 46,
       "play:tentative": 20,
       "alert:context_only": 2,
       "warning:context_only": 2,

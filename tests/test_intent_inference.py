@@ -138,3 +138,21 @@ def test_cat_meow_context_below_gate_never_supports():
     cat = [x for x in r.readings if x.channel == "cat_meow_context"]
     assert cat and not cat[0].confident and not cat[0].evidence_gate_passed
     assert not any(h.status.startswith("supported") for h in r.hypotheses)
+
+
+def test_adopted_divergence_detector_flags_disagreement_when_audio_head_never_commits():
+    m = Models()
+    m.situation_heads["audio"] = _head("audio", SIT, A_DIM, thr=1.01)  # as in E28: the audio head never passes its threshold
+    r = I.infer(m, _branches(_audio("bathing dog"), "walking the dog"), _cues(sounds={"Water": 0.8}), YL)
+    assert r.status != "conflict"  # without an adopted detector nothing is flagged (E28's finding)
+    m.situation_policy = {**m.situation_policy, "conflict_js_threshold": 0.2}
+    r = I.infer(m, _branches(_audio("bathing dog"), "walking the dog"), _cues(sounds={"Water": 0.8}), YL)
+    assert r.status == "conflict" and any("disagree about the situation" in c for c in r.conflicts)
+    r = I.infer(m, _branches(_audio("walking the dog"), "walking the dog"), _cues(), YL)
+    assert r.status != "conflict"  # agreeing channels are not flagged
+
+
+def test_js_divergence():
+    p = np.array([1.0, 0.0])
+    assert I.js_divergence(p, p) == 0.0
+    assert abs(I.js_divergence(p, np.array([0.0, 1.0])) - np.log(2)) < 1e-6

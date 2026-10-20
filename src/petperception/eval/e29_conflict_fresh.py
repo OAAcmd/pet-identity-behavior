@@ -153,3 +153,25 @@ def fetch_and_extract(settings: Settings, threads: int = 2) -> dict:
     comp = AF.load_components(threads)
     AF.extract_many(comp, [(c.key, c.path) for c in clips], K.feature_dir(data_root.parent))
     return {"fetch": got, "clips": len(clips)}
+
+
+def apply_adoption(metrics_path: Path, art_root: Path) -> dict:
+    """Write the adopted detector threshold into each adopting variant's policy.json (E28 artifacts)."""
+    import json
+
+    m = json.loads(metrics_path.read_text())
+    out = {}
+    for variant in ("full", "phone_now"):
+        r = m["results"][variant]
+        p = art_root / "kinetics_situation_v1" / variant / "policy.json"
+        pol = json.loads(p.read_text())
+        if r["adopt"]:
+            pol["conflict_js_threshold"] = r["threshold"]
+            pol["conflict_detector"] = ("E29: Jensen-Shannon divergence between the audio-only and visual-only situation distributions; "
+                                        "threshold = 90th percentile of genuine pairs on E28's test clips; adopted under the pre-registered rule")
+        else:
+            pol.pop("conflict_js_threshold", None)
+            pol["conflict_detector"] = "E29: not adopted for this variant (pre-registered rule not met)"
+        write_json(p, pol)
+        out[variant] = r["adopt"]
+    return out

@@ -8,8 +8,8 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 170,
-    "typescript_unit_tests": 37,
+    "python_tests": 175,
+    "typescript_unit_tests": 39,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
     "ci": "green on every push up to 2026-10-11; pushes of 2026-10-19 not yet observed from this workspace",
@@ -60,7 +60,8 @@
     "g1_full_cpu_run": "E4 full-curve AP50 cat 0.898 / dog 0.864 (M3 0.923 / 0.851); acceptance 1 with per-class operating points and its own verifier: cat 0.814 (needs 0.833), dog 0.749 (passes), specificity intervals overlap M3's; home video at the single tuning-selected point: cat frames 0.811, dog 0.856 vs phone build 0.697 / 0.598",
     "situation_synchronized_av_e28": "late fusion macro-F1 0.730 [0.678, 0.777] (294 Kinetics validation clips, 6 situations); visual only 0.689; audio only 0.456; rules 0.282; coverage 0.88 at selective accuracy 0.76",
     "dog_bark_activity_e26_e27": "macro-F1 0.222 [0.184, 0.269] audio only; 0.290 [0.251, 0.328] with location context; no activity passes the gate; coverage 0-4 % at fitted thresholds",
-    "intent_end_to_end": "no intent hypothesis reaches 'supported' on held-out Kinetics or Barkopedia clips; situation interpretations on 208/294 Kinetics clips (0.779 correct); 50 species conflicts"
+    "intent_end_to_end": "no intent hypothesis reaches 'supported' on held-out Kinetics or Barkopedia clips; full variant: situation interpretations on 188/294 Kinetics clips (0.787 correct), 74 conflicts (50 species, 29 audio-video)",
+    "e29_conflict_detector": "fresh 300 Kinetics clips: E28 replicates (combined 0.702, visual 0.705); divergence detector flags 30 % of same-species and 43 % of other-species foreign soundtracks at 11 % false flags (full variant, adopted); phone variant 29 % (not adopted)"
    },
    "blocking": [
     "household recordings (package ready: docs/household/)",
@@ -130,8 +131,8 @@
   },
   {
    "date": "2026-10-20",
-   "decision": "JS-divergence audio-video conflict score not adopted",
-   "basis": "exploratory after E28 (AUC 0.69-0.71); needs a fresh pre-registered test"
+   "decision": "E29 divergence conflict detector adopted for the full variant, not for the phone variant",
+   "basis": "pre-registered rule on 300 fresh clips (full: all 3 criteria; phone: same-species detection 0.287 < 0.30)"
   }
  ],
  "resources_needed": [

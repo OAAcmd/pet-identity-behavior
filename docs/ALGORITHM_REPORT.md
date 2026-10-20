@@ -1260,10 +1260,46 @@ training-fitted threshold and no audio-video conflict is flagged):
   after the result) shows a weak continuous signal: the Jensen-Shannon
   divergence between the audio-only and visual-only distributions separates
   swapped from genuine pairs with ROC AUC 0.69 (same species) and 0.71
-  (other species); it is not adopted, since adopting it would need a fresh
-  pre-registered test.
+  (other species). Adopting it needed a fresh pre-registered test: E29.
 * The selective accuracy targeted on training data (0.8) is missed on test
   (0.764): the abstention thresholds are optimistic.
+
+### E29 - Pre-registered audio-video conflict detector and E28 replication on fresh clips - COMPLETED, adopted (full variant)
+
+Protocol fixed and committed (6dba573) before the clips were fetched
+(`src/petperception/eval/e29_conflict_fresh.py`). Fresh data: Kinetics
+train-split clips 161-210 of each class (300 clips; clips 1-160, including
+the sealed E23 set, were streamed past and never extracted); no YouTube id
+shared with any other split. Frozen E28 models.
+
+Replication of E28 on the fresh clips (macro-F1 [95 % CI]):
+
+| Variant | Combined | Visual only | Audio only |
+| --- | --- | --- | --- |
+| Full | 0.702 [0.646, 0.749] | 0.705 [0.652, 0.751] | 0.438 [0.379, 0.490] |
+| Phone | 0.723 [0.669, 0.769] | 0.707 [0.653, 0.755] | 0.396 [0.341, 0.448] |
+
+The situation result replicates (E28: 0.730 / 0.687 combined); on these
+clips audio adds nothing measurable to video in the full variant.
+
+Detector: Jensen-Shannon divergence between the audio-only and visual-only
+situation distributions; threshold = 90th percentile of genuine pairs on
+E28's test clips (0.435 full, 0.423 phone).
+
+| Variant | Genuine clips flagged | Same-species swaps flagged | Other-species swaps flagged | ROC AUC (same / other) | Selective accuracy on genuine clips, without -> with |
+| --- | --- | --- | --- | --- | --- |
+| Full | 0.107 [0.076, 0.147] | **0.303 [0.254, 0.358]** | 0.427 [0.372, 0.483] | 0.667 / 0.749 | 0.732 -> 0.728 |
+| Phone | 0.127 [0.094, 0.170] | 0.287 [0.238, 0.340] | 0.333 [0.282, 0.388] | 0.601 / 0.651 | 0.765 -> 0.746 |
+
+* Full variant: all three adoption criteria met (swaps flagged >= 0.30 with
+  lower bound >= 0.20; genuine <= 0.15 with upper bound <= 0.20; selective
+  accuracy drop 0.004 <= 0.02). **Adopted**: the threshold is in
+  `artifacts/intent/kinetics_situation_v1/full/policy.json`.
+* Phone variant: same-species detection 0.287 < 0.30. **Not adopted**; the
+  phone policy is unchanged.
+* What it means: about one foreign soundtrack in three (same species) to
+  two in five (other species) is now reported as a conflict instead of an
+  interpretation, at the price of one genuine clip in ten.
 
 ### On-device execution
 
@@ -1302,9 +1338,10 @@ temperature and its abstention threshold fitted on training data.
 * Qualifiers change the reading: vocal signals while handled or bathed are
   marked as possibly a reaction to the handling.
 * *Conflict* (no single interpretation): audio and video name different
-  situations (both above threshold), a confident visual situation
-  contradicts the detected species, or two soft-conflicting hypotheses are
-  both supported.
+  situations (both above threshold; never fired in E28), their situation
+  distributions diverge beyond the E29 threshold (full variant only), a
+  confident visual situation contradicts the detected species, or two
+  soft-conflicting hypotheses are both supported.
 * Every missing or unusable input is listed with its reason (no audio
   stream, silence, no animal detected, video removed, no vocalization
   heard, a model absent from the variant).
@@ -1319,7 +1356,7 @@ descriptive: the policy was informed by these clips):
 
 | Data | Interpretation of an intent hypothesis | Situation only | Conflict | Insufficient evidence | Situation correct when given |
 | --- | --- | --- | --- | --- | --- |
-| Kinetics validation, 294 clips, full | 0 | 208 | 50 (species) | 36 | 0.779 |
+| Kinetics validation, 294 clips, full (with the E29 detector) | 0 | 188 | 74 (50 species, 29 audio-video) | 32 | 0.787 |
 | Kinetics validation, phone variant | 0 | 194 | 51 (species) | 49 | 0.768 |
 | Barkopedia validation, 500 barks (audio only) | 0 | 0 | 0 | 500 | - |
 

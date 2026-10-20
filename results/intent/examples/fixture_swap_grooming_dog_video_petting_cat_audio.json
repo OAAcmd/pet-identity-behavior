@@ -56,22 +56,22 @@
     "situation": {
       "label": "grooming dog",
       "score": 0.9876,
-      "status": "interpretation",
+      "status": "conflict",
       "branches_used": [
         "audio",
         "animal",
         "environment",
         "interaction"
       ],
-      "qualifier": "handling"
+      "qualifier": null
     },
-    "qualifiers": [
-      "handling"
-    ],
+    "qualifiers": [],
     "hypotheses": [],
-    "conflicts": [],
-    "status": "situation_only",
-    "summary": "Situation: grooming dog (0.99, interpretation). Missing: dog_vocal_activity (no dog vocalization heard).",
+    "conflicts": [
+      "situation: audio and video disagree about the situation (divergence 0.47 > 0.43; audio leans to 'petting cat', video to 'grooming dog')"
+    ],
+    "status": "conflict",
+    "summary": "Conflicting evidence: situation: audio and video disagree about the situation (divergence 0.47 > 0.43; audio leans to 'petting cat', video to 'grooming dog'). No single interpretation. Situation: grooming dog (0.99, conflict). Missing: dog_vocal_activity (no dog vocalization heard).",
     "caveats": [
       "cross-channel intent combination not validated (no synchronized intent-labelled recordings)",
       "scores are temperature-scaled on training data, not probabilities of truth"
