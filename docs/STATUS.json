@@ -105,8 +105,12 @@
    "evaluation": "results/e27, results/e28, results/intent"
   },
   "G1b": {
-   "status": "paused 2026-10-20 (signal checkpoints saved, resumable); selection rule fixed",
-   "reason": "priority moved to behaviour/intent inference"
+   "status": "run B (g1b_warm_cat2_cop3d) finished 2026-10-20 (resumed after a reboot from its 10-minute checkpoint, no restart); run A paused",
+   "selection": "development data only: run B over G1a (OI dev AP50 cat 0.774 / dog 0.821 vs 0.741 / 0.765; CoP3D dev dog frames only a cat 0.086 vs 0.154)",
+   "acceptance_1": "met: E4 with own verifier at per-class points cat 0.852, dog 0.7481 (threshold 0.748), specificity intervals overlap M3's",
+   "e20": "home video vs phone build + verifier: cat found 0.766 vs 0.697, dog 0.762 vs 0.598, dog frames only a cat 0.072 vs 0.137",
+   "next": "E16 and E18 need the engine wired to a G1 export with per-class points and verifier; then parity and phone latency; phone detector unchanged",
+   "artifacts": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint ckpt-21 with optimizer state, float32/float16/int8 exports, MANIFEST.json); GitHub restore verified"
   },
   "B1": {
    "capability": "trained behaviour head on frozen SigLIP embeddings (behaviour explanation)",
@@ -155,6 +159,11 @@
    "date": "2026-10-20",
    "decision": "Tail chasing is not reported as recognized from recordings; answers about it rest on the owner's report",
    "basis": "E31 benchmark: recognized in 3 of 8 tail-chasing clips (pre-registered minimum 0.7); confusers rejected 4/4"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "G1b run B selected over G1a; acceptance 1 met; phone detector not replaced yet",
+   "basis": "pre-registered selection on development data, then E7/E20 scored once (results/g1/g1b_*); criteria 2-5 (E18, E16, parity, phone latency) not yet run"
   }
  ],
  "resources_needed": [
@@ -169,7 +178,8 @@
   "keypoint_heads": "artifacts/keypoints/*.npz",
   "audio_artifacts": "artifacts/audio_*.json",
   "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)",
-  "behavior_explanation": "artifacts/understand/recognizer.json (deployed zero-shot thresholds); knowledge base in src/petperception/understand/knowledge.py; benchmark benchmarks/behavior_questions.json; annotations/behavior_clips.json (assistant frame review)"
+  "behavior_explanation": "artifacts/understand/recognizer.json (deployed zero-shot thresholds); knowledge base in src/petperception/understand/knowledge.py; benchmark benchmarks/behavior_questions.json; annotations/behavior_clips.json (assistant frame review)",
+  "g1b_detector": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint and exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check_g1b.json)"
  },
  "experiments_latest": {
   "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31"

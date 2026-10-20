@@ -315,3 +315,9 @@ Features (`var/understand/features/<clip>.npz`, not committed): target
 track, optical-flow motion, appearance descriptors, SigLIP crop and scene
 embeddings, YAMNet scores. Rebuilt with
 `python -m petperception.understand.dataset` (resumable).
+
+### G1b detector (2026-10-20)
+
+| Path | Content | Trained on | Terms |
+| --- | --- | --- | --- |
+| `models/g1/g1b_warm_cat2_cop3d/` | checkpoint `ckpt-21` (weights and optimizer state, weights SHA-256 `1a53f4b3…6aad`), exports float32 (SHA-256 `8e47751e…7fbe`), float16, int8 PTQ, run record; `MANIFEST.json` | G1 Open Images CC BY images with cat images repeated twice, plus 4,538 CoP3D home-video frames (CC BY-NC 4.0; 25 contributors disjoint from every CoP3D evaluation) | Open Images annotations CC BY 4.0 / images CC BY 2.0; **CoP3D CC BY-NC 4.0 frames in training: research and non-commercial only** |
