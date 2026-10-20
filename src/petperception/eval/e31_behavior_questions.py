@@ -447,6 +447,11 @@ def run(settings: Settings, out_dir: Path) -> dict:
            "knowledge_version": K.KNOWLEDGE_VERSION, "benchmark": json.loads(BENCHMARK.read_text())["version"], "pool": info, "part_a": a,
            "part_b_recognition": b, "part_b_explanation": c, "tail_chasing_recognized_from_recordings": tc_ok, "per_question": rows}
     write_json(out_dir / "metrics.json", res)
+    by_key = {c.key: c for c in clips}
+    write_json(out_dir / "splits.json", {"grouping": "uploader (Commons, Internet Archive) or paper; GroupKFold(5) over the part A pool",
+                                         "clips": [{"key": k, "source": by_key[k].source, "group": by_key[k].group, "fold": int(f),
+                                                    "human_labels": sorted(human_labels(by_key[k]))} for k, f in zip(state["keys"], state["fold"])],
+                                         "not_in_pool": sorted(c.key for c in clips if c.key not in set(state["keys"]))})
     # deployed recognizer and head (artifacts/understand/)
     art = REPO_ROOT / "artifacts" / "understand"
     prov = {"experiment": "E31", "code_commit": commit, "pool_clips": a["clips"], "pool_groups": a["groups"], "adopted": a["adopted"],

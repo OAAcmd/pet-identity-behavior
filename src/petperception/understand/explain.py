@@ -66,7 +66,7 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: Re
     seen = [r for r in readings if r.score >= cfg.threshold(r.behavior) and (r.bouts or r.behavior == "vocalizing" or r.evidence.get("clip_level"))]
     seen_names = {r.behavior for r in seen}
     by_name = {r.behavior: r for r in readings}
-    behaviors_seen = [{"behavior": r.behavior, "description": V.BEHAVIORS[r.behavior].description, "score": r.score,
+    behaviors_seen = [{"behavior": r.behavior, "description": V.describe(r.behavior, q.species), "score": r.score,
                        "threshold": cfg.threshold(r.behavior), "bouts_s": [[round(b.t0, 2), round(b.t1, 2)] for b in r.bouts],
                        "evidence": r.evidence} for r in seen]
     reported = []
@@ -130,7 +130,7 @@ def _summary(q: Query, seen: list[BehaviorReading], explained: list[dict], patte
     parts = []
     if seen:
         top = seen[:3]
-        parts.append("In the recording: " + "; ".join(f"{V.BEHAVIORS[r.behavior].description} ({_fmt_bouts(r) or 'throughout'})" for r in top) + ".")
+        parts.append("In the recording: " + "; ".join(f"{V.describe(r.behavior, q.species)} ({_fmt_bouts(r) or 'throughout'})" for r in top) + ".")
     else:
         parts.append("No specific behaviour was recognized with confidence in the recording.")
     if pattern.get("available"):
@@ -145,7 +145,7 @@ def _summary(q: Query, seen: list[BehaviorReading], explained: list[dict], patte
             parts.append("Movement: " + ", ".join(bits) + ".")
     for ex in explained[:2]:
         kinds = list(dict.fromkeys(ex["kind_order_by_context"]))
-        what = f"{V.BEHAVIORS[ex['behavior']].description.capitalize()} ({ex['basis']})"
+        what = f"{V.describe(ex['behavior'], q.species).capitalize()} ({ex['basis']})"
         if len(kinds) == 1:
             parts.append(f"{what} is usually {K.KIND_TEXT[kinds[0]]}." + ("" if ex["request_or_intention_possible"] else " No request is implied by it."))
         else:

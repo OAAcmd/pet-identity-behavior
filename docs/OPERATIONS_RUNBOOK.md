@@ -62,6 +62,19 @@ passwords are not logged (tested).
   [ON_DEVICE.md](ON_DEVICE.md), and the component state `intent: ok` in a
   result. If the component says `unavailable`, its reason names the missing
   artifact or the release-profile decision.
+* **Behaviour explanation (command line, research profile):**
+  `petperception explain <media> --species cat|dog --scene "..." --question "..." --out a.json --markdown a.md`
+  needs the `behavior` extra (`uv sync --extra behavior`: CPU PyTorch,
+  transformers) and SigLIP in `var/models/siglip_base_patch16_224`
+  (`petperception fetch-models --only siglip_base_patch16_224`; checksums in
+  `manifests/resources.json`). It uses `artifacts/understand/recognizer.json`
+  (and `behavior_head.*` when E31 adopted a head) and falls back to the fixed
+  zero-shot defaults when they are missing. About 20-30 s for a 10-s clip on
+  2 CPU threads, most of it model loading. After changing
+  `understand/knowledge.py`, run `pytest tests/test_understand.py`
+  (`knowledge.validate()` must stay empty) and re-run
+  `petperception evaluate --experiment e31`. Not part of the phone bundle or
+  the web app yet ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
 * **Upgrades:** `git pull && $dc up -d --build`; migrations run at start.
   Read the release notes for asset-format changes (bundle `engine_version`):
   app and bundle must come from the same release.

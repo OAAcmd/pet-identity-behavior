@@ -95,5 +95,12 @@ def prompts_for(species: str) -> tuple[list[str], list[str]]:
     return texts, owners
 
 
+SPECIES_DESCRIPTION = {("vocalizing", "cat"): "meowing, purring, hissing or yowling", ("vocalizing", "dog"): "barking, whining, howling or growling"}
+
+
+def describe(behavior: str, species: str) -> str:
+    return SPECIES_DESCRIPTION.get((behavior, species), BEHAVIORS[behavior].description)
+
+
 def visual_behaviors(species: str) -> list[str]:
     return [b.name for b in BEHAVIORS.values() if b.channel == "visual" and species in b.species]

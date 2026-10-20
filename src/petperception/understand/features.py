@@ -30,7 +30,7 @@ MOTION_FPS = 6.0
 EMB_FPS = 2.0
 MAX_SECONDS = 60.0
 MAX_SIDE = 480
-SIGLIP_DIR = "var/models/siglip_base_patch16_224"
+SIGLIP_ID = "siglip_base_patch16_224"  # manifests/resources.json; files under <models_root>/<id>
 SIGLIP_REVISION = "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed"
 
 
@@ -142,9 +142,15 @@ def motion(frames: list[np.ndarray], box: np.ndarray, fps: float = MOTION_FPS) -
 
 
 class SiglipEncoder:
-    def __init__(self, model_dir: str | Path = SIGLIP_DIR, threads: int = 2):
+    def __init__(self, model_dir: str | Path | None = None, threads: int = 2):
         import torch
         from transformers import AutoModel, AutoProcessor
+
+        if model_dir is None:
+            from ..config import load_settings
+            from ..registry import model_dir as _model_dir
+
+            model_dir = _model_dir(load_settings(), SIGLIP_ID)
 
         torch.set_num_threads(threads)
         self.torch = torch
