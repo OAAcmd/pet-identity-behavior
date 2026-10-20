@@ -1226,7 +1226,9 @@ Paired differences (macro-F1): combined - best single branch
 - rules +0.448 [+0.383, +0.521]; late - early fusion +0.049 [+0.014,
 +0.086]; phone variant - full -0.043 [-0.073, -0.014]. Per class
 (combined): petting cat 0.81, walking 0.80, training 0.73, grooming dog
-0.71, bathing 0.67, grooming cat 0.66. Leakage audit: no test clip has a
+0.71, bathing 0.67, grooming cat 0.66. Posture and the research
+keypoint features (ears, tail, limbs) add nothing measurable to the animal
+branch for these situations (animal 0.611 with them, 0.611 without). Leakage audit: no test clip has a
 training whole-frame embedding with cosine >= 0.95; 28 have such an audio
 neighbour (music, silence); without them 0.735.
 

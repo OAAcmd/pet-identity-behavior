@@ -23,7 +23,7 @@ motivation (``interpretation``), which may always be "cannot_tell".
 from __future__ import annotations
 
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Literal
 
@@ -262,6 +262,11 @@ def score_recording(man: RecordingManifest, ann: Annotation, res: dict) -> dict:
     truth = {i.hypothesis: i.label for i in ann.interpretation}
     hyps = [h for h in res.get("hypotheses", []) if h.get("status") not in ("abstained", "not_supported", "insufficient_evidence")]
     out["hypotheses"] = [{"name": h.get("name"), "truth": truth.get(h.get("name"), "not_annotated")} for h in hyps]
+    # Intent block (result schema 1.5.0): only supported hypotheses count as claims; tentative and context-only do not.
+    it = res.get("intent") or None
+    if it is not None:
+        claims = [h for h in it.get("hypotheses", []) if h.get("status") in ("supported", "supported_corroborated")]
+        out["intent"] = {"status": it.get("status"), "claims": [{"name": h.get("name"), "truth": truth.get(h.get("name"), "not_annotated")} for h in claims]}
     return out
 
 
@@ -345,6 +350,18 @@ def evaluate(dataset: Path) -> dict:
             hyp[h["name"]][0 if h["truth"] == "yes" else 1 if h["truth"] == "no" else 2] += 1
     metrics["hypothesis_precision"] = {name: {"non_abstained": sum(c), "precision": c[0] / (c[0] + c[1]) if c[0] + c[1] else None,
                                               "cannot_tell_or_unannotated": c[2], "threshold": THRESHOLDS["hypothesis_precision"]} for name, c in sorted(hyp.items())}
+    with_intent = [r for r in rows if "intent" in r]
+    if with_intent:
+        ih = defaultdict(lambda: [0, 0, 0])
+        for r in with_intent:
+            for h in r["intent"]["claims"]:
+                ih[h["name"]][0 if h["truth"] == "yes" else 1 if h["truth"] == "no" else 2] += 1
+        metrics["intent_claim_precision"] = {name: {"claims": sum(c), "precision": c[0] / (c[0] + c[1]) if c[0] + c[1] else None,
+                                                    "cannot_tell_or_unannotated": c[2], "threshold": THRESHOLDS["hypothesis_precision"]}
+                                             for name, c in sorted(ih.items())}
+        metrics["intent_coverage"] = {"recordings": len(with_intent),
+                                      "with_a_supported_hypothesis": sum(bool(r["intent"]["claims"]) for r in with_intent),
+                                      "status_counts": dict(Counter(r["intent"]["status"] for r in with_intent))}
     return {"schema": "petperception.household_evaluation/1", "recordings_scored": len(rows), "households": len(hh), "recordings_missing_labels_or_results": missing,
             "metrics": metrics}
 

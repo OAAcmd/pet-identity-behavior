@@ -122,6 +122,19 @@ Listed exactly in `taxonomy.MISSING`:
    bouts); keypoint models give geometry but nothing links it to context or intent.
 5. Animal and household ids for Barkopedia clips (source video, dog, uploader).
 
+The household collection package already specifies how items 1-4 would be
+collected: owner-reported situations (`owner_context.situation`, e.g.
+`before_feeding`, `waiting_at_door`, `greeting`, `alone_at_home`), what
+happened before and after, and blind per-hypothesis annotation (`yes` /
+`no` / `cannot_tell` for food, outside, attention, play, alert, tense,
+warning, relaxed) with double annotation and agreement reporting
+([household/COLLECTION_PROTOCOL.md](household/COLLECTION_PROTOCOL.md),
+[household/ANNOTATION_GUIDE.md](household/ANNOTATION_GUIDE.md)). The intent
+stage's output (`intent` block, result schema 1.5.0) is scored against
+those annotations by `household-eval` (`intent_claim_precision` counts only
+supported hypotheses as claims; `intent_coverage` gives the share of
+recordings with one and the status counts); no such recording exists yet.
+
 ## 6. What was trained and what it showed (2026-10-20)
 
 All figures are measured on held-out data (details and CIs in

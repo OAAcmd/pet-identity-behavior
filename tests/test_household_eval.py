@@ -66,3 +66,12 @@ def test_evaluate_dataset_and_agreement(tmp_path: Path):
     assert ag["recordings_double_annotated"] == 2
     assert ag["posture_kappa"] is None  # both annotators used one label only: kappa is undefined, not 1
     assert ag["activity_interval_f1_between_annotators"] == 1.0
+
+
+def test_intent_block_scoring_counts_only_supported_claims():
+    res = {**RES, "intent": {"status": "interpretation", "hypotheses": [{"name": "food", "status": "supported"},
+                                                                       {"name": "attention", "status": "context_only"},
+                                                                       {"name": "play", "status": "tentative"}]}}
+    s = H.score_recording(H.RecordingManifest.model_validate(MAN), H.Annotation.model_validate(ANN), res)
+    assert s["intent"] == {"status": "interpretation", "claims": [{"name": "food", "truth": "yes"}]}
+    assert "intent" not in H.score_recording(H.RecordingManifest.model_validate(MAN), H.Annotation.model_validate(ANN), RES)
