@@ -1,0 +1,252 @@
+{
+  "benchmark_item": {
+    "id": "q10",
+    "clip": "commons_226a8cfdeb4d",
+    "species": "cat",
+    "scene": "Curled up on a red cushion.",
+    "question": "My young cat keeps licking her tail while she lies curled up. Should I be worried?",
+    "question_origin": "authored_from_source_description",
+    "category": "tail_directed",
+    "asked": [
+      "tail_directed"
+    ],
+    "asked_ok": [
+      "self_grooming"
+    ],
+    "reference_present": [
+      "tail_directed",
+      "resting"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "tail_directed": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Curled up on a red cushion.",
+    "question": "My young cat keeps licking her tail while she lies curled up. Should I be worried?",
+    "behaviors_seen": [
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.785,
+        "threshold": 0.262011,
+        "bouts_s": [
+          [
+            1.0,
+            3.0
+          ],
+          [
+            9.0,
+            26.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.785,
+          "share_of_frames_most_likely": 0.843
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 156,
+      "seconds": 26.0,
+      "animal_found_fraction": 0.9935897435897436,
+      "available": true,
+      "mean_speed_body_per_s": 0.0328,
+      "path_body_lengths": 3.4560000896453857,
+      "net_displacement_body_lengths": 0.06599999964237213,
+      "stays_in_place": false,
+      "turned_rad": 0.188,
+      "abs_turned_rad": 3.352,
+      "turning_consistency": 0.056,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.194
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_directed",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.163
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_directed",
+        "basis": "user report only",
+        "summary": "Licking, biting or chewing the tail without necessarily turning in circles.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "td_itch",
+              "explanation": "itch or skin disease (parasites, allergy)",
+              "context_match": [
+                "red"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "waisglass2006",
+                "vin_pa",
+                "amengualbatle2019"
+              ]
+            },
+            {
+              "id": "td_pain",
+              "explanation": "pain or a lesion near the tail or anal sacs; in dogs after surgery, neuropathic pain was a differential",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "tvp_fhs",
+                "frontiers2023_dachshund"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "td_groom",
+              "explanation": "ordinary grooming of the tail as part of a grooming sequence",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "td_compulsive",
+              "explanation": "a compulsive or displacement pattern when medical causes are excluded",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "cliniciansbrief_pa",
+                "tiira2012"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is there hair loss, redness, a wound or flea dirt at the tail?",
+      "Did it start after an injury, surgery or a change at home?",
+      "Does the animal stop when distracted?"
+    ],
+    "urgent_signs": [
+      "open wounds or bleeding",
+      "the animal cannot be distracted from damaging the tail"
+    ],
+    "sources": [
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "amengualbatle2019",
+        "tier": "peer_reviewed_study",
+        "citation": "Amengual Batle P et al. (2019) Feline hyperaesthesia syndrome with self-trauma to the tail: retrospective study of seven cases. J Feline Med Surg 21(2).",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10814607/",
+        "supports": "tail chasing and self-trauma in young cats; hypersensitivity dermatitis suspected in some; fleas should be eliminated even in indoor cats"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      },
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      }
+    ],
+    "summary": "In the recording: lying down, resting or sleeping (1.0-3.0 s, 9.0-26.0 s). Licking, biting or chewing its own tail (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; an abnormal repetitive (compulsive) pattern. No request is implied by it. Lying down, resting or sleeping (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "resting": 0.785,
+    "self_grooming": 0.1904,
+    "tail_directed": 0.163,
+    "tail_chasing": 0.1336,
+    "kneading": 0.1239,
+    "tail_flicking": 0.0753,
+    "self_biting": 0.0647,
+    "social_play": 0.0432,
+    "scratching_self": 0.036,
+    "vocalizing": 0.0312,
+    "drinking": 0.0252,
+    "playing_object": 0.0222,
+    "eating": 0.0147,
+    "threat_display": 0.0085,
+    "locomotion": 0.007,
+    "being_petted": 0.0034
+  }
+}

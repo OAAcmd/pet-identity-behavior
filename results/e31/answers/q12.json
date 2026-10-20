@@ -1,0 +1,216 @@
+{
+  "benchmark_item": {
+    "id": "q12",
+    "clip": "paper_focal_seizures_dogs_2026",
+    "species": "dog",
+    "scene": "At home in the hallway and the living room.",
+    "question": "My Border Terrier suddenly stands still, staring into space, and doesn't seem to notice us. Is he just daydreaming?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "self_directed",
+    "asked": [
+      "staring_snapping"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "staring_snapping"
+    ],
+    "reference_basis": "expert (video captions) + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "medical"
+      ],
+      "text": "suspected focal impaired-awareness seizures (supported by interictal EEG)",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "staring_snapping": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "At home in the hallway and the living room.",
+    "question": "My Border Terrier suddenly stands still, staring into space, and doesn't seem to notice us. Is he just daydreaming?",
+    "behaviors_seen": [
+      {
+        "behavior": "locomotion",
+        "description": "walking or running across the scene",
+        "score": 0.4104,
+        "threshold": 0.285819,
+        "bouts_s": [
+          [
+            0.0,
+            8.0
+          ],
+          [
+            21.5,
+            22.0
+          ],
+          [
+            32.0,
+            32.5
+          ],
+          [
+            40.5,
+            41.0
+          ],
+          [
+            57.0,
+            57.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.4104,
+          "share_of_frames_most_likely": 0.167
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0799,
+      "path_body_lengths": 13.427000045776367,
+      "net_displacement_body_lengths": 0.453000009059906,
+      "stays_in_place": false,
+      "turned_rad": 0.498,
+      "abs_turned_rad": 8.368,
+      "turning_consistency": 0.059,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.839
+    },
+    "user_reported": [
+      {
+        "behavior": "staring_snapping",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0781
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "staring_snapping",
+        "basis": "user report only",
+        "summary": "Staring fixedly, or snapping at the air as if catching flies.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ss_seizure",
+              "explanation": "focal (impaired-awareness) seizures: fly-catching, air snapping, staring and lip licking with reduced responsiveness, which can be mistaken for a behavioural problem",
+              "context_match": [
+                "suddenly",
+                "sudden",
+                "staring"
+              ],
+              "context_score": 2.2,
+              "sources": [
+                "frontiers2026_focal"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "ss_insect",
+              "explanation": "snapping at a real insect or reacting to something actually in view",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "ss_compulsive",
+              "explanation": "a compulsive behaviour, the main non-medical explanation weighed for such episodes",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "frontiers2026_focal",
+                "tiira2012"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "locomotion",
+        "basis": "recording",
+        "summary": "Walking or running. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "locomotion_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Does the dog respond to its name or a touch during an episode?",
+      "Is anything actually there (an insect, a shadow, a light)?",
+      "How long do episodes last, and do they look the same each time?"
+    ],
+    "urgent_signs": [
+      "episodes of unresponsiveness, drooling, collapse or loss of bladder control (possible seizures)"
+    ],
+    "sources": [
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      }
+    ],
+    "summary": "In the recording: walking or running across the scene (0.0-8.0 s, 21.5-22.0 s, 32.0-32.5 s, 40.5-41.0 s and 1 more). Staring fixedly or snapping at the air as if catching flies (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; an abnormal repetitive (compulsive) pattern. No request is implied by it. Walking or running across the scene (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "locomotion": 0.4104,
+    "tail_chasing": 0.3624,
+    "self_biting": 0.2958,
+    "playing_object": 0.2939,
+    "threat_display": 0.2553,
+    "tail_directed": 0.2428,
+    "self_grooming": 0.0904,
+    "social_play": 0.0903,
+    "staring_snapping": 0.0781,
+    "scratching_self": 0.0702,
+    "being_petted": 0.0454,
+    "resting": 0.0345,
+    "drinking": 0.0243,
+    "eating": 0.0241
+  }
+}

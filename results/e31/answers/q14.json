@@ -1,0 +1,134 @@
+{
+  "benchmark_item": {
+    "id": "q14",
+    "clip": "archive_ia_kitten_mother_tail",
+    "species": "cat",
+    "scene": "On a wooden garden table outdoors, a kitten and an adult cat.",
+    "question": "A kitten keeps pouncing on and biting the adult cat's tail. Is the kitten playing?",
+    "question_origin": "authored_from_source_title",
+    "category": "confuser",
+    "asked": [
+      "social_play"
+    ],
+    "asked_ok": [
+      "playing_object"
+    ],
+    "reference_present": [
+      "social_play"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [
+      "tail_chasing",
+      "tail_directed"
+    ],
+    "source_interpretation": null,
+    "request_expected": {},
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "On a wooden garden table outdoors, a kitten and an adult cat.",
+    "question": "A kitten keeps pouncing on and biting the adult cat's tail. Is the kitten playing?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0344,
+      "path_body_lengths": 20.113000869750977,
+      "net_displacement_body_lengths": 0.12300000339746475,
+      "stays_in_place": false,
+      "turned_rad": -0.745,
+      "abs_turned_rad": 7.458,
+      "turning_consistency": 0.1,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.053
+    },
+    "user_reported": [
+      {
+        "behavior": "playing_object",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0386
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "playing_object",
+        "basis": "user report only",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Batting, pouncing on or chasing a toy or object (user report only) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "social_play": 0.8327,
+    "tail_chasing": 0.3134,
+    "kneading": 0.1414,
+    "tail_flicking": 0.1206,
+    "resting": 0.1,
+    "self_grooming": 0.0715,
+    "threat_display": 0.0499,
+    "scratching_self": 0.0424,
+    "tail_directed": 0.0406,
+    "playing_object": 0.0386,
+    "self_biting": 0.0234,
+    "locomotion": 0.0214,
+    "drinking": 0.0149,
+    "eating": 0.0062,
+    "vocalizing": 0.0039,
+    "being_petted": 0.0029
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "benchmark_item": {
+    "id": "q20",
+    "clip": "commons_c74a52667c09",
+    "species": "cat",
+    "scene": "On a fluffy blanket.",
+    "question": "My cat purrs and kneads the blanket before settling down. What does this mean?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "kneading",
+      "vocalizing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "vocalizing"
+    ],
+    "reference_basis": "source (kneading not visible in the frames)",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "kneading": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "On a fluffy blanket.",
+    "question": "My cat purrs and kneads the blanket before settling down. What does this mean?",
+    "behaviors_seen": [
+      {
+        "behavior": "vocalizing",
+        "description": "meowing, purring, hissing or yowling",
+        "score": 0.9961,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.48,
+            15.36
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.9961
+        }
+      },
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.3605,
+        "threshold": 0.262011,
+        "bouts_s": [
+          [
+            5.0,
+            5.5
+          ],
+          [
+            9.0,
+            12.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3605,
+          "share_of_frames_most_likely": 0.133
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 90,
+      "seconds": 15.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0784,
+      "path_body_lengths": 3.075000047683716,
+      "net_displacement_body_lengths": 0.017999999225139618,
+      "stays_in_place": false,
+      "turned_rad": -0.071,
+      "abs_turned_rad": 2.071,
+      "turning_consistency": 0.034,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.0
+    },
+    "user_reported": [
+      {
+        "behavior": "kneading",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.7078
+      },
+      {
+        "behavior": "vocalizing",
+        "status": "also seen in the recording",
+        "recording_score": 0.9961
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "kneading",
+        "basis": "user report only",
+        "summary": "Rhythmic alternate pushing of the front paws into a soft surface.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "kn_comfort",
+              "explanation": "comfort or contentment behaviour derived from nursing, often with purring, before resting",
+              "context_match": [
+                "blanket",
+                "purr"
+              ],
+              "context_score": 1.3,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "kn_soothing",
+              "explanation": "self-soothing when stressed or uncomfortable, if it is new or excessive",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "vocalizing",
+        "basis": "recording and user report",
+        "summary": "Meowing, purring loudly or yowling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "request": [
+            {
+              "id": "vc_request",
+              "explanation": "a request directed at people, typically for food or attention; meows are mostly human-directed, and food-soliciting purrs contain a cry-like element",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "prato2020",
+                "mccomb2009"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "vc_context",
+              "explanation": "isolation or handling (meows recorded during isolation and brushing differ from food meows, but people decode single meows poorly)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "prato2020"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "request",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is the kneading new or more frequent than usual?",
+      "Does the cat purr and relax afterwards?",
+      "When does it happen: before meals, at a closed door, when alone, when handled?",
+      "What does the cat do when you respond?"
+    ],
+    "urgent_signs": [
+      "a sudden change in voice or night-time vocalizing in an older cat"
+    ],
+    "sources": [
+      {
+        "id": "petmd_knead",
+        "tier": "veterinarian_advice",
+        "citation": "PetMD: Why do cats knead?",
+        "url": "https://www.petmd.com/cat/behavior/why-do-cats-knead",
+        "supports": "kneading is usually associated with contentment, comfort or marking; it can be self-soothing when stressed or in pain; new or excessive kneading deserves a veterinary check"
+      },
+      {
+        "id": "prato2020",
+        "tier": "peer_reviewed_study",
+        "citation": "Prato-Previde E et al. (2020) What's in a meow? A study on human classification and interpretation of domestic cat vocalizations. Animals 10(12):2390.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7765146/",
+        "supports": "meows are mostly human-directed and vary with context (waiting for food, isolation, brushing), but people decode the context of single meows poorly"
+      },
+      {
+        "id": "mccomb2009",
+        "tier": "peer_reviewed_study",
+        "citation": "McComb K et al. (2009) The cry embedded within the purr. Curr Biol 19(13):R507-R508.",
+        "url": "https://doi.org/10.1016/j.cub.2009.05.033",
+        "supports": "cats soliciting food produce purrs with a cry-like component that people rate as more urgent"
+      }
+    ],
+    "summary": "In the recording: meowing, purring, hissing or yowling (0.5-15.4 s); lying down, resting or sleeping (5.0-5.5 s, 9.0-12.5 s). Pushing the front paws alternately into a soft surface (user report only) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. Meowing, purring, hissing or yowling (recording and user report) has several possible explanations, in order of fit to your description: a request or intention directed at a person; arousal, frustration or stress. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "vocalizing": 0.9961,
+    "kneading": 0.7078,
+    "resting": 0.3605,
+    "self_grooming": 0.1763,
+    "tail_chasing": 0.0494,
+    "self_biting": 0.0481,
+    "tail_directed": 0.0363,
+    "threat_display": 0.0337,
+    "scratching_self": 0.0238,
+    "playing_object": 0.0202,
+    "eating": 0.0194,
+    "tail_flicking": 0.0176,
+    "being_petted": 0.0076,
+    "social_play": 0.0055,
+    "drinking": 0.0041,
+    "locomotion": 0.0014
+  }
+}

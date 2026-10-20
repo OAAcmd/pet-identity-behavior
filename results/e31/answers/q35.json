@@ -1,0 +1,240 @@
+{
+  "benchmark_item": {
+    "id": "q35",
+    "clip": "commons_8820a1b04d0a",
+    "species": "dog",
+    "scene": "Two puppies in a grassy yard with a ball.",
+    "question": "Our two puppies chase each other and play fight in the yard. Is this normal play?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "social_play"
+    ],
+    "asked_ok": [
+      "playing_object"
+    ],
+    "reference_present": [
+      "social_play"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "play_or_normal"
+      ],
+      "text": "uploader: puppies play fighting",
+      "authority": "lay"
+    },
+    "request_expected": {},
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "Two puppies in a grassy yard with a ball.",
+    "question": "Our two puppies chase each other and play fight in the yard. Is this normal play?",
+    "behaviors_seen": [
+      {
+        "behavior": "social_play",
+        "description": "play fighting or wrestling with another animal",
+        "score": 0.8447,
+        "threshold": 0.832747,
+        "bouts_s": [
+          [
+            0.0,
+            1.5
+          ],
+          [
+            4.0,
+            4.5
+          ],
+          [
+            9.0,
+            16.0
+          ],
+          [
+            22.0,
+            23.5
+          ],
+          [
+            26.5,
+            42.0
+          ],
+          [
+            44.0,
+            44.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8447,
+          "share_of_frames_most_likely": 0.348
+        }
+      },
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.3968,
+        "threshold": 0.297763,
+        "bouts_s": [
+          [
+            1.5,
+            8.5
+          ],
+          [
+            27.0,
+            28.0
+          ],
+          [
+            33.0,
+            35.5
+          ],
+          [
+            46.5,
+            48.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3968,
+          "share_of_frames_most_likely": 0.122
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.9472222222222222,
+      "available": true,
+      "mean_speed_body_per_s": 0.109,
+      "path_body_lengths": 21.725000381469727,
+      "net_displacement_body_lengths": 0.8899999856948853,
+      "stays_in_place": true,
+      "turned_rad": -1.047,
+      "abs_turned_rad": 9.105,
+      "turning_consistency": 0.115,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.874
+    },
+    "user_reported": [
+      {
+        "behavior": "social_play",
+        "status": "also seen in the recording",
+        "recording_score": 0.8447
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "social_play",
+        "basis": "recording and user report",
+        "summary": "Chasing, wrestling or mouthing with another dog.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sp_dog_play",
+              "explanation": "social play: play bows and role reversals mark rough contact as play",
+              "context_match": [
+                "puppies",
+                "ball"
+              ],
+              "context_score": 1.0,
+              "sources": [
+                "bekoff1995"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [
+                "ball"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Do the dogs take turns (chaser and chased, on top and below) and pause with play bows?",
+      "Does one dog try to leave or hide while the other keeps going?",
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [
+      "one dog repeatedly trying to escape, yelping or being injured"
+    ],
+    "sources": [
+      {
+        "id": "bekoff1995",
+        "tier": "peer_reviewed_study",
+        "citation": "Bekoff M (1995) Play signals as punctuation: the structure of social play in canids. Behaviour 132(5-6):419-429.",
+        "url": "https://doi.org/10.1163/156853995X00649",
+        "supports": "play bows occur around play bites and other actions that could be misread, marking them as play"
+      },
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: play fighting or wrestling with another animal (0.0-1.5 s, 4.0-4.5 s, 9.0-16.0 s, 22.0-23.5 s and 2 more); batting, pouncing on or chasing a toy or object (1.5-8.5 s, 27.0-28.0 s, 33.0-35.5 s, 46.5-48.0 s). Movement: the animal stays roughly in place while moving. Play fighting or wrestling with another animal (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. Batting, pouncing on or chasing a toy or object (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "social_play": 0.8447,
+    "tail_chasing": 0.6776,
+    "playing_object": 0.3968,
+    "threat_display": 0.2377,
+    "tail_directed": 0.1211,
+    "self_biting": 0.0861,
+    "locomotion": 0.0447,
+    "self_grooming": 0.0435,
+    "being_petted": 0.0389,
+    "staring_snapping": 0.036,
+    "scratching_self": 0.0198,
+    "drinking": 0.0096,
+    "resting": 0.0022,
+    "eating": 0.0018
+  }
+}

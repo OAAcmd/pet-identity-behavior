@@ -1,0 +1,2388 @@
+{
+  "grouping": "uploader (Commons, Internet Archive) or paper; GroupKFold(5) over the part A pool",
+  "clips": [
+    {
+      "key": "commons_07a5978145f9",
+      "source": "commons",
+      "group": "commons:ComputerHotline",
+      "fold": 3,
+      "human_labels": [
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_1af9c54c57ee",
+      "source": "commons",
+      "group": "commons:F\u00e6",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_020b3cab9637",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_3fc154a9f343",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_629aeb6e3512",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_0776deb4ff47",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_54ca942e7e56",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_8f2ffb37f277",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_a956157ce807",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_291688a92fb5",
+      "source": "commons",
+      "group": "commons:ForeverFlying",
+      "fold": 4,
+      "human_labels": [
+        "eating",
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_c12a5fc356e4",
+      "source": "commons",
+      "group": "commons:HareGovorittKrishna",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_f17e2c7ff1a0",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_467fa4d4d2e2",
+      "source": "commons",
+      "group": "commons:Dandarmkd",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_d19328d49d24",
+      "source": "commons",
+      "group": "commons:Hansmuller",
+      "fold": 0,
+      "human_labels": [
+        "locomotion",
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_c11e818bf673",
+      "source": "commons",
+      "group": "commons:George Miquilena",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_3579183916de",
+      "source": "commons",
+      "group": "commons:\u30a6\u30a3\u30ad\u592a\u90ce",
+      "fold": 2,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_a7637caf7d37",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_90d76146a086",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_2bf009ab6f65",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_24c1587102b5",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_37ff1c5a1957",
+      "source": "commons",
+      "group": "commons:Umngeni",
+      "fold": 1,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_2dfead347560",
+      "source": "commons",
+      "group": "commons:Tipar",
+      "fold": 1,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_c74a52667c09",
+      "source": "commons",
+      "group": "commons:Jarble",
+      "fold": 4,
+      "human_labels": [
+        "kneading",
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_f81fb05b8f46",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": [
+        "eating",
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_3970ebd928d6",
+      "source": "commons",
+      "group": "commons:Spontaneous Symmetry",
+      "fold": 3,
+      "human_labels": [
+        "being_petted"
+      ]
+    },
+    {
+      "key": "commons_d3f6559443d6",
+      "source": "commons",
+      "group": "commons:Ashleyam",
+      "fold": 4,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_01eafd26a192",
+      "source": "commons",
+      "group": "commons:Opie81",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_253c08fc8c68",
+      "source": "commons",
+      "group": "commons:WikiMaker9000",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_2c4de41a895a",
+      "source": "commons",
+      "group": "commons:Vitaly Zdanevich",
+      "fold": 1,
+      "human_labels": [
+        "locomotion",
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_345c4addda3d",
+      "source": "commons",
+      "group": "commons:L. Beck",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_1b9690ae4424",
+      "source": "commons",
+      "group": "commons:Raymond",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e11df17966a5",
+      "source": "commons",
+      "group": "commons:85jesse",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_6cdda0122d9a",
+      "source": "commons",
+      "group": "commons:Toivocoughlin",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_eefa76e6e3e1",
+      "source": "commons",
+      "group": "commons:Dzkouslavia",
+      "fold": 1,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_3a1feff60c58",
+      "source": "commons",
+      "group": "commons:Eteil",
+      "fold": 1,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_8b99cc40f351",
+      "source": "commons",
+      "group": "commons:Mattes",
+      "fold": 3,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_6b7871daee3a",
+      "source": "commons",
+      "group": "commons:Abujoy",
+      "fold": 1,
+      "human_labels": [
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_21dcab74d428",
+      "source": "commons",
+      "group": "commons:Abujoy",
+      "fold": 1,
+      "human_labels": [
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_063e642cbcae",
+      "source": "commons",
+      "group": "commons:ComputerHotline",
+      "fold": 3,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_a9f9e5eb058d",
+      "source": "commons",
+      "group": "commons:Illegitimate Barrister",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_8105a285c650",
+      "source": "commons",
+      "group": "commons:Prototyperspective",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_be876279d8b4",
+      "source": "commons",
+      "group": "commons:Vijayanrajapuram",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_9db2231c588f",
+      "source": "commons",
+      "group": "commons:Psypherium",
+      "fold": 0,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_83d2e8f47885",
+      "source": "commons",
+      "group": "commons:\u0628\u0627\u0633\u0645",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_201844da325c",
+      "source": "commons",
+      "group": "commons:Mahanga",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_62c5775fe9d1",
+      "source": "commons",
+      "group": "commons:1Veertje",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_bec343f2eef6",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_4501c74b74b9",
+      "source": "commons",
+      "group": "commons:NairobiPapel",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_b43d06c41c69",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_8ae5c68f689b",
+      "source": "commons",
+      "group": "commons:Riverarvi",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_accf752b94ca",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_33629a4cf3e9",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_5d76f5e6e03c",
+      "source": "commons",
+      "group": "commons:Learnerktm",
+      "fold": 3,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_200930f8d690",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_cefe8995e1e3",
+      "source": "commons",
+      "group": "commons:Jeromi Mikhael",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_dc62bbab6117",
+      "source": "commons",
+      "group": "commons:Watchduck",
+      "fold": 3,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_cd247faf4555",
+      "source": "commons",
+      "group": "commons:Raul654",
+      "fold": 3,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_3d09643d88d3",
+      "source": "commons",
+      "group": "commons:NairobiPapel",
+      "fold": 2,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_7197c3b27824",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_1c46faa2fecf",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_88cd4ed5ecf3",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_beeb9075ad26",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_2609ce8b6c15",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_6be4bf477ff8",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_fd49ded51b4d",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_fba32cc76568",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_a1cbbdd66007",
+      "source": "commons",
+      "group": "commons:Turbojet",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_87a40192cda8",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_a553b95abf7e",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_a4614b1b91d5",
+      "source": "commons",
+      "group": "commons:Watchduck",
+      "fold": 3,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_961a01353c25",
+      "source": "commons",
+      "group": "commons:Grendelkhan",
+      "fold": 3,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_25a6515f82e6",
+      "source": "commons",
+      "group": "commons:Grendelkhan",
+      "fold": 3,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_5104df174f8e",
+      "source": "commons",
+      "group": "commons:Grendelkhan",
+      "fold": 3,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_226a8cfdeb4d",
+      "source": "commons",
+      "group": "commons:Ammoniumnitrate",
+      "fold": 2,
+      "human_labels": [
+        "self_grooming",
+        "tail_directed"
+      ]
+    },
+    {
+      "key": "commons_e9909ab1c799",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_0c532f735238",
+      "source": "commons",
+      "group": "commons:Sharkeston",
+      "fold": 1,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_38cf52e4e280",
+      "source": "commons",
+      "group": "commons:Renamed user c0af5c6d5769c6d5a58e1b9188e21cc2",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e138042c4e3f",
+      "source": "commons",
+      "group": "commons:NairobiPapel",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_828f73557f0d",
+      "source": "commons",
+      "group": "commons:NairobiPapel",
+      "fold": 2,
+      "human_labels": [
+        "eating",
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_82d85cdc924b",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_9f22d724f678",
+      "source": "commons",
+      "group": "commons:Pleclown",
+      "fold": 2,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_7c246e99cfe4",
+      "source": "commons",
+      "group": "commons:Basile Morin",
+      "fold": 3,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_2f43d725de7b",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": [
+        "resting",
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_1b423f125216",
+      "source": "commons",
+      "group": "commons:\u80e1\u8461\u8404",
+      "fold": 4,
+      "human_labels": [
+        "resting",
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_49d544ad9d43",
+      "source": "commons",
+      "group": "commons:Grendelkhan",
+      "fold": 3,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_87ecc0293746",
+      "source": "commons",
+      "group": "commons:Wnjensen08",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_0d0976af54a1",
+      "source": "commons",
+      "group": "commons:Pleclown",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_47f36e250514",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_0fc4128ba177",
+      "source": "commons",
+      "group": "commons:Deavmi",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_9aa65b0449e8",
+      "source": "commons",
+      "group": "commons:Xyxyzyz",
+      "fold": 2,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "commons_52eecb4a086a",
+      "source": "commons",
+      "group": "commons:Sebman81",
+      "fold": 4,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_00aaf9dac153",
+      "source": "commons",
+      "group": "commons:Sporti",
+      "fold": 4,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_817be7e1ac1f",
+      "source": "commons",
+      "group": "commons:Jaydanp",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_f14587fb3a88",
+      "source": "commons",
+      "group": "commons:Racconish",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_6f4ba90f20b9",
+      "source": "commons",
+      "group": "commons:Rubi2011",
+      "fold": 3,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_d91c2f2431da",
+      "source": "commons",
+      "group": "commons:Ragesoss",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_0bb0c9755ec4",
+      "source": "commons",
+      "group": "commons:Rubi2011",
+      "fold": 3,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_5f0acb3e9b89",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_52912291ce1b",
+      "source": "commons",
+      "group": "commons:Panini!",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_fc687deafb93",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_ec8f14c2c1a9",
+      "source": "commons",
+      "group": "commons:Jarble",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_73eefd3c95b7",
+      "source": "commons",
+      "group": "commons:Zaqarbal",
+      "fold": 4,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_61769bd87701",
+      "source": "commons",
+      "group": "commons:Zaqarbal",
+      "fold": 4,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_d223a7ce62f1",
+      "source": "commons",
+      "group": "commons:Raymond",
+      "fold": 4,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_0f2c02fc6d1c",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_c3f5264170e8",
+      "source": "commons",
+      "group": "commons:Hannolans",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_471bda19d29d",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_830199108b9c",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_595b46fdcab8",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_c6d39fd150b7",
+      "source": "commons",
+      "group": "commons:Pochi999~commonswiki",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e881dc36f92f",
+      "source": "commons",
+      "group": "commons:George Miquilena",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_8b1d581c6f42",
+      "source": "commons",
+      "group": "commons:SurprisedMewtwoFace",
+      "fold": 1,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_be9049058615",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_89899b1e497d",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_624fbe589e28",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_7984d80688f0",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_a3edf359dbaf",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_1f971671a27c",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_fbe68960e44e",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_2e8af268b2e2",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_ba56bde9d4ea",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_673c33d58efc",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_5b9a5c6fc704",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_50b7b8c5e014",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_41344623f187",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_7ac5964dacda",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_5203d37662c1",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_fa57e7c09c11",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_0682f15061ef",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_1b5e87fdb3a6",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_49efbf761655",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_96dcbe7e0c49",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_c64ffed7ae73",
+      "source": "commons",
+      "group": "commons:Rickjpelleg",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_74faf239cc0c",
+      "source": "commons",
+      "group": "commons:Mattstestpage",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_af8edc33e113",
+      "source": "commons",
+      "group": "commons:RG72",
+      "fold": 1,
+      "human_labels": [
+        "playing_object",
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_aaee4945f623",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_173031fe5387",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_2cc35add7589",
+      "source": "commons",
+      "group": "commons:Jarble",
+      "fold": 4,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_3b36c28a4a37",
+      "source": "commons",
+      "group": "commons:EEIM",
+      "fold": 2,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_6a4d3df68ffb",
+      "source": "commons",
+      "group": "commons:EEIM",
+      "fold": 2,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_cd0b0ceb901d",
+      "source": "commons",
+      "group": "commons:Shadster",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_69ad84b1d5c3",
+      "source": "commons",
+      "group": "commons:Shadster",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_0c683f9a5517",
+      "source": "commons",
+      "group": "commons:Shadster",
+      "fold": 4,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_4a591a9c78a5",
+      "source": "commons",
+      "group": "commons:Priwo",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_04ee8f903154",
+      "source": "commons",
+      "group": "commons:Priwo",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_eb52d9d7589a",
+      "source": "commons",
+      "group": "commons:Eatcha",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_3c9c22f6630c",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_8820a1b04d0a",
+      "source": "commons",
+      "group": "commons:Tim36272",
+      "fold": 4,
+      "human_labels": [
+        "locomotion",
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_18ba035eb3a4",
+      "source": "commons",
+      "group": "commons:Tim36272",
+      "fold": 4,
+      "human_labels": [
+        "locomotion",
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_41e6c676d32f",
+      "source": "commons",
+      "group": "commons:NairobiPapel",
+      "fold": 2,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_74d66d1ac112",
+      "source": "commons",
+      "group": "commons:Mateus2019",
+      "fold": 0,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_c6b1458f437b",
+      "source": "commons",
+      "group": "commons:1falt",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_cf4cf93147ef",
+      "source": "commons",
+      "group": "commons:SecretName101",
+      "fold": 3,
+      "human_labels": [
+        "eating",
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_866acdff34f2",
+      "source": "commons",
+      "group": "commons:Ixocactus",
+      "fold": 0,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_55f0be3c903f",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_48f23f4989f2",
+      "source": "commons",
+      "group": "commons:Traneptora",
+      "fold": 3,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_0b40a900feb2",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_b1cbe3feb94e",
+      "source": "commons",
+      "group": "commons:Hassanmohammed994",
+      "fold": 3,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_7b87085a115e",
+      "source": "commons",
+      "group": "commons:ZDF Terra X Redaktion",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_02cf19a31dc3",
+      "source": "commons",
+      "group": "commons:ComputerHotline",
+      "fold": 3,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_68f4f618a29d",
+      "source": "commons",
+      "group": "commons:Julo",
+      "fold": 1,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_f386b84eecde",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_ee68470e26d1",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_48da6af13e1f",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_bea435397491",
+      "source": "commons",
+      "group": "commons:The Nature Box",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_ce54029cd476",
+      "source": "commons",
+      "group": "commons:Ragesoss",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_8f04b6295bd9",
+      "source": "commons",
+      "group": "commons:Jonnmann",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_7fca5047423c",
+      "source": "commons",
+      "group": "commons:Tinokatze",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_3ae6437dc128",
+      "source": "commons",
+      "group": "commons:Mattes",
+      "fold": 3,
+      "human_labels": [
+        "drinking",
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_caa0cfbc3964",
+      "source": "commons",
+      "group": "commons:Hedwig Storch",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_1d165cc1c206",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_a6612a13f771",
+      "source": "commons",
+      "group": "commons:Fumikas Sagisavas",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_2aa37aeaed3c",
+      "source": "commons",
+      "group": "commons:RenaatPeeters",
+      "fold": 2,
+      "human_labels": [
+        "kneading"
+      ]
+    },
+    {
+      "key": "commons_f380113e38c7",
+      "source": "commons",
+      "group": "commons:Anggggggela",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_a8be21b63f87",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_d594df7abc3a",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_bfd87d96a088",
+      "source": "commons",
+      "group": "commons:Nonlinearmind",
+      "fold": 1,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_fe2d3cee6170",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_d856afbfe9e1",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e53f6e2b51f4",
+      "source": "commons",
+      "group": "commons:Epicalyx",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_aec6f6b08cce",
+      "source": "commons",
+      "group": "commons:Designermadsen",
+      "fold": 2,
+      "human_labels": [
+        "scratching_self"
+      ]
+    },
+    {
+      "key": "commons_a32dc489609f",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_2e9c0621f605",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_08951c5290c2",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_470be60de3a4",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_e4a60553a699",
+      "source": "commons",
+      "group": "commons:Tet",
+      "fold": 1,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_1492a32d8d43",
+      "source": "commons",
+      "group": "commons:Tet",
+      "fold": 1,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_112285cc8f82",
+      "source": "commons",
+      "group": "commons:Nesnad",
+      "fold": 3,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_23675671ee60",
+      "source": "commons",
+      "group": "commons:Muzzle97",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_4a236086b12d",
+      "source": "commons",
+      "group": "commons:Ser Amantio di Nicolao",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_1b65b1c6c558",
+      "source": "commons",
+      "group": "commons:ILoveDenpaMen48",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_580ee207f01f",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_213d15f49118",
+      "source": "commons",
+      "group": "commons:RG72",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_50b10462916a",
+      "source": "commons",
+      "group": "commons:Elgaard",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_c70d47ca13bb",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_014e8eef25bb",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_7d8a7152bb32",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_41dcd3dec4b0",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": [
+        "eating",
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_62f82faa497c",
+      "source": "commons",
+      "group": "commons:Brooke Vibber",
+      "fold": 2,
+      "human_labels": [
+        "self_grooming",
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_c2e42d28d3af",
+      "source": "commons",
+      "group": "commons:Fancibaer",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_e30aa710879d",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_cdba538fab81",
+      "source": "commons",
+      "group": "commons:Trade",
+      "fold": 1,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_25c217af12b4",
+      "source": "commons",
+      "group": "commons:Illegitimate Barrister",
+      "fold": 4,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_2c304a9c0f5a",
+      "source": "commons",
+      "group": "commons:Pleclown",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_b7bd05adb3a5",
+      "source": "commons",
+      "group": "commons:Erik Zachte",
+      "fold": 2,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_cca606643036",
+      "source": "commons",
+      "group": "commons:Grendelkhan",
+      "fold": 3,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_397b435acf04",
+      "source": "commons",
+      "group": "commons:Nesnad",
+      "fold": 3,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_5eb6b48a88b0",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_d67664f9e813",
+      "source": "commons",
+      "group": "commons:Amada44",
+      "fold": 4,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_cc9b4eb0917b",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_18e973314b24",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_a7599553f502",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_d8a86d913966",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_f76e30bd8955",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_f8a20954b6a2",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_53bbdd2475b3",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_83471fbb9ad5",
+      "source": "commons",
+      "group": "commons:Ies",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_daa6d5f0696e",
+      "source": "commons",
+      "group": "commons:Markheffron2",
+      "fold": 1,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_ae0e105654a3",
+      "source": "commons",
+      "group": "commons:Veikk0.ma",
+      "fold": 3,
+      "human_labels": [
+        "self_grooming"
+      ]
+    },
+    {
+      "key": "commons_342405402c6d",
+      "source": "commons",
+      "group": "commons:Pristurus",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e41dfed22fb3",
+      "source": "commons",
+      "group": "commons:Mr. Fulano",
+      "fold": 3,
+      "human_labels": [
+        "eating",
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_ebb579d9089a",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_81a2a8a4a359",
+      "source": "commons",
+      "group": "commons:Eatcha",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_4ce9836b0935",
+      "source": "commons",
+      "group": "commons:RobertKuhlmann",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_17c71f034d08",
+      "source": "commons",
+      "group": "commons:ZDF Terra X Redaktion",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_9094fd492063",
+      "source": "commons",
+      "group": "commons:Ragesoss",
+      "fold": 4,
+      "human_labels": [
+        "scratching_self"
+      ]
+    },
+    {
+      "key": "commons_b656b1779b07",
+      "source": "commons",
+      "group": "commons:\u30c8\u30c8\u30c8",
+      "fold": 1,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_ad5527daccf4",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_fef7483f140c",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_9d50ef77ab1f",
+      "source": "commons",
+      "group": "commons:Rhododendrites",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_d79853dc3d6f",
+      "source": "commons",
+      "group": "commons:Supreme Chungus",
+      "fold": 2,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_0233a1ee96e2",
+      "source": "commons",
+      "group": "commons:Amada44",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_e4b4510d3e1b",
+      "source": "commons",
+      "group": "commons:SnowyCinema",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_51b48424b9c3",
+      "source": "commons",
+      "group": "commons:85jesse",
+      "fold": 2,
+      "human_labels": [
+        "drinking",
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_b40cf00f4f7a",
+      "source": "commons",
+      "group": "commons:MLinington",
+      "fold": 2,
+      "human_labels": [
+        "threat_display"
+      ]
+    },
+    {
+      "key": "commons_4293f1a461a1",
+      "source": "commons",
+      "group": "commons:Dabmasterars",
+      "fold": 0,
+      "human_labels": [
+        "being_petted",
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_697c772a734e",
+      "source": "commons",
+      "group": "commons:Eatcha",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_7b041a761673",
+      "source": "commons",
+      "group": "commons:The Smart Star",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_a703e5081d0e",
+      "source": "commons",
+      "group": "commons:Teneab",
+      "fold": 2,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_337384a9b0db",
+      "source": "commons",
+      "group": "commons:Vanished Account Byeznhpyxeuztibuo",
+      "fold": 4,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_44c709520994",
+      "source": "commons",
+      "group": "commons:\u04da",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_98d7b31c7331",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_970418eaa8e2",
+      "source": "commons",
+      "group": "commons:Artem.G",
+      "fold": 0,
+      "human_labels": [
+        "playing_object"
+      ]
+    },
+    {
+      "key": "commons_7dfcae214a42",
+      "source": "commons",
+      "group": "commons:Drummyfish",
+      "fold": 3,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_c44f55ec8378",
+      "source": "commons",
+      "group": "commons:Drummyfish",
+      "fold": 3,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_ac19ef381c2b",
+      "source": "commons",
+      "group": "commons:Nesnad",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_d8ba14e39c34",
+      "source": "commons",
+      "group": "commons:Teneab",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_6440cb31071c",
+      "source": "commons",
+      "group": "commons:Open Access Media Importer Bot",
+      "fold": 2,
+      "human_labels": []
+    },
+    {
+      "key": "commons_2acc4904fac7",
+      "source": "commons",
+      "group": "commons:Technophant",
+      "fold": 4,
+      "human_labels": []
+    },
+    {
+      "key": "commons_3f3f51bccd10",
+      "source": "commons",
+      "group": "commons:Mahanga",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_55f2a15256e5",
+      "source": "commons",
+      "group": "commons:Trade",
+      "fold": 1,
+      "human_labels": [
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "commons_7a95b53d01c9",
+      "source": "commons",
+      "group": "commons:Trade",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_481d29000e8f",
+      "source": "commons",
+      "group": "commons:Beeld en Geluid Collecties",
+      "fold": 3,
+      "human_labels": []
+    },
+    {
+      "key": "commons_0182f4b179b3",
+      "source": "commons",
+      "group": "commons:Ragesoss",
+      "fold": 4,
+      "human_labels": [
+        "locomotion"
+      ]
+    },
+    {
+      "key": "commons_003048520b3f",
+      "source": "commons",
+      "group": "commons:Eowyn Cwper",
+      "fold": 4,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_1106c7173785",
+      "source": "commons",
+      "group": "commons:Mahanga",
+      "fold": 1,
+      "human_labels": [
+        "drinking"
+      ]
+    },
+    {
+      "key": "commons_4a3d678ee602",
+      "source": "commons",
+      "group": "commons:AKA MBG",
+      "fold": 3,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "commons_711de44bcb9b",
+      "source": "commons",
+      "group": "commons:Fastily",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_683a9dace085",
+      "source": "commons",
+      "group": "commons:\u0421\u0430\u0440\u0430\u043f\u0443\u043b\u043e\u0432",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_6f27f38f4da0",
+      "source": "commons",
+      "group": "commons:Butko",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_5cfc7a44911f",
+      "source": "commons",
+      "group": "commons:Kelly The Angel",
+      "fold": 0,
+      "human_labels": []
+    },
+    {
+      "key": "commons_041ca9d05f26",
+      "source": "commons",
+      "group": "commons:\u0421\u0430\u0440\u0430\u043f\u0443\u043b\u043e\u0432",
+      "fold": 1,
+      "human_labels": [
+        "eating"
+      ]
+    },
+    {
+      "key": "commons_97180bc865e6",
+      "source": "commons",
+      "group": "commons:\u0421\u0430\u0440\u0430\u043f\u0443\u043b\u043e\u0432",
+      "fold": 1,
+      "human_labels": []
+    },
+    {
+      "key": "commons_c2bde681df72",
+      "source": "commons",
+      "group": "commons:\u0414\u043e\u043a\u0442\u043e\u0440 \u0440\u0443\u043a\u0438\u043d\u043e\u0433\u0438",
+      "fold": 1,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "commons_2b86d2ef5e58",
+      "source": "commons",
+      "group": "commons:\u0421\u0430\u0440\u0430\u043f\u0443\u043b\u043e\u0432",
+      "fold": 1,
+      "human_labels": [
+        "social_play"
+      ]
+    },
+    {
+      "key": "paper_tiira2012_s1",
+      "source": "paper",
+      "group": "paper:10.1371/journal.pone.0041684",
+      "fold": 2,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "paper_tiira2012_s2",
+      "source": "paper",
+      "group": "paper:10.1371/journal.pone.0041684",
+      "fold": 2,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "paper_tiira2012_s3",
+      "source": "paper",
+      "group": "paper:10.1371/journal.pone.0041684",
+      "fold": 2,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "paper_fhs_cat_2026_m1",
+      "source": "paper",
+      "group": "paper:10.1007/s11259-026-11255-8",
+      "fold": 3,
+      "human_labels": [
+        "tail_chasing",
+        "tail_directed"
+      ]
+    },
+    {
+      "key": "paper_fhs_cat_2026_m2",
+      "source": "paper",
+      "group": "paper:10.1007/s11259-026-11255-8",
+      "fold": 3,
+      "human_labels": [
+        "tail_chasing",
+        "tail_directed"
+      ]
+    },
+    {
+      "key": "paper_fhs_cat_2026_m3",
+      "source": "paper",
+      "group": "paper:10.1007/s11259-026-11255-8",
+      "fold": 3,
+      "human_labels": [
+        "tail_chasing",
+        "tail_directed"
+      ]
+    },
+    {
+      "key": "paper_dachshund_flank_2023",
+      "source": "paper",
+      "group": "paper:10.3389/fvets.2023.1223800",
+      "fold": 3,
+      "human_labels": [
+        "self_biting",
+        "vocalizing"
+      ]
+    },
+    {
+      "key": "paper_focal_seizures_dogs_2026",
+      "source": "paper",
+      "group": "paper:10.3389/fvets.2026.1904889",
+      "fold": 3,
+      "human_labels": [
+        "staring_snapping"
+      ]
+    },
+    {
+      "key": "archive_ia_cat_tail_1",
+      "source": "archive",
+      "group": "archive:simplify3@gmail.com",
+      "fold": 1,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "archive_ia_cat_tail_2",
+      "source": "archive",
+      "group": "archive:simplify3@gmail.com",
+      "fold": 1,
+      "human_labels": [
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "archive_ia_dog_spin_1",
+      "source": "archive",
+      "group": "archive:babbler@freedminds.com",
+      "fold": 2,
+      "human_labels": [
+        "playing_object",
+        "tail_chasing"
+      ]
+    },
+    {
+      "key": "archive_ia_cat_tail_flick_rest",
+      "source": "archive",
+      "group": "archive:simplify3@gmail.com",
+      "fold": 1,
+      "human_labels": [
+        "resting"
+      ]
+    },
+    {
+      "key": "archive_ia_kitten_mother_tail",
+      "source": "archive",
+      "group": "archive:cdlarramore1@gmail.com",
+      "fold": 1,
+      "human_labels": [
+        "social_play"
+      ]
+    }
+  ],
+  "not_in_pool": [
+    "commons_043dd0716953",
+    "commons_1821480212ea",
+    "commons_1ffdece231da",
+    "commons_26091b397714",
+    "commons_355458c5db03",
+    "commons_398945ed447f",
+    "commons_3dc1f7929fee",
+    "commons_4ac794d3f5bb",
+    "commons_54f9b1f1f71a",
+    "commons_55f3e6fae605",
+    "commons_601cc63bfefe",
+    "commons_64128b74defc",
+    "commons_7f743aa53c22",
+    "commons_8206b8c1ff21",
+    "commons_8d1bf3480cfd",
+    "commons_a2c89f03de30",
+    "commons_b727c2a5b98b",
+    "commons_cf157b18d2fb",
+    "commons_e7adabe8f31e",
+    "commons_eb8d285defa8",
+    "commons_edba93e378de"
+  ]
+}

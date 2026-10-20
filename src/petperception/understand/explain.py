@@ -101,7 +101,7 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: Re
         explained.append({"behavior": b, "basis": ("recording and user report" if b in seen_names and b in q.reported else
                                                    "recording" if b in seen_names else "user report only"),
                           "summary": e.summary, "temporal_notes": e.temporal_notes,
-                          "candidates_by_kind": {k: groups[k] for k in K.KINDS if k in groups},
+                          "candidates_by_kind": {k: groups[k] for k in dict.fromkeys(c.kind for _, c, _ in cands)},  # in order of fit
                           "kind_order_by_context": [c.kind for _, c, _ in cands],
                           "request_or_intention_possible": request_implied,
                           "no_request_note": None if request_implied else "No request or intention is implied by this behaviour itself."})

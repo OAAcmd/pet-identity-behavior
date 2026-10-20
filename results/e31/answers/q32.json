@@ -1,0 +1,355 @@
+{
+  "benchmark_item": {
+    "id": "q32",
+    "clip": "commons_b1cbe3feb94e",
+    "species": "dog",
+    "scene": "Lying in the back seat of the car.",
+    "question": "My husky howls in the car. Why?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "vocalizing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "vocalizing",
+      "resting"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "vocalizing": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "Lying in the back seat of the car.",
+    "question": "My husky howls in the car. Why?",
+    "behaviors_seen": [
+      {
+        "behavior": "threat_display",
+        "description": "hissing, growling, ears flat or arched back toward something",
+        "score": 0.6783,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            1.0,
+            2.5
+          ],
+          [
+            7.0,
+            9.5
+          ],
+          [
+            15.0,
+            20.5
+          ],
+          [
+            25.0,
+            34.5
+          ],
+          [
+            38.5,
+            40.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.6783,
+          "share_of_frames_most_likely": 0.372
+        }
+      },
+      {
+        "behavior": "vocalizing",
+        "description": "barking, whining, howling or growling",
+        "score": 0.668,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            3.84,
+            4.8
+          ],
+          [
+            16.8,
+            19.68
+          ],
+          [
+            29.76,
+            34.56
+          ],
+          [
+            37.92,
+            38.88
+          ],
+          [
+            42.24,
+            43.2
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.668
+        }
+      },
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.404,
+        "threshold": 0.36407,
+        "bouts_s": [
+          [
+            10.5,
+            16.0
+          ],
+          [
+            22.0,
+            24.5
+          ],
+          [
+            29.5,
+            30.0
+          ],
+          [
+            44.0,
+            46.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.404,
+          "share_of_frames_most_likely": 0.149
+        }
+      },
+      {
+        "behavior": "self_grooming",
+        "description": "licking or cleaning its own fur, paws or face",
+        "score": 0.297,
+        "threshold": 0.263084,
+        "bouts_s": [
+          [
+            5.0,
+            5.5
+          ],
+          [
+            10.0,
+            10.5
+          ],
+          [
+            14.0,
+            14.5
+          ],
+          [
+            24.5,
+            25.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.297,
+          "share_of_frames_most_likely": 0.17
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 282,
+      "seconds": 47.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.1121,
+      "path_body_lengths": 5.889999866485596,
+      "net_displacement_body_lengths": 0.024000000208616257,
+      "stays_in_place": true,
+      "turned_rad": 0.352,
+      "abs_turned_rad": 8.758,
+      "turning_consistency": 0.04,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.918
+    },
+    "user_reported": [
+      {
+        "behavior": "vocalizing",
+        "status": "also seen in the recording",
+        "recording_score": 0.668
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "vocalizing",
+        "basis": "recording and user report",
+        "summary": "Barking, whining or howling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "vd_disturbance",
+              "explanation": "alerting to a disturbance (a stranger, the doorbell)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "vd_isolation",
+              "explanation": "seeking contact when separated or isolated",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "vd_play",
+              "explanation": "play barking during games",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "threat_display",
+        "basis": "recording",
+        "summary": "Hissing, growling, flattened ears, arched back or bared teeth directed at something.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "td_defensive",
+              "explanation": "a defensive warning: the animal feels threatened and wants the trigger to keep away",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "gajdos2023",
+                "merck_cat_behavior"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "td_pain_threat",
+              "explanation": "pain can lower the threshold for warning signals, especially when the animal is touched",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "tvp_fhs",
+                "cornell_fhs"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "What happens just before the barking (a sound outside, being left, a game)?",
+      "What is the animal looking at or reacting to?",
+      "Does it happen only when touched at a particular place?"
+    ],
+    "urgent_signs": [
+      "sudden new aggression when touched (possible pain)"
+    ],
+    "sources": [
+      {
+        "id": "yin2004",
+        "tier": "peer_reviewed_study",
+        "citation": "Yin S, McCowan B (2004) Barking in domestic dogs: context specificity and individual identification. Anim Behav 68:343-355.",
+        "url": "https://doi.org/10.1016/j.anbehav.2003.07.016",
+        "supports": "barks differ acoustically between disturbance, isolation and play contexts"
+      },
+      {
+        "id": "gajdos2023",
+        "tier": "peer_reviewed_study",
+        "citation": "Gajdos-Kmecova N et al. (2023) An ethological analysis of close-contact inter-cat interactions determining if cats are playing, fighting, or something in between. Sci Rep 13:92.",
+        "url": "https://doi.org/10.1038/s41598-022-26121-1",
+        "supports": "105 videos: wrestling went with play, vocalization and chasing with agonistic interactions; an intermediate group mixed both"
+      },
+      {
+        "id": "merck_cat_behavior",
+        "tier": "clinical_review",
+        "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+        "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+        "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out before a problem is called behavioural"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      },
+      {
+        "id": "cornell_fhs",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Hyperesthesia syndrome.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperesthesia-syndrome",
+        "supports": "skin sensitivity near the base of the tail; scratching, biting, tail chasing, dilated pupils, rippling skin; underlying causes (for example disc disease) must be evaluated; stress adds to the reaction"
+      }
+    ],
+    "summary": "In the recording: hissing, growling, ears flat or arched back toward something (1.0-2.5 s, 7.0-9.5 s, 15.0-20.5 s, 25.0-34.5 s and 1 more); barking, whining, howling or growling (3.8-4.8 s, 16.8-19.7 s, 29.8-34.6 s, 37.9-38.9 s and 1 more); lying down, resting or sleeping (10.5-16.0 s, 22.0-24.5 s, 29.5-30.0 s, 44.0-46.0 s). Movement: the animal stays roughly in place while moving. Barking, whining, howling or growling (recording and user report) has several possible explanations, in order of fit to your description: arousal, frustration or stress; a request or intention directed at a person; ordinary play or maintenance behaviour. Hissing, growling, ears flat or arched back toward something (recording) has several possible explanations, in order of fit to your description: arousal, frustration or stress; discomfort, itch, pain or a neurological cause. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "threat_display": 0.6783,
+    "vocalizing": 0.668,
+    "resting": 0.404,
+    "self_grooming": 0.297,
+    "staring_snapping": 0.187,
+    "playing_object": 0.1542,
+    "self_biting": 0.1468,
+    "social_play": 0.1275,
+    "eating": 0.1041,
+    "tail_chasing": 0.0511,
+    "tail_directed": 0.05,
+    "being_petted": 0.0355,
+    "scratching_self": 0.0115,
+    "drinking": 0.0089,
+    "locomotion": 0.0043
+  }
+}

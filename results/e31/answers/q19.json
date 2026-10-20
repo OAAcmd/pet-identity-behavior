@@ -1,0 +1,162 @@
+{
+  "benchmark_item": {
+    "id": "q19",
+    "clip": "commons_bfd87d96a088",
+    "species": "dog",
+    "scene": "Sitting in front of me in the office.",
+    "question": "My Labrador barks when I tell him to. Is he upset?",
+    "question_origin": "authored_from_source_description",
+    "category": "gap",
+    "asked": [
+      "vocalizing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "vocalizing"
+    ],
+    "reference_basis": "source",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [],
+      "text": "trained to bark on command",
+      "authority": "lay"
+    },
+    "request_expected": {
+      "vocalizing": true
+    },
+    "gap": "barking on cue (a trained response) is not in the knowledge base"
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "Sitting in front of me in the office.",
+    "question": "My Labrador barks when I tell him to. Is he upset?",
+    "behaviors_seen": [
+      {
+        "behavior": "vocalizing",
+        "description": "barking, whining, howling or growling",
+        "score": 0.9414,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            2.88,
+            7.2
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.9414
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 50,
+      "seconds": 8.333333333333334,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.1187,
+      "path_body_lengths": 0.6359999775886536,
+      "net_displacement_body_lengths": 0.10199999809265137,
+      "stays_in_place": true,
+      "turned_rad": 0.016,
+      "abs_turned_rad": 0.393,
+      "turning_consistency": 0.04,
+      "repetition_strength": 0.03,
+      "repetition_period_s": 1.5,
+      "detector_dog_vote": 0.9
+    },
+    "user_reported": [
+      {
+        "behavior": "vocalizing",
+        "status": "also seen in the recording",
+        "recording_score": 0.9414
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "vocalizing",
+        "basis": "recording and user report",
+        "summary": "Barking, whining or howling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "vd_disturbance",
+              "explanation": "alerting to a disturbance (a stranger, the doorbell)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "vd_isolation",
+              "explanation": "seeking contact when separated or isolated",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "vd_play",
+              "explanation": "play barking during games",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "What happens just before the barking (a sound outside, being left, a game)?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "yin2004",
+        "tier": "peer_reviewed_study",
+        "citation": "Yin S, McCowan B (2004) Barking in domestic dogs: context specificity and individual identification. Anim Behav 68:343-355.",
+        "url": "https://doi.org/10.1016/j.anbehav.2003.07.016",
+        "supports": "barks differ acoustically between disturbance, isolation and play contexts"
+      }
+    ],
+    "summary": "In the recording: barking, whining, howling or growling (2.9-7.2 s). Movement: the animal stays roughly in place while moving. Barking, whining, howling or growling (recording and user report) has several possible explanations, in order of fit to your description: arousal, frustration or stress; a request or intention directed at a person; ordinary play or maintenance behaviour. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "vocalizing": 0.9414,
+    "staring_snapping": 0.1215,
+    "tail_chasing": 0.1089,
+    "self_grooming": 0.0867,
+    "threat_display": 0.0301,
+    "playing_object": 0.0192,
+    "locomotion": 0.0092,
+    "self_biting": 0.0082,
+    "tail_directed": 0.0076,
+    "resting": 0.0076,
+    "eating": 0.0061,
+    "drinking": 0.0018,
+    "scratching_self": 0.0012,
+    "being_petted": 0.0008,
+    "social_play": 0.0006
+  }
+}

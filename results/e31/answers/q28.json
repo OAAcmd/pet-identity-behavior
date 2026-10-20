@@ -1,0 +1,268 @@
+{
+  "benchmark_item": {
+    "id": "q28",
+    "clip": "commons_b7bd05adb3a5",
+    "species": "cat",
+    "scene": "Two 14-week-old littermates on a blanket.",
+    "question": "My two young cats from the same litter wrestle a lot. Are they fighting or playing?",
+    "question_origin": "authored_from_source_description",
+    "category": "other",
+    "asked": [
+      "social_play"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "social_play"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "play_or_normal"
+      ],
+      "text": "uploader: two young cats in playful fight",
+      "authority": "lay"
+    },
+    "request_expected": {},
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Two 14-week-old littermates on a blanket.",
+    "question": "My two young cats from the same litter wrestle a lot. Are they fighting or playing?",
+    "behaviors_seen": [
+      {
+        "behavior": "social_play",
+        "description": "play fighting or wrestling with another animal",
+        "score": 0.8717,
+        "threshold": 0.832747,
+        "bouts_s": [
+          [
+            0.5,
+            2.5
+          ],
+          [
+            7.0,
+            12.0
+          ],
+          [
+            15.0,
+            19.5
+          ],
+          [
+            22.5,
+            49.0
+          ],
+          [
+            55.0,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8717,
+          "share_of_frames_most_likely": 0.529
+        }
+      },
+      {
+        "behavior": "kneading",
+        "description": "pushing the front paws alternately into a soft surface",
+        "score": 0.7358,
+        "threshold": 0.70779,
+        "bouts_s": [
+          [
+            2.5,
+            7.0
+          ],
+          [
+            9.5,
+            10.0
+          ],
+          [
+            12.0,
+            22.5
+          ],
+          [
+            26.5,
+            27.0
+          ],
+          [
+            29.0,
+            36.0
+          ],
+          [
+            40.5,
+            41.0
+          ],
+          [
+            43.0,
+            45.0
+          ],
+          [
+            49.0,
+            55.0
+          ],
+          [
+            57.5,
+            59.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.7358,
+          "share_of_frames_most_likely": 0.429
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.9944444444444445,
+      "available": true,
+      "mean_speed_body_per_s": 0.1032,
+      "path_body_lengths": 20.586000442504883,
+      "net_displacement_body_lengths": 0.07199999690055847,
+      "stays_in_place": true,
+      "turned_rad": -0.07,
+      "abs_turned_rad": 9.588,
+      "turning_consistency": 0.007,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.696
+    },
+    "user_reported": [
+      {
+        "behavior": "social_play",
+        "status": "also seen in the recording",
+        "recording_score": 0.8717
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "social_play",
+        "basis": "recording and user report",
+        "summary": "Close-contact interaction with another cat.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sp_play",
+              "explanation": "rough-and-tumble play: wrestling with alternating roles and few vocalizations",
+              "context_match": [
+                "wrestl"
+              ],
+              "context_score": 0.8,
+              "sources": [
+                "gajdos2023"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "sp_agonistic",
+              "explanation": "an agonistic interaction (fighting): chasing in one direction and vocalizing (hissing, growling, yowling) go with fights",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "gajdos2023"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "kneading",
+        "basis": "recording",
+        "summary": "Rhythmic alternate pushing of the front paws into a soft surface.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "kn_comfort",
+              "explanation": "comfort or contentment behaviour derived from nursing, often with purring, before resting",
+              "context_match": [
+                "blanket"
+              ],
+              "context_score": 0.5,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "kn_soothing",
+              "explanation": "self-soothing when stressed or uncomfortable, if it is new or excessive",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "The detector's species vote disagrees with the species you gave (cat); your answer is used, and the detector only locates the animal.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Do the cats take turns chasing and being on top?",
+      "Are there hisses, growls or yowls, and does one cat try to leave?",
+      "Is the kneading new or more frequent than usual?",
+      "Does the cat purr and relax afterwards?"
+    ],
+    "urgent_signs": [
+      "injuries or one cat persistently hiding or avoiding the other"
+    ],
+    "sources": [
+      {
+        "id": "gajdos2023",
+        "tier": "peer_reviewed_study",
+        "citation": "Gajdos-Kmecova N et al. (2023) An ethological analysis of close-contact inter-cat interactions determining if cats are playing, fighting, or something in between. Sci Rep 13:92.",
+        "url": "https://doi.org/10.1038/s41598-022-26121-1",
+        "supports": "105 videos: wrestling went with play, vocalization and chasing with agonistic interactions; an intermediate group mixed both"
+      },
+      {
+        "id": "petmd_knead",
+        "tier": "veterinarian_advice",
+        "citation": "PetMD: Why do cats knead?",
+        "url": "https://www.petmd.com/cat/behavior/why-do-cats-knead",
+        "supports": "kneading is usually associated with contentment, comfort or marking; it can be self-soothing when stressed or in pain; new or excessive kneading deserves a veterinary check"
+      }
+    ],
+    "summary": "In the recording: play fighting or wrestling with another animal (0.5-2.5 s, 7.0-12.0 s, 15.0-19.5 s, 22.5-49.0 s and 1 more); pushing the front paws alternately into a soft surface (2.5-7.0 s, 9.5-10.0 s, 12.0-22.5 s, 26.5-27.0 s and 5 more). Movement: the animal stays roughly in place while moving. Play fighting or wrestling with another animal (recording and user report) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. Pushing the front paws alternately into a soft surface (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "social_play": 0.8717,
+    "kneading": 0.7358,
+    "resting": 0.1924,
+    "tail_chasing": 0.0884,
+    "tail_directed": 0.0726,
+    "self_biting": 0.0679,
+    "playing_object": 0.0614,
+    "tail_flicking": 0.0373,
+    "self_grooming": 0.0349,
+    "scratching_self": 0.0259,
+    "being_petted": 0.0121,
+    "threat_display": 0.0083,
+    "locomotion": 0.0029,
+    "eating": 0.002,
+    "drinking": 0.0017
+  }
+}

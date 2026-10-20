@@ -1,0 +1,134 @@
+{
+  "benchmark_item": {
+    "id": "q27",
+    "clip": "commons_624fbe589e28",
+    "species": "cat",
+    "scene": "In her cat bed inside a cardboard box.",
+    "question": "My cat licks the same favorite places on her body again and again. Should I worry?",
+    "question_origin": "authored_from_source_description",
+    "category": "other",
+    "asked": [
+      "self_grooming"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "self_grooming"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "self_grooming": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "In her cat bed inside a cardboard box.",
+    "question": "My cat licks the same favorite places on her body again and again. Should I worry?",
+    "behaviors_seen": [
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.8599,
+        "threshold": 0.491687,
+        "bouts_s": [
+          [
+            0.5,
+            5.5
+          ],
+          [
+            8.0,
+            8.5
+          ],
+          [
+            12.5,
+            14.5
+          ],
+          [
+            16.5,
+            37.5
+          ],
+          [
+            43.5,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8599,
+          "share_of_frames_most_likely": 0.768
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.9333333333333333,
+      "available": true,
+      "mean_speed_body_per_s": 0.0272,
+      "path_body_lengths": 10.895000457763672,
+      "net_displacement_body_lengths": 0.3050000071525574,
+      "stays_in_place": false,
+      "turned_rad": 0.509,
+      "abs_turned_rad": 12.84,
+      "turning_consistency": 0.04,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.009
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "In the recording: lying down, resting or sleeping (0.5-5.5 s, 8.0-8.5 s, 12.5-14.5 s, 16.5-37.5 s and 1 more). Lying down, resting or sleeping (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "resting": 0.8599,
+    "kneading": 0.2443,
+    "tail_chasing": 0.1934,
+    "self_grooming": 0.1016,
+    "social_play": 0.1011,
+    "vocalizing": 0.082,
+    "tail_directed": 0.0278,
+    "tail_flicking": 0.0258,
+    "playing_object": 0.0234,
+    "threat_display": 0.0214,
+    "scratching_self": 0.02,
+    "self_biting": 0.0143,
+    "eating": 0.0051,
+    "drinking": 0.0037,
+    "locomotion": 0.0024,
+    "being_petted": 0.0007
+  }
+}

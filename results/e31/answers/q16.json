@@ -1,0 +1,208 @@
+{
+  "benchmark_item": {
+    "id": "q16",
+    "clip": "commons_200930f8d690",
+    "species": "cat",
+    "scene": "Two cats sitting at a window, looking out at birds.",
+    "question": "My cats sit at the window watching birds and flick their tails quickly. What does that mean?",
+    "question_origin": "authored_from_source_description",
+    "category": "confuser",
+    "asked": [
+      "tail_flicking"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "tail_flicking"
+    ],
+    "reference_basis": "source description + assistant",
+    "must_not_recognize": [
+      "tail_chasing"
+    ],
+    "source_interpretation": {
+      "kinds": [
+        "play_or_normal"
+      ],
+      "text": "uploader: cats watching birds through a window flick their tails",
+      "authority": "lay"
+    },
+    "request_expected": {
+      "tail_flicking": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Two cats sitting at a window, looking out at birds.",
+    "question": "My cats sit at the window watching birds and flick their tails quickly. What does that mean?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 22,
+      "seconds": 3.6666666666666665,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0708,
+      "path_body_lengths": 1.565999984741211,
+      "net_displacement_body_lengths": 0.014000000432133675,
+      "stays_in_place": false,
+      "turned_rad": -0.022,
+      "abs_turned_rad": 0.898,
+      "turning_consistency": 0.025,
+      "repetition_strength": 0.894,
+      "repetition_period_s": 1.83,
+      "detector_dog_vote": 0.0
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_flicking",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0679
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_flicking",
+        "basis": "user report only",
+        "summary": "Flicking, twitching or lashing the tail while the rest of the body may be still.",
+        "temporal_notes": "A relaxed cat holds its tail up without flicking; the speed and context of the movement matter.",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "tf_prey",
+              "explanation": "attention to prey or a moving target (for example birds outside a window): a hunting cat watches with a twitching tail before it lunges",
+              "context_match": [
+                "bird",
+                "window",
+                "watching"
+              ],
+              "context_score": 2.4,
+              "sources": [
+                "snapcats_aggression"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "tf_stop",
+              "explanation": "a signal that the cat wants contact to stop: during petting or handling, tail lashing or twitching often comes before a swat or bite",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "cornell_aggression",
+                "ahs_petting",
+                "merck_cat_behavior"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "tf_irritation",
+              "explanation": "irritation or arousal from something it cannot reach or does not like (an outdoor cat seen through a window, being disturbed while resting)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "cornell_aggression"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "tf_fhs",
+              "explanation": "with rippling skin over the back and sudden running, part of an episode of feline hyperaesthesia",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "cornell_fhs",
+                "tvp_fhs"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request",
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "What is the cat looking at or reacting to while the tail moves?",
+      "Does it happen while it is being petted or handled, and does a swat or bite follow?",
+      "Does the skin on the back ripple at the same time?"
+    ],
+    "urgent_signs": [
+      "tail flicking with skin rippling, dilated pupils and sudden running or self-attack (possible hyperaesthesia episode)"
+    ],
+    "sources": [
+      {
+        "id": "snapcats_aggression",
+        "tier": "animal_welfare_organization",
+        "citation": "SNAP Cats: Feline aggression.",
+        "url": "https://www.snapcats.org/2018/05/08/feline-aggression/",
+        "supports": "a hunting cat slinks with a lowered head and a twitching tail and lunges when prey is in reach"
+      },
+      {
+        "id": "cornell_aggression",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Feline behavior problems: aggression.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression",
+        "supports": "petting-induced aggression (over-stimulation, the cat controlling when petting ends) is often preceded by dilated pupils, tail lashing and ears moved back; a relaxed cat holds its tail up with no flicking or twitching; seeing an outdoor cat through a window can trigger redirected aggression; cats in pain may act aggressively to avoid touch"
+      },
+      {
+        "id": "ahs_petting",
+        "tier": "animal_welfare_organization",
+        "citation": "Animal Humane Society: Petting-induced and play aggression in cats.",
+        "url": "https://www.animalhumanesociety.org/resource/petting-induced-and-play-aggression-cats",
+        "supports": "tail lashing or thumping, shifting body position, skin twitching and direct stares indicate the cat has had enough petting"
+      },
+      {
+        "id": "merck_cat_behavior",
+        "tier": "clinical_review",
+        "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+        "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+        "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out before a problem is called behavioural"
+      },
+      {
+        "id": "cornell_fhs",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Hyperesthesia syndrome.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperesthesia-syndrome",
+        "supports": "skin sensitivity near the base of the tail; scratching, biting, tail chasing, dilated pupils, rippling skin; underlying causes (for example disc disease) must be evaluated; stress adds to the reaction"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      }
+    ],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Movement: its appearance repeats about every 1.8 s. Flicking, twitching or lashing the tail (user report only) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person; arousal, frustration or stress; discomfort, itch, pain or a neurological cause. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "tail_chasing": 0.4942,
+    "social_play": 0.4117,
+    "tail_flicking": 0.0679,
+    "locomotion": 0.0525,
+    "kneading": 0.0397,
+    "threat_display": 0.0204,
+    "playing_object": 0.0184,
+    "tail_directed": 0.0094,
+    "self_grooming": 0.007,
+    "drinking": 0.0047,
+    "resting": 0.0047,
+    "self_biting": 0.0044,
+    "scratching_self": 0.003,
+    "eating": 0.0013,
+    "being_petted": 0.0005
+  }
+}

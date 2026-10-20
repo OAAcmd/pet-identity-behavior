@@ -1,0 +1,258 @@
+{
+  "benchmark_item": {
+    "id": "q24",
+    "clip": "commons_b40cf00f4f7a",
+    "species": "cat",
+    "scene": "Lying on a cork floor while a shadow moves past.",
+    "question": "My cat lunges at a moving shadow and then hisses. Why?",
+    "question_origin": "authored_from_source_description",
+    "category": "other",
+    "asked": [
+      "threat_display"
+    ],
+    "asked_ok": [
+      "playing_object"
+    ],
+    "reference_present": [
+      "playing_object",
+      "threat_display"
+    ],
+    "reference_basis": "source + assistant (hiss: source only)",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "threat_display": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Lying on a cork floor while a shadow moves past.",
+    "question": "My cat lunges at a moving shadow and then hisses. Why?",
+    "behaviors_seen": [
+      {
+        "behavior": "self_biting",
+        "description": "biting, sucking or chewing at its own flank, leg or body",
+        "score": 0.4111,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            1.5,
+            2.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.4111,
+          "share_of_frames_most_likely": 0.143
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 21,
+      "seconds": 3.5,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0805,
+      "path_body_lengths": 0.6549999713897705,
+      "net_displacement_body_lengths": 0.10000000149011612,
+      "stays_in_place": true,
+      "turned_rad": -0.255,
+      "abs_turned_rad": 0.519,
+      "turning_consistency": 0.491,
+      "repetition_strength": 0.016,
+      "repetition_period_s": 1.67,
+      "detector_dog_vote": 0.0
+    },
+    "user_reported": [
+      {
+        "behavior": "threat_display",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0904
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "threat_display",
+        "basis": "user report only",
+        "summary": "Hissing, growling, flattened ears, arched back or bared teeth directed at something.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "td_defensive",
+              "explanation": "a defensive warning: the animal feels threatened and wants the trigger to keep away",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "gajdos2023",
+                "merck_cat_behavior"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "td_pain_threat",
+              "explanation": "pain can lower the threshold for warning signals, especially when the animal is touched",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "tvp_fhs",
+                "cornell_fhs"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "self_biting",
+        "basis": "recording",
+        "summary": "Biting, sucking or chewing at its own flank, leg or body.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "sb_neuropathic",
+              "explanation": "pain, including neuropathic pain after an injury or spinal surgery (in the published Dachshund case biting and licking at the flank followed a hemilaminectomy)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "frontiers2023_dachshund"
+              ]
+            },
+            {
+              "id": "sb_itch",
+              "explanation": "itch or skin disease at the place it bites (parasites, allergy)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "sb_behavioural",
+              "explanation": "a behavioural cause (a compulsive or attention-related pattern), the alternative the published case weighed against pain",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "frontiers2023_dachshund",
+                "cliniciansbrief_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "What is the animal looking at or reacting to?",
+      "Does it happen only when touched at a particular place?",
+      "Did it start after an injury, surgery or a change at home?",
+      "Is there hair loss, redness or a wound where it bites?",
+      "Does it stop when the animal is distracted, and does it happen when nobody is watching?"
+    ],
+    "urgent_signs": [
+      "sudden new aggression when touched (possible pain)",
+      "open wounds, bleeding or the animal cannot be distracted from biting itself",
+      "biting at the body after spinal surgery or with weakness of the legs"
+    ],
+    "sources": [
+      {
+        "id": "gajdos2023",
+        "tier": "peer_reviewed_study",
+        "citation": "Gajdos-Kmecova N et al. (2023) An ethological analysis of close-contact inter-cat interactions determining if cats are playing, fighting, or something in between. Sci Rep 13:92.",
+        "url": "https://doi.org/10.1038/s41598-022-26121-1",
+        "supports": "105 videos: wrestling went with play, vocalization and chasing with agonistic interactions; an intermediate group mixed both"
+      },
+      {
+        "id": "merck_cat_behavior",
+        "tier": "clinical_review",
+        "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+        "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+        "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out before a problem is called behavioural"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      },
+      {
+        "id": "cornell_fhs",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Hyperesthesia syndrome.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperesthesia-syndrome",
+        "supports": "skin sensitivity near the base of the tail; scratching, biting, tail chasing, dilated pupils, rippling skin; underlying causes (for example disc disease) must be evaluated; stress adds to the reaction"
+      },
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      }
+    ],
+    "summary": "In the recording: biting, sucking or chewing at its own flank, leg or body (1.5-2.0 s). Movement: the animal stays roughly in place while moving. Hissing, growling, ears flat or arched back toward something (user report only) has several possible explanations, in order of fit to your description: arousal, frustration or stress; discomfort, itch, pain or a neurological cause. No request is implied by it. Biting, sucking or chewing at its own flank, leg or body (recording) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; an abnormal repetitive (compulsive) pattern. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "kneading": 0.6332,
+    "self_biting": 0.4111,
+    "self_grooming": 0.231,
+    "tail_chasing": 0.2121,
+    "tail_flicking": 0.189,
+    "playing_object": 0.1722,
+    "threat_display": 0.0904,
+    "tail_directed": 0.0787,
+    "scratching_self": 0.0572,
+    "locomotion": 0.0353,
+    "resting": 0.0199,
+    "vocalizing": 0.0156,
+    "social_play": 0.0143,
+    "being_petted": 0.0068,
+    "drinking": 0.0052,
+    "eating": 0.0042
+  }
+}

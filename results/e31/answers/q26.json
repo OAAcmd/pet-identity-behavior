@@ -1,0 +1,337 @@
+{
+  "benchmark_item": {
+    "id": "q26",
+    "clip": "commons_62f82faa497c",
+    "species": "cat",
+    "scene": "Lying on her back on a dark blanket.",
+    "question": "My cat licks her paw and washes her face while purring. Is she stressed?",
+    "question_origin": "authored_from_source_description",
+    "category": "other",
+    "asked": [
+      "self_grooming",
+      "vocalizing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "self_grooming",
+      "vocalizing"
+    ],
+    "reference_basis": "source + assistant (purring: source)",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "self_grooming": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Lying on her back on a dark blanket.",
+    "question": "My cat licks her paw and washes her face while purring. Is she stressed?",
+    "behaviors_seen": [
+      {
+        "behavior": "vocalizing",
+        "description": "meowing, purring, hissing or yowling",
+        "score": 0.9961,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            4.8
+          ],
+          [
+            14.4,
+            48.0
+          ],
+          [
+            51.84,
+            55.68
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.9961
+        }
+      },
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.5855,
+        "threshold": 0.262011,
+        "bouts_s": [
+          [
+            0.0,
+            2.5
+          ],
+          [
+            7.5,
+            8.5
+          ],
+          [
+            24.0,
+            37.5
+          ],
+          [
+            40.0,
+            40.5
+          ],
+          [
+            46.5,
+            49.0
+          ],
+          [
+            51.0,
+            52.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.5855,
+          "share_of_frames_most_likely": 0.375
+        }
+      },
+      {
+        "behavior": "self_grooming",
+        "description": "licking or cleaning its own fur, paws or face",
+        "score": 0.3688,
+        "threshold": 0.202294,
+        "bouts_s": [
+          [
+            7.0,
+            9.5
+          ],
+          [
+            30.5,
+            31.0
+          ],
+          [
+            39.0,
+            39.5
+          ],
+          [
+            49.0,
+            56.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3688,
+          "share_of_frames_most_likely": 0.286
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 335,
+      "seconds": 55.833333333333336,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.1113,
+      "path_body_lengths": 2.121999979019165,
+      "net_displacement_body_lengths": 0.00800000037997961,
+      "stays_in_place": true,
+      "turned_rad": 2.086,
+      "abs_turned_rad": 14.348,
+      "turning_consistency": 0.145,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.179
+    },
+    "user_reported": [
+      {
+        "behavior": "self_grooming",
+        "status": "also seen in the recording",
+        "recording_score": 0.3688
+      },
+      {
+        "behavior": "vocalizing",
+        "status": "also seen in the recording",
+        "recording_score": 0.9961
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "self_grooming",
+        "basis": "recording and user report",
+        "summary": "Licking or cleaning its own coat, paws or face.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "sg_displacement",
+              "explanation": "displacement grooming in conflict, anxiety or frustration (out of context, after a startle or a dispute)",
+              "context_match": [
+                "stress"
+              ],
+              "context_score": 0.8,
+              "sources": [
+                "cliniciansbrief_pa",
+                "vin_pa"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "sg_normal",
+              "explanation": "ordinary coat care; cats spend a substantial part of their waking time grooming",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "sg_itch",
+              "explanation": "itch: when grooming is excessive or focused (hair loss, sores), a medical cause such as allergy or parasites is much more common than a purely behavioural one",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "waisglass2006",
+                "vin_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "play_or_normal",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "vocalizing",
+        "basis": "recording and user report",
+        "summary": "Meowing, purring loudly or yowling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "request": [
+            {
+              "id": "vc_request",
+              "explanation": "a request directed at people, typically for food or attention; meows are mostly human-directed, and food-soliciting purrs contain a cry-like element",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "prato2020",
+                "mccomb2009"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "vc_context",
+              "explanation": "isolation or handling (meows recorded during isolation and brushing differ from food meows, but people decode single meows poorly)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "prato2020"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "request",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is there hair loss, short broken hairs or sores where it licks?",
+      "Has the amount of grooming changed recently?",
+      "Does grooming follow stressful events, or happen out of context?",
+      "When does it happen: before meals, at a closed door, when alone, when handled?",
+      "What does the cat do when you respond?"
+    ],
+    "urgent_signs": [
+      "open sores or rapidly spreading hair loss",
+      "licking that cannot be interrupted",
+      "a sudden change in voice or night-time vocalizing in an older cat"
+    ],
+    "sources": [
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "prato2020",
+        "tier": "peer_reviewed_study",
+        "citation": "Prato-Previde E et al. (2020) What's in a meow? A study on human classification and interpretation of domestic cat vocalizations. Animals 10(12):2390.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7765146/",
+        "supports": "meows are mostly human-directed and vary with context (waiting for food, isolation, brushing), but people decode the context of single meows poorly"
+      },
+      {
+        "id": "mccomb2009",
+        "tier": "peer_reviewed_study",
+        "citation": "McComb K et al. (2009) The cry embedded within the purr. Curr Biol 19(13):R507-R508.",
+        "url": "https://doi.org/10.1016/j.cub.2009.05.033",
+        "supports": "cats soliciting food produce purrs with a cry-like component that people rate as more urgent"
+      }
+    ],
+    "summary": "In the recording: meowing, purring, hissing or yowling (0.0-4.8 s, 14.4-48.0 s, 51.8-55.7 s); lying down, resting or sleeping (0.0-2.5 s, 7.5-8.5 s, 24.0-37.5 s, 40.0-40.5 s and 2 more); licking or cleaning its own fur, paws or face (7.0-9.5 s, 30.5-31.0 s, 39.0-39.5 s, 49.0-56.0 s). Movement: the animal stays roughly in place while moving. Licking or cleaning its own fur, paws or face (recording and user report) has several possible explanations, in order of fit to your description: arousal, frustration or stress; ordinary play or maintenance behaviour; discomfort, itch, pain or a neurological cause. No request is implied by it. Meowing, purring, hissing or yowling (recording and user report) has several possible explanations, in order of fit to your description: a request or intention directed at a person; arousal, frustration or stress. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "vocalizing": 0.9961,
+    "resting": 0.5855,
+    "self_grooming": 0.3688,
+    "kneading": 0.2566,
+    "social_play": 0.1942,
+    "scratching_self": 0.1562,
+    "self_biting": 0.1484,
+    "tail_chasing": 0.1482,
+    "tail_directed": 0.1161,
+    "tail_flicking": 0.0657,
+    "being_petted": 0.0386,
+    "playing_object": 0.0146,
+    "threat_display": 0.0053,
+    "drinking": 0.0047,
+    "eating": 0.0017,
+    "locomotion": 0.0005
+  }
+}

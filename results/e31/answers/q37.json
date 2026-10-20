@@ -1,0 +1,132 @@
+{
+  "benchmark_item": {
+    "id": "q37",
+    "clip": "commons_ba56bde9d4ea",
+    "species": "cat",
+    "scene": "Two cats eating from one plate in the kitchen.",
+    "question": "My two cats eat side by side from one plate. Does this behavior mean anything?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "eating"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "eating"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "eating": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Two cats eating from one plate in the kitchen.",
+    "question": "My two cats eat side by side from one plate. Does this behavior mean anything?",
+    "behaviors_seen": [
+      {
+        "behavior": "eating",
+        "description": "eating food",
+        "score": 0.9788,
+        "threshold": 0.323586,
+        "bouts_s": [
+          [
+            0.5,
+            4.5
+          ],
+          [
+            7.0,
+            57.0
+          ],
+          [
+            59.0,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9788,
+          "share_of_frames_most_likely": 0.948
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.9583333333333334,
+      "available": true,
+      "mean_speed_body_per_s": 0.0639,
+      "path_body_lengths": 7.9730000495910645,
+      "net_displacement_body_lengths": 0.057999998331069946,
+      "stays_in_place": false,
+      "turned_rad": -0.447,
+      "abs_turned_rad": 13.083,
+      "turning_consistency": 0.034,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.162
+    },
+    "user_reported": [
+      {
+        "behavior": "eating",
+        "status": "also seen in the recording",
+        "recording_score": 0.9788
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "eating",
+        "basis": "recording and user report",
+        "summary": "Eating. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "eating_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "In the recording: eating food (0.5-4.5 s, 7.0-57.0 s, 59.0-60.0 s). Eating food (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "eating": 0.9788,
+    "social_play": 0.2479,
+    "vocalizing": 0.1094,
+    "kneading": 0.0425,
+    "playing_object": 0.0393,
+    "drinking": 0.0344,
+    "tail_chasing": 0.0249,
+    "self_grooming": 0.0234,
+    "self_biting": 0.0207,
+    "locomotion": 0.0177,
+    "tail_directed": 0.016,
+    "tail_flicking": 0.0091,
+    "threat_display": 0.0079,
+    "scratching_self": 0.002,
+    "resting": 0.0016,
+    "being_petted": 0.0013
+  }
+}

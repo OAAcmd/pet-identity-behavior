@@ -286,3 +286,32 @@ See [`artifacts/README.md`](../artifacts/README.md) for checksums and
 | `object_relation/pet_object_relation_v2.npz` (shipped) | none (rule; evaluated on OI relationships) | all suitable |
 | `audio_event_thresholds_cc.json` | ESC-50 CC0 / CC BY clips (E1-CC) | research, personal; commercial pending ASSET_TERMS Q-A2 |
 | `e2_catmeows_context_logreg.json` | CatMeows | research only; not shipped |
+
+## Behaviour-explanation additions (2026-10-20)
+
+Machine-readable entries: `siglip_base_patch16_224`, `xclip_base_patch32`,
+`commons_pet_videos`, `paper_supplement_videos`, `internet_archive_pet_clips`
+in [`manifests/resources.json`](../manifests/resources.json). Use:
+[BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md), E31.
+
+### Models
+
+| ID | Revision (pinned) | Files and checksums | Terms | Use |
+| --- | --- | --- | --- | --- |
+| `siglip_base_patch16_224` | `google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed` | 7 files, `model.safetensors` 812,672,320 B, SHA-256 `2c63cb7d…2af8` (all in resources.json); `petperception fetch-models --only siglip_base_patch16_224` | Apache-2.0 (model card); WebLI training data, terms not published | frozen encoder: zero-shot behaviour prompts, inputs of the trained behaviour head |
+| `xclip_base_patch32` | `microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963` | 8 files, `model.safetensors` 786,414,772 B, SHA-256 `abf286e8…dbb` | MIT (model card); Kinetics-400 (YouTube) | retrieved as a temporal candidate; **not evaluated, not used** |
+
+### Datasets
+
+| ID | Content (counted here) | Licence / permission | Labels | Grouping |
+| --- | --- | --- | --- | --- |
+| `commons_pet_videos` (`manifests/commons_pets.json`, `python -m petperception.data.commons_pets`) | 430 records (cat 237, dog 193) from the Commons categories "Videos of cats" / "Videos of dogs" (depth 3) and searches; first 60 s of 287 files downloaded (stream copy) to `var/data/commons_pets/` (about 1.2 GB), 4 failed with HTTP 429 | per file, recorded with author and URL (mostly CC BY, CC BY-SA, CC0) | *source*: parsed from title, description and categories by keyword rules (lay, noisy: for example a chemistry demonstration called "Barking Dog Reaction") | uploader |
+| `paper_supplement_videos` (`manifests/paper_videos.json`, `python -m petperception.data.paper_videos`) | 8 videos with SHA-256: Tiira et al. 2012 Movies S1-S3; Vet Res Commun 2026 M1-M3; Frontiers 2023 Dachshund; Frontiers 2026 focal seizures | CC BY 4.0 (articles) | *expert*: the authors' captions (case level; M3 shows string play, not the case's tail chasing) | paper |
+| `internet_archive_pet_clips` (`manifests/archive_pets.json`) | 5 videos with SHA-256 (one cartoon found by search excluded) | **none stated**: research analysis only, never redistributed | *source*: title | uploader |
+| Frame review (`annotations/behavior_clips.json`) | 38 clips: behaviours, coarse bouts, absent confusers, setting, quality | - | *assistant* (machine-assisted, reviewed by the AI assistant from timestamped contact sheets; never merged with human labels) | - |
+| Benchmark (`benchmarks/behavior_questions.json`) | 37 questions on 37 clips with references, confusers, source interpretations, request expectations | inherits the clips' terms | references combine frame review with source / expert labels (basis per item) | - |
+
+Features (`var/understand/features/<clip>.npz`, not committed): target
+track, optical-flow motion, appearance descriptors, SigLIP crop and scene
+embeddings, YAMNet scores. Rebuilt with
+`python -m petperception.understand.dataset` (resumable).

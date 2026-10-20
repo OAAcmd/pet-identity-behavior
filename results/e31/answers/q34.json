@@ -1,0 +1,199 @@
+{
+  "benchmark_item": {
+    "id": "q34",
+    "clip": "commons_daa6d5f0696e",
+    "species": "dog",
+    "scene": "At a campsite; he brings his toy to my hand.",
+    "question": "At the campsite my rat terrier keeps bringing his toy and dropping it at my hand. Does he want me to play?",
+    "question_origin": "authored_from_frame_review",
+    "category": "other",
+    "asked": [
+      "playing_object"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "playing_object",
+      "being_petted"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "playing_object": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "At a campsite; he brings his toy to my hand.",
+    "question": "At the campsite my rat terrier keeps bringing his toy and dropping it at my hand. Does he want me to play?",
+    "behaviors_seen": [
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.6779,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            35.5,
+            45.5
+          ],
+          [
+            49.5,
+            51.5
+          ],
+          [
+            54.5,
+            55.5
+          ],
+          [
+            58.0,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.6779,
+          "share_of_frames_most_likely": 0.295
+        }
+      },
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.5452,
+        "threshold": 0.407694,
+        "bouts_s": [
+          [
+            5.5,
+            10.0
+          ],
+          [
+            30.5,
+            34.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.5452,
+          "share_of_frames_most_likely": 0.182
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.7388888888888889,
+      "available": true,
+      "mean_speed_body_per_s": 0.2858,
+      "path_body_lengths": 13.359000205993652,
+      "net_displacement_body_lengths": 0.33899998664855957,
+      "stays_in_place": true,
+      "turned_rad": 0.942,
+      "abs_turned_rad": 11.542,
+      "turning_consistency": 0.082,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.823
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "being_petted",
+        "basis": "recording",
+        "summary": "Being touched or stroked by a person. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "being_petted_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [
+                "brings"
+              ],
+              "context_score": 1.0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [
+                "toy"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: being touched or stroked by a person (35.5-45.5 s, 49.5-51.5 s, 54.5-55.5 s, 58.0-60.0 s); batting, pouncing on or chasing a toy or object (5.5-10.0 s, 30.5-34.5 s). Movement: the animal stays roughly in place while moving. Being touched or stroked by a person (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. Batting, pouncing on or chasing a toy or object (recording) has several possible explanations, in order of fit to your description: a request or intention directed at a person; ordinary play or maintenance behaviour. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "being_petted": 0.6779,
+    "playing_object": 0.5452,
+    "tail_chasing": 0.4581,
+    "staring_snapping": 0.2761,
+    "threat_display": 0.1721,
+    "tail_directed": 0.1183,
+    "self_biting": 0.1152,
+    "locomotion": 0.1132,
+    "self_grooming": 0.0617,
+    "scratching_self": 0.0496,
+    "drinking": 0.0447,
+    "eating": 0.0423,
+    "social_play": 0.0191,
+    "resting": 0.0021
+  }
+}

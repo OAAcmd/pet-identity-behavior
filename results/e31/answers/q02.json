@@ -1,0 +1,391 @@
+{
+  "benchmark_item": {
+    "id": "q02",
+    "clip": "paper_tiira2012_s2",
+    "species": "dog",
+    "scene": "Garden lawn by a tree.",
+    "question": "My 4-year-old German Shepherd chases his tail many times a day, usually while he waits for his food or when I talk with other people. Why does he do this?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "tail_chasing",
+    "asked": [
+      "tail_chasing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "tail_chasing"
+    ],
+    "reference_basis": "expert + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "arousal_or_stress",
+        "compulsive"
+      ],
+      "text": "compulsive tail chasing that starts in waiting situations (food) or when the owner talks to others",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "tail_chasing": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "Garden lawn by a tree.",
+    "question": "My 4-year-old German Shepherd chases his tail many times a day, usually while he waits for his food or when I talk with other people. Why does he do this?",
+    "behaviors_seen": [
+      {
+        "behavior": "tail_chasing",
+        "description": "turning in tight circles after its own tail",
+        "score": 0.7002,
+        "threshold": 0.689274,
+        "bouts_s": [
+          [
+            0.0,
+            15.5
+          ],
+          [
+            17.5,
+            23.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.7002,
+          "share_of_frames_most_likely": 0.809
+        }
+      },
+      {
+        "behavior": "vocalizing",
+        "description": "barking, whining, howling or growling",
+        "score": 0.5,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            12.48,
+            13.44
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.5
+        }
+      },
+      {
+        "behavior": "threat_display",
+        "description": "hissing, growling, ears flat or arched back toward something",
+        "score": 0.3122,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            3.5,
+            4.0
+          ],
+          [
+            14.5,
+            15.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3122,
+          "share_of_frames_most_likely": 0.085
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 140,
+      "seconds": 23.333333333333332,
+      "animal_found_fraction": 0.9928571428571429,
+      "available": true,
+      "mean_speed_body_per_s": 0.2554,
+      "path_body_lengths": 19.54199981689453,
+      "net_displacement_body_lengths": 0.4620000123977661,
+      "stays_in_place": true,
+      "turned_rad": -0.634,
+      "abs_turned_rad": 5.82,
+      "turning_consistency": 0.109,
+      "repetition_strength": 0.08,
+      "repetition_period_s": 1.17,
+      "detector_dog_vote": 0.842
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_chasing",
+        "status": "also seen in the recording",
+        "recording_score": 0.7002
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_chasing",
+        "basis": "recording and user report",
+        "summary": "Turning in tight circles after the tail. Common, and usually brief; in some dogs it is habitual and hard to interrupt.",
+        "temporal_notes": "A bout is repeated whole-body turning in place; the number of turns, how long bouts last and whether they recur matter more than a single turn.",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "dog_tc_frustration",
+              "explanation": "frustration or arousal in a waiting or conflict situation (for example waiting for food, or when the owner talks to other people)",
+              "context_match": [
+                "food"
+              ],
+              "context_score": 0.7,
+              "sources": [
+                "tiira2012"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "dog_tc_compulsive",
+              "explanation": "canine compulsive disorder: habitual, perseverative chasing with lowered responsiveness, often with other repetitive behaviours (light chasing, freezing); more common in some breeds (bull terriers, German shepherds)",
+              "context_match": [
+                "german shepherd"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "tiira2012",
+                "burn2011"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "dog_tc_play",
+              "explanation": "self-directed play or excitement, especially in young dogs, when bouts are brief and the dog is easy to distract",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "dog_tc_attention",
+              "explanation": "a learned way to get attention: owners often laugh at or encourage tail chasing, which can reinforce it; some dogs start when nobody attends to them",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "dog_tc_medical",
+              "explanation": "a physical cause near the tail or a neurological one: tail or anal-sac discomfort, skin itch, pain, or focal seizures; behaviour and medical causes can coexist",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vanhaevermaet2026",
+                "frontiers2026_focal"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "compulsive",
+          "play_or_normal",
+          "request",
+          "medical"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "vocalizing",
+        "basis": "recording",
+        "summary": "Barking, whining or howling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "vd_disturbance",
+              "explanation": "alerting to a disturbance (a stranger, the doorbell)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "vd_isolation",
+              "explanation": "seeking contact when separated or isolated",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "vd_play",
+              "explanation": "play barking during games",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "threat_display",
+        "basis": "recording",
+        "summary": "Hissing, growling, flattened ears, arched back or bared teeth directed at something.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "td_defensive",
+              "explanation": "a defensive warning: the animal feels threatened and wants the trigger to keep away",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "gajdos2023",
+                "merck_cat_behavior"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "td_pain_threat",
+              "explanation": "pain can lower the threshold for warning signals, especially when the animal is touched",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "tvp_fhs",
+                "cornell_fhs"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "How old was the dog when it started, and how often does it happen (occasionally or daily)?",
+      "Can you interrupt it by calling the dog or offering a toy, and does it respond to you during a bout?",
+      "In which situations does it start (waiting for food, when people talk to each other, when left alone, when excited)?",
+      "Does the dog bite or injure the tail, scoot, or show hair loss or sores near the tail base?",
+      "Are there other repetitive behaviours such as chasing lights or shadows, snapping at the air, freezing or staring?",
+      "What happens just before the barking (a sound outside, being left, a game)?",
+      "What is the animal looking at or reacting to?",
+      "Does it happen only when touched at a particular place?"
+    ],
+    "urgent_signs": [
+      "the tail is wounded or bleeding",
+      "bouts cannot be interrupted or interfere with eating or sleeping",
+      "episodes with staring, unresponsiveness or snapping at the air (possible seizures)",
+      "sudden new aggression when touched (possible pain)"
+    ],
+    "sources": [
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      },
+      {
+        "id": "burn2011",
+        "tier": "peer_reviewed_study",
+        "citation": "Burn CC (2011) A vicious cycle: a cross-sectional study of canine tail-chasing and human responses to it, using a free video-sharing website. PLoS ONE 6(11): e26553.",
+        "url": "https://doi.org/10.1371/journal.pone.0026553",
+        "supports": "400 online videos: about a third of tail-chasing dogs chased habitually or were hard to distract; perseverative dogs showed fewer play behaviours; laughter in 55 % and encouragement in 43 % of videos, so owner attention may reinforce it"
+      },
+      {
+        "id": "vanhaevermaet2026",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Van Haevermaet et al. (2026) Tail chasing in a dog: false dichotomy between behavioural and medical problems. Veterinary Record Case Reports.",
+        "url": "https://doi.org/10.1002/vrc2.70334",
+        "supports": "tail chasing can combine behavioural and medical causes"
+      },
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      },
+      {
+        "id": "yin2004",
+        "tier": "peer_reviewed_study",
+        "citation": "Yin S, McCowan B (2004) Barking in domestic dogs: context specificity and individual identification. Anim Behav 68:343-355.",
+        "url": "https://doi.org/10.1016/j.anbehav.2003.07.016",
+        "supports": "barks differ acoustically between disturbance, isolation and play contexts"
+      },
+      {
+        "id": "gajdos2023",
+        "tier": "peer_reviewed_study",
+        "citation": "Gajdos-Kmecova N et al. (2023) An ethological analysis of close-contact inter-cat interactions determining if cats are playing, fighting, or something in between. Sci Rep 13:92.",
+        "url": "https://doi.org/10.1038/s41598-022-26121-1",
+        "supports": "105 videos: wrestling went with play, vocalization and chasing with agonistic interactions; an intermediate group mixed both"
+      },
+      {
+        "id": "merck_cat_behavior",
+        "tier": "clinical_review",
+        "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+        "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+        "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out before a problem is called behavioural"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      },
+      {
+        "id": "cornell_fhs",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Hyperesthesia syndrome.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperesthesia-syndrome",
+        "supports": "skin sensitivity near the base of the tail; scratching, biting, tail chasing, dilated pupils, rippling skin; underlying causes (for example disc disease) must be evaluated; stress adds to the reaction"
+      }
+    ],
+    "summary": "In the recording: turning in tight circles after its own tail (0.0-15.5 s, 17.5-23.0 s); barking, whining, howling or growling (12.5-13.4 s); hissing, growling, ears flat or arched back toward something (3.5-4.0 s, 14.5-15.0 s). Movement: the animal stays roughly in place while moving. Turning in tight circles after its own tail (recording and user report) has several possible explanations, in order of fit to your description: arousal, frustration or stress; an abnormal repetitive (compulsive) pattern; ordinary play or maintenance behaviour; a request or intention directed at a person; discomfort, itch, pain or a neurological cause. Barking, whining, howling or growling (recording) has several possible explanations, in order of fit to your description: arousal, frustration or stress; a request or intention directed at a person; ordinary play or maintenance behaviour. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "tail_chasing": 0.7002,
+    "vocalizing": 0.5,
+    "threat_display": 0.3122,
+    "tail_directed": 0.2233,
+    "playing_object": 0.1834,
+    "locomotion": 0.1544,
+    "scratching_self": 0.1453,
+    "self_biting": 0.0698,
+    "staring_snapping": 0.0599,
+    "social_play": 0.0571,
+    "self_grooming": 0.0454,
+    "drinking": 0.0075,
+    "eating": 0.0037,
+    "resting": 0.0029,
+    "being_petted": 0.0001
+  }
+}

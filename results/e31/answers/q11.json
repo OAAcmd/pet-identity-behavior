@@ -1,0 +1,406 @@
+{
+  "benchmark_item": {
+    "id": "q11",
+    "clip": "paper_dachshund_flank_2023",
+    "species": "dog",
+    "scene": "On the sofa at home; he had back surgery (a hemilaminectomy) recently.",
+    "question": "Since his back surgery, my Dachshund barks and bites at his flank, mostly at home. Is this just bad behavior?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "self_directed",
+    "asked": [
+      "self_biting",
+      "vocalizing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "self_biting",
+      "vocalizing"
+    ],
+    "reference_basis": "expert + assistant (vocalizing: expert)",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "medical",
+        "compulsive"
+      ],
+      "text": "neuropathic pain weighed against undesirable behaviour after hemilaminectomy",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "self_biting": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "On the sofa at home; he had back surgery (a hemilaminectomy) recently.",
+    "question": "Since his back surgery, my Dachshund barks and bites at his flank, mostly at home. Is this just bad behavior?",
+    "behaviors_seen": [
+      {
+        "behavior": "vocalizing",
+        "description": "barking, whining, howling or growling",
+        "score": 0.9805,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            1.92
+          ],
+          [
+            6.24,
+            16.32
+          ],
+          [
+            19.2,
+            28.8
+          ],
+          [
+            31.68,
+            34.08
+          ]
+        ],
+        "evidence": {
+          "yamnet_max_vocal_score": 0.9805
+        }
+      },
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.6237,
+        "threshold": 0.36407,
+        "bouts_s": [
+          [
+            3.5,
+            4.0
+          ],
+          [
+            7.0,
+            15.0
+          ],
+          [
+            17.0,
+            17.5
+          ],
+          [
+            25.0,
+            27.5
+          ],
+          [
+            30.5,
+            32.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.6237,
+          "share_of_frames_most_likely": 0.338
+        }
+      },
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.3801,
+        "threshold": 0.336986,
+        "bouts_s": [
+          [
+            1.0,
+            1.5
+          ],
+          [
+            11.0,
+            11.5
+          ],
+          [
+            15.0,
+            15.5
+          ],
+          [
+            18.0,
+            22.0
+          ],
+          [
+            28.0,
+            30.5
+          ],
+          [
+            33.0,
+            33.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3801,
+          "share_of_frames_most_likely": 0.235
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 205,
+      "seconds": 34.166666666666664,
+      "animal_found_fraction": 0.9951219512195122,
+      "available": true,
+      "mean_speed_body_per_s": 0.1779,
+      "path_body_lengths": 12.91100025177002,
+      "net_displacement_body_lengths": 0.46000000834465027,
+      "stays_in_place": true,
+      "turned_rad": 1.28,
+      "abs_turned_rad": 8.677,
+      "turning_consistency": 0.147,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.52
+    },
+    "user_reported": [
+      {
+        "behavior": "self_biting",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.1067
+      },
+      {
+        "behavior": "vocalizing",
+        "status": "also seen in the recording",
+        "recording_score": 0.9805
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "self_biting",
+        "basis": "user report only",
+        "summary": "Biting, sucking or chewing at its own flank, leg or body.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "sb_neuropathic",
+              "explanation": "pain, including neuropathic pain after an injury or spinal surgery (in the published Dachshund case biting and licking at the flank followed a hemilaminectomy)",
+              "context_match": [
+                "surgery",
+                "since",
+                "back"
+              ],
+              "context_score": 2.0,
+              "sources": [
+                "frontiers2023_dachshund"
+              ]
+            },
+            {
+              "id": "sb_itch",
+              "explanation": "itch or skin disease at the place it bites (parasites, allergy)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "sb_behavioural",
+              "explanation": "a behavioural cause (a compulsive or attention-related pattern), the alternative the published case weighed against pain",
+              "context_match": [
+                "bad behavior"
+              ],
+              "context_score": 0.4,
+              "sources": [
+                "frontiers2023_dachshund",
+                "cliniciansbrief_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "compulsive",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "vocalizing",
+        "basis": "recording and user report",
+        "summary": "Barking, whining or howling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "vd_disturbance",
+              "explanation": "alerting to a disturbance (a stranger, the doorbell)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "vd_isolation",
+              "explanation": "seeking contact when separated or isolated",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "vd_play",
+              "explanation": "play barking during games",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Did it start after an injury, surgery or a change at home?",
+      "Is there hair loss, redness or a wound where it bites?",
+      "Does it stop when the animal is distracted, and does it happen when nobody is watching?",
+      "What happens just before the barking (a sound outside, being left, a game)?",
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [
+      "open wounds, bleeding or the animal cannot be distracted from biting itself",
+      "biting at the body after spinal surgery or with weakness of the legs"
+    ],
+    "sources": [
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "yin2004",
+        "tier": "peer_reviewed_study",
+        "citation": "Yin S, McCowan B (2004) Barking in domestic dogs: context specificity and individual identification. Anim Behav 68:343-355.",
+        "url": "https://doi.org/10.1016/j.anbehav.2003.07.016",
+        "supports": "barks differ acoustically between disturbance, isolation and play contexts"
+      },
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: barking, whining, howling or growling (0.0-1.9 s, 6.2-16.3 s, 19.2-28.8 s, 31.7-34.1 s); lying down, resting or sleeping (3.5-4.0 s, 7.0-15.0 s, 17.0-17.5 s, 25.0-27.5 s and 1 more); batting, pouncing on or chasing a toy or object (1.0-1.5 s, 11.0-11.5 s, 15.0-15.5 s, 18.0-22.0 s and 2 more). Movement: the animal stays roughly in place while moving. Biting, sucking or chewing at its own flank, leg or body (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; an abnormal repetitive (compulsive) pattern. No request is implied by it. Barking, whining, howling or growling (recording and user report) has several possible explanations, in order of fit to your description: arousal, frustration or stress; a request or intention directed at a person; ordinary play or maintenance behaviour. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "vocalizing": 0.9805,
+    "resting": 0.6237,
+    "playing_object": 0.3801,
+    "tail_chasing": 0.3027,
+    "self_grooming": 0.2212,
+    "social_play": 0.1863,
+    "scratching_self": 0.15,
+    "tail_directed": 0.112,
+    "self_biting": 0.1067,
+    "staring_snapping": 0.0924,
+    "threat_display": 0.0861,
+    "locomotion": 0.0429,
+    "being_petted": 0.0136,
+    "eating": 0.0117,
+    "drinking": 0.01
+  }
+}

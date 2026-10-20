@@ -1,0 +1,37 @@
+{
+ "version": "recognizer-zero_shot-v1",
+ "method": "zero_shot",
+ "head_behaviors": [],
+ "thresholds": {
+  "drinking": 0.91316,
+  "eating": 0.1282,
+  "kneading": 0.70779,
+  "locomotion": 0.465104,
+  "playing_object": 0.290027,
+  "resting": 0.262011,
+  "self_grooming": 0.242822,
+  "social_play": 0.832747,
+  "tail_chasing": 0.689274
+ },
+ "default_threshold": 0.3,
+ "vocal_threshold": 0.3,
+ "provenance": {
+  "experiment": "E31",
+  "code_commit": "0c9ac741966aa5b96cc30633dc4c8d3d73aae757",
+  "pool_clips": 278,
+  "pool_groups": 131,
+  "adopted": "R0_zero_shot",
+  "eligible": [
+   "drinking",
+   "eating",
+   "kneading",
+   "locomotion",
+   "playing_object",
+   "resting",
+   "self_grooming",
+   "social_play",
+   "tail_chasing"
+  ],
+  "created_at": "2026-10-20T08:16:20+00:00"
+ }
+}

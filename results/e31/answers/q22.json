@@ -1,0 +1,151 @@
+{
+  "benchmark_item": {
+    "id": "q22",
+    "clip": "commons_a4614b1b91d5",
+    "species": "cat",
+    "scene": "Lying on a red blanket on the bed.",
+    "question": "My cat kneads and sucks on the blanket for minutes at a time. Is this normal?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "kneading"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "kneading"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "kneading": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Lying on a red blanket on the bed.",
+    "question": "My cat kneads and sucks on the blanket for minutes at a time. Is this normal?",
+    "behaviors_seen": [
+      {
+        "behavior": "kneading",
+        "description": "pushing the front paws alternately into a soft surface",
+        "score": 0.9902,
+        "threshold": 0.70779,
+        "bouts_s": [
+          [
+            0.0,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9902,
+          "share_of_frames_most_likely": 0.983
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0991,
+      "path_body_lengths": 18.367000579833984,
+      "net_displacement_body_lengths": 0.23399999737739563,
+      "stays_in_place": true,
+      "turned_rad": -3.456,
+      "abs_turned_rad": 13.304,
+      "turning_consistency": 0.26,
+      "repetition_strength": 0.123,
+      "repetition_period_s": 1.33,
+      "detector_dog_vote": 0.361
+    },
+    "user_reported": [
+      {
+        "behavior": "kneading",
+        "status": "also seen in the recording",
+        "recording_score": 0.9902
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "kneading",
+        "basis": "recording and user report",
+        "summary": "Rhythmic alternate pushing of the front paws into a soft surface.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "kn_comfort",
+              "explanation": "comfort or contentment behaviour derived from nursing, often with purring, before resting",
+              "context_match": [
+                "blanket"
+              ],
+              "context_score": 0.5,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "kn_soothing",
+              "explanation": "self-soothing when stressed or uncomfortable, if it is new or excessive",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is the kneading new or more frequent than usual?",
+      "Does the cat purr and relax afterwards?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "petmd_knead",
+        "tier": "veterinarian_advice",
+        "citation": "PetMD: Why do cats knead?",
+        "url": "https://www.petmd.com/cat/behavior/why-do-cats-knead",
+        "supports": "kneading is usually associated with contentment, comfort or marking; it can be self-soothing when stressed or in pain; new or excessive kneading deserves a veterinary check"
+      }
+    ],
+    "summary": "In the recording: pushing the front paws alternately into a soft surface (0.0-60.0 s). Movement: the animal stays roughly in place while moving. Pushing the front paws alternately into a soft surface (recording and user report) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "kneading": 0.9902,
+    "resting": 0.2054,
+    "self_grooming": 0.0687,
+    "vocalizing": 0.043,
+    "scratching_self": 0.0143,
+    "tail_directed": 0.0131,
+    "tail_chasing": 0.0109,
+    "tail_flicking": 0.0098,
+    "self_biting": 0.0068,
+    "playing_object": 0.0029,
+    "being_petted": 0.0021,
+    "social_play": 0.0015,
+    "threat_display": 0.0006,
+    "drinking": 0.0004,
+    "eating": 0.0003,
+    "locomotion": 0.0001
+  }
+}

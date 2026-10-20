@@ -1,0 +1,144 @@
+{
+  "benchmark_item": {
+    "id": "q21",
+    "clip": "commons_25a6515f82e6",
+    "species": "cat",
+    "scene": "On a soft blanket.",
+    "question": "Why does my cat push her paws into the blanket over and over?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "kneading"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "kneading"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "kneading": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "On a soft blanket.",
+    "question": "Why does my cat push her paws into the blanket over and over?",
+    "behaviors_seen": [
+      {
+        "behavior": "kneading",
+        "description": "pushing the front paws alternately into a soft surface",
+        "score": 0.9994,
+        "threshold": 0.70779,
+        "bouts_s": [
+          [
+            0.0,
+            12.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9994,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 75,
+      "seconds": 12.5,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0614,
+      "path_body_lengths": 4.189000129699707,
+      "net_displacement_body_lengths": 0.15000000596046448,
+      "stays_in_place": false,
+      "turned_rad": 0.005,
+      "abs_turned_rad": 2.533,
+      "turning_consistency": 0.002,
+      "repetition_strength": 0.011,
+      "repetition_period_s": 3.0,
+      "detector_dog_vote": 0.133
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "kneading",
+        "basis": "recording",
+        "summary": "Rhythmic alternate pushing of the front paws into a soft surface.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "kn_comfort",
+              "explanation": "comfort or contentment behaviour derived from nursing, often with purring, before resting",
+              "context_match": [
+                "blanket"
+              ],
+              "context_score": 0.5,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "kn_soothing",
+              "explanation": "self-soothing when stressed or uncomfortable, if it is new or excessive",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is the kneading new or more frequent than usual?",
+      "Does the cat purr and relax afterwards?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "petmd_knead",
+        "tier": "veterinarian_advice",
+        "citation": "PetMD: Why do cats knead?",
+        "url": "https://www.petmd.com/cat/behavior/why-do-cats-knead",
+        "supports": "kneading is usually associated with contentment, comfort or marking; it can be self-soothing when stressed or in pain; new or excessive kneading deserves a veterinary check"
+      }
+    ],
+    "summary": "In the recording: pushing the front paws alternately into a soft surface (0.0-12.5 s). Pushing the front paws alternately into a soft surface (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "kneading": 0.9994,
+    "self_grooming": 0.0017,
+    "self_biting": 0.0015,
+    "playing_object": 0.0011,
+    "scratching_self": 0.0009,
+    "social_play": 0.0006,
+    "tail_chasing": 0.0005,
+    "tail_directed": 0.0004,
+    "being_petted": 0.0004,
+    "tail_flicking": 0.0003,
+    "resting": 0.0003,
+    "threat_display": 0.0001,
+    "eating": 0.0,
+    "drinking": 0.0,
+    "locomotion": 0.0
+  }
+}

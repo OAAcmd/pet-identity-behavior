@@ -1,0 +1,341 @@
+{
+  "benchmark_item": {
+    "id": "q25",
+    "clip": "commons_9db2231c588f",
+    "species": "cat",
+    "scene": "Sitting on a carpet in the living room.",
+    "question": "My kitten spends a lot of time grooming herself. Is that normal?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "self_grooming"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "self_grooming"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "self_grooming": false
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "Sitting on a carpet in the living room.",
+    "question": "My kitten spends a lot of time grooming herself. Is that normal?",
+    "behaviors_seen": [
+      {
+        "behavior": "self_biting",
+        "description": "biting, sucking or chewing at its own flank, leg or body",
+        "score": 0.3991,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            1.5,
+            2.0
+          ],
+          [
+            6.5,
+            9.5
+          ],
+          [
+            28.0,
+            30.5
+          ],
+          [
+            33.0,
+            34.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3991,
+          "share_of_frames_most_likely": 0.144
+        }
+      },
+      {
+        "behavior": "scratching_self",
+        "description": "scratching its own body with a hind foot",
+        "score": 0.3279,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            3.0,
+            6.5
+          ],
+          [
+            11.5,
+            12.0
+          ],
+          [
+            32.5,
+            33.0
+          ],
+          [
+            35.0,
+            36.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3279,
+          "share_of_frames_most_likely": 0.167
+        }
+      },
+      {
+        "behavior": "self_grooming",
+        "description": "licking or cleaning its own fur, paws or face",
+        "score": 0.2631,
+        "threshold": 0.190436,
+        "bouts_s": [
+          [
+            27.5,
+            28.0
+          ],
+          [
+            34.0,
+            34.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.2631,
+          "share_of_frames_most_likely": 0.056
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 271,
+      "seconds": 45.166666666666664,
+      "animal_found_fraction": 0.996309963099631,
+      "available": true,
+      "mean_speed_body_per_s": 0.0715,
+      "path_body_lengths": 8.821000099182129,
+      "net_displacement_body_lengths": 0.33799999952316284,
+      "stays_in_place": false,
+      "turned_rad": 0.532,
+      "abs_turned_rad": 9.83,
+      "turning_consistency": 0.054,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.2
+    },
+    "user_reported": [
+      {
+        "behavior": "self_grooming",
+        "status": "also seen in the recording",
+        "recording_score": 0.2631
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "self_grooming",
+        "basis": "recording and user report",
+        "summary": "Licking or cleaning its own coat, paws or face.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sg_normal",
+              "explanation": "ordinary coat care; cats spend a substantial part of their waking time grooming",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "sg_displacement",
+              "explanation": "displacement grooming in conflict, anxiety or frustration (out of context, after a startle or a dispute)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "cliniciansbrief_pa",
+                "vin_pa"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "sg_itch",
+              "explanation": "itch: when grooming is excessive or focused (hair loss, sores), a medical cause such as allergy or parasites is much more common than a purely behavioural one",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "waisglass2006",
+                "vin_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "self_biting",
+        "basis": "recording",
+        "summary": "Biting, sucking or chewing at its own flank, leg or body.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "sb_neuropathic",
+              "explanation": "pain, including neuropathic pain after an injury or spinal surgery (in the published Dachshund case biting and licking at the flank followed a hemilaminectomy)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "frontiers2023_dachshund"
+              ]
+            },
+            {
+              "id": "sb_itch",
+              "explanation": "itch or skin disease at the place it bites (parasites, allergy)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "sb_behavioural",
+              "explanation": "a behavioural cause (a compulsive or attention-related pattern), the alternative the published case weighed against pain",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "frontiers2023_dachshund",
+                "cliniciansbrief_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "scratching_self",
+        "basis": "recording",
+        "summary": "Scratching the body or ears with a hind foot.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sc_normal",
+              "explanation": "occasional scratching is ordinary coat care",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "sc_itch",
+              "explanation": "itch from parasites, allergy or ear disease when it is frequent or focused",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Is there hair loss, short broken hairs or sores where it licks?",
+      "Has the amount of grooming changed recently?",
+      "Does grooming follow stressful events, or happen out of context?",
+      "Did it start after an injury, surgery or a change at home?",
+      "Is there hair loss, redness or a wound where it bites?",
+      "Does it stop when the animal is distracted, and does it happen when nobody is watching?",
+      "Is it frequent or focused on one place (ears, neck)?",
+      "Are there fleas, flea dirt, redness or discharge from the ears?"
+    ],
+    "urgent_signs": [
+      "open sores or rapidly spreading hair loss",
+      "licking that cannot be interrupted",
+      "open wounds, bleeding or the animal cannot be distracted from biting itself",
+      "biting at the body after spinal surgery or with weakness of the legs",
+      "bleeding or open sores from scratching"
+    ],
+    "sources": [
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      }
+    ],
+    "summary": "In the recording: biting, sucking or chewing at its own flank, leg or body (1.5-2.0 s, 6.5-9.5 s, 28.0-30.5 s, 33.0-34.0 s); scratching its own body with a hind foot (3.0-6.5 s, 11.5-12.0 s, 32.5-33.0 s, 35.0-36.0 s); licking or cleaning its own fur, paws or face (27.5-28.0 s, 34.0-34.5 s). Licking or cleaning its own fur, paws or face (recording and user report) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress; discomfort, itch, pain or a neurological cause. No request is implied by it. Biting, sucking or chewing at its own flank, leg or body (recording) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; an abnormal repetitive (compulsive) pattern. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "tail_chasing": 0.4211,
+    "self_biting": 0.3991,
+    "scratching_self": 0.3279,
+    "self_grooming": 0.2631,
+    "threat_display": 0.2123,
+    "kneading": 0.1855,
+    "tail_directed": 0.1352,
+    "tail_flicking": 0.078,
+    "locomotion": 0.0652,
+    "playing_object": 0.0495,
+    "eating": 0.0386,
+    "being_petted": 0.0206,
+    "drinking": 0.0088,
+    "social_play": 0.0041,
+    "resting": 0.0039,
+    "vocalizing": 0.0039
+  }
+}

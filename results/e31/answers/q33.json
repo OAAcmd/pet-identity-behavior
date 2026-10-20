@@ -1,0 +1,146 @@
+{
+  "benchmark_item": {
+    "id": "q33",
+    "clip": "commons_9f22d724f678",
+    "species": "cat",
+    "scene": "In the hallway, by a wall.",
+    "question": "My cat jumps up the wall after the laser pointer dot. Is she just playing?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "playing_object"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "playing_object"
+    ],
+    "reference_basis": "source + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "playing_object": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "cat",
+    "scene": "In the hallway, by a wall.",
+    "question": "My cat jumps up the wall after the laser pointer dot. Is she just playing?",
+    "behaviors_seen": [
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.4077,
+        "threshold": 0.290027,
+        "bouts_s": [
+          [
+            4.0,
+            6.5
+          ],
+          [
+            13.5,
+            14.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.4077,
+          "share_of_frames_most_likely": 0.25
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 84,
+      "seconds": 14.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0763,
+      "path_body_lengths": 3.5429999828338623,
+      "net_displacement_body_lengths": 0.20000000298023224,
+      "stays_in_place": false,
+      "turned_rad": -0.399,
+      "abs_turned_rad": 5.172,
+      "turning_consistency": 0.077,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.0
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: batting, pouncing on or chasing a toy or object (4.0-6.5 s, 13.5-14.0 s). Batting, pouncing on or chasing a toy or object (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "playing_object": 0.4077,
+    "tail_chasing": 0.3973,
+    "locomotion": 0.2567,
+    "tail_flicking": 0.1515,
+    "kneading": 0.1138,
+    "tail_directed": 0.031,
+    "threat_display": 0.0294,
+    "self_biting": 0.0259,
+    "eating": 0.0152,
+    "drinking": 0.0145,
+    "self_grooming": 0.0143,
+    "vocalizing": 0.0117,
+    "scratching_self": 0.0101,
+    "social_play": 0.008,
+    "being_petted": 0.0031,
+    "resting": 0.0008
+  }
+}

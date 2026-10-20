@@ -1,0 +1,227 @@
+{
+  "benchmark_item": {
+    "id": "q03",
+    "clip": "paper_tiira2012_s3",
+    "species": "dog",
+    "scene": "Gravel yard outside the house.",
+    "question": "My 10-month-old Staffordshire Bull Terrier starts chasing his tail when nobody pays attention to him, and sometimes he seems to be in a trance. His littermates do it too. What could this mean?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "tail_chasing",
+    "asked": [
+      "tail_chasing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "tail_chasing"
+    ],
+    "reference_basis": "expert + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "compulsive",
+        "request"
+      ],
+      "text": "compulsive, familial tail chasing with trance-like behaviour; starts when nobody pays attention",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "tail_chasing": true
+    },
+    "gap": null
+  },
+  "answer": {
+    "version": "behavior-answer-v1",
+    "species": "dog",
+    "scene": "Gravel yard outside the house.",
+    "question": "My 10-month-old Staffordshire Bull Terrier starts chasing his tail when nobody pays attention to him, and sometimes he seems to be in a trance. His littermates do it too. What could this mean?",
+    "behaviors_seen": [
+      {
+        "behavior": "tail_chasing",
+        "description": "turning in tight circles after its own tail",
+        "score": 0.8086,
+        "threshold": 0.689274,
+        "bouts_s": [
+          [
+            0.0,
+            8.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8086,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 52,
+      "seconds": 8.666666666666666,
+      "animal_found_fraction": 0.9807692307692307,
+      "available": true,
+      "mean_speed_body_per_s": 0.2379,
+      "path_body_lengths": 5.609000205993652,
+      "net_displacement_body_lengths": 0.7730000019073486,
+      "stays_in_place": true,
+      "turned_rad": 0.431,
+      "abs_turned_rad": 2.684,
+      "turning_consistency": 0.161,
+      "repetition_strength": 0.098,
+      "repetition_period_s": 2.83,
+      "detector_dog_vote": 0.627
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_chasing",
+        "status": "also seen in the recording",
+        "recording_score": 0.8086
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_chasing",
+        "basis": "recording and user report",
+        "summary": "Turning in tight circles after the tail. Common, and usually brief; in some dogs it is habitual and hard to interrupt.",
+        "temporal_notes": "A bout is repeated whole-body turning in place; the number of turns, how long bouts last and whether they recur matter more than a single turn.",
+        "candidates_by_kind": {
+          "compulsive": [
+            {
+              "id": "dog_tc_compulsive",
+              "explanation": "canine compulsive disorder: habitual, perseverative chasing with lowered responsiveness, often with other repetitive behaviours (light chasing, freezing); more common in some breeds (bull terriers, German shepherds)",
+              "context_match": [
+                "bull terrier",
+                "trance"
+              ],
+              "context_score": 1.6,
+              "sources": [
+                "tiira2012",
+                "burn2011"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "dog_tc_attention",
+              "explanation": "a learned way to get attention: owners often laugh at or encourage tail chasing, which can reinforce it; some dogs start when nobody attends to them",
+              "context_match": [
+                "attention"
+              ],
+              "context_score": 0.9,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "dog_tc_play",
+              "explanation": "self-directed play or excitement, especially in young dogs, when bouts are brief and the dog is easy to distract",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "dog_tc_frustration",
+              "explanation": "frustration or arousal in a waiting or conflict situation (for example waiting for food, or when the owner talks to other people)",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "tiira2012"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "dog_tc_medical",
+              "explanation": "a physical cause near the tail or a neurological one: tail or anal-sac discomfort, skin itch, pain, or focal seizures; behaviour and medical causes can coexist",
+              "context_match": [],
+              "context_score": 0,
+              "sources": [
+                "vanhaevermaet2026",
+                "frontiers2026_focal"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "compulsive",
+          "request",
+          "play_or_normal",
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31."
+    ],
+    "observations_needed": [
+      "How old was the dog when it started, and how often does it happen (occasionally or daily)?",
+      "Can you interrupt it by calling the dog or offering a toy, and does it respond to you during a bout?",
+      "In which situations does it start (waiting for food, when people talk to each other, when left alone, when excited)?",
+      "Does the dog bite or injure the tail, scoot, or show hair loss or sores near the tail base?",
+      "Are there other repetitive behaviours such as chasing lights or shadows, snapping at the air, freezing or staring?"
+    ],
+    "urgent_signs": [
+      "the tail is wounded or bleeding",
+      "bouts cannot be interrupted or interfere with eating or sleeping",
+      "episodes with staring, unresponsiveness or snapping at the air (possible seizures)"
+    ],
+    "sources": [
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      },
+      {
+        "id": "burn2011",
+        "tier": "peer_reviewed_study",
+        "citation": "Burn CC (2011) A vicious cycle: a cross-sectional study of canine tail-chasing and human responses to it, using a free video-sharing website. PLoS ONE 6(11): e26553.",
+        "url": "https://doi.org/10.1371/journal.pone.0026553",
+        "supports": "400 online videos: about a third of tail-chasing dogs chased habitually or were hard to distract; perseverative dogs showed fewer play behaviours; laughter in 55 % and encouragement in 43 % of videos, so owner attention may reinforce it"
+      },
+      {
+        "id": "vanhaevermaet2026",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Van Haevermaet et al. (2026) Tail chasing in a dog: false dichotomy between behavioural and medical problems. Veterinary Record Case Reports.",
+        "url": "https://doi.org/10.1002/vrc2.70334",
+        "supports": "tail chasing can combine behavioural and medical causes"
+      },
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      }
+    ],
+    "summary": "In the recording: turning in tight circles after its own tail (0.0-8.5 s). Movement: the animal stays roughly in place while moving. Turning in tight circles after its own tail (recording and user report) has several possible explanations, in order of fit to your description: an abnormal repetitive (compulsive) pattern; a request or intention directed at a person; ordinary play or maintenance behaviour; arousal, frustration or stress; discomfort, itch, pain or a neurological cause. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v1",
+    "notes": []
+  },
+  "scores": {
+    "tail_chasing": 0.8086,
+    "threat_display": 0.2712,
+    "playing_object": 0.1856,
+    "tail_directed": 0.1509,
+    "locomotion": 0.065,
+    "self_grooming": 0.0605,
+    "scratching_self": 0.0602,
+    "resting": 0.0543,
+    "staring_snapping": 0.0492,
+    "drinking": 0.0331,
+    "self_biting": 0.0257,
+    "eating": 0.0052,
+    "social_play": 0.0019,
+    "being_petted": 0.0003
+  }
+}
