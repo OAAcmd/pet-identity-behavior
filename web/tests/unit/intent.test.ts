@@ -13,7 +13,7 @@ describe("intent inference matches the Python reference", () => {
     it(c.name, () => {
       const frames: IntentFrame[] | null = c.frames
         ? c.frames.map((f: any) => ({ t: f.t, whole: f32FromB64(f.whole_b64), objects: f32FromB64(f.objects_b64), pet: f.pet, box: f.box,
-          crop: f.crop_b64 ? f32FromB64(f.crop_b64) : null, person: f.person, motion: f.motion }))
+          crop: f.crop_b64 ? f32FromB64(f.crop_b64) : null, person: f.person, motion: f.motion, ...(f.quality ? { quality: f.quality } : {}) }))
         : null;
       const audio = c.audio ? { scores: c.audio.scores_b64.map((s: string) => f32FromB64(s)), rmsDb: c.audio.rmsDb } : null;
       const { branches, cues } = pool(frames, audio, c.videoState, c.audioState);

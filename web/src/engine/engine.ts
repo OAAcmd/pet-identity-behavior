@@ -277,6 +277,7 @@ export class LocalEngine {
         if (this.intent) {
           td = tick();
           const r = await this.intentFrame(fr.rgb, fr.t_s, intentGray);
+          r.frame.quality = [luma, lapVar];
           intentFrames.push(r.frame);
           intentGray = r.gray;
           intentMs += tick() - td;

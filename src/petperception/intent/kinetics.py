@@ -103,6 +103,8 @@ def pool(z) -> tuple[dict[str, np.ndarray | None], dict]:
         return b, cues
     pet = z["v_pet"][:, 0] > 0
     T = len(pet)
+    if "v_quality" in z.files and len(z["v_quality"]) == T:
+        cues["quality"] = np.asarray(z["v_quality"], np.float32)  # per frame (luma, Laplacian variance)
     obj = z["v_objects"].astype(np.float32)
     b["environment"] = np.concatenate([z["v_whole"].astype(np.float32).mean(0), obj.max(0)])
     cues["object_frames"] = (obj > 0).sum(0)

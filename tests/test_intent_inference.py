@@ -156,3 +156,17 @@ def test_js_divergence():
     p = np.array([1.0, 0.0])
     assert I.js_divergence(p, p) == 0.0
     assert abs(I.js_divergence(p, np.array([0.0, 1.0])) - np.log(2)) < 1e-6
+
+
+def test_degraded_video_rule_blocks_situation_interpretation_only_when_adopted():
+    m = Models()
+    dark = np.tile([[12.0, 300.0]], (20, 1))  # every frame dark (luma < 40), sharp
+    cues = {**_cues(), "quality": dark}
+    r = I.infer(m, _branches(_audio("walking the dog"), "walking the dog"), cues, YL)
+    assert r.situation["status"] == "interpretation"  # rule not adopted for this policy
+    m.situation_policy = {**m.situation_policy, "degraded_video_rule": {"low_light_luma": 40.0, "blur_laplacian_var": 25.0, "fraction": 0.5}}
+    r = I.infer(m, _branches(_audio("walking the dog"), "walking the dog"), cues, YL)
+    assert r.situation["status"] == "uncertain" and "video_quality" in r.missing_inputs
+    assert "20 of 20" in r.missing_inputs["video_quality"]
+    ok = {**_cues(), "quality": np.tile([[120.0, 300.0]], (20, 1))}
+    assert I.infer(m, _branches(_audio("walking the dog"), "walking the dog"), ok, YL).situation["status"] == "interpretation"

@@ -19,6 +19,8 @@ export interface IntentAssets {
     /** E29 conflict detector threshold; present only for variants where it was adopted. */
     conflict_js_threshold?: number | null;
     species: Record<string, string>; qualifier: Record<string, string | null>; context_for: Record<string, string[]>;
+    /** E30 rule; present only for variants where it was adopted. */
+    degraded_video_rule?: { low_light_luma: number; blur_laplacian_var: number; fraction: number } | null;
   };
   dog_activity_hypothesis: Record<string, string | null>;
   dog_audio?: IntentHeadAssets;
@@ -35,6 +37,7 @@ export interface IntentFrame {
   crop: Float32Array | null; // 1280, backbone on the square crop of the largest cat/dog
   person: [number, number, number, number]; // people, best person score, best interaction score, best IoU with the animal
   motion: number; // mean |grey difference| to the previous frame on a 64x48 area-resized image, 0..1
+  quality?: [number, number]; // mean grey level and Laplacian variance of the frame (engine frame-quality check)
 }
 
 export interface IntentAudio { scores: Float32Array[]; rmsDb: number[] }
@@ -61,6 +64,19 @@ export class LinearHead {
     }
     return softmax(z);
   }
+}
+
+/** E30 rule: reason if at least `fraction` of sampled frames are low-light or blurry; null otherwise. */
+export function videoDegraded(rule: { low_light_luma: number; blur_laplacian_var: number; fraction: number } | null,
+  quality: [number, number][] | undefined): string | null {
+  if (!rule || !quality || !quality.length) return null;
+  let low = 0, blur = 0, bad = 0;
+  for (const [l, v] of quality) {
+    const a = l < rule.low_light_luma, b = v < rule.blur_laplacian_var;
+    low += a ? 1 : 0; blur += b ? 1 : 0; bad += a || b ? 1 : 0;
+  }
+  if (bad / quality.length < rule.fraction) return null;
+  return `video too dark or blurred in ${bad} of ${quality.length} sampled frames (${low} dark, ${blur} blurred)`;
 }
 
 /** Jensen-Shannon divergence (natural log); the E29 conflict score. */
@@ -135,6 +151,7 @@ export interface IntentCues {
   person_frames?: number;
   interaction_max?: number;
   dog_fraction?: number | null;
+  quality?: [number, number][];
 }
 
 export type Branches = Record<"audio_scores" | "animal_phone" | "environment" | "interaction", Float32Array | null>;
@@ -164,6 +181,7 @@ export function pool(frames: IntentFrame[] | null, audio: IntentAudio | null, vi
   const objMax = max0(frames.map((f) => f.objects), C);
   b.environment = Float32Array.from([...mean0(frames.map((f) => f.whole), 1280), ...objMax]);
   cues.object_frames = Array.from({ length: C }, (_, j) => frames.filter((f) => f.objects[j] > 0).length);
+  if (frames.every((f) => f.quality)) cues.quality = frames.map((f) => f.quality!);
   const pet = frames.map((f) => f.pet[0] > 0);
   const petIdx = frames.map((_, i) => i).filter((i) => pet[i]);
   const per = frames.map((f) => f.person);
@@ -303,8 +321,10 @@ export class IntentModels {
         sitConflict = `situation '${r.top}' implies a ${a.situation.species[r.top]} but the ${src.split(" ")[0]} indicates a ${species}`;
         conflicts.push(sitConflict);
       }
+      const degraded = vis.length ? videoDegraded(a.situation.degraded_video_rule ?? null, cues.quality) : null;
+      if (degraded) missing.video_quality = degraded + "; the situation is not interpreted (E30 rule)";
       // Decided after E28: without video the situation model reached only 0.61 selective accuracy (target 0.8).
-      const status = sitConflict ? "conflict" : r.confident && vis.length ? "interpretation" : "uncertain";
+      const status = sitConflict ? "conflict" : r.confident && vis.length && !degraded ? "interpretation" : "uncertain";
       if (r.confident && !vis.length && !sitConflict) caveats.push(AUDIO_ONLY_SITUATION);
       situation = { label: r.top, score: r.top_score, status, branches_used: present, qualifier: status === "interpretation" ? a.situation.qualifier[r.top] ?? null : null };
       if (situation.qualifier) qualifiers.push(situation.qualifier);

@@ -135,6 +135,19 @@ class IntentModels:
         self.audio_input = a
 
 
+def video_degraded(rule: dict | None, quality) -> str | None:
+    """E30 rule (only when adopted for the variant): reason string if at least `fraction` of the sampled frames
+    are low-light or blurry by the engine's frame-quality thresholds, else None."""
+    if not rule or quality is None or len(quality) == 0:
+        return None
+    q = np.asarray(quality, np.float64)
+    low, blur = q[:, 0] < rule["low_light_luma"], q[:, 1] < rule["blur_laplacian_var"]
+    bad = low | blur
+    if bad.mean() < rule["fraction"]:
+        return None
+    return f"video too dark or blurred in {int(bad.sum())} of {len(q)} sampled frames ({int(low.sum())} dark, {int(blur.sum())} blurred)"
+
+
 def js_divergence(p: np.ndarray, q: np.ndarray) -> float:
     """Jensen-Shannon divergence (natural log) between two distributions; the E29 conflict score."""
     p, q = np.asarray(p, np.float64), np.asarray(q, np.float64)
@@ -221,7 +234,10 @@ def infer(models: IntentModels, branches: dict[str, np.ndarray | None], cues: di
         if species in ("cat", "dog") and SITUATION_SPECIES[r.top] != species and r.confident and vis:
             sit_conflict = f"situation '{r.top}' implies a {SITUATION_SPECIES[r.top]} but the {src.split(' ')[0]} indicates a {species}"
             conflicts.append(sit_conflict)
-        status = "conflict" if sit_conflict else ("interpretation" if r.confident and vis else "uncertain")
+        degraded = video_degraded(models.situation_policy.get("degraded_video_rule"), cues.get("quality")) if vis else None
+        if degraded:
+            missing["video_quality"] = degraded + "; the situation is not interpreted (E30 rule)"
+        status = "conflict" if sit_conflict else ("interpretation" if r.confident and vis and not degraded else "uncertain")
         if r.confident and not vis and not sit_conflict:
             caveats.append(AUDIO_ONLY_SITUATION)
         situation = {"label": r.top, "score": r.top_score, "status": status, "branches_used": present,
