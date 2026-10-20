@@ -1,0 +1,130 @@
+{
+ "schema": "petperception.intent_artifacts/1",
+ "created_by": {
+  "kinetics_situation_v1": "petperception evaluate --experiment e28 (features: python -m petperception.intent.kinetics)",
+  "dog_audio_activity_v1": "petperception evaluate --experiment e27",
+  "cat_audio_context_v1": "python -m petperception.intent.train_heads",
+  "dog_bark_context_v1": "python -m petperception.intent.train_heads"
+ },
+ "training_config": {
+  "heads": "multinomial logistic regression, class_weight balanced, lbfgs max_iter 5000, standardized inputs",
+  "C_grid": [
+   0.001,
+   0.01,
+   0.1,
+   1.0
+  ],
+  "selection": "GroupKFold(5) pooled out-of-fold macro-F1 on training data only (groups: YouTube id / pseudo-group / animal)",
+  "temperature": "NLL on out-of-fold logits (golden section on log T in [0.05, 20])",
+  "abstention": "smallest max-score threshold with out-of-fold selective accuracy >= 0.8 (1.01 = never)",
+  "late_fusion": "logistic regression on centred branch log-probabilities x availability + flags; modality dropout over every non-empty branch subset",
+  "seed": 0
+ },
+ "encoders": {
+  "audio": "yamnet_mediapipe_v1 (scores 521, embedding 1024 via tensor tower0/network/layer28/reduce_mean)",
+  "vision": "efficientnet_lite0_mediapipe_v1 pooled 1280; efficientdet_lite0_mediapipe_v1 (COCO); detection_verifier_v1; posture_v1; person_pet_interaction_v1; catdog_keypoints_head_awa_v1 (full variant only)"
+ },
+ "release": "see manifests/resources.json ids intent_situation_kinetics_v1, intent_dog_audio_activity_v1, intent_cat_audio_context_v1, intent_dog_bark_context_v1",
+ "files": [
+  {
+   "path": "artifacts/intent/cat_audio_context_v1/head_audio.json",
+   "sha256": "df389898fe7bc0eb9edccff97e39ef5690fe6b3836fededead7d7a1d826e15ff",
+   "bytes": 179763
+  },
+  {
+   "path": "artifacts/intent/cat_audio_context_v1/head_audio_scores.json",
+   "sha256": "97e94ec3f591374af96e88869c1987e62ecebf914f9d765317bc74d75bf59492",
+   "bytes": 120405
+  },
+  {
+   "path": "artifacts/intent/dog_audio_activity_v1/head_audio.json",
+   "sha256": "1aa173284dcbff315879a7f3aafb0b43fb9249015d8b5e576e1d3904790c7410",
+   "bytes": 469503
+  },
+  {
+   "path": "artifacts/intent/dog_audio_activity_v1/head_audio_scores.json",
+   "sha256": "932d521c09c922ffdb0e941a97364f5d597e5340aebf8e2fc4b5be56de6b1ac0",
+   "bytes": 294195
+  },
+  {
+   "path": "artifacts/intent/dog_audio_activity_v1/head_environment.json",
+   "sha256": "8c8d4cfec7c996d0f97db277151aa7c5a578ed2acfb5f8df9913096dc64b514b",
+   "bytes": 3711
+  },
+  {
+   "path": "artifacts/intent/dog_audio_activity_v1/late_fusion_full.json",
+   "sha256": "4add994f9dbde32e0cce5c59436f92c0e769d71201f1de762ec7b54b7633cd8c",
+   "bytes": 5873
+  },
+  {
+   "path": "artifacts/intent/dog_audio_activity_v1/late_fusion_phone_now.json",
+   "sha256": "56e92a7802be283ffeee3999fa2ec8c66102d8b3463e6f10c10e68168657e0c3",
+   "bytes": 5897
+  },
+  {
+   "path": "artifacts/intent/dog_bark_context_v1/head_audio.json",
+   "sha256": "81eea9e93a93932cc3ad12149c3848022c3c3cd2cef35e89bf2cd25ec40a92da",
+   "bytes": 199353
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/head_animal.json",
+   "sha256": "8ec4f3ec45840ce2145caa0d1ceb120f05093ba8068c8b4116c056a3b29c6d31",
+   "bytes": 590038
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/head_audio.json",
+   "sha256": "aeb9f1ece290062d8b595b3ef2c93b83e5dc5561fa081d1509c2e37071528c1a",
+   "bytes": 414952
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/head_environment.json",
+   "sha256": "4dcf8a0aebb5b7d90196de9fcd571d1097a61817265c12d8b88261f6b4ee0341",
+   "bytes": 298960
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/head_interaction.json",
+   "sha256": "b1d6ad32543d80961d4c39a7a8382b1e8da2d2b460acd97f2f46d98571962cc0",
+   "bytes": 2528
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/late_fusion.json",
+   "sha256": "7e552f34720655d352a7c9934d0d4a47bed11cfddf9eecd57faad414be79a3ef",
+   "bytes": 6893
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/full/policy.json",
+   "sha256": "aeaa2001a9accb0e3aa174062c43dcf71a20ffce6d2b7b6f6d07eaa0ea35c01d",
+   "bytes": 416
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/head_animal_phone.json",
+   "sha256": "b10267d217fb5512a5c473aa72fab612c8fd15d9a141addac5bc3394322b4c3b",
+   "bytes": 573392
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/head_audio_scores.json",
+   "sha256": "60b1af6c702eeb41210ab6aa5dd5d26b3b3a72536ab107de3e607d973b110f67",
+   "bytes": 237060
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/head_environment.json",
+   "sha256": "4dcf8a0aebb5b7d90196de9fcd571d1097a61817265c12d8b88261f6b4ee0341",
+   "bytes": 298960
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/head_interaction.json",
+   "sha256": "b1d6ad32543d80961d4c39a7a8382b1e8da2d2b460acd97f2f46d98571962cc0",
+   "bytes": 2528
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/late_fusion.json",
+   "sha256": "aed642ad81c6f7c903fb1f125524b64ae3899cee1070fccb39a5192c28784a5c",
+   "bytes": 6904
+  },
+  {
+   "path": "artifacts/intent/kinetics_situation_v1/phone_now/policy.json",
+   "sha256": "b5b4656565fa2cad88498b60518f485a025fcfc023359b2d2d96ec84c982bc02",
+   "bytes": 430
+  }
+ ]
+}

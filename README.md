@@ -40,17 +40,26 @@ verifier, posture, person-pet interaction, pet on furniture); rule-based
 tracking, behavior segments and fusion. A pet-and-household detector trained
 here on CC BY images (G1) is in training. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 
+Behaviour / intent layer (`src/petperception/intent/`, optional `intent.enabled`):
+trained channels on frozen encoders (situation from synchronized audio and video,
+E28; dog vocal activity / intent from barks, E26-E27; bark and meow context) and a
+combination that keeps observable behaviour, recorded context and intent apart,
+lists missing inputs and reports conflicts. Try it on a file:
+`uv run petperception intent clip.mp4` (label layers and data gaps:
+[docs/BEHAVIOR_INTENT_DATA.md](docs/BEHAVIOR_INTENT_DATA.md)).
+
 ## Documents
 
 | Topic | Document |
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
 | What each capability can and cannot do, per species (software, behavioural evidence, device, release) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E25) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Methods and measured results (E1-E28, intent layer in section 9) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Behaviour / intent: label layers, data inventory, missing annotations | [BEHAVIOR_INTENT_DATA.md](docs/BEHAVIOR_INTENT_DATA.md) |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
 | Data, models, licences | [ASSET_TERMS.md](docs/ASSET_TERMS.md) (per asset, open questions, replacements), [DATA_SOURCES.md](docs/DATA_SOURCES.md) (94-source survey, network blockers), [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |
-| Training jobs G1-G5 and reproduction | [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md), `training/g1/`, [G2 annotation spec](docs/training/G2_ANNOTATION_SPEC.md) |
+| Training jobs G1-G5, I1 (intent heads) and reproduction | [TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md), `training/g1/`, [G2 annotation spec](docs/training/G2_ANNOTATION_SPEC.md) |
 | Validation still needed; household collection package | [EVALUATION_PLAN_REAL_PAIRED.md](docs/EVALUATION_PLAN_REAL_PAIRED.md), [docs/household/](docs/household/README.md) |
 | Tests | [TEST_REPORT.md](docs/TEST_REPORT.md) |
 | API | [API_CONTRACT.md](docs/API_CONTRACT.md), [openapi.json](docs/openapi.json) |

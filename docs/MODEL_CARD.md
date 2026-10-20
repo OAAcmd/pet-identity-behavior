@@ -30,6 +30,9 @@ validated against household outcomes.
 | Dog keypoints (ears, tail, limbs) | JAX head on frozen EfficientNet-Lite0 features | yes (E9) | E9 | no (research-only data) |
 | Dog actions from video | logistic regression on segment features | yes (E11) | E11 | no (research-only data) |
 | Fusion and abstention | rule baseline (unfitted) | no | E5 synthetic checks only | yes |
+| Situation from synchronized audio + video (intent stage, optional) | logistic heads on frozen YAMNet / EfficientNet-Lite0 / detector features + trained late fusion with availability flags | yes (E28) | E28 (Kinetics, YouTube) | yes, when exported with `--intent` (research profile) |
+| Dog vocal activity / intent (intent stage) | logistic heads on YAMNet features, optional location context | yes (E27) | E26, E27 (Barkopedia) | yes (class-score head) |
+| Behaviour/intent combination | taxonomy relations (annotated / consistent / context), thresholds fitted per channel, explicit missing inputs and conflicts | heads yes; combination no (no intent-labelled synchronized data) | channel level only; end-to-end status on held-out clips | yes |
 | Explanations | deterministic templates; no language model | no | tests | yes |
 
 ## Intended use
@@ -69,8 +72,17 @@ validated against household outcomes.
   only they can start or support an interpretation. Unvalidated types stay
   in the result file and can only make an interpretation abstain.
 - Cat keypoints (research, AwA-Pose, E24): PCK@0.1 0.76; ears 0.91, tail 0.51.
+- Situation from synchronized audio + video (Kinetics validation, 294
+  clips, E28): macro-F1 0.730 combined, 0.689 video only, 0.456 audio only;
+  the scene is the strongest cue. Coverage 0.88 at selective accuracy 0.76.
+- Dog activity / intent from a single bark (Barkopedia, E27): macro-F1
+  0.22 (8 activities), 0.29 with the location as context; no activity
+  passes the gate, so bark readings are at most "tentative".
+- No intent hypothesis reaches "supported" on held-out data; what the
+  intent stage adds is the situation as context, missing inputs and
+  conflicts.
 - Not measured: anything in real homes with labels, on real phones, cat
-  interaction, hypothesis accuracy, calibration.
+  interaction, hypothesis (intent) accuracy, calibration on new data.
 
 ## Known failure modes
 

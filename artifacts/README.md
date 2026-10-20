@@ -56,3 +56,19 @@ e98c1b1649d62a1fa94b3e08bd14054423e681da7ee731a440a7a0d72bf70219  verifier/verif
 The phone does not read these files directly: `petperception export-ondevice`
 converts the runtime artifacts into `engine_assets.json` inside the
 checksummed on-device bundle (see [docs/ON_DEVICE.md](../docs/ON_DEVICE.md)).
+
+## Behaviour / intent heads (`intent/`, 2026-10-20)
+
+JSON heads (`petperception.intent_head/1`: standardization, coefficients,
+temperature, abstention threshold, metadata naming data, label layer and
+held-out evaluation) and late-fusion stackers
+(`petperception.intent_late_fusion/1`). SHA-256 of every file, the training
+configuration and the producing commands: `intent/MANIFEST.json`.
+
+| Directory | Produced by | Trained on | Used at runtime | Release (resources.json) |
+| --- | --- | --- | --- | --- |
+| `intent/kinetics_situation_v1/{full,phone_now}/` | `petperception evaluate --experiment e28` | Kinetics-700 pet clips, 600 train-split clips (YouTube) | intent stage, server (`intent.enabled`) and phone (bundle exported with `--intent`) | **research only** |
+| `intent/dog_audio_activity_v1/` | `petperception evaluate --experiment e27` | Barkopedia (MIT card; audio provenance unresolved) | intent stage | research; legal review otherwise |
+| `intent/cat_audio_context_v1/` | `python -m petperception.intent.train_heads` | CatMeows (CC BY-NC 4.0) | intent stage (hint only, below the gate) | research; non-commercial review |
+| `intent/dog_bark_context_v1/` | `python -m petperception.intent.train_heads` | Yin & McCowan barks via BEANS (no licence stated) | intent stage, `full` variant only | **research only** |
+
