@@ -1,0 +1,155 @@
+{
+  "experiment": "E20 (G1b winner at per-class tuning-selected operating points, with its own verifier)",
+  "created_at": "2026-10-20T09:24:29+00:00",
+  "operating_points": {
+    "cat": 0.24,
+    "dog": 0.3
+  },
+  "note": "scored once after the G1b selection on development data (results/g1/g1b_selection.json)",
+  "results": {
+    "phone_build_m3+verifier": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "contributors": 14,
+        "frame_found": 0.6971291866028708,
+        "frame_found_ci95": {
+          "ci_low": 0.6576255163082182,
+          "ci_high": 0.7425469779155366,
+          "n_boot": 1000,
+          "n_groups": 14,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.024880382775119617,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.010325666741371581,
+          "ci_high": 0.04528149692712905,
+          "n_boot": 1000,
+          "n_groups": 14,
+          "unit": "group"
+        },
+        "frame_missed": 0.27799043062200957,
+        "frame_found_box_iou50": 0.6844380403458213,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8736578822135925,
+        "sequence_found_half_frames": 0.8133971291866029,
+        "sequence_any_frame": 0.9712918660287081,
+        "sequence_mean_found_fraction": 0.6971291866028707,
+        "sequence_mean_wrong_only_fraction": 0.02488038277511962
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "contributors": 9,
+        "frame_found": 0.5979591836734693,
+        "frame_found_ci95": {
+          "ci_low": 0.5633747220163084,
+          "ci_high": 0.6312163542943889,
+          "n_boot": 1000,
+          "n_groups": 9,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.13741496598639455,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.10292578659370724,
+          "ci_high": 0.1682444792353329,
+          "n_boot": 1000,
+          "n_groups": 9,
+          "unit": "group"
+        },
+        "frame_missed": 0.2646258503401361,
+        "frame_found_box_iou50": 0.5842465753424657,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.8945630788803101,
+        "sequence_found_half_frames": 0.673469387755102,
+        "sequence_any_frame": 0.9795918367346939,
+        "sequence_mean_found_fraction": 0.5979591836734695,
+        "sequence_mean_wrong_only_fraction": 0.13741496598639458
+      }
+    },
+    "g1b_warm_cat2_cop3d_perclass+own_verifier": {
+      "cat": {
+        "sequences": 209,
+        "frames": 2090,
+        "contributors": 14,
+        "frame_found": 0.7660287081339713,
+        "frame_found_ci95": {
+          "ci_low": 0.7316533018867925,
+          "ci_high": 0.8016902067837738,
+          "n_boot": 1000,
+          "n_groups": 14,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.04019138755980861,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.026292827144120248,
+          "ci_high": 0.05470871722182848,
+          "n_boot": 1000,
+          "n_groups": 14,
+          "unit": "group"
+        },
+        "frame_missed": 0.1937799043062201,
+        "frame_found_box_iou50": 0.7540826128722382,
+        "box_scored_frames": 2082,
+        "median_best_iou_when_found": 0.8850607872009277,
+        "sequence_found_half_frames": 0.8708133971291866,
+        "sequence_any_frame": 0.9856459330143541,
+        "sequence_mean_found_fraction": 0.7660287081339713,
+        "sequence_mean_wrong_only_fraction": 0.04019138755980861
+      },
+      "dog": {
+        "sequences": 147,
+        "frames": 1470,
+        "contributors": 9,
+        "frame_found": 0.7619047619047619,
+        "frame_found_ci95": {
+          "ci_low": 0.7295454545454545,
+          "ci_high": 0.7894319640564826,
+          "n_boot": 1000,
+          "n_groups": 9,
+          "unit": "group"
+        },
+        "frame_wrong_species_only": 0.07210884353741497,
+        "frame_wrong_species_only_ci95": {
+          "ci_low": 0.052076430722891566,
+          "ci_high": 0.09646802740508136,
+          "n_boot": 1000,
+          "n_groups": 9,
+          "unit": "group"
+        },
+        "frame_missed": 0.16598639455782313,
+        "frame_found_box_iou50": 0.7479452054794521,
+        "box_scored_frames": 1460,
+        "median_best_iou_when_found": 0.900643527507782,
+        "sequence_found_half_frames": 0.8503401360544217,
+        "sequence_any_frame": 0.9863945578231292,
+        "sequence_mean_found_fraction": 0.7619047619047619,
+        "sequence_mean_wrong_only_fraction": 0.07210884353741497
+      }
+    }
+  },
+  "paired_vs_phone_build": {
+    "g1b_warm_cat2_cop3d_perclass+own_verifier": {
+      "cat": {
+        "mean_difference": 0.06889952153110047,
+        "ci95": [
+          0.04714735004830069,
+          0.08932282837622643
+        ],
+        "sequences_better": 101,
+        "sequences_worse": 47,
+        "sequences": 209
+      },
+      "dog": {
+        "mean_difference": 0.16394557823129252,
+        "ci95": [
+          0.14650905820377744,
+          0.1839702290076336
+        ],
+        "sequences_better": 96,
+        "sequences_worse": 23,
+        "sequences": 147
+      }
+    }
+  }
+}

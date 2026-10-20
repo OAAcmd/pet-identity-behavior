@@ -16,7 +16,7 @@ results are kept).
 
 | Job | Capability | Ran here | Blocked on |
 | --- | --- | --- | --- |
-| G1 | pet and household detector (presence, location, objects) | data job **ran** (52,599 CC BY images); CPU benchmark and a 6k-image resumable training run **ran** (`results/g1/cpu_training.json`): within about 0.03 AP50 of M2/M3 on the E4 subset; three data-path defects fixed | the full-data CPU run (several hours, resumable), its own threshold and verifier, then E18 and parity |
+| G1 | pet and household detector (presence, location, objects); G1b run B **finished 2026-10-20** (dev AP50 cat 0.774 / dog 0.821, selected over G1a) | data job **ran** (52,599 CC BY images); CPU benchmark and a 6k-image resumable training run **ran** (`results/g1/cpu_training.json`): within about 0.03 AP50 of M2/M3 on the E4 subset; three data-path defects fixed | the full-data CPU run (several hours, resumable), its own threshold and verifier, then E18 and parity |
 | G2 | licensed cat and dog keypoints: ears, tail, body | candidate job **ran** (4,813 cat / 6,348 dog images, split by photographer); annotation spec written | human annotation (estimate 70-100 hours for 2,000 + 2,000) |
 | G3 | temporal behaviour from video | E17 **ran on CPU**: temporal model 0.590 vs pooled 0.575 vs E11 0.638 macro-F1; not adopted | household or licensed video (cats; release) |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
@@ -350,6 +350,59 @@ resumed (2 threads, same command; it restored the signal checkpoint at step
 230), because the intent stage measured a downstream cost of the detector's
 species confusion: 50 of 294 Kinetics test clips end in a species conflict
 (`results/intent/end_to_end_status.json`). `g1b_warm_cat2` stays paused.
+
+*Status: run B finished, 2026-10-20.* `g1b_warm_cat2_cop3d` completed its
+two epochs with one interruption (a machine reboot; it resumed from the
+10-minute checkpoint at step 1,012 with the same command, no restart from
+scratch): epoch 0 70 min, epoch 1 90 min (the CPU was shared with feature
+extraction), peak RSS 5.5 GB. Final Open Images development AP50 cat 0.774,
+dog 0.821, mAP50 0.483 (G1a: 0.741 / 0.765 / 0.457; identical development
+file). Checkpoint `ckpt-21` (with optimizer state), float32 / float16 / int8
+exports and the run record are in `models/g1/g1b_warm_cat2_cop3d/`
+(`MANIFEST.json`); a fresh GitHub clone verified all 8 files, the exports
+load in the product detector, and `vault.py restore` rebuilt a resumable run
+directory from the clone (`results/g1/github_restore_check_g1b.json`).
+`g1b_warm_cat2` (run A) stays paused at step 106: the selection below
+compares the completed candidates G1a and B only (the candidate set is
+reduced, the rule is unchanged).
+
+Selection on development data (`results/g1/g1b_selection.json`,
+`src/petperception/eval/g1_select.py`):
+
+| Candidate | Per-class points (tuning, recall-matched to M3) | OI dev AP50 cat / dog | CoP3D dev cat found / only a dog | CoP3D dev dog found / only a cat | Constraints |
+| --- | --- | --- | --- | --- | --- |
+| G1a | 0.11 / 0.28 | 0.741 / 0.765 | 0.998 / 0.000 | 0.807 / 0.154 | - |
+| **G1b run B** | 0.24 / 0.30 | **0.774 / 0.821** | 0.931 / 0.027 | 0.839 / **0.086** | both met |
+
+Winner: **G1b run B** (constraints met; higher cat AP50). On the CoP3D
+development frames it nearly halves the dog frames reported only as a cat.
+
+Scored once, as fixed above (per-class points cat 0.24 / dog 0.30, collection floor 0.19 as for
+G1a's per-class run):
+* **Acceptance 1 (E7 protocol on E4, own verifier fitted on the tuning set):
+  met** (`results/g1/g1b_e7_perclass/`).
+
+  | E7 protocol | AP50 cat | AP50 dog | Specificity cat [95 % CI] | Specificity dog [95 % CI] |
+  | --- | --- | --- | --- | --- |
+  | M3 + verifier (thresholds) | 0.833 | 0.748 | 0.660 [0.52, 0.79] | 0.919 [0.865, 0.966] |
+  | G1a, per-class points + own verifier | 0.814 (fail) | 0.749 | 0.574 [0.43, 0.71] | 0.901 [0.84, 0.95] |
+  | **G1b run B, per-class points + own verifier** | **0.852 [0.809, 0.890] (pass)** | **0.7481 [0.685, 0.805] (pass, at the threshold)** | 0.681 [0.541, 0.812] (overlaps: pass) | 0.883 [0.821, 0.942] (overlaps: pass) |
+
+  The dog margin is nil (0.7481 against 0.748; the phone build's own
+  unrounded value is 0.7481 too).
+* **E20, CoP3D home video (test), per-class points with the verifier, paired
+  with the phone build and its verifier** (`results/g1/g1b_e20/`): cat frames
+  found 0.766 [0.732, 0.802] vs 0.697 (paired +0.069 [+0.047, +0.089]),
+  only a dog 0.040 vs 0.025; dog frames found 0.762 [0.730, 0.789] vs 0.598
+  (+0.164 [+0.147, +0.184]), only a cat **0.072 vs 0.137**. Against G1a at
+  its per-class points (cat 0.908, dog 0.720, dog frames only a cat 0.167),
+  G1b gives up cat recall for far less dog-to-cat confusion.
+* Next, as fixed above: E16 and E18 (acceptance criteria 2 and 3). Both need
+  the engine wired to a G1 export with its per-class points and its
+  verifier, which is not implemented yet; then engine parity (criterion 4)
+  and phone latency (criterion 5, needs phones). **The phone detector is
+  unchanged until then.** The downstream effect on behaviour explanation is
+  E31 part C ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
 
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):

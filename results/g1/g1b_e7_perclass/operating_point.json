@@ -1,0 +1,16 @@
+{
+  "rule": "per-class recall-matched on the tuning set (g1_select.per_class_points; results/g1/g1b_selection.json)",
+  "thresholds": {
+    "cat": 0.24,
+    "dog": 0.3
+  },
+  "collection_floor": 0.19,
+  "reference_tuning_recall": {
+    "cat": 0.9181636726546906,
+    "dog": 0.8838582677165354
+  },
+  "candidate_tuning_recall": {
+    "cat": 0.9181636726546906,
+    "dog": 0.8838582677165354
+  }
+}

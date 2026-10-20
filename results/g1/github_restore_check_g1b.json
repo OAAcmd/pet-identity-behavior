@@ -1,0 +1,15 @@
+{
+  "check": "G1b run B artifacts retrieved from GitHub and loaded",
+  "date": "2026-10-20",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng https://github.com/OAAcmd/pet-identity-behavior.git (commit f52dd9c)",
+  "repository_path": "models/g1/g1b_warm_cat2_cop3d/",
+  "manifest_files_verified": 8,
+  "export_identical_to_training_output": true,
+  "exports_loaded_in_product_detector": [
+    "model_float32.tflite",
+    "model_float16.tflite",
+    "model_int8_ptq.tflite"
+  ],
+  "restore": "training/g1/vault.py restore --src <clone>/models/g1/g1b_warm_cat2_cop3d --run-dir var/training/g1/runs/verify_g1b_from_github (8 files verified; weights_sha256 1a53f4b3c979802f921e384c7e858ede9d627bfbbe148b0a25a14298fa016aad)",
+  "validate_only": "pending"
+}
