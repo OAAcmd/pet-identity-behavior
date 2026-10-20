@@ -1248,6 +1248,201 @@
         "commercial": "not_permitted"
       },
       "release_note": "No data licence: research only."
+    },
+    {
+      "id": "siglip_base_patch16_224",
+      "kind": "model",
+      "role": "frozen vision-language encoder for behaviour recognition (zero-shot prompts; trained head inputs)",
+      "name": "SigLIP base patch16-224 (google/siglip-base-patch16-224)",
+      "canonical_url": "https://huggingface.co/google/siglip-base-patch16-224",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-20",
+      "files": [
+        {
+          "name": "config.json",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/config.json",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 432,
+          "sha256": "cd85b3d28829722820bcb89a2cfbb4160e55fd359249a3044da724166a8d9688"
+        },
+        {
+          "name": "model.safetensors",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/model.safetensors",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 812672320,
+          "sha256": "2c63cb7d1f2e95ba501893cbb8faeb4ea9a3af295498d35097126228659c2af8"
+        },
+        {
+          "name": "preprocessor_config.json",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/preprocessor_config.json",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 368,
+          "sha256": "d11ccb80f15d358a11bdb070e92e2d889005874b7db15823d5f10d9b2533b14a"
+        },
+        {
+          "name": "special_tokens_map.json",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/special_tokens_map.json",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 409,
+          "sha256": "2b6a1ff67a27e0df9ac0c7d93250fc0d87431c7b366b3d5669217104f9088a26"
+        },
+        {
+          "name": "spiece.model",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/spiece.model",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 798330,
+          "sha256": "1e5036bed065526c3c212dfbe288752391797c4bb1a284aa18c9a0b23fcaf8ec"
+        },
+        {
+          "name": "tokenizer.json",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/tokenizer.json",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 2399357,
+          "sha256": "c6e405cb7c670d56636a9402c81023a55bc6c3c53d89cf02b92f5c5005bfe920"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "url": "https://huggingface.co/google/siglip-base-patch16-224/resolve/7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed/tokenizer_config.json",
+          "revision": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+          "bytes": 711,
+          "sha256": "d6423dae508cc3a129d22ea443841c111832a1a73125b8f25ea8736951698bcb"
+        }
+      ],
+      "licence": "Apache-2.0 (model card at the pinned revision)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable_pending_review",
+        "commercial": "suitable_pending_review"
+      },
+      "release_note": "Apache-2.0 weights; trained on WebLI (Google), data terms not published. Server/desktop size (812 MB); no phone build exists yet."
+    },
+    {
+      "id": "xclip_base_patch32",
+      "kind": "model",
+      "role": "video-text model retrieved as a candidate temporal recognizer; not evaluated, not used",
+      "name": "X-CLIP base patch32 (microsoft/xclip-base-patch32, Kinetics-400)",
+      "canonical_url": "https://huggingface.co/microsoft/xclip-base-patch32",
+      "status": "available",
+      "profiles": [
+        "research"
+      ],
+      "retrieved_at": "2026-10-20",
+      "files": [
+        {
+          "name": "config.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/config.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 4718,
+          "sha256": "13bb919d1ef16f3b80b03cdf5c575d688dfafd21d12566849cc557b00e058ce3"
+        },
+        {
+          "name": "merges.txt",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/merges.txt",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 524657,
+          "sha256": "f526393189112391ce6f9795d4695f704121ce452c3aad1f5335cc41337eba85"
+        },
+        {
+          "name": "model.safetensors",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/model.safetensors",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 786414772,
+          "sha256": "abf286e8cdd0612761c3e42d3a55eca998382dfa67a04a0f3fdcdfa4f150cdbb"
+        },
+        {
+          "name": "preprocessor_config.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/preprocessor_config.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 309,
+          "sha256": "c14b2b5c8f26a754df62235ba79d1ca63cfdd9b3de76ee688e4a30ea1e5c6986"
+        },
+        {
+          "name": "special_tokens_map.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/special_tokens_map.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 472,
+          "sha256": "c4864a9376a8401918425bed71fc14fc0e81f9b59ec45c1cf96cccb2df508eac"
+        },
+        {
+          "name": "tokenizer.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/tokenizer.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 2224041,
+          "sha256": "a75dc79c6ec004a7e2d346c20e0af8d29aa2b251ea356964718aef8b8f052e80"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/tokenizer_config.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 965,
+          "sha256": "7e28810d55aafb02f6b216f05fa1208a4aac62abf794796288a70314eed5ddf3"
+        },
+        {
+          "name": "vocab.json",
+          "url": "https://huggingface.co/microsoft/xclip-base-patch32/resolve/a2e27a78a2b5d802e894b8a1ef14f3a8ce490963/vocab.json",
+          "revision": "microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963",
+          "bytes": 862328,
+          "sha256": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363"
+        }
+      ],
+      "licence": "MIT (model card at the pinned revision); trained on Kinetics-400 (YouTube)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "legal_review",
+        "commercial": "legal_review"
+      }
+    },
+    {
+      "id": "commons_pet_videos",
+      "kind": "dataset",
+      "role": "behaviour clips with uploader labels (E31 pool and benchmark)",
+      "name": "Wikimedia Commons videos of cats and dogs",
+      "canonical_url": "https://commons.wikimedia.org/wiki/Category:Videos_of_cats",
+      "status": "available",
+      "retrieved_at": "2026-10-20",
+      "manifest": "manifests/commons_pets.json",
+      "licence": "per file (mostly CC BY, CC BY-SA, CC0; recorded per record with the author)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "per_file",
+        "commercial": "per_file"
+      },
+      "release_note": "Raw media are kept in var/ and never committed; attribution per file is in the manifest."
+    },
+    {
+      "id": "paper_supplement_videos",
+      "kind": "dataset",
+      "role": "expert-captioned behaviour videos (tail chasing, hyperaesthesia, flank biting, focal seizures)",
+      "name": "Supplementary videos of five open-access papers",
+      "status": "available",
+      "retrieved_at": "2026-10-20",
+      "manifest": "manifests/paper_videos.json",
+      "licence": "CC BY 4.0 (each article)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "suitable"
+      },
+      "release_note": "Attribution to the articles is required; raw media stay in var/."
+    },
+    {
+      "id": "internet_archive_pet_clips",
+      "kind": "dataset",
+      "role": "tail-chasing and confuser clips for the E31 benchmark",
+      "name": "Five Internet Archive uploads (cats chasing tails, a dog spinning, tail flicking at rest, a kitten biting a cat's tail)",
+      "status": "available",
+      "retrieved_at": "2026-10-20",
+      "manifest": "manifests/archive_pets.json",
+      "licence": "none stated (unresolved permission)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "not_permitted",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Research analysis only; never redistributed; nothing trained on them ships outside the research profile."
     }
   ]
 }

@@ -38,7 +38,18 @@ class Answer:
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
-        return asdict(self)
+        return _plain(asdict(self))
+
+
+def _plain(x):
+    """Plain JSON types (numpy scalars from the feature code become Python numbers)."""
+    if isinstance(x, dict):
+        return {k: _plain(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_plain(v) for v in x]
+    if hasattr(x, "item") and not isinstance(x, (str, bytes)):
+        return x.item()
+    return x
 
 
 def _fmt_bouts(r: BehaviorReading, limit: int = 4) -> str:
@@ -133,10 +144,13 @@ def _summary(q: Query, seen: list[BehaviorReading], explained: list[dict], patte
         if bits:
             parts.append("Movement: " + ", ".join(bits) + ".")
     for ex in explained[:2]:
-        kinds = [k for k in ex["kind_order_by_context"]]
-        kinds = list(dict.fromkeys(kinds))
-        parts.append(f"{V.BEHAVIORS[ex['behavior']].description.capitalize()} ({ex['basis']}) has several possible explanations: "
-                     + "; ".join(K.KIND_TEXT[k] for k in kinds) + "." + ("" if ex["request_or_intention_possible"] else " No request is implied by it."))
+        kinds = list(dict.fromkeys(ex["kind_order_by_context"]))
+        what = f"{V.BEHAVIORS[ex['behavior']].description.capitalize()} ({ex['basis']})"
+        if len(kinds) == 1:
+            parts.append(f"{what} is usually {K.KIND_TEXT[kinds[0]]}." + ("" if ex["request_or_intention_possible"] else " No request is implied by it."))
+        else:
+            parts.append(f"{what} has several possible explanations, in order of fit to your description: " + "; ".join(K.KIND_TEXT[k] for k in kinds)
+                         + "." + ("" if ex["request_or_intention_possible"] else " No request is implied by it."))
     parts.append("The cause is not established from the recording; the questions listed would help tell the candidates apart.")
     return " ".join(parts)
 
