@@ -17,7 +17,7 @@
  "vocal_threshold": 0.3,
  "provenance": {
   "experiment": "E31",
-  "code_commit": "0c9ac741966aa5b96cc30633dc4c8d3d73aae757",
+  "code_commit": "8c614bb7e5f9268fc5b0ecb2ccf19f0a543084b4",
   "pool_clips": 278,
   "pool_groups": 131,
   "adopted": "R0_zero_shot",
@@ -32,6 +32,6 @@
    "social_play",
    "tail_chasing"
   ],
-  "created_at": "2026-10-20T08:16:20+00:00"
+  "created_at": "2026-10-20T08:22:46+00:00"
  }
 }

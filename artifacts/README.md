@@ -77,8 +77,9 @@ configuration and the producing commands: `intent/MANIFEST.json`.
 
 | File | Produced by | Content | Used at runtime | Release |
 | --- | --- | --- | --- | --- |
-| `understand/recognizer.json` | `petperception evaluate --experiment e31` | method `zero_shot` (the trained head was not adopted), per-behaviour thresholds chosen on out-of-fold scores of 278 clips, fixed defaults (0.30 zero-shot, 0.30 YAMNet vocal), provenance | `petperception explain` | research (thresholds chosen on Commons / paper / Internet Archive clips; SigLIP terms) |
+| `understand/recognizer.json` (checksums: `understand/MANIFEST.json`) | `petperception evaluate --experiment e31` | method `zero_shot` (the trained head was not adopted), per-behaviour thresholds chosen on out-of-fold scores of 278 clips, fixed defaults (0.30 zero-shot, 0.30 YAMNet vocal), provenance | `petperception explain` | research (thresholds chosen on Commons / paper / Internet Archive clips; SigLIP terms) |
 
 The knowledge base (sources, candidates, distinguishing observations) is
 code with its own version (`understand/knowledge.py`, `behavior-kb-v1`),
 validated by `knowledge.validate()` and the tests.
+| `understand/candidates/behavior_head_e31_not_adopted.{json,npz}` | same command | the trained head E31 evaluated and did not adopt (logistic regression per behaviour on 1,537 inputs, fitted on all 278 pool clips; metadata names data and decision) | never (kept for reproducibility and later comparison) | research |

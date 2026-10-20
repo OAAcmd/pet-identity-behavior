@@ -1,0 +1,22 @@
+{
+ "schema": "petperception.artifact_manifest/1",
+ "produced_by": "petperception evaluate --experiment e31",
+ "experiment": "E31",
+ "encoder": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+ "deployed": "recognizer.json (method zero_shot)",
+ "not_deployed": "candidates/behavior_head_e31_not_adopted.* (trained head, macro AP 0.248 vs 0.416; kept for reproducibility)",
+ "files": {
+  "candidates/behavior_head_e31_not_adopted.json": {
+   "bytes": 871,
+   "sha256": "8b11ada996bc9458c14af7e23c9cca6a295d614a659fd0f607b09cd8e922816d"
+  },
+  "candidates/behavior_head_e31_not_adopted.npz": {
+   "bytes": 68636,
+   "sha256": "b76c56baa295e734b5379ddf75ae757b1cf0ca8d6075ea3f2e1250db731be75e"
+  },
+  "recognizer.json": {
+   "bytes": 783,
+   "sha256": "039e41e75344b563d1814d0a8896d0deabc61608afe80a650a0bda40fd589dda"
+  }
+ }
+}

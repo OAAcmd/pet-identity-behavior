@@ -1,7 +1,7 @@
 {
   "experiment": "E31",
-  "created_at": "2026-10-20T08:16:20+00:00",
-  "code_commit": "0c9ac741966aa5b96cc30633dc4c8d3d73aae757",
+  "created_at": "2026-10-20T08:22:46+00:00",
+  "code_commit": "8c614bb7e5f9268fc5b0ecb2ccf19f0a543084b4",
   "encoder": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
   "knowledge_version": "behavior-kb-v1",
   "benchmark": "behavior-questions-v1",

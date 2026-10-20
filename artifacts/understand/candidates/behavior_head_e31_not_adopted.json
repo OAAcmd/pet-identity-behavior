@@ -1,0 +1,44 @@
+{
+ "version": "behavior-head-v1",
+ "behaviors": [
+  "drinking",
+  "eating",
+  "kneading",
+  "locomotion",
+  "playing_object",
+  "resting",
+  "self_grooming",
+  "social_play",
+  "tail_chasing"
+ ],
+ "C": {
+  "drinking": 0.01,
+  "eating": 0.01,
+  "kneading": 1.0,
+  "locomotion": 0.01,
+  "playing_object": 0.01,
+  "resting": 0.01,
+  "self_grooming": 0.01,
+  "social_play": 0.01,
+  "tail_chasing": 0.01
+ },
+ "encoder": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
+ "experiment": "E31",
+ "code_commit": "8c614bb7e5f9268fc5b0ecb2ccf19f0a543084b4",
+ "pool_clips": 278,
+ "pool_groups": 131,
+ "adopted": "R0_zero_shot",
+ "eligible": [
+  "drinking",
+  "eating",
+  "kneading",
+  "locomotion",
+  "playing_object",
+  "resting",
+  "self_grooming",
+  "social_play",
+  "tail_chasing"
+ ],
+ "created_at": "2026-10-20T08:22:46+00:00",
+ "head_adopted": false
+}
