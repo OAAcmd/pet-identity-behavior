@@ -110,7 +110,8 @@
    "acceptance_1": "met: E4 with own verifier at per-class points cat 0.852, dog 0.7481 (threshold 0.748), specificity intervals overlap M3's",
    "e20": "home video vs phone build + verifier: cat found 0.766 vs 0.697, dog 0.762 vs 0.598, dog frames only a cat 0.072 vs 0.137",
    "next": "E16 and E18 need the engine wired to a G1 export with per-class points and verifier; then parity and phone latency; phone detector unchanged",
-   "artifacts": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint ckpt-21 with optimizer state, float32/float16/int8 exports, MANIFEST.json); GitHub restore verified"
+   "artifacts": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint ckpt-21 with optimizer state, float32/float16/int8 exports, MANIFEST.json); GitHub restore verified",
+   "downstream_behaviour": "E31 part C: located in more frames (0.786 / 0.771 vs 0.727) but behaviour recognition not improved (pool macro AP 0.404 / 0.402 vs 0.416; benchmark 23/36 / 19/36 vs 22/36; tail chasing 3/8 / 1/8 vs 3/8)"
   },
   "B1": {
    "capability": "trained behaviour head on frozen SigLIP embeddings (behaviour explanation)",
@@ -164,6 +165,11 @@
    "date": "2026-10-20",
    "decision": "G1b run B selected over G1a; acceptance 1 met; phone detector not replaced yet",
    "basis": "pre-registered selection on development data, then E7/E20 scored once (results/g1/g1b_*); criteria 2-5 (E18, E16, parity, phone latency) not yet run"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "Behaviour explanation keeps the phone detector for locating the animal",
+   "basis": "E31 part C: G1b improves localization but not recognition; at its per-class points tail chasing drops to 1/8"
   }
  ],
  "resources_needed": [

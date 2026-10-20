@@ -1,0 +1,134 @@
+{
+  "detector": "G1b run B (float32 export) at its tuning-set per-class points cat 0.24 / dog 0.30 (secondary)",
+  "clips_compared": 299,
+  "base_pool": {
+    "collection": 300,
+    "in_pool": 278,
+    "animal_not_located": 21,
+    "duplicate_removed": 1
+  },
+  "alt_pool": {
+    "collection": 300,
+    "in_pool": 275,
+    "animal_not_located": 24,
+    "duplicate_removed": 1
+  },
+  "located_fraction_mean": {
+    "default": 0.7270392767317596,
+    "alternative": 0.7714657314475418
+  },
+  "clips_located_in_more_frames": 75,
+  "clips_located_in_fewer_frames": 26,
+  "default": {
+    "part_a_R0_macro_ap": 0.4156189759960366,
+    "part_a_R0_ci95": [
+      0.35122720644868066,
+      0.4962507827277059
+    ],
+    "part_a_adopted": "R0_zero_shot",
+    "part_a_adopted_macro_ap": 0.4156189759960366,
+    "B": {
+      "B1_all": {
+        "k": 22,
+        "n": 36,
+        "rate": 0.6111111111111112,
+        "wilson95": [
+          0.4486417029674347,
+          0.7521534458217705
+        ]
+      },
+      "B1_behavior_tail_chasing": {
+        "k": 3,
+        "n": 8,
+        "rate": 0.375,
+        "wilson95": [
+          0.13684175946152105,
+          0.6942621454161981
+        ]
+      },
+      "B2_present_seen": {
+        "k": 27,
+        "n": 46,
+        "rate": 0.5869565217391305,
+        "wilson95": [
+          0.4433924238701789,
+          0.7171160670289898
+        ]
+      },
+      "B4_confuser_rejection": {
+        "k": 5,
+        "n": 6,
+        "rate": 0.8333333333333334,
+        "wilson95": [
+          0.43649056343635395,
+          0.9699474141282697
+        ]
+      },
+      "B4_tail_chasing_rejection": {
+        "k": 4,
+        "n": 4,
+        "rate": 1.0,
+        "wilson95": [
+          0.5100999795960008,
+          1.0
+        ]
+      }
+    }
+  },
+  "alternative": {
+    "part_a_R0_macro_ap": 0.4022580469577825,
+    "part_a_R0_ci95": [
+      0.3444230082678758,
+      0.47765044221386904
+    ],
+    "part_a_adopted": "R0_zero_shot",
+    "part_a_adopted_macro_ap": 0.4022580469577825,
+    "B": {
+      "B1_all": {
+        "k": 19,
+        "n": 36,
+        "rate": 0.5277777777777778,
+        "wilson95": [
+          0.3700567162693947,
+          0.6801420709279067
+        ]
+      },
+      "B1_behavior_tail_chasing": {
+        "k": 1,
+        "n": 8,
+        "rate": 0.125,
+        "wilson95": [
+          0.02241690886329617,
+          0.4708948057698615
+        ]
+      },
+      "B2_present_seen": {
+        "k": 23,
+        "n": 46,
+        "rate": 0.5,
+        "wilson95": [
+          0.3611870167007236,
+          0.6388129832992764
+        ]
+      },
+      "B4_confuser_rejection": {
+        "k": 5,
+        "n": 6,
+        "rate": 0.8333333333333334,
+        "wilson95": [
+          0.43649056343635395,
+          0.9699474141282697
+        ]
+      },
+      "B4_tail_chasing_rejection": {
+        "k": 4,
+        "n": 4,
+        "rate": 1.0,
+        "wilson95": [
+          0.5100999795960008,
+          1.0
+        ]
+      }
+    }
+  }
+}

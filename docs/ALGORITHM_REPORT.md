@@ -1375,6 +1375,14 @@ common behaviours (sound, play, kneading, eating, grooming) but not
 reliably the clinically interesting ones (tail chasing, tail or flank biting,
 staring, threat displays).
 
+Part C, downstream effect of the G1b detector (run B; descriptive): located
+in more frames (mean share 0.786 at the locate threshold, 0.771 at its
+per-class points, against 0.727 with the phone detector), but zero-shot pool
+macro AP 0.404 [0.347, 0.481] and 0.402 [0.344, 0.478] against 0.416, and
+benchmark recognition 23/36 and 19/36 against 22/36 (tail chasing 3/8, 1/8,
+3/8). Better localization does not help recognition; at the stricter
+per-class points fast spinning drops out of the track.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

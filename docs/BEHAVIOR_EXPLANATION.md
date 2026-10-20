@@ -254,12 +254,16 @@ protocol, same clips; descriptive (no adoption decision here).
 | --- | --- | --- | --- | --- | --- |
 | Phone detector (default) | 0.727 | 278 | 0.416 [0.351, 0.496] | 22/36 (3/8) | 5/6 |
 | G1b at the locate threshold 0.25 (pre-registered) | **0.786** (83 clips located in more frames, 20 in fewer) | 275 | 0.404 [0.347, 0.481] | 23/36 (3/8) | 5/6 |
-| G1b at its tuning-set per-class points (secondary) | SECONDARY_FOUND | SECONDARY_POOL | SECONDARY_AP | SECONDARY_B1 | SECONDARY_B4 |
+| G1b at its tuning-set per-class points cat 0.24 / dog 0.30 (secondary, declared before any part C number) | 0.771 (75 more, 26 fewer) | 275 | 0.402 [0.344, 0.478] | 19/36 (**1/8**) | 5/6 |
 
 G1b finds the animal in more frames, but behaviour recognition does not
-change measurably: the bottleneck is the recognizer, not localization. For
-the explanation layer the detector matters through the species vote only,
-which is reported, never used to override the user.
+improve: on the pool the zero-shot macro AP stays within noise (0.404 and
+0.402 against 0.416), and at G1b's stricter per-class points the benchmark
+loses tail-chasing clips (1 of 8 instead of 3), because fast spinning frames
+drop out of the track and the crops miss the movement. The bottleneck is the
+recognizer, not localization; for behaviour explanation the phone detector
+stays. Results: `results/e31/downstream_features_g1b.json`,
+`results/e31/downstream_features_g1b_perclass.json`.
 
 ## 8. Which questions can be answered today
 
