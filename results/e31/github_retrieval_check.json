@@ -1,0 +1,18 @@
+{
+  "check": "behaviour-explanation code, artifacts, benchmark and results retrieved from GitHub and run",
+  "date": "2026-10-20",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng https://github.com/OAAcmd/pet-identity-behavior.git (commit f073562)",
+  "artifacts_understand_manifest_verified": true,
+  "files_present": [
+    "benchmarks/behavior_questions.json",
+    "annotations/behavior_clips.json",
+    "results/e31/metrics.json",
+    "results/e31/answers/q01-q37.json",
+    "manifests/commons_pets.json",
+    "manifests/paper_videos.json",
+    "manifests/archive_pets.json"
+  ],
+  "run_from_clone": "PYTHONPATH=src petperception explain var/data/archive_pets/ia_cat_tail_1.mp4 --species cat --scene 'An open living room.' --question <q08> (models and media from the workspace via PETPERCEPTION_MODELS_ROOT / PETPERCEPTION_DATA_ROOT)",
+  "result": "identical to results/e31/answers/q08.json in user_reported, explained_behaviors, observations_needed, urgent_signs, sources and summary; behaviors_seen differs only in the resting threshold (deployed 0.262 from all pool clips vs the benchmark's cross-fitted 0.280)",
+  "not_in_git": "raw media (var/data) and SigLIP weights (fetch-models --only siglip_base_patch16_224; checksums in manifests/resources.json)"
+}
