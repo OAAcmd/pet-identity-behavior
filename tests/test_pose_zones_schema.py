@@ -90,8 +90,8 @@ def test_zone_validation_rejects_bad_input():
 def test_schema_forbids_extra_fields_and_fixes_version():
     schema = AnalysisResult.model_json_schema()
     # 1.1.0 is additive; results stored under 1.0.0 remain valid.
-    assert schema["properties"]["schema_version"]["enum"] == ["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"]
-    assert schema["properties"]["schema_version"]["default"] == "1.4.0"
+    assert schema["properties"]["schema_version"]["enum"] == ["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0"]
+    assert schema["properties"]["schema_version"]["default"] == "1.5.0"
     with pytest.raises(ValidationError):
         Hypothesis.model_validate({"hypothesis_id": "h", "name": "fear", "semantic_type": "state", "status": "abstained",
                                    "supporting_evidence_ids": [], "conflicting_evidence_ids": [], "independent_provenance_roots": [],
