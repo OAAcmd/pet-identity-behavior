@@ -36,6 +36,13 @@ train = [
     "jax[cpu]>=0.7",
     "optax>=0.2",
 ]
+# Behaviour understanding (docs/BEHAVIOR_EXPLANATION.md): zero-shot vision-language encoders (SigLIP) on CPU.
+behavior = [
+    "torch>=2.4",
+    "transformers>=4.46,<5",
+    "pillow>=10",
+    "sentencepiece>=0.2",
+]
 
 [project.scripts]
 petperception = "petperception.cli:main"
@@ -76,3 +83,11 @@ filterwarnings = [
 [tool.uv]
 # Pin the interpreter used for the lock and the default environment.
 python-preference = "only-system"
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

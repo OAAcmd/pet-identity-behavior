@@ -1,0 +1,171 @@
+{
+ "schema": "petperception.paper_videos/1",
+ "videos": [
+  {
+   "id": "tiira2012_s1",
+   "species": "dog",
+   "doi": "10.1371/journal.pone.0041684",
+   "licence": "CC BY 4.0 (PLoS ONE)",
+   "url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=10.1371/journal.pone.0041684.s003",
+   "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684. Movie S1.",
+   "caption": "Tail chasing in Bull Terrier puppy. This female puppy is four months at the time of video shooting, and TC index is 9 (index varies between 0-12). Dog performs TC multiple times per day, and no clear reason for the behavior can be seen. Dog started the TC behavior at the age of 9 weeks.",
+   "expert_labels": [
+    "tail_chasing"
+   ],
+   "context": {
+    "age": "puppy (4 months)",
+    "frequency": "multiple times per day",
+    "trigger": "none apparent",
+    "clinical": "compulsive tail chasing (questionnaire TC index 9 of 12)"
+   },
+   "file": "tiira2012_s1.wmv",
+   "bytes": 2790005,
+   "sha256": "7b2f8a49047a94a12759a252ca3bfd3ffa60c98af7c6ac8e13f4d543cd1d7017"
+  },
+  {
+   "id": "tiira2012_s2",
+   "species": "dog",
+   "doi": "10.1371/journal.pone.0041684",
+   "licence": "CC BY 4.0 (PLoS ONE)",
+   "url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=10.1371/journal.pone.0041684.s004",
+   "citation": "Tiira K et al. (2012) PLoS ONE 7(7): e41684. Movie S2.",
+   "caption": "Tail chasing in German Shepherd male. This is a four year old male at the time of video shooting and has TC index 9. Dog chases its tail multiple times per day and usually in situations where the dog has to wait for food or when owner talks to other people.",
+   "expert_labels": [
+    "tail_chasing"
+   ],
+   "context": {
+    "age": "adult (4 years)",
+    "frequency": "multiple times per day",
+    "trigger": "waiting for food; owner talking to other people",
+    "clinical": "compulsive tail chasing"
+   },
+   "file": "tiira2012_s2.wmv",
+   "bytes": 3405749,
+   "sha256": "2c14c8af7b89064b30c351f248cf1ac1c66bf79450f32447b088ce462ee023cb"
+  },
+  {
+   "id": "tiira2012_s3",
+   "species": "dog",
+   "doi": "10.1371/journal.pone.0041684",
+   "licence": "CC BY 4.0 (PLoS ONE)",
+   "url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=10.1371/journal.pone.0041684.s005",
+   "citation": "Tiira K et al. (2012) PLoS ONE 7(7): e41684. Movie S3.",
+   "caption": "Tail chasing in Staffordshire Bull Terrier male. This dog is ten months of age, and all his sisters and brothers and a father (litter size 7) chase tails, while the mother does not have any stereotypic behavior. Dog has a TC index 7, and the owner reports that the dog may start TC when nobody pays attention to the dog. This dog also displays a trance-like behavior.",
+   "expert_labels": [
+    "tail_chasing"
+   ],
+   "context": {
+    "age": "young adult (10 months)",
+    "trigger": "when nobody pays attention to the dog",
+    "clinical": "compulsive tail chasing; familial; trance-like behaviour"
+   },
+   "file": "tiira2012_s3.wmv",
+   "bytes": 750197,
+   "sha256": "eca401cba266d494083b24793d0f08dbe84a7aef54a00d655ae64075c22ed1fa"
+  },
+  {
+   "id": "fhs_cat_2026_m1",
+   "species": "cat",
+   "doi": "10.1007/s11259-026-11255-8",
+   "pmcid": "PMC13156213",
+   "licence": "CC BY 4.0 (Vet Res Commun)",
+   "member": "11259_2026_11255_MOESM1_ESM.mp4",
+   "citation": "A presumptive diagnosis of feline hyperesthesia syndrome due to stressful human-related condition: case report. Vet Res Commun (2026). Supplementary Material 1.",
+   "caption": "43-month-old spayed female cat with a one-year history of lumbar tremors, tail chasing and sudden aggressive episodes, temporally associated with the birth of the owner's child; physical and haematological examination normal; presumptive feline hyperaesthesia syndrome (article abstract; the supplementary videos document the episodes).",
+   "expert_labels": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "context": {
+    "age": "adult (43 months)",
+    "trigger": "household change (birth of a child)",
+    "clinical": "presumptive feline hyperaesthesia syndrome"
+   },
+   "file": "fhs_cat_2026_m1.mp4",
+   "bytes": 2404908,
+   "sha256": "f0198781fd14e0e6b616069449f16a879bd0014e06c86088ea0ab3bbf8af429a"
+  },
+  {
+   "id": "fhs_cat_2026_m2",
+   "species": "cat",
+   "doi": "10.1007/s11259-026-11255-8",
+   "pmcid": "PMC13156213",
+   "licence": "CC BY 4.0 (Vet Res Commun)",
+   "member": "11259_2026_11255_MOESM2_ESM.mp4",
+   "citation": "Vet Res Commun (2026) case report, Supplementary Material 2.",
+   "caption": "Same cat as Supplementary Material 1 (presumptive feline hyperaesthesia syndrome: lumbar tremors, tail chasing, aggressive episodes).",
+   "expert_labels": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "context": {
+    "clinical": "presumptive feline hyperaesthesia syndrome"
+   },
+   "file": "fhs_cat_2026_m2.mp4",
+   "bytes": 1065320,
+   "sha256": "2f721129b1dfa08fbfb2a192b59a06c93cd8adf5eb59277d62e1f7098acd478d"
+  },
+  {
+   "id": "fhs_cat_2026_m3",
+   "species": "cat",
+   "doi": "10.1007/s11259-026-11255-8",
+   "pmcid": "PMC13156213",
+   "licence": "CC BY 4.0 (Vet Res Commun)",
+   "member": "11259_2026_11255_MOESM3_ESM.mp4",
+   "citation": "Vet Res Commun (2026) case report, Supplementary Material 3.",
+   "caption": "Same cat as Supplementary Material 1 (presumptive feline hyperaesthesia syndrome: lumbar tremors, tail chasing, aggressive episodes).",
+   "expert_labels": [
+    "tail_chasing",
+    "tail_directed"
+   ],
+   "context": {
+    "clinical": "presumptive feline hyperaesthesia syndrome"
+   },
+   "file": "fhs_cat_2026_m3.mp4",
+   "bytes": 5089628,
+   "sha256": "1789fcd8b2e6d417b571ce7d19067f10500e30e7b19bfffe3aa09eb09e030a7d"
+  },
+  {
+   "id": "dachshund_flank_2023",
+   "species": "dog",
+   "doi": "10.3389/fvets.2023.1223800",
+   "pmcid": "PMC10414986",
+   "licence": "CC BY 4.0 (Front Vet Sci)",
+   "member": "Video_1.MOV",
+   "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy surgery. Front Vet Sci (2023). Supplementary video 1.",
+   "caption": "The video showed the dog barking and biting, sucking and licking the right-side flank, ventrally and slightly caudally to the level of the surgical incision, 7 days after hemilaminectomy; the behaviour occurred at home, not in the clinic.",
+   "expert_labels": [
+    "self_directed_biting",
+    "vocalizing"
+   ],
+   "context": {
+    "age": "adult (5.5 years)",
+    "trigger": "after spinal surgery; at home",
+    "clinical": "neuropathic pain vs undesirable behaviour"
+   },
+   "file": "dachshund_flank_2023.mov",
+   "bytes": 3479758,
+   "sha256": "e069362defc0dab05a342166b4bedbfd6db58c6ac81211172e1855e1d021e010"
+  },
+  {
+   "id": "focal_seizures_dogs_2026",
+   "species": "dog",
+   "doi": "10.3389/fvets.2026.1904889",
+   "pmcid": "PMC13564459",
+   "licence": "CC BY 4.0 (Front Vet Sci)",
+   "member": "Video_1.MOV",
+   "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG. Front Vet Sci (2026). Supplementary Video 1.",
+   "caption": "Episodes of looking behind or to the side as if responding to an unseen stimulus, snapping at the air, hiding, staring into space, lip licking and fly-catching behaviour with impaired consciousness in three dogs; suspected focal seizures often mistaken for behavioural disorders.",
+   "expert_labels": [
+    "fly_snapping",
+    "staring"
+   ],
+   "context": {
+    "clinical": "suspected focal impaired-awareness seizures"
+   },
+   "file": "focal_seizures_dogs_2026.mov",
+   "bytes": 31449352,
+   "sha256": "e446c2fe9f1165e487e6c074bb942f14ffb836ac78cbbb5b6ebbbf19459c8d03"
+  }
+ ]
+}

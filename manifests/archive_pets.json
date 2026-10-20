@@ -1,0 +1,49 @@
+{
+ "schema": "petperception.archive_pets/1",
+ "base": "https://archive.org/download/{identifier}/",
+ "records": [
+  {
+   "id": "ia_cat_tail_1",
+   "file": "ia_cat_tail_1.mp4",
+   "species": "cat",
+   "identifier": "ILookedOverMyLeftShoulderBehindMeAndWhoIsPlayingWithYourselfcatWasChasingHerTailAgain.vHUjHKJDbHjw",
+   "title": "I looked over my left shoulder, behind me, and who is playing with yourself #cat was Chasing her tail again.",
+   "uploader": "simplify3@gmail.com",
+   "date": "2013-11-26",
+   "licence": "none stated (Internet Archive upload; research analysis only, not redistributed)",
+   "source_labels": [
+    "tail_chasing"
+   ],
+   "sha256": "d056f6c94dd9e678ff4376c36a5bf170218ade83fb215d07b862ae56f8b47918"
+  },
+  {
+   "id": "ia_cat_tail_2",
+   "file": "ia_cat_tail_2.mp4",
+   "species": "cat",
+   "identifier": "CatChasingTailInTub-M5f1qxhkinz",
+   "title": "#Cat #chasing #tail in #tub",
+   "uploader": "simplify3@gmail.com",
+   "date": "2014-04-10",
+   "licence": "none stated (Internet Archive upload; research analysis only, not redistributed)",
+   "source_labels": [
+    "tail_chasing"
+   ],
+   "sha256": "f0aa368da10e742606264eeaeb2eba3f910a58b435ce33dc1ec75dcd129e2a18"
+  },
+  {
+   "id": "ia_dog_spin_1",
+   "file": "ia_dog_spin_1.ogv",
+   "species": "dog",
+   "identifier": "SpinningFetchingLateNightDogFunWithRoman2015Philly",
+   "title": "Spinning Fetching Late Night Dog Fun With Roman 2015 Philly",
+   "uploader": "babbler@freedminds.com",
+   "date": null,
+   "licence": "none stated (Internet Archive upload; research analysis only, not redistributed)",
+   "source_labels": [
+    "tail_chasing",
+    "playing_object"
+   ],
+   "sha256": "1346f7d7580912dd989dc76846b5f2a5b3c0f8a29c7b205d7bdb046a7999f633"
+  }
+ ]
+}
