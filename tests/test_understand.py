@@ -169,3 +169,20 @@ def test_source_label_mapping():
 
     c = Clip("k", None, "cat", "commons", "g", "t", "", {"source": ["hiss_growl", "fighting", "kneading"], "assistant": ["eating"]})
     assert E31.human_labels(c) == {"threat_display", "kneading"}  # assistant labels never enter the human reference
+
+
+def test_per_class_detector_wrapper_keeps_each_class_at_its_point():
+    from types import SimpleNamespace
+
+    from petperception.understand.features import _PerClass
+
+    class Det:
+        labels = ["cat", "dog"]
+
+        def detect(self, rgb, classes, thr, iou=0.5, k=10):
+            ds = [SimpleNamespace(label="cat", score=0.22), SimpleNamespace(label="cat", score=0.30), SimpleNamespace(label="dog", score=0.27),
+                  SimpleNamespace(label="dog", score=0.35)]
+            return [d for d in ds if d.score >= thr]
+
+    kept = _PerClass(Det(), {"cat": 0.24, "dog": 0.30}).detect(None, ["cat", "dog"], 0.25)
+    assert sorted((d.label, d.score) for d in kept) == [("cat", 0.30), ("dog", 0.35)]
