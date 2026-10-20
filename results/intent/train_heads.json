@@ -1,0 +1,97 @@
+{
+  "created_at": "2026-10-20T01:39:08+00:00",
+  "cat_audio_context_v1": {
+    "clips": 440,
+    "cats": 21,
+    "classes": [
+      "brushing",
+      "isolation",
+      "waiting_for_food"
+    ],
+    "heads": {
+      "audio": {
+        "inner_cv": "GroupKFold",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "selected_C": 0.01,
+        "inner_folds_skipped_missing_class": 0,
+        "temperature": 5.15889363556359,
+        "oof_macro_f1": 0.46699259742791216,
+        "oof_ece_raw": 0.18334514236870764,
+        "oof_ece_calibrated": 0.07704344541290732,
+        "abstain_below": 0.9453140353634761,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 0.0022727272727272726,
+        "inner_macro_f1": {
+          "0.001": 0.44592190252089425,
+          "0.01": 0.45538918521920885,
+          "0.1": 0.44052912683281686,
+          "1.0": 0.43836689561520625
+        }
+      },
+      "audio_scores": {
+        "inner_cv": "GroupKFold",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "selected_C": 0.1,
+        "inner_folds_skipped_missing_class": 0,
+        "temperature": 15.765573247541147,
+        "oof_macro_f1": 0.4128704045980173,
+        "oof_ece_raw": 0.27845751963052656,
+        "oof_ece_calibrated": 0.06962606727886218,
+        "abstain_below": 1.01,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 0.0,
+        "inner_macro_f1": {
+          "0.001": 0.38791654740187226,
+          "0.01": 0.39305462179098616,
+          "0.1": 0.407053841025992,
+          "1.0": 0.39834993640244554
+        }
+      }
+    }
+  },
+  "dog_bark_context_v1": {
+    "clips": 693,
+    "dogs": 10,
+    "classes": [
+      "aggression",
+      "contact",
+      "play"
+    ],
+    "heads": {
+      "audio": {
+        "inner_cv": "GroupKFold",
+        "C_grid": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "inner_macro_f1": {
+          "0.001": 0.6909546387758654,
+          "0.01": 0.6977021213377647,
+          "0.1": 0.6864380309460357,
+          "1.0": 0.6613706450944868
+        },
+        "selected_C": 0.01,
+        "inner_folds_skipped_missing_class": 0,
+        "temperature": 1.5940170399158777,
+        "oof_macro_f1": 0.7145876790604332,
+        "oof_ece_raw": 0.0712749801355344,
+        "oof_ece_calibrated": 0.03769305578285302,
+        "abstain_below": 0.5585801414210566,
+        "target_selective_accuracy": 0.8,
+        "oof_coverage_at_threshold": 0.7864357864357865
+      }
+    }
+  }
+}

@@ -1,0 +1,652 @@
+{
+  "experiment": "E26",
+  "status": "completed",
+  "created_at": "2026-10-20T02:01:21+00:00",
+  "protocol": [
+    "E26: dog vocal context from barks: the dog's activity (Barkopedia Activity and Environment, MIT).",
+    "",
+    "Data. ArlingtonCL2/Barkopedia_Dog_Act_Env at revision 60a721a7 (Hugging Face;",
+    "the archives match the published LFS SHA-256). 12,480 training clips and 499",
+    "validation clips, each labelled with the activity the dog was engaged in:",
+    "rest, alerting to sounds, seeking attention, playing with a human, another",
+    "animal or a toy, begging for food, taking a shower. A vision-language model",
+    "inferred the labels from the clips' videos, and people then verified them",
+    "(dataset card). Label spelling is normalised (case). The labels describe the",
+    "situation, not the dog's state.",
+    "",
+    "Protocol, fixed before the validation clips were scored:",
+    "* Features: YAMNet embeddings (mean and max over windows; the variant the",
+    "  phone could run once the bundle's YAMNet exposes its embedding) and MFCC",
+    "  statistics (E1's feature set).",
+    "* No dog or video ids are published. Near-duplicate clips (cosine >= 0.95",
+    "  of mean YAMNet embeddings) are linked into pseudo-groups, so selection",
+    "  cross-validates without splitting near-duplicates.",
+    "* Selection: logistic regression with C chosen by 5-fold cross-validation",
+    "  grouped by pseudo-group, on the training clips only.",
+    "* Test, once: the provider's validation set. 95 % CIs bootstrap validation",
+    "  pseudo-groups.",
+    "* Leakage audit: each validation clip's highest cosine similarity to any",
+    "  training clip. Results are repeated on the clips whose maximum is below",
+    "  0.95.",
+    "* Gate (as for vocalization types, docs/TRAINING_PROGRAM.md G4): an",
+    "  activity could serve as evidence only with F1 >= 0.7 and a lower bound",
+    "  >= 0.6. Nothing is shipped by this experiment."
+  ],
+  "gate": {
+    "f1": 0.7,
+    "ci_low": 0.6
+  },
+  "results": {
+    "labels": [
+      "alerting to sounds",
+      "begging for food",
+      "playing with human",
+      "playing with other animals",
+      "playing with toy",
+      "rest",
+      "seeking attention",
+      "taking shower"
+    ],
+    "methods": {
+      "yamnet_embedding_logreg": {
+        "labels": [
+          "alerting to sounds",
+          "begging for food",
+          "playing with human",
+          "playing with other animals",
+          "playing with toy",
+          "rest",
+          "seeking attention",
+          "taking shower"
+        ],
+        "n": 500,
+        "macro_f1": 0.23369794644097902,
+        "balanced_accuracy": 0.25233364723157353,
+        "accuracy": 0.24,
+        "per_class": {
+          "alerting to sounds": {
+            "precision": 0.2558139534883721,
+            "recall": 0.3235294117647059,
+            "f1": 0.28571428571428575,
+            "support": 68,
+            "tp": 22,
+            "fp": 64,
+            "fn": 46
+          },
+          "begging for food": {
+            "precision": 0.08620689655172414,
+            "recall": 0.2631578947368421,
+            "f1": 0.12987012987012989,
+            "support": 19,
+            "tp": 5,
+            "fp": 53,
+            "fn": 14
+          },
+          "playing with human": {
+            "precision": 0.24074074074074073,
+            "recall": 0.17105263157894737,
+            "f1": 0.19999999999999998,
+            "support": 76,
+            "tp": 13,
+            "fp": 41,
+            "fn": 63
+          },
+          "playing with other animals": {
+            "precision": 0.2,
+            "recall": 0.11764705882352941,
+            "f1": 0.14814814814814817,
+            "support": 85,
+            "tp": 10,
+            "fp": 40,
+            "fn": 75
+          },
+          "playing with toy": {
+            "precision": 0.20634920634920634,
+            "recall": 0.22033898305084745,
+            "f1": 0.21311475409836064,
+            "support": 59,
+            "tp": 13,
+            "fp": 50,
+            "fn": 46
+          },
+          "rest": {
+            "precision": 0.38235294117647056,
+            "recall": 0.26804123711340205,
+            "f1": 0.3151515151515151,
+            "support": 97,
+            "tp": 26,
+            "fp": 42,
+            "fn": 71
+          },
+          "seeking attention": {
+            "precision": 0.20634920634920634,
+            "recall": 0.2549019607843137,
+            "f1": 0.22807017543859648,
+            "support": 51,
+            "tp": 13,
+            "fp": 50,
+            "fn": 38
+          },
+          "taking shower": {
+            "precision": 0.3103448275862069,
+            "recall": 0.4,
+            "f1": 0.34951456310679613,
+            "support": 45,
+            "tp": 18,
+            "fp": 40,
+            "fn": 27
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "alerting to sounds",
+            "begging for food",
+            "playing with human",
+            "playing with other animals",
+            "playing with toy",
+            "rest",
+            "seeking attention",
+            "taking shower"
+          ],
+          "matrix": [
+            [
+              22,
+              10,
+              4,
+              5,
+              7,
+              7,
+              11,
+              2
+            ],
+            [
+              3,
+              5,
+              1,
+              3,
+              1,
+              3,
+              2,
+              1
+            ],
+            [
+              12,
+              7,
+              13,
+              12,
+              12,
+              8,
+              6,
+              6
+            ],
+            [
+              12,
+              8,
+              13,
+              10,
+              8,
+              10,
+              10,
+              14
+            ],
+            [
+              5,
+              10,
+              4,
+              8,
+              13,
+              6,
+              9,
+              4
+            ],
+            [
+              15,
+              8,
+              9,
+              8,
+              14,
+              26,
+              9,
+              8
+            ],
+            [
+              9,
+              7,
+              5,
+              2,
+              5,
+              5,
+              13,
+              5
+            ],
+            [
+              8,
+              3,
+              5,
+              2,
+              3,
+              3,
+              3,
+              18
+            ]
+          ]
+        },
+        "macro_f1_ci95_by_pseudo_group": {
+          "ci_low": 0.19503402611097548,
+          "ci_high": 0.2809518924337393,
+          "n_boot": 1000,
+          "n_groups": 365,
+          "unit": "group"
+        },
+        "per_class_gate": {
+          "alerting to sounds": {
+            "f1": 0.28571428571428575,
+            "ci95": [
+              0.19844566090799517,
+              0.370382634289919
+            ],
+            "passes_gate": false
+          },
+          "begging for food": {
+            "f1": 0.12987012987012989,
+            "ci95": [
+              0.03076923076923077,
+              0.2739860327692721
+            ],
+            "passes_gate": false
+          },
+          "playing with human": {
+            "f1": 0.19999999999999998,
+            "ci95": [
+              0.11537356321839082,
+              0.2876764217517642
+            ],
+            "passes_gate": false
+          },
+          "playing with other animals": {
+            "f1": 0.14814814814814817,
+            "ci95": [
+              0.0789344685242518,
+              0.24074074074074073
+            ],
+            "passes_gate": false
+          },
+          "playing with toy": {
+            "f1": 0.21311475409836064,
+            "ci95": [
+              0.11263693270735525,
+              0.31666666666666665
+            ],
+            "passes_gate": false
+          },
+          "rest": {
+            "f1": 0.3151515151515151,
+            "ci95": [
+              0.21333333333333335,
+              0.42777658662092616
+            ],
+            "passes_gate": false
+          },
+          "seeking attention": {
+            "f1": 0.22807017543859648,
+            "ci95": [
+              0.13333333333333333,
+              0.338990617433414
+            ],
+            "passes_gate": false
+          },
+          "taking shower": {
+            "f1": 0.34951456310679613,
+            "ci95": [
+              0.23298156746869284,
+              0.4477821174501325
+            ],
+            "passes_gate": false
+          }
+        },
+        "without_near_duplicates": {
+          "clips": 171,
+          "macro_f1": 0.20067804511081824
+        },
+        "selection": {
+          "inner_cv": "GroupKFold",
+          "C_grid": [
+            0.01,
+            0.1,
+            1.0,
+            10.0
+          ],
+          "inner_macro_f1": {
+            "0.01": 0.20877592179478813,
+            "0.1": 0.19788495849522075,
+            "1.0": 0.18649955704500967,
+            "10.0": 0.18304850117333182
+          },
+          "selected_C": 0.01,
+          "inner_folds_skipped_missing_class": 0
+        }
+      },
+      "mfcc_logreg": {
+        "labels": [
+          "alerting to sounds",
+          "begging for food",
+          "playing with human",
+          "playing with other animals",
+          "playing with toy",
+          "rest",
+          "seeking attention",
+          "taking shower"
+        ],
+        "n": 500,
+        "macro_f1": 0.2285808752337039,
+        "balanced_accuracy": 0.2629046562158343,
+        "accuracy": 0.232,
+        "per_class": {
+          "alerting to sounds": {
+            "precision": 0.23376623376623376,
+            "recall": 0.2647058823529412,
+            "f1": 0.24827586206896549,
+            "support": 68,
+            "tp": 18,
+            "fp": 59,
+            "fn": 50
+          },
+          "begging for food": {
+            "precision": 0.11475409836065574,
+            "recall": 0.3684210526315789,
+            "f1": 0.175,
+            "support": 19,
+            "tp": 7,
+            "fp": 54,
+            "fn": 12
+          },
+          "playing with human": {
+            "precision": 0.20930232558139536,
+            "recall": 0.11842105263157894,
+            "f1": 0.15126050420168066,
+            "support": 76,
+            "tp": 9,
+            "fp": 34,
+            "fn": 67
+          },
+          "playing with other animals": {
+            "precision": 0.19148936170212766,
+            "recall": 0.10588235294117647,
+            "f1": 0.13636363636363635,
+            "support": 85,
+            "tp": 9,
+            "fp": 38,
+            "fn": 76
+          },
+          "playing with toy": {
+            "precision": 0.2698412698412698,
+            "recall": 0.288135593220339,
+            "f1": 0.2786885245901639,
+            "support": 59,
+            "tp": 17,
+            "fp": 46,
+            "fn": 42
+          },
+          "rest": {
+            "precision": 0.31343283582089554,
+            "recall": 0.21649484536082475,
+            "f1": 0.25609756097560976,
+            "support": 97,
+            "tp": 21,
+            "fp": 46,
+            "fn": 76
+          },
+          "seeking attention": {
+            "precision": 0.23333333333333334,
+            "recall": 0.27450980392156865,
+            "f1": 0.2522522522522523,
+            "support": 51,
+            "tp": 14,
+            "fp": 46,
+            "fn": 37
+          },
+          "taking shower": {
+            "precision": 0.25609756097560976,
+            "recall": 0.4666666666666667,
+            "f1": 0.33070866141732286,
+            "support": 45,
+            "tp": 21,
+            "fp": 61,
+            "fn": 24
+          }
+        },
+        "confusion_matrix": {
+          "rows_true_cols_pred": [
+            "alerting to sounds",
+            "begging for food",
+            "playing with human",
+            "playing with other animals",
+            "playing with toy",
+            "rest",
+            "seeking attention",
+            "taking shower"
+          ],
+          "matrix": [
+            [
+              18,
+              6,
+              6,
+              5,
+              8,
+              8,
+              10,
+              7
+            ],
+            [
+              1,
+              7,
+              1,
+              1,
+              2,
+              3,
+              3,
+              1
+            ],
+            [
+              10,
+              9,
+              9,
+              6,
+              9,
+              11,
+              5,
+              17
+            ],
+            [
+              11,
+              13,
+              8,
+              9,
+              10,
+              12,
+              10,
+              12
+            ],
+            [
+              6,
+              4,
+              8,
+              7,
+              17,
+              5,
+              6,
+              6
+            ],
+            [
+              17,
+              12,
+              4,
+              8,
+              10,
+              21,
+              11,
+              14
+            ],
+            [
+              12,
+              6,
+              4,
+              5,
+              3,
+              3,
+              14,
+              4
+            ],
+            [
+              2,
+              4,
+              3,
+              6,
+              4,
+              4,
+              1,
+              21
+            ]
+          ]
+        },
+        "macro_f1_ci95_by_pseudo_group": {
+          "ci_low": 0.1832080836144905,
+          "ci_high": 0.27999720692435914,
+          "n_boot": 1000,
+          "n_groups": 365,
+          "unit": "group"
+        },
+        "per_class_gate": {
+          "alerting to sounds": {
+            "f1": 0.24827586206896549,
+            "ci95": [
+              0.16317140353073745,
+              0.35387573964497043
+            ],
+            "passes_gate": false
+          },
+          "begging for food": {
+            "f1": 0.175,
+            "ci95": [
+              0.07873243785703257,
+              0.34486074270557027
+            ],
+            "passes_gate": false
+          },
+          "playing with human": {
+            "f1": 0.15126050420168066,
+            "ci95": [
+              0.06105713624797594,
+              0.26785714285714285
+            ],
+            "passes_gate": false
+          },
+          "playing with other animals": {
+            "f1": 0.13636363636363635,
+            "ci95": [
+              0.06379654255319149,
+              0.21314402810304445
+            ],
+            "passes_gate": false
+          },
+          "playing with toy": {
+            "f1": 0.2786885245901639,
+            "ci95": [
+              0.16467914438502673,
+              0.3962522615662962
+            ],
+            "passes_gate": false
+          },
+          "rest": {
+            "f1": 0.25609756097560976,
+            "ci95": [
+              0.16846597008516426,
+              0.3500091240875912
+            ],
+            "passes_gate": false
+          },
+          "seeking attention": {
+            "f1": 0.2522522522522523,
+            "ci95": [
+              0.1492386042759177,
+              0.3809740259740259
+            ],
+            "passes_gate": false
+          },
+          "taking shower": {
+            "f1": 0.33070866141732286,
+            "ci95": [
+              0.2222222222222222,
+              0.42857142857142855
+            ],
+            "passes_gate": false
+          }
+        },
+        "without_near_duplicates": {
+          "clips": 171,
+          "macro_f1": 0.19492369059305367
+        },
+        "selection": {
+          "inner_cv": "GroupKFold",
+          "C_grid": [
+            0.01,
+            0.1,
+            1.0,
+            10.0
+          ],
+          "inner_macro_f1": {
+            "0.01": 0.21434433609740258,
+            "0.1": 0.2147335460940017,
+            "1.0": 0.21420875908542944,
+            "10.0": 0.21504872514183654
+          },
+          "selected_C": 10.0,
+          "inner_folds_skipped_missing_class": 0
+        }
+      }
+    },
+    "majority_macro_f1": 0.023139745916515422,
+    "stratified_random_macro_f1": 0.12318554963298556,
+    "leakage_audit": {
+      "validation_max_cosine_to_train": {
+        "median": 0.960301399230957,
+        ">=0.95": 329,
+        ">=0.98": 77,
+        ">=0.99": 7,
+        "clips": 500
+      },
+      "train_pseudo_groups": 4548,
+      "largest_train_group": 7682,
+      "validation_pseudo_groups": 365
+    },
+    "data": {
+      "dataset": "ArlingtonCL2/Barkopedia_Dog_Act_Env @ 60a721a7f9477634971f6b3df29dc2a5e56994d8 (MIT)",
+      "train_clips": 12480,
+      "validation_clips": 500,
+      "train_label_counts": {
+        "alerting to sounds": 1756,
+        "begging for food": 541,
+        "playing with human": 1797,
+        "playing with other animals": 1774,
+        "playing with toy": 1779,
+        "rest": 1770,
+        "seeking attention": 1818,
+        "taking shower": 1245
+      },
+      "validation_label_counts": {
+        "alerting to sounds": 68,
+        "begging for food": 19,
+        "playing with human": 76,
+        "playing with other animals": 85,
+        "playing with toy": 59,
+        "rest": 97,
+        "seeking attention": 51,
+        "taking shower": 45
+      },
+      "median_duration_s": 0.96,
+      "feature_digest": "4ad9d38b7e5fc65a"
+    }
+  },
+  "runtime_s": 3401.2,
+  "terms": "MIT (dataset card); labels VLM-inferred then human-verified; research experiment, nothing shipped"
+}

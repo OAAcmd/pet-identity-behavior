@@ -1095,6 +1095,41 @@ Protocol, fixed before scoring (`src/petperception/eval/e25_species_arbitration.
   not from a lack of species evidence. The species evidence itself is
   unreliable on home video.
 
+### E26 - Dog activity from a bark (Barkopedia Activity and Environment) - COMPLETED, below the gate
+
+Data: ArlingtonCL2/Barkopedia_Dog_Act_Env at revision 60a721a7 (MIT; archives
+match the published LFS SHA-256): 12,480 training and 500 validation bark
+clips (median 0.96 s, i.e. mostly one bark), each labelled with the dog's
+activity in the source video: rest, alerting to sounds, seeking attention,
+playing with a human / another animal / a toy, begging for food, taking a
+shower. A vision-language model proposed the labels and people verified
+them. "Begging for food" and "seeking attention" are intent annotations; the
+others are behaviour or context (`docs/BEHAVIOR_INTENT_DATA.md`).
+
+Protocol (`src/petperception/eval/e26_bark_activity.py`): logistic
+regression, C by 5-fold CV grouped by near-duplicate pseudo-group (cosine
+>= 0.95 of mean YAMNet embeddings), tested once on the provider's
+validation split; CIs bootstrap validation pseudo-groups; gate F1 >= 0.7
+with lower bound >= 0.6 per class.
+
+| Features | Macro-F1 (8 classes) [95 % CI] | Accuracy | Clips with max cosine < 0.95 to train |
+| --- | --- | --- | --- |
+| YAMNet embedding mean + max | **0.234 [0.195, 0.281]** | 0.240 | 0.201 (171 clips) |
+| MFCC statistics | 0.229 [0.183, 0.280] | 0.232 | 0.195 |
+| Majority / stratified random | 0.023 / 0.123 | | |
+
+* Above chance, far below the gate: no activity passes (best per-class F1:
+  taking shower 0.35, rest 0.32). A single bark says little about what the
+  dog was doing or wanted.
+* Leakage control is weak here. No dog or video ids are published, and
+  one-bark YAMNet embeddings are uniformly similar (median nearest-training
+  cosine of validation clips 0.96), so the 0.95 linkage chains 7,682 of the
+  12,480 training clips into one pseudo-group. Independence of animals and
+  recordings between the provider's splits cannot be verified
+  (`taxonomy.MISSING`: ids needed).
+* E27 builds the product's dog audio channel on this data and adds the
+  environment context, noise and coverage.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25", "e26"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25", "e26", "e27", "e28"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -241,6 +241,14 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         from .eval import e26_bark_activity as E
 
         return E.run(s, out_dir)
+    if name == "e27":
+        from .eval import e27_dog_audio_intent as E
+
+        return E.run(s, out_dir, REPO_ROOT / "artifacts" / "intent" / "dog_audio_activity_v1")
+    if name == "e28":
+        from .eval import e28_av_situation as E
+
+        return E.run(s, out_dir, REPO_ROOT / "artifacts" / "intent" / "kinetics_situation_v1")
     if name == "e25":
         from .eval import e25_species_arbitration as E
 
@@ -379,6 +387,20 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     if args.report:
         Path(args.report).parent.mkdir(parents=True, exist_ok=True)
         Path(args.report).write_text(render_markdown(res), encoding="utf-8")
+    return 0
+
+
+def cmd_intent(args: argparse.Namespace) -> int:
+    from .intent.run import IntentAnalyzer
+
+    res = IntentAnalyzer(args.threads, args.situation_variant).analyze(Path(args.media), tuple(m.strip() for m in args.modalities.split(",")),
+                                                                       args.environment)
+    js = json.dumps(res.to_dict(), indent=2)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(js + "\n", encoding="utf-8")
+    else:
+        print(js)
     return 0
 
 
@@ -811,6 +833,14 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--out", help="write JSON result here (default: stdout)")
     an.add_argument("--report", help="write a Markdown report here")
     an.set_defaults(func=cmd_analyze)
+    it = sub.add_parser("intent", help="behaviour/intent hypotheses for one media file (trained channels + combined inference)")
+    it.add_argument("media")
+    it.add_argument("--modalities", default="audio,video")
+    it.add_argument("--environment", help="known location of the animal (E27 categories, e.g. near_door, bathroom, outdoor)")
+    it.add_argument("--situation-variant", default="full", choices=["full", "phone_now"])
+    it.add_argument("--threads", type=int, default=2)
+    it.add_argument("--out")
+    it.set_defaults(func=cmd_intent)
     sv = sub.add_parser("serve", help="run the web app + API (+ in-process workers); loopback by default")
     sv.add_argument("--host")
     sv.add_argument("--port", type=int)

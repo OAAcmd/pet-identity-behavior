@@ -337,6 +337,15 @@ The winner is then scored once: acceptance 1 (E7 protocol on E4, its own
 verifier at its points) and E20 (home video, test). If acceptance 1 passes,
 E16 and E18 follow. The acceptance thresholds are unchanged.
 
+*Status: paused, 2026-10-20.* The project priority moved to trained
+behaviour/intent inference (`docs/BEHAVIOR_INTENT_DATA.md`), where detection
+work continues only when it measurably helps downstream. Both runs were
+stopped with SIGTERM; each wrote its signal checkpoint
+(`g1b_warm_cat2`: epoch 0, step 106 of 3,489; `g1b_warm_cat2_cop3d`: epoch
+0, step 230 of 3,772) under `var/training/g1/runs/` and resumes with the
+same command. No G1b result exists; the selection rule above stays fixed
+for when the runs are resumed.
+
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):
 * Model Maker 0.2.1.4's COCO cache writer skips every image without a box.
