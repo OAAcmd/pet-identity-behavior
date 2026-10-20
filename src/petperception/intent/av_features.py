@@ -18,7 +18,8 @@ Stored per clip (``.npz``; embeddings float16):
   the box, visibility); ``v_person`` [T,4] = (people, best person score,
   best interaction score, best IoU with the animal); ``v_objects`` [T,C] (best
   score per COCO class); ``v_motion`` [T] (mean absolute grey-level change
-  from the previous frame, 0..1);
+  from the previous frame, 0..1); ``v_quality`` [T,2] (mean grey level,
+  variance of the Laplacian; as the engine's frame-quality check);
 * audio: ``a_t`` [W]; ``a_emb`` [W,1024]; ``a_scores`` [W,521]; ``a_rms_db``
   [W]; ``audio_state`` (present / absent / silent).
 
@@ -119,11 +120,17 @@ def audio_features(c: Components, y: np.ndarray | None, hop_s: float = 0.48) -> 
     return out
 
 
+def frame_luma_blur(rgb: np.ndarray) -> tuple[float, float]:
+    """Mean grey level and variance of the Laplacian, exactly as vision/quality.py frame_quality."""
+    gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+    return float(gray.mean()), float(cv2.Laplacian(gray, cv2.CV_64F).var())
+
+
 def empty_video(T: int, n_objects: int, fps: float) -> dict:
     return {"v_t": np.arange(T, dtype=np.float32) / fps, "v_whole": np.zeros((T, 1280), np.float16), "v_crop": np.zeros((T, 1280), np.float16),
             "v_box": np.zeros((T, 4), np.float32), "v_pet": np.zeros((T, 4), np.float32), "v_posture": np.zeros((T, 3), np.float32),
             "v_kp": np.zeros((T, 24, 3), np.float32), "v_person": np.zeros((T, 4), np.float32),
-            "v_objects": np.zeros((T, n_objects), np.float16), "v_motion": np.zeros(T, np.float32)}
+            "v_objects": np.zeros((T, n_objects), np.float16), "v_motion": np.zeros(T, np.float32), "v_quality": np.zeros((T, 2), np.float32)}
 
 
 def frame_features(c: Components, rgb: np.ndarray, t_s: float, prev_gray: np.ndarray | None, out: dict, i: int) -> np.ndarray:
@@ -137,6 +144,7 @@ def frame_features(c: Components, rgb: np.ndarray, t_s: float, prev_gray: np.nda
     hw = rgb.shape[:2]
     g = cv2.resize(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY), (64, 48), interpolation=cv2.INTER_AREA).astype(np.float32) / 255.0
     out["v_motion"][i] = float(np.mean(np.abs(g - prev_gray))) if prev_gray is not None else 0.0
+    out["v_quality"][i] = frame_luma_blur(rgb)
     out["v_whole"][i] = c.backbone.features(cv2.resize(rgb, (224, 224), interpolation=cv2.INTER_AREA))["pooled"]
     dets = c.detector.detect(rgb, ["cat", "dog", "person"] + c.object_classes, s.vision.score_threshold, s.vision.nms_iou, 25)
     for d in dets:
