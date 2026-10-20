@@ -309,6 +309,34 @@ Evaluation against the acceptance rules (float32 export):
   the engine wired to a G1 export plus its verifier; it is only worth
   running once acceptance 1 passes.
 
+**G1b: closing the cat gap and the dog-to-cat confusion (started
+2026-10-20; rule fixed before any result).** Two warm starts from the full
+run's checkpoint (`--init-from models/g1/g1a_full_mnv2_sb4096/ckpt/ckpt-27`),
+2 all-layer epochs at learning rate 0.1 (Model Maker convention; the full
+run used 0.3), 2 threads each, in parallel:
+* `g1b_warm_cat2`: every training image with a cat appears twice
+  (`train-prep g1-extra --cat-repeat 2`; 55,826 training entries);
+* `g1b_warm_cat2_cop3d`: the same, plus 4,538 CoP3D home-video frames from
+  25 contributors (`--cop3d`; 60,364 entries; boxes from the model-generated
+  masks). The contributors are disjoint from E20's archives and from the
+  CoP3D development frames (448 cat and 857 dog frames, 9 contributors).
+
+Selection among G1a, `g1b_warm_cat2` and `g1b_warm_cat2_cop3d` uses
+development data only:
+1. per-class operating points for each candidate, chosen on the Open Images
+   tuning set (each class's tuning recall matched to M3's at 0.35);
+2. constraints, relative to G1a:
+   - Open Images development dog AP50 not lower by more than 0.01;
+   - on the CoP3D development frames (detector only, at the candidate's
+     points), the rate of dog frames with only a cat not higher by more
+     than 0.02;
+3. among the candidates that meet both, the highest Open Images development
+   cat AP50 wins.
+
+The winner is then scored once: acceptance 1 (E7 protocol on E4, its own
+verifier at its points) and E20 (home video, test). If acceptance 1 passes,
+E16 and E18 follow. The acceptance thresholds are unchanged.
+
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):
 * Model Maker 0.2.1.4's COCO cache writer skips every image without a box.
