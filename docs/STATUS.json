@@ -3,12 +3,12 @@
  "date": "2026-10-20",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "Milestone of 2026-10-20: trained behaviour/intent inference. Observable behaviour, recorded context and intent are separate label layers (docs/BEHAVIOR_INTENT_DATA.md). Trained channels: situation from synchronized audio and video (E28, Kinetics: late fusion macro-F1 0.730 on 294 held-out clips, visual only 0.689, audio only 0.456; the scene adds +0.073), dog vocal activity / intent from barks (E26/E27, Barkopedia: 0.222 from audio, 0.290 with the location as context; no class passes the gate), dog bark and cat meow context heads. A combination layer reports single-channel readings, the combined situation, explicit missing inputs and conflicts; no intent hypothesis reaches 'supported' on held-out data because no intent-labelled synchronized data exists (exact missing examples listed). The phone engine mirrors the intent stage (feature-level parity on 10 cases); phones remain untested. Earlier rounds: E20 home video, E21 audio, E24 cat keypoints, G1 detector (paused G1b ablation).",
+ "summary": "Milestone of 2026-10-20 (latest): explaining a pet's behaviour in context. `petperception explain <media> --species --scene --question` locates the animal (the user's species is never overridden), recognizes behaviour bouts with a frozen zero-shot SigLIP encoder, parses the question and answers with source-grounded candidate explanations (24 sources; request, ordinary, arousal/stress, compulsive and medical kinds kept apart; distinguishing observations; urgent signs; never a stated cause). E31 (pre-registered, real recordings): zero-shot macro AP 0.416 [0.351, 0.496] over 9 behaviours on 278 clips, a trained head worse (0.248, not adopted); 37-question benchmark: explanation checks met (34/34; request separation 33/34; authors' interpretation covered 7/7) except parsing (27/34, target 0.9); tail chasing recognized in 3/8 clips (target 0.7 not met), so tail-chasing answers rest on the owner's report. Earlier the same day: trained behaviour/intent channels (E26-E30), situation from synchronized audio and video (E28: 0.730). Not on the phone; phones remain untested.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 177,
+    "python_tests": 191,
     "typescript_unit_tests": 40,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
@@ -107,6 +107,12 @@
   "G1b": {
    "status": "paused 2026-10-20 (signal checkpoints saved, resumable); selection rule fixed",
    "reason": "priority moved to behaviour/intent inference"
+  },
+  "B1": {
+   "capability": "trained behaviour head on frozen SigLIP embeddings (behaviour explanation)",
+   "status": "trained on CPU in E31 (5-fold grouped CV, < 1 min); not adopted (macro AP 0.248 vs zero-shot 0.416)",
+   "artifacts": "artifacts/understand/recognizer.json (zero-shot thresholds; no head deployed)",
+   "evaluation": "results/e31"
   }
  },
  "decisions": [
@@ -139,6 +145,16 @@
    "date": "2026-10-20",
    "decision": "E30 degraded-video rule not adopted",
    "basis": "pre-registered: flags 98.7 % of poor fresh clips but 8.0 % of clean ones (limit 5 %); implemented, inactive"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "E31: zero-shot SigLIP behaviour recognizer kept; trained head not adopted (macro AP -0.167 [-0.243, -0.088])",
+   "basis": "pre-registered adoption rule (gain >= 0.03 with CI above 0) on 278 clips, 5-fold grouped CV; results/e31/metrics.json"
+  },
+  {
+   "date": "2026-10-20",
+   "decision": "Tail chasing is not reported as recognized from recordings; answers about it rest on the owner's report",
+   "basis": "E31 benchmark: recognized in 3 of 8 tail-chasing clips (pre-registered minimum 0.7); confusers rejected 4/4"
   }
  ],
  "resources_needed": [
@@ -152,6 +168,10 @@
   "g1_detector_full_run": "models/g1/g1a_full_mnv2_sb4096/ (checkpoint ckpt-27 with optimizer state, float32/float16/int8 exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check.json)",
   "keypoint_heads": "artifacts/keypoints/*.npz",
   "audio_artifacts": "artifacts/audio_*.json",
-  "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)"
+  "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)",
+  "behavior_explanation": "artifacts/understand/recognizer.json (deployed zero-shot thresholds); knowledge base in src/petperception/understand/knowledge.py; benchmark benchmarks/behavior_questions.json; annotations/behavior_clips.json (assistant frame review)"
+ },
+ "experiments_latest": {
+  "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31"
  }
 }

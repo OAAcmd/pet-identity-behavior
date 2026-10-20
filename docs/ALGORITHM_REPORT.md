@@ -1329,6 +1329,52 @@ fresh clips with the same synthetic degradation.
   quality input would need its own fresh test. The degradation is
   synthetic; real dark or blurred home video is unmeasured.
 
+### E31 - Explaining a behaviour in context: recognition and explanation support - COMPLETED (zero-shot kept; tail chasing not recognized reliably; parsing below target)
+
+Protocol, benchmark and targets committed before any score (3925a50,
+`src/petperception/eval/e31_behavior_questions.py`,
+`benchmarks/behavior_questions.json`). Data: 300 real clips (Wikimedia
+Commons, CC BY paper supplements, Internet Archive), human labels from titles
+and paper captions; 37 owner-style questions on 37 clips (q08 is the task's
+question verbatim). Details and examples: [BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md).
+
+Part A, 278 clips with a located animal, 131 groups, 5-fold grouped CV,
+macro AP over 9 behaviours [cluster-bootstrap 95 % CI]:
+
+| Recognizer | Macro AP |
+| --- | --- |
+| Zero-shot SigLIP (frozen) | **0.416 [0.351, 0.496]** |
+| Trained head (logistic regression, pooled embeddings) | 0.248 [0.210, 0.321] |
+| Mean of both | 0.407 [0.356, 0.485] |
+| Chance | 0.073 |
+
+The head loses (-0.167 [-0.243, -0.088]); the zero-shot recognizer stays,
+with per-behaviour thresholds chosen on out-of-fold scores
+(`artifacts/understand/recognizer.json`). Best behaviours: drinking 0.757,
+kneading 0.687, eating 0.613; weakest: locomotion 0.163, social play 0.190.
+
+Part B, benchmark (cross-fitted):
+* recognition of asked behaviours present in the clip 22/36 (0.61 [0.45,
+  0.75]); **tail chasing 3/8 (0.375 [0.14, 0.69]): below the pre-registered
+  0.7**, so tail chasing is not reported as recognized from recordings and
+  answers rest on the user's report; vocalizing 8/8, object play 3/3,
+  kneading 2/2; threat display 0/2; recognized bouts overlap frame-review
+  bouts 14/14; confusers rejected 5/6 (tail chasing 4/4);
+* explanation support on 34 questions: knowledge entry, grounding, distinguishing
+  observations, no certainty claims, honest report status and the user's
+  species 34/34 each; request separation 33/34; the paper authors'
+  interpretation among the candidates 7/7 and ranked first 6/7; **question
+  parsing 27/34 (0.79), below the 0.9 target**;
+* the three gap questions (behaviour or explanation outside the vocabulary or
+  knowledge base) are answered with the nearest entry, which is wrong.
+
+What it means: the system can answer "what could this mean, and is it a
+request?" for 17 behaviours from the owner's description, with sources and
+the questions that would tell the candidates apart; the recording confirms
+common behaviours (sound, play, kneading, eating, grooming) but not
+reliably the clinically interesting ones (tail chasing, tail or flank biting,
+staring, threat displays).
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
@@ -1411,3 +1457,26 @@ held-out Kinetics clips as WebM: situation label 12/12, overall status 9/12
 (threshold-boundary cases), species 11/12, median situation-score difference
 0.039, 0 schema errors (`results/ondevice/intent_engine_parity_chromium.json`).
 No phone measurement yet.
+
+## 10. Behaviour explanation in context (2026-10-20)
+
+Code: `src/petperception/understand/`; command: `petperception explain
+<media> --species cat|dog --scene ... --question ...`; evaluation: E31;
+design, data, results and gaps: [BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md).
+
+* **Locate**: the phone detector, cat or dog boxes, a single-target track
+  with gap filling; the user's species is never overridden (a disagreeing
+  detector vote is reported).
+* **Recognize**: frozen SigLIP base (zero-shot prompts per behaviour and
+  neutral states) on the animal crop at 2 fps, bouts where a behaviour is
+  the most likely reading, per-behaviour thresholds from E31; YAMNet for
+  vocalizations; optical-flow movement descriptors (descriptive only).
+* **Explain**: a deterministic parser for the question; a knowledge base of
+  entries per behaviour and species (24 sources with tiers; candidates by
+  kind: request, ordinary, arousal or stress, compulsive, medical; context
+  cue words that only reorder; distinguishing observations; urgent signs);
+  the answer states what was seen and when, what the user reported and
+  whether the recording shows it, candidates by kind with sources, whether a
+  request is possible, and that the recording cannot establish the cause.
+* **Not on the phone**: SigLIP is 812 MB; the explanation layer is not yet
+  ported to the browser engine.

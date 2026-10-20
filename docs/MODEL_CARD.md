@@ -34,6 +34,7 @@ validated against household outcomes.
 | Dog vocal activity / intent (intent stage) | logistic heads on YAMNet features, optional location context | yes (E27) | E26, E27 (Barkopedia) | yes (class-score head) |
 | Behaviour/intent combination | taxonomy relations (annotated / consistent / context), thresholds fitted per channel, explicit missing inputs and conflicts | heads yes; combination no (no intent-labelled synchronized data) | channel level only; end-to-end status on held-out clips | yes |
 | Explanations | deterministic templates; no language model | no | tests | yes |
+| Behaviour explanation in context (`petperception explain`, research profile) | frozen SigLIP base zero-shot behaviour recognition on the animal crop (thresholds from E31), YAMNet for sounds, deterministic question parser, source-grounded knowledge base (24 sources) | thresholds only (a trained head was evaluated and not adopted) | E31 (300 real clips, 37-question benchmark) | no (SigLIP 812 MB) |
 
 ## Intended use
 
@@ -108,6 +109,15 @@ validated against household outcomes.
   decisions than float32 builds (E12); the default uses float32.
 - Camera-motion compensation is approximate; zone membership uses the box
   bottom centre.
+- Behaviour explanation (E31): tail chasing is recognized in only 3 of 8
+  real clips (a small cat on a suitcase and a hyperaesthesia cat on a play
+  mat were missed), so answers about it rest on the owner's description;
+  threat displays, tail or flank biting, staring and tail flicking were not
+  recognized; a dog rubbing itself on the carpet was read as scratching.
+  The question parser misses paraphrases (27 of 34 parsed) and context words
+  such as "after eating" can be taken for a reported behaviour. Behaviours
+  or explanations outside the knowledge base get the nearest entry, which
+  can be wrong (scratch reflex, trained barking).
 
 ## Ethical considerations
 

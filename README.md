@@ -48,14 +48,26 @@ lists missing inputs and reports conflicts. Try it on a file:
 `uv run petperception intent clip.mp4` (label layers and data gaps:
 [docs/BEHAVIOR_INTENT_DATA.md](docs/BEHAVIOR_INTENT_DATA.md)).
 
+Behaviour explanation in context (`src/petperception/understand/`, research
+profile, server/desktop only): give the species, the scene and your question
+with a recording, and get what the recording shows (with times) plus
+candidate explanations grounded in cited veterinary and ethological sources,
+with requests kept apart from play, stress, compulsive and medical causes and
+never a stated cause:
+`uv run petperception explain clip.mp4 --species cat --scene "open living room" --question "my cat keeps turning in circles while biting its own tail - what could this mean?" --markdown answer.md`
+(needs `uv sync --extra behavior` and `petperception fetch-models --only siglip_base_patch16_224`).
+Measured on 37 real-clip questions in E31; what it can and cannot answer:
+[docs/BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md).
+
 ## Documents
 
 | Topic | Document |
 | --- | --- |
 | Acceptance status and requirements | [REQUIREMENTS_MATRIX.md](docs/REQUIREMENTS_MATRIX.md), [STATUS.json](docs/STATUS.json) |
 | What each capability can and cannot do, per species (software, behavioural evidence, device, release) | [CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) |
-| Methods and measured results (E1-E28, intent layer in section 9) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
+| Methods and measured results (E1-E31; intent layer in section 9, behaviour explanation in section 10) | [ALGORITHM_REPORT.md](docs/ALGORITHM_REPORT.md), `results/` |
 | Behaviour / intent: label layers, data inventory, missing annotations | [BEHAVIOR_INTENT_DATA.md](docs/BEHAVIOR_INTENT_DATA.md) |
+| Explaining a behaviour in context: existing work, data, method, E31 benchmark, answerable questions, gaps | [BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md) |
 | On-device design, evidence, audit | [ON_DEVICE.md](docs/ON_DEVICE.md), [ON_DEVICE_AUDIT.md](docs/ON_DEVICE_AUDIT.md) |
 | Phones: tiers, budgets, acceptance test | [DEVICE_TIERS_AND_BUDGETS.md](docs/DEVICE_TIERS_AND_BUDGETS.md), [DEVICE_TEST_PROTOCOL.md](docs/DEVICE_TEST_PROTOCOL.md) |
 | Data, models, licences | [ASSET_TERMS.md](docs/ASSET_TERMS.md) (per asset, open questions, replacements), [DATA_SOURCES.md](docs/DATA_SOURCES.md) (94-source survey, network blockers), [DATA_AND_MODEL_REGISTER.md](docs/DATA_AND_MODEL_REGISTER.md), `manifests/resources.json`, [artifacts/README.md](artifacts/README.md) |

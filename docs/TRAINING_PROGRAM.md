@@ -21,6 +21,7 @@ results are kept).
 | G3 | temporal behaviour from video | E17 **ran on CPU**: temporal model 0.590 vs pooled 0.575 vs E11 0.638 macro-F1; not adopted | household or licensed video (cats; release) |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
 | G5 | distilled multi-task student for phones | not started | household video and G1 |
+| B1 | behaviour head on frozen SigLIP (explanations) | **ran** in E31 (5-fold grouped CV on 278 clips): 0.248 vs zero-shot 0.416 macro AP, not adopted | more labelled clips per behaviour |
 
 ## Rules for every job
 
@@ -673,6 +674,40 @@ a changed training set refits.
 *supported* only above its own fitted threshold; a channel below the
 per-class gate (F1 >= 0.7, lower bound >= 0.6) is reported with its gate
 status. Context channels never support a hypothesis alone.
+
+## B1 - Behaviour head for explanations (2026-10-20)
+
+**Capability.** Recognizing what the animal does (and when) as evidence for
+the behaviour-explanation answers (`src/petperception/understand/`,
+[BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
+
+**What is trained and why.** The SigLIP base encoder stays frozen (812 MB;
+fine-tuning it on a few hundred clips on this CPU is neither feasible nor
+justified). The trainable part is a one-vs-rest logistic regression per
+behaviour on clip-level evidence (mean animal-crop embedding, scene
+embedding, species flag; `understand/head.py`), C chosen by inner grouped CV
+on training folds. Its competitor is the untrained zero-shot reading of the
+same encoder.
+
+| Job | Data | Grouping | Command | CPU time (measured) | Outcome |
+| --- | --- | --- | --- | --- | --- |
+| Features | 300 clips (Commons, paper supplements, Internet Archive) | - | `python -m petperception.understand.dataset --threads 2` (resumable per clip) | 15-19 s per clip of up to 60 s with 2 threads (about 95 min for 298 clips while the G1b run shared the CPU) | `var/understand/features/*.npz` |
+| E31 part A | 278 clips with a located animal, title / caption labels, 9 eligible behaviours | uploader or paper; 5-fold GroupKFold | `petperception evaluate --experiment e31` | about 2 min including the benchmark | head 0.248 vs zero-shot 0.416 macro AP: **not adopted** |
+
+**Artifacts.** `artifacts/understand/recognizer.json`: the adopted method
+(zero-shot), per-behaviour thresholds chosen on out-of-fold scores, the
+fixed defaults for the other behaviours, and provenance (commit, pool,
+eligible behaviours). No head file is written while the head is not
+adopted; `petperception explain` falls back to the fixed zero-shot defaults
+when the configuration is missing.
+
+**Recovery.** Feature extraction skips clips whose file exists (atomic
+rename per clip); E31 itself is deterministic and re-runs from the features
+in about two minutes.
+
+**Next.** More labelled clips per behaviour (household recordings), or a
+temporal recognizer for tail chasing tested on fresh clips; the head is
+re-evaluated with the same rule when the data change.
 
 ## Already-trained artifacts and how to reproduce them
 

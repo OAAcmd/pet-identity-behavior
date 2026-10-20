@@ -72,3 +72,13 @@ configuration and the producing commands: `intent/MANIFEST.json`.
 | `intent/cat_audio_context_v1/` | `python -m petperception.intent.train_heads` | CatMeows (CC BY-NC 4.0) | intent stage (hint only, below the gate) | research; non-commercial review |
 | `intent/dog_bark_context_v1/` | `python -m petperception.intent.train_heads` | Yin & McCowan barks via BEANS (no licence stated) | intent stage, `full` variant only | **research only** |
 
+
+## Behaviour explanation (`understand/`, 2026-10-20)
+
+| File | Produced by | Content | Used at runtime | Release |
+| --- | --- | --- | --- | --- |
+| `understand/recognizer.json` | `petperception evaluate --experiment e31` | method `zero_shot` (the trained head was not adopted), per-behaviour thresholds chosen on out-of-fold scores of 278 clips, fixed defaults (0.30 zero-shot, 0.30 YAMNet vocal), provenance | `petperception explain` | research (thresholds chosen on Commons / paper / Internet Archive clips; SigLIP terms) |
+
+The knowledge base (sources, candidates, distinguishing observations) is
+code with its own version (`understand/knowledge.py`, `behavior-kb-v1`),
+validated by `knowledge.validate()` and the tests.
