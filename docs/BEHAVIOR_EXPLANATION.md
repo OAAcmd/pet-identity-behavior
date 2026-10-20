@@ -243,6 +243,24 @@ can be interrupted, in which situations it starts, whether the tail is
 injured, and whether there are other repetitive behaviours. It also shows
 a false recognition: "threat display" at 3.5 and 14.5 s.
 
+### 7.5 Downstream effect of the G1b detector (E31 part C)
+
+The G1b detector (run B, finished in this milestone; selected over G1a on
+development data, acceptance 1 met, see TRAINING_PROGRAM.md) replaced the
+phone detector in the `locate` step and every clip was re-processed. Same
+protocol, same clips; descriptive (no adoption decision here).
+
+| Locate with | Mean share of frames with the animal located (299 clips) | Pool clips with a located animal | Zero-shot macro AP [95 % CI] | Benchmark B1 (tail chasing) | Confusers rejected |
+| --- | --- | --- | --- | --- | --- |
+| Phone detector (default) | 0.727 | 278 | 0.416 [0.351, 0.496] | 22/36 (3/8) | 5/6 |
+| G1b at the locate threshold 0.25 (pre-registered) | **0.786** (83 clips located in more frames, 20 in fewer) | 275 | 0.404 [0.347, 0.481] | 23/36 (3/8) | 5/6 |
+| G1b at its tuning-set per-class points (secondary) | SECONDARY_FOUND | SECONDARY_POOL | SECONDARY_AP | SECONDARY_B1 | SECONDARY_B4 |
+
+G1b finds the animal in more frames, but behaviour recognition does not
+change measurably: the bottleneck is the recognizer, not localization. For
+the explanation layer the detector matters through the species vote only,
+which is reported, never used to override the user.
+
 ## 8. Which questions can be answered today
 
 | Question type | Answerable? | Evidence |

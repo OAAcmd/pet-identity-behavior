@@ -11,5 +11,14 @@
     "model_int8_ptq.tflite"
   ],
   "restore": "training/g1/vault.py restore --src <clone>/models/g1/g1b_warm_cat2_cop3d --run-dir var/training/g1/runs/verify_g1b_from_github (8 files verified; weights_sha256 1a53f4b3c979802f921e384c7e858ede9d627bfbbe148b0a25a14298fa016aad)",
-  "validate_only": "pending"
+  "validate_only": {
+    "restore_weights_identical": true,
+    "weights_sha256": "1a53f4b3c979802f921e384c7e858ede9d627bfbbe148b0a25a14298fa016aad",
+    "dev_map50": 0.4826,
+    "dev_map50_recorded_at_training": 0.4826,
+    "dev_ap50": {
+      "cat": 0.7736,
+      "dog": 0.8208
+    }
+  }
 }
