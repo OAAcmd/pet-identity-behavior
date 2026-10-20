@@ -1,0 +1,526 @@
+{
+ "schema": "petperception.stock_pets/1",
+ "retrieved_at": "2026-10-20",
+ "site": "https://mixkit.co",
+ "note": "Free stock clips (Mixkit Stock Video Free License); first 360p rendition; fresh material for E32 only.",
+ "records": [
+  {
+   "id": "mixkit_45347",
+   "file": "mixkit_45347.mp4",
+   "slug": "cat-cleaning-its-paw-with-a-blurred-background-45347",
+   "page": "https://mixkit.co/free-stock-video/cat-cleaning-its-paw-with-a-blurred-background-45347/",
+   "url": "https://assets.mixkit.co/videos/45347/45347-360.mp4",
+   "title": "Cat cleaning its paw with a blurred background",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1808431,
+   "sha256": "5bb13134b5fa8056f237211ce7d8cdffe53990a8ec712c6386a3422211255f15",
+   "species": "cat",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_14018",
+   "file": "mixkit_14018.mp4",
+   "slug": "cute-kitten-licking-a-claw-14018",
+   "page": "https://mixkit.co/free-stock-video/cute-kitten-licking-a-claw-14018/",
+   "url": "https://assets.mixkit.co/videos/14018/14018-360.mp4",
+   "title": "Cute kitten licking a claw",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1505454,
+   "sha256": "956b3f7a7b4d966232f60b8fc7197016b61ad52ed3fed19357e0153ae890e63c",
+   "species": "cat",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50675",
+   "file": "mixkit_50675.mp4",
+   "slug": "a-playful-pitbull-biting-a-teddy-bear-on-the-ground-50675",
+   "page": "https://mixkit.co/free-stock-video/a-playful-pitbull-biting-a-teddy-bear-on-the-ground-50675/",
+   "url": "https://assets.mixkit.co/videos/50675/50675-360.mp4",
+   "title": "A playful pitbull biting a teddy bear on the ground",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1301119,
+   "sha256": "4119ef3553dcc109e91ca8c284fe52a5cd7866faa25312e8359d7e96446c30ac",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32",
+   "species_note": "breed word in the title (pitbull / corgi)"
+  },
+  {
+   "id": "mixkit_50676",
+   "file": "mixkit_50676.mp4",
+   "slug": "a-young-pitbull-dog-bitting-and-playing-with-a-teddy-50676",
+   "page": "https://mixkit.co/free-stock-video/a-young-pitbull-dog-bitting-and-playing-with-a-teddy-50676/",
+   "url": "https://assets.mixkit.co/videos/50676/50676-360.mp4",
+   "title": "A young pitbull dog bitting and playing with a teddy bear toy",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 574611,
+   "sha256": "b2d4cdf7395f1283c9a64b141c62dbd55803b6ee4b1a49725846652e16d04ba9",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50689",
+   "file": "mixkit_50689.mp4",
+   "slug": "border-collie-plays-whit-a-soft-ball-on-the-ground-50689",
+   "page": "https://mixkit.co/free-stock-video/border-collie-plays-whit-a-soft-ball-on-the-ground-50689/",
+   "url": "https://assets.mixkit.co/videos/50689/50689-360.mp4",
+   "title": "Border Collie plays whit a soft ball on the ground",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 817747,
+   "sha256": "68b692d8797cf2051287ccce1fe0c1dc375d7bc1adce8767e8ca0345a68108c0",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50688",
+   "file": "mixkit_50688.mp4",
+   "slug": "playfull-border-collie-dog-playing-with-a-toy-ball-50688",
+   "page": "https://mixkit.co/free-stock-video/playfull-border-collie-dog-playing-with-a-toy-ball-50688/",
+   "url": "https://assets.mixkit.co/videos/50688/50688-360.mp4",
+   "title": "Playfull Border Collie dog playing with a toy ball",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 635790,
+   "sha256": "2387986a78c3d12200d543477d5e160105ac37456b5d50393ffe41e11778b8be",
+   "species": "dog",
+   "source_labels": [
+    "playing_object"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_45868",
+   "file": "mixkit_45868.mp4",
+   "slug": "young-corgi-chasing-after-a-tennis-ball-in-the-park-45868",
+   "page": "https://mixkit.co/free-stock-video/young-corgi-chasing-after-a-tennis-ball-in-the-park-45868/",
+   "url": "https://assets.mixkit.co/videos/45868/45868-360.mp4",
+   "title": "Young Corgi chasing after a tennis ball in the park",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 379666,
+   "sha256": "b37c3ad94b8503a4485c79a2e6afa2d1435bb238de355f802256e7d6f091b260",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32",
+   "species_note": "breed word in the title (pitbull / corgi)"
+  },
+  {
+   "id": "mixkit_1478",
+   "file": "mixkit_1478.mp4",
+   "slug": "dog-being-petted-1478",
+   "page": "https://mixkit.co/free-stock-video/dog-being-petted-1478/",
+   "url": "https://assets.mixkit.co/videos/1478/1478-360.mp4",
+   "title": "Dog being petted",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 950898,
+   "sha256": "bad4ed5c22dfc22f40565ac72e6c513f19d7a96d93bb49fe9e7580ca9159b328",
+   "species": "dog",
+   "source_labels": [
+    "being_handled"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_45842",
+   "file": "mixkit_45842.mp4",
+   "slug": "chunky-pug-enjoying-being-petted-45842",
+   "page": "https://mixkit.co/free-stock-video/chunky-pug-enjoying-being-petted-45842/",
+   "url": "https://assets.mixkit.co/videos/45842/45842-360.mp4",
+   "title": "Chunky pug enjoying being petted ",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 727708,
+   "sha256": "39e33f68baf80f16e010878bfb78a67b098b66ff83a30bde2a1d464ea15aacda",
+   "species": "dog",
+   "source_labels": [
+    "being_handled"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_1778",
+   "file": "mixkit_1778.mp4",
+   "slug": "petting-a-cute-cat-close-up-1778",
+   "page": "https://mixkit.co/free-stock-video/petting-a-cute-cat-close-up-1778/",
+   "url": "https://assets.mixkit.co/videos/1778/1778-360.mp4",
+   "title": "Petting a cute cat, close up",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1218621,
+   "sha256": "1108f563a8aea131b0c6d7760abace40a6586f01b1fd6cb90b86a3245ed14a19",
+   "species": "cat",
+   "source_labels": [
+    "being_handled"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_38824",
+   "file": "mixkit_38824.mp4",
+   "slug": "tenderly-stroking-a-cat-38824",
+   "page": "https://mixkit.co/free-stock-video/tenderly-stroking-a-cat-38824/",
+   "url": "https://assets.mixkit.co/videos/38824/38824-360.mp4",
+   "title": "Tenderly stroking a cat",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1447159,
+   "sha256": "1d13540385d4fc5abea96e5e184448dc7d8379b6e3a5933bc697fe5ac04dd3e9",
+   "species": "cat",
+   "source_labels": [
+    "being_handled"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_42736",
+   "file": "mixkit_42736.mp4",
+   "slug": "woman-petting-her-dog-on-the-lawn-42736",
+   "page": "https://mixkit.co/free-stock-video/woman-petting-her-dog-on-the-lawn-42736/",
+   "url": "https://assets.mixkit.co/videos/42736/42736-360.mp4",
+   "title": "Woman petting her dog on the lawn",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 867593,
+   "sha256": "d90dfcf42adee8da03427b26b656b58e53086e8a550a12c45f199fe804c21f66",
+   "species": "dog",
+   "source_labels": [
+    "being_handled"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50687",
+   "file": "mixkit_50687.mp4",
+   "slug": "border-collie-canine-eating-from-a-bowl-50687",
+   "page": "https://mixkit.co/free-stock-video/border-collie-canine-eating-from-a-bowl-50687/",
+   "url": "https://assets.mixkit.co/videos/50687/50687-360.mp4",
+   "title": "Border Collie canine eating from a bowl",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 588116,
+   "sha256": "d95425e08fab29b48863f698ce030d6c63425c44efc26d4da47bae67869b1c30",
+   "species": "dog",
+   "source_labels": [
+    "eating"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_1547",
+   "file": "mixkit_1547.mp4",
+   "slug": "two-cats-eating-1547",
+   "page": "https://mixkit.co/free-stock-video/two-cats-eating-1547/",
+   "url": "https://assets.mixkit.co/videos/1547/1547-360.mp4",
+   "title": "Two cats eating ",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 987212,
+   "sha256": "c983a13459b74df05332f6bdef797442228b5fab84b6d0afe4cfd89ec7e6a3fe",
+   "species": "cat",
+   "source_labels": [
+    "eating"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_33017",
+   "file": "mixkit_33017.mp4",
+   "slug": "hungry-puppies-eating-together-33017",
+   "page": "https://mixkit.co/free-stock-video/hungry-puppies-eating-together-33017/",
+   "url": "https://assets.mixkit.co/videos/33017/33017-360.mp4",
+   "title": "Hungry puppies eating together",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1243756,
+   "sha256": "532410e9f14b88fd44f947cff5be52cc68073f2413d112aac9e2ddf04e986086",
+   "species": "dog",
+   "source_labels": [
+    "eating"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_31936",
+   "file": "mixkit_31936.mp4",
+   "slug": "homeless-kittens-eating-on-the-street-31936",
+   "page": "https://mixkit.co/free-stock-video/homeless-kittens-eating-on-the-street-31936/",
+   "url": "https://assets.mixkit.co/videos/31936/31936-360.mp4",
+   "title": "Homeless kittens eating on the street",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1181485,
+   "sha256": "e5bca56a9d25da4895aa792c0f0423ad28b821a4123cd9f4eb1d13f09c244274",
+   "species": "cat",
+   "source_labels": [
+    "eating"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_48988",
+   "file": "mixkit_48988.mp4",
+   "slug": "puppy-dog-eating-grass-in-the-park-48988",
+   "page": "https://mixkit.co/free-stock-video/puppy-dog-eating-grass-in-the-park-48988/",
+   "url": "https://assets.mixkit.co/videos/48988/48988-360.mp4",
+   "title": "Puppy dog eating grass in the park",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 690354,
+   "sha256": "603a863f3c26e240636cb3fa93970aa83251a5a2994203677178892ed27985ae",
+   "species": "dog",
+   "source_labels": [
+    "eating"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50677",
+   "file": "mixkit_50677.mp4",
+   "slug": "a-brown-pitbull-dog-reaches-the-bowl-of-water-and-50677",
+   "page": "https://mixkit.co/free-stock-video/a-brown-pitbull-dog-reaches-the-bowl-of-water-and-50677/",
+   "url": "https://assets.mixkit.co/videos/50677/50677-360.mp4",
+   "title": "A brown pitbull dog reaches the bowl of water and drinks",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 654933,
+   "sha256": "48c77fea7ecabbced6378338dd8a38c505e49106216af33429dbbcfe4b1e5b42",
+   "species": "dog",
+   "source_labels": [
+    "drinking"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_4102",
+   "file": "mixkit_4102.mp4",
+   "slug": "cat-taking-a-nap-4102",
+   "page": "https://mixkit.co/free-stock-video/cat-taking-a-nap-4102/",
+   "url": "https://assets.mixkit.co/videos/4102/4102-360.mp4",
+   "title": "Cat taking a nap",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1228157,
+   "sha256": "b98f7cad21da02f7a76cdd63578d6cd72d1afd1e9d8aca39cbb2672c8b1fff40",
+   "species": "cat",
+   "source_labels": [
+    "resting"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_32319",
+   "file": "mixkit_32319.mp4",
+   "slug": "cute-red-kitten-sleeping-in-the-couch-32319",
+   "page": "https://mixkit.co/free-stock-video/cute-red-kitten-sleeping-in-the-couch-32319/",
+   "url": "https://assets.mixkit.co/videos/32319/32319-360.mp4",
+   "title": "Cute red kitten sleeping in the couch",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 603235,
+   "sha256": "417ee6048fc469a446d90dc6b1762eb93296afa3f4e81caffea660378a878f18",
+   "species": "cat",
+   "source_labels": [
+    "resting"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_16619",
+   "file": "mixkit_16619.mp4",
+   "slug": "puppy-laying-in-their-bed-16619",
+   "page": "https://mixkit.co/free-stock-video/puppy-laying-in-their-bed-16619/",
+   "url": "https://assets.mixkit.co/videos/16619/16619-360.mp4",
+   "title": "Puppy laying in their bed",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 658302,
+   "sha256": "ac0ededeae037a87bb4a45b9ca6278385d4be0db2d15879b36153a824acda2f2",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_48739",
+   "file": "mixkit_48739.mp4",
+   "slug": "group-of-puppies-sleeping-in-a-pile-48739",
+   "page": "https://mixkit.co/free-stock-video/group-of-puppies-sleeping-in-a-pile-48739/",
+   "url": "https://assets.mixkit.co/videos/48739/48739-360.mp4",
+   "title": "Group of puppies sleeping in a pile",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 738106,
+   "sha256": "bec7f755d670fb74be570a0db0d11a438db0cabc51496f7d0972ce92230f3d1e",
+   "species": "dog",
+   "source_labels": [
+    "resting"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_14184",
+   "file": "mixkit_14184.mp4",
+   "slug": "young-cats-play-in-the-garden-14184",
+   "page": "https://mixkit.co/free-stock-video/young-cats-play-in-the-garden-14184/",
+   "url": "https://assets.mixkit.co/videos/14184/14184-360.mp4",
+   "title": "Young cats play in the garden",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1406235,
+   "sha256": "1b0034e4c7c35528442f7b0bae8dddab041045aa864e43f2de00cd4933f8e557",
+   "species": "cat",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_1779",
+   "file": "mixkit_1779.mp4",
+   "slug": "pet-owner-playing-with-a-cute-cat-1779",
+   "page": "https://mixkit.co/free-stock-video/pet-owner-playing-with-a-cute-cat-1779/",
+   "url": "https://assets.mixkit.co/videos/1779/1779-360.mp4",
+   "title": "Pet owner playing with a cute cat",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 911924,
+   "sha256": "d360906d9afd2629da52b3fab2c7fbad33c45a9abb7052c4a5a40ace2ae51c5a",
+   "species": "cat",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_45843",
+   "file": "mixkit_45843.mp4",
+   "slug": "happy-pug-running-across-a-grassy-park-45843",
+   "page": "https://mixkit.co/free-stock-video/happy-pug-running-across-a-grassy-park-45843/",
+   "url": "https://assets.mixkit.co/videos/45843/45843-360.mp4",
+   "title": "Happy pug running across a grassy park",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 337680,
+   "sha256": "f5343b6bd1c97bbfe823e123af82c154741ea011113120a976331c74704109b0",
+   "species": "dog",
+   "source_labels": [
+    "locomotion"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_25225",
+   "file": "mixkit_25225.mp4",
+   "slug": "little-dog-running-in-snow-in-slow-motion-25225",
+   "page": "https://mixkit.co/free-stock-video/little-dog-running-in-snow-in-slow-motion-25225/",
+   "url": "https://assets.mixkit.co/videos/25225/25225-360.mp4",
+   "title": "Little dog running in snow in slow motion",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1275491,
+   "sha256": "3524f630c28663b34b4d6676b4eed18764a8e440e0e693da70660b339f5876e3",
+   "species": "dog",
+   "source_labels": [
+    "locomotion"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50683",
+   "file": "mixkit_50683.mp4",
+   "slug": "a-panting-border-collie-receives-a-small-treat-on-its-50683",
+   "page": "https://mixkit.co/free-stock-video/a-panting-border-collie-receives-a-small-treat-on-its-50683/",
+   "url": "https://assets.mixkit.co/videos/50683/50683-360.mp4",
+   "title": "A panting border collie receives a small treat on its muzzle",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 653702,
+   "sha256": "c21944c56ae2453050b8fb3ecd7ccce07b84040b05ae1118c6721f994dc53e2a",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_6975",
+   "file": "mixkit_6975.mp4",
+   "slug": "playful-kitten-under-the-couch-6975",
+   "page": "https://mixkit.co/free-stock-video/playful-kitten-under-the-couch-6975/",
+   "url": "https://assets.mixkit.co/videos/6975/6975-360.mp4",
+   "title": "Playful kitten under the couch",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 1399387,
+   "sha256": "a30a4827e638518b02ba0bb1ef17bf9b7091e84faa1f552916e4daed36b92ea9",
+   "species": "cat",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_45406",
+   "file": "mixkit_45406.mp4",
+   "slug": "sleepy-kitten-watching-a-toy-behind-the-camera-45406",
+   "page": "https://mixkit.co/free-stock-video/sleepy-kitten-watching-a-toy-behind-the-camera-45406/",
+   "url": "https://assets.mixkit.co/videos/45406/45406-360.mp4",
+   "title": "Sleepy kitten watching a toy behind the camera",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 2130274,
+   "sha256": "2aa60417d9cf60b623c580de6f32ff693b32684a65a768de06d128fc3736541a",
+   "species": "cat",
+   "source_labels": [
+    "resting"
+   ],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50686",
+   "file": "mixkit_50686.mp4",
+   "slug": "border-collie-hi-fives-a-human-hand-with-its-paw-50686",
+   "page": "https://mixkit.co/free-stock-video/border-collie-hi-fives-a-human-hand-with-its-paw-50686/",
+   "url": "https://assets.mixkit.co/videos/50686/50686-360.mp4",
+   "title": "Border Collie hi-fives a human hand with its paw",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 797987,
+   "sha256": "aaa4669ed7c0d50b732669008dc077a1ef200b729ef14d5be88e9fa23b17ac60",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_1494",
+   "file": "mixkit_1494.mp4",
+   "slug": "dog-catches-a-ball-in-a-river-1494",
+   "page": "https://mixkit.co/free-stock-video/dog-catches-a-ball-in-a-river-1494/",
+   "url": "https://assets.mixkit.co/videos/1494/1494-360.mp4",
+   "title": "Dog catches a ball in a river",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 689382,
+   "sha256": "cfb1a5221be045b315bbfb7f9d3afd4a4f7dbf67fa9f6e0b920a2f9ed6a8cb18",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  },
+  {
+   "id": "mixkit_50671",
+   "file": "mixkit_50671.mp4",
+   "slug": "a-young-pitbull-canine-biting-a-teddy-bear-on-the-50671",
+   "page": "https://mixkit.co/free-stock-video/a-young-pitbull-canine-biting-a-teddy-bear-on-the-50671/",
+   "url": "https://assets.mixkit.co/videos/50671/50671-360.mp4",
+   "title": "A young pitbull canine biting a teddy bear on the ground",
+   "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+   "bytes": 888507,
+   "sha256": "1db2f280797761aabb65902b976f23c214e3fabc1202f9ab473f5fe2fa9dc358",
+   "species": "dog",
+   "source_labels": [],
+   "uploader": "mixkit",
+   "set": "e32"
+  }
+ ]
+}

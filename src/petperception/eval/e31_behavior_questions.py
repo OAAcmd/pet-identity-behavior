@@ -134,6 +134,8 @@ def load_pool(settings: Settings, features_dir: Path | None = None) -> tuple[lis
     fdir = features_dir or (data_root.parent / "understand" / "features")
     clips, zs, info = [], [], Counter()
     for c in D.clips(data_root):
+        if c.set != "dev":  # material added later for E32 is not part of E31
+            continue
         info["collection"] += 1
         if any(d in c.title for d in DUPLICATES) and c.source == "commons":
             info["duplicate_removed"] += 1

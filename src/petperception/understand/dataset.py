@@ -33,6 +33,7 @@ class Clip:
     labels: dict[str, list[str]] = field(default_factory=dict)
     context: dict = field(default_factory=dict)
     url: str = ""
+    set: str = "dev"  # dev (E31 collection, development for E32) | e32 (fresh test material, added for E32)
 
 
 def load_assistant() -> dict[str, dict]:
@@ -58,14 +59,21 @@ def clips(data_root: Path) -> list[Clip]:
             if p.exists():
                 grp = "paper:" + v["doi"]
                 out.append(Clip(f"paper_{v['id']}", p, v["species"], "paper", grp, v["citation"], v["licence"], {"expert": list(v["expert_labels"])},
-                                {**v.get("context", {}), "caption": v["caption"]}, "https://doi.org/" + v["doi"]))
+                                {**v.get("context", {}), "caption": v["caption"]}, "https://doi.org/" + v["doi"], v.get("set", "dev")))
     ia = REPO_ROOT / "manifests" / "archive_pets.json"
     if ia.exists():
         for r in json.loads(ia.read_text())["records"]:
             p = data_root / "archive_pets" / r["file"]
             if p.exists():
                 out.append(Clip(f"archive_{r['id']}", p, r["species"], "archive", f"archive:{r['uploader']}", r["title"], r["licence"],
-                                {"source": list(r["source_labels"])}, {}, "https://archive.org/details/" + r["identifier"]))
+                                {"source": list(r["source_labels"])}, {}, "https://archive.org/details/" + r["identifier"], r.get("set", "dev")))
+    st = REPO_ROOT / "manifests" / "stock_pets.json"
+    if st.exists():
+        for r in json.loads(st.read_text())["records"]:
+            p = data_root / "stock_pets" / r["file"]
+            if p.exists() and r.get("species") in ("cat", "dog"):
+                out.append(Clip(f"stock_{r['id']}", p, r["species"], "stock", f"stock:{r['uploader']}", r["title"], r["licence"],
+                                {"source": list(r["source_labels"])}, {}, r["page"], r.get("set", "e32")))
     ann = load_assistant()
     for c in out:
         a = ann.get(c.key)
@@ -95,6 +103,7 @@ def main() -> None:
     ap.add_argument("--detector", help="alternative detector .tflite (E31 part C); default: the configured detector")
     ap.add_argument("--detector-points", help='per-class thresholds for --detector as JSON, e.g. {"cat": 0.11, "dog": 0.28}')
     ap.add_argument("--subdir", default="features", help="output directory under var/understand/")
+    ap.add_argument("--feature-version", type=int, default=1, help="1: E31 features; 2: E32 features (track holding, context detections, scenes)")
     a = ap.parse_args()
     s = load_settings()
     data_root = s.paths.resolve("data_root")
@@ -104,7 +113,7 @@ def main() -> None:
     todo.sort(key=lambda c: (c.source != "paper", c.source != "archive", c.key))
     import json
 
-    ex = Extractor.load(a.threads, a.detector, json.loads(a.detector_points) if a.detector_points else None)
+    ex = Extractor.load(a.threads, a.detector, json.loads(a.detector_points) if a.detector_points else None, a.feature_version)
     t0 = time.perf_counter()
     for n, c in enumerate(todo, 1):
         p = feature_path(data_root.parent, c.key, a.subdir)

@@ -74,12 +74,31 @@
    ],
    "role": "confuser: kittens biting another cat's tail (not self-directed)",
    "sha256": "1c8a360cce342b04eb4c14e6ef196b759604f2aeb9925f304c8e0e3c757844cd"
+  },
+  {
+   "id": "ia_cat_tail_3",
+   "file": "ia_cat_tail_3.mp4",
+   "species": "cat",
+   "identifier": "JasonBrackinsTailChase",
+   "title": "Tail Chase (\"Yes, a cat video. This is Clouseau chasing his tail.\")",
+   "uploader": "jason@j-san.net",
+   "date": null,
+   "licence": "CC BY-NC-SA 2.0 (licenseurl in the item metadata)",
+   "source_labels": [
+    "tail_chasing"
+   ],
+   "set": "e32",
+   "sha256": "7fb85353fac4a52a3e4bec0ea47351857e294c2eefbeb00df14aa2843741c9b1"
   }
  ],
  "excluded": [
   {
    "identifier": "kitten-vs-bani-the-tail-war-fluffy-contest-entry-and-we-won-d",
    "reason": "animated cartoon, not a recording of an animal (frame review)"
+  },
+  {
+   "identifier": "funny_or_die_video_21495cc104",
+   "reason": "download refused (HTTP 401, restricted item)"
   }
  ]
 }

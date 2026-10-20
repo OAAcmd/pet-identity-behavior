@@ -23,7 +23,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-KNOWLEDGE_VERSION = "behavior-kb-v1"
+KNOWLEDGE_VERSION = "behavior-kb-v2"
 
 SOURCES: dict[str, dict] = {
     "tiira2012": {"tier": "peer_reviewed_study", "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
@@ -107,6 +107,42 @@ SOURCES: dict[str, dict] = {
     "ellis2013": {"tier": "clinical_review", "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg "
                                                        "15:219-230 (as summarized by Veterinary Partner).", "url": "https://doi.org/10.1177/1098612X13477537",
                   "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"},
+    "merck_neuro_exam": {"tier": "clinical_review", "citation": "Merck Veterinary Manual: The neurologic examination of animals.",
+                         "url": "https://www.merckvetmanual.com/nervous-system/the-neurologic-examination/the-neurologic-examination-of-animals",
+                         "supports": "a head tilt usually indicates vestibular dysfunction; animals with forebrain lesions may turn their heads and "
+                                     "circle in one direction"},
+    "dvm360_vestibular": {"tier": "clinical_review", "citation": "dvm360: Vestibular disease in dogs and cats (proceedings).",
+                          "url": "https://www.dvm360.com/view/vestibular-disease-dogs-and-cats-proceedings",
+                          "supports": "vestibular disorders cause head tilt, falling, rolling, leaning, circling and abnormal eye movements; circling "
+                                      "also occurs with focal forebrain lesions"},
+    "vin_vestibular": {"tier": "veterinarian_advice", "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+                       "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+                       "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and "
+                                   "treatment"},
+    "mspca_ihts": {"tier": "veterinary_hospital", "citation": "MSPCA-Angell: Idiopathic head tremor syndrome.",
+                   "url": "https://www.mspca.org/clinical/idiopathic-head-tremor-syndrome/",
+                   "supports": "most dogs (up to 87 %) can be distracted out of an episode; the dog stays alert; the primary differential is "
+                               "focal seizure activity, which distraction does not stop and which may show autonomic signs"},
+    "akc_dream_seizure": {"tier": "veterinarian_advice", "citation": "American Kennel Club (J. Klein, chief veterinarian): Dreaming vs. seizures in dogs.",
+                          "url": "https://www.akc.org/expert-advice/health/dreaming-vs-seizures-in-dogs/",
+                          "supports": "twitching and small noises during sleep are usually dreaming; a dreaming dog wakes when its name is called, "
+                                      "a seizing dog cannot easily be woken and may urinate or be disoriented afterwards"},
+    "vca_sleep_twitch": {"tier": "veterinary_hospital", "citation": "VCA Animal Hospitals: What does it mean when dogs twitch in their sleep?",
+                         "url": "https://vcahospitals.com/resources/behavior-dog/true-or-false-twitching-feet-while-sleeping-is-a-dream",
+                         "supports": "brief, relaxed twitching in sleep is dream-related; stiff, long movements with drooling, confusion or "
+                                     "incontinence may be a seizure"},
+    "vettimes_sleep": {"tier": "clinical_review", "citation": "Vet Times: Sleep disorders - differential diagnoses and treatment.",
+                       "url": "https://www.vettimes.com/news/vets/small-animal-vets/sleep-disorders-differential-diagnoses-and-treatment",
+                       "supports": "cataplexy: sudden flaccid collapse induced by excitement (food, greeting, play) with abrupt return to normal; "
+                                   "REM sleep behaviour disorder: involuntary, sometimes violent movements in REM sleep that stop when the animal "
+                                   "is aroused; both can mimic syncope or seizures"},
+    "vca_narcolepsy": {"tier": "veterinary_hospital", "citation": "VCA Animal Hospitals: Narcolepsy in dogs.",
+                       "url": "https://vcahospitals.com/know-your-pet/narcolepsy-in-dogs",
+                       "supports": "cataplexy episodes last seconds to minutes and often occur when the dog is eating, playing or excited"},
+    "bol2017": {"tier": "peer_reviewed_study", "citation": "Bol S et al. (2017) Responsiveness of cats to silver vine, Tatarian honeysuckle, valerian "
+                                                        "and catnip. BMC Vet Res 13:70.", "url": "https://doi.org/10.1186/s12917-017-0987-6",
+                "supports": "nearly all of 100 domestic cats responded to at least one plant; one in three did not respond to catnip, almost 80 % "
+                            "responded to silver vine"},
     "bekoff1995": {"tier": "peer_reviewed_study", "citation": "Bekoff M (1995) Play signals as punctuation: the structure of social play in "
                                                           "canids. Behaviour 132(5-6):419-429.", "url": "https://doi.org/10.1163/156853995X00649",
                    "supports": "play bows occur around play bites and other actions that could be misread, marking them as play"},
@@ -183,14 +219,21 @@ _add(Entry("tail_chasing", ("dog",), "Turning in tight circles after the tail. C
             Candidate("dog_tc_medical", "medical", "a physical cause near the tail or a neurological one: tail or anal-sac discomfort, skin itch, pain, "
                       "or focal seizures; behaviour and medical causes can coexist", ("vanhaevermaet2026", "frontiers2026_focal"),
                       {"bite": 0.7, "biting": 0.7, "licking": 0.5, "wound": 1.0, "bleeding": 1.0, "scooting": 0.8, "older": 0.4, "sudden": 0.6,
-                       "staring": 0.6, "new": 0.5})),
+                       "staring": 0.6, "new": 0.5}),
+            Candidate("dog_tc_neuro_circling", "medical", "circling that is not tail chasing: tight circles always in the same direction, often with a "
+                      "head tilt or head turn, loss of balance or episodes that cannot be interrupted, point to a balance (vestibular) or brain "
+                      "problem", ("merck_neuro_exam", "dvm360_vestibular", "vin_vestibular"),
+                      {"same direction": 1.0, "to the left": 0.8, "to the right": 0.8, "head tilt": 1.2, "tilt": 0.8, "balance": 1.0, "falls": 0.6,
+                       "stumbl": 0.8, "can't be distracted": 0.8, "cannot be distracted": 0.8, "puppy": 0.0})),
            ("How old was the dog when it started, and how often does it happen (occasionally or daily)?",
             "Can you interrupt it by calling the dog or offering a toy, and does it respond to you during a bout?",
             "In which situations does it start (waiting for food, when people talk to each other, when left alone, when excited)?",
             "Does the dog bite or injure the tail, scoot, or show hair loss or sores near the tail base?",
-            "Are there other repetitive behaviours such as chasing lights or shadows, snapping at the air, freezing or staring?"),
+            "Are there other repetitive behaviours such as chasing lights or shadows, snapping at the air, freezing or staring?",
+            "Does it always circle in the same direction, with a head tilt or loss of balance, even without looking at its tail?"),
            ("the tail is wounded or bleeding", "bouts cannot be interrupted or interfere with eating or sleeping",
-            "episodes with staring, unresponsiveness or snapping at the air (possible seizures)"),
+            "episodes with staring, unresponsiveness or snapping at the air (possible seizures)",
+            "circling with a head tilt, falling or loss of balance"),
            "A bout is repeated whole-body turning in place; the number of turns, how long bouts last and whether they recur matter more than a "
            "single turn."))
 
@@ -212,14 +255,20 @@ _add(Entry("tail_chasing", ("cat",), "Turning after or attacking its own tail. C
                       ("tvp_fhs",), {"can't stop": 0.8, "unresponsive": 1.0, "staring": 0.8, "drool": 0.8, "same way": 0.5}),
             Candidate("cat_tc_stress", "arousal_or_stress", "stress or conflict (a household change, other pets); it can add to the episodes but "
                       "is not shown to cause them", ("cornell_fhs", "vrc2026_fhs_cat"),
-                      {"new baby": 1.0, "moved": 0.8, "new cat": 0.8, "new dog": 0.6, "change": 0.6, "stress": 0.8})),
+                      {"new baby": 1.0, "moved": 0.8, "new cat": 0.8, "new dog": 0.6, "change": 0.6, "stress": 0.8}),
+            Candidate("cat_tc_neuro_circling", "medical", "circling that is not tail chasing: tight circles always in the same direction, often with a "
+                      "head tilt or loss of balance, point to a balance (vestibular) or brain problem", ("merck_neuro_exam", "dvm360_vestibular",
+                                                                                                        "vin_vestibular"),
+                      {"same direction": 1.0, "to the left": 0.8, "to the right": 0.8, "head tilt": 1.2, "tilt": 0.8, "balance": 1.0, "falls": 0.6,
+                       "stumbl": 0.8})),
            ("How old is the cat, and is the tail chasing new or has it done this since kittenhood?",
             "Does the skin on the lower back ripple or twitch, or do the pupils dilate, during an episode? Does the cat run off afterwards?",
             "Does the cat react when you touch the base of the tail or the lower back?",
             "Is there hair loss, scabs, flea dirt or a wound on the tail or near its base?",
-            "Can you interrupt an episode (call, toy), and how long does it last?"),
+            "Can you interrupt an episode (call, toy), and how long does it last?",
+            "Does it always circle in the same direction, with a head tilt or loss of balance?"),
            ("the tail is wounded, bleeding or the cat keeps attacking it", "episodes with unresponsiveness, drooling or loss of bladder control",
-            "a sudden new behaviour in an adult or senior cat"),
+            "a sudden new behaviour in an adult or senior cat", "circling with a head tilt, falling or loss of balance"),
            "In kittens bouts are short and playful, interleaved with other play; episodic bouts with skin rippling and running off point elsewhere."))
 
 _add(Entry("tail_directed", ("cat", "dog"), "Licking, biting or chewing the tail without necessarily turning in circles.",
@@ -360,6 +409,56 @@ _add(Entry("being_petted", ("cat",), "Being touched or stroked by a person.",
                       "avoid touch)", ("cornell_aggression",), {"one spot": 1.0, "back": 0.6, "suddenly": 0.6, "hiss": 0.6})),
            ("Where is the cat touched when it reacts, and what does its tail and ears do just before?", "Does it seek contact again afterwards?"),
            ("sudden new sensitivity to touch at one place (possible pain)",)))
+
+_add(Entry("head_tremor", ("dog",), "Rhythmic bobbing, nodding or rotating of the head while the dog is awake.",
+           (Candidate("ht_idiopathic", "medical", "idiopathic head tremor: episodes of head bobbing in an alert dog that usually stop when the dog is "
+                      "distracted (called, offered food or a toy); considered benign but diagnosed after other causes are excluded",
+                      ("mspca_ihts",), {"stops when": 1.0, "distract": 1.0, "treat": 0.6, "alert": 0.8, "bulldog": 0.8, "boxer": 0.8,
+                                         "doberman": 0.8, "labrador": 0.5, "young": 0.3}),
+            Candidate("ht_focal_seizure", "medical", "a focal seizure, the main alternative: it is not stopped by distraction and may come with "
+                      "drooling, unresponsiveness or other signs", ("mspca_ihts",),
+                      {"doesn't respond": 1.0, "not respond": 1.0, "drool": 1.0, "unresponsive": 1.0, "can't stop": 0.6, "afterwards": 0.4}),
+            Candidate("ht_ear", "medical", "shaking the head to the side because of ear discomfort is a different movement (a vigorous shake, "
+                      "often with ear scratching)", ("vin_vestibular",), {"ear": 1.0, "scratch": 0.6, "shakes its head": 0.6, "smell": 0.4})),
+           ("Does the dog stay alert, and does the movement stop when you call it or offer a treat?",
+            "Is it a small rhythmic bobbing (yes-yes, no-no) or a vigorous shake as if shaking off water or an ear problem?",
+            "How long do episodes last, and is the dog normal between them?"),
+           ("episodes with unresponsiveness, drooling, collapse or loss of bladder control", "a first episode in an older dog")))
+
+_add(Entry("sleep_movements", ("cat", "dog"), "Twitching, paddling, whimpering or running movements while asleep.",
+           (Candidate("sm_dreaming", "play_or_normal", "ordinary dreaming: brief, relaxed twitches, paddling and small noises in REM sleep; the "
+                      "animal wakes when its name is called and is normal straight away", ("akc_dream_seizure", "vca_sleep_twitch"),
+                      {"dream": 0.8, "brief": 0.6, "wakes up": 0.8, "puppy": 0.6, "kitten": 0.6, "senior": 0.3}),
+            Candidate("sm_seizure", "medical", "a seizure during sleep: stiff or violent movements, lasting longer, the animal cannot easily be "
+                      "woken, with drooling, urination or confusion afterwards", ("akc_dream_seizure", "vca_sleep_twitch"),
+                      {"stiff": 1.0, "rigid": 1.0, "can't wake": 1.2, "cannot wake": 1.2, "won't wake": 1.2, "drool": 0.8, "pee": 0.8,
+                       "urinat": 0.8, "confused": 0.8, "minutes": 0.4}),
+            Candidate("sm_rbd", "medical", "a REM sleep behaviour disorder: involuntary, sometimes violent movements during sleep that stop as soon "
+                      "as the animal is woken", ("vettimes_sleep",), {"violent": 1.0, "every night": 0.8, "bites in his sleep": 0.8,
+                                                                      "attacks": 0.6, "stops when woken": 1.0})),
+           ("Does the animal wake easily when you call its name, and is it normal right away?",
+            "Are the movements soft and brief, or stiff, violent or long?", "Is there drooling, urination or confusion afterwards?"),
+           ("the animal cannot be woken, is rigid or convulsing, or the episode lasts more than a few minutes",)))
+
+_add(Entry("collapse", ("dog",), "Suddenly going limp, falling over or collapsing.",
+           (Candidate("co_cataplexy", "medical", "cataplexy (narcolepsy): sudden limp collapse triggered by excitement such as eating, playing or "
+                      "greeting, with the dog often still following with its eyes and a quick, complete return to normal",
+                      ("vettimes_sleep", "vca_narcolepsy"), {"eating": 0.8, "food": 0.8, "play": 0.8, "excited": 1.0, "greet": 0.8, "limp": 0.8,
+                                                             "gets up": 0.6, "puppy": 0.4}),
+            Candidate("co_seizure_syncope", "medical", "a seizure or a fainting episode (heart), which sleep-related collapse can mimic; stiffness, "
+                      "paddling, drooling or confusion afterwards point away from cataplexy", ("vettimes_sleep",),
+                      {"stiff": 1.0, "paddl": 0.8, "drool": 0.8, "confused": 0.8, "exercise": 0.5, "older": 0.4})),
+           ("What was the dog doing just before (eating, playing, greeting, exercising)?", "Was it limp or stiff, and did it follow you with its eyes?",
+            "How fast was it back to normal?"),
+           ("every first collapse", "the dog cannot be roused, has trouble breathing or the episode lasts more than a few minutes")))
+
+_add(Entry("rolling_rubbing", ("cat",), "Rolling on the back or rubbing the face, chin or body on objects.",
+           (Candidate("rr_plants", "play_or_normal", "a response to catnip or other cat-attracting plants (silver vine, honeysuckle, valerian): "
+                      "rolling, rubbing, licking and chewing; most cats respond to at least one of these plants", ("bol2017",),
+                      {"catnip": 1.5, "silver vine": 1.5, "valerian": 1.2, "honeysuckle": 1.2, "plant": 0.8, "toy": 0.4}),
+            Candidate("rr_marking", "play_or_normal", "ordinary scent marking or greeting by rubbing the face on objects or people", (),
+                      {"door": 0.4, "furniture": 0.4, "legs": 0.6, "greet": 0.6})),
+           ("Was a plant, a catnip toy or a new object nearby?", "Does the cat also lick or chew the object?"), ()))
 
 for _b, _summary in (("eating", "Eating."), ("drinking", "Drinking."), ("resting", "Lying down, resting or sleeping."),
                      ("locomotion", "Walking or running."), ("being_petted", "Being touched or stroked by a person.")):

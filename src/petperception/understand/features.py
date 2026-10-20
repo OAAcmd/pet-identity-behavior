@@ -15,6 +15,18 @@ reported, never used to reject the user's answer). Stored per clip (.npz):
 * ``emb_t`` [E], ``emb`` [E,768]: SigLIP embeddings of the animal crop at
   ``EMB_FPS``; ``scene`` [768]: SigLIP embedding of the middle frame;
 * audio: ``a_t`` [W], ``a_scores`` [W,521] (YAMNet), when the clip has sound.
+
+Feature version 2 (``FEATURE_VERSION``; E32) adds, at the same sample times:
+* longer gap filling and short track holding: gaps up to ``MAX_GAP`` samples
+  between detections are interpolated (``det[:,2] == 1``) and the last box is
+  held for up to ``HOLD`` samples where the detector loses a fast-moving
+  animal (``det[:,2] == 2``), so spinning bouts keep their crops;
+* ``ctx`` [T, len(CONTEXT_CLASSES)]: the detector's best score per context
+  class in the frame (people, other animals, food bowls, toys, furniture,
+  bathroom fittings, car), plus ``ctx_person_near`` [T]: the largest overlap
+  of a person box with the animal's enlarged box (0-1);
+* ``scenes`` [3,768]: SigLIP embeddings of frames at 1/6, 1/2 and 5/6 of the
+  clip, for the place (``scene`` is kept for version 1 readers).
 """
 
 from __future__ import annotations
@@ -32,6 +44,11 @@ MAX_SECONDS = 60.0
 MAX_SIDE = 480
 SIGLIP_ID = "siglip_base_patch16_224"  # manifests/resources.json; files under <models_root>/<id>
 SIGLIP_REVISION = "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed"
+FEATURE_VERSION = 2
+MAX_GAP = 12  # samples (2 s) bridged by interpolation between two detections (version 1: 6)
+HOLD = 6  # samples (1 s) the last box is held after the detector loses the animal
+CONTEXT_CLASSES = ("person", "cat", "dog", "bowl", "sports ball", "frisbee", "teddy bear", "bed", "couch", "chair", "dining table", "toilet",
+                   "sink", "car", "tv", "potted plant")
 
 
 def decode(path: Path, fps: float = MOTION_FPS, max_seconds: float = MAX_SECONDS, max_side: int = MAX_SIDE) -> tuple[list[np.ndarray], np.ndarray]:
@@ -71,15 +88,28 @@ def _iou(a, b) -> float:
     return ix * iy / u if u > 0 else 0.0
 
 
-def locate(detector, frames: list[np.ndarray], score: float = 0.25, max_gap: int = 6) -> tuple[np.ndarray, np.ndarray]:
+def locate(detector, frames: list[np.ndarray], score: float = 0.25, max_gap: int = 6, hold: int = 0,
+           context: tuple[str, ...] = ()) -> tuple[np.ndarray, np.ndarray] | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Single-target track: per frame the cat/dog box that best continues the previous one (else the largest).
-    Gaps up to ``max_gap`` samples are interpolated."""
+    Gaps up to ``max_gap`` samples are interpolated; the last box is held for ``hold`` samples after a loss.
+    With ``context`` classes, also returns the per-frame best score of each context class and the person-animal overlap."""
     T = len(frames)
     box = np.full((T, 4), np.nan, np.float32)
     det = np.zeros((T, 3), np.float32)
+    ctx = np.zeros((T, len(context)), np.float32)
+    raw_all: list[list] = []
     prev = None
     for i, rgb in enumerate(frames):
-        d = [x for x in detector.detect(rgb, ["cat", "dog"], score, 0.5, 5)]
+        if context:
+            allc = [c for c in dict.fromkeys(("cat", "dog") + tuple(context)) if c in detector.labels]
+            raw = detector.detect(rgb, allc, min(score, 0.3), 0.5, 15)
+            raw_all.append(raw)
+            for j, c in enumerate(context):
+                sc = [x.score for x in raw if x.label == c]
+                ctx[i, j] = max(sc) if sc else 0.0
+            d = [x for x in raw if x.label in ("cat", "dog") and x.score >= score][:5]
+        else:
+            d = [x for x in detector.detect(rgb, ["cat", "dog"], score, 0.5, 5)]
         if not d:
             continue
         if prev is not None:
@@ -99,7 +129,38 @@ def locate(detector, frames: list[np.ndarray], score: float = 0.25, max_gap: int
                 f = (j - a) / (b - a)
                 box[j] = (1 - f) * box[a] + f * box[b]
                 det[j, 2] = 1.0
-    return box, det
+    if hold > 0:
+        filled = ~np.isnan(box[:, 0])
+        for i in range(1, T):  # hold forwards after a loss
+            if not filled[i] and filled[i - 1] and det[i - 1, 2] != 2:
+                for j in range(i, min(T, i + hold)):
+                    if filled[j]:
+                        break
+                    box[j] = box[i - 1]
+                    det[j, 2] = 2.0
+        filled = ~np.isnan(box[:, 0])
+        for i in range(T - 2, -1, -1):  # and backwards before the first detection of a run
+            if not filled[i] and filled[i + 1] and det[i + 1, 2] == 0:
+                for j in range(i, max(-1, i - hold), -1):
+                    if filled[j]:
+                        break
+                    box[j] = box[i + 1]
+                    det[j, 2] = 2.0
+    if not context:
+        return box, det
+    near = np.zeros(T, np.float32)
+    for i, raw in enumerate(raw_all):
+        if np.isnan(box[i, 0]):
+            continue
+        x0, y0, x1, y1 = box[i]
+        w, h = x1 - x0, y1 - y0
+        big = (x0 - 0.25 * w, y0 - 0.25 * h, x1 + 0.25 * w, y1 + 0.25 * h)
+        for x in raw:
+            if x.label == "person" and x.score >= 0.3:
+                ix = max(0.0, min(big[2], x.box[2]) - max(big[0], x.box[0]))
+                iy = max(0.0, min(big[3], x.box[3]) - max(big[1], x.box[1]))
+                near[i] = max(near[i], ix * iy / max((big[2] - big[0]) * (big[3] - big[1]), 1e-6))
+    return box, det, ctx, near
 
 
 def _region(box: np.ndarray, hw: tuple[int, int], scale: float = 1.3) -> tuple[int, int, int, int]:
@@ -195,9 +256,11 @@ class Extractor:
     detector: object
     encoder: SiglipEncoder
     yamnet: object | None = None
+    version: int = FEATURE_VERSION
 
     @classmethod
-    def load(cls, threads: int = 2, detector_path: str | None = None, points: dict[str, float] | None = None) -> Extractor:
+    def load(cls, threads: int = 2, detector_path: str | None = None, points: dict[str, float] | None = None,
+             version: int = FEATURE_VERSION) -> Extractor:
         """``points``: per-class score thresholds for the alternative detector (E31 part C, secondary)."""
         from ..intent import av_features as AF
 
@@ -209,7 +272,7 @@ class Extractor:
             det = EfficientDetDetector(Path(detector_path), threads)
             if points:
                 det = _PerClass(det, points)
-        return cls(det, SiglipEncoder(threads=threads), comp.yamnet)
+        return cls(det, SiglipEncoder(threads=threads), comp.yamnet, version)
 
     def extract(self, path: Path, with_audio: bool = True) -> dict:
         frames, t = decode(path)
@@ -219,7 +282,11 @@ class Extractor:
             return out
         out["video_state"] = np.array("present")
         out["hw"] = np.array(frames[0].shape[:2])
-        box, det = locate(self.detector, frames)
+        if self.version >= 2:
+            box, det, ctx, near = locate(self.detector, frames, max_gap=MAX_GAP, hold=HOLD, context=CONTEXT_CLASSES)
+            out.update({"ctx": ctx, "ctx_person_near": near, "feature_version": np.array(self.version)})
+        else:
+            box, det = locate(self.detector, frames)
         flow, app = motion(frames, box)
         step = int(round(MOTION_FPS / EMB_FPS))
         idx = [i for i in range(0, len(frames), step) if not np.isnan(box[i, 0])]
@@ -227,6 +294,9 @@ class Extractor:
         out.update({"box": box, "det": det, "flow": flow, "app": app.astype(np.float16), "emb_t": t[idx] if idx else np.zeros(0, np.float32),
                     "emb": self.encoder.images(crops).astype(np.float16) if crops else np.zeros((0, 768), np.float16),
                     "scene": self.encoder.images([cv2.resize(frames[len(frames) // 2], (224, 224), interpolation=cv2.INTER_AREA)])[0].astype(np.float16)})
+        if self.version >= 2:
+            pick = [frames[min(len(frames) - 1, int(len(frames) * q))] for q in (1 / 6, 1 / 2, 5 / 6)]
+            out["scenes"] = self.encoder.images([cv2.resize(f, (224, 224), interpolation=cv2.INTER_AREA) for f in pick]).astype(np.float16)
         if with_audio and self.yamnet is not None:
             y = decode_audio16k(path)
             if y is not None and float(np.sqrt(np.mean(y ** 2))) > 1e-4:
