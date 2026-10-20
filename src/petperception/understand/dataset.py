@@ -93,6 +93,7 @@ def main() -> None:
     ap.add_argument("--only", default="", help="comma-separated source names")
     ap.add_argument("--keys", default="", help="comma-separated clip keys (default: all)")
     ap.add_argument("--detector", help="alternative detector .tflite (E31 part C); default: the configured detector")
+    ap.add_argument("--detector-points", help='per-class thresholds for --detector as JSON, e.g. {"cat": 0.11, "dog": 0.28}')
     ap.add_argument("--subdir", default="features", help="output directory under var/understand/")
     a = ap.parse_args()
     s = load_settings()
@@ -101,7 +102,9 @@ def main() -> None:
     todo = [c for c in clips(data_root) if (not a.only or c.source in a.only.split(",")) and (keys is None or c.key in keys)
             and not feature_path(data_root.parent, c.key, a.subdir).exists()]
     todo.sort(key=lambda c: (c.source != "paper", c.source != "archive", c.key))
-    ex = Extractor.load(a.threads, a.detector)
+    import json
+
+    ex = Extractor.load(a.threads, a.detector, json.loads(a.detector_points) if a.detector_points else None)
     t0 = time.perf_counter()
     for n, c in enumerate(todo, 1):
         p = feature_path(data_root.parent, c.key, a.subdir)

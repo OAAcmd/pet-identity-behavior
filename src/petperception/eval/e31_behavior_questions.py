@@ -73,6 +73,12 @@ descriptive, no adoption decision here; G1b deployment follows
 docs/TRAINING_PROGRAM.md): animal-located fraction per clip, part A R0 macro
 AP and part B B1/B4 with features re-extracted using the G1b detector at the
 current detector's score threshold.
+Secondary, added after parts A and B were scored and before any part C
+number (G1-family scores are calibrated lower than the phone detector's,
+docs/TRAINING_PROGRAM.md): the same with the G1b export at its per-class
+operating points chosen on the Open Images tuning set by step 1 of the G1b
+selection (``g1_select.per_class_points``); nothing is chosen on behaviour
+clips.
 """
 
 from __future__ import annotations

@@ -175,6 +175,16 @@ class SiglipEncoder:
             return self.torch.nn.functional.normalize(e, dim=-1).numpy()
 
 
+class _PerClass:
+    """A detector whose detections are kept at per-class score thresholds (the locate threshold applies to other classes)."""
+
+    def __init__(self, det, points: dict[str, float]):
+        self.det, self.points, self.labels = det, points, det.labels
+
+    def detect(self, rgb, classes, thr, iou=0.5, k=10):
+        return [d for d in self.det.detect(rgb, classes, min(min(self.points.values()), thr), iou, k) if d.score >= self.points.get(d.label, thr)]
+
+
 def square_crop(rgb: np.ndarray, box: np.ndarray, scale: float = 1.2) -> np.ndarray:
     x0, y0, x1, y1 = _region(box, rgb.shape[:2], scale)
     return cv2.resize(rgb[y0:y1, x0:x1], (224, 224), interpolation=cv2.INTER_AREA)
@@ -187,7 +197,8 @@ class Extractor:
     yamnet: object | None = None
 
     @classmethod
-    def load(cls, threads: int = 2, detector_path: str | None = None) -> Extractor:
+    def load(cls, threads: int = 2, detector_path: str | None = None, points: dict[str, float] | None = None) -> Extractor:
+        """``points``: per-class score thresholds for the alternative detector (E31 part C, secondary)."""
         from ..intent import av_features as AF
 
         comp = AF.load_components(threads, with_audio=True)
@@ -196,6 +207,8 @@ class Extractor:
             from ..vision.detector import EfficientDetDetector
 
             det = EfficientDetDetector(Path(detector_path), threads)
+            if points:
+                det = _PerClass(det, points)
         return cls(det, SiglipEncoder(threads=threads), comp.yamnet)
 
     def extract(self, path: Path, with_audio: bool = True) -> dict:
