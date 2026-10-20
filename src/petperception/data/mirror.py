@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import http.client
 import json
 import os
 import re
@@ -319,7 +320,7 @@ def _range(url: str, start: int, end: int, attempts: int = 6, sleep=time.sleep) 
         except urllib.error.HTTPError as exc:
             if exc.code in (401, 403):
                 raise MirrorError(f"{redact(url)}: HTTP {exc.code}") from None
-        except (urllib.error.URLError, OSError):
+        except (urllib.error.URLError, OSError, http.client.HTTPException):  # HTTPException: e.g. IncompleteRead on a dropped connection
             pass
         sleep(min(60, 2 ** k))
     raise MirrorError(f"{redact(url)}: range {start}-{end} failed after {attempts} attempts")

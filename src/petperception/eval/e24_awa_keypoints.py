@@ -36,6 +36,7 @@ research only.
 
 from __future__ import annotations
 
+import json
 import random
 import time
 from collections import Counter
@@ -163,8 +164,6 @@ def run(settings: Settings, out_dir: Path) -> dict:
     if ref.exists():
         z = np.load(ref)
         models["C_e9_dog_head_reference"] = {k: z[k] for k in z.files if k != "version"}
-        import json
-
         g = json.loads((ref.with_suffix(".json")).read_text())["gates"]
         gates["C_e9_dog_head_reference"] = {"min_visible": g["min_visible"], "min_peak": g["min_peak"], "note": "E9's own gates"}
     results: dict = {}
@@ -198,3 +197,64 @@ def run(settings: Settings, out_dir: Path) -> dict:
     }
     write_json(out_dir / "metrics.json", summary)
     return summary
+
+
+def _concat(dirs: list[Path], out: Path) -> int:
+    """One feature directory from several (memmapped float16 features, targets)."""
+    parts = [E9._load(d) for d in dirs]
+    n = sum(len(p["xy"]) for p in parts)
+    out.mkdir(parents=True, exist_ok=True)
+    for k, (g, c) in KP.FEATURE_TENSORS.items():
+        m = np.lib.format.open_memmap(out / f"{k}.npy", mode="w+", dtype=np.float16, shape=(n, g, g, c))
+        j = 0
+        for p in parts:
+            m[j:j + len(p[k])] = p[k]
+            j += len(p[k])
+        m.flush()
+    np.save(out / "xy.npy", np.concatenate([np.asarray(p["xy"]) for p in parts]))
+    np.save(out / "lab.npy", np.concatenate([np.asarray(p["lab"]) for p in parts]))
+    return n
+
+
+def run_with_dog_pose(settings: Settings, out_dir: Path) -> dict:
+    """E24 variant D: the joint head trained on AwA cats and dogs plus the dog-pose training dogs (research-only data).
+
+    Fixed before training: same AwA splits, development set and test sets as E24, E9 training code
+    unchanged. Success means cat tail PCK@0.1 >= 0.75 on the AwA cat test split (the G2 criterion) with
+    cat ears not worse than model B (0.914).
+    """
+    t0 = time.perf_counter()
+    data_root = settings.paths.resolve("data_root")
+    rb = check_model(settings, "efficientnet_lite0_mediapipe_v1")
+    backbone = KP.Backbone(Path(next(iter(rb.files.values()))), settings.runtime.num_threads)
+    recs = records(data_root)
+    splits = {sp: split_by_photographer([r for r in recs if r["species"] == sp]) for sp in ("cat", "dog")}
+    cache = data_root.parent / "cache" / "e24"
+    dp_root = data_root / "dog_pose" / "extracted"
+    dp_fit = E9.read_split(dp_root, "train")
+    if not (cache / "dogpose_fit" / "lab.npy").exists():
+        E9.extract(backbone, dp_fit, cache / "dogpose_fit", flip=True)
+    if not (cache / "jointdp_fit" / "lab.npy").exists():
+        _concat([cache / "cat_fit", cache / "dog_fit", cache / "dogpose_fit"], cache / "jointdp_fit")
+    log: list = []
+    params = E9.train(cache / "jointdp_fit", cache / "joint_dev", log)
+    gv, gp, info = E9._choose_gates(params, cache / "joint_dev")
+    results = {sp: score(params, cache / f"{sp}_test", splits[sp]["test"], gv, gp) for sp in ("cat", "dog")}
+    ref = json.loads((out_dir / "metrics.json").read_text())["results"]["B_joint_head"] if (out_dir / "metrics.json").exists() else None
+    cat = results["cat"]["regions"]
+    success = {"cat_tail_pck@0.1": cat["tail"]["pck@0.1"], "criterion_tail": cat["tail"]["pck@0.1"] is not None and cat["tail"]["pck@0.1"] >= 0.75,
+               "cat_ears_pck@0.1": cat["ears"]["pck@0.1"],
+               "ears_not_worse_than_B": bool(ref is None or cat["ears"]["pck@0.1"] >= ref["cat"]["regions"]["ears"]["pck@0.1"])}
+    p = REPO_ROOT / "artifacts" / "keypoints" / "catdog_keypoints_head_awa_dogpose_v1.npz"
+    np.savez(p, **params, version=np.array(p.stem))
+    sha = sha256_file(p)
+    write_json(p.with_suffix(".json"), head_metadata(p.name, sha, "D_joint_plus_dog_pose", {"min_visible": gv, "min_peak": gp, **info}) |
+               {"trained_on": "AwA-Pose cats and dogs (fit split) plus Ultralytics dog-pose train (research only)",
+                "terms": "Research only (dog-pose data; AwA2 image licences)."})
+    out = {"experiment": "E24-D", "status": "completed", "created_at": utc_now().isoformat(timespec="seconds"),
+           "protocol": run_with_dog_pose.__doc__.strip().splitlines(), "fit_instances": int(len(np.load(cache / "jointdp_fit" / "lab.npy", mmap_mode="r"))),
+           "dog_pose_train_instances": len(dp_fit), "training": {"log": log, "selected_epoch": max(log, key=lambda r: r["dev_pck@0.1"])["epoch"]},
+           "gates": {"min_visible": gv, "min_peak": gp, **info}, "results": results, "success": success, "artifact_sha256": sha,
+           "runtime_s": round(time.perf_counter() - t0, 1)}
+    write_json(out_dir / "variant_d_dog_pose.json", out)
+    return out

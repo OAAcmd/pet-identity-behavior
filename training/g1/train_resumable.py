@@ -31,7 +31,10 @@ Initialisation (--init): `coco` (default) starts backbone, decoder and the
 head's convolutions from Model Maker's COCO-trained RetinaNet checkpoint (the
 classifier layer is always re-initialised for the product classes);
 `scratch` skips that checkpoint, so no COCO-derived weight is used. Both are
-recorded in the configuration hash.
+recorded in the configuration hash. `--init-from <checkpoint>` then loads all
+model weights of an earlier G1 run (same model and classes): a warm start with
+a new optimizer and schedule, recorded in the configuration hash with the
+source weights' SHA-256.
 
 Benchmark mode (--benchmark N): measures data loading alone, N training
 steps (after warm-up), a checkpoint write and restore, and a validation
@@ -188,6 +191,8 @@ def main() -> None:
     ap.add_argument("--learning-rate", type=float, default=0.3, help="Model Maker convention: scaled by batch/256")
     ap.add_argument("--stages", default="10:all")
     ap.add_argument("--init", choices=["coco", "scratch"], default="coco", help="COCO-pretrained RetinaNet weights or random initialisation")
+    ap.add_argument("--init-from", default="", help="warm start: model weights (not optimizer or position) from a checkpoint prefix of an "
+                                                       "earlier G1 run with the same model and classes, e.g. models/g1/<run>/ckpt/ckpt-27")
     ap.add_argument("--val-every", type=int, default=1, help="validate every K epochs (the last epoch is always validated)")
     ap.add_argument("--seed", type=int, default=20261019)
     ap.add_argument("--shuffle-buffer", type=int, default=0,
@@ -220,6 +225,10 @@ def main() -> None:
               "cache_layout": CACHE_LAYOUT}
     if a.init != "coco":
         config["init"] = a.init
+    if a.init_from:  # the source weights are part of the configuration
+        src_state = Path(a.init_from).parent.parent / "state.json"
+        src_state = src_state if src_state.exists() else Path(a.init_from + ".state.json")
+        config["init_from"] = {"checkpoint": a.init_from, "weights_sha256": json.loads(src_state.read_text())["weights_sha256"] if src_state.exists() else None}
     if a.shuffle_buffer:  # recorded only when set, so earlier runs keep their configuration hash
         config["shuffle_buffer"] = a.shuffle_buffer
     config_sha = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
@@ -253,6 +262,9 @@ def main() -> None:
 
         model_lib.ObjectDetectorModel.load_checkpoint = build_only
     det._create_model()  # COCO-pretrained backbone, decoder and head (classifier re-initialised)
+    if a.init_from:
+        tf.train.Checkpoint(model=det._model._model).restore(a.init_from).expect_partial().assert_existing_objects_matched()
+        print(json.dumps({"warm_start_from": a.init_from}), flush=True)
     model, opt, pre = det._model, det._optimizer, det._preprocessor
     inner = model._model
     opt.build(inner.trainable_variables)  # slots for every variable, so stages can change the trainable set

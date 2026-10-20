@@ -80,8 +80,7 @@
     "behavioural validity",
     "real-phone acceptance",
     "commercial: Q-T publisher decision or G1b (G1 trains on CPU now)",
-    "HTTPS origin under our control for the installed-app track (docs/DEVICE_TEST_PROTOCOL.md)",
-    "durable storage with write access for training checkpoints (docs/DATA_TRANSFER_REQUEST.md section 6)"
+    "HTTPS origin under our control for the installed-app track (docs/DEVICE_TEST_PROTOCOL.md)"
    ]
   }
  },
@@ -102,10 +101,14 @@
  ],
  "resources_needed": [
   "Run the phone test on one iPhone and one Android phone",
-  "Write access to an object-store prefix for training checkpoints (signed PUT URLs or a scoped service account; docs/DATA_TRANSFER_REQUEST.md section 6)",
   "A Kaggle API token for CatFLW / DogFLW (cat and dog facial landmarks, research)",
   "Annotators for G2 (70-100 h for 2,000 cats + 2,000 dogs), or a per-image licence check of the AwA2 cat and dog images used by E24",
   "Household recordings: participants and a data controller (docs/household/CONSENT_AND_PRIVACY.md)",
   "An HTTPS host with header control for the installed-app track (only after track A)"
- ]
+ ],
+ "artifacts_in_repository": {
+  "g1_detector_full_run": "models/g1/g1a_full_mnv2_sb4096/ (checkpoint ckpt-27 with optimizer state, float32/float16/int8 exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check.json)",
+  "keypoint_heads": "artifacts/keypoints/*.npz",
+  "audio_artifacts": "artifacts/audio_*.json"
+ }
 }

@@ -33,13 +33,17 @@ Protocol, fixed before scoring:
   - missed: neither.
 * Sequence outcome: the share of its frames with the pet found; a sequence
   counts as found when at least half its frames are.
-* 95 % CIs: bootstrap over sequences (the frames of one video are
-  correlated). Comparisons with the phone build are paired by sequence.
+* 95 % CIs: bootstrap over contributors. A CoP3D sequence name starts with
+  a number shared by many sequences, treated as the contributor (probably one
+  household and pet): 14 contributors for the 209 cat sequences, 9 for the
+  147 dog sequences. Comparisons with the phone build are paired by sequence
+  and resampled by contributor. (Until 2026-10-20 the bootstrap resampled
+  sequences, which gave intervals that were too narrow.)
 
 Limitations stated up front: the reference boxes come from model-generated
 masks; CoP3D videos circle a mostly static, centred pet (unlike home-camera
-footage); each sequence is a different video, but the owner and household
-are not identified, so two sequences can share a pet.
+footage); the contributor grouping is inferred from sequence names, not
+documented by the dataset.
 """
 
 from __future__ import annotations
@@ -58,6 +62,11 @@ from . import metrics as M
 
 SPECIES = ["cat", "dog"]
 MASK_MIN, MASK_MAX = 0.005, 0.95
+
+
+def contributor(sequence: str) -> str:
+    """CoP3D contributor: the leading number of the sequence name (shared by many sequences)."""
+    return sequence.split("_")[0]
 
 
 def _iou(a: tuple, b: tuple) -> float:
@@ -101,11 +110,11 @@ def summarize(rows: list[dict], n_boot: int = 1000, seed: int = 0) -> dict:
         frac = np.array([np.mean([x["found"] for x in by[s]]) for s in seqs])
         wrong = np.array([np.mean([x["wrong_only"] for x in by[s]]) for s in seqs])
         boxed = [x for x in r if x["box_scored"]]
-        groups = [x["sequence"] for x in r]
+        groups = [contributor(x["sequence"]) for x in r]
         found = np.array([x["found"] for x in r])
         wonly = np.array([x["wrong_only"] for x in r])
         res[sp] = {
-            "sequences": len(seqs), "frames": len(r),
+            "sequences": len(seqs), "frames": len(r), "contributors": len(set(groups)),
             "frame_found": float(found.mean()), "frame_found_ci95": M.group_bootstrap(lambda ix: float(found[ix].mean()), groups, n_boot, seed),
             "frame_wrong_species_only": float(wonly.mean()),
             "frame_wrong_species_only_ci95": M.group_bootstrap(lambda ix: float(wonly[ix].mean()), groups, n_boot, seed),
@@ -134,8 +143,15 @@ def paired(rows_a: list[dict], rows_b: list[dict], n_boot: int = 1000, seed: int
         if not seqs:
             continue
         d = np.array([np.mean(fa[s]) - np.mean(fb[s]) for s in seqs])
+        by_c: dict[str, list[int]] = {}
+        for i, sq in enumerate(seqs):
+            by_c.setdefault(contributor(sq), []).append(i)
+        cs = sorted(by_c)
         rng = np.random.default_rng(seed)
-        boots = [float(d[rng.integers(0, len(d), len(d))].mean()) for _ in range(n_boot)]
+        boots = []
+        for _ in range(n_boot):
+            ix = np.concatenate([by_c[cs[j]] for j in rng.integers(0, len(cs), len(cs))])
+            boots.append(float(d[ix].mean()))
         out[sp] = {"mean_difference": float(d.mean()), "ci95": [float(np.percentile(boots, 2.5)), float(np.percentile(boots, 97.5))],
                    "sequences_better": int((d > 0).sum()), "sequences_worse": int((d < 0).sum()), "sequences": len(seqs)}
     return out
@@ -237,7 +253,11 @@ def engine_level(settings: Settings, out_dir: Path, detector_id: str = "efficien
         y = np.array([x["right_species_track"] for x in rr])
         w = np.array([x["only_other_species"] for x in rr])
         rng = np.random.default_rng(0)
-        boot = [float(y[rng.integers(0, len(y), len(y))].mean()) for _ in range(n_boot)]
+        by_c: dict[str, list[int]] = {}
+        for i, x in enumerate(rr):
+            by_c.setdefault(contributor(x["sequence"]), []).append(i)
+        cs = sorted(by_c)
+        boot = [float(y[np.concatenate([by_c[cs[j]] for j in rng.integers(0, len(cs), len(cs))])].mean()) for _ in range(n_boot)]
         res[sp] = {"sequences": len(rr), "right_species_track": float(y.mean()), "right_species_track_ci95": [float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
                    "only_other_species": float(w.mean()), "no_track": float(np.mean([x["no_track"] for x in rr])),
                    "mean_tracks_per_sequence": float(np.mean([x["tracks"] for x in rr]))}

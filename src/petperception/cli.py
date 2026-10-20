@@ -18,7 +18,7 @@ from pathlib import Path
 from . import __version__
 from .config import REPO_ROOT, load_settings
 
-EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25"]
+EXPERIMENTS = ["e1", "e1-cc", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e9-breeds", "e10", "e11", "e12", "e13", "e14", "e15", "e15-analysis", "e16", "e17", "e18", "e19", "e19b", "e20", "e21", "e21b", "e22", "e24", "e25", "e26"]
 DATASETS = ["esc50", "openimages-catdog", "openimages-tuning", "openimages-vrd", "openimages-vrd-objects", "oxford-pets", "kinetics-pets", "kinetics-pets-final", "dog-pose", "posture-weak", "mammalnet", "catmeows", "barkopedia"]
 PROBE_HOSTS = ["https://pypi.org/simple/", "https://storage.googleapis.com/", "https://raw.githubusercontent.com/",
                "https://zenodo.org/", "https://huggingface.co/", "https://docs.ultralytics.com/"]
@@ -235,6 +235,10 @@ def _run_experiment(name: str, args: argparse.Namespace) -> dict:
         return E.run(s, out_dir)
     if name == "e21b":
         from .eval import e21b_threshold_selection as E
+
+        return E.run(s, out_dir)
+    if name == "e26":
+        from .eval import e26_bark_activity as E
 
         return E.run(s, out_dir)
     if name == "e25":
@@ -520,6 +524,13 @@ def cmd_network_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+def _group(rows: list[dict]) -> dict[tuple[str, str], set[str]]:
+    out: dict[tuple[str, str], set[str]] = {}
+    for r in rows:
+        out.setdefault((r["species"], r["split"]), set()).add(r["contributor"])
+    return out
+
+
 def cmd_train_prep(args: argparse.Namespace) -> int:
     s = _settings(args)
     if args.job == "g1":
@@ -527,6 +538,19 @@ def cmd_train_prep(args: argparse.Namespace) -> int:
 
         out = build(s.paths.resolve("data_root"), REPO_ROOT / "manifests", REPO_ROOT / "var" / "training" / "g1", REPO_ROOT / "results" / "g1")
         print(json.dumps({k: out[k] for k in ("images", "selected_by_role", "dropped_for_leakage", "original_bytes_total")}, indent=2))
+    elif args.job == "g1-extra":
+        from .training import g1_extra_views as X
+
+        root = REPO_ROOT / "var" / "training" / "g1"
+        extra = X.cop3d_frames(root / "images", root / "cop3d_frames.csv") if args.cop3d else None
+        name = args.view_name or f"full_cat{args.cat_repeat}" + ("_cop3d" if args.cop3d else "")
+        out = X.build_view(root / "views" / "full", root / "views" / name, root / "images", args.cat_repeat, extra)
+        if extra:
+            from collections import Counter
+
+            out["cop3d_frames"] = {f"{k[0]}/{k[1]}": v for k, v in Counter((r["species"], r["split"]) for r in extra).items()}
+            out["cop3d_contributors"] = {f"{k[0]}/{k[1]}": len(v) for k, v in _group(extra).items()}
+        print(json.dumps({"view": name, **out}, indent=2))
     elif args.job == "g2":
         from .training.g2_candidates import build as build_g2
 
@@ -825,7 +849,10 @@ def build_parser() -> argparse.ArgumentParser:
     mr.add_argument("--official", action="store_true", help="use the official URL when no mirror URL is configured (reachable hosts only)")
     mr.set_defaults(func=cmd_mirror)
     tp = sub.add_parser("train-prep", help="build the training-data manifests of a G-job (docs/TRAINING_PROGRAM.md)")
-    tp.add_argument("job", choices=["g1", "g2"])
+    tp.add_argument("job", choices=["g1", "g2", "g1-extra"])
+    tp.add_argument("--cat-repeat", type=int, default=1, help="g1-extra: times each cat training image appears")
+    tp.add_argument("--cop3d", action="store_true", help="g1-extra: add CoP3D home-video frames (contributors disjoint from E20)")
+    tp.add_argument("--view-name", default="", help="g1-extra: output view name")
     tp.set_defaults(func=cmd_train_prep)
     ge = sub.add_parser("g1-eval", help="score G1 detector exports on the E4 subset next to the shipped detectors")
     ge.add_argument("--model", action="append", required=True, help="NAME=PATH to an exported .tflite (repeatable)")

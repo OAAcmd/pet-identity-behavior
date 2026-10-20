@@ -14,7 +14,7 @@ dl.fbaipublicfiles.com, kaggle.com pages and cvml.ista.ac.at
 | P3 Barkopedia | Dataset card read: **CC BY-NC-SA 4.0**. Its labels are arousal and valence (emotion attributions), which the product does not output, so it was not downloaded. |
 | P4 CatFLW / DogFLW | **Still blocked**: Kaggle's download API needs an account token (`KAGGLE_USERNAME` / `KAGGLE_KEY`). The pages are reachable. |
 | P4 AwA2 cat images | the host is reachable; not fetched yet (research-only cat ear and tail keypoints, 588 images) |
-| Section 6, write access for checkpoints | **still needed**: training checkpoints still cannot be made durable outside this environment |
+| Section 6, write access for checkpoints | **not needed any more**: checkpoints and exports are committed with ordinary Git under `models/` (each file < 50 MB; restore verified from a fresh clone) |
 
 The original request follows unchanged, as the record of what was asked.
 

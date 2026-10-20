@@ -1,7 +1,7 @@
 {
   "experiment": "E20",
   "status": "completed",
-  "created_at": "2026-10-19T10:46:30+00:00",
+  "created_at": "2026-10-20T00:51:01+00:00",
   "data": {
     "dataset": "CoP3D v1 (dl.fbaipublicfiles.com/cop3d), frame archives cat_001.zip, dog_001.zip",
     "terms": "CC BY-NC 4.0 (LICENSE in the archive); research evaluation only",
@@ -24,20 +24,21 @@
       "cat": {
         "sequences": 209,
         "frames": 2090,
+        "contributors": 14,
         "frame_found": 0.6971291866028708,
         "frame_found_ci95": {
-          "ci_low": 0.6593181818181818,
-          "ci_high": 0.7354066985645933,
+          "ci_low": 0.6576255163082182,
+          "ci_high": 0.7425469779155366,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.024880382775119617,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.015311004784688996,
-          "ci_high": 0.03636363636363636,
+          "ci_low": 0.010325666741371581,
+          "ci_high": 0.04528149692712905,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_missed": 0.27799043062200957,
@@ -52,20 +53,21 @@
       "dog": {
         "sequences": 147,
         "frames": 1470,
+        "contributors": 9,
         "frame_found": 0.5979591836734693,
         "frame_found_ci95": {
-          "ci_low": 0.5503231292517007,
-          "ci_high": 0.64421768707483,
+          "ci_low": 0.5633747220163084,
+          "ci_high": 0.6312163542943889,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.13741496598639455,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.11018707482993198,
-          "ci_high": 0.1727891156462585,
+          "ci_low": 0.10292578659370724,
+          "ci_high": 0.1682444792353329,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_missed": 0.2646258503401361,
@@ -82,20 +84,21 @@
       "cat": {
         "sequences": 209,
         "frames": 2090,
+        "contributors": 14,
         "frame_found": 0.7133971291866029,
         "frame_found_ci95": {
-          "ci_low": 0.6760526315789475,
-          "ci_high": 0.7497727272727273,
+          "ci_low": 0.6742550632911393,
+          "ci_high": 0.760789705882353,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.0784688995215311,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.062188995215311,
-          "ci_high": 0.09665071770334928,
+          "ci_low": 0.04816198092232661,
+          "ci_high": 0.1119595876549456,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_missed": 0.20813397129186603,
@@ -110,20 +113,21 @@
       "dog": {
         "sequences": 147,
         "frames": 1470,
+        "contributors": 9,
         "frame_found": 0.6748299319727891,
         "frame_found_ci95": {
-          "ci_low": 0.6278911564625851,
-          "ci_high": 0.7177040816326531,
+          "ci_low": 0.636922131147541,
+          "ci_high": 0.7114055832147937,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.11768707482993197,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.09387755102040816,
-          "ci_high": 0.14559523809523808,
+          "ci_low": 0.08897572541001436,
+          "ci_high": 0.1465202657807309,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_missed": 0.20748299319727892,
@@ -140,20 +144,21 @@
       "cat": {
         "sequences": 209,
         "frames": 2090,
+        "contributors": 14,
         "frame_found": 0.6617224880382775,
         "frame_found_ci95": {
-          "ci_low": 0.6224760765550239,
-          "ci_high": 0.7023923444976077,
+          "ci_low": 0.6208488550306528,
+          "ci_high": 0.7071707077326344,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.03014354066985646,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.01960526315789474,
-          "ci_high": 0.04307416267942583,
+          "ci_low": 0.018060951830721456,
+          "ci_high": 0.0504681974270924,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_missed": 0.30813397129186604,
@@ -168,20 +173,21 @@
       "dog": {
         "sequences": 147,
         "frames": 1470,
+        "contributors": 9,
         "frame_found": 0.5299319727891156,
         "frame_found_ci95": {
-          "ci_low": 0.48365646258503403,
-          "ci_high": 0.572108843537415,
+          "ci_low": 0.4940371929026388,
+          "ci_high": 0.5648903429056101,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.12108843537414966,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.09454081632653062,
-          "ci_high": 0.1523809523809524,
+          "ci_low": 0.09491165392710757,
+          "ci_high": 0.14452065004887588,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_missed": 0.3489795918367347,
@@ -198,20 +204,21 @@
       "cat": {
         "sequences": 209,
         "frames": 2090,
+        "contributors": 14,
         "frame_found": 0.7062200956937799,
         "frame_found_ci95": {
-          "ci_low": 0.6674521531100478,
-          "ci_high": 0.7444976076555024,
+          "ci_low": 0.6671083333333333,
+          "ci_high": 0.755562372188139,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.07703349282296651,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.06028708133971292,
-          "ci_high": 0.09522727272727272,
+          "ci_low": 0.05309221830349069,
+          "ci_high": 0.10267847533632286,
           "n_boot": 1000,
-          "n_groups": 209,
+          "n_groups": 14,
           "unit": "group"
         },
         "frame_missed": 0.21674641148325358,
@@ -226,20 +233,21 @@
       "dog": {
         "sequences": 147,
         "frames": 1470,
+        "contributors": 9,
         "frame_found": 0.5918367346938775,
         "frame_found_ci95": {
-          "ci_low": 0.54421768707483,
-          "ci_high": 0.6346938775510204,
+          "ci_low": 0.5542307877503853,
+          "ci_high": 0.6326553187646741,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_wrong_species_only": 0.16666666666666666,
         "frame_wrong_species_only_ci95": {
-          "ci_low": 0.1326360544217687,
-          "ci_high": 0.20681972789115644,
+          "ci_low": 0.13137659414853714,
+          "ci_high": 0.1984795081967213,
           "n_boot": 1000,
-          "n_groups": 147,
+          "n_groups": 9,
           "unit": "group"
         },
         "frame_missed": 0.24149659863945577,
@@ -253,13 +261,14 @@
       }
     }
   },
+  "paired_baseline": "phone_build_m3+verifier",
   "paired_vs_phone_build": {
     "phone_build_m3_detector_only": {
       "cat": {
         "mean_difference": 0.016267942583732056,
         "ci95": [
-          0.010526315789473682,
-          0.023444976076555026
+          0.010525588833963359,
+          0.02485288904643744
         ],
         "sequences_better": 27,
         "sequences_worse": 0,
@@ -268,8 +277,8 @@
       "dog": {
         "mean_difference": 0.07687074829931974,
         "ci95": [
-          0.061224489795918366,
-          0.09523809523809523
+          0.06357705988986558,
+          0.09189675286797587
         ],
         "sequences_better": 74,
         "sequences_worse": 0,
@@ -280,8 +289,8 @@
       "cat": {
         "mean_difference": -0.035406698564593296,
         "ci95": [
-          -0.05454545454545455,
-          -0.012416267942583752
+          -0.048311975591151794,
+          -0.02192613340281396
         ],
         "sequences_better": 47,
         "sequences_worse": 87,
@@ -290,8 +299,8 @@
       "dog": {
         "mean_difference": -0.06802721088435375,
         "ci95": [
-          -0.09863945578231292,
-          -0.039438775510204103
+          -0.09575329846665874,
+          -0.03378659141652199
         ],
         "sequences_better": 31,
         "sequences_worse": 76,
@@ -302,8 +311,8 @@
       "cat": {
         "mean_difference": 0.009090909090909089,
         "ci95": [
-          -0.011004784688995212,
-          0.030622009569377984
+          -0.005413499436936939,
+          0.02279319571865442
         ],
         "sequences_better": 64,
         "sequences_worse": 66,
@@ -312,8 +321,8 @@
       "dog": {
         "mean_difference": -0.0061224489795918425,
         "ci95": [
-          -0.042193877551020414,
-          0.02925170068027209
+          -0.04337854210136636,
+          0.04159999999999999
         ],
         "sequences_better": 48,
         "sequences_worse": 60,
@@ -357,13 +366,17 @@
     "  - missed: neither.",
     "* Sequence outcome: the share of its frames with the pet found; a sequence",
     "  counts as found when at least half its frames are.",
-    "* 95 % CIs: bootstrap over sequences (the frames of one video are",
-    "  correlated). Comparisons with the phone build are paired by sequence.",
+    "* 95 % CIs: bootstrap over contributors. A CoP3D sequence name starts with",
+    "  a number shared by many sequences, treated as the contributor (probably one",
+    "  household and pet): 14 contributors for the 209 cat sequences, 9 for the",
+    "  147 dog sequences. Comparisons with the phone build are paired by sequence",
+    "  and resampled by contributor. (Until 2026-10-20 the bootstrap resampled",
+    "  sequences, which gave intervals that were too narrow.)",
     "",
     "Limitations stated up front: the reference boxes come from model-generated",
     "masks; CoP3D videos circle a mostly static, centred pet (unlike home-camera",
-    "footage); each sequence is a different video, but the owner and household",
-    "are not identified, so two sequences can share a pet."
+    "footage); the contributor grouping is inferred from sequence names, not",
+    "documented by the dataset."
   ],
-  "runtime_s": 1034.2
+  "runtime_s": 679.3
 }

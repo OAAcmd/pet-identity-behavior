@@ -404,8 +404,18 @@ in this or a new environment:
     an identical development mAP50;
   - the resumed run continued at optimizer iteration 458;
   - a crash in the export step was recovered by re-running the command.
-* Not yet available: an object-store prefix with write access. Until one
-  exists, a checkpoint survives only as long as this environment.
+* Durable copy in the repository (since 2026-10-20): `training/g1/vault.py
+  publish` copies a run's final checkpoint (weights and optimizer state, about
+  21 MB), its exports (3-11 MB each) and its run record into `models/g1/<run>/`.
+  It writes a SHA-256 manifest, and the folder is committed with ordinary Git.
+  Each file is far below GitHub's 50 MB warning size, so no LFS or release host
+  is needed; GitHub's API is not reachable from this workspace anyway.
+  `vault.py restore` checks the manifest and recreates a resumable run directory.
+  Verified from a fresh clone (`results/g1/github_restore_check.json`): all 8
+  files match, the three exports load in the product detector, and
+  `--validate-only` reports identical weights and the same development
+  mAP50 (0.4569). `--init-from models/g1/<run>/ckpt/ckpt-27` warm-starts a
+  new run from these weights.
 
 ## G2 - Licensed cat and dog keypoints (ears, tail, body)
 

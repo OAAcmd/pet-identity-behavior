@@ -794,14 +794,14 @@ it on people's own phone videos of their cat or dog at home:
 * protocol fixed before scoring (`src/petperception/eval/e20_cop3d_home_video.py`):
   - product operating point; verifier per detection (E7 protocol);
   - a frame is "found" with an accepted detection of the right species;
-  - CIs bootstrap over sequences; comparisons paired by sequence.
+  - CIs bootstrap over contributors (the leading number of the sequence name, shared by many sequences: 14 cat and 9 dog contributors); comparisons paired by sequence, resampled by contributor. Until 2026-10-20 the bootstrap resampled sequences; the point estimates are unchanged.
 
 | Configuration | Cat frames found [95 % CI] | Dog frames found [95 % CI] | Only the other species (cat / dog frames) | Sequences with the pet in ≥ half the frames (cat / dog) |
 | --- | --- | --- | --- | --- |
-| **Phone build (M3) + verifier** | **0.697 [0.659, 0.735]** | **0.598 [0.550, 0.644]** | 0.025 / **0.137** | 0.81 / 0.67 |
-| M3, detector only | 0.713 [0.676, 0.750] | 0.675 [0.628, 0.718] | 0.078 / 0.118 | 0.82 / 0.78 |
-| Reference (M2) + verifier | 0.662 [0.622, 0.702] | 0.530 [0.484, 0.572] | 0.030 / 0.121 | 0.73 / 0.63 |
-| M2, detector only | 0.706 [0.667, 0.744] | 0.592 [0.544, 0.635] | 0.077 / 0.167 | 0.79 / 0.70 |
+| **Phone build (M3) + verifier** | **0.697 [0.658, 0.743]** | **0.598 [0.563, 0.631]** | 0.025 / **0.137** | 0.81 / 0.67 |
+| M3, detector only | 0.713 [0.674, 0.761] | 0.675 [0.637, 0.711] | 0.078 / 0.118 | 0.82 / 0.78 |
+| Reference (M2) + verifier | 0.662 [0.621, 0.707] | 0.530 [0.494, 0.565] | 0.030 / 0.121 | 0.73 / 0.63 |
+| M2, detector only | 0.706 [0.667, 0.756] | 0.592 [0.554, 0.633] | 0.077 / 0.167 | 0.79 / 0.70 |
 
 When found, the box agrees closely with the mask box (median IoU 0.87-0.91;
 found with IoU ≥ 0.5: 0.68 cat, 0.58 dog for the phone build).
@@ -809,7 +809,7 @@ found with IoU ≥ 0.5: 0.68 cat, 0.58 dog for the phone build).
 Findings:
 * **On home phone video the phone build is better than the reference
   detector.** With verifiers, the paired difference (M2 minus M3) is cat
-  -0.035 [-0.055, -0.012] and dog -0.068 [-0.099, -0.039]. This reverses
+  -0.035 [-0.048, -0.022] and dog -0.068 [-0.096, -0.034]. This reverses
   E18's YouTube result for dogs. Keeping M3 after Q-M2 costs nothing on
   this kind of footage.
 * **Species confusion is the largest error on dog videos.** 14 % of dog
@@ -818,7 +818,7 @@ Findings:
 * **The verifier helps cats and hurts dogs.** For cats it cuts
   other-species-only frames from 7.8 % to 2.5 % for 1.6 points of found
   frames. For dogs it removes 7.7 points of found frames (paired
-  [6.1, 9.5]) and does not reduce confusion (11.8 % → 13.7 %). A
+  [6.4, 9.2]) and does not reduce confusion (11.8 % → 13.7 %). A
   per-species verifier operating point, chosen on tuning data, is the next
   step. These frames must not be used to choose it.
 * Nearly every sequence has the pet found in some frame (0.97 / 0.98), so
