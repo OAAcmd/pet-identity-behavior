@@ -1,0 +1,166 @@
+{
+  "config": {
+    "view": "var/training/g1/views/full_cat2",
+    "model": "MOBILENET_V2",
+    "batch_size": 16,
+    "learning_rate": 0.1,
+    "stages": "2:all",
+    "seed": 20261019,
+    "cache_layout": "coco-v2-negatives-crowd",
+    "init_from": {
+      "checkpoint": "models/g1/g1a_full_mnv2_sb4096/ckpt/ckpt-27",
+      "weights_sha256": "ef364f054ffc4d83af0a4e0d2a0ec2287e40c86019419e325bed91322c0bb956"
+    },
+    "shuffle_buffer": 4096
+  },
+  "history": [
+    {
+      "epoch": 0,
+      "stage": "all",
+      "train_loss_mean": 0.6555770477479387,
+      "epoch_minutes": 37.68952430089315,
+      "images_per_second": 9.254560905037582,
+      "dev_total_loss": 0.6624411344528198,
+      "dev_cls_loss": 0.3857285976409912,
+      "dev_box_loss": 0.004394358955323696,
+      "dev_model_loss": 0.6054466962814331,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.7280189386926715,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.8051691338806879,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.544930803329488,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.7464557819616249,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.45105903447023726,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.2885786406028181,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.37252524270227316,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.4611531946344293,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.535247743709114,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.1990271719920226,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.6496812290341484,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.37769737148199245,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.21002273889284506,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.3086623774694395,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.477016385918128,
+      "seconds": 154.47935914993286
+    },
+    {
+      "epoch": 1,
+      "stage": "all",
+      "train_loss_mean": 0.6553857297977973,
+      "epoch_minutes": 97.4289133588473,
+      "images_per_second": 9.549526597714118,
+      "dev_total_loss": 0.6587230563163757,
+      "dev_cls_loss": 0.38360288739204407,
+      "dev_box_loss": 0.004370267502963543,
+      "dev_model_loss": 0.6021161079406738,
+      "dev_ap50": {
+        "cat": {
+          "ap50": 0.7671931009929156,
+          "positives": 370
+        },
+        "dog": {
+          "ap50": 0.8089994553481499,
+          "positives": 687
+        },
+        "person": {
+          "ap50": 0.5427808251901991,
+          "positives": 4080
+        },
+        "bed": {
+          "ap50": 0.7564714814209713,
+          "positives": 125
+        },
+        "couch": {
+          "ap50": 0.4853261861224306,
+          "positives": 138
+        },
+        "chair": {
+          "ap50": 0.29245395029701304,
+          "positives": 608
+        },
+        "table": {
+          "ap50": 0.37457073269919056,
+          "positives": 380
+        },
+        "car": {
+          "ap50": 0.48230377147458886,
+          "positives": 317
+        },
+        "bowl": {
+          "ap50": 0.5251858555786838,
+          "positives": 115
+        },
+        "toy": {
+          "ap50": 0.20634325317246416,
+          "positives": 326
+        },
+        "teddy_bear": {
+          "ap50": 0.6343866255958024,
+          "positives": 27
+        },
+        "door": {
+          "ap50": 0.37299660986313227,
+          "positives": 144
+        },
+        "window": {
+          "ap50": 0.21394373848005202,
+          "positives": 814
+        },
+        "stairs": {
+          "ap50": 0.28072278860636907,
+          "positives": 55
+        }
+      },
+      "dev_map50": 0.48169131248871155,
+      "seconds": 157.03079867362976
+    }
+  ],
+  "exported": {
+    "model_float16.tflite": "a796d0345e5a7651287f02421d2f36873bbf2c2356638a0fe914bd75cfc24857",
+    "model_float32.tflite": "341bde43d48d908b199a63f802e4d317f3233e4638b87de930b7928c9be9e847",
+    "model_int8_ptq.tflite": "80e03990f244f011241057b0464ff5e201dfff0f1f20b69f6449a77baa8becaa"
+  },
+  "peak_rss_mb": 5782.0234375
+}
