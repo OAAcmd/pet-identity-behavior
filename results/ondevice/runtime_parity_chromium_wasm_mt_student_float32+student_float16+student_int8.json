@@ -1,0 +1,130 @@
+{
+ "initMs": 385.10000000009313,
+ "accel": "wasm",
+ "threads": true,
+ "crossOriginIsolated": true,
+ "hardwareConcurrency": 4,
+ "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36",
+ "cases": {
+  "student_float32": {
+   "compileMs": 75.9199999999255,
+   "inputs": [
+    {
+     "name": "crop",
+     "shape": [
+      1,
+      224,
+      224,
+      3
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "student_mnv3l",
+     "shape": [
+      1,
+      768
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 19.925000000279397,
+   "minMs": 18.334999999962747,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 768,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 0.4655151069164276,
+     "argmaxEqual": true
+    }
+   ]
+  },
+  "student_float16": {
+   "compileMs": 18.390000000130385,
+   "inputs": [
+    {
+     "name": "crop",
+     "shape": [
+      1,
+      224,
+      224,
+      3
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "student_mnv3l",
+     "shape": [
+      1,
+      768
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 15.040000000037253,
+   "minMs": 11.395000000018626,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 768,
+     "maxAbsDiff": 0,
+     "meanAbsDiff": 0,
+     "maxAbsRef": 0.4654695987701416,
+     "argmaxEqual": true
+    }
+   ]
+  },
+  "student_int8": {
+   "compileMs": 14.790000000037253,
+   "inputs": [
+    {
+     "name": "crop",
+     "shape": [
+      1,
+      224,
+      224,
+      3
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "student_mnv3l",
+     "shape": [
+      1,
+      768
+     ],
+     "dtype": "float32"
+    }
+   ],
+   "inputBitExact": true,
+   "firstRunIncluded": false,
+   "medianMs": 37.015000000130385,
+   "minMs": 36.489999999757856,
+   "comparisons": [
+    {
+     "ref": 0,
+     "matchedOutput": 0,
+     "elements": 768,
+     "maxAbsDiff": 0.004163077101111412,
+     "meanAbsDiff": 0.001047367899869774,
+     "maxAbsRef": 0.46692129969596863,
+     "argmaxEqual": true
+    }
+   ]
+  }
+ }
+}

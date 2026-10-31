@@ -713,6 +713,13 @@ def cmd_export_parity(args: argparse.Namespace) -> int:
             data = expose_outputs(data, BACKBONE_OUTPUTS)
         dst.write_bytes(data)
         models[case] = dst
+    if args.student_dir:  # E33 behaviour-encoder student exports
+        for k in ("float32", "float16", "int8"):
+            src = Path(args.student_dir) / f"student_{k}.tflite"
+            if src.exists():
+                dst = out / "models" / f"parity_student_{k}.tflite"
+                dst.write_bytes(src.read_bytes())
+                models[f"student_{k}"] = dst
     m = export(models, out / "parity")
     print(json.dumps({k: [o["shape"] for o in v["outputs"]] for k, v in m["cases"].items()}))
     return 0
@@ -946,6 +953,7 @@ def build_parser() -> argparse.ArgumentParser:
     dt.set_defaults(func=cmd_export_device_test)
     ep = sub.add_parser("export-parity", help="write model-level parity fixtures (Python LiteRT reference outputs)")
     ep.add_argument("--out", default=str(REPO_ROOT / "var" / "ondevice"))
+    ep.add_argument("--student-dir", help="also export the E33 behaviour-encoder student (directory with student_*.tflite)")
     ep.set_defaults(func=cmd_export_parity)
     pp = sub.add_parser("engine-parity", help="engine-level parity: write Python reference results, or score the browser results against them")
     pp.add_argument("action", choices=["reference", "compare", "intent-reference", "intent-compare"])

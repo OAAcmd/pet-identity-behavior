@@ -13,6 +13,7 @@ function jsInput(name: string): Typed[] {
   if (name === "detector_int8") return [syntheticImage(320)];
   if (name === "backbone_int8") return [syntheticImage(224)];
   if (name === "detector_tfhub_raw") return [syntheticImage(320)];
+  if (name.startsWith("student_")) return [normalize(syntheticImage(224), 0, 1)]; // E33 student: float 0-255
   throw new Error(name);
 }
 

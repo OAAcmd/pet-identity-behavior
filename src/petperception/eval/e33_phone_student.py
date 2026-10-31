@@ -308,6 +308,25 @@ def evaluate(settings: Settings, models: dict[str, Path], out_dir: Path) -> dict
                                  "difference_to_teacher": d, "difference_ci95": E31.cluster_boot(groups, lambda idx, Ss=Ss: macro(Ss, idx) - macro(St, idx)),
                                  "per_behavior_ap": {b: E31.ap(Y[b], Ss[:, j]) for j, b in enumerate(eligible)},
                                  "clip_top_behavior_agreement": top_agree}
+    # secondary, descriptive: the 37 E32 test clips (never used for any choice here)
+    from ..understand import dataset as D
+    from ..understand.e31 import recognize as R1
+
+    bench = json.loads((REPO_ROOT / "benchmarks" / "behavior_questions_v2.json").read_text())["questions"]
+    cl = {c.key: c for c in D.clips(settings.paths.resolve("data_root"))}
+    fdir = settings.paths.resolve("data_root").parent / "understand" / "features"
+    agree = {name: [] for name in encs}
+    zt = R1.ZeroShot(bank)
+    for it in bench:
+        z = np.load(fdir / f"{it['clip']}.npz", allow_pickle=False)
+        if "emb" not in z.files or len(z["emb"]) < E31.MIN_CROPS:
+            continue
+        st = R1.zero_shot_scores(_Z(emb=z["emb"].astype(np.float32)), it["species"], zt)
+        crops = recut(cl[it["clip"]].path, z)
+        for name, enc in encs.items():
+            ss = R1.zero_shot_scores(_Z(emb=enc.images(crops)), it["species"], R1.ZeroShot(enc))
+            agree[name].append(max(st, key=st.get) == max(ss, key=ss.get))
+    res["e32_clips_top_behavior_agreement"] = {name: {"agree": int(sum(v)), "n": len(v)} for name, v in agree.items()}
     need = chance + RETAIN * (res["teacher"]["macro_ap"] - chance)
     prim = res["students"].get("float32")
     res["criterion"] = {"rule": "AP_student >= chance + 0.8 (AP_teacher - chance), float32 export", "required": need,
@@ -347,8 +366,11 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("step", choices=["build", "teacher", "evaluate"])
     ap.add_argument("--export-dir", default="models/student/e33_mnv3l")
+    ap.add_argument("--threads", type=int, help="CPU threads (default: configuration)")
     a = ap.parse_args()
     s = load_settings()
+    if a.threads:
+        s.runtime.num_threads = a.threads
     if a.step == "build":
         print(build(s))
     elif a.step == "teacher":

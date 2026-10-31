@@ -1,0 +1,117 @@
+{
+ "schema": "petperception.student_run/1",
+ "experiment": "E33",
+ "selected_epoch": 5,
+ "history": [
+  {
+   "epoch": 0,
+   "train_loss": 1.2321917027329046,
+   "val": {
+    "loss": 1.243479609489441,
+    "cos": 0.8275498151779175,
+    "kl": 1.0710294246673584
+   }
+  },
+  {
+   "epoch": 1,
+   "train_loss": 0.6716137950540717,
+   "val": {
+    "loss": 0.8809736371040344,
+    "cos": 0.8478937745094299,
+    "kl": 0.7288674712181091
+   }
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.5143226417081214,
+   "val": {
+    "loss": 0.7810186743736267,
+    "cos": 0.8571061491966248,
+    "kl": 0.6381247639656067
+   }
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.4228404875527421,
+   "val": {
+    "loss": 0.7188254594802856,
+    "cos": 0.8614092469215393,
+    "kl": 0.5802346467971802
+   }
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.36707005191488595,
+   "val": {
+    "loss": 0.6969804167747498,
+    "cos": 0.862777829170227,
+    "kl": 0.5597582459449768
+   }
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.34377433451431055,
+   "val": {
+    "loss": 0.6915751695632935,
+    "cos": 0.8630610704421997,
+    "kl": 0.5546364188194275
+   }
+  }
+ ],
+ "config": {
+  "epochs": 6,
+  "batch_size": 32,
+  "learning_rate": 0.0003,
+  "kl_weight": 1.0,
+  "seed": 20261031,
+  "model": "MobileNetV3Large+Dense768+L2",
+  "init": "imagenet"
+ },
+ "config_sha256": "eea5e96690a7063ffce44495d4ffab692a34a7a09c24e77140e37875df9e2cea",
+ "index_sha256": "d63638b532177df9038c6582f304d1415df01dd7c004c8136cb552599f8ad161",
+ "code_sha256": "d8eb42f42010af62feb3c38494b82c7331a96e4663003f90d0c6e5e58d1b8266",
+ "text_sha256": "65c173ba8c0941e92f8018e519424de354b124003e6489fc5d8c1bdcb1625e57",
+ "train_crops": 20313,
+ "val_crops": 1327,
+ "files": {
+  "student_best.weights.h5": {
+   "bytes": 15542928,
+   "sha256": "46c9f275126fdb725bff6fabdc2c51e4fcfaed62fb51877633fc47435dce39d9"
+  },
+  "student_float16.tflite": {
+   "bytes": 7487512,
+   "sha256": "ef111465360a56d9dc101ce9e7c16823d00eec15ec1e2d049f3b6a8b21874783"
+  },
+  "student_float32.tflite": {
+   "bytes": 14856060,
+   "sha256": "fa2e14fcca4065ad0623a075618b1295d8aee6682aa27c38655ea98779c8d3da"
+  },
+  "student_int8.tflite": {
+   "bytes": 4029528,
+   "sha256": "e2a7eab2cccfd7029b4125ef3cdd5caf19597f077512d6f94aaff42245041e47"
+  }
+ },
+ "input": "uint8 RGB 224x224 as float32 0-255 (MobileNetV3 built-in preprocessing)",
+ "output": "L2-normalized 768-d, SigLIP image space",
+ "versions": {
+  "tensorflow": "2.15.1",
+  "python": "3.11.16"
+ },
+ "train_minutes": 9.4,
+ "evaluated_exports_dynamic_batch": {
+  "student_float16.tflite": {
+   "bytes": 7476976,
+   "sha256": "ff4a572b33e7d8c93a95826f8f13926ebb207a49b62284c051b68ac0f9d4f3ed"
+  },
+  "student_float32.tflite": {
+   "bytes": 14848900,
+   "sha256": "2fe3f82e29907c3d227d1e012c79996e132da8eb99b02b8c066e8fee42b72d7c"
+  },
+  "student_int8.tflite": {
+   "bytes": 4022408,
+   "sha256": "166caa592ac00eb670c2a64085c95fda4d4f1a66ba86056a68d5b28717e13a1d"
+  }
+ },
+ "export_note": "The files evaluated in E33 had a dynamic batch dimension (shape signature [-1,224,224,3]), which LiteRT.js cannot allocate; they were re-exported from student_best.weights.h5 with a fixed batch of 1 (training/student/export_student.py). Outputs are identical (max abs difference 0.0 on 64 validation crops for all three variants); hashes of the evaluated files are kept above.",
+ "train_minutes_note": "train_minutes covers the last session only: about 48 min before a machine reboot (epoch 5, step ~560; resumed from the interval checkpoint at step 1) plus 9.4 min after it"
+}

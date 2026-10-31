@@ -69,6 +69,10 @@ CASES = {
     "detector_int8": lambda: [synthetic_image(320)[None]],
     "backbone_int8": lambda: [synthetic_image(224)[None]],
     "detector_tfhub_raw": lambda: [synthetic_image(320)[None]],  # TF Hub build without in-graph post-processing (E14)
+    # E33 behaviour-encoder student (MobileNetV3 with built-in preprocessing: float input 0-255)
+    "student_float32": lambda: [synthetic_image(224).astype(np.float32)[None]],
+    "student_float16": lambda: [synthetic_image(224).astype(np.float32)[None]],
+    "student_int8": lambda: [synthetic_image(224).astype(np.float32)[None]],
 }
 
 

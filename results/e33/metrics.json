@@ -1,0 +1,144 @@
+{
+  "experiment": "E33",
+  "created_at": "2026-10-31T03:49:51+00:00",
+  "clips": 278,
+  "groups": 131,
+  "eligible": [
+    "drinking",
+    "eating",
+    "kneading",
+    "locomotion",
+    "playing_object",
+    "resting",
+    "self_grooming",
+    "social_play",
+    "tail_chasing"
+  ],
+  "chance_macro_ap": 0.0727418065547562,
+  "recut_count_mismatches": [],
+  "teacher": {
+    "macro_ap": 0.4156189759960366,
+    "macro_ap_ci95": [
+      0.35122720644868066,
+      0.4962507827277059
+    ],
+    "per_behavior_ap": {
+      "drinking": 0.7567457393798547,
+      "eating": 0.6127224936169815,
+      "kneading": 0.6871680203854116,
+      "locomotion": 0.16303159396381225,
+      "playing_object": 0.28479897559320544,
+      "resting": 0.289449687396041,
+      "self_grooming": 0.39197425050551776,
+      "social_play": 0.1899116180583091,
+      "tail_chasing": 0.36476840506519587
+    }
+  },
+  "students": {
+    "float32": {
+      "model": "/workspace/pet-identity-behavior/models/student/e33_mnv3l/student_float32.tflite",
+      "bytes": 14848900,
+      "macro_ap": 0.2726501064456025,
+      "macro_ap_ci95": [
+        0.22093971209443583,
+        0.3528256368578657
+      ],
+      "difference_to_teacher": -0.14296886955043409,
+      "difference_ci95": [
+        -0.1943133433961942,
+        -0.08805057252081508
+      ],
+      "per_behavior_ap": {
+        "drinking": 0.3327939425795959,
+        "eating": 0.5032454666774842,
+        "kneading": 0.45303165873032875,
+        "locomotion": 0.16865208318732905,
+        "playing_object": 0.19667721354518147,
+        "resting": 0.32138623056482624,
+        "self_grooming": 0.2325585453303005,
+        "social_play": 0.12648691892341163,
+        "tail_chasing": 0.11901889847196548
+      },
+      "clip_top_behavior_agreement": 0.5071942446043165
+    },
+    "float16": {
+      "model": "/workspace/pet-identity-behavior/models/student/e33_mnv3l/student_float16.tflite",
+      "bytes": 7476976,
+      "macro_ap": 0.27265350343124406,
+      "macro_ap_ci95": [
+        0.22083812950681475,
+        0.3532389980919193
+      ],
+      "difference_to_teacher": -0.14296547256479253,
+      "difference_ci95": [
+        -0.194507274634056,
+        -0.08779435817229148
+      ],
+      "per_behavior_ap": {
+        "drinking": 0.33180766832891506,
+        "eating": 0.5034979536744038,
+        "kneading": 0.4531519474231917,
+        "locomotion": 0.1680363147347523,
+        "playing_object": 0.197212204595185,
+        "resting": 0.32137588047311927,
+        "self_grooming": 0.23321000262174943,
+        "social_play": 0.12623843464429327,
+        "tail_chasing": 0.11935112438558673
+      },
+      "clip_top_behavior_agreement": 0.5035971223021583
+    },
+    "int8": {
+      "model": "/workspace/pet-identity-behavior/models/student/e33_mnv3l/student_int8.tflite",
+      "bytes": 4022408,
+      "macro_ap": 0.2728617318430387,
+      "macro_ap_ci95": [
+        0.22100517699421804,
+        0.35768242555345076
+      ],
+      "difference_to_teacher": -0.1427572441529979,
+      "difference_ci95": [
+        -0.1923757475545286,
+        -0.08719489989802745
+      ],
+      "per_behavior_ap": {
+        "drinking": 0.3223101077498404,
+        "eating": 0.4943454698839211,
+        "kneading": 0.45035889303879933,
+        "locomotion": 0.16626525362965452,
+        "playing_object": 0.20577370261805672,
+        "resting": 0.32546499465636847,
+        "self_grooming": 0.2333612836395436,
+        "social_play": 0.1276337422982526,
+        "tail_chasing": 0.13024213907291163
+      },
+      "clip_top_behavior_agreement": 0.49640287769784175
+    }
+  },
+  "e32_clips_top_behavior_agreement": {
+    "float32": {
+      "agree": 23,
+      "n": 37
+    },
+    "float16": {
+      "agree": 23,
+      "n": 37
+    },
+    "int8": {
+      "agree": 24,
+      "n": 37
+    }
+  },
+  "criterion": {
+    "rule": "AP_student >= chance + 0.8 (AP_teacher - chance), float32 export",
+    "required": 0.34704354210778054,
+    "met": false
+  },
+  "latency_desktop_cpu": {
+    "float32_threads1_ms": 6.7,
+    "float32_threads2_ms": 4.13,
+    "float16_threads1_ms": 6.63,
+    "float16_threads2_ms": 4.61,
+    "int8_threads1_ms": 8.85,
+    "int8_threads2_ms": 6.88
+  }
+}
