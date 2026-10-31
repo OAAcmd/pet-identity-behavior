@@ -174,8 +174,8 @@ XCLIP_PROMPTS = {"tail": ["a {s} chasing its own tail", "a {s} spinning in circl
                            "a {s} jumping", "a {s} looking around"]}
 
 
-def xclip_cache(settings: Settings, keys: list[str], hop_s: float = 1.0) -> int:
-    """X-CLIP zero-shot on 8-frame windows (2 s at 4 fps), hop 1 s -> var/understand/xclip/<clip>.npz (resumable)."""
+def xclip_cache(settings: Settings, keys: list[str]) -> int:
+    """X-CLIP zero-shot on consecutive 8-frame windows (2 s at 4 fps) -> var/understand/xclip/<clip>.npz (resumable)."""
     import torch
     from transformers import XCLIPModel, XCLIPProcessor
 
@@ -200,16 +200,24 @@ def xclip_cache(settings: Settings, keys: list[str], hop_s: float = 1.0) -> int:
         texts = [x.format(s=s) for x in XCLIP_PROMPTS["tail"]] + [x.format(s=s) for x in XCLIP_PROMPTS["other"]]
         frames, t = decode(c.path, fps=4.0, max_side=320)
         starts, probs = [], []
-        step = int(round(hop_s * 4))
         with torch.no_grad():
-            for st in range(0, max(1, len(frames) - 7), step):
-                win = frames[st:st + 8]
-                if len(win) < 8:
-                    break
-                x = proc(text=texts, videos=list(win), return_tensors="pt", padding=True)
-                lp = model(**x).logits_per_video[0].softmax(-1).numpy()
-                probs.append(lp)
-                starts.append(t[st])
+            tok = proc.tokenizer(texts, padding=True, return_tensors="pt")
+            te = model.text_projection(model.text_model(**tok)[1])  # [K, D], once per clip
+            nw = len(frames) // 8  # consecutive 8-frame windows (2 s): the vision tower mixes the 8 frames, so windows cannot share frames
+            if nw:
+                pv = proc.image_processor(list(frames[:nw * 8]), return_tensors="pt")["pixel_values"][0]  # [nw*8, 3, 224, 224]
+                for b in range(0, nw, 4):
+                    x = pv[b * 8:min(nw, b + 4) * 8]
+                    vo = model.vision_model(pixel_values=x)
+                    n = x.shape[0] // 8
+                    ve = model.mit(model.visual_projection(vo[1]).view(n, 8, -1))[1]
+                    img = (model.prompts_visual_layernorm(vo[0][:, 1:, :]) @ model.prompts_visual_projection).view(n, 8, -1, ve.shape[-1]).mean(1)
+                    tx = te[None].expand(n, -1, -1)
+                    tx = tx + model.prompts_generator(tx, img)  # same computation as XCLIPModel.forward
+                    ve = ve / ve.norm(dim=-1, keepdim=True)
+                    tx = tx / tx.norm(dim=-1, keepdim=True)
+                    probs += list(torch.einsum("bd,bkd->bk", ve, model.logit_scale.exp() * tx).softmax(-1).numpy())
+                    starts += [float(t[(b + w) * 8]) for w in range(n)]
         np.savez(p.with_suffix(".tmp.npz"), t=np.array(starts, np.float32), p=np.array(probs, np.float32).reshape(len(starts), len(texts)),
                  n_tail=np.array(len(XCLIP_PROMPTS["tail"])))
         p.with_suffix(".tmp.npz").replace(p)
