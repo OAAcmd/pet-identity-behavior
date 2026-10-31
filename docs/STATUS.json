@@ -1,14 +1,14 @@
 {
  "schema": "petperception.status/1",
- "date": "2026-10-30",
+ "date": "2026-10-31",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "Milestone of 2026-10-30 (latest): behaviour explanation v2 (E32). Developed on the E31 collection only and frozen (3f8eae9): feature version 2 (gap bridging, track holding, context detections), a turning-in-place window model for tail chasing, hiss/growl as threat evidence, recording context (person near, objects, sounds, place) with half the weight of the user's words, before/after events, parser v2 (after/before/until context phrases, MiniLM paraphrase matching), knowledge base v2 (21 behaviours, 33 sources incl. neurological look-alikes). Pre-registered test (0402c46) on 37 fresh clips and questions, scored once, paired with the frozen E31 system: v2 better over all questions (asked behaviours recognized 24 vs 21/33, parse 16 vs 13/33, request separation 28 vs 25/33, expert interpretation covered 6 vs 3/7, ranked first 5 vs 1/7; tail chasing 2/2 vs 1/2 with confusers 2/2), but post hoc only through the five questions on conditions knowledge base v2 was extended for after the test papers were chosen (on the other 32 the systems tie on every explanation check; recognition 20 vs 21 of 28) but parse (0.48) and request separation (0.85) stay below 0.9, so by the fixed rule the default stays the E31 system (kept verbatim in understand/e31, verified to reproduce the tested answers); v2 via --system-version 2. Post-hoc: fresh paraphrases defeat the parser; new behaviours at the fixed threshold fire on unrelated clips; the recording context over-reports people. Previous milestone (2026-10-20): E31 explanation in context, G1b detector. Not on the phone; phones remain untested.",
+ "summary": "Milestone of 2026-10-30/31 (latest): behaviour explanation v2 (E32) and a phone-sized behaviour encoder (E33). E32 was developed on the E31 collection only and frozen (3f8eae9): feature version 2 (gap bridging, track holding, context detections), a turning-in-place window model for tail chasing, hiss/growl as threat evidence, recording context (person near, objects, sounds, place) with half the weight of the user's words, before/after events, parser v2 (after/before/until context phrases, MiniLM paraphrase matching), knowledge base v2 (21 behaviours, 33 sources incl. neurological look-alikes). Pre-registered test (0402c46) on 37 fresh clips and questions, scored once, paired with the frozen E31 system: v2 better over all questions (asked behaviours recognized 24 vs 21/33, parse 16 vs 13/33, request separation 28 vs 25/33, expert interpretation covered 6 vs 3/7, ranked first 5 vs 1/7; tail chasing 2/2 vs 1/2 with confusers 2/2), but post hoc only through the five questions on conditions knowledge base v2 was extended for after the test papers were chosen (on the other 32 the systems tie on every explanation check; recognition 20 vs 21 of 28) but parse (0.48) and request separation (0.85) stay below 0.9, so by the fixed rule the default stays the E31 system (kept verbatim in understand/e31, verified to reproduce the tested answers); v2 via --system-version 2. Post-hoc: fresh paraphrases defeat the parser; new behaviours at the fixed threshold fire on unrelated clips; the recording context over-reports people. E33 (pre-registered): a MobileNetV3-Large student distilled from SigLIP on 20k cat/dog crops reaches zero-shot macro AP 0.273 vs 0.416 on the E31 pool (retains 58 % above chance; bar 80 % not met; not adopted); its 4-15 MB exports run bit-exact (float) in desktop headless Chromium at 15-48 ms per crop. Previous milestone (2026-10-20): E31 explanation in context, G1b detector. Not on the phone; phones remain untested.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 200,
+    "python_tests": 201,
     "typescript_unit_tests": 40,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
@@ -105,7 +105,7 @@
    "evaluation": "results/e27, results/e28, results/intent"
   },
   "G1b": {
-   "status": "run B (g1b_warm_cat2_cop3d) finished 2026-10-20; run A (g1b_warm_cat2) resumed 2026-10-31 from its signal checkpoint at step 1,086 of 6,978 (2 threads, nice 15); selection with three candidates follows the fixed rule when it finishes",
+   "status": "run B (g1b_warm_cat2_cop3d) finished 2026-10-20; run A (g1b_warm_cat2) resumed in this milestone from its signal checkpoints (steps 1,086 and 2,181 of 6,978; paused while E33 trained), running in the background at 2 threads; selection with three candidates follows the fixed rule when it finishes",
    "selection": "development data only: run B over G1a (OI dev AP50 cat 0.774 / dog 0.821 vs 0.741 / 0.765; CoP3D dev dog frames only a cat 0.086 vs 0.154)",
    "acceptance_1": "met: E4 with own verifier at per-class points cat 0.852, dog 0.7481 (threshold 0.748), specificity intervals overlap M3's",
    "e20": "home video vs phone build + verifier: cat found 0.766 vs 0.697, dog 0.762 vs 0.598, dog frames only a cat 0.072 vs 0.137",
@@ -124,6 +124,12 @@
    "status": "trained on CPU in E32 development (logistic regression on 20,822 windows of 294 clips, grouped 5-fold CV, < 2 min)",
    "artifacts": "artifacts/understand/circling_v1.json, artifacts/understand/recognizer_v2.json",
    "evaluation": "results/e32/development.json (dev out-of-fold clip AP 0.30; mean with zero-shot 0.43, adopted); results/e32/metrics.json (test)"
+  },
+  "B3": {
+   "capability": "phone-sized behaviour encoder (SigLIP -> MobileNetV3-Large student)",
+   "status": "trained on CPU in E33 (20,313 crops, 6 epochs, ~57 min on 4 threads; resumed after a machine reboot); not adopted (macro AP 0.273 vs 0.416, bar 0.347)",
+   "artifacts": "models/student/e33_mnv3l/ (float32/float16/int8 TFLite, fixed batch 1; selected weights; run_record.json)",
+   "evaluation": "results/e33/metrics.json; browser parity results/ondevice/runtime_parity_chromium_wasm_*_student_*.json"
   }
  },
  "decisions": [
@@ -186,6 +192,11 @@
    "date": "2026-10-31",
    "decision": "Tail chasing: v2 met the pre-registered criterion (2/2, confusers 2/2) but is not reported as reliable",
    "basis": "n = 2 + 2; one positive passed by 0.001; post hoc, the clip decision used the zero-shot threshold on the combined score (results/e32/posthoc.json)"
+  },
+  {
+   "date": "2026-10-31",
+   "decision": "E33 student not adopted as the phone behaviour encoder; behaviour explanation stays server/desktop",
+   "basis": "pre-registered: student zero-shot macro AP 0.273 [0.221, 0.353] vs teacher 0.416; required 0.347 (80 % of the above-chance AP); results/e33/metrics.json"
   }
  ],
  "resources_needed": [
@@ -201,11 +212,13 @@
   "audio_artifacts": "artifacts/audio_*.json",
   "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)",
   "behavior_explanation": "artifacts/understand/recognizer.json (E31 zero-shot thresholds, default system), recognizer_v2.json and circling_v1.json (E32 system); knowledge bases src/petperception/understand/knowledge.py (v2) and understand/e31/knowledge.py (v1, frozen); benchmarks/behavior_questions.json (E31), behavior_questions_v2.json (E32), parser_dev.json; annotations/behavior_clips.json (assistant frame review, E31 + E32)",
-  "g1b_detector": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint and exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check_g1b.json)"
+  "g1b_detector": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint and exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check_g1b.json)",
+  "behavior_student": "models/student/e33_mnv3l/ (research and non-commercial: CoP3D frames in training)"
  },
  "experiments_latest": {
   "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31",
-  "e32_behavior_v2": "v2 vs E31 system on 37 fresh questions (one run): recognized 24 vs 21/33, parse 16 vs 13/33, C4 28 vs 25/33, expert coverage 6 vs 3/7 (gain confined to topic-matched knowledge entries); default stays E31 system by the fixed rule; person context 23/35; results/e32"
+  "e32_behavior_v2": "v2 vs E31 system on 37 fresh questions (one run): recognized 24 vs 21/33, parse 16 vs 13/33, C4 28 vs 25/33, expert coverage 6 vs 3/7 (gain confined to topic-matched knowledge entries); default stays E31 system by the fixed rule; person context 23/35; results/e32",
+  "e33_phone_student": "student macro AP 0.273 vs teacher 0.416 (diff -0.143 [-0.194, -0.088]); float16/int8 same AP at 7.5/4.0 MB; browser parity bit-exact (float); not adopted; results/e33"
  },
  "clock_note": "The machine clock was reset between milestones: commits and documents of the previous milestone are dated 2026-10-20, this milestone (E32) 2026-10-30/31. Dates are as the machine reported them."
 }

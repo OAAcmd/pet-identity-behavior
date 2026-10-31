@@ -339,6 +339,16 @@ committed; `python -m petperception.understand.dataset --feature-version 2
 2026-10-30 (never evaluated; `fetch-models --only xclip_base_patch32`
 restores it).
 
+### Behaviour-encoder student (E33, 2026-10-31)
+
+| Path | Content | Trained on | Terms |
+| --- | --- | --- | --- |
+| `models/student/e33_mnv3l/` | MobileNetV3-Large (Keras ImageNet weights) + 768-d projection distilled from SigLIP base; TFLite float32 / float16 / int8 (fixed batch 1), selected weights (`student_best.weights.h5`), `run_record.json` (hashes, configuration, history, data index hash) | 20,313 square crops of cat and dog boxes: G1 Open Images training images (CC BY 2.0 images, CC BY 4.0 boxes) and the G1b CoP3D training frames (CC BY-NC 4.0); teacher targets from SigLIP base (Apache-2.0 weights; WebLI data terms unpublished) | **research and non-commercial only** (CoP3D frames); not in any bundle (E33 bar not met) |
+
+Crops, teacher embeddings and the text bank stay in `var/student/` (not
+committed; rebuilt by `python -m petperception.eval.e33_phone_student build`
+and `teacher`).
+
 ### G1b detector (2026-10-20)
 
 | Path | Content | Trained on | Terms |

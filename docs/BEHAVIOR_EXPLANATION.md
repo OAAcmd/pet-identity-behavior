@@ -330,8 +330,10 @@ rule; "v2" is `--system-version 2`.
 * **Data**: still few tail-chasing recordings with usable terms; questions
   are written by the assistant from captions, not collected from owners;
   frame-review references (person, place, bouts) are machine-assisted.
-* **Phone**: unchanged - SigLIP (812 MB) and MiniLM exceed the phone budget;
-  nothing here has been run on a phone.
+* **Phone**: SigLIP (812 MB) and MiniLM exceed the phone budget. A 4-15 MB
+  distilled student runs in the browser engine but keeps only 58 % of the
+  zero-shot recognition above chance (E33, §12; bar 80 %); nothing here has
+  been run on a phone.
 
 ## 10. Version 2 (E32, 2026-10-30): what changed and why
 
@@ -464,3 +466,45 @@ or loss of bladder control as reasons to see a veterinarian promptly. It also
 shows a known defect: ear discomfort is ranked first because the cue word
 "ear" matches inside "2-year-old" (substring matching, §9). v1 had no entry
 for the behaviour and reported grooming.
+
+## 12. Behaviour recognition on the phone: a distilled student (E33, measured)
+
+SigLIP base (812 MB) cannot run on a phone. E33 tested whether a small
+student can stand in for its image encoder while keeping the zero-shot
+design (text prompts embedded once by SigLIP, offline). Protocol and
+criterion were committed before any student score
+(`src/petperception/eval/e33_phone_student.py`, `training/student/`).
+
+* **Student**: Keras MobileNetV3-Large (ImageNet weights) + a 768-d
+  projection, trained on CPU to reproduce SigLIP's embedding of cat and dog
+  crops (cosine) and its softmax over the E31 prompts (KL): 20,313 training
+  crops from the G1 Open Images training images (CC BY) and the G1b CoP3D
+  training frames (CC BY-NC), 1,327 validation crops; 6 epochs, about 57
+  minutes on 4 threads (interrupted once by a machine reboot and resumed
+  from its interval checkpoint). Validation cosine to the teacher 0.863.
+* **Evaluation (E31 pool, 278 clips, the teacher's own crops)**: the teacher
+  reproduces E31's macro AP exactly (0.416); the student reaches
+  **0.273 [0.221, 0.353]**, a difference of -0.143 [-0.194, -0.088]. It
+  retains 58 % of the teacher's AP above chance (0.073); the pre-registered
+  bar was 80 % (0.347): **not met - the student is not the phone behaviour
+  encoder.** Per behaviour (teacher / student): eating 0.61 / 0.50, resting
+  0.29 / 0.32, locomotion 0.16 / 0.17 hold up; drinking 0.76 / 0.33, tail
+  chasing 0.37 / 0.12, kneading 0.69 / 0.45, grooming 0.39 / 0.23 do not.
+  The clip's most likely behaviour agrees with the teacher's in 51 % of pool
+  clips and 23 of 37 E32 clips.
+* **Size and speed**: float32 14.9 MB, float16 7.5 MB, int8 (dynamic range)
+  4.0 MB, all with the same macro AP (0.273). Desktop CPU (Python LiteRT):
+  4-9 ms per crop. Desktop headless Chromium (LiteRT.js, WASM): float32 and
+  float16 bit-identical to Python, int8 within 0.004; median 15-20 ms
+  (float) and 37-48 ms (int8) per crop, measured while a training job used
+  2 of the 4 cores. No phone was tested.
+
+What it means: a phone-sized encoder is technically ready to run in the
+browser engine (sizes, parity, latency), but distilling on generic cat and
+dog photos loses the behaviour-specific detail that zero-shot recognition
+needs (drinking, tail chasing, kneading, grooming). Next candidates, each to
+be tested the same way: distillation on behaviour-rich video frames (pet
+videos with licences that allow it, never the evaluation clips), a larger
+student or a published small vision-language encoder, and per-behaviour
+heads trained on the student's embeddings. Until one meets the bar,
+behaviour explanation stays a server/desktop feature.

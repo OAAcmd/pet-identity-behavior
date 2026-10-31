@@ -190,6 +190,21 @@ adopted).
 Not yet done: any phone measurement (the extra cost is about three backbone
 passes and one detector pass per frame).
 
+## Behaviour-encoder student (E33, model level only)
+
+A MobileNetV3-Large student of SigLIP (`models/student/e33_mnv3l/`, 4.0-14.9
+MB) is exported with a fixed batch of 1 (LiteRT.js cannot allocate a
+dynamic batch dimension; the first export failed in the browser for that
+reason). Desktop headless Chromium, LiteRT.js WASM, identical synthetic
+input (`export-parity --student-dir models/student/e33_mnv3l`, then the
+runtime spec with `PARITY_ONLY=student_float32,student_float16,student_int8`):
+float32 and float16 outputs bit-identical to Python LiteRT, int8 within
+0.004 (outputs up to 0.47); median 15-20 ms (float) and 37-48 ms (int8) per
+224 x 224 crop with 4 cores, 2 of them busy with training
+(`results/ondevice/runtime_parity_chromium_wasm_{st,mt}_student_*.json`).
+It is **not in the bundle**: it missed E33's recognition bar
+([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md) §12). No phone was tested.
+
 ## Evidence and how to reproduce it
 
 | Evidence | Command | Result file |

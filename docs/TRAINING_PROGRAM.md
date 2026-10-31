@@ -22,6 +22,7 @@ results are kept).
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
 | G5 | distilled multi-task student for phones | not started | household video and G1 |
 | B1 | behaviour head on frozen SigLIP (explanations) | **ran** in E31 (5-fold grouped CV on 278 clips): 0.248 vs zero-shot 0.416 macro AP, not adopted; re-run on feature version 2 in E32: head -0.19, not adopted | more labelled clips per behaviour |
+| B3 | phone-sized behaviour encoder: SigLIP -> MobileNetV3-Large student (E33) | **ran** on CPU (20,313 crops, 6 epochs, about 57 min on 4 threads plus about 45 min of teacher embeddings; resumed after a machine reboot): zero-shot macro AP 0.273 vs teacher 0.416, retains 58 % above chance (bar 80 %): not adopted | behaviour-rich licensed video frames for distillation; a larger student |
 | B2 | turning-in-place (tail chasing) window model (E32) | **ran** on CPU (20,822 windows of 294 clips, grouped 5-fold CV, under 2 min): out-of-fold clip AP 0.30, mean with zero-shot 0.43 (adopted in v2); fresh test 2/2 positives, 2/2 confusers (n tiny); v2 not the default | more tail-chasing recordings with usable terms; one consistent threshold |
 
 ## Rules for every job
@@ -800,6 +801,37 @@ score it is applied to, and be tested on new clips.
 
 **Recovery.** Feature extraction skips finished clips; development is
 deterministic from the features.
+
+## B3 - Phone-sized behaviour encoder (E33, 2026-10-31)
+
+**Capability.** Zero-shot behaviour recognition on the phone: a student
+that maps a 224 x 224 animal crop into SigLIP's image space, so that the
+SigLIP text prompts (embedded offline) can score it.
+
+| Job | Data | Command | CPU time (measured) | Outcome |
+| --- | --- | --- | --- | --- |
+| Crops | G1 Open Images cat/dog boxes (area >= 0.04; train 15,775 / development 927) and G1b CoP3D frames (train 4,538 / 400 development) | `python -m petperception.eval.e33_phone_student build` (resumable per file) | about 3 min | `var/student/crops/`, `index.json` |
+| Teacher | SigLIP base on every crop | `... e33_phone_student teacher --threads 4` (resumable in chunks of 512) | about 4.8 crops/s on 2 threads while G1 trained, 10.7 crops/s on 4 threads | `var/student/teacher/*.npy`, `text_e31.npz` |
+| Student | MobileNetV3-Large + Dense(768) + L2; cosine + KL on the E31 prompt logits; Adam 3e-4 cosine decay, batch 32, 6 epochs | `var/venv-g1/bin/python training/student/train_student.py --work var/student --run-dir var/student/run_e33 --export-dir models/student/e33_mnv3l --threads 4` | about 8 min per epoch, 57 min in total | validation cosine 0.863, KL 0.555 (epoch 5 selected) |
+| Fixed-batch export | the selected weights | `training/student/export_student.py --weights models/student/e33_mnv3l/student_best.weights.h5 --out models/student/e33_mnv3l` | under 1 min | float32 / float16 / int8 TFLite, outputs identical to the evaluated files |
+| Evaluation | E31 pool (278 clips) | `python -m petperception.eval.e33_phone_student evaluate --threads 2` | about 25 min | `results/e33/metrics.json` |
+
+**Recovery (tested).** A SIGTERM mid-epoch and a resume with the same
+command continued at the saved step (smoke run); the real run was killed by
+a machine reboot at epoch 5, step about 560, and resumed from its interval
+checkpoint at step 1 (about 7 minutes of work lost; the interval timer is
+not reset by an epoch-end checkpoint, which a later trainer version should
+fix). A resume refuses to continue if the configuration, the crop index,
+the text bank or the trainer changed.
+
+**Artifacts.** `models/student/e33_mnv3l/` (exports, selected weights,
+`run_record.json` with hashes and history; the optimizer-state checkpoint
+stays in `var/student/run_e33/`). Release: research and non-commercial only
+(CoP3D CC BY-NC frames in training; SigLIP as teacher).
+
+**Next.** Distillation on behaviour-rich video frames, a larger student, or
+per-behaviour heads on the student's embeddings, each evaluated with the
+same E31-pool protocol and bar.
 
 ## Already-trained artifacts and how to reproduce them
 

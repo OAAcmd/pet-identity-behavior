@@ -1423,6 +1423,27 @@ over-reports people (12 false, 0 missed); the tail-chasing clip decision
 used the zero-shot threshold on the combined score (at the development
 threshold for that score neither positive passes).
 
+### E33 - Phone-sized student of the behaviour encoder - COMPLETED (criterion not met; not adopted)
+
+Pre-registered (`src/petperception/eval/e33_phone_student.py`, committed
+before any student score): a Keras MobileNetV3-Large + 768-d projection
+distilled from SigLIP base (cosine + KL on the E31 prompt softmax) on 20,313
+cat and dog crops (G1 Open Images CC BY, G1b CoP3D CC BY-NC), evaluated by
+zero-shot macro AP on the E31 pool (278 clips, the teacher's own crops,
+frozen E31 prompts and clip score).
+
+| Encoder | Size | Macro AP [95 % CI] | Difference to teacher |
+| --- | --- | --- | --- |
+| SigLIP base (teacher; reproduces E31) | 812 MB | 0.416 [0.351, 0.496] | - |
+| Student float32 / float16 / int8 | 14.9 / 7.5 / 4.0 MB | 0.273 [0.221, 0.353] (all three) | -0.143 [-0.194, -0.088] |
+| Chance | - | 0.073 | - |
+
+The student retains 58 % of the teacher's above-chance AP; the bar was 80 %
+(0.347): not met. Eating, resting and locomotion hold up; drinking, tail
+chasing, kneading and grooming lose most. Desktop CPU 4-9 ms per crop;
+desktop headless Chromium (LiteRT.js) bit-exact for float32 / float16, int8
+within 0.004, 15-48 ms per crop. Not a phone result.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
