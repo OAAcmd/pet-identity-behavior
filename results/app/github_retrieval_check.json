@@ -1,0 +1,12 @@
+{
+  "check": "user journey, capability inventory and Android test app retrieved from GitHub",
+  "date": "2026-10-31 (machine clock)",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng (commit after the Android test app commit)",
+  "results": {
+    "apk_sha256": "android-app/dist/pet-observer-0.1.0-debug.apk matches dist/SHA256SUMS",
+    "apk_rebuilt_from_clone": "npm ci, npx cap sync android, ./gradlew assembleDebug: success (debug APK, 4.05 MB; not byte-identical because of debug signing metadata)",
+    "screenshots": "docs/ux: 9 PNG files present",
+    "journey_test": "web/tests/journey/journey.spec.ts passed against a running server in this workspace (45 s); launcher.spec.ts passed"
+  },
+  "not_in_git": "Android SDK, Gradle caches, node_modules, private recordings (storage.media_root, storage.research_root), credentials"
+}
