@@ -368,6 +368,15 @@ references combine the source with the assistant frame review
 (machine-assisted). Both systems saw the same text once: v1 = the frozen E31
 system (commit 0c1f7c5, run from a git worktree), v2 = the E32 system.
 
+Timeline by the machine clock (2026-10-31): v2 freeze commit 3f8eae9 at
+00:47:42; frame-review and benchmark files last written at 00:51 and 00:52;
+pre-registration commit 0402c46 at 00:57:29; first test feature file at
+00:58:01. The frame-review entries and the benchmark carry the date
+2026-10-30, the date the assistant assumed before checking the clock. That
+the frame review followed the freeze is taken from the working notes; the
+file times only show the last write. No test feature (and so no test score)
+existed before the pre-registration commit.
+
 | Measure | v1 (E31 system) | v2 (E32 system) | Target |
 | --- | --- | --- | --- |
 | B1 asked-and-present behaviours recognized | 21/33 = 0.64 [0.47, 0.78] | **24/33 = 0.73** [0.56, 0.85] | paired: v2 >= v1 - 1 (met) |
