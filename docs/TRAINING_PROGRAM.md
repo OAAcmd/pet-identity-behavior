@@ -12,7 +12,7 @@ when held-out evaluation supports it (E15: the learned "on furniture" head
 was not better than the containment rule, so the rule ships, and both
 results are kept).
 
-## Status at a glance (2026-10-19)
+## Status at a glance (2026-10-30)
 
 | Job | Capability | Ran here | Blocked on |
 | --- | --- | --- | --- |
@@ -21,7 +21,8 @@ results are kept).
 | G3 | temporal behaviour from video | E17 **ran on CPU**: temporal model 0.590 vs pooled 0.575 vs E11 0.638 macro-F1; not adopted | household or licensed video (cats; release) |
 | G4 | vocal context and vocalization type | cat context (E2) **ran**: macro-F1 0.46, not shipped | dog context data (huggingface.co blocked, terms); type-labelled audio (zenodo.org blocked) |
 | G5 | distilled multi-task student for phones | not started | household video and G1 |
-| B1 | behaviour head on frozen SigLIP (explanations) | **ran** in E31 (5-fold grouped CV on 278 clips): 0.248 vs zero-shot 0.416 macro AP, not adopted | more labelled clips per behaviour |
+| B1 | behaviour head on frozen SigLIP (explanations) | **ran** in E31 (5-fold grouped CV on 278 clips): 0.248 vs zero-shot 0.416 macro AP, not adopted; re-run on feature version 2 in E32: head -0.19, not adopted | more labelled clips per behaviour |
+| B2 | turning-in-place (tail chasing) window model (E32) | **ran** on CPU (20,822 windows of 294 clips, grouped 5-fold CV, under 2 min): out-of-fold clip AP 0.30, mean with zero-shot 0.43 (adopted in v2); fresh test 2/2 positives, 2/2 confusers (n tiny); v2 not the default | more tail-chasing recordings with usable terms; one consistent threshold |
 
 ## Rules for every job
 
@@ -364,7 +365,12 @@ load in the product detector, and `vault.py restore` rebuilt a resumable run
 directory from the clone (`results/g1/github_restore_check_g1b.json`).
 `g1b_warm_cat2` (run A) stays paused at step 106: the selection below
 compares the completed candidates G1a and B only (the candidate set is
-reduced, the rule is unchanged).
+reduced, the rule is unchanged). *Update 2026-10-31 (machine clock, see
+STATUS.json):* run A was resumed in the E32 milestone with the same command
+(it restored its signal checkpoints at steps 106 and 1,086; 2 threads,
+nice 15); when it finishes, the selection is re-run with the three
+candidates under the same rule, and a different winner would be scored once
+on acceptance 1 and E20.
 
 Selection on development data (`results/g1/g1b_selection.json`,
 `src/petperception/eval/g1_select.py`):
@@ -758,9 +764,42 @@ when the configuration is missing.
 rename per clip); E31 itself is deterministic and re-runs from the features
 in about two minutes.
 
-**Next.** More labelled clips per behaviour (household recordings), or a
-temporal recognizer for tail chasing tested on fresh clips; the head is
-re-evaluated with the same rule when the data change.
+**Next.** More labelled clips per behaviour (household recordings); the
+head is re-evaluated with the same rule when the data change. The temporal
+recognizer for tail chasing became B2 (below).
+
+## B2 - Turning-in-place window model (E32, 2026-10-30)
+
+**Capability.** Tail chasing and other circling, recognized from the
+animal's track over time rather than single frames
+(`src/petperception/understand/temporal.py`).
+
+**What is trained.** A logistic regression on 14 features of 2-s windows
+(hop 0.5 s) from feature version 2: detection and fill rates, displacement
+and path relative to the animal's size, flow speed and rotation, horizontal
+motion flips, box aspect and area variation, appearance periodicity, and the
+zero-shot circling and neutral probabilities. Window labels: inside a
+frame-review tail-chasing bout = 1, outside every bout = 0, partial overlap
+ignored; other development clips all 0 unless a human label says tail
+chasing (then left out). C from {0.01, 0.1, 1} by grouped 5-fold CV
+(uploader / paper); clip score = mean of the top quarter of window
+probabilities, combined with the zero-shot clip score by their mean (chosen
+on out-of-fold clip AP: window 0.30, zero-shot 0.35, mean 0.43).
+
+| Job | Data | Command | CPU time (measured) | Outcome |
+| --- | --- | --- | --- | --- |
+| Features v2 | 300 development clips, then the 37 test clips after pre-registration | `python -m petperception.understand.dataset --threads 2 --feature-version 2 --subdir features_v2` (resumable per clip) | about 11-24 s per clip with 2 threads (37 test clips in 14 min with v1 extraction in parallel) | `var/understand/features_v2/*.npz` |
+| Development | the E31 collection only | `python -m petperception.eval.e32_behavior_v2 develop` | a few minutes (SigLIP text prompts and CV) | `artifacts/understand/circling_v1.json`, `recognizer_v2.json`, `results/e32/development.json` |
+
+**Known defect (found after the test, not fixed in the tested system).** The
+v2 recognizer compares the combined clip score with the tail-chasing
+threshold that the part A rule chose for zero-shot scores (0.64), not with
+the development threshold for the combined score (0.81); the circling
+threshold only sets the bouts. A v3 must use one threshold chosen for the
+score it is applied to, and be tested on new clips.
+
+**Recovery.** Feature extraction skips finished clips; development is
+deterministic from the features.
 
 ## Already-trained artifacts and how to reproduce them
 

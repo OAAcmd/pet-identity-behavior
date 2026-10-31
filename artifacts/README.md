@@ -80,6 +80,11 @@ configuration and the producing commands: `intent/MANIFEST.json`.
 | `understand/recognizer.json` (checksums: `understand/MANIFEST.json`) | `petperception evaluate --experiment e31` | method `zero_shot` (the trained head was not adopted), per-behaviour thresholds chosen on out-of-fold scores of 278 clips, fixed defaults (0.30 zero-shot, 0.30 YAMNet vocal), provenance | `petperception explain` | research (thresholds chosen on Commons / paper / Internet Archive clips; SigLIP terms) |
 
 The knowledge base (sources, candidates, distinguishing observations) is
-code with its own version (`understand/knowledge.py`, `behavior-kb-v1`),
-validated by `knowledge.validate()` and the tests.
+code with its own version (`understand/knowledge.py`, `behavior-kb-v2`
+for the E32 system; the default E31 system keeps `behavior-kb-v1` in the
+frozen copy `understand/e31/knowledge.py`), validated by
+`knowledge.validate()` and the tests. E32's decision kept the E31 system as
+the default (results/e32).
+| `understand/recognizer_v2.json` | `python -m petperception.eval.e32_behavior_v2 develop` | E32 system: the E31 part A rule re-run on feature version 2 (zero-shot kept; thresholds from out-of-fold scores of 283 development clips) | `petperception explain --system-version 2` | research |
+| `understand/circling_v1.json` | same command | turning-in-place window model (logistic regression on 14 window features, standardization, coefficients, development threshold 0.81, clip score "mean" of zero-shot and window model; JSON, no pickles) | `--system-version 2` | research (fitted on Commons / paper / Internet Archive clips) |
 | `understand/candidates/behavior_head_e31_not_adopted.{json,npz}` | same command | the trained head E31 evaluated and did not adopt (logistic regression per behaviour on 1,537 inputs, fitted on all 278 pool clips; metadata names data and decision) | never (kept for reproducibility and later comparison) | research |

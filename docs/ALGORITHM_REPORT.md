@@ -1383,6 +1383,42 @@ benchmark recognition 23/36 and 19/36 against 22/36 (tail chasing 3/8, 1/8,
 3/8). Better localization does not help recognition; at the stricter
 per-class points fast spinning drops out of the track.
 
+### E32 - Behaviour explanation v2 on fresh recordings, paired with the E31 system - COMPLETED (v2 better on every paired measure; not adopted as default by the pre-registered rule)
+
+Development on the E31 collection only (`results/e32/development.json`):
+turning-in-place window model over feature version 2 (out-of-fold clip AP
+for tail chasing 0.30; zero-shot 0.35; their mean 0.43, adopted), zero-shot
+kept on version-2 features (head -0.19 macro AP), parser v2 with
+after/before/until context phrases and MiniLM paraphrase matching (66/84
+development questions, keyword parser 53/84), recording context (person,
+objects, sounds, place) at fixed thresholds, knowledge base v2 (21
+behaviours, 33 sources). Frozen at 3f8eae9; test protocol, benchmark and
+targets committed at 0402c46 before any test feature existed; scored once.
+
+Test: 37 questions on 37 fresh clips (9 expert-captioned paper videos, 27
+Mixkit stock clips, 1 Internet Archive clip), both systems on the same text:
+
+| Measure | E31 system (v1) | v2 |
+| --- | --- | --- |
+| Asked-and-present behaviours recognized | 21/33 | **24/33** |
+| Tail chasing / tail-chasing confusers rejected | 1/2 / 1/2 | **2/2 / 2/2** (n tiny; one positive by 0.001) |
+| Question parsed (target 0.9) | 13/33 | 16/33 (not met) |
+| Knowledge entry / grounded / request separation (target 0.9) | 28 / 30 / 25 of 33 | **33 / 31 / 28** of 33 (C4 0.85: not met) |
+| Expert interpretation covered / ranked first | 3/7, 1/7 | **6/7, 5/7** |
+| Observations, no certainty, report status, species | 33/33 each | 33/33 each |
+| Person in view agrees with frame review (target 0.8) | - | 23/35 (not met) |
+
+Decision: v2 missed the absolute bar C4 >= 0.9, so by the fixed rule the
+default stays the E31 system (kept verbatim in `understand/e31/`, verified
+to reproduce the tested answers, `results/e32/default_v1_check.json`); v2 is
+available with `--system-version 2`. Post-hoc (descriptive): fresh,
+independently phrased questions defeat the parser far more often than the
+E31 questions did; new behaviours at the fixed 0.30 threshold fire on
+unrelated clips (head tremor 7 false alarms); the person-near rule
+over-reports people (12 false, 0 missed); the tail-chasing clip decision
+used the zero-shot threshold on the combined score (at the development
+threshold for that score neither positive passes).
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):
@@ -1488,3 +1524,9 @@ design, data, results and gaps: [BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.m
   request is possible, and that the recording cannot establish the cause.
 * **Not on the phone**: SigLIP is 812 MB; the explanation layer is not yet
   ported to the browser engine.
+* **Version 2 (E32, `--system-version 2`)**: feature version 2 (gap
+  bridging, track holding, context detections, three scene embeddings), a
+  turning-in-place window model for tail chasing, hiss / growl as threat
+  evidence, recording context with half the weight of the user's words,
+  before/after events, parser v2, knowledge base v2. Better than the E31
+  system on every paired E32 measure but not the default (E32 decision).

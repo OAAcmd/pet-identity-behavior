@@ -67,14 +67,20 @@ passwords are not logged (tested).
   needs the `behavior` extra (`uv sync --extra behavior`: CPU PyTorch,
   transformers) and SigLIP in `var/models/siglip_base_patch16_224`
   (`petperception fetch-models --only siglip_base_patch16_224`; checksums in
-  `manifests/resources.json`). It uses `artifacts/understand/recognizer.json`
-  (and `behavior_head.*` when E31 adopted a head) and falls back to the fixed
-  zero-shot defaults when they are missing. About 20-30 s for a 10-s clip on
-  2 CPU threads, most of it model loading. After changing
-  `understand/knowledge.py`, run `pytest tests/test_understand.py`
-  (`knowledge.validate()` must stay empty) and re-run
-  `petperception evaluate --experiment e31`. Not part of the phone bundle or
-  the web app yet ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
+  `manifests/resources.json`). The default (E31 system, code frozen in
+  `understand/e31/`) uses `artifacts/understand/recognizer.json` and falls
+  back to the fixed zero-shot defaults when it is missing.
+  `--system-version 2` (E32 system) uses `recognizer_v2.json` and
+  `circling_v1.json`, and all-MiniLM-L6-v2 in `var/models/minilm_l6_v2`
+  (`petperception fetch-models --only minilm_l6_v2`; without it the parser
+  falls back to keywords). About 20-30 s for a 10-s clip on 2 CPU threads,
+  most of it model loading. After changing `understand/knowledge.py` (v2),
+  run `pytest tests/test_understand.py tests/test_understand_v2.py`
+  (`knowledge.validate()` must stay empty); a change to the v2 system needs a
+  new pre-registered test on fresh clips before it can become the default
+  (E32 protocol). Never edit `understand/e31/` (a test pins its hashes). Not
+  part of the phone bundle or the web app yet
+  ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
 * **Upgrades:** `git pull && $dc up -d --build`; migrations run at start.
   Read the release notes for asset-format changes (bundle `engine_version`):
   app and bundle must come from the same release.

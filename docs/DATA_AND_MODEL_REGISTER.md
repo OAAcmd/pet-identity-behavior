@@ -316,6 +316,29 @@ track, optical-flow motion, appearance descriptors, SigLIP crop and scene
 embeddings, YAMNet scores. Rebuilt with
 `python -m petperception.understand.dataset` (resumable).
 
+### Behaviour explanation v2 additions (E32, 2026-10-30)
+
+Machine-readable entries: `minilm_l6_v2`, `mixkit_stock_pet_clips`, and the
+updated `paper_supplement_videos` and `internet_archive_pet_clips` in
+[`manifests/resources.json`](../manifests/resources.json). Everything below
+is E32 **test** material (set "e32" in the manifests): the E31 collection
+loader skips it, and no development step reads it.
+
+| ID | Content | Licence / permission | Labels | Grouping |
+| --- | --- | --- | --- | --- |
+| `minilm_l6_v2` (model) | `sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41`, files and SHA-256 in resources.json, local copy `var/models/minilm_l6_v2` | Apache-2.0 | - (frozen sentence encoder for parser v2) | - |
+| `paper_supplement_videos`, E32 part | 12 videos from 9 papers (sensory-impaired compulsive dogs, PLoS ONE 2020; hypothalamic hamartoma circling, Front Vet Sci 2025; catnip ethogram and catnip cats, BMC Biol 2022; absence seizures 2018, epilepsy survey types B and D 2025, sleep movements 2016, narcolepsy 2021, bruxism 2022, eating-triggered seizures 2020, J Vet Intern Med; idiopathic head tremor, Vet Med Int 2015); files over the size limit stored as their first 60 s (stream copy) with the retrieved file's SHA-256 | 7 CC BY (4.0 or 3.0), 4 CC BY-NC 4.0, 1 CC BY-NC-ND 4.0 (per video in `manifests/paper_videos.json`); evaluation only | *expert*: the authors' captions and video overlays | paper |
+| `mixkit_stock_pet_clips` | 32 cat and dog clips (first 360p rendition, SHA-256 each, `manifests/stock_pets.json`), 27 in the E32 benchmark | Mixkit Stock Video Free License; clips not redistributed | *source*: the stock title | uploader (all "mixkit") |
+| `internet_archive_pet_clips`, E32 part | `ia_cat_tail_3` (a cat chasing its tail on a carpet) | CC BY-NC-SA 2.0 (item metadata) | *source*: title | uploader |
+| Frame review, E32 part (`annotations/behavior_clips.json`, `method_e32`) | 37 test clips: behaviours, coarse bouts, setting, person in view, place; done after the v2 freeze | - | *assistant* (machine-assisted) | - |
+| E32 benchmark (`benchmarks/behavior_questions_v2.json`) and parser development set (`benchmarks/parser_dev.json`, 50 questions, development only) | 37 test questions with references, confusers, expert interpretations, request expectations, frame-review person / place | inherits the clips' terms | references combine source / expert labels with the frame review | - |
+
+Features: `var/understand/features_v2/<clip>.npz` (feature version 2, not
+committed; `python -m petperception.understand.dataset --feature-version 2
+--subdir features_v2`). The X-CLIP local copy was removed for disk space on
+2026-10-30 (never evaluated; `fetch-models --only xclip_base_patch32`
+restores it).
+
 ### G1b detector (2026-10-20)
 
 | Path | Content | Trained on | Terms |

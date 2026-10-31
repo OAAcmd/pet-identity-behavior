@@ -56,7 +56,12 @@ with requests kept apart from play, stress, compulsive and medical causes and
 never a stated cause:
 `uv run petperception explain clip.mp4 --species cat --scene "open living room" --question "my cat keeps turning in circles while biting its own tail - what could this mean?" --markdown answer.md`
 (needs `uv sync --extra behavior` and `petperception fetch-models --only siglip_base_patch16_224`).
-Measured on 37 real-clip questions in E31; what it can and cannot answer:
+The default is the E31 system; `--system-version 2` runs the E32 system
+(recording context, turning-in-place model, parser v2; also needs
+`fetch-models --only minilm_l6_v2`), which was better on every paired measure
+of the fresh E32 test but did not meet the pre-registered bar to become the
+default. Measured on 37 real-clip questions in E31 and 37 fresh ones in E32;
+what it can and cannot answer:
 [docs/BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md).
 
 ## Documents

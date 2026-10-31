@@ -3,7 +3,7 @@
  "produced_by": "petperception evaluate --experiment e31",
  "experiment": "E31",
  "encoder": "google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
- "deployed": "recognizer.json (method zero_shot)",
+ "deployed": "recognizer.json (method zero_shot) - default system (E31; kept by the E32 decision)",
  "not_deployed": "candidates/behavior_head_e31_not_adopted.* (trained head, macro AP 0.248 vs 0.416; kept for reproducibility)",
  "files": {
   "candidates/behavior_head_e31_not_adopted.json": {
@@ -27,5 +27,5 @@
    "sha256": "407f0f1dc97599210550e3f06f1ee72dfa7c2a133d26dea94d781d5e2cb533b6"
   }
  },
- "deployed_v2": "recognizer_v2.json (zero-shot thresholds, v2 vocabulary, feature version 2) + circling_v1.json (turning-in-place window model; clip score = mean with zero-shot); produced by python -m petperception.eval.e32_behavior_v2 develop"
+ "deployed_v2": "recognizer_v2.json (zero-shot thresholds, v2 vocabulary, feature version 2) + circling_v1.json (turning-in-place window model; clip score = mean with zero-shot); produced by python -m petperception.eval.e32_behavior_v2 develop; used with petperception explain --system-version 2 (not the default: E32 decision, results/e32/metrics.json)"
 }

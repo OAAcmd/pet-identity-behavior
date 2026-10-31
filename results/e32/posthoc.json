@@ -140,91 +140,107 @@
   "person_v2": {
     "false_reports": [
       {
-        "id": "t08",
+        "id": "t01",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
+        "max_person_score": 0.42,
         "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.01
+      },
+      {
+        "id": "t02",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.93,
+        "share_frames_person_ge_0.5": 0.02,
+        "share_frames_near_ge_0.2": 0.08
+      },
+      {
+        "id": "t05",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.74,
+        "share_frames_person_ge_0.5": 0.1,
+        "share_frames_near_ge_0.2": 0.23
+      },
+      {
+        "id": "t07",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.34,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.01
+      },
+      {
+        "id": "t10",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.44,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.02
+      },
+      {
+        "id": "t12",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.91,
+        "share_frames_person_ge_0.5": 0.34,
         "share_frames_near_ge_0.2": 0.0
       },
       {
-        "id": "o01",
+        "id": "o02",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "max_person_score": 0.51,
+        "share_frames_person_ge_0.5": 0.02,
+        "share_frames_near_ge_0.2": 0.08
       },
       {
-        "id": "o08",
+        "id": "o13",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
+        "max_person_score": 0.41,
         "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "share_frames_near_ge_0.2": 0.22
       },
       {
-        "id": "o09",
+        "id": "o16",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
+        "max_person_score": 0.49,
         "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "share_frames_near_ge_0.2": 0.3
       },
       {
-        "id": "o10",
+        "id": "o18",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
+        "max_person_score": 0.36,
         "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "share_frames_near_ge_0.2": 0.02
       },
       {
-        "id": "o11",
+        "id": "o21",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "max_person_score": 0.69,
+        "share_frames_person_ge_0.5": 0.01,
+        "share_frames_near_ge_0.2": 0.01
       },
       {
-        "id": "o12",
+        "id": "o22",
         "frame_review": false,
         "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
-      },
-      {
-        "id": "o14",
-        "frame_review": false,
-        "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
-      },
-      {
-        "id": "o15",
-        "frame_review": false,
-        "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
-      },
-      {
-        "id": "o17",
-        "frame_review": false,
-        "reported": true,
-        "max_person_score": 0.0,
-        "share_frames_person_ge_0.5": 0.0,
-        "share_frames_near_ge_0.2": 0.0
+        "max_person_score": 0.91,
+        "share_frames_person_ge_0.5": 0.45,
+        "share_frames_near_ge_0.2": 0.58
       }
     ],
     "missed": [],
     "counts": {
-      "frame False / reported False": 12,
+      "frame False / reported True": 12,
       "frame True / reported True": 13,
-      "frame False / reported True": 10
+      "frame False / reported False": 10
     }
   },
   "place_v2": {
@@ -238,5 +254,48 @@
     "park or street -> garden or yard": 1,
     "park or street -> veterinary clinic": 3,
     "veterinary clinic -> veterinary clinic": 4
+  },
+  "tail_chasing_v2_threshold": {
+    "note": "the clip decision compared the combined score (mean of zero-shot and window model) with the tail-chasing threshold of recognizer_v2.json, which the part-A rule chose for zero-shot scores; development chose a different threshold for the combined score (circling_v1.json); counterfactual only, nothing is changed",
+    "seen": [
+      {
+        "id": "t01",
+        "score": 0.8011,
+        "threshold_applied": 0.63577,
+        "evidence": {
+          "clip_score": "mean",
+          "window_model": 0.9224,
+          "windows_above_threshold": 20,
+          "windows": 78,
+          "zero_shot_top_quartile_mean": 0.6799
+        }
+      },
+      {
+        "id": "t02",
+        "score": 0.6368,
+        "threshold_applied": 0.63577,
+        "evidence": {
+          "clip_score": "mean",
+          "window_model": 0.8799,
+          "windows_above_threshold": 25,
+          "windows": 117,
+          "zero_shot_top_quartile_mean": 0.3937
+        }
+      },
+      {
+        "id": "o21",
+        "score": 0.6673,
+        "threshold_applied": 0.63577,
+        "evidence": {
+          "clip_score": "mean",
+          "window_model": 0.7043,
+          "windows_above_threshold": 0,
+          "windows": 35,
+          "zero_shot_top_quartile_mean": 0.6304
+        }
+      }
+    ],
+    "development_threshold_for_combined_score": 0.8072953820228577,
+    "seen_at_development_threshold": []
   }
 }

@@ -1415,34 +1415,50 @@
     {
       "id": "paper_supplement_videos",
       "kind": "dataset",
-      "role": "expert-captioned behaviour videos (tail chasing, hyperaesthesia, flank biting, focal seizures)",
-      "name": "Supplementary videos of five open-access papers",
+      "role": "expert-captioned behaviour videos: E31 development collection (8: tail chasing, hyperaesthesia, flank biting, focal seizures) and E32 test material (12, set 'e32': compulsive and neurological circling, head tremor, epilepsy, sleep movements, narcolepsy, bruxism, eating-triggered seizures, catnip)",
+      "name": "Supplementary videos of open-access papers (5 papers for E31, 9 for E32)",
       "status": "available",
-      "retrieved_at": "2026-10-20",
+      "retrieved_at": "2026-10-20 (E31; the E32 additions were retrieved in the next milestone, before the machine clock was reset)",
       "manifest": "manifests/paper_videos.json",
-      "licence": "CC BY 4.0 (each article)",
+      "licence": "CC BY 4.0 / CC BY 3.0 (E31 videos and 7 E32 videos); CC BY-NC 4.0 (4 J Vet Intern Med E32 videos) and CC BY-NC-ND 4.0 (narcolepsy 2021); per video in the manifest",
       "release_suitability": {
         "research": "suitable",
         "personal_noncommercial": "suitable",
-        "commercial": "suitable"
+        "commercial": "only the CC BY videos (NC / ND videos: evaluation in research only)"
       },
-      "release_note": "Attribution to the articles is required; raw media stay in var/."
+      "release_note": "Attribution to the articles is required; raw media stay in var/; large E32 files are stored as their first 60 s with the retrieved file's SHA-256 recorded. Evaluation only."
     },
     {
       "id": "internet_archive_pet_clips",
       "kind": "dataset",
-      "role": "tail-chasing and confuser clips for the E31 benchmark",
-      "name": "Five Internet Archive uploads (cats chasing tails, a dog spinning, tail flicking at rest, a kitten biting a cat's tail)",
+      "role": "tail-chasing and confuser clips for the E31 benchmark (5) and one E32 test clip (ia_cat_tail_3, a cat chasing its tail)",
+      "name": "Six Internet Archive uploads (cats chasing tails, a dog spinning, tail flicking at rest, a kitten biting a cat's tail)",
       "status": "available",
       "retrieved_at": "2026-10-20",
       "manifest": "manifests/archive_pets.json",
-      "licence": "none stated (unresolved permission)",
+      "licence": "none stated for the five E31 clips (unresolved permission); CC BY-NC-SA 2.0 for ia_cat_tail_3 (item metadata)",
       "release_suitability": {
         "research": "suitable",
         "personal_noncommercial": "not_permitted",
         "commercial": "not_permitted"
       },
       "release_note": "Research analysis only; never redistributed; nothing trained on them ships outside the research profile."
+    },
+    {
+      "id": "mixkit_stock_pet_clips",
+      "kind": "dataset",
+      "role": "fresh cat and dog stock clips for the E32 test (32 retrieved, 27 in the benchmark); never used for development",
+      "name": "Mixkit free stock videos of cats and dogs (first 360p rendition)",
+      "status": "available",
+      "retrieved_at": "2026-10-20 (machine clock at retrieval, E32 milestone)",
+      "manifest": "manifests/stock_pets.json",
+      "licence": "Mixkit Stock Video Free License (https://mixkit.co/license/#videoFree)",
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "suitable",
+        "commercial": "use in a project allowed by the licence; the clips themselves may not be redistributed"
+      },
+      "release_note": "Raw media stay in var/ (SHA-256 per clip in the manifest); evaluation only."
     },
     {
       "id": "minilm_l6_v2",

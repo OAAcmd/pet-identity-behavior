@@ -429,8 +429,8 @@ def posthoc(settings: Settings, out_dir: Path) -> dict:
         q = bench[r["id"]]
         if "X_person" in r:
             z = np.load(fdir / f"{q['clip']}.npz", allow_pickle=False)
-            said = r["X_person"] == bool(q["frame_person"])
-            person.append({"id": r["id"], "frame_review": bool(q["frame_person"]), "reported": bool(q["frame_person"]) == said,
+            reported = bool(q["frame_person"]) == bool(r["X_person"])  # X_person: reported == frame review
+            person.append({"id": r["id"], "frame_review": bool(q["frame_person"]), "reported": reported,
                            "max_person_score": round(float(z["ctx"][:, j].max()), 2), "share_frames_person_ge_0.5": round(float((z["ctx"][:, j] >= 0.5).mean()), 2),
                            "share_frames_near_ge_0.2": round(float((z["ctx_person_near"] >= 0.2).mean()), 2)})
         if q.get("frame_place"):
@@ -439,6 +439,18 @@ def posthoc(settings: Settings, out_dir: Path) -> dict:
                         "missed": [p for p in person if p["frame_review"] and not p["reported"]],
                         "counts": dict(Counter(f"frame {p['frame_review']} / reported {p['reported']}" for p in person))}
     out["place_v2"] = dict(sorted(place.items()))
+    circ = json.loads((REPO_ROOT / "artifacts" / "understand" / "circling_v1.json").read_text())
+    tc = []
+    for it in bench.values():
+        a = json.loads((out_dir / "answers" / f"{it['id']}.json").read_text())["answer"]
+        tc += [{"id": it["id"], "score": b["score"], "threshold_applied": b["threshold"], "evidence": b["evidence"]}
+               for b in a["behaviors_seen"] if b["behavior"] == "tail_chasing"]
+    out["tail_chasing_v2_threshold"] = {
+        "note": "the clip decision compared the combined score (mean of zero-shot and window model) with the tail-chasing threshold of "
+                "recognizer_v2.json, which the part-A rule chose for zero-shot scores; development chose a different threshold for the "
+                "combined score (circling_v1.json); counterfactual only, nothing is changed",
+        "seen": tc, "development_threshold_for_combined_score": circ["threshold"],
+        "seen_at_development_threshold": [t["id"] for t in tc if t["score"] >= circ["threshold"]]}
     write_json(out_dir / "posthoc.json", out)
     return out
 
