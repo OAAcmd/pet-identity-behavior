@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { subjectText } from "../components/AnalysisListItem";
+import { BehaviorAnswerView } from "../components/BehaviorAnswerView";
 import { ResultView, serverFeedback } from "../components/ResultView";
 import { ConfirmDialog, ErrorBanner, InfoBanner, ProgressBar, Spinner } from "../components/ui";
 import { ApiError, api } from "../lib/api";
@@ -116,6 +117,7 @@ export function AnalysisPage({ id }: { id: string }) {
         </InfoBanner>
       )}
 
+      {a.behavior_question && <BehaviorAnswerView q={a.behavior_question} />}
       {a.status === "succeeded" && a.result && <ResultView feedback={serverFeedback(a.id)} result={a.result} mediaUrl={mediaUrl} mediaKind={mediaKind} />}
 
       <div class="card">

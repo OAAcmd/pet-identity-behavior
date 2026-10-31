@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ErrorBanner, Field, InfoBanner, ProgressBar } from "../components/ui";
 import { ApiError } from "../lib/api";
 import { localMedia } from "../lib/localMedia";
-import { pendingStore, type PendingUpload } from "../lib/idb";
+import { pendingStore, type BehaviorQuestionIn, type PendingUpload } from "../lib/idb";
 import { captureSupport, ClipRecorder, describeMediaError, grabPhoto, openStream, stopStream, type CaptureError, type CaptureMode } from "../lib/recorder";
 import { navigate } from "../lib/router";
 import type { SubjectMode } from "../lib/types";
@@ -41,6 +41,13 @@ export function CapturePage() {
   const [petIds, setPetIds] = useState<string[]>([]);
   const [placeId, setPlaceId] = useState<string>("");
   const [note, setNote] = useState("");
+  const [askQ, setAskQ] = useState(false);
+  const [qSpecies, setQSpecies] = useState<"cat" | "dog">("cat");
+  const [qScene, setQScene] = useState("");
+  const [qText, setQText] = useState("");
+  const [qCloud, setQCloud] = useState(false);
+  const [qDonate, setQDonate] = useState(false);
+  const bq = caps?.behavior_question;
   const [error, setError] = useState<unknown>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -165,6 +172,11 @@ export function CapturePage() {
       analysis: {
         subject_mode: subject, pet_ids: subject === "unknown" ? [] : petIds, place_id: placeId || null,
         modalities: clip.kind === "audio" ? ["audio"] : clip.kind === "image" ? ["video"] : ["audio", "video"], note,
+        question: askQ && qText.trim().length >= 3 ? ({
+          species: qSpecies, scene: qScene.trim(), question: qText.trim(), understanding: qCloud && bq?.cloud_available ? "cloud" : "local",
+          strategy: (bq?.default_strategy as BehaviorQuestionIn["strategy"]) ?? "local_preprocessed",
+          retain_for_research: qDonate, research_consent_version: qDonate ? (bq?.research_consent_version ?? null) : null,
+        } satisfies BehaviorQuestionIn) : undefined,
       },
       createdAt: Date.now(), state: "pending", lastError: null, analysisId: null,
     };
@@ -289,6 +301,36 @@ export function CapturePage() {
           <Field label="Note (optional)" id="note">
             <input id="note" maxLength={500} value={note} onInput={(e) => setNote((e.target as HTMLInputElement).value)} placeholder="e.g. before dinner" />
           </Field>
+
+          {useServer && (
+            <fieldset class="field">
+              <legend>Ask about the behaviour (optional)</legend>
+              <label class="check"><input type="checkbox" checked={askQ} onChange={(e) => setAskQ((e.target as HTMLInputElement).checked)} /> I have a question about what my pet does</label>
+              {askQ && (
+                <div>
+                  <Field label="Species" id="q-species">
+                    <select id="q-species" value={qSpecies} onChange={(e) => setQSpecies((e.target as HTMLSelectElement).value as "cat" | "dog")}>
+                      <option value="cat">Cat</option><option value="dog">Dog</option>
+                    </select>
+                  </Field>
+                  <Field label="Where and what was happening" id="q-scene">
+                    <input id="q-scene" maxLength={500} value={qScene} onInput={(e) => setQScene((e.target as HTMLInputElement).value)} placeholder="e.g. open living room, evening, guests visiting" />
+                  </Field>
+                  <Field label="Your question" id="q-text">
+                    <textarea id="q-text" maxLength={1000} value={qText} onInput={(e) => setQText((e.target as HTMLTextAreaElement).value)}
+                      placeholder="e.g. Why does my cat keep circling while chasing or biting its tail?" />
+                  </Field>
+                  {bq?.cloud_available && (
+                    <label class="check"><input type="checkbox" checked={qCloud} onChange={(e) => setQCloud((e.target as HTMLInputElement).checked)} />
+                      {" "}Use the cloud model: frames, pet close-ups and a sound summary of this clip are sent from the server to the AI provider for this answer</label>
+                  )}
+                  <label class="check"><input type="checkbox" checked={qDonate} onChange={(e) => setQDonate((e.target as HTMLInputElement).checked)} />
+                    {" "}Keep this recording as a research sample (separate consent; you can delete it at any time under Research samples)</label>
+                  <p class="hint">The answer separates what the recording shows, what you described, and possible explanations, which are hypotheses, not diagnoses.</p>
+                </div>
+              )}
+            </fieldset>
+          )}
 
           {useServer ? (
             <InfoBanner tone="warn">Server analysis is on (Settings): this recording will be uploaded to your server for analysis.</InfoBanner>

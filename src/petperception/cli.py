@@ -420,6 +420,22 @@ def cmd_explain(args: argparse.Namespace) -> int:
     from .understand.explain import render_markdown
     from .understand.run import Explainer
 
+    if args.understanding == "cloud":
+        from .understand import cloud as CL
+
+        s = _settings(args)
+        out = CL.understand(Path(args.media), args.species, args.scene or "", args.question or "", Explainer.load(args.threads, args.detector, version=2),
+                            args.strategy or s.cloud.default_strategy, s.cloud, dry_run=args.dry_run)
+        js = json.dumps(out, indent=2, default=str)
+        if args.out:
+            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.out).write_text(js + "\n", encoding="utf-8")
+        if args.markdown:
+            Path(args.markdown).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.markdown).write_text(CL.render_markdown(out), encoding="utf-8")
+        if not args.out and not args.markdown:
+            print(js)
+        return 0
     ans = Explainer.load(args.threads, args.detector, version=args.system_version).explain(Path(args.media), args.species, args.scene or "", args.question or "").to_dict()
     js = json.dumps(ans, indent=2)
     if args.out:
@@ -892,6 +908,10 @@ def build_parser() -> argparse.ArgumentParser:
     xp.add_argument("--threads", type=int, default=2)
     xp.add_argument("--system-version", type=int, choices=[1, 2], default=1,
                     help="1 (default): E31 system; 2: E32 system with recording context and the turning-in-place model (results/e32)")
+    xp.add_argument("--understanding", choices=["local", "cloud"], default="local",
+                    help="cloud: local preprocessing, then the hosted model configured in cloud.* (API key in the backend environment; E35)")
+    xp.add_argument("--strategy", choices=["full_frames", "local_preprocessed", "features_only"], help="evidence packet for --understanding cloud")
+    xp.add_argument("--dry-run", action="store_true", help="build the cloud packet and report its size and cost estimate without calling the API")
     xp.add_argument("--out", help="write the JSON answer here")
     xp.add_argument("--markdown", help="write a readable answer here")
     xp.set_defaults(func=cmd_explain)

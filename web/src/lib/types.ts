@@ -90,6 +90,22 @@ export interface Analysis {
   started_at: string | null;
   finished_at: string | null;
   result?: AnalysisResult | null;
+  behavior_question?: {
+    species: string; scene: string; question: string; understanding: string; strategy: string; status: string; retain_for_research: boolean;
+    answer: BehaviorAnswer | null;
+  };
+}
+
+/** Answer to the owner's behaviour question (understand/cloud.py). Observed, owner-reported and inferred parts stay apart. */
+export interface BehaviorAnswer {
+  answer_source: "cloud" | "local";
+  strategy: string;
+  cloud: { status: string; reason?: string; answer?: Record<string, unknown> | null; problems?: string[]; cost_usd?: number; latency_s?: number };
+  local_answer: { summary: string; behaviors_seen: { behavior: string; score: number; bouts_s: number[][] }[]; uncertainty: string[];
+    observations_needed: string[]; urgent_signs: string[];
+    explained_behaviors: { behavior: string; basis: string; candidates_by_kind: Record<string, { explanation: string; sources: string[] }[]> }[] };
+  packet?: { images: number; upload_bytes_base64: number };
+  error?: string;
 }
 
 export interface Feedback {
@@ -237,4 +253,5 @@ export interface Capabilities {
   retention: { max_retain_media_days: number };
   registration: string;
   components: { name: string; state: string; reason: string | null }[];
+  behavior_question?: { cloud_available: boolean; strategies: string[]; default_strategy: string; research_consent_version: string };
 }

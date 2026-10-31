@@ -58,14 +58,57 @@ def summarize(res: AnalysisResult) -> dict:
 
 
 class JobRunner:
-    def __init__(self, settings: Settings, db: Database, store: Store, engine_factory: Callable[[], object], worker_id: str | None = None):
+    def __init__(self, settings: Settings, db: Database, store: Store, engine_factory: Callable[[], object], worker_id: str | None = None,
+                 explainer_factory: Callable[[int], object] | None = None):
         self.s = settings
         self.db = db
         self.store = store
         self.engine_factory = engine_factory
+        self.explainer_factory = explainer_factory
         self.worker_id = worker_id or f"{socket.gethostname()}:{os.getpid()}:{threading.get_ident()}"
         self._stop = threading.Event()
         self._engine = None
+        self._explainers: dict[int, object] = {}
+
+    def explainer(self, version: int):
+        """Behaviour-explanation system: version 1 (default, local answers), version 2 (evidence for cloud packets)."""
+        if version not in self._explainers:
+            if self.explainer_factory is not None:
+                self._explainers[version] = self.explainer_factory(version)
+            else:
+                from ..understand.run import Explainer
+
+                self._explainers[version] = Explainer.load(self.s.runtime.num_threads, version=version)
+        return self._explainers[version]
+
+    def answer_question(self, analysis_id: str, media_path: str) -> None:
+        """Answer the owner's behaviour question (local or cloud-assisted) and donate the recording if the owner opted in."""
+        q = self.store.question(analysis_id)
+        if q is None:
+            return
+        from ..understand import cloud as CL
+
+        try:
+            if q["understanding"] == "cloud":
+                out = CL.understand(Path(media_path), q["species"], q["scene"], q["question"], self.explainer(2), q["strategy"], self.s.cloud)
+            else:
+                ans = self.explainer(1).explain(Path(media_path), q["species"], q["scene"], q["question"]).to_dict()
+                out = {"strategy": "local", "answer_source": "local", "local_answer": ans, "cloud": {"status": "not_requested"},
+                       "species": q["species"], "scene": q["scene"], "question": q["question"]}
+            self.store.store_answer(analysis_id, "answered", out)
+        except Exception:  # noqa: BLE001 - the analysis result stays valid when the question step fails
+            log.exception("question_error", extra={"analysis_id": analysis_id})
+            self.store.store_answer(analysis_id, "failed", {"error": "the behaviour question could not be answered"})
+            out = None
+        if q["retain_for_research"]:
+            ann = None
+            if out is not None:
+                c = out.get("cloud") or {}
+                ann = {"origin": "cloud model" if out["answer_source"] == "cloud" else "local recognizer", "status_note": "provisional; not a label",
+                       "observed": (c.get("answer") or {}).get("observed") if out["answer_source"] == "cloud"
+                       else [{k: b[k] for k in ("behavior", "score", "bouts_s")} for b in out["local_answer"]["behaviors_seen"]],
+                       "model": c.get("model"), "prompt_version": c.get("prompt_version")}
+            self.store.donate_sample(analysis_id, ann)
 
     # ---------------------------------------------------------------- queue ops
     def recover_expired(self) -> int:
@@ -151,6 +194,8 @@ class JobRunner:
                 raise MediaError("not_found", "media file missing")
             res = self.engine().analyze(job["media_path"], zones=zones, modalities=tuple(job["modalities"].split(",")), analysis_id=jid,
                                         display_name=job["original_filename"], progress=progress, should_cancel=should_cancel)
+            progress("question", 0.99)
+            self.answer_question(jid, job["media_path"])  # before 'succeeded', so a finished analysis already carries its answer
             with self.db.tx() as c:
                 owner = c.execute("SELECT lease_owner FROM analyses WHERE id = ?", (jid,)).fetchone()
                 if owner is None or owner["lease_owner"] != self.worker_id:

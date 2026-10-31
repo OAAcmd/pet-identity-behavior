@@ -101,6 +101,7 @@ def app_settings(settings, tmp_path):
     s = settings.model_copy(deep=True)
     s.app.storage.database_path = str(tmp_path / "db.sqlite3")
     s.app.storage.media_root = str(tmp_path / "media")
+    s.app.storage.research_root = str(tmp_path / "research")
     s.app.storage.min_free_disk_bytes = 0
     s.app.auth.cookie_secure = False
     s.app.jobs.retry_backoff_s = 0.0

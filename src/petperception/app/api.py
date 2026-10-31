@@ -24,6 +24,7 @@ MEDIA_TYPES = {".mp4": "video/mp4", ".m4v": "video/mp4", ".mov": "video/quicktim
                ".avi": "video/x-msvideo", ".wav": "audio/wav", ".flac": "audio/flac", ".ogg": "audio/ogg", ".oga": "audio/ogg",
                ".opus": "audio/ogg", ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".aac": "audio/aac", ".jpg": "image/jpeg",
                ".jpeg": "image/jpeg", ".png": "image/png"}
+RESEARCH_CONSENT_VERSION = "rs-1"  # docs/RESEARCH_SAMPLES.md
 ERRORS: dict[int | str, dict[str, Any]] = {c: {"model": ErrorBody} for c in (400, 401, 403, 404, 409, 413, 415, 422, 429, 503, 507)}
 
 
@@ -108,6 +109,19 @@ class Upload(BaseModel):
     expires_at: float
 
 
+class BehaviorQuestionIn(BaseModel):
+    """The owner's question about the recording; species and scene are known inputs, never overridden."""
+
+    species: Literal["cat", "dog"]
+    scene: str = Field("", max_length=500)
+    question: str = Field(min_length=3, max_length=1000)
+    understanding: Literal["local", "cloud"] = "local"
+    strategy: Literal["full_frames", "local_preprocessed", "features_only"] = "local_preprocessed"
+    # separate, explicit opt-in: keep this recording as a research sample (deletable at any time)
+    retain_for_research: bool = False
+    research_consent_version: str | None = Field(None, max_length=40)
+
+
 class AnalysisIn(BaseModel):
     upload_id: str
     subject_mode: Literal["unknown", "single_known", "multiple_known"] = "unknown"
@@ -116,6 +130,24 @@ class AnalysisIn(BaseModel):
     zones: ZoneConfig | None = None
     modalities: list[Literal["audio", "video"]] = Field(default_factory=lambda: ["audio", "video"])
     note: str = Field("", max_length=500)
+    question: BehaviorQuestionIn | None = None
+
+
+class SampleFeedbackIn(BaseModel):
+    """Owner feedback on a donated sample: what the animal did, context, corrections, what happened afterwards."""
+
+    observed_behavior: str = Field("", max_length=1000)
+    context: str = Field("", max_length=1000)
+    corrections: str = Field("", max_length=1000)
+    subsequent_events: str = Field("", max_length=1000)
+
+
+class SampleReviewIn(BaseModel):
+    """A reviewer's label (human-confirmed): behaviours with times and the reviewer's certainty."""
+
+    behaviors: list[dict[str, Any]] = Field(default_factory=list, max_length=50)
+    certainty: Literal["low", "medium", "high"] = "medium"
+    note: str = Field("", max_length=1000)
 
 
 class DeviceReportIn(BaseModel):
@@ -202,6 +234,8 @@ def build_router(store: Store, engine_caps, readiness) -> APIRouter:
                           "max_duration_s": s.limits.max_duration_s, "url_fetching": False, "resumable": True}
         caps["retention"] = {"max_retain_media_days": st.max_retain_media_days, "default_retain_media_days": 0}
         caps["registration"] = s.app.auth.registration
+        caps["behavior_question"] = {"cloud_available": s.cloud.enabled, "strategies": ["full_frames", "local_preprocessed", "features_only"],
+                                     "default_strategy": s.cloud.default_strategy, "research_consent_version": RESEARCH_CONSENT_VERSION}
         return caps
 
     # -------------------------------------------------------------- auth
@@ -351,7 +385,30 @@ def build_router(store: Store, engine_caps, readiness) -> APIRouter:
     # ---------------------------------------------------------- analyses
     @r.post("/analyses", tags=["analyses"], status_code=202)
     def create_analysis(body: AnalysisIn, p: Principal = Depends(principal)) -> dict:
-        return store.create_analysis(p.user_id, body.upload_id, body.pet_ids, body.subject_mode, body.place_id, body.zones, list(body.modalities), body.note)
+        return store.create_analysis(p.user_id, body.upload_id, body.pet_ids, body.subject_mode, body.place_id, body.zones, list(body.modalities), body.note,
+                                     body.question.model_dump() if body.question else None)
+
+    # ---------------------------------------------------- research samples
+    @r.get("/research-samples", tags=["research"])
+    def list_samples(p: Principal = Depends(principal)) -> list[dict]:
+        return store.list_samples(p.user_id)
+
+    @r.get("/research-samples/{sample_id}", tags=["research"])
+    def get_sample(sample_id: str, p: Principal = Depends(principal)) -> dict:
+        return store.get_sample(p.user_id, sample_id)
+
+    @r.delete("/research-samples/{sample_id}", tags=["research"], status_code=204)
+    def delete_sample(sample_id: str, p: Principal = Depends(principal)) -> Response:
+        store.delete_sample(p.user_id, sample_id)
+        return Response(status_code=204)
+
+    @r.post("/research-samples/{sample_id}/feedback", tags=["research"], status_code=201)
+    def sample_feedback(sample_id: str, body: SampleFeedbackIn, p: Principal = Depends(principal)) -> dict:
+        return store.annotate_sample(p.user_id, sample_id, "owner", body.model_dump())
+
+    @r.post("/research-samples/{sample_id}/review", tags=["research"], status_code=201)
+    def sample_review(sample_id: str, body: SampleReviewIn, p: Principal = Depends(admin)) -> dict:
+        return store.annotate_sample(p.user_id, sample_id, "reviewer", body.model_dump())
 
     @r.get("/analyses", tags=["analyses"])
     def list_analyses(pet_id: str | None = None, limit: int = Query(30, ge=1, le=100), before: str | None = None,

@@ -3,6 +3,16 @@
 const DB_NAME = "pet-observer";
 const STORE = "pendingUploads";
 
+export interface BehaviorQuestionIn {
+  species: "cat" | "dog";
+  scene: string;
+  question: string;
+  understanding: "local" | "cloud";
+  strategy: "full_frames" | "local_preprocessed" | "features_only";
+  retain_for_research: boolean;
+  research_consent_version: string | null;
+}
+
 export interface PendingUpload {
   localId: string;
   userId: string;
@@ -16,6 +26,7 @@ export interface PendingUpload {
     place_id: string | null;
     modalities: string[];
     note: string;
+    question?: BehaviorQuestionIn;
   };
   createdAt: number;
   state: "pending" | "uploading" | "paused" | "failed" | "done";

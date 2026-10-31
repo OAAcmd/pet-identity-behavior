@@ -49,6 +49,9 @@ class Store:
         self.media_root = settings.app.storage.resolve(settings.app.storage.media_root)
         self.media_root.mkdir(parents=True, exist_ok=True)
         os.chmod(self.media_root, 0o700)
+        self.research_root = settings.app.storage.resolve(settings.app.storage.research_root)
+        self.research_root.mkdir(parents=True, exist_ok=True)
+        os.chmod(self.research_root, 0o700)
         self._upload_locks: dict[str, threading.Lock] = {}
         self._locks_guard = threading.Lock()
 
@@ -173,6 +176,7 @@ class Store:
         with self.db.tx() as c:
             c.execute("DELETE FROM users WHERE id = ?", (user_id,))
         shutil.rmtree(self.user_dir(user_id), ignore_errors=True)
+        shutil.rmtree(self.research_root / user_id, ignore_errors=True)
         self.audit(user_id, "account_deleted")
 
     # ------------------------------------------------------------------- pets
@@ -363,8 +367,15 @@ class Store:
 
     # --------------------------------------------------------------- analyses
     def create_analysis(self, user_id: str, upload_id: str, pet_ids: list[str], subject_mode: str, place_id: str | None,
-                        zones: ZoneConfig | None, modalities: list[str], note: str) -> dict:
+                        zones: ZoneConfig | None, modalities: list[str], note: str, question: dict | None = None) -> dict:
+        """``question``: {species, scene, question, understanding, strategy, retain_for_research, research_consent_version}."""
         j = self.s.app.jobs
+        if question is not None:
+            if question["understanding"] == "cloud" and not self.s.cloud.enabled:
+                raise ApiError(422, "cloud_disabled", "Cloud-assisted understanding is not enabled on this server.", "Choose local understanding.")
+            if question["retain_for_research"] and not question.get("research_consent_version"):
+                raise ApiError(422, "research_consent_missing", "Keeping the recording as a research sample needs your explicit consent.",
+                               "Accept the research-sample consent or leave the option off.")
         if subject_mode == "unknown" and pet_ids:
             raise ApiError(422, "subject_mismatch", "Pets were selected but the subject is 'unknown'.", "Choose 'single' or 'multiple', or clear the pets.")
         if subject_mode == "single_known" and len(pet_ids) != 1:
@@ -413,6 +424,11 @@ class Store:
                            up["size_bytes"], up["filename"], mp.duration_s, note, ts, ts))
                 for pid in pet_ids:
                     c.execute("INSERT INTO analysis_pets (analysis_id, pet_id) VALUES (?, ?)", (aid, pid))
+                if question is not None:
+                    c.execute("INSERT INTO analysis_questions (analysis_id, species, scene, question, understanding, strategy, retain_for_research, "
+                              "research_consent_version, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                              (aid, question["species"], question["scene"], question["question"], question["understanding"], question["strategy"],
+                               int(question["retain_for_research"]), question.get("research_consent_version"), ts, ts))
         log.info("analysis_queued", extra={"analysis_id": aid, "user": user_ref(user_id)})
         return self.get_analysis(user_id, aid)
 
@@ -439,10 +455,81 @@ class Store:
 
     def get_analysis(self, user_id: str, analysis_id: str, with_result: bool = False) -> dict:
         out = self._public(self._analysis_row(user_id, analysis_id))
+        q = self.question(analysis_id)
+        if q is not None:
+            out["behavior_question"] = {k: q[k] for k in ("species", "scene", "question", "understanding", "strategy", "status")} | {
+                "retain_for_research": bool(q["retain_for_research"]), "answer": json.loads(q["answer_json"]) if (with_result and q["answer_json"]) else None}
         if with_result:
             rr = self.db.one("SELECT result_json FROM analysis_results WHERE analysis_id = ?", (analysis_id,))
             out["result"] = json.loads(rr["result_json"]) if rr else None
         return out
+
+    # ------------------------------------------------------ behaviour questions and research samples (E35)
+    def question(self, analysis_id: str) -> dict | None:
+        return row(self.db.one("SELECT * FROM analysis_questions WHERE analysis_id = ?", (analysis_id,)))
+
+    def store_answer(self, analysis_id: str, status: str, answer: dict | None) -> None:
+        self.db.execute("UPDATE analysis_questions SET status = ?, answer_json = ?, updated_at = ? WHERE analysis_id = ?",
+                        (status, json.dumps(answer) if answer is not None else None, now_iso(), analysis_id))
+
+    def donate_sample(self, analysis_id: str, model_annotation: dict | None) -> str | None:
+        """Copy the analysed recording into the research store when the owner opted in for this analysis."""
+        q = self.question(analysis_id)
+        a = row(self.db.one("SELECT user_id, media_path, media_ext FROM analyses WHERE id = ?", (analysis_id,)))
+        if q is None or not q["retain_for_research"] or a is None or not a["media_path"] or not Path(a["media_path"]).exists():
+            return None
+        sid, ts = security.new_id(), now_iso()
+        d = self.research_root / a["user_id"]
+        d.mkdir(parents=True, exist_ok=True)
+        os.chmod(d, 0o700)
+        dst = d / f"sample-{sid}{a['media_ext']}"
+        shutil.copyfile(a["media_path"], dst)
+        sha = hashlib.sha256(dst.read_bytes()).hexdigest()
+        with self.db.tx() as c:
+            c.execute("INSERT INTO research_samples (id, user_id, analysis_id, media_path, media_sha256, species, scene, question, consent_version, "
+                      "consent_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                      (sid, a["user_id"], analysis_id, str(dst), sha, q["species"], q["scene"], q["question"], q["research_consent_version"], q["created_at"], ts))
+            if model_annotation is not None:
+                c.execute("INSERT INTO sample_annotations (id, sample_id, source, status, author_id, payload_json, created_at) VALUES (?, ?, 'model', 'provisional', NULL, ?, ?)",
+                          (security.new_id(), sid, json.dumps(model_annotation), ts))
+        self.audit(a["user_id"], "research_sample_donated", "research_sample", sid)
+        return sid
+
+    def _sample(self, user_id: str | None, sample_id: str) -> dict:
+        r = row(self.db.one("SELECT * FROM research_samples WHERE id = ?" + (" AND user_id = ?" if user_id else ""),
+                            (sample_id, user_id) if user_id else (sample_id,)))
+        if r is None:
+            raise not_found("research sample")
+        return r
+
+    def _sample_public(self, r: dict) -> dict:
+        ann = [dict(x) for x in self.db.query("SELECT id, source, status, payload_json, created_at FROM sample_annotations WHERE sample_id = ? ORDER BY created_at", (r["id"],))]
+        return {k: r[k] for k in ("id", "analysis_id", "species", "scene", "question", "consent_version", "consent_at", "created_at", "media_sha256")} | {
+            "annotations": [{**{k: x[k] for k in ("id", "source", "status", "created_at")}, "payload": json.loads(x["payload_json"])} for x in ann]}
+
+    def list_samples(self, user_id: str) -> list[dict]:
+        return [self._sample_public(dict(r)) for r in self.db.query("SELECT * FROM research_samples WHERE user_id = ? ORDER BY created_at DESC", (user_id,))]
+
+    def get_sample(self, user_id: str, sample_id: str) -> dict:
+        return self._sample_public(self._sample(user_id, sample_id))
+
+    def delete_sample(self, user_id: str, sample_id: str) -> None:
+        r = self._sample(user_id, sample_id)
+        with self.db.tx() as c:
+            c.execute("DELETE FROM research_samples WHERE id = ?", (sample_id,))
+        Path(r["media_path"]).unlink(missing_ok=True)
+        self.audit(user_id, "research_sample_deleted", "research_sample", sample_id)
+
+    def annotate_sample(self, user_id: str | None, sample_id: str, source: str, payload: dict) -> dict:
+        """source 'owner' (owner-reported) or 'reviewer' (human-confirmed; administrators only, enforced by the API)."""
+        status = {"owner": "owner_reported", "reviewer": "human_confirmed"}[source]
+        r = self._sample(user_id if source == "owner" else None, sample_id)
+        if len(json.dumps(payload)) > 8000:
+            raise ApiError(422, "annotation_too_large", "Feedback is limited to 8,000 characters.")
+        aid = security.new_id()
+        self.db.execute("INSERT INTO sample_annotations (id, sample_id, source, status, author_id, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        (aid, r["id"], source, status, user_id, json.dumps(payload), now_iso()))
+        return self._sample_public(self._sample(None, sample_id))
 
     def list_analyses(self, user_id: str, pet_id: str | None, limit: int, before: str | None) -> list[dict]:
         limit = max(1, min(100, limit))
@@ -563,6 +650,7 @@ class Store:
                   for r in self.db.query("SELECT * FROM synced_results WHERE user_id = ? ORDER BY created_at", (user_id,))]
         return {"format": "petperception.export/1", "exported_at": now_iso(), "user": {k: u[k] for k in ("username", "retain_media_days", "feedback_research_consent", "created_at")},
                 "pets": self.list_pets(user_id), "places": self.list_places(user_id), "analyses": analyses, "on_device_results_backed_up": synced,
+                "research_samples": self.list_samples(user_id),
                 "note": "Recordings are not included; download retained recordings individually. On-device recordings never reach the server."}
 
     # ---------------------------------------------------------------- cleanup

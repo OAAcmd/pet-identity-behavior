@@ -266,6 +266,21 @@ class VlmConfig(_Strict):
         return v
 
 
+class CloudConfig(_Strict):
+    """Cloud-assisted behaviour understanding (understand/cloud.py, E35). Off unless the server owner enables it; the
+    API key stays in the backend's environment (api_key_env) and each analysis must ask for it explicitly."""
+
+    enabled: bool = False
+    provider: Literal["anthropic"] = "anthropic"
+    model: str = "claude-sonnet-4-5"
+    api_key_env: str = "ANTHROPIC_API_KEY"
+    default_strategy: Literal["full_frames", "local_preprocessed", "features_only"] = "local_preprocessed"
+    price_in_per_mtok: float = 3.0    # USD; check the provider's current price list
+    price_out_per_mtok: float = 15.0
+    timeout_s: float = 120.0
+    max_tokens: int = 2000
+
+
 class ServeConfig(_Strict):
     host: str = "127.0.0.1"
     port: int = 8000
@@ -307,6 +322,8 @@ class JobsConfig(_Strict):
 class StorageConfig(_Strict):
     database_path: str = "${PETPERCEPTION_DB:-var/app/petperception.sqlite3}"
     media_root: str = "${PETPERCEPTION_MEDIA_ROOT:-var/app/media}"
+    # recordings the owner explicitly donated as research samples (never in Git; deleted on request or with the account)
+    research_root: str = "${PETPERCEPTION_RESEARCH_ROOT:-var/app/research_samples}"
     max_upload_bytes: int = 100 * 1024 * 1024
     max_chunk_bytes: int = 8 * 1024 * 1024
     max_open_uploads_per_user: int = 5
@@ -357,6 +374,7 @@ class Settings(_Strict):
     intent: IntentConfig = Field(default_factory=IntentConfig)
     fusion: FusionConfig = Field(default_factory=FusionConfig)
     vlm: VlmConfig = Field(default_factory=VlmConfig)
+    cloud: CloudConfig = Field(default_factory=CloudConfig)
     serve: ServeConfig = Field(default_factory=ServeConfig)
     ondevice: OnDeviceConfig = Field(default_factory=OnDeviceConfig)
     app: AppConfig = Field(default_factory=AppConfig)
