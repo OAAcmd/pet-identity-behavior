@@ -1,0 +1,23 @@
+{
+  "check": "E32 code, artifacts, benchmark and results retrieved from GitHub and both systems re-run from the clone",
+  "date": "2026-10-31 (machine clock)",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng https://github.com/OAAcmd/pet-identity-behavior.git (commit efd2123)",
+  "artifacts_understand_manifest_verified": true,
+  "files_present": [
+    "benchmarks/behavior_questions_v2.json",
+    "benchmarks/parser_dev.json",
+    "annotations/behavior_clips.json",
+    "results/e32/{metrics,development,posthoc,default_v1_check,v1_answers}.json",
+    "results/e32/answers/*.json (37)",
+    "manifests/{stock_pets,paper_videos,archive_pets,resources}.json",
+    "src/petperception/understand/e31/ (frozen default)"
+  ],
+  "run_from_clone": "PYTHONPATH=<clone>/src with models (SigLIP, MiniLM, YAMNet, detector) and stored features from the workspace (PETPERCEPTION_MODELS_ROOT / PETPERCEPTION_DATA_ROOT); Explainer.load(version=2).answer and Explainer.load() (default) on the 37 E32 items",
+  "result": {
+    "package_used": "/tmp/e32clone/src/petperception",
+    "questions": 37,
+    "v2_answers_identical_to_results_e32_answers": 37,
+    "default_answers_identical_to_v1_answers_apart_from_quality_notes": 37
+  },
+  "not_in_git": "raw media (var/data), features (var/understand), SigLIP and MiniLM weights (fetch-models; checksums in manifests/resources.json)"
+}
