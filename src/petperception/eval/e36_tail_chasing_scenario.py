@@ -233,7 +233,7 @@ def main() -> None:
     from ..config import load_settings
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["dataset", "pose", "xclip", "evaluate"])
+    ap.add_argument("step", choices=["dataset", "pose", "xclip", "evaluate", "final-models"])
     ap.add_argument("--threads", type=int)
     a = ap.parse_args()
     s = load_settings()
@@ -249,6 +249,10 @@ def main() -> None:
         # positives and hard negatives first, so a partial cache already covers the informative clips
         sc = {r["clip"]: r["label"] for r in json.loads(SCENARIO.read_text())["clips"]}
         print(xclip_cache(s, sorted(keys, key=lambda k: {"positive": 0, "hard_negative": 1}.get(sc[k], 2))))
+    elif a.step == "final-models":
+        from .e36_evaluate import save_final_models
+
+        print(save_final_models(s, s.paths.resolve("results_root") / "e36"))
     else:
         from .e36_evaluate import evaluate
 

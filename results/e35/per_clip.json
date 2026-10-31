@@ -1,0 +1,3628 @@
+[
+  {
+    "clip": "commons_c74a52667c09",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "fluffy blanket",
+    "duration_s": 14.833333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 2.82
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 30,
+          "image_bytes": 723498,
+          "upload_bytes_base64": 981884,
+          "image_tokens_est": 9720,
+          "text_tokens_est": 4305,
+          "preprocess_s": 0.44,
+          "estimated_cost_usd": 0.05708
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 33,
+          "image_bytes": 510355,
+          "upload_bytes_base64": 697984,
+          "image_tokens_est": 5292,
+          "text_tokens_est": 4377,
+          "preprocess_s": 0.61,
+          "estimated_cost_usd": 0.04401
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17896,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4474,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02842
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_21dcab74d428",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "wooden floor",
+    "duration_s": 35.33333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.07
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 2276185,
+          "upload_bytes_base64": 3052815,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4474,
+          "preprocess_s": 1.2,
+          "estimated_cost_usd": 0.10906
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 697986,
+          "upload_bytes_base64": 948770,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4530,
+          "preprocess_s": 1.53,
+          "estimated_cost_usd": 0.04775
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 18429,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4607,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02882
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_9db2231c588f",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "carpet in a living room",
+    "duration_s": 45.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.07
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 2700914,
+          "upload_bytes_base64": 3616498,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3819,
+          "preprocess_s": 1.48,
+          "estimated_cost_usd": 0.1071
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 739072,
+          "upload_bytes_base64": 1001010,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3894,
+          "preprocess_s": 1.7,
+          "estimated_cost_usd": 0.04584
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15946,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3986,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02696
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_200930f8d690",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "two cats sitting at a window",
+    "duration_s": 3.5,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.02
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 7,
+          "image_bytes": 253066,
+          "upload_bytes_base64": 352705,
+          "image_tokens_est": 3136,
+          "text_tokens_est": 3820,
+          "preprocess_s": 0.23,
+          "estimated_cost_usd": 0.03587
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 11,
+          "image_bytes": 172290,
+          "upload_bytes_base64": 245225,
+          "image_tokens_est": 1779,
+          "text_tokens_est": 3876,
+          "preprocess_s": 0.29,
+          "estimated_cost_usd": 0.03197
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15670,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3917,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02675
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_a4614b1b91d5",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "red blanket on a bed",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.11
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 3642556,
+          "upload_bytes_base64": 4873014,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4067,
+          "preprocess_s": 3.17,
+          "estimated_cost_usd": 0.10784
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 1084986,
+          "upload_bytes_base64": 1463206,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4139,
+          "preprocess_s": 3.72,
+          "estimated_cost_usd": 0.04658
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16720,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4180,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02754
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_25a6515f82e6",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "soft blanket",
+    "duration_s": 12.333333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 25,
+          "image_bytes": 1375985,
+          "upload_bytes_base64": 1849897,
+          "image_tokens_est": 11200,
+          "text_tokens_est": 3812,
+          "preprocess_s": 0.69,
+          "estimated_cost_usd": 0.06004
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 28,
+          "image_bytes": 569144,
+          "upload_bytes_base64": 774480,
+          "image_tokens_est": 4227,
+          "text_tokens_est": 3905,
+          "preprocess_s": 0.83,
+          "estimated_cost_usd": 0.0394
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15782,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3945,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02683
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_226a8cfdeb4d",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "curled on a red cushion",
+    "duration_s": 25.83333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 52,
+          "image_bytes": 878003,
+          "upload_bytes_base64": 1186786,
+          "image_tokens_est": 21528,
+          "text_tokens_est": 4028,
+          "preprocess_s": 0.47,
+          "estimated_cost_usd": 0.09167
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 404875,
+          "upload_bytes_base64": 556250,
+          "image_tokens_est": 6558,
+          "text_tokens_est": 4103,
+          "preprocess_s": 0.71,
+          "estimated_cost_usd": 0.04698
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16712,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4178,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02753
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_0c532f735238",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "indoors, kitten in front of the camera",
+    "duration_s": 14.666666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 30,
+          "image_bytes": 497859,
+          "upload_bytes_base64": 680163,
+          "image_tokens_est": 6240,
+          "text_tokens_est": 4087,
+          "preprocess_s": 0.29,
+          "estimated_cost_usd": 0.04598
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 32,
+          "image_bytes": 434339,
+          "upload_bytes_base64": 595815,
+          "image_tokens_est": 4800,
+          "text_tokens_est": 4173,
+          "preprocess_s": 0.36,
+          "estimated_cost_usd": 0.04192
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17017,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4254,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02776
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_9f22d724f678",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "hallway wall",
+    "duration_s": 13.833333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 28,
+          "image_bytes": 633581,
+          "upload_bytes_base64": 860496,
+          "image_tokens_est": 12544,
+          "text_tokens_est": 3930,
+          "preprocess_s": 0.53,
+          "estimated_cost_usd": 0.06442
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 31,
+          "image_bytes": 246849,
+          "upload_bytes_base64": 345117,
+          "image_tokens_est": 4659,
+          "text_tokens_est": 3996,
+          "preprocess_s": 0.62,
+          "estimated_cost_usd": 0.04097
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16166,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4041,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02712
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_9aa65b0449e8",
+    "label": "positive",
+    "species": "dog",
+    "scene": "front yard behind a metal fence",
+    "duration_s": 15.333333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 2.36
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 31,
+          "image_bytes": 1913065,
+          "upload_bytes_base64": 2568113,
+          "image_tokens_est": 13888,
+          "text_tokens_est": 4339,
+          "preprocess_s": 1.1,
+          "estimated_cost_usd": 0.06968
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 34,
+          "image_bytes": 655937,
+          "upload_bytes_base64": 892202,
+          "image_tokens_est": 5091,
+          "text_tokens_est": 4404,
+          "preprocess_s": 1.09,
+          "estimated_cost_usd": 0.04348
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17862,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4465,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0284
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_3dc1f7929fee",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "garden gate",
+    "duration_s": 13.166666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.02
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 27,
+          "image_bytes": 2490494,
+          "upload_bytes_base64": 3336813,
+          "image_tokens_est": 12096,
+          "text_tokens_est": 4038,
+          "preprocess_s": 0.62,
+          "estimated_cost_usd": 0.0634
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 3,
+          "image_bytes": 125284,
+          "upload_bytes_base64": 183422,
+          "image_tokens_est": 627,
+          "text_tokens_est": 4093,
+          "preprocess_s": 0.74,
+          "estimated_cost_usd": 0.02916
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16647,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4161,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02748
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_624fbe589e28",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "cat bed in a cardboard box",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1754603,
+          "upload_bytes_base64": 2355730,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4064,
+          "preprocess_s": 1.56,
+          "estimated_cost_usd": 0.10783
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 489990,
+          "upload_bytes_base64": 669886,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4141,
+          "preprocess_s": 1.86,
+          "estimated_cost_usd": 0.04658
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16767,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4191,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02757
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_ba56bde9d4ea",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "kitchen floor, food plate",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.12
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1558150,
+          "upload_bytes_base64": 2094929,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4348,
+          "preprocess_s": 1.61,
+          "estimated_cost_usd": 0.10868
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 483673,
+          "upload_bytes_base64": 662638,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4434,
+          "preprocess_s": 2.11,
+          "estimated_cost_usd": 0.04746
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17912,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4478,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02843
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_8820a1b04d0a",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "grassy yard with a ball",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 5250725,
+          "upload_bytes_base64": 7016002,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3758,
+          "preprocess_s": 2.46,
+          "estimated_cost_usd": 0.10691
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 1175082,
+          "upload_bytes_base64": 1582164,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3847,
+          "preprocess_s": 2.83,
+          "estimated_cost_usd": 0.0457
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15809,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3952,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02686
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_b1cbe3feb94e",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "back seat of a car",
+    "duration_s": 46.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 2202388,
+          "upload_bytes_base64": 2955924,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4851,
+          "preprocess_s": 2.07,
+          "estimated_cost_usd": 0.11019
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 718837,
+          "upload_bytes_base64": 978241,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4947,
+          "preprocess_s": 2.26,
+          "estimated_cost_usd": 0.049
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 20265,
+          "image_tokens_est": 0,
+          "text_tokens_est": 5066,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0302
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_bfd87d96a088",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "office floor",
+    "duration_s": 8.166666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 17,
+          "image_bytes": 606386,
+          "upload_bytes_base64": 824023,
+          "image_tokens_est": 7616,
+          "text_tokens_est": 3876,
+          "preprocess_s": 0.44,
+          "estimated_cost_usd": 0.04948
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 20,
+          "image_bytes": 309420,
+          "upload_bytes_base64": 428468,
+          "image_tokens_est": 3075,
+          "text_tokens_est": 3977,
+          "preprocess_s": 0.49,
+          "estimated_cost_usd": 0.03616
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16072,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4018,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02705
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_aec6f6b08cce",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "carpet",
+    "duration_s": 4.666666507720947,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 10,
+          "image_bytes": 499663,
+          "upload_bytes_base64": 681220,
+          "image_tokens_est": 2340,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.29,
+          "estimated_cost_usd": 0.03327
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 13,
+          "image_bytes": 418295,
+          "upload_bytes_base64": 573028,
+          "image_tokens_est": 2142,
+          "text_tokens_est": 3825,
+          "preprocess_s": 0.29,
+          "estimated_cost_usd": 0.0329
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15468,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3867,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0266
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_62f82faa497c",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "dark blanket",
+    "duration_s": 55.66666793823242,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.07
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1591384,
+          "upload_bytes_base64": 2142332,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 5121,
+          "preprocess_s": 1.5,
+          "estimated_cost_usd": 0.111
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 555320,
+          "upload_bytes_base64": 761253,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 5206,
+          "preprocess_s": 1.94,
+          "estimated_cost_usd": 0.04978
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 21434,
+          "image_tokens_est": 0,
+          "text_tokens_est": 5358,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.03107
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_b7bd05adb3a5",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "checked blanket",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 2689805,
+          "upload_bytes_base64": 3601663,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3813,
+          "preprocess_s": 2.37,
+          "estimated_cost_usd": 0.10708
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 804832,
+          "upload_bytes_base64": 1088737,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3906,
+          "preprocess_s": 2.69,
+          "estimated_cost_usd": 0.04588
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15973,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3993,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02698
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_daa6d5f0696e",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "campsite lawn",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.1
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 2610576,
+          "upload_bytes_base64": 3495782,
+          "image_tokens_est": 24840,
+          "text_tokens_est": 3753,
+          "preprocess_s": 2.35,
+          "estimated_cost_usd": 0.10078
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 812482,
+          "upload_bytes_base64": 1098679,
+          "image_tokens_est": 6558,
+          "text_tokens_est": 3841,
+          "preprocess_s": 2.77,
+          "estimated_cost_usd": 0.0462
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15792,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3948,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02684
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_9094fd492063",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "bed",
+    "duration_s": 13.166666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 27,
+          "image_bytes": 1070820,
+          "upload_bytes_base64": 1443211,
+          "image_tokens_est": 12096,
+          "text_tokens_est": 3862,
+          "preprocess_s": 0.68,
+          "estimated_cost_usd": 0.06287
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 30,
+          "image_bytes": 534716,
+          "upload_bytes_base64": 728707,
+          "image_tokens_est": 4515,
+          "text_tokens_est": 3937,
+          "preprocess_s": 0.7,
+          "estimated_cost_usd": 0.04036
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16007,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4001,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.027
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_b40cf00f4f7a",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "cork floor",
+    "duration_s": 3.3333332538604736,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 7,
+          "image_bytes": 190286,
+          "upload_bytes_base64": 269035,
+          "image_tokens_est": 2016,
+          "text_tokens_est": 3829,
+          "preprocess_s": 0.31,
+          "estimated_cost_usd": 0.03253
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 10,
+          "image_bytes": 196927,
+          "upload_bytes_base64": 278114,
+          "image_tokens_est": 1872,
+          "text_tokens_est": 3885,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.03227
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15766,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3941,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02682
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_4293f1a461a1",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "garden",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.08
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 3210907,
+          "upload_bytes_base64": 4298409,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4299,
+          "preprocess_s": 2.65,
+          "estimated_cost_usd": 0.10854
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 1024604,
+          "upload_bytes_base64": 1383735,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4398,
+          "preprocess_s": 3.46,
+          "estimated_cost_usd": 0.04736
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17880,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4470,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02841
+        }
+      }
+    }
+  },
+  {
+    "clip": "commons_c44f55ec8378",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "garden path",
+    "duration_s": 45.16666793823242,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 3335910,
+          "upload_bytes_base64": 4468304,
+          "image_tokens_est": 24840,
+          "text_tokens_est": 5106,
+          "preprocess_s": 1.14,
+          "estimated_cost_usd": 0.10484
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 913183,
+          "upload_bytes_base64": 1238397,
+          "image_tokens_est": 6558,
+          "text_tokens_est": 5204,
+          "preprocess_s": 1.42,
+          "estimated_cost_usd": 0.05029
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 21089,
+          "image_tokens_est": 0,
+          "text_tokens_est": 5272,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.03082
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_tiira2012_s1",
+    "label": "positive",
+    "species": "dog",
+    "scene": "living room: rug, sofa, people seated next to the puppy",
+    "duration_s": 43.33333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 507346,
+          "upload_bytes_base64": 691562,
+          "image_tokens_est": 5040,
+          "text_tokens_est": 3774,
+          "preprocess_s": 0.66,
+          "estimated_cost_usd": 0.04144
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 514958,
+          "upload_bytes_base64": 702061,
+          "image_tokens_est": 6012,
+          "text_tokens_est": 3862,
+          "preprocess_s": 0.76,
+          "estimated_cost_usd": 0.04462
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15683,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3920,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02676
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_tiira2012_s2",
+    "label": "positive",
+    "species": "dog",
+    "scene": "garden lawn by a birch tree",
+    "duration_s": 23.16666603088379,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.07
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 47,
+          "image_bytes": 636858,
+          "upload_bytes_base64": 865624,
+          "image_tokens_est": 5076,
+          "text_tokens_est": 4120,
+          "preprocess_s": 0.59,
+          "estimated_cost_usd": 0.04259
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 674007,
+          "upload_bytes_base64": 915472,
+          "image_tokens_est": 6084,
+          "text_tokens_est": 4199,
+          "preprocess_s": 0.61,
+          "estimated_cost_usd": 0.04585
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17028,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4257,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02777
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_tiira2012_s3",
+    "label": "positive",
+    "species": "dog",
+    "scene": "gravel yard",
+    "duration_s": 8.5,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 17,
+          "image_bytes": 165957,
+          "upload_bytes_base64": 236286,
+          "image_tokens_est": 1836,
+          "text_tokens_est": 3752,
+          "preprocess_s": 0.22,
+          "estimated_cost_usd": 0.03176
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 21,
+          "image_bytes": 238768,
+          "upload_bytes_base64": 333747,
+          "image_tokens_est": 2916,
+          "text_tokens_est": 3846,
+          "preprocess_s": 0.23,
+          "estimated_cost_usd": 0.03529
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15615,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3903,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02671
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_fhs_cat_2026_m1",
+    "label": "positive",
+    "species": "cat",
+    "scene": "indoors, striped mat on a tiled floor",
+    "duration_s": 21.16666603088379,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 43,
+          "image_bytes": 1095640,
+          "upload_bytes_base64": 1476155,
+          "image_tokens_est": 19264,
+          "text_tokens_est": 3824,
+          "preprocess_s": 0.73,
+          "estimated_cost_usd": 0.08426
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 509087,
+          "upload_bytes_base64": 694382,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3899,
+          "preprocess_s": 1.0,
+          "estimated_cost_usd": 0.04586
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15765,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3941,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02682
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_fhs_cat_2026_m2",
+    "label": "positive",
+    "species": "cat",
+    "scene": "children's play mat",
+    "duration_s": 8.5,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 17,
+          "image_bytes": 621637,
+          "upload_bytes_base64": 844150,
+          "image_tokens_est": 7616,
+          "text_tokens_est": 3824,
+          "preprocess_s": 0.4,
+          "estimated_cost_usd": 0.04932
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 21,
+          "image_bytes": 350860,
+          "upload_bytes_base64": 483354,
+          "image_tokens_est": 3219,
+          "text_tokens_est": 3884,
+          "preprocess_s": 0.46,
+          "estimated_cost_usd": 0.03631
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15793,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3948,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02684
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_fhs_cat_2026_m3",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "tiled floor; a person dangles a strap",
+    "duration_s": 27.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 54,
+          "image_bytes": 1207357,
+          "upload_bytes_base64": 1625315,
+          "image_tokens_est": 24192,
+          "text_tokens_est": 3875,
+          "preprocess_s": 0.97,
+          "estimated_cost_usd": 0.0992
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 406639,
+          "upload_bytes_base64": 558043,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3963,
+          "preprocess_s": 1.21,
+          "estimated_cost_usd": 0.04605
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16106,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4026,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02708
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_dachshund_flank_2023",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "sofa with a checked blanket",
+    "duration_s": 34.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.08
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1267442,
+          "upload_bytes_base64": 1707776,
+          "image_tokens_est": 14040,
+          "text_tokens_est": 4463,
+          "preprocess_s": 0.84,
+          "estimated_cost_usd": 0.07051
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 630565,
+          "upload_bytes_base64": 859052,
+          "image_tokens_est": 6462,
+          "text_tokens_est": 4574,
+          "preprocess_s": 0.92,
+          "estimated_cost_usd": 0.04811
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 18907,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4726,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02918
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_focal_seizures_dogs_2026",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "home: hallway and living room",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.1
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1561827,
+          "upload_bytes_base64": 2097482,
+          "image_tokens_est": 17940,
+          "text_tokens_est": 3761,
+          "preprocess_s": 2.09,
+          "estimated_cost_usd": 0.0801
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 615477,
+          "upload_bytes_base64": 835982,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3836,
+          "preprocess_s": 2.31,
+          "estimated_cost_usd": 0.04567
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15525,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3881,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02664
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_sensory_compulsive_2020",
+    "label": "positive",
+    "species": "dog",
+    "scene": "garden and house",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 694504,
+          "upload_bytes_base64": 944027,
+          "image_tokens_est": 8640,
+          "text_tokens_est": 4504,
+          "preprocess_s": 0.46,
+          "estimated_cost_usd": 0.05443
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 684293,
+          "upload_bytes_base64": 930795,
+          "image_tokens_est": 6192,
+          "text_tokens_est": 4600,
+          "preprocess_s": 0.67,
+          "estimated_cost_usd": 0.04738
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 18808,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4702,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02911
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_hamartoma_circling_2025",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "veterinary clinic",
+    "duration_s": 42.33333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1935242,
+          "upload_bytes_base64": 2595346,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3755,
+          "preprocess_s": 3.71,
+          "estimated_cost_usd": 0.10691
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 604567,
+          "upload_bytes_base64": 821470,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3844,
+          "preprocess_s": 4.13,
+          "estimated_cost_usd": 0.04569
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15679,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3919,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02676
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_catnip_ethogram_2022",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "tiled floor, top view",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 3866948,
+          "upload_bytes_base64": 5171199,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3816,
+          "preprocess_s": 10.02,
+          "estimated_cost_usd": 0.10709
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 645412,
+          "upload_bytes_base64": 876071,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3879,
+          "preprocess_s": 10.62,
+          "estimated_cost_usd": 0.0458
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15729,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3932,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0268
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_epilepsy_survey_typeD_2025",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "living room",
+    "duration_s": 24.83333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 50,
+          "image_bytes": 1154744,
+          "upload_bytes_base64": 1554670,
+          "image_tokens_est": 22400,
+          "text_tokens_est": 3752,
+          "preprocess_s": 2.21,
+          "estimated_cost_usd": 0.09346
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 39,
+          "image_bytes": 481196,
+          "upload_bytes_base64": 656963,
+          "image_tokens_est": 5811,
+          "text_tokens_est": 3841,
+          "preprocess_s": 2.52,
+          "estimated_cost_usd": 0.04396
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15546,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3886,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02666
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_head_tremor_2015",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "living room sofa",
+    "duration_s": 27.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 55,
+          "image_bytes": 623026,
+          "upload_bytes_base64": 845724,
+          "image_tokens_est": 9900,
+          "text_tokens_est": 3755,
+          "preprocess_s": 0.37,
+          "estimated_cost_usd": 0.05597
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 453429,
+          "upload_bytes_base64": 619891,
+          "image_tokens_est": 6300,
+          "text_tokens_est": 3829,
+          "preprocess_s": 0.43,
+          "estimated_cost_usd": 0.04539
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15619,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3904,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02671
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_narcolepsy_2021",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "veterinary clinic",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.1
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1792122,
+          "upload_bytes_base64": 2404518,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3755,
+          "preprocess_s": 1.89,
+          "estimated_cost_usd": 0.10691
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 544771,
+          "upload_bytes_base64": 741742,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3844,
+          "preprocess_s": 2.32,
+          "estimated_cost_usd": 0.04569
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15683,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3920,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02676
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_sleep_movements_2016",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "rug in a living room",
+    "duration_s": 40.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.08
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1959526,
+          "upload_bytes_base64": 2628490,
+          "image_tokens_est": 17940,
+          "text_tokens_est": 3946,
+          "preprocess_s": 1.63,
+          "estimated_cost_usd": 0.08066
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 766027,
+          "upload_bytes_base64": 1037462,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4022,
+          "preprocess_s": 1.72,
+          "estimated_cost_usd": 0.04623
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16252,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4063,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02719
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_bruxism_2022",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "veterinary clinic",
+    "duration_s": 20.66666603088379,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 42,
+          "image_bytes": 1841979,
+          "upload_bytes_base64": 2471416,
+          "image_tokens_est": 18816,
+          "text_tokens_est": 3861,
+          "preprocess_s": 1.1,
+          "estimated_cost_usd": 0.08303
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 789387,
+          "upload_bytes_base64": 1068360,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3961,
+          "preprocess_s": 1.29,
+          "estimated_cost_usd": 0.04604
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16117,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4029,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02709
+        }
+      }
+    }
+  },
+  {
+    "clip": "paper_eating_seizure_2020",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "veterinary clinic",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.09
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1950845,
+          "upload_bytes_base64": 2616150,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 3755,
+          "preprocess_s": 2.41,
+          "estimated_cost_usd": 0.10691
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 638854,
+          "upload_bytes_base64": 867186,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3844,
+          "preprocess_s": 3.02,
+          "estimated_cost_usd": 0.04569
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15809,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3952,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02686
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_cat_tail_1",
+    "label": "positive",
+    "species": "cat",
+    "scene": "living room: recliners, a red suitcase",
+    "duration_s": 6.333333492279053,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 13,
+          "image_bytes": 336772,
+          "upload_bytes_base64": 464345,
+          "image_tokens_est": 4212,
+          "text_tokens_est": 3828,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.03912
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 16,
+          "image_bytes": 259514,
+          "upload_bytes_base64": 361733,
+          "image_tokens_est": 2844,
+          "text_tokens_est": 3928,
+          "preprocess_s": 0.35,
+          "estimated_cost_usd": 0.03532
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15977,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3994,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02698
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_cat_tail_2",
+    "label": "positive",
+    "species": "cat",
+    "scene": "bathtub",
+    "duration_s": 3.1666667461395264,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.02
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 7,
+          "image_bytes": 102608,
+          "upload_bytes_base64": 152039,
+          "image_tokens_est": 2268,
+          "text_tokens_est": 3806,
+          "preprocess_s": 0.25,
+          "estimated_cost_usd": 0.03322
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 10,
+          "image_bytes": 102408,
+          "upload_bytes_base64": 152060,
+          "image_tokens_est": 1980,
+          "text_tokens_est": 3879,
+          "preprocess_s": 0.26,
+          "estimated_cost_usd": 0.03258
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15681,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3920,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02676
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_dog_spin_1",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "city park at night; person holding a long leash",
+    "duration_s": 57.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.08
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 1477065,
+          "upload_bytes_base64": 1986433,
+          "image_tokens_est": 12540,
+          "text_tokens_est": 4253,
+          "preprocess_s": 0.71,
+          "estimated_cost_usd": 0.06538
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 473711,
+          "upload_bytes_base64": 649028,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4353,
+          "preprocess_s": 0.9,
+          "estimated_cost_usd": 0.04722
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17651,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4412,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02824
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_cat_tail_flick_rest",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "lying on a green blanket",
+    "duration_s": 6.333333492279053,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 13,
+          "image_bytes": 302388,
+          "upload_bytes_base64": 418621,
+          "image_tokens_est": 4212,
+          "text_tokens_est": 3859,
+          "preprocess_s": 0.33,
+          "estimated_cost_usd": 0.03921
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 16,
+          "image_bytes": 252134,
+          "upload_bytes_base64": 351840,
+          "image_tokens_est": 2844,
+          "text_tokens_est": 3915,
+          "preprocess_s": 0.37,
+          "estimated_cost_usd": 0.03528
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15947,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3986,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02696
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_kitten_mother_tail",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "wooden garden table outdoors",
+    "duration_s": 59.83333206176758,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.13
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 3137319,
+          "upload_bytes_base64": 4201562,
+          "image_tokens_est": 26880,
+          "text_tokens_est": 4617,
+          "preprocess_s": 2.34,
+          "estimated_cost_usd": 0.10949
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 867140,
+          "upload_bytes_base64": 1175012,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 4706,
+          "preprocess_s": 2.73,
+          "estimated_cost_usd": 0.04828
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 19056,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4764,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02929
+        }
+      }
+    }
+  },
+  {
+    "clip": "archive_ia_cat_tail_3",
+    "label": "positive",
+    "species": "cat",
+    "scene": "carpeted room",
+    "duration_s": 40.33333206176758,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.08
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 60,
+          "image_bytes": 621581,
+          "upload_bytes_base64": 845968,
+          "image_tokens_est": 6480,
+          "text_tokens_est": 4298,
+          "preprocess_s": 0.39,
+          "estimated_cost_usd": 0.04733
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 531151,
+          "upload_bytes_base64": 725789,
+          "image_tokens_est": 6084,
+          "text_tokens_est": 4396,
+          "preprocess_s": 0.44,
+          "estimated_cost_usd": 0.04644
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 17883,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4470,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02841
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_45347",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "garden",
+    "duration_s": 23.16666603088379,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 47,
+          "image_bytes": 1253668,
+          "upload_bytes_base64": 1686797,
+          "image_tokens_est": 14053,
+          "text_tokens_est": 3809,
+          "preprocess_s": 0.72,
+          "estimated_cost_usd": 0.06859
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 670688,
+          "upload_bytes_base64": 909760,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3877,
+          "preprocess_s": 0.92,
+          "estimated_cost_usd": 0.04579
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15770,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3942,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02683
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50675",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 17.16666603088379,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 35,
+          "image_bytes": 649264,
+          "upload_bytes_base64": 880688,
+          "image_tokens_est": 10465,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.47,
+          "estimated_cost_usd": 0.05765
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 38,
+          "image_bytes": 464463,
+          "upload_bytes_base64": 634669,
+          "image_tokens_est": 5667,
+          "text_tokens_est": 3846,
+          "preprocess_s": 0.6,
+          "estimated_cost_usd": 0.04354
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15553,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3888,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02666
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50689",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 10.666666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 22,
+          "image_bytes": 408573,
+          "upload_bytes_base64": 559764,
+          "image_tokens_est": 6578,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.34,
+          "estimated_cost_usd": 0.04598
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 25,
+          "image_bytes": 289125,
+          "upload_bytes_base64": 400892,
+          "image_tokens_est": 3795,
+          "text_tokens_est": 3848,
+          "preprocess_s": 0.43,
+          "estimated_cost_usd": 0.03793
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15560,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3890,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02667
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_45868",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "park",
+    "duration_s": 4.833333492279053,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 10,
+          "image_bytes": 374347,
+          "upload_bytes_base64": 514128,
+          "image_tokens_est": 2990,
+          "text_tokens_est": 3749,
+          "preprocess_s": 0.29,
+          "estimated_cost_usd": 0.03522
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 13,
+          "image_bytes": 262526,
+          "upload_bytes_base64": 365283,
+          "image_tokens_est": 2067,
+          "text_tokens_est": 3811,
+          "preprocess_s": 0.26,
+          "estimated_cost_usd": 0.03263
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15477,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3869,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02661
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_1478",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "outdoors",
+    "duration_s": 15.166666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 31,
+          "image_bytes": 1107999,
+          "upload_bytes_base64": 1492336,
+          "image_tokens_est": 9269,
+          "text_tokens_est": 3751,
+          "preprocess_s": 0.46,
+          "estimated_cost_usd": 0.05406
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 31,
+          "image_bytes": 662020,
+          "upload_bytes_base64": 898058,
+          "image_tokens_est": 4659,
+          "text_tokens_est": 3840,
+          "preprocess_s": 0.56,
+          "estimated_cost_usd": 0.0405
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15528,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3882,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02665
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_45842",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "garden",
+    "duration_s": 10.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 20,
+          "image_bytes": 568229,
+          "upload_bytes_base64": 772640,
+          "image_tokens_est": 5980,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.04419
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 24,
+          "image_bytes": 390116,
+          "upload_bytes_base64": 535513,
+          "image_tokens_est": 3651,
+          "text_tokens_est": 3839,
+          "preprocess_s": 0.39,
+          "estimated_cost_usd": 0.03747
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15523,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3880,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02664
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_1778",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "indoors",
+    "duration_s": 19.83333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 40,
+          "image_bytes": 859577,
+          "upload_bytes_base64": 1161343,
+          "image_tokens_est": 11960,
+          "text_tokens_est": 3809,
+          "preprocess_s": 0.55,
+          "estimated_cost_usd": 0.06231
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 546829,
+          "upload_bytes_base64": 744703,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3898,
+          "preprocess_s": 0.68,
+          "estimated_cost_usd": 0.04585
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15761,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3940,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02682
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_38824",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "a person's lap",
+    "duration_s": 20.33333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.1
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 41,
+          "image_bytes": 1007344,
+          "upload_bytes_base64": 1358381,
+          "image_tokens_est": 12259,
+          "text_tokens_est": 3813,
+          "preprocess_s": 0.55,
+          "estimated_cost_usd": 0.06322
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 43,
+          "image_bytes": 624440,
+          "upload_bytes_base64": 848199,
+          "image_tokens_est": 6387,
+          "text_tokens_est": 3902,
+          "preprocess_s": 0.69,
+          "estimated_cost_usd": 0.04587
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15878,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3969,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02691
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_42736",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "lawn",
+    "duration_s": 12.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 25,
+          "image_bytes": 1000777,
+          "upload_bytes_base64": 1349368,
+          "image_tokens_est": 7475,
+          "text_tokens_est": 3749,
+          "preprocess_s": 0.43,
+          "estimated_cost_usd": 0.04867
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 29,
+          "image_bytes": 569715,
+          "upload_bytes_base64": 774969,
+          "image_tokens_est": 4371,
+          "text_tokens_est": 3837,
+          "preprocess_s": 0.46,
+          "estimated_cost_usd": 0.03962
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15665,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3916,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02675
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50687",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 8.166666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 17,
+          "image_bytes": 324442,
+          "upload_bytes_base64": 447592,
+          "image_tokens_est": 5083,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.28,
+          "estimated_cost_usd": 0.0415
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 20,
+          "image_bytes": 230223,
+          "upload_bytes_base64": 322276,
+          "image_tokens_est": 3075,
+          "text_tokens_est": 3828,
+          "preprocess_s": 0.34,
+          "estimated_cost_usd": 0.03571
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15471,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3867,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0266
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_1547",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "indoors",
+    "duration_s": 15.333333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 31,
+          "image_bytes": 513733,
+          "upload_bytes_base64": 700219,
+          "image_tokens_est": 9269,
+          "text_tokens_est": 3809,
+          "preprocess_s": 0.46,
+          "estimated_cost_usd": 0.05423
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 34,
+          "image_bytes": 339917,
+          "upload_bytes_base64": 468737,
+          "image_tokens_est": 5091,
+          "text_tokens_est": 3878,
+          "preprocess_s": 0.56,
+          "estimated_cost_usd": 0.04191
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15778,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3944,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02683
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_33017",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "wooden floor",
+    "duration_s": 19.33333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 39,
+          "image_bytes": 1179005,
+          "upload_bytes_base64": 1587020,
+          "image_tokens_est": 11661,
+          "text_tokens_est": 3753,
+          "preprocess_s": 0.57,
+          "estimated_cost_usd": 0.06124
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 37,
+          "image_bytes": 601222,
+          "upload_bytes_base64": 816918,
+          "image_tokens_est": 5523,
+          "text_tokens_est": 3821,
+          "preprocess_s": 0.67,
+          "estimated_cost_usd": 0.04303
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15446,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3861,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02658
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_31936",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "outdoors",
+    "duration_s": 15.833333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 32,
+          "image_bytes": 928286,
+          "upload_bytes_base64": 1252957,
+          "image_tokens_est": 9568,
+          "text_tokens_est": 3810,
+          "preprocess_s": 0.67,
+          "estimated_cost_usd": 0.05513
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 35,
+          "image_bytes": 515309,
+          "upload_bytes_base64": 702595,
+          "image_tokens_est": 5235,
+          "text_tokens_est": 3878,
+          "preprocess_s": 0.85,
+          "estimated_cost_usd": 0.04234
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15675,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3918,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02675
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_48988",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "grass",
+    "duration_s": 9.333333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 19,
+          "image_bytes": 586704,
+          "upload_bytes_base64": 797270,
+          "image_tokens_est": 5681,
+          "text_tokens_est": 3749,
+          "preprocess_s": 0.34,
+          "estimated_cost_usd": 0.04329
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 22,
+          "image_bytes": 390812,
+          "upload_bytes_base64": 536353,
+          "image_tokens_est": 3363,
+          "text_tokens_est": 3817,
+          "preprocess_s": 0.36,
+          "estimated_cost_usd": 0.03654
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15428,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3857,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02657
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50677",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 9.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 18,
+          "image_bytes": 279770,
+          "upload_bytes_base64": 388028,
+          "image_tokens_est": 5382,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.28,
+          "estimated_cost_usd": 0.0424
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 22,
+          "image_bytes": 224838,
+          "upload_bytes_base64": 315141,
+          "image_tokens_est": 3363,
+          "text_tokens_est": 3839,
+          "preprocess_s": 0.31,
+          "estimated_cost_usd": 0.03661
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15528,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3882,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02665
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_4102",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "sofa",
+    "duration_s": 18.83333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.05
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 38,
+          "image_bytes": 847379,
+          "upload_bytes_base64": 1145073,
+          "image_tokens_est": 11362,
+          "text_tokens_est": 3808,
+          "preprocess_s": 0.53,
+          "estimated_cost_usd": 0.06051
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 41,
+          "image_bytes": 503989,
+          "upload_bytes_base64": 687489,
+          "image_tokens_est": 6099,
+          "text_tokens_est": 3875,
+          "preprocess_s": 0.61,
+          "estimated_cost_usd": 0.04492
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15662,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3915,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02674
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_32319",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "couch",
+    "duration_s": 9.666666984558105,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 20,
+          "image_bytes": 509502,
+          "upload_bytes_base64": 694571,
+          "image_tokens_est": 5980,
+          "text_tokens_est": 3808,
+          "preprocess_s": 0.37,
+          "estimated_cost_usd": 0.04436
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 23,
+          "image_bytes": 334532,
+          "upload_bytes_base64": 461552,
+          "image_tokens_est": 3507,
+          "text_tokens_est": 3877,
+          "preprocess_s": 0.41,
+          "estimated_cost_usd": 0.03715
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15669,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3917,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02675
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_16619",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "dog bed on a tiled floor",
+    "duration_s": 10.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 21,
+          "image_bytes": 439569,
+          "upload_bytes_base64": 601128,
+          "image_tokens_est": 6279,
+          "text_tokens_est": 3759,
+          "preprocess_s": 0.36,
+          "estimated_cost_usd": 0.04511
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 25,
+          "image_bytes": 288906,
+          "upload_bytes_base64": 400544,
+          "image_tokens_est": 3795,
+          "text_tokens_est": 3834,
+          "preprocess_s": 0.41,
+          "estimated_cost_usd": 0.03789
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15463,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3865,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.0266
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_48739",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "rug",
+    "duration_s": 9.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 19,
+          "image_bytes": 495959,
+          "upload_bytes_base64": 676274,
+          "image_tokens_est": 5681,
+          "text_tokens_est": 3748,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.04329
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 23,
+          "image_bytes": 336334,
+          "upload_bytes_base64": 463716,
+          "image_tokens_est": 3507,
+          "text_tokens_est": 3817,
+          "preprocess_s": 0.37,
+          "estimated_cost_usd": 0.03697
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15429,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3857,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02657
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_14184",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "garden lawn with leaves",
+    "duration_s": 18.33333396911621,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 37,
+          "image_bytes": 2518832,
+          "upload_bytes_base64": 3373715,
+          "image_tokens_est": 11063,
+          "text_tokens_est": 3817,
+          "preprocess_s": 0.59,
+          "estimated_cost_usd": 0.05964
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 38,
+          "image_bytes": 1232467,
+          "upload_bytes_base64": 1658917,
+          "image_tokens_est": 5667,
+          "text_tokens_est": 3906,
+          "preprocess_s": 0.67,
+          "estimated_cost_usd": 0.04372
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15752,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3938,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02681
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_1779",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "sofa",
+    "duration_s": 14.833333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 30,
+          "image_bytes": 610894,
+          "upload_bytes_base64": 829761,
+          "image_tokens_est": 8970,
+          "text_tokens_est": 3808,
+          "preprocess_s": 0.42,
+          "estimated_cost_usd": 0.05333
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 33,
+          "image_bytes": 385416,
+          "upload_bytes_base64": 529471,
+          "image_tokens_est": 4947,
+          "text_tokens_est": 3895,
+          "preprocess_s": 0.52,
+          "estimated_cost_usd": 0.04153
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15763,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3940,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02682
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_45843",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "park",
+    "duration_s": 5.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 10,
+          "image_bytes": 274762,
+          "upload_bytes_base64": 381348,
+          "image_tokens_est": 2990,
+          "text_tokens_est": 3749,
+          "preprocess_s": 0.27,
+          "estimated_cost_usd": 0.03522
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 12,
+          "image_bytes": 189497,
+          "upload_bytes_base64": 267965,
+          "image_tokens_est": 1923,
+          "text_tokens_est": 3825,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.03224
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15428,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3857,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02657
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_25225",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "snow field with trees",
+    "duration_s": 19.0,
+    "local": {
+      "tail_chasing_seen": true,
+      "seconds_from_stored_features": 0.06
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 38,
+          "image_bytes": 1692578,
+          "upload_bytes_base64": 2271802,
+          "image_tokens_est": 11362,
+          "text_tokens_est": 3757,
+          "preprocess_s": 0.62,
+          "estimated_cost_usd": 0.06036
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 42,
+          "image_bytes": 706068,
+          "upload_bytes_base64": 956811,
+          "image_tokens_est": 6243,
+          "text_tokens_est": 3846,
+          "preprocess_s": 0.71,
+          "estimated_cost_usd": 0.04527
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15640,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3910,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02673
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50683",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 8.5,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 17,
+          "image_bytes": 332412,
+          "upload_bytes_base64": 458216,
+          "image_tokens_est": 5083,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.28,
+          "estimated_cost_usd": 0.0415
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 21,
+          "image_bytes": 240726,
+          "upload_bytes_base64": 336324,
+          "image_tokens_est": 3219,
+          "text_tokens_est": 3839,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.03617
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15723,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3930,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02679
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_6975",
+    "label": "hard_negative",
+    "species": "cat",
+    "scene": "wooden floor, under a couch",
+    "duration_s": 19.0,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 38,
+          "image_bytes": 841413,
+          "upload_bytes_base64": 1137163,
+          "image_tokens_est": 11362,
+          "text_tokens_est": 3819,
+          "preprocess_s": 0.51,
+          "estimated_cost_usd": 0.06054
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 37,
+          "image_bytes": 451423,
+          "upload_bytes_base64": 617529,
+          "image_tokens_est": 5523,
+          "text_tokens_est": 3907,
+          "preprocess_s": 0.6,
+          "estimated_cost_usd": 0.04329
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 16035,
+          "image_tokens_est": 0,
+          "text_tokens_est": 4008,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02702
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_50686",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "studio",
+    "duration_s": 12.333333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.04
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 25,
+          "image_bytes": 343037,
+          "upload_bytes_base64": 472384,
+          "image_tokens_est": 7475,
+          "text_tokens_est": 3750,
+          "preprocess_s": 0.32,
+          "estimated_cost_usd": 0.04867
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 26,
+          "image_bytes": 235322,
+          "upload_bytes_base64": 329120,
+          "image_tokens_est": 3939,
+          "text_tokens_est": 3839,
+          "preprocess_s": 0.42,
+          "estimated_cost_usd": 0.03833
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15680,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3920,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02676
+        }
+      }
+    }
+  },
+  {
+    "clip": "stock_mixkit_1494",
+    "label": "hard_negative",
+    "species": "dog",
+    "scene": "river",
+    "duration_s": 10.833333015441895,
+    "local": {
+      "tail_chasing_seen": false,
+      "seconds_from_stored_features": 0.03
+    },
+    "strategies": {
+      "full_frames": {
+        "packet": {
+          "strategy": "full_frames",
+          "images": 22,
+          "image_bytes": 549195,
+          "upload_bytes_base64": 747258,
+          "image_tokens_est": 6578,
+          "text_tokens_est": 3749,
+          "preprocess_s": 0.36,
+          "estimated_cost_usd": 0.04598
+        }
+      },
+      "local_preprocessed": {
+        "packet": {
+          "strategy": "local_preprocessed",
+          "images": 17,
+          "image_bytes": 181916,
+          "upload_bytes_base64": 257853,
+          "image_tokens_est": 2643,
+          "text_tokens_est": 3824,
+          "preprocess_s": 0.36,
+          "estimated_cost_usd": 0.0344
+        }
+      },
+      "features_only": {
+        "packet": {
+          "strategy": "features_only",
+          "images": 0,
+          "image_bytes": 0,
+          "upload_bytes_base64": 15424,
+          "image_tokens_est": 0,
+          "text_tokens_est": 3856,
+          "preprocess_s": 0.0,
+          "estimated_cost_usd": 0.02657
+        }
+      }
+    }
+  }
+]

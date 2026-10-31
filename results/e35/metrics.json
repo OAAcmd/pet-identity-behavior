@@ -1,0 +1,99 @@
+{
+  "experiment": "E35",
+  "created_at": "2026-10-31T13:06:18+00:00",
+  "clips": 74,
+  "positives": 10,
+  "hard_negatives": 64,
+  "cloud_called": false,
+  "cloud_model": null,
+  "prices_usd_per_mtok": {
+    "input": 3.0,
+    "output": 15.0,
+    "output_tokens_assumed_for_estimate": 1000
+  },
+  "local_v2": {
+    "tp": 7,
+    "fp": 3,
+    "fn": 3
+  },
+  "packets": {
+    "full_frames": {
+      "images": {
+        "median": 38.0,
+        "max": 60.0
+      },
+      "upload_bytes_base64": {
+        "median": 1219871.5,
+        "max": 7016002.0
+      },
+      "image_tokens_est": {
+        "median": 11281.0,
+        "max": 26880.0
+      },
+      "text_tokens_est": {
+        "median": 3812.5,
+        "max": 5121.0
+      },
+      "estimated_cost_usd": {
+        "median": 0.060200000000000004,
+        "max": 0.111
+      },
+      "preprocess_s": {
+        "median": 0.55,
+        "max": 10.02
+      }
+    },
+    "local_preprocessed": {
+      "images": {
+        "median": 38.0,
+        "max": 43.0
+      },
+      "upload_bytes_base64": {
+        "median": 690935.5,
+        "max": 1658917.0
+      },
+      "image_tokens_est": {
+        "median": 5667.0,
+        "max": 6558.0
+      },
+      "text_tokens_est": {
+        "median": 3884.5,
+        "max": 5206.0
+      },
+      "estimated_cost_usd": {
+        "median": 0.043840000000000004,
+        "max": 0.05029
+      },
+      "preprocess_s": {
+        "median": 0.67,
+        "max": 10.62
+      }
+    },
+    "features_only": {
+      "images": {
+        "median": 0.0,
+        "max": 0.0
+      },
+      "upload_bytes_base64": {
+        "median": 15774.0,
+        "max": 21434.0
+      },
+      "image_tokens_est": {
+        "median": 0.0,
+        "max": 0.0
+      },
+      "text_tokens_est": {
+        "median": 3943.0,
+        "max": 5358.0
+      },
+      "estimated_cost_usd": {
+        "median": 0.02683,
+        "max": 0.03107
+      },
+      "preprocess_s": {
+        "median": 0.0,
+        "max": 0.0
+      }
+    }
+  }
+}

@@ -11,10 +11,10 @@ import subprocess
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
+from test_app_backend import PW, make, register, start
 
 from petperception.config import CloudConfig
 from petperception.understand import cloud as CL
-from test_app_backend import PW, make, register, start
 
 pytestmark = pytest.mark.synthetic
 

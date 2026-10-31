@@ -81,6 +81,12 @@ passwords are not logged (tested).
   (E32 protocol). Never edit `understand/e31/` (a test pins its hashes). Not
   part of the phone bundle or the web app yet
   ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
+* **Cloud-assisted understanding (optional, off by default):** set `cloud.enabled: true` and put the provider key in
+  the backend's environment variable named by `cloud.api_key_env` (default `ANTHROPIC_API_KEY`); never in the
+  config file, the web app or Git. Check prices in `cloud.price_*_per_mtok` against the provider's list. Owners
+  choose it per analysis; frames, pet crops and a sound summary of that clip leave the server for that answer.
+  Research samples live under `storage.research_root` (back it up with the database; deleting an account deletes
+  its samples). `petperception explain ... --understanding cloud --dry-run` shows the packet size and cost estimate.
 * **Upgrades:** `git pull && $dc up -d --build`; migrations run at start.
   Read the release notes for asset-format changes (bundle `engine_version`):
   app and bundle must come from the same release.

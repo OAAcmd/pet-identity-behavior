@@ -67,7 +67,9 @@ what it can and cannot answer:
 [docs/BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md). It does not run
 on the phone: phone-sized encoders tested so far (a distilled 4-15 MB
 student, E33; TinyCLIP, E34) keep too little of the zero-shot behaviour
-recognition.
+recognition. A cloud-assisted path (`--understanding cloud`, server only, off by default) and the
+priority tail-chasing scenario are in §13 of that document: no recognizer is reliable yet on held-out sources, and
+the hosted model has not been evaluated (no API key here).
 
 ## Documents
 

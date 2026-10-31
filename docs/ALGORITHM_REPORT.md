@@ -1463,6 +1463,20 @@ committed before the run): dog right-species clips 119 vs 87 of 195
 59 of 99 (+0.010 [-0.091, +0.111]) with more only-a-dog clips (14 vs 9).
 Not met for cats: the phone detector stays.
 
+### E36 - Priority scenario (circling while chasing or biting the tail) on every usable real clip - COMPLETED (no method reliable)
+
+334 clips, 10 verified positives from 6 sources (5 cats / 3 sources), 64 hard negatives; leave-one-group-out;
+pre-registered. AP: SigLIP zero-shot 0.369 (3/10 found, 4 FP), X-CLIP zero-shot 0.121 (1/10, 16 FP), trained track +
+SigLIP 0.349 (3/10, 10 FP), trained track + pose (phone route) 0.108 (4/10, all dogs, 6 FP), all features 0.245
+(3/10, 10 FP). More data is the limit: every accessible source was searched (manifest acquisition log).
+
+### E35 - Cloud-assisted understanding: input strategies - PARTIAL (no API key; packets measured, answers not)
+
+Backend path implemented (frames / pet crops / readings + sound timeline, structured answers, validation, local
+fallback). On 74 frame-reviewed clips: median upload 1.22 / 0.69 / 0.02 MB and estimated cost 0.060 / 0.044 / 0.027
+USD per analysis for full frames / local preprocessing / features only. Cloud recognition, explanation support,
+latency and billed cost need a key (`--call-cloud`).
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

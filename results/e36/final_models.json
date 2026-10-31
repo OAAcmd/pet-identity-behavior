@@ -1,0 +1,5 @@
+{
+  "A1_track_siglip": "artifacts/understand/candidates/tail_chasing_e36_A1_track_siglip.json",
+  "P_track_pose": "artifacts/understand/candidates/tail_chasing_e36_P_track_pose.json",
+  "F_track_pose_siglip_xclip": "artifacts/understand/candidates/tail_chasing_e36_F_track_pose_siglip_xclip.json"
+}

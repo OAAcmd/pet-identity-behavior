@@ -224,3 +224,29 @@ def evaluate(settings: Settings, out_dir: Path) -> dict:
                       for k, v in res["methods"].items()}
     write_json(out_dir / "metrics.json", res)
     return res
+
+
+def save_final_models(settings: Settings, out_dir: Path) -> dict:
+    """The adapted models refitted on every clip (not adopted: no E36 method met the bar); JSON, kept for reproducibility."""
+    from sklearn.linear_model import LogisticRegression
+
+    from ..config import REPO_ROOT
+
+    _, data = load(settings)
+    out = {}
+    for name, fs in FEATURESETS.items():
+        X = np.concatenate([_X(d, fs) for d in data])
+        y = np.concatenate([d["y"] for d in data])
+        keep = y >= 0
+        X, y = X[keep], y[keep]
+        mu, sd = X.mean(0), X.std(0)
+        sd[sd < 1e-8] = 1.0
+        clf = LogisticRegression(C=C_LR, class_weight="balanced", max_iter=3000).fit((X - mu) / sd, y)
+        rec = {"experiment": "E36", "status": "not adopted (results/e36/metrics.json)", "featuresets": list(fs), "window_s": WIN_S, "hop_s": 0.5,
+               "mean": mu.tolist(), "scale": sd.tolist(), "coef": clf.coef_[0].tolist(), "intercept": float(clf.intercept_[0]),
+               "clip_score": "mean of the top quarter of window probabilities", "trained_on": f"{len(data)} clips, {int(y.sum())} positive windows"}
+        p = REPO_ROOT / "artifacts" / "understand" / "candidates" / f"tail_chasing_e36_{name}.json"
+        p.write_text(json.dumps(rec, indent=1) + "\n")
+        out[name] = str(p.relative_to(REPO_ROOT))
+    write_json(out_dir / "final_models.json", out)
+    return out

@@ -299,7 +299,7 @@ in [`manifests/resources.json`](../manifests/resources.json). Use:
 | ID | Revision (pinned) | Files and checksums | Terms | Use |
 | --- | --- | --- | --- | --- |
 | `siglip_base_patch16_224` | `google/siglip-base-patch16-224@7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed` | 7 files, `model.safetensors` 812,672,320 B, SHA-256 `2c63cb7d…2af8` (all in resources.json); `petperception fetch-models --only siglip_base_patch16_224` | Apache-2.0 (model card); WebLI training data, terms not published | frozen encoder: zero-shot behaviour prompts, inputs of the trained behaviour head |
-| `xclip_base_patch32` | `microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963` | 8 files, `model.safetensors` 786,414,772 B, SHA-256 `abf286e8…dbb` | MIT (model card); Kinetics-400 (YouTube) | retrieved as a temporal candidate; **not evaluated, not used** |
+| `xclip_base_patch32` | `microsoft/xclip-base-patch32@a2e27a78a2b5d802e894b8a1ef14f3a8ce490963` | 8 files, `model.safetensors` 786,414,772 B, SHA-256 `abf286e8…dbb` | MIT (model card); Kinetics-400 (YouTube) | evaluated zero-shot in E36 (AP 0.121 for tail chasing; not used); local copy removable |
 
 ### Datasets
 
@@ -348,6 +348,14 @@ restores it).
 Crops, teacher embeddings and the text bank stay in `var/student/` (not
 committed; rebuilt by `python -m petperception.eval.e33_phone_student build`
 and `teacher`).
+
+### Priority-scenario manifest (E36, 2026-10-31)
+
+`benchmarks/tail_chasing_scenario.json`: every usable clip of the E31 and E32 collections with its scenario label
+(positive / hard negative / negative / excluded), source group, licence, frame-review bouts (machine-assisted,
+about +-1 s), file hash, near-duplicate pairs and the acquisition log of the sources searched for more tail-chasing
+video. Caches (`var/understand/pose/`, `var/understand/xclip/`) are rebuilt by
+`python -m petperception.eval.e36_tail_chasing_scenario pose|xclip`.
 
 ### G1b detector (2026-10-20)
 

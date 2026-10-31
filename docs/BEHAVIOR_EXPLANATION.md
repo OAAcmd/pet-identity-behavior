@@ -521,3 +521,72 @@ budget at int8 anyway. No phone-sized encoder tested so far keeps enough of
 SigLIP's zero-shot behaviour recognition; local copies of the TinyCLIP
 weights were removed after the run (pinned revisions in the module restore
 them).
+
+## 13. Priority scenario and cloud-assisted understanding (E35, E36; 2026-10-31)
+
+### What exists for "my cat keeps circling while chasing or biting its tail"
+* **Command**: `petperception explain clip.mp4 --species cat --scene "open living room" --question "..."
+  [--understanding cloud --strategy full_frames|local_preprocessed|features_only] [--dry-run]`; the app accepts the
+  same question on a server analysis (`POST /analyses` with `question`; capture page "Ask about the behaviour") and
+  shows the answer with observed, owner-reported and inferred parts apart.
+* **Cloud path** (`understand/cloud.py`): the provider (Anthropic Messages API) documents text and image input only,
+  no audio or video, up to 100 images per request on 200k-context models, image cost ceil(w/28) x ceil(h/28)
+  tokens. The backend therefore sends time-stamped frames or pet-focused crops in temporal order plus a YAMNet
+  sound-event timeline, and the knowledge base as the only citable sources; the answer is JSON with observed
+  behaviour (times, evidence, confidence), what the owner mentioned but the recording does not show, scene and sound
+  evidence, hypotheses with knowledge-base ids, uncertainty, distinguishing observations and vet signs, and is
+  validated (unknown kinds or ids are flagged). The key is read from the backend environment only
+  (`cloud.api_key_env`); the cloud path is off unless the owner enables `cloud.enabled`; without a key the answer
+  falls back to the local system and says so.
+* **Research loop**: separate opt-in per recording, provisional model annotations, owner feedback, reviewer labels,
+  deletion ([RESEARCH_SAMPLES.md](RESEARCH_SAMPLES.md)).
+
+### Data (E36 manifest `benchmarks/tail_chasing_scenario.json`)
+334 usable real clips: **10 verified tail-chasing positives from 6 independent sources (5 cats from 3 sources, 5 dogs
+from 3)**, 64 frame-reviewed hard negatives, 260 negatives; 3 excluded (unverifiable or duplicate). Targeted
+acquisition for more positives found none usable: Commons (149 new hits, none relevant), Internet Archive
+(exhausted), Flickr CC videos (listed, but the video host is blocked by this environment's proxy), Pexels / Pixabay /
+Vimeo / Videvo (403), YouTube (downloads refused), Mixkit / Coverr (no such clips). This is the binding limit.
+
+### Recognition on held-out sources (E36, leave-one-group-out, pre-registered; `results/e36/metrics.json`)
+
+| Method | Trained here | AP | Found (of 10) | False positives (of 324) | Hard-negative FPs (of 64) |
+| --- | --- | --- | --- | --- | --- |
+| B1 SigLIP zero-shot | no | **0.369** | 3 | 4 | 0 |
+| B2 X-CLIP zero-shot (Kinetics video-text model) | no | 0.121 | 1 | 16 | 2 |
+| A1 track + SigLIP windows | yes | 0.349 | 3 | 10 | 1 |
+| P track + pose (phone route: detector + EfficientNet-Lite0 keypoint head) | yes | 0.108 | 4 (all four held-out dog sources' clips, no cat) | 6 | 0 |
+| F track + pose + SigLIP + X-CLIP | yes | 0.245 | 3 | 10 | 1 |
+
+No method is reliable (bar: recall and precision >= 0.8). Training on 10 positives does not beat the pretrained
+SigLIP prompts; the pose features help dogs but no held-out cat is found by any trained model (only 2 other cat
+sources remain when one is held out). When a positive is found, its bouts mostly overlap the frame-review bouts (for
+example Tiira S2/S3 and the bathtub cat: 0.78-1.0 of the reference seconds), but the priority-scenario cat
+(Clouseau, Internet Archive) gets extra bouts during resting and play with a second cat (temporal precision 0.12 for
+SigLIP).
+
+### Cloud input strategies (E35, 74 frame-reviewed clips; `results/e35/metrics.json`)
+**The hosted model was not called: no API key is available in this environment**, so recognition, evidential
+support, failures, latency and billed cost of the cloud answers are not measured. Measured per analysis (medians):
+
+| Strategy | Images | Upload | Estimated input tokens | Estimated cost (3 / 15 USD per M tokens, 1,000 output tokens) | Local preprocessing |
+| --- | --- | --- | --- | --- | --- |
+| full_frames | 38 (max 60) | 1.22 MB | 15.1k | 0.060 USD | 0.6 s |
+| local_preprocessed | 38 (max 43) | 0.69 MB | 9.6k | 0.044 USD | 0.7 s |
+| features_only | 0 | 0.02 MB | 3.9k | 0.027 USD | (needs the local recognizer: about 15-25 s per clip) |
+
+About 3.8k of the text tokens are the knowledge base and instructions (cacheable). The local comparator on the same
+74 clips found 7 of 10 positives with 3 false positives, but most of these clips were used to develop that system,
+so this is not a held-out number. `python -m petperception.eval.e35_cloud_strategies --call-cloud` runs the full
+comparison once a key is set (the answers are scored against the frame review, which is machine-assisted).
+
+### Worked examples (`results/e35/examples/`)
+* Priority scenario, unseen by the local recognizer's development (E32 test clip): Clouseau, a cat chasing its tail
+  on a carpet. Answer: tail chasing seen at 2-6, 10-14.5, 19.5-25 and 35-39 s (reference 0-5 and 13-16 s: the first
+  two overlap, the last two are false bouts), scratching seen, the owner's "biting its tail" reported as not
+  recognized; candidates by kind with sources (itch or skin disease, pain, hyperaesthesia, focal seizures,
+  vestibular circling, predatory play, stress) ordered by the description, the questions that would separate them
+  (age and onset, skin rippling or dilated pupils, reaction to touch at the tail base, interruptibility, direction of
+  circling) and vet signs. Cloud status "unavailable"; the 43-image packet (0.73 MB, about 10.5k tokens) is reported.
+* Confuser: the hyperaesthesia case cat playing with a strap on a mat, asked the same question: tail chasing reported
+  as not recognized; object play seen; a rolling reading at 0.92 is likely the known new-behaviour false alarm (§9).

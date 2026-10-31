@@ -1,0 +1,565 @@
+{
+  "strategy": "local_preprocessed",
+  "packet": {
+    "strategy": "local_preprocessed",
+    "images": 43,
+    "image_bytes": 531151,
+    "upload_bytes_base64": 725875,
+    "image_tokens_est": 6084,
+    "text_tokens_est": 4417,
+    "preprocess_s": 0.4,
+    "estimated_cost_usd": 0.0465
+  },
+  "local_answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "An open living room with a carpet; we have a second cat.",
+    "question": "My cat keeps turning in circles while chasing or biting its tail. Why does it do this?",
+    "behaviors_seen": [
+      {
+        "behavior": "tail_chasing",
+        "description": "turning in tight circles (after its own tail or not)",
+        "score": 0.8011,
+        "threshold": 0.63577,
+        "bouts_s": [
+          [
+            2.0,
+            6.0
+          ],
+          [
+            10.0,
+            14.5
+          ],
+          [
+            19.5,
+            25.0
+          ],
+          [
+            35.0,
+            39.0
+          ]
+        ],
+        "evidence": {
+          "clip_score": "mean",
+          "window_model": 0.9224,
+          "windows_above_threshold": 20,
+          "windows": 78,
+          "zero_shot_top_quartile_mean": 0.6799
+        }
+      },
+      {
+        "behavior": "scratching_self",
+        "description": "scratching its own body with a hind foot",
+        "score": 0.3026,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            2.5
+          ],
+          [
+            5.5,
+            6.5
+          ],
+          [
+            8.5,
+            9.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3026,
+          "share_of_frames_most_likely": 0.123
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 243,
+      "seconds": 40.5,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.1207,
+      "path_body_lengths": 18.974000930786133,
+      "net_displacement_body_lengths": 0.02800000086426735,
+      "stays_in_place": true,
+      "turned_rad": -1.294,
+      "abs_turned_rad": 11.25,
+      "turning_consistency": 0.115,
+      "repetition_strength": 0.003,
+      "repetition_period_s": 2.5,
+      "detector_dog_vote": 0.181
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_chasing",
+        "status": "also seen in the recording",
+        "recording_score": 0.8011
+      },
+      {
+        "behavior": "tail_directed",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0909
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_chasing",
+        "basis": "recording and user report",
+        "summary": "Turning after or attacking its own tail. Common play in kittens; new or intense tail chasing in an adult cat has several medical differentials.",
+        "temporal_notes": "In kittens bouts are short and playful, interleaved with other play; episodic bouts with skin rippling and running off point elsewhere.",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "cat_tc_itch",
+              "explanation": "itch or skin disease at the tail base (fleas, allergy, other dermatitis) - one reason a cat turns to bite or lick the tail",
+              "context_match": [
+                "bit",
+                "biting"
+              ],
+              "context_score": 1.6,
+              "sources": [
+                "amengualbatle2019",
+                "tvp_fhs",
+                "vin_pa"
+              ]
+            },
+            {
+              "id": "cat_tc_pain",
+              "explanation": "pain in the tail, the lower back or the anal sacs",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "tvp_fhs",
+                "cornell_fhs"
+              ]
+            },
+            {
+              "id": "cat_tc_fhs",
+              "explanation": "feline hyperaesthesia syndrome: brief episodes with rippling skin over the lower back, dilated pupils, tail chasing or biting, sudden running and sometimes vocalizing - a diagnosis made after other causes are excluded",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "cornell_fhs",
+                "amengualbatle2019",
+                "tvp_fhs",
+                "vrc2026_fhs_cat"
+              ]
+            },
+            {
+              "id": "cat_tc_seizure",
+              "explanation": "focal seizures, when episodes are abrupt, stereotyped and cannot be interrupted",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "tvp_fhs"
+              ]
+            },
+            {
+              "id": "cat_tc_neuro_circling",
+              "explanation": "circling that is not tail chasing: tight circles always in the same direction, often with a head tilt or loss of balance, point to a balance (vestibular) or brain problem",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "merck_neuro_exam",
+                "dvm360_vestibular",
+                "vin_vestibular"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "cat_tc_play",
+              "explanation": "predatory play with the tail as a moving target, typical of kittens and playful young cats",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mrfrs_vet_tail",
+                "ellis2013"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "cat_tc_stress",
+              "explanation": "stress or conflict (a household change, other pets); it can add to the episodes but is not shown to cause them",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "cornell_fhs",
+                "vrc2026_fhs_cat"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "medical",
+          "medical",
+          "medical",
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "tail_directed",
+        "basis": "user report only",
+        "summary": "Licking, biting or chewing the tail without necessarily turning in circles.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "td_itch",
+              "explanation": "itch or skin disease (parasites, allergy)",
+              "context_match": [
+                "bit"
+              ],
+              "context_score": 0.5,
+              "sources": [
+                "waisglass2006",
+                "vin_pa",
+                "amengualbatle2019"
+              ]
+            },
+            {
+              "id": "td_pain",
+              "explanation": "pain or a lesion near the tail or anal sacs; in dogs after surgery, neuropathic pain was a differential",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "tvp_fhs",
+                "frontiers2023_dachshund"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "td_groom",
+              "explanation": "ordinary grooming of the tail as part of a grooming sequence",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "td_compulsive",
+              "explanation": "a compulsive or displacement pattern when medical causes are excluded",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "cliniciansbrief_pa",
+                "tiira2012"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "scratching_self",
+        "basis": "recording",
+        "summary": "Scratching the body or ears with a hind foot.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "sc_itch",
+              "explanation": "itch from parasites, allergy or ear disease when it is frequent or focused",
+              "context_match": [],
+              "context_score": 0.4,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ],
+              "recording_match": [
+                "ear"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "sc_normal",
+              "explanation": "occasional scratching is ordinary coat care",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "How old is the cat, and is the tail chasing new or has it done this since kittenhood?",
+      "Does the skin on the lower back ripple or twitch, or do the pupils dilate, during an episode? Does the cat run off afterwards?",
+      "Does the cat react when you touch the base of the tail or the lower back?",
+      "Is there hair loss, scabs, flea dirt or a wound on the tail or near its base?",
+      "Can you interrupt an episode (call, toy), and how long does it last?",
+      "Does it always circle in the same direction, with a head tilt or loss of balance?",
+      "Is there hair loss, redness, a wound or flea dirt at the tail?",
+      "Did it start after an injury, surgery or a change at home?"
+    ],
+    "urgent_signs": [
+      "the tail is wounded, bleeding or the cat keeps attacking it",
+      "episodes with unresponsiveness, drooling or loss of bladder control",
+      "a sudden new behaviour in an adult or senior cat",
+      "circling with a head tilt, falling or loss of balance",
+      "open wounds or bleeding",
+      "the animal cannot be distracted from damaging the tail",
+      "bleeding or open sores from scratching"
+    ],
+    "sources": [
+      {
+        "id": "amengualbatle2019",
+        "tier": "peer_reviewed_study",
+        "citation": "Amengual Batle P et al. (2019) Feline hyperaesthesia syndrome with self-trauma to the tail: retrospective study of seven cases. J Feline Med Surg 21(2).",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10814607/",
+        "supports": "tail chasing and self-trauma in young cats; hypersensitivity dermatitis suspected in some; fleas should be eliminated even in indoor cats"
+      },
+      {
+        "id": "tvp_fhs",
+        "tier": "clinical_review",
+        "citation": "Today's Veterinary Practice: Answering FAQs about feline hyperesthesia syndrome.",
+        "url": "https://todaysveterinarypractice.com/behavior/answering-faqs-about-feline-hyperesthesia-syndrome/",
+        "supports": "diagnosis of exclusion; consider skin disease and spinal, tail and anal-sac pain; consider focal seizures when episodes are stereotyped, abrupt and not interruptible; many signs also occur in healthy cats"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "mrfrs_vet_tail",
+        "tier": "veterinarian_advice",
+        "citation": "Merrimack River Feline Rescue Society, Ask a Vet: Why do cats chase their tails?",
+        "url": "https://mrfrs.org/ask-a-vet-with-dr-sam-why-do-cats-chase-their-tails/",
+        "supports": "tail chasing is common play and hunting practice in kittens; a new behaviour in an adult cat should be checked by a veterinarian"
+      },
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      },
+      {
+        "id": "cornell_fhs",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Hyperesthesia syndrome.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperesthesia-syndrome",
+        "supports": "skin sensitivity near the base of the tail; scratching, biting, tail chasing, dilated pupils, rippling skin; underlying causes (for example disc disease) must be evaluated; stress adds to the reaction"
+      },
+      {
+        "id": "vrc2026_fhs_cat",
+        "tier": "peer_reviewed_case_report",
+        "citation": "A presumptive diagnosis of feline hyperesthesia syndrome due to stressful human-related condition: case report. Vet Res Commun (2026).",
+        "url": "https://doi.org/10.1007/s11259-026-11255-8",
+        "supports": "tail chasing and lumbar tremors began after a household change (birth of a child); the authors state that a causal relationship cannot be established"
+      },
+      {
+        "id": "merck_neuro_exam",
+        "tier": "clinical_review",
+        "citation": "Merck Veterinary Manual: The neurologic examination of animals.",
+        "url": "https://www.merckvetmanual.com/nervous-system/the-neurologic-examination/the-neurologic-examination-of-animals",
+        "supports": "a head tilt usually indicates vestibular dysfunction; animals with forebrain lesions may turn their heads and circle in one direction"
+      },
+      {
+        "id": "dvm360_vestibular",
+        "tier": "clinical_review",
+        "citation": "dvm360: Vestibular disease in dogs and cats (proceedings).",
+        "url": "https://www.dvm360.com/view/vestibular-disease-dogs-and-cats-proceedings",
+        "supports": "vestibular disorders cause head tilt, falling, rolling, leaning, circling and abnormal eye movements; circling also occurs with focal forebrain lesions"
+      },
+      {
+        "id": "vin_vestibular",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+        "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and treatment"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      }
+    ],
+    "summary": "In the recording: turning in tight circles (after its own tail or not) (2.0-6.0 s, 10.0-14.5 s, 19.5-25.0 s, 35.0-39.0 s); scratching its own body with a hind foot (0.0-2.5 s, 5.5-6.5 s, 8.5-9.0 s). Movement: the animal stays roughly in place while moving. Turning in tight circles (after its own tail or not) (recording and user report) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. Licking, biting or chewing its own tail (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; an abnormal repetitive (compulsive) pattern. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.45,
+        "times_s": [
+          [
+            12.8,
+            13.2
+          ]
+        ]
+      },
+      {
+        "what": "TV or music",
+        "from": "sound model (YAMNet)",
+        "score": 0.99,
+        "times_s": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.5,
+            1.4
+          ],
+          [
+            1.0,
+            1.9
+          ],
+          [
+            1.4,
+            2.4
+          ],
+          [
+            1.9,
+            2.9
+          ],
+          [
+            2.4,
+            3.4
+          ]
+        ]
+      },
+      {
+        "what": "place: living room",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.67,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "tail_chasing",
+        "bout_s": [
+          2.0,
+          6.0
+        ],
+        "before": [
+          "TV or music (0.0-1.0 s)",
+          "TV or music (0.5-1.4 s)",
+          "TV or music (1.0-1.9 s)",
+          "TV or music (1.4-2.4 s)",
+          "scratching_self (0.0-2.5 s)"
+        ],
+        "after": [
+          "scratching_self (5.5-6.5 s)",
+          "scratching_self (8.5-9.0 s)"
+        ]
+      },
+      {
+        "behavior": "tail_chasing",
+        "bout_s": [
+          10.0,
+          14.5
+        ],
+        "before": [
+          "scratching_self (5.5-6.5 s)",
+          "scratching_self (8.5-9.0 s)"
+        ],
+        "after": []
+      },
+      {
+        "behavior": "scratching_self",
+        "bout_s": [
+          0.0,
+          2.5
+        ],
+        "before": [],
+        "after": [
+          "TV or music (2.4-3.4 s)",
+          "tail_chasing (2.0-6.0 s)"
+        ]
+      },
+      {
+        "behavior": "scratching_self",
+        "bout_s": [
+          5.5,
+          6.5
+        ],
+        "before": [
+          "TV or music (0.0-1.0 s)",
+          "TV or music (0.5-1.4 s)",
+          "TV or music (1.0-1.9 s)",
+          "TV or music (1.4-2.4 s)",
+          "TV or music (1.9-2.9 s)",
+          "TV or music (2.4-3.4 s)"
+        ],
+        "after": [
+          "tail_chasing (10.0-14.5 s)"
+        ]
+      }
+    ]
+  },
+  "local_seconds": 73.85,
+  "species": "cat",
+  "scene": "An open living room with a carpet; we have a second cat.",
+  "question": "My cat keeps turning in circles while chasing or biting its tail. Why does it do this?",
+  "provenance": {
+    "observed": "recording",
+    "owner_report": "question and scene",
+    "explanations": "hypotheses (cloud model or local knowledge base)"
+  },
+  "cloud": {
+    "status": "unavailable",
+    "reason": "no API key in ANTHROPIC_API_KEY on the backend"
+  },
+  "answer_source": "local"
+}
