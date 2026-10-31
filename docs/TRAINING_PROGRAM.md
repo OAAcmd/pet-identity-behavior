@@ -410,6 +410,26 @@ G1a's per-class run):
   and phone latency (criterion 5, needs phones). **The phone detector is
   unchanged until then.** The downstream effect on behaviour explanation is
   E31 part C ([BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.md)).
+* *Update 2026-10-31:* the Python engine now takes per-class operating
+  points (`vision.class_score_thresholds`), G1b is registered as
+  `pet_detector_oi_g1b_v1` with its acceptance-1 verifier, and **acceptance
+  2 was run (pre-registered, `src/petperception/eval/g1b_acceptance.py`,
+  `results/g1/acceptance2_e18.json`): not met.** On the 294 E18 Kinetics
+  clips, paired with M3 re-run on the same engine (whose rates reproduce
+  E18's published 59/99 and 87/195):
+
+  | Species | Right-species clips G1b / M3 | Paired difference [95 % bootstrap] | Only-wrong-species clips G1b / M3 | Met |
+  | --- | --- | --- | --- | --- |
+  | dog | 119 / 87 of 195 | +0.164 [+0.097, +0.231] | 13 / 21 | yes |
+  | cat | 60 / 59 of 99 | +0.010 [-0.091, +0.111] | **14 / 9** | **no** |
+
+  G1b finds far more dogs in real video, with less dog-to-cat confusion,
+  but not more cats, and it calls more cat clips "only a dog". The phone
+  detector stays; criterion 3 (E16) was not run because the replacement is
+  already ruled out (the Oxford-IIIT Pet images are no longer on disk), and
+  criterion 4 needs per-class points in the phone engine first. The next
+  detector candidate needs more cat recall on video without losing the
+  dog gain (cat video frames in training; the 384-px model).
 
 **Data-path defects found by the run and fixed** (details in
 `results/g1/cpu_training.json`; tests in `tests/test_g1_data_loader.py`):

@@ -1452,6 +1452,17 @@ committed before any score): TinyCLIP ViT-8M/16 0.267 [0.213, 0.342]
 0.390] ([-0.164, -0.053]); bar 0.347 not met by either; tail chasing AP 0.06
 for both. Desktop CPU (PyTorch, 2 threads): 22 and 87 ms per crop.
 
+### G1b acceptance criterion 2 - E18 real pet video at the per-class points - COMPLETED (not met)
+
+The Python engine now accepts per-class detector operating points. With G1b
+at its tuning-set points (cat 0.24, dog 0.30) and its own verifier, paired
+with M3 re-run on the same engine over the 294 Kinetics clips
+(`results/g1/acceptance2_e18.json`; rule fixed before G1 training, analysis
+committed before the run): dog right-species clips 119 vs 87 of 195
+(+0.164 [+0.097, +0.231]) with fewer only-a-cat clips (13 vs 21); cat 60 vs
+59 of 99 (+0.010 [-0.091, +0.111]) with more only-a-dog clips (14 vs 9).
+Not met for cats: the phone detector stays.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

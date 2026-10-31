@@ -8,7 +8,7 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 201,
+    "python_tests": 205,
     "typescript_unit_tests": 40,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
@@ -109,9 +109,10 @@
    "selection": "development data only: run B over G1a (OI dev AP50 cat 0.774 / dog 0.821 vs 0.741 / 0.765; CoP3D dev dog frames only a cat 0.086 vs 0.154)",
    "acceptance_1": "met: E4 with own verifier at per-class points cat 0.852, dog 0.7481 (threshold 0.748), specificity intervals overlap M3's",
    "e20": "home video vs phone build + verifier: cat found 0.766 vs 0.697, dog 0.762 vs 0.598, dog frames only a cat 0.072 vs 0.137",
-   "next": "E16 and E18 need the engine wired to a G1 export with per-class points and verifier; then parity and phone latency; phone detector unchanged",
+   "next": "phone detector unchanged: acceptance 2 fails on cats; the Python engine supports per-class points (vision.class_score_thresholds), the phone engine does not yet",
    "artifacts": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint ckpt-21 with optimizer state, float32/float16/int8 exports, MANIFEST.json); GitHub restore verified",
-   "downstream_behaviour": "E31 part C: located in more frames (0.786 / 0.771 vs 0.727) but behaviour recognition not improved (pool macro AP 0.404 / 0.402 vs 0.416; benchmark 23/36 / 19/36 vs 22/36; tail chasing 3/8 / 1/8 vs 3/8)"
+   "downstream_behaviour": "E31 part C: located in more frames (0.786 / 0.771 vs 0.727) but behaviour recognition not improved (pool macro AP 0.404 / 0.402 vs 0.416; benchmark 23/36 / 19/36 vs 22/36; tail chasing 3/8 / 1/8 vs 3/8)",
+   "acceptance_2": "not met (2026-10-31; results/g1/acceptance2_e18.json): E18 right-species clips dog 119 vs 87/195 (+0.164 [+0.097, +0.231]; only-a-cat 13 vs 21), cat 60 vs 59/99 (+0.010 [-0.091, +0.111]; only-a-dog 14 vs 9)"
   },
   "B1": {
    "capability": "trained behaviour head on frozen SigLIP embeddings (behaviour explanation)",
@@ -202,6 +203,11 @@
    "date": "2026-10-31",
    "decision": "E34: no off-the-shelf small CLIP encoder adopted for phone behaviour recognition",
    "basis": "pre-registered, same bar as E33 (0.347): TinyCLIP ViT-8M/16 0.267, ViT-39M/16 0.308 (SigLIP 0.416); results/e34/metrics.json"
+  },
+  {
+   "date": "2026-10-31",
+   "decision": "G1b does not replace the phone detector",
+   "basis": "pre-registered acceptance 2 (E18 paired with M3): met for dogs, not for cats (no cat gain, more cat clips with only a dog); results/g1/acceptance2_e18.json"
   }
  ],
  "resources_needed": [
@@ -224,7 +230,8 @@
   "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31",
   "e32_behavior_v2": "v2 vs E31 system on 37 fresh questions (one run): recognized 24 vs 21/33, parse 16 vs 13/33, C4 28 vs 25/33, expert coverage 6 vs 3/7 (gain confined to topic-matched knowledge entries); default stays E31 system by the fixed rule; person context 23/35; results/e32",
   "e33_phone_student": "student macro AP 0.273 vs teacher 0.416 (diff -0.143 [-0.194, -0.088]); float16/int8 same AP at 7.5/4.0 MB; browser parity bit-exact (float); not adopted; results/e33",
-  "e34_small_vlm": "TinyCLIP ViT-8M/16 0.267, ViT-39M/16 0.308 vs SigLIP 0.416 on the E31 pool; neither reaches 0.347; results/e34"
+  "e34_small_vlm": "TinyCLIP ViT-8M/16 0.267, ViT-39M/16 0.308 vs SigLIP 0.416 on the E31 pool; neither reaches 0.347; results/e34",
+  "g1b_acceptance_2": "E18 paired with M3: dog +0.164 [+0.097, +0.231], cat +0.010 [-0.091, +0.111] with more only-a-dog clips; not met"
  },
  "clock_note": "The machine clock was reset between milestones: commits and documents of the previous milestone are dated 2026-10-20, this milestone (E32) 2026-10-30/31. Dates are as the machine reported them."
 }
