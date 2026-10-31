@@ -1,0 +1,17 @@
+{
+  "appId": "org.petperception.observer",
+  "appName": "Pet Observer",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true,
+    "allowNavigation": [
+      "*"
+    ]
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": true,
+    "appendUserAgent": "PetObserverAndroid/0.1"
+  }
+}

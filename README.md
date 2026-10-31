@@ -71,6 +71,17 @@ recognition. A cloud-assisted path (`--understanding cloud`, server only, off by
 priority tail-chasing scenario are in §13 of that document: no recognizer is reliable yet on held-out sources, and
 the hosted model has not been evaluated (no API key here).
 
+## Try the user journey
+
+* **Web**: `cd web && npm ci && npm run build`, then `uv run petperception serve --port 8765 --workers 1` and open
+  http://127.0.0.1:8765 - create the first account, then **Ask about my pet's behaviour** (describe the concern, add a
+  10-60 s video, read the answer, correct it). The answer comes from the server's pipeline; the cloud provider path is
+  off unless configured (docs/OPERATIONS_RUNBOOK.md). Flow and screenshots: [docs/UX_FLOW.md](docs/UX_FLOW.md).
+* **Android test build**: `android-app/dist/pet-observer-0.1.0-debug.apk` (install with `adb install`; on the emulator
+  connect to `http://10.0.2.2:8765`). Built and linted here; not yet run on an emulator or a phone
+  ([android-app/README.md](android-app/README.md)).
+* **Capability totals**: [docs/CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md) §0.
+
 ## Documents
 
 | Topic | Document |

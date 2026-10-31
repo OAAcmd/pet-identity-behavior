@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pet Observer</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 1.5rem; background: #f7f6f2; color: #1d2330; }
+  h1 { font-size: 1.4rem; } label { display: block; font-weight: 600; margin: 1rem 0 0.3rem; }
+  input { width: 100%; box-sizing: border-box; font-size: 1rem; padding: 0.7rem; border: 1px solid #bbc; border-radius: 8px; }
+  button { width: 100%; margin-top: 1rem; padding: 0.9rem; font-size: 1.05rem; border: 0; border-radius: 8px; background: #1f5e4f; color: #fff; }
+  .hint { color: #556; font-size: 0.9rem; } .err { color: #9b1c1c; margin-top: 0.8rem; }
+</style>
+</head>
+<body>
+<h1>Pet Observer</h1>
+<p>Connect to the Pet Observer server that analyses your recordings.</p>
+<label for="url">Server address</label>
+<input id="url" inputmode="url" autocomplete="url" placeholder="https://pets.example.org">
+<p class="hint">Test builds: the Android emulator reaches a server on this computer at http://10.0.2.2:8765. A phone needs the
+server's HTTPS address (docs/DEPLOYMENT.md).</p>
+<button id="go">Connect</button>
+<p id="err" class="err" role="alert"></p>
+<script>
+  // Thin native shell: the same web app is loaded from the server, so all logic and data stay in one place.
+  const KEY = "server-url";
+  const box = document.getElementById("url"), err = document.getElementById("err"), go = document.getElementById("go");
+  box.value = localStorage.getItem(KEY) || "http://10.0.2.2:8765";
+  async function connect(auto) {
+    const base = box.value.trim().replace(/\/+$/, "");
+    if (!/^https?:\/\/[^\s]+$/.test(base)) { err.textContent = "Enter an address starting with https:// (or http:// for the emulator)."; return; }
+    go.disabled = true; go.textContent = "Connecting..."; err.textContent = "";
+    try {
+      const ctl = new AbortController(); setTimeout(() => ctl.abort(), 8000);
+      await fetch(base + "/api/v1/health", { signal: ctl.signal, mode: "no-cors" }); // rejects only when the server is unreachable
+      localStorage.setItem(KEY, base);
+      location.href = base + "/#/";
+    } catch (e) {
+      err.textContent = (auto ? "Could not reach " : "Could not connect to ") + base + ". Check the address and your connection, then try again. Your unfinished recordings stay on this phone.";
+      go.disabled = false; go.textContent = "Try again";
+    }
+  }
+  go.addEventListener("click", () => connect(false));
+  if (localStorage.getItem(KEY) && !location.hash.includes("change")) connect(true);
+</script>
+</body>
+</html>

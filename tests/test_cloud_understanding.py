@@ -162,3 +162,22 @@ def test_cloud_mode_without_key_falls_back_to_the_local_answer(app_settings, tmp
         ans = c.get(f"/api/v1/analyses/{aid}").json()["behavior_question"]["answer"]
         assert ans["cloud"]["status"] == "unavailable" and ans["answer_source"] == "local" and ans["packet"]["images"] == 0
         assert PW not in json.dumps(ans)
+
+
+def test_correction_on_a_donated_recording_becomes_an_owner_report(app_settings):
+    app, runner, _ = make(app_settings)
+    runner.explainer_factory = lambda version: FakeExplainer()
+    with TestClient(app) as c:
+        csrf = register(c)
+        h = {"X-CSRF-Token": csrf}
+        q = {"species": "cat", "scene": "", "question": "why does it spin?", "retain_for_research": True, "research_consent_version": "rs-1"}
+        aid = start(c, csrf, question=q)
+        runner.run_pending()
+        r = c.post(f"/api/v1/analyses/{aid}/feedback", json={"target_type": "observation", "target_id": "tail_chasing", "verdict": "disagree",
+                                                              "actual_behavior": "playing_object", "note": "it was chasing a toy"}, headers=h)
+        assert r.status_code == 201
+        ann = c.get("/api/v1/research-samples").json()[0]["annotations"]
+        assert [a["status"] for a in ann] == ["provisional", "owner_reported"]
+        assert ann[1]["payload"]["actual_behavior"] == "playing_object" and ann[1]["payload"]["kind"] == "correction"
+        caps = c.get("/api/v1/capabilities").json()["behavior_question"]
+        assert caps["cloud_available"] is False and any(b["name"] == "tail_chasing" for b in caps["behaviors"])

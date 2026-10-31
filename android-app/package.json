@@ -1,0 +1,9 @@
+{
+  "name": "pet-observer-android",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Android test shell for the Pet Observer web app (Capacitor). See README.md.",
+  "scripts": { "sync": "cap sync android" },
+  "devDependencies": { "@capacitor/cli": "^7.4.0" },
+  "dependencies": { "@capacitor/android": "^7.4.0", "@capacitor/core": "^7.4.0" }
+}

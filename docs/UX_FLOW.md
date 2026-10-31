@@ -1,5 +1,16 @@
 # User flow: ask about a behaviour (web and Android)
 
+## Responsibilities
+
+| Part | Does | Code |
+| --- | --- | --- |
+| Client (web app; Android shell loads the same app) | capture or import, the owner's species and scene, light checks (type, length, size), progress, answers, corrections, history, drafts and unfinished uploads kept on the device; optional on-device observation engine | `web/src/pages/Ask.tsx`, `components/BehaviorAnswerView.tsx`, `android-app/` |
+| Application backend | uploads (resumable), analysis jobs, result and answer storage, model invocation (local pipeline; cloud provider when enabled), consented research samples and their annotation layers, deletion and export | `src/petperception/app/`, `understand/run.py`, `understand/cloud.py` |
+| Cloud model provider (optional, off by default) | multimodal understanding and grounded explanation from the backend's evidence packet | `understand/cloud.py` (`AnthropicProvider`; one class per provider behind `name`, `available()`, `complete()`) |
+
+The working path today is client -> backend -> local pipeline (no provider key is configured here); the answer says
+when the extended AI service was not available.
+
 Primary journey (one obvious action per screen; species and the owner's description are used as given):
 
 ```
@@ -30,3 +41,5 @@ in-page recorder of the Record page.
 Data the owner creates: corrections and notes are stored as owner reports; on a donated recording they are added to
 the research sample as `owner_reported`, never as reviewed labels ([RESEARCH_SAMPLES.md](RESEARCH_SAMPLES.md)).
 Screenshots of each screen: `docs/ux/` (made by `web/tests/e2e/journey.spec.ts` against a running server).
+
+Screenshots show a frame of "Tail Chase" by Jason Brackins (Internet Archive, CC BY-NC-SA 2.0), used for this research documentation under that licence.

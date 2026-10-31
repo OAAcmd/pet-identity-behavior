@@ -54,6 +54,7 @@ export function SettingsPage() {
       </form>
 
       <ResearchSamples />
+      <AndroidServer />
       <div class="card">
         <h2>Your data</h2>
         <p>Download everything stored for your account (pets, places, results and feedback) as JSON.</p>
@@ -179,6 +180,18 @@ function OnDeviceCard() {
 
 
 /** Recordings the owner chose to keep as research samples: list and delete (docs/RESEARCH_SAMPLES.md). */
+/** Shown only inside the Android test app: go back to its start screen to change the server address. */
+function AndroidServer() {
+  if (!navigator.userAgent.includes("PetObserverAndroid")) return null;
+  return (
+    <div class="card">
+      <h2>Server</h2>
+      <p class="muted">This app is connected to {location.origin}.</p>
+      <a class="btn btn-secondary" href="http://localhost/#change">Change server</a>
+    </div>
+  );
+}
+
 function ResearchSamples() {
   const [items, setItems] = useState<{ id: string; question: string; created_at: string; annotations: { status: string }[] }[] | null>(null);
   const [err, setErr] = useState<unknown>(null);

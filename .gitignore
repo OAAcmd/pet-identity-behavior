@@ -49,3 +49,8 @@ web/test-results/
 web/playwright-report/
 !web/public/icons/*.png
 web/dist-devicetest/
+
+# Android test build (installable debug APK, see android-app/README.md)
+!android-app/dist/
+!android-app/android/app/src/main/res/**/*.png
+!docs/ux/*.png
