@@ -22,6 +22,44 @@ Development (this module's ``develop``; nothing here touches E32 test clips):
   >= 0.2, place prompts on three scene frames, YAMNet laughter / speech /
   doorbell / knock >= 0.3).
 Writes ``results/e32/development.json`` and ``artifacts/understand/circling_v1.json``.
+
+Test (``test``; pre-registered: this text, the benchmark and the scoring code
+were committed before any E32 test feature was extracted or any test answer
+was produced; nothing below may be changed after scoring)
+* Systems: v1 = the frozen E31 system (commit 0c1f7c5, run from a git worktree
+  by ``e32_v1_runner.py`` on feature version 1); v2 = this milestone's system
+  (frozen at commit 3f8eae9; feature version 2, ``Explainer.load(version=2)``).
+  Both see the same question text, scene text and species, once.
+* Benchmark: ``benchmarks/behavior_questions_v2.json`` (37 questions on 37
+  clips that neither system was developed on: set "e32" in the manifests;
+  references from the source caption / title and the assistant frame review
+  done after the freeze, ``annotations/behavior_clips.json`` method_e32).
+* Measures: the E31 measures (B1-B4, C1-C9, same code) for both systems, plus
+  B1 per category and per behaviour for every category / behaviour in the
+  benchmark, paired v1/v2 counts, and for v2 the recording-context checks
+  X_person (a person reported iff the frame review saw one) and X_place (the
+  reported place is one of the frame-review places; no place reported fails).
+* Targets and decisions (fixed now):
+  - Tail chasing counts as recognized from recordings (v2) only if B1 for
+    tail chasing is at least 0.7 and B4 tail-chasing rejection at least 0.8
+    (n = 2 and 2: reported with Wilson intervals; meeting it would not show
+    general reliability).
+  - Parser: C1 of v2 at least 0.9 on non-gap questions.
+  - v2 stays the default system only if, on the same questions, (a) its C1
+    passes are at least v1's, (b) its asked-and-present behaviours recognized
+    are at least v1's minus 1, (c) its confuser rejections are at least v1's
+    minus 1, (d) its C5 expert coverage is at least v1's, and (e) C2, C3, C4,
+    C6, C7, C8, C9 each pass on at least 90 % of non-gap questions;
+    otherwise the default goes back to version 1 and the failure is reported.
+  - Recording context (descriptive): X_person agreement target 0.8; X_place
+    reported without a target.
+  - Per question (descriptive, both systems): "explained" when it is not a
+    gap question, C1, C2, C3, C4, C6-C9 pass (and C5 coverage when an expert
+    interpretation exists) and no must-not behaviour is recognized;
+    "explained and seen" when, in addition, every asked-and-present behaviour
+    is recognized (otherwise the answer rests on the user's report, which C8
+    requires it to say). Gap questions count as "handled" when the parse adds
+    no behaviour outside ``asked_ok`` (no unrelated explanation is forced).
 """
 
 from __future__ import annotations
@@ -240,6 +278,52 @@ def score_items(items: list[dict], answers: dict[str, dict], system: str) -> lis
     return rows
 
 
+def summarize_extra(rows: list[dict]) -> dict:
+    """B1 per category and per asked behaviour for every one in the benchmark (E31's summary lists only its own)."""
+    from .e31_behavior_questions import wilson
+
+    def rate(k, n):
+        return {"k": k, "n": n, "rate": k / n if n else float("nan"), "wilson95": wilson(k, n)}
+
+    out = {"by_category": {}, "by_behavior": {}}
+    for cat in sorted({r["category"] for r in rows}):
+        rs = [r for r in rows if r["category"] == cat]
+        out["by_category"][cat] = rate(sum(len(r["asked_present_seen"]) for r in rs), sum(len(r["asked_present"]) for r in rs))
+    for b in sorted({b for r in rows for b in r["asked_present"]}):
+        out["by_behavior"][b] = rate(sum(b in r["asked_present_seen"] for r in rows), sum(b in r["asked_present"] for r in rows))
+    return out
+
+
+EXPLAINED_CHECKS = ("C1_parse", "C2_entry", "C3_grounded", "C4_separation", "C6_observations", "C7_no_certainty", "C8_report_status", "C9_species")
+
+
+def outcome(r: dict, asked_ok: list[str]) -> str:
+    if r["gap"]:
+        return "gap_handled" if set(r["parsed"]) <= set(asked_ok) else "gap_forced"
+    ok = all(r[c] for c in EXPLAINED_CHECKS) and r.get("C5_coverage", True) and not r["must_not_seen"]
+    if not ok:
+        return "not_explained"
+    return "explained_and_seen" if set(r["asked_present_seen"]) == set(r["asked_present"]) else "explained_from_report"
+
+
+def decide(res: dict) -> dict:
+    """The pre-registered decisions (module docstring)."""
+    p, c2 = res["paired"], res["v2"]["explanation"]
+    cov1, cov2 = res["v1"]["explanation"]["C5_coverage_expert"]["pass"], c2["C5_coverage_expert"]["pass"]
+    rules = {"a_C1_not_below_v1": p["C1_parse"]["v2"] >= p["C1_parse"]["v1"],
+             "b_recognized_at_least_v1_minus_1": p["asked_present_recognized"]["v2"] >= p["asked_present_recognized"]["v1"] - 1,
+             "c_confusers_at_least_v1_minus_1": p["confusers_rejected"]["v2"] >= p["confusers_rejected"]["v1"] - 1,
+             "d_C5_expert_coverage_not_below_v1": cov2 >= cov1,
+             "e_C2_C3_C4_C6_to_C9_at_least_0.9": all(c2[c]["rate"] >= 0.9 for c in EXPLAINED_CHECKS if c != "C1_parse")}
+    tc = res["v2"]["recognition"].get("B1_behavior_tail_chasing")
+    rej = res["v2"]["recognition"]["B4_tail_chasing_rejection"]
+    return {"v2_stays_default": all(rules.values()), "rules": rules,
+            "parser_C1_v2_at_least_0.9": c2["C1_parse"]["rate"] >= 0.9,
+            "tail_chasing_recognized_from_recordings_v2": bool(tc and tc["n"] and tc["rate"] >= 0.7 and rej["n"] and rej["rate"] >= 0.8),
+            "context_person_agreement_at_least_0.8": (res["context_v2"]["person"]["agree"] >= 0.8 * res["context_v2"]["person"]["n"])
+            if res["context_v2"]["person"]["n"] else None}
+
+
 def paired(rows1: list[dict], rows2: list[dict], key) -> dict:
     a = [key(r) for r in rows1]
     b = [key(r) for r in rows2]
@@ -272,7 +356,6 @@ def test(settings: Settings, out_dir: Path, v1_answers: Path) -> dict:
     r1, r2 = score_items(items, ans1, "v1"), score_items(items, ans2, "v2")
     b1, b2 = E31.summarize_b(r1), E31.summarize_b(r2)
     c1, c2 = E31.summarize_c(r1), E31.summarize_c(r2)
-    tc = b2.get("B1_behavior_tail_chasing", {"rate": float("nan")})
     res = {"experiment": "E32", "created_at": utc_now().isoformat(timespec="seconds"),
            "code_commit": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=REPO_ROOT).stdout.strip(),
            "benchmark": bench["version"], "questions": len(items),
@@ -285,9 +368,15 @@ def test(settings: Settings, out_dir: Path, v1_answers: Path) -> dict:
                       "C5_ranking": paired(r1, r2, lambda r: int(r["C5_ranking"]) if r.get("C5_ranking") is not None else None)},
            "context_v2": {"person": {"agree": sum(bool(r.get("X_person")) for r in r2 if "X_person" in r), "n": sum("X_person" in r for r in r2)},
                           "place": {"agree": sum(bool(r.get("X_place")) for r in r2 if "X_place" in r), "n": sum("X_place" in r for r in r2)}},
-           "tail_chasing_recognized_from_recordings_v2": bool(tc["rate"] >= 0.7 and b2["B4_tail_chasing_rejection"]["rate"] >= 0.8)
-           if tc.get("n") else False,
            "per_question": {"v1": r1, "v2": r2}}
+    res["v1"]["recognition_extra"], res["v2"]["recognition_extra"] = summarize_extra(r1), summarize_extra(r2)
+    ok_by_id = {it["id"]: it["asked_ok"] for it in items}
+    for sysname, rows in (("v1", r1), ("v2", r2)):
+        for r in rows:
+            r["outcome"] = outcome(r, ok_by_id[r["id"]])
+        res[sysname]["outcomes"] = {o: [r["id"] for r in rows if r["outcome"] == o]
+                                    for o in ("explained_and_seen", "explained_from_report", "not_explained", "gap_handled", "gap_forced")}
+    res["decision"] = decide(res)
     write_json(out_dir / "metrics.json", res)
     md = ["# E32 answers of the v2 system (all benchmark questions)", ""]
     from ..understand.explain import render_markdown
@@ -309,7 +398,8 @@ def main() -> None:
     s = load_settings()
     if a.step == "test":
         r = test(s, s.paths.resolve("results_root") / "e32", Path(a.v1_answers))
-        print(json.dumps({k: r[k] for k in ("v1", "v2", "paired", "context_v2", "tail_chasing_recognized_from_recordings_v2")}, indent=1, default=str)[:6000])
+        print(json.dumps({k: r[k] for k in ("paired", "context_v2", "decision")}, indent=1, default=str))
+        print(json.dumps({s: r[s]["outcomes"] for s in ("v1", "v2")}, indent=1))
         return
     r = develop(s, s.paths.resolve("results_root") / "e32")
     print(json.dumps({"circling": {k: v for k, v in r["circling"].items() if k != "coefficients"}, "thresholds_v2": r["thresholds_v2"],

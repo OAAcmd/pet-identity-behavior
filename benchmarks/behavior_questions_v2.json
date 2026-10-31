@@ -1,0 +1,1035 @@
+{
+ "schema": "petperception.behavior_questions/1",
+ "version": "behavior-questions-v2",
+ "created_at": "2026-10-30",
+ "description": "E32 test benchmark: questions on fresh recordings (expert-captioned paper videos, Mixkit stock clips, one CC BY-NC-SA Internet Archive clip) that were never used to develop either system. Written by the assistant from each source's caption, overlay text or title after the v2 system was frozen (commit 3f8eae9); not collected from owners. Same fields as behavior-questions-v1, plus frame_person / frame_place from the frame review for the recording-context checks.",
+ "questions": [
+  {
+   "id": "t01",
+   "clip": "archive_ia_cat_tail_3",
+   "species": "cat",
+   "scene": "Carpeted living room; we have a second cat.",
+   "question": "My cat whirls around after his tail on the carpet and then flops down. Is he just playing?",
+   "question_origin": "authored_from_source_description",
+   "category": "tail_chasing",
+   "asked": [
+    "tail_chasing"
+   ],
+   "asked_ok": [
+    "resting"
+   ],
+   "reference_present": [
+    "tail_chasing",
+    "resting"
+   ],
+   "reference_basis": "source + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "tail_chasing": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "t02",
+   "clip": "paper_sensory_compulsive_2020",
+   "species": "dog",
+   "scene": "Our dog was born deaf and partly blind; it happens in the garden and in the house.",
+   "question": "My deaf white dog stares at nothing and then chases her tail for minutes. Our vet first thought it was neurological. Why does she do it?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "tail_chasing",
+   "asked": [
+    "staring_snapping",
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "staring_snapping",
+    "tail_chasing"
+   ],
+   "reference_basis": "expert (video overlays) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "compulsive"
+    ],
+    "text": "compulsive behaviours of sensory-impaired dogs, first considered neurological; improved after behavioural adjustments",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "tail_chasing": true
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "t03",
+   "clip": "paper_hamartoma_circling_2025",
+   "species": "dog",
+   "scene": "At the vet clinic; she has had a head tilt to the left for months and loses her balance.",
+   "question": "My 7-month-old Schnauzer keeps turning her head to the left over and over and sometimes circles to the left. She can't be distracted out of it. What could be going on?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "circling_neuro",
+   "asked": [
+    "head_tremor",
+    "tail_chasing"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "head_tremor"
+   ],
+   "reference_basis": "expert + assistant (no circling in the first 42 s)",
+   "must_not_recognize": [
+    "tail_chasing"
+   ],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "neurological: presumptive hypothalamic hamartoma",
+    "authority": "expert"
+   },
+   "request_expected": {},
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "veterinary clinic"
+   ]
+  },
+  {
+   "id": "t04",
+   "clip": "stock_mixkit_45868",
+   "species": "dog",
+   "scene": "In the park with a tennis ball.",
+   "question": "In the park my young corgi races after his tennis ball and runs back to me. Does he want me to keep throwing it?",
+   "question_origin": "authored_from_source_title",
+   "category": "confuser",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [
+    "locomotion"
+   ],
+   "reference_present": [
+    "locomotion"
+   ],
+   "reference_basis": "assistant (ball in view; the run is toward the camera)",
+   "must_not_recognize": [
+    "tail_chasing"
+   ],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "t05",
+   "clip": "stock_mixkit_50675",
+   "species": "dog",
+   "scene": "On the floor at home with his teddy bear.",
+   "question": "My pit bull puppy shakes and bites his teddy bear really hard. Is he being aggressive?",
+   "question_origin": "authored_from_source_title",
+   "category": "confuser",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [
+    "threat_display",
+    "self_biting"
+   ],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [
+    "threat_display"
+   ],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "t06",
+   "clip": "paper_head_tremor_2015",
+   "species": "dog",
+   "scene": "Sitting on the sofa next to me in the evening.",
+   "question": "My 2-year-old Schnauzer's head starts bobbing round and round while he is wide awake, and it seems to stop when I talk to him. Should I worry?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "medical_confuser",
+   "asked": [
+    "head_tremor"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "head_tremor",
+    "being_petted"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "idiopathic head tremor syndrome",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "head_tremor": false
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "t07",
+   "clip": "paper_epilepsy_survey_typeD_2025",
+   "species": "dog",
+   "scene": "At home in the living room.",
+   "question": "My dog sometimes stands completely still in the living room, staring at nothing, and doesn't react when I call him. Is he just thinking?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "medical_confuser",
+   "asked": [
+    "staring_snapping"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "staring_snapping"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "episode of impaired awareness (seizure category D)",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "staring_snapping": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "t08",
+   "clip": "paper_sleep_movements_2016",
+   "species": "dog",
+   "scene": "Asleep on the rug in the living room.",
+   "question": "My retriever kicks and jerks his legs a lot while he sleeps on the rug. Is he just dreaming?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "medical_confuser",
+   "asked": [
+    "sleep_movements"
+   ],
+   "asked_ok": [
+    "resting"
+   ],
+   "reference_present": [
+    "sleep_movements",
+    "resting"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "REM sleep behaviour disorder with degenerative encephalopathy",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "sleep_movements": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room",
+    "bedroom"
+   ]
+  },
+  {
+   "id": "t09",
+   "clip": "paper_narcolepsy_2021",
+   "species": "dog",
+   "scene": "At home and at the vet clinic.",
+   "question": "My young French bulldog suddenly goes limp and lies down when he gets excited, then gets up a moment later. What is happening?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "medical_confuser",
+   "asked": [
+    "collapse"
+   ],
+   "asked_ok": [
+    "resting"
+   ],
+   "reference_present": [
+    "collapse"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "medical"
+    ],
+    "text": "cataplexy in suspected acquired narcolepsy",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "collapse": false
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "veterinary clinic"
+   ]
+  },
+  {
+   "id": "t10",
+   "clip": "paper_bruxism_2022",
+   "species": "dog",
+   "scene": "At the vet clinic, wearing a muzzle.",
+   "question": "My dog grinds his teeth while he is awake. Why does he do that?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [],
+   "reference_present": [],
+   "reference_basis": "expert",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "awake teeth grinding (bruxism) is not in the vocabulary or the knowledge base",
+   "frame_person": false,
+   "frame_place": [
+    "veterinary clinic"
+   ]
+  },
+  {
+   "id": "t11",
+   "clip": "paper_eating_seizure_2020",
+   "species": "dog",
+   "scene": "At the vet clinic with his food bowl.",
+   "question": "A few bites into his meal my terrier stops eating, hunches over and starts trembling. Did he eat too fast?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [
+    "eating"
+   ],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "expert + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "seizures triggered by eating are not in the knowledge base",
+   "frame_person": true,
+   "frame_place": [
+    "veterinary clinic"
+   ]
+  },
+  {
+   "id": "t12",
+   "clip": "paper_catnip_ethogram_2022",
+   "species": "cat",
+   "scene": "On the floor with a catnip toy.",
+   "question": "When I give my cat catnip she bites it and then rubs her head on the floor. Is that normal?",
+   "question_origin": "authored_from_expert_caption",
+   "category": "other",
+   "asked": [
+    "rolling_rubbing"
+   ],
+   "asked_ok": [
+    "playing_object",
+    "eating"
+   ],
+   "reference_present": [
+    "rolling_rubbing"
+   ],
+   "reference_basis": "expert (overlays) + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": {
+    "kinds": [
+     "play_or_normal"
+    ],
+    "text": "the catnip response of domestic cats",
+    "authority": "expert"
+   },
+   "request_expected": {
+    "rolling_rubbing": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o01",
+   "clip": "stock_mixkit_45347",
+   "species": "cat",
+   "scene": "Sitting in the garden.",
+   "question": "My cat sits in the garden licking her paw and wiping her face with it. Why does she do that?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "self_grooming"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "self_grooming"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "self_grooming": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "o02",
+   "clip": "stock_mixkit_50689",
+   "species": "dog",
+   "scene": "Lying on the floor with his ball.",
+   "question": "My border collie lies on the floor chewing and pushing his ball around for ages. Does he want something from me?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o03",
+   "clip": "stock_mixkit_1478",
+   "species": "dog",
+   "scene": "Outside, kneeling next to him.",
+   "question": "My golden retriever leans into me and pants while I rub his face. Does he like it?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": false
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "o04",
+   "clip": "stock_mixkit_45842",
+   "species": "dog",
+   "scene": "In the garden.",
+   "question": "My pug stands still with his tongue out while I stroke his head. Is he asking for more?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": false
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "o05",
+   "clip": "stock_mixkit_1778",
+   "species": "cat",
+   "scene": "At home.",
+   "question": "My cat closes her eyes and lifts her chin when I scratch under it. What does that mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [
+    "scratching_self"
+   ],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": true
+   },
+   "gap": null,
+   "frame_person": true
+  },
+  {
+   "id": "o06",
+   "clip": "stock_mixkit_38824",
+   "species": "cat",
+   "scene": "On my lap on the sofa.",
+   "question": "My cat lets me stroke her on my lap and then suddenly turns over and grabs at my hand. Why?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": true
+   },
+   "gap": null,
+   "frame_person": true
+  },
+  {
+   "id": "o07",
+   "clip": "stock_mixkit_42736",
+   "species": "dog",
+   "scene": "On the lawn.",
+   "question": "My dog rolls onto his back on the lawn so I can rub his belly. Is he asking me to?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "being_petted"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "being_petted"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "being_petted": false
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "o08",
+   "clip": "stock_mixkit_50687",
+   "species": "dog",
+   "scene": "At home with his food bowl.",
+   "question": "My dog eats with his head deep in the bowl and doesn't look up. Is that normal?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o09",
+   "clip": "stock_mixkit_1547",
+   "species": "cat",
+   "scene": "At home.",
+   "question": "My two cats eat from the same bowl at the same time. Is one of them stressed?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o10",
+   "clip": "stock_mixkit_33017",
+   "species": "dog",
+   "scene": "On the kitchen floor.",
+   "question": "Our three puppies eat from one bowl at the same time. Is that normal?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o11",
+   "clip": "stock_mixkit_31936",
+   "species": "cat",
+   "scene": "Outside our house.",
+   "question": "Stray kittens are eating scraps outside our house. Are they very hungry?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "o12",
+   "clip": "stock_mixkit_48988",
+   "species": "dog",
+   "scene": "In the garden.",
+   "question": "My puppy chews on the grass in the garden. Why does he eat grass?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "eating"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "eating"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "eating": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "o13",
+   "clip": "stock_mixkit_50677",
+   "species": "dog",
+   "scene": "At home.",
+   "question": "My dog walks up to his water bowl and laps for a long time. Is he too thirsty?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "drinking"
+   ],
+   "asked_ok": [
+    "locomotion"
+   ],
+   "reference_present": [
+    "drinking"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "drinking": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o14",
+   "clip": "stock_mixkit_4102",
+   "species": "cat",
+   "scene": "On the sofa in the afternoon.",
+   "question": "My Siamese sleeps curled up on the sofa most of the afternoon. Is that okay?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "resting"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "resting"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "resting": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "o15",
+   "clip": "stock_mixkit_32319",
+   "species": "cat",
+   "scene": "On the couch.",
+   "question": "My kitten sleeps on her back with her paws up on the couch. What does it mean?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "resting"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "resting"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "resting": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "o16",
+   "clip": "stock_mixkit_16619",
+   "species": "dog",
+   "scene": "In his bed at home.",
+   "question": "My puppy lies in his bed and watches me. Does he want to come out?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "resting"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "resting"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "resting": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o17",
+   "clip": "stock_mixkit_48739",
+   "species": "dog",
+   "scene": "On a rug.",
+   "question": "Our puppies sleep piled on top of each other. Is that normal?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "resting"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "resting"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "resting": false
+   },
+   "gap": null,
+   "frame_person": false
+  },
+  {
+   "id": "o18",
+   "clip": "stock_mixkit_14184",
+   "species": "cat",
+   "scene": "In the garden among the leaves.",
+   "question": "Our kittens tumble and wrestle in the leaves in the garden. Are they fighting?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "social_play"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "social_play"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "garden or yard",
+    "park or street"
+   ]
+  },
+  {
+   "id": "o19",
+   "clip": "stock_mixkit_1779",
+   "species": "cat",
+   "scene": "On the sofa.",
+   "question": "My cat sits up and swats at the string toy I wave. Is she enjoying it?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "o20",
+   "clip": "stock_mixkit_45843",
+   "species": "dog",
+   "scene": "In the park.",
+   "question": "My pug runs across the park toward me. Is he happy?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "locomotion"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "locomotion"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "locomotion": false
+   },
+   "gap": null,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "o21",
+   "clip": "stock_mixkit_25225",
+   "species": "dog",
+   "scene": "In the snow.",
+   "question": "My corgi runs through the snow straight at the camera. Is he excited?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "locomotion"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "locomotion"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "locomotion": false
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "o22",
+   "clip": "stock_mixkit_6975",
+   "species": "cat",
+   "scene": "Under the couch, with a feather toy.",
+   "question": "My kitten reaches out from under the couch to grab the feather toy. Is she playing or scared?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [],
+   "reference_present": [
+    "playing_object"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_person": false,
+   "frame_place": [
+    "living room"
+   ]
+  },
+  {
+   "id": "o23",
+   "clip": "stock_mixkit_1494",
+   "species": "dog",
+   "scene": "At the river.",
+   "question": "My dog splashes into the river after his ball. Is he playing?",
+   "question_origin": "authored_from_source_title",
+   "category": "other",
+   "asked": [
+    "playing_object"
+   ],
+   "asked_ok": [
+    "locomotion"
+   ],
+   "reference_present": [
+    "playing_object",
+    "locomotion"
+   ],
+   "reference_basis": "source title + assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {
+    "playing_object": true
+   },
+   "gap": null,
+   "frame_person": true,
+   "frame_place": [
+    "park or street",
+    "garden or yard"
+   ]
+  },
+  {
+   "id": "g01",
+   "clip": "stock_mixkit_50683",
+   "species": "dog",
+   "scene": "In the kitchen, holding a treat.",
+   "question": "My border collie pants and stares at the treat in my fingers. Is he begging?",
+   "question_origin": "authored_from_source_title",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [
+    "eating",
+    "staring_snapping"
+   ],
+   "reference_present": [],
+   "reference_basis": "assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "begging or staring at food is not in the vocabulary",
+   "frame_person": true
+  },
+  {
+   "id": "g02",
+   "clip": "stock_mixkit_50686",
+   "species": "dog",
+   "scene": "At home.",
+   "question": "My border collie puts his paw in my hand whenever I hold it out. Does he want a treat?",
+   "question_origin": "authored_from_source_title",
+   "category": "gap",
+   "asked": [],
+   "asked_ok": [
+    "being_petted"
+   ],
+   "reference_present": [],
+   "reference_basis": "assistant",
+   "must_not_recognize": [],
+   "source_interpretation": null,
+   "request_expected": {},
+   "gap": "giving a paw (a trained or attention behaviour) is not in the vocabulary",
+   "frame_person": true
+  }
+ ]
+}
