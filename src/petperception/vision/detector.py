@@ -239,6 +239,16 @@ class PostprocessedDetector:
         return out
 
 
+def detect_at_operating_point(detector, rgb: np.ndarray, classes: list[str], vision, max_detections: int | None = None) -> list:
+    """Detections at the configured operating point: ``vision.score_threshold`` for every class, or the per-class
+    ``vision.class_score_thresholds`` where given (the detector runs at the lowest of them, then each class is cut at
+    its own point)."""
+    per = vision.class_score_thresholds or {}
+    lo = min([vision.score_threshold, *per.values()]) if per else vision.score_threshold
+    dets = detector.detect(rgb, classes, lo, vision.nms_iou, max_detections or vision.max_detections_per_frame)
+    return [d for d in dets if d.score >= per.get(d.label, vision.score_threshold)] if per else dets
+
+
 def load_detector(model_path: Path, num_threads: int = 2, decode: str | None = None) -> EfficientDetDetector | PostprocessedDetector:
     """Pick the decoder that matches the model's output layout. ``decode="strip_postprocess"``
     (set per model in manifests/resources.json) removes in-graph post-processing and decodes

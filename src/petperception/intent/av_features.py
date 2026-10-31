@@ -146,7 +146,9 @@ def frame_features(c: Components, rgb: np.ndarray, t_s: float, prev_gray: np.nda
     out["v_motion"][i] = float(np.mean(np.abs(g - prev_gray))) if prev_gray is not None else 0.0
     out["v_quality"][i] = frame_luma_blur(rgb)
     out["v_whole"][i] = c.backbone.features(cv2.resize(rgb, (224, 224), interpolation=cv2.INTER_AREA))["pooled"]
-    dets = c.detector.detect(rgb, ["cat", "dog", "person"] + c.object_classes, s.vision.score_threshold, s.vision.nms_iou, 25)
+    from ..vision.detector import detect_at_operating_point
+
+    dets = detect_at_operating_point(c.detector, rgb, ["cat", "dog", "person"] + c.object_classes, s.vision, 25)
     for d in dets:
         if d.label in c.object_classes:
             j = c.object_classes.index(d.label)

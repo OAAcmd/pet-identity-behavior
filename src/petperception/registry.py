@@ -68,13 +68,18 @@ def check_model(settings: Settings, model_id: str, verify_checksum: bool = True)
     files: dict[str, str] = {}
     d = model_dir(settings, model_id)
     for f in r.get("files", []):
-        p = d / f["name"]
+        p = _file_path(d, f)
         files[f["name"]] = str(p)
         if not p.exists():
             return ModelReadiness(model_id, "missing", files, f"{p} not found; run: uv run petperception fetch-models --only {model_id}")
         if verify_checksum and _cached_sha256(p) != f["sha256"]:
             return ModelReadiness(model_id, "checksum_mismatch", files, f"{p} does not match the pinned SHA-256")
     return ModelReadiness(model_id, "ready", files)
+
+
+def _file_path(d: Path, f: dict) -> Path:
+    """Models trained in this project are committed and referenced by ``repo_path``; downloaded ones live in the model directory."""
+    return REPO_ROOT / f["repo_path"] if f.get("repo_path") else d / f["name"]
 
 
 def fetch_model(settings: Settings, model_id: str) -> dict[str, Any]:
@@ -86,9 +91,12 @@ def fetch_model(settings: Settings, model_id: str) -> dict[str, Any]:
     d = model_dir(settings, model_id)
     out = []
     for f in r["files"]:
-        p = d / f["name"]
+        p = _file_path(d, f)
         if p.exists() and sha256_file(p) == f["sha256"]:
             out.append({"name": f["name"], "status": "already_present"})
+            continue
+        if f.get("repo_path"):
+            out.append({"name": f["name"], "status": "error", "error": f"{p} is missing or modified (part of this repository)"})
             continue
         try:
             rec = download(f["url"], p, expected_sha256=f["sha256"])

@@ -36,6 +36,7 @@ import numpy as np
 from ..config import Settings, load_settings
 from ..data import oxford_pets as OP
 from ..utils import utc_now, write_json
+from ..vision.detector import detect_at_operating_point
 
 N_PERMUTATIONS = 2000
 HEAD_COVERAGE = 0.8
@@ -81,7 +82,7 @@ def collect(settings: Settings, recs: list[dict], img_dir: Path, cache: Path) ->
                 out = {**r, "outcome": "unreadable"}
             else:
                 rgb = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-                dets = eng.detector.detect(rgb, ["cat", "dog"], s.vision.score_threshold, s.vision.nms_iou, 10)
+                dets = detect_at_operating_point(eng.detector, rgb, ["cat", "dog"], s.vision, 10)
                 ver = []
                 for d in dets:
                     v = eng.verifier.verify(rgb, d) if eng.verifier is not None else None

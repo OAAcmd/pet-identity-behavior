@@ -167,6 +167,9 @@ def _intent_assets(allowed) -> dict | None:
 
 
 def export_bundle(settings: Settings, out: Path) -> dict:
+    if settings.vision.class_score_thresholds:
+        raise ValueError("per-class detector operating points are not implemented in the phone engine yet; export without "
+                         "vision.class_score_thresholds")
     profile = settings.release_profile
     notes: list[str] = []
     if out.exists():

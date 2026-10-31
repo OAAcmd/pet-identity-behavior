@@ -895,6 +895,35 @@
       "release_note": "Fitted on CC BY 4.0 annotations / CC BY 2.0 images; geometry features only (no backbone needed)."
     },
     {
+      "id": "pet_detector_oi_g1b_v1",
+      "kind": "model",
+      "role": "G1b pet and household detector (MobileNetV2-256 RetinaNet, 14 classes; run B, selected on development data, acceptance 1 met); evaluated in the Python engine at its per-class operating points (cat 0.24, dog 0.30) with its own verifier; not in the phone bundle",
+      "name": "G1b detector, float32 export (models/g1/g1b_warm_cat2_cop3d)",
+      "canonical_url": "https://github.com/OAAcmd/pet-identity-behavior/tree/f52dd9ce7d36b471236c9164e05a49bfd40d1ce0/models/g1/g1b_warm_cat2_cop3d",
+      "status": "available",
+      "profiles": ["research"],
+      "retrieved_at": "2026-10-20",
+      "files": [
+        {
+          "name": "model_float32.tflite",
+          "repo_path": "models/g1/g1b_warm_cat2_cop3d/export/model_float32.tflite",
+          "revision": "this repository, committed in f52dd9ce7d36b471236c9164e05a49bfd40d1ce0",
+          "bytes": 10962672,
+          "sha256": "8e47751e4b9bf34c6bef6790d6df4a7d0823cfb8c218d41be4030f3fca097fbe"
+        }
+      ],
+      "task": "Open Images classes cat, dog, person and 11 household objects; MediaPipe detector metadata (anchors, labels) embedded",
+      "training_data": "G1 Open Images selection (CC BY 2.0 images, CC BY 4.0 annotations) with cat images repeated twice, plus 4,538 CoP3D home-video frames (CC BY-NC 4.0); warm start from G1a (COCO-initialised Model Maker checkpoint)",
+      "attribution": "Trained in this project (TRAINING_PROGRAM.md, G1b); MediaPipe Model Maker RetinaNet",
+      "use_restrictions": ["CoP3D CC BY-NC frames in training: research and non-commercial only", "Per-class operating points: vision.class_score_thresholds; the phone engine does not implement them yet"],
+      "release_suitability": {
+        "research": "suitable",
+        "personal_noncommercial": "requires_legal_review",
+        "commercial": "not_permitted"
+      },
+      "release_note": "Trained with CoP3D (CC BY-NC 4.0) frames and from a COCO-initialised checkpoint; research use only until reviewed."
+    },
+    {
       "id": "efficientdet_lite0_tfhub_rawdecode_v1",
       "kind": "model",
       "role": "licence-confirmed cat/dog/person detector for phones: TF Hub build with TFLite_Detection_PostProcess removed and raw outputs decoded outside the graph (E14)",

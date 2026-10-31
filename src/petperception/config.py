@@ -147,6 +147,8 @@ class VisionConfig(_Strict):
     sample_fps: float = 2.0
     max_side: int = 640
     score_threshold: float = 0.35
+    # Per-class operating points (e.g. a G1 export at its tuning-set points); classes not listed use score_threshold.
+    class_score_thresholds: dict[str, float] = Field(default_factory=dict)
     nms_iou: float = 0.5
     max_detections_per_frame: int = 10
     target_classes: list[str] = Field(default_factory=lambda: ["cat", "dog"])

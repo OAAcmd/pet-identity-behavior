@@ -34,7 +34,7 @@ from .registry import check_model, model_dir, model_terms_summary, release_decis
 from .schemas import analysis as S
 from .utils import StageTimer, sha256_file, utc_now
 from .vision import behavior as BH
-from .vision.detector import Detection, EfficientDetDetector, PostprocessedDetector, load_detector
+from .vision.detector import Detection, EfficientDetDetector, PostprocessedDetector, detect_at_operating_point, load_detector
 from .vision.pose import UnavailablePoseProvider, compute_features
 from .vision.quality import detection_flags, frame_quality
 from .vision.tracking import Track, estimate_camera_motion, make_tracker, merge_species, movement_summary
@@ -462,7 +462,7 @@ class AnalysisEngine:
                     if fq.blurry:
                         blurry_times.append(fr.t_s)
                     td = time.perf_counter()
-                    dets = self.detector.detect(fr.rgb, classes, s.vision.score_threshold, s.vision.nms_iou, s.vision.max_detections_per_frame)
+                    dets = detect_at_operating_point(self.detector, fr.rgb, classes, s.vision)
                     detect_s += time.perf_counter() - td
                     animal = [d for d in dets if d.label in s.vision.target_classes]
                     for d in dets:
