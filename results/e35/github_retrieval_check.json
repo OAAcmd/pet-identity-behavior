@@ -1,0 +1,8 @@
+{
+  "check": "cloud-assisted path, E35/E36 code, results, examples and candidate models retrieved from GitHub and run",
+  "date": "2026-10-31 (machine clock)",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng (commit 53fb242)",
+  "tests_from_clone": "tests/test_cloud_understanding.py, tests/test_e36_scenario.py, tests/test_app_backend.py: 27 passed",
+  "command_from_clone": "petperception explain ia_cat_tail_3.mp4 --species cat --scene ... --question ... --understanding cloud --strategy local_preprocessed --dry-run: 43-image packet (0.73 MB), local answer with the same behaviours and bouts as results/e35/examples/priority_cat_tail_chasing.json",
+  "not_in_git": "media (var/data), feature / pose / X-CLIP caches (var/understand), model weights (fetch-models), research samples (storage.research_root)"
+}
