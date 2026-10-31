@@ -20,6 +20,7 @@ data_local/
 *.safetensors
 # Models trained in this project and published for resuming / evaluation (ordinary Git; each file < 50 MB)
 !models/**/*.tflite
+!models/**/*.weights.h5
 
 # Raw media must never be committed
 *.wav
