@@ -125,14 +125,21 @@ def develop_circling(settings: Settings, zsm: R.ZeroShot) -> tuple[dict, TM.Circ
         per_c[C] = (ap(y_clip[evalmask], s[evalmask]), s)
     bestC = max(C_GRID, key=lambda c: per_c[c][0])
     oof = per_c[bestC][1]
-    thr = best_f1_threshold(y_clip[evalmask], oof[evalmask])
     zs = np.array([r["zs_clip"] for r in rows])
+    # which clip score to use is decided here, on development data: zero-shot alone, the window model alone, or their mean
+    options = {"zero_shot": zs, "window_model": oof, "mean": 0.5 * (zs + oof)}
+    option_ap = {k: ap(y_clip[evalmask], v[evalmask]) for k, v in options.items()}
+    use = max(option_ap, key=option_ap.get)
+    oof_window = oof
+    oof = options[use]
+    thr = best_f1_threshold(y_clip[evalmask], oof[evalmask])
     pred = oof >= thr
     tp = int(np.sum(pred & (y_clip == 1) & evalmask))
     res = {"clips": len(rows), "groups": len(set(groups)), "clips_scored": int(evalmask.sum()), "clip_positives": int(y_clip.sum()),
            "windows": int(sum(len(r["y"]) for r in rows)), "positive_windows": int(sum((r["y"] == 1).sum() for r in rows)),
            "C_grid_oof_clip_ap": {str(c): per_c[c][0] for c in C_GRID}, "C": bestC,
-           "oof_clip_ap": per_c[bestC][0], "zero_shot_clip_ap": ap(y_clip[evalmask], zs[evalmask]),
+           "oof_clip_ap": per_c[bestC][0], "zero_shot_clip_ap": ap(y_clip[evalmask], zs[evalmask]), "clip_score_options_ap": option_ap,
+           "clip_score_used": use,
            "base_rate": float(y_clip[evalmask].mean()), "threshold": thr,
            "oof_at_threshold": {"tp": tp, "positives": int(y_clip.sum()), "fp": int(np.sum(pred & (y_clip == 0) & evalmask)),
                                 "negatives": int((evalmask & (y_clip == 0)).sum())},
@@ -142,8 +149,9 @@ def develop_circling(settings: Settings, zsm: R.ZeroShot) -> tuple[dict, TM.Circ
     X = np.concatenate([r["X"][r["y"] >= 0] for r in rows])
     y = np.concatenate([r["y"][r["y"] >= 0] for r in rows])
     mean, scale, coef, b = TM.fit(X, y, bestC)
-    model = TM.CirclingModel(mean, scale, coef, b, thr, {"C": bestC, "fitted_on": "E31 collection (development), feature version 2",
+    model = TM.CirclingModel(mean, scale, coef, b, thr, {"C": bestC, "clip_score": use, "fitted_on": "E31 collection (development), feature version 2",
                                                        "created_at": utc_now().isoformat(timespec="seconds")})
+    res["window_model_oof_scores_positive_clips"] = {r["clip"].key: round(float(oof_window[i]), 3) for i, r in enumerate(rows) if r["clip_pos"]}
     res["coefficients"] = dict(zip(TM.FEATURES, [round(float(v), 3) for v in coef]))
     return res, model
 

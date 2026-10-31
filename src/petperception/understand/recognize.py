@@ -216,10 +216,15 @@ def recognize_v2(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None 
         zf = (z["emb_t"], p[:, names.index("tail_chasing")], p[:, names.index("neutral")]) if len(z["emb"]) else None
         st, X = TM.window_features(z, zf)
         wp = circling.window_probs(X)
-        sc = circling.clip_score(wp)
-        bouts = [Bout(a, b, v) for a, b, v in circling.bouts(st, wp)]
         old = by.get("tail_chasing")
-        ev = {"turning_in_place_model": round(sc, 4), "windows_above_threshold": int((wp >= circling.threshold).sum()), "windows": int(len(wp))}
+        zs_clip = float(old.evidence.get("zero_shot_top_quartile_mean", 0.0)) if old is not None else 0.0
+        use = circling.meta.get("clip_score", "window_model")
+        sc = {"zero_shot": zs_clip, "mean": 0.5 * (zs_clip + circling.clip_score(wp))}.get(use, circling.clip_score(wp))
+        if use == "window_model":
+            bouts = [Bout(a, b, v) for a, b, v in circling.bouts(st, wp)]
+        else:  # bouts where the window model is confident, else the zero-shot bouts
+            bouts = [Bout(a, b, v) for a, b, v in circling.bouts(st, wp)] or (old.bouts if old is not None else [])
+        ev = {"clip_score": use, "window_model": round(circling.clip_score(wp), 4), "windows_above_threshold": int((wp >= circling.threshold).sum()), "windows": int(len(wp))}
         if old is not None:
             ev["zero_shot_top_quartile_mean"] = old.evidence.get("zero_shot_top_quartile_mean")
         new = BehaviorReading("tail_chasing", round(sc, 4), bouts, ev)

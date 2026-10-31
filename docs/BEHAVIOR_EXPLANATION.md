@@ -297,3 +297,18 @@ stays. Results: `results/e31/downstream_features_g1b.json`,
   code and could run in the browser engine, but SigLIP (812 MB) does not fit
   the phone budgets; a phone version needs a small encoder evaluated on the
   same benchmark. Nothing here has been run on a phone.
+
+## 10. Version 2 (E32, 2026-10-30): what changed and why
+
+Each change answers a measured E31 failure; everything was developed on the
+E31 collection only, then frozen before the fresh E32 test material was
+labelled.
+
+| E31 finding | v2 change | Where |
+| --- | --- | --- |
+| Tail chasing recognized in 3/8 clips; the detector loses spinning animals; single frames do not show circling | feature version 2 bridges detector gaps up to 2 s and holds the last box 1 s; a window model of the track over time (staying in place, box-shape oscillation, horizontal-motion flips, missed detections, zero-shot circling probability) replaces the frame score for tail chasing | `understand/features.py`, `understand/temporal.py` |
+| Threat displays 0/2 from video | hiss or growl in the sound (YAMNet >= 0.3) is evidence for a threat display next to the visual reading; the answer names the channel | `recognize.recognize_v2` |
+| Context only from the user's words | context observed in the recording - a person close to the animal, bowls and toys, furniture, bathroom fittings, place (scene prompts), laughter, people talking, doorbell - listed with instrument and score, and allowed to reorder candidates with half the weight of the user's words (laughter matches the "owners laugh, which can reinforce it" candidate of Burn 2011) | `understand/context.py` |
+| No temporal relation between events | "before and after": other recognized behaviours and recording context within 5 s of each bout | `context.events_around` |
+| Parsing 27/34; "after eating" read as a reported behaviour | after / before / until phrases become context; each clause may add its best paraphrase match from a frozen sentence encoder (threshold and margin chosen on a separate development question set) | `understand/question.py`, `benchmarks/parser_dev.json` |
+| Gaps: neurological circling, head bobbing, sleep twitching, collapse, rolling and rubbing | knowledge base v2 entries with sources independent of the E32 test papers (Merck, dvm360, Veterinary Partner, MSPCA-Angell, AKC, VCA, Vet Times, Bol 2017) | `understand/knowledge.py` (33 sources) |

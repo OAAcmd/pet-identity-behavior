@@ -14,9 +14,18 @@
    "bytes": 68636,
    "sha256": "b76c56baa295e734b5379ddf75ae757b1cf0ca8d6075ea3f2e1250db731be75e"
   },
+  "circling_v1.json": {
+   "bytes": 1469,
+   "sha256": "8a7a19cb84e62e9e0278793e8dd1a5702b9aec69eeead821a951af437e4c916d"
+  },
   "recognizer.json": {
    "bytes": 783,
    "sha256": "039e41e75344b563d1814d0a8896d0deabc61608afe80a650a0bda40fd589dda"
+  },
+  "recognizer_v2.json": {
+   "bytes": 589,
+   "sha256": "407f0f1dc97599210550e3f06f1ee72dfa7c2a133d26dea94d781d5e2cb533b6"
   }
- }
+ },
+ "deployed_v2": "recognizer_v2.json (zero-shot thresholds, v2 vocabulary, feature version 2) + circling_v1.json (turning-in-place window model; clip score = mean with zero-shot); produced by python -m petperception.eval.e32_behavior_v2 develop"
 }

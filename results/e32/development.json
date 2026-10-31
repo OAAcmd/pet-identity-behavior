@@ -1,0 +1,146 @@
+{
+  "experiment": "E32 development",
+  "created_at": "2026-10-31T00:44:43+00:00",
+  "circling": {
+    "clips": 296,
+    "groups": 137,
+    "clips_scored": 294,
+    "clip_positives": 8,
+    "windows": 20822,
+    "positive_windows": 148,
+    "C_grid_oof_clip_ap": {
+      "0.01": 0.30113642133444113,
+      "0.1": 0.24561584640698567,
+      "1.0": 0.2230326938660272
+    },
+    "C": 0.01,
+    "oof_clip_ap": 0.30113642133444113,
+    "zero_shot_clip_ap": 0.3492477691161067,
+    "clip_score_options_ap": {
+      "zero_shot": 0.3492477691161067,
+      "window_model": 0.30113642133444113,
+      "mean": 0.43290714320126084
+    },
+    "clip_score_used": "mean",
+    "base_rate": 0.027210884353741496,
+    "threshold": 0.8072953820228577,
+    "oof_at_threshold": {
+      "tp": 3,
+      "positives": 8,
+      "fp": 1,
+      "negatives": 286
+    },
+    "oof_scores_positive_clips": {
+      "commons_9aa65b0449e8": 0.606,
+      "paper_tiira2012_s1": 0.457,
+      "paper_tiira2012_s2": 0.807,
+      "paper_tiira2012_s3": 0.847,
+      "paper_fhs_cat_2026_m1": 0.625,
+      "paper_fhs_cat_2026_m2": 0.725,
+      "archive_ia_cat_tail_1": 0.353,
+      "archive_ia_cat_tail_2": 0.93
+    },
+    "oof_scores_frame_review_confusers": {
+      "commons_200930f8d690": 0.661,
+      "paper_fhs_cat_2026_m3": 0.4,
+      "archive_ia_cat_tail_flick_rest": 0.433,
+      "archive_ia_kitten_mother_tail": 0.197
+    },
+    "window_model_oof_scores_positive_clips": {
+      "commons_9aa65b0449e8": 0.914,
+      "paper_tiira2012_s1": 0.731,
+      "paper_tiira2012_s2": 0.979,
+      "paper_tiira2012_s3": 0.984,
+      "paper_fhs_cat_2026_m1": 0.734,
+      "paper_fhs_cat_2026_m2": 0.895,
+      "archive_ia_cat_tail_1": 0.605,
+      "archive_ia_cat_tail_2": 0.996
+    },
+    "coefficients": {
+      "detected": -1.006,
+      "filled": 1.478,
+      "displacement": -0.686,
+      "path": 0.367,
+      "speed": 0.637,
+      "omega_abs": -0.105,
+      "omega_net": 0.591,
+      "dx_flips": 0.611,
+      "aspect_cv": 0.584,
+      "area_cv": -0.576,
+      "periodicity": 0.262,
+      "zs_circling_max": 0.237,
+      "zs_circling_mean": 0.395,
+      "zs_neutral_mean": -1.186
+    }
+  },
+  "thresholds_v2": {
+    "clips": 283,
+    "groups": 132,
+    "eligible": [
+      "drinking",
+      "eating",
+      "kneading",
+      "locomotion",
+      "playing_object",
+      "resting",
+      "self_grooming",
+      "social_play",
+      "tail_chasing"
+    ],
+    "adopted": "R0_zero_shot",
+    "gains_over_R0": {
+      "R1_head": {
+        "gain": -0.1931406848654015,
+        "ci95": [
+          -0.25617860551975175,
+          -0.12105126589809906
+        ],
+        "qualifies": false
+      },
+      "R2_mean": {
+        "gain": -0.05252672045154283,
+        "ci95": [
+          -0.09289615461494914,
+          -0.0023182158905114695
+        ],
+        "qualifies": false
+      }
+    },
+    "thresholds_deployed": {
+      "drinking": 0.906398594379425,
+      "eating": 0.04445254057645798,
+      "kneading": 0.41192102432250977,
+      "locomotion": 0.4381476938724518,
+      "playing_object": 0.33558693528175354,
+      "resting": 0.23890094459056854,
+      "self_grooming": 0.24176296591758728,
+      "social_play": 0.8136741518974304,
+      "tail_chasing": 0.6357698440551758
+    },
+    "chance_macro_ap": 0.07224185316058108,
+    "macro_ap": {
+      "R0_zero_shot": 0.40415638229193396,
+      "R1_head": 0.21101569742653245,
+      "R2_mean": 0.35162966184039113
+    },
+    "per_behavior_ap_R0": {
+      "drinking": 0.7523081525971989,
+      "eating": 0.6266479210926748,
+      "kneading": 0.707294244683702,
+      "locomotion": 0.14847109232960784,
+      "playing_object": 0.28880504834091986,
+      "resting": 0.20226990628132602,
+      "self_grooming": 0.42102921143450955,
+      "social_play": 0.19616018651518866,
+      "tail_chasing": 0.2944216773522786
+    }
+  },
+  "parser": {
+    "items": 84,
+    "keyword_parser_v1_pass": 53,
+    "parser_v2_pass": 66,
+    "threshold": 0.5,
+    "margin": 0.05,
+    "selection": "grid threshold 0.5-0.7 x margin 0-0.12 on these items (E32 development); best pass rate"
+  }
+}

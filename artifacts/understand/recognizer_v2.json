@@ -1,0 +1,26 @@
+{
+ "version": "recognizer-zero_shot-v2",
+ "method": "zero_shot",
+ "head_behaviors": [],
+ "thresholds": {
+  "drinking": 0.906399,
+  "eating": 0.044453,
+  "kneading": 0.411921,
+  "locomotion": 0.438148,
+  "playing_object": 0.335587,
+  "resting": 0.238901,
+  "self_grooming": 0.241763,
+  "social_play": 0.813674,
+  "tail_chasing": 0.63577
+ },
+ "default_threshold": 0.3,
+ "vocal_threshold": 0.3,
+ "provenance": {
+  "experiment": "E32 development",
+  "vocabulary": "v2",
+  "feature_version": 2,
+  "pool_clips": 283,
+  "adopted": "R0_zero_shot",
+  "created_at": "2026-10-31T00:45:46+00:00"
+ }
+}
