@@ -194,10 +194,115 @@ def develop(settings: Settings, out_dir: Path) -> dict:
     return res
 
 
+BENCHMARK_V2 = REPO_ROOT / "benchmarks" / "behavior_questions_v2.json"
+V1_VOCAB = {"tail_chasing", "tail_directed", "self_grooming", "self_biting", "tail_flicking", "staring_snapping", "scratching_self", "kneading",
+            "playing_object", "social_play", "threat_display", "eating", "drinking", "resting", "locomotion", "being_petted", "vocalizing"}
+
+
+def score_items(items: list[dict], answers: dict[str, dict], system: str) -> list[dict]:
+    from ..understand import vocab as V
+    from . import e31_behavior_questions as E31
+
+    ann = D.load_assistant()
+    rows = []
+    for it in items:
+        a = answers[it["id"]]
+        ans = a["answer"]
+
+        class _A:  # attribute view of the answer dict for E31.score_question
+            pass
+
+        A = _A()
+        for k, v in ans.items():
+            setattr(A, k, v)
+        seen = {b["behavior"] for b in ans["behaviors_seen"]}
+        r = E31.score_question(it, A, a["parsed"], seen, ann.get(it["clip"], {}))
+        if system == "v1":  # knowledge entries of the E31 system: its 17 behaviours (all with entries for their species)
+            r["C2_entry"] = all(b in V1_VOCAB and it["species"] in V.BEHAVIORS[b].species for b in it["asked"])
+        r["parsed"], r["seen"] = a["parsed"], sorted(seen)
+        if system == "v2":
+            ctx = ans.get("recording_context", [])
+            if "frame_person" in it:
+                r["X_person"] = any("person" in c["what"] for c in ctx) == bool(it["frame_person"])
+            if it.get("frame_place"):
+                got = [c["what"].removeprefix("place: ") for c in ctx if c["what"].startswith("place: ")]
+                r["X_place"] = (got[0] if got else None) in it["frame_place"]
+                r["X_place_said"] = got[0] if got else None
+        rows.append(r)
+    return rows
+
+
+def paired(rows1: list[dict], rows2: list[dict], key) -> dict:
+    a = [key(r) for r in rows1]
+    b = [key(r) for r in rows2]
+    pairs = [(x, y) for x, y in zip(a, b) if x is not None and y is not None]
+    return {"n": len(pairs), "v1": sum(x for x, _ in pairs), "v2": sum(y for _, y in pairs), "v2_only": sum(1 for x, y in pairs if y and not x),
+            "v1_only": sum(1 for x, y in pairs if x and not y)}
+
+
+def test(settings: Settings, out_dir: Path, v1_answers: Path) -> dict:
+    """Score the frozen v1 answers (``e32_v1_runner.py``) and the v2 system once on the E32 benchmark."""
+    import subprocess
+
+    from ..understand.run import Explainer
+    from . import e31_behavior_questions as E31
+
+    bench = json.loads(BENCHMARK_V2.read_text())
+    items = bench["questions"]
+    fdir = settings.paths.resolve("data_root").parent / "understand" / "features_v2"
+    ex = Explainer.load(settings.runtime.num_threads, version=2)
+    ans2 = {}
+    for it in items:
+        z = np.load(fdir / f"{it['clip']}.npz", allow_pickle=False)
+        q_ans = ex.answer(z, it["species"], it["scene"], it["question"]).to_dict()
+        from ..understand import question as Qn
+
+        q = Qn.parse_v2(it["species"], it["scene"], it["question"], ex.matcher)
+        ans2[it["id"]] = {"answer": q_ans, "parsed": q.reported}
+        write_json(out_dir / "answers" / f"{it['id']}.json", {"benchmark_item": it, "answer": q_ans})
+    ans1 = json.loads(Path(v1_answers).read_text())["answers"]
+    r1, r2 = score_items(items, ans1, "v1"), score_items(items, ans2, "v2")
+    b1, b2 = E31.summarize_b(r1), E31.summarize_b(r2)
+    c1, c2 = E31.summarize_c(r1), E31.summarize_c(r2)
+    tc = b2.get("B1_behavior_tail_chasing", {"rate": float("nan")})
+    res = {"experiment": "E32", "created_at": utc_now().isoformat(timespec="seconds"),
+           "code_commit": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=REPO_ROOT).stdout.strip(),
+           "benchmark": bench["version"], "questions": len(items),
+           "v1": {"recognition": b1, "explanation": c1}, "v2": {"recognition": b2, "explanation": c2},
+           "paired": {"asked_present_recognized": paired(r1, r2, lambda r: len(r["asked_present_seen"]) if r["asked_present"] else None),
+                      "confusers_rejected": paired(r1, r2, lambda r: len(r["must_not"]) - len(r["must_not_seen"]) if r["must_not"] else None),
+                      "C1_parse": paired(r1, r2, lambda r: int(r["C1_parse"]) if not r["gap"] else None),
+                      "C2_entry": paired(r1, r2, lambda r: int(r["C2_entry"]) if not r["gap"] else None),
+                      "C5_coverage": paired(r1, r2, lambda r: int(r["C5_coverage"]) if "C5_coverage" in r else None),
+                      "C5_ranking": paired(r1, r2, lambda r: int(r["C5_ranking"]) if r.get("C5_ranking") is not None else None)},
+           "context_v2": {"person": {"agree": sum(bool(r.get("X_person")) for r in r2 if "X_person" in r), "n": sum("X_person" in r for r in r2)},
+                          "place": {"agree": sum(bool(r.get("X_place")) for r in r2 if "X_place" in r), "n": sum("X_place" in r for r in r2)}},
+           "tail_chasing_recognized_from_recordings_v2": bool(tc["rate"] >= 0.7 and b2["B4_tail_chasing_rejection"]["rate"] >= 0.8)
+           if tc.get("n") else False,
+           "per_question": {"v1": r1, "v2": r2}}
+    write_json(out_dir / "metrics.json", res)
+    md = ["# E32 answers of the v2 system (all benchmark questions)", ""]
+    from ..understand.explain import render_markdown
+
+    md += [render_markdown(ans2[it["id"]]["answer"], f"{it['id']} - {it['clip']} ({it['category']})") for it in items]
+    (out_dir / "answers.md").write_text("\n".join(md), encoding="utf-8")
+    return res
+
+
 def main() -> None:
+    import argparse
+
     from ..config import load_settings
 
+    ap = argparse.ArgumentParser()
+    ap.add_argument("step", choices=["develop", "test"])
+    ap.add_argument("--v1-answers", default="var/understand/e32_v1_answers.json")
+    a = ap.parse_args()
     s = load_settings()
+    if a.step == "test":
+        r = test(s, s.paths.resolve("results_root") / "e32", Path(a.v1_answers))
+        print(json.dumps({k: r[k] for k in ("v1", "v2", "paired", "context_v2", "tail_chasing_recognized_from_recordings_v2")}, indent=1, default=str)[:6000])
+        return
     r = develop(s, s.paths.resolve("results_root") / "e32")
     print(json.dumps({"circling": {k: v for k, v in r["circling"].items() if k != "coefficients"}, "thresholds_v2": r["thresholds_v2"],
                       "parser": r["parser"]}, indent=1, default=str))
