@@ -839,9 +839,10 @@ SigLIP text prompts (embedded offline) can score it.
 **Recovery (tested).** A SIGTERM mid-epoch and a resume with the same
 command continued at the saved step (smoke run); the real run was killed by
 a machine reboot at epoch 5, step about 560, and resumed from its interval
-checkpoint at step 1 (about 7 minutes of work lost; the interval timer is
-not reset by an epoch-end checkpoint, which a later trainer version should
-fix). A resume refuses to continue if the configuration, the crop index,
+checkpoint at step 1 (about 7 minutes of work lost: the interval timer was
+not reset by an epoch-end checkpoint; fixed in the trainer after the run,
+which changes its code hash, so this run's record refers to the earlier
+version in Git). A resume refuses to continue if the configuration, the crop index,
 the text bank or the trainer changed.
 
 **Artifacts.** `models/student/e33_mnv3l/` (exports, selected weights,

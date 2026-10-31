@@ -173,6 +173,7 @@ def main() -> None:
         state["history"].append({"epoch": ep, "train_loss": run_loss / max(n, 1), "val": val})
         state["epoch"], state["step_in_epoch"] = ep + 1, 0
         save("epoch_end")
+        last_ckpt = time.time()  # the interval restarts after an epoch-end checkpoint
         print(json.dumps({"epoch_done": ep, "val": val}), flush=True)
 
     best = min(state["history"], key=lambda h: h["val"]["loss"])
