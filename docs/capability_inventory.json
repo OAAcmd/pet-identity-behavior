@@ -1,0 +1,660 @@
+{
+ "generated_by": "python -m petperception.inventory",
+ "totals": {
+  "behaviours_cat": 27,
+  "behaviours_dog": 27,
+  "behaviours_shared": 24,
+  "behaviours_deduplicated": 30,
+  "behaviours_cat_only": [
+   "kneading",
+   "rolling_rubbing",
+   "tail_flicking"
+  ],
+  "behaviours_dog_only": [
+   "collapse",
+   "head_tremor",
+   "staring_snapping"
+  ],
+  "recognition_status": {
+   "evaluated": 21,
+   "experimental": 9
+  },
+  "explanation_vocabulary": 21,
+  "engine_observations_not_duplicated": 9,
+  "sound_events": {
+   "vocalization_events": [
+    "cat_vocalization",
+    "dog_vocalization"
+   ],
+   "vocal_types_shown": [
+    "bark",
+    "meow"
+   ],
+   "vocal_types_blocked": [
+    "bow_wow",
+    "caterwaul",
+    "growl",
+    "hiss",
+    "howl",
+    "purr",
+    "whimper_dog",
+    "yip"
+   ],
+   "context_sound_tags": [
+    "door",
+    "knock",
+    "dishes_pots_pans",
+    "thunder",
+    "fireworks"
+   ]
+  },
+  "contexts": {
+   "zone_events": [
+    "approach_zone",
+    "enter_zone",
+    "dwell_zone",
+    "leave_zone",
+    "entered_view",
+    "left_view"
+   ],
+   "recording_context_server": [
+    "person near / in view",
+    "9 object kinds",
+    "4 sound kinds",
+    "8 places"
+   ],
+   "situations_kinetics": 6,
+   "dog_bark_context": 3,
+   "cat_meow_context": 3,
+   "dog_activity_from_barks": 8
+  },
+  "explanation": {
+   "knowledge_entries": 36,
+   "entries_cat": 18,
+   "entries_dog": 18,
+   "sources": 33,
+   "candidate_kinds": [
+    "request",
+    "play_or_normal",
+    "arousal_or_stress",
+    "compulsive",
+    "medical"
+   ],
+   "engine_hypotheses": [
+    "food",
+    "outside",
+    "attention",
+    "play",
+    "alert",
+    "tense",
+    "warning",
+    "relaxed"
+   ],
+   "cloud_understanding": "implemented, not evaluated (no API key)"
+  },
+  "phone_validation": "no physical phone has run any of this; desktop Chromium parity only"
+ },
+ "behaviours": [
+  {
+   "behavior": "tail_chasing",
+   "description": "turning in tight circles (after its own tail or not)",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 13,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts, turning-in-place model)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.36",
+    "E32 fresh test: 2/2 recognized",
+    "E36 held-out sources: AP 0.37, 3/10 found, 4 FP (not reliable)"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "tail_directed",
+   "description": "licking, biting or chewing its own tail",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 8,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "experimental",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "no measurement on real recordings"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "self_grooming",
+   "description": "licking or cleaning its own fur, paws or face",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 9,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.39",
+    "E32 fresh test: 1/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "self_biting",
+   "description": "biting, sucking or chewing at its own flank, leg or body",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 17,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "experimental",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "no measurement on real recordings"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "tail_flicking",
+   "description": "flicking, twitching or lashing the tail",
+   "species": [
+    "cat"
+   ],
+   "aliases": 15,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "experimental",
+   "explained_with_sources": {
+    "cat": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "no measurement on real recordings"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "staring_snapping",
+   "description": "staring fixedly or snapping at the air as if catching flies",
+   "species": [
+    "dog"
+   ],
+   "aliases": 10,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E32 fresh test: 0/2 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "head_tremor",
+   "description": "rhythmic bobbing, nodding or rotating of the head while awake",
+   "species": [
+    "dog"
+   ],
+   "aliases": 11,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "dog": true
+   },
+   "in_default_system": false,
+   "evidence": [
+    "E32 fresh test: 2/2 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "sleep_movements",
+   "description": "twitching, paddling or whimpering while asleep",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 19,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": false,
+   "evidence": [
+    "E32 fresh test: 0/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "collapse",
+   "description": "suddenly going limp, falling over or collapsing",
+   "species": [
+    "dog"
+   ],
+   "aliases": 13,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "dog": true
+   },
+   "in_default_system": false,
+   "evidence": [
+    "E32 fresh test: 1/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "rolling_rubbing",
+   "description": "rolling on the back or rubbing the face or body on objects",
+   "species": [
+    "cat"
+   ],
+   "aliases": 12,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true
+   },
+   "in_default_system": false,
+   "evidence": [
+    "E32 fresh test: 1/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "scratching_self",
+   "description": "scratching its own body with a hind foot",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 3,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "experimental",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "no measurement on real recordings"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "kneading",
+   "description": "pushing the front paws alternately into a soft surface",
+   "species": [
+    "cat"
+   ],
+   "aliases": 3,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.69"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "playing_object",
+   "description": "batting, pouncing on or chasing a toy or object",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 8,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.28",
+    "E32 fresh test: 4/5 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "social_play",
+   "description": "play fighting or wrestling with another animal",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 5,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.19",
+    "E32 fresh test: 0/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "threat_display",
+   "description": "hissing, growling, ears flat or arched back toward something",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 7,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "experimental",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "no measurement on real recordings"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "eating",
+   "description": "eating food",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 3,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.61",
+    "E32 fresh test: 5/5 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "drinking",
+   "description": "drinking water",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 3,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.76",
+    "E32 fresh test: 0/1 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "resting",
+   "description": "lying down, resting or sleeping",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 4,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.29",
+    "E32 fresh test: 3/4 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "locomotion",
+   "description": "walking or running across the scene",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 4,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 pool CV (human labels): AP 0.16",
+    "E32 fresh test: 0/2 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "being_petted",
+   "description": "being touched or stroked by a person",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 5,
+   "understood_from_text": true,
+   "recognized_from": "video (zero-shot SigLIP prompts)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E32 fresh test: 5/5 recognized"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  },
+  {
+   "behavior": "vocalizing",
+   "description": "meowing, barking, howling or whining",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "aliases": 13,
+   "understood_from_text": true,
+   "recognized_from": "sound (YAMNet)",
+   "recognition_status": "evaluated",
+   "explained_with_sources": {
+    "cat": true,
+    "dog": true
+   },
+   "in_default_system": true,
+   "evidence": [
+    "E31 sound vs title labels: AP 0.44 (base rate 0.10); E21 FSD50K cat vocalization F1 0.69"
+   ],
+   "where": "server / desktop (Python); not on the phone"
+  }
+ ],
+ "engine_observations": [
+  {
+   "observation": "moving",
+   "same_as": "locomotion",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "experimental",
+   "evidence": "rule on the track; E8 semi-synthetic only; produced on real video in E18 (no labels)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "stationary",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "experimental",
+   "evidence": "rule on the track; E8 semi-synthetic only",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "active_bout",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "experimental",
+   "evidence": "rule on motion; E8 semi-synthetic only",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "pacing_candidate",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "experimental",
+   "evidence": "rule; E8 semi-synthetic only",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "startle_candidate",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "experimental",
+   "evidence": "audio-motion rule; no real evaluation",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "vocal_bout",
+   "same_as": "vocalizing",
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E21 FSD50K eval: cat vocalization F1 0.688; meow and bark subtypes passed the gate (results/e21)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "person_interaction_candidate",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E13 dog pairs AP 0.907 (photos); E18 real video contact clips: cat 35/56, dog 36/50 tracked clips (results/e13, results/e18)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "on_furniture_candidate",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E15 Open Images rule precision / recall 0.97 pooled, end-to-end recall 0.40 (results/e15)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "posture_lying",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E10 weak labels: cat F1 0.75, dog 0.61 (results/e10)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "posture_sitting",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E10 (as lying)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  },
+  {
+   "observation": "posture_standing",
+   "same_as": null,
+   "species": [
+    "cat",
+    "dog"
+   ],
+   "status": "evaluated",
+   "evidence": "E10 (as lying; 3 cat examples only)",
+   "where": "phone engine (browser, parity-tested on desktop Chromium) and Python engine"
+  }
+ ]
+}
