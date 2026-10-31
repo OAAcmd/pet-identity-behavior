@@ -1,0 +1,355 @@
+{
+ "schema": "petperception.parser_dev/1",
+ "purpose": "development set for the question parser (E32): owner-style questions written by the assistant, separate from the E31 and E32 benchmark questions; gold = behaviours the question asks about (context-only mentions excluded)",
+ "items": [
+  {
+   "species": "cat",
+   "question": "Why does my cat spin around trying to catch her tail?",
+   "gold": [
+    "tail_chasing"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My terrier goes round and round after his tail every evening.",
+   "gold": [
+    "tail_chasing"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He keeps whirling in circles in the hallway.",
+   "gold": [
+    "tail_chasing"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My kitten attacks the tip of her tail and then runs off.",
+   "gold": [
+    "tail_directed"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "She nibbles at her tail until the fur looks thin.",
+   "gold": [
+    "tail_directed"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Our dog chews on his tail a lot lately.",
+   "gold": [
+    "tail_directed"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat washes herself for ages on the sofa.",
+   "gold": [
+    "self_grooming"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "He licks his belly so much there is a bald patch.",
+   "gold": [
+    "self_grooming"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My dog licks his paws constantly at night.",
+   "gold": [
+    "self_grooming"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Why does my dog nibble at his side and leg?",
+   "gold": [
+    "self_biting"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat bites at her back legs suddenly.",
+   "gold": [
+    "self_biting"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "Her tail swishes back and forth while she sits on my lap.",
+   "gold": [
+    "tail_flicking"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "His tail thumps on the floor when I talk to him.",
+   "gold": [
+    "tail_flicking"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My dog freezes and stares at the wall for a minute.",
+   "gold": [
+    "staring_snapping"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "She snaps at invisible flies in the living room.",
+   "gold": [
+    "staring_snapping"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He scratches behind his ear with his back foot all day.",
+   "gold": [
+    "scratching_self"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat keeps scratching her neck.",
+   "gold": [
+    "scratching_self"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "Why does my cat paw at my sweater rhythmically before lying down?",
+   "gold": [
+    "kneading"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "She makes biscuits on the pillow every night.",
+   "gold": [
+    "kneading"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat bats a crumpled paper ball around the kitchen.",
+   "gold": [
+    "playing_object"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He drops the ball at my feet over and over.",
+   "gold": [
+    "playing_object"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Our two dogs wrestle and mouth each other in the garden.",
+   "gold": [
+    "social_play"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "The kittens tumble over each other all afternoon.",
+   "gold": [
+    "social_play"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat flattens her ears and hisses at the vacuum cleaner.",
+   "gold": [
+    "threat_display"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He growls and shows his teeth when someone comes near his bowl.",
+   "gold": [
+    "threat_display"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My puppy gulps his food in seconds.",
+   "gold": [
+    "eating"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "She laps water from the tap.",
+   "gold": [
+    "drinking"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He naps on the couch most of the day.",
+   "gold": [
+    "resting"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My dog paces back and forth along the fence.",
+   "gold": [
+    "locomotion"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "When I stroke her back she leans into my hand.",
+   "gold": [
+    "being_petted"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat yowls at night in the hallway.",
+   "gold": [
+    "vocalizing"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "She whines at the door when I leave.",
+   "gold": [
+    "vocalizing"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My bulldog's head bobs up and down while he is awake.",
+   "gold": [
+    "head_tremor"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "His head trembles side to side for a minute and then stops.",
+   "gold": [
+    "head_tremor"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My dog kicks his legs and yips in his sleep.",
+   "gold": [
+    "sleep_movements"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat twitches while she is asleep.",
+   "gold": [
+    "sleep_movements"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Sometimes my puppy suddenly goes floppy and falls over when he gets excited about food.",
+   "gold": [
+    "collapse"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "He collapsed while playing fetch and got up a few seconds later.",
+   "gold": [
+    "collapse"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat rolls around on the floor and rubs her face on the catnip toy.",
+   "gold": [
+    "rolling_rubbing"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "She rubs her cheeks on the door frame.",
+   "gold": [
+    "rolling_rubbing"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "After eating she cleans her face with her paw.",
+   "gold": [
+    "self_grooming"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "After his walk he drinks a lot of water.",
+   "gold": [
+    "drinking"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Before dinner he spins in circles in the kitchen.",
+   "gold": [
+    "tail_chasing"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "My cat meows at me and then rubs against my legs.",
+   "gold": [
+    "vocalizing",
+    "rolling_rubbing"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "My dog barks at the window and then paces.",
+   "gold": [
+    "vocalizing",
+    "locomotion"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "She purrs and kneads my blanket.",
+   "gold": [
+    "vocalizing",
+    "kneading"
+   ]
+  },
+  {
+   "species": "dog",
+   "question": "Is it normal that my dog sleeps so much?",
+   "gold": [
+    "resting"
+   ]
+  },
+  {
+   "species": "cat",
+   "question": "What does it mean when my cat stares at me?",
+   "gold": []
+  },
+  {
+   "species": "dog",
+   "question": "Why is my dog so clingy lately?",
+   "gold": []
+  },
+  {
+   "species": "cat",
+   "question": "My cat brought me a toy mouse and dropped it on the bed.",
+   "gold": [
+    "playing_object"
+   ]
+  }
+ ]
+}

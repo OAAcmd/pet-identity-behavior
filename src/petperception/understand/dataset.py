@@ -99,7 +99,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Extract behaviour evidence for every clip (resumable).")
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--only", default="", help="comma-separated source names")
-    ap.add_argument("--keys", default="", help="comma-separated clip keys (default: all)")
+    ap.add_argument("--keys", default=None, help="comma-separated clip keys (default: all; an empty list selects nothing)")
     ap.add_argument("--detector", help="alternative detector .tflite (E31 part C); default: the configured detector")
     ap.add_argument("--detector-points", help='per-class thresholds for --detector as JSON, e.g. {"cat": 0.11, "dog": 0.28}')
     ap.add_argument("--subdir", default="features", help="output directory under var/understand/")
@@ -107,7 +107,7 @@ def main() -> None:
     a = ap.parse_args()
     s = load_settings()
     data_root = s.paths.resolve("data_root")
-    keys = set(a.keys.split(",")) if a.keys else None
+    keys = None if a.keys is None else {k for k in a.keys.split(",") if k}
     todo = [c for c in clips(data_root) if (not a.only or c.source in a.only.split(",")) and (keys is None or c.key in keys)
             and not feature_path(data_root.parent, c.key, a.subdir).exists()]
     todo.sort(key=lambda c: (c.source != "paper", c.source != "archive", c.key))

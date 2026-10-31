@@ -15,7 +15,7 @@ from . import vocab as V
 from .question import Query, cue_score
 from .recognize import BehaviorReading, RecognizerConfig
 
-ANSWER_VERSION = "behavior-answer-v1"
+ANSWER_VERSION = "behavior-answer-v2"
 MAX_SEEN_EXPLAINED = 2  # behaviours seen but not asked about that also get explanations
 
 
@@ -36,6 +36,9 @@ class Answer:
     summary: str
     knowledge_version: str = K.KNOWLEDGE_VERSION
     notes: list[str] = field(default_factory=list)
+    recording_context: list[dict] = field(default_factory=list)  # E32: observed in the recording, with instrument and score
+    vocal_types: list[dict] = field(default_factory=list)
+    events: list[dict] = field(default_factory=list)  # E32: what happens before / after recognized bouts
 
     def to_dict(self) -> dict:
         return _plain(asdict(self))
@@ -60,8 +63,12 @@ def _fmt_bouts(r: BehaviorReading, limit: int = 4) -> str:
     return ", ".join(parts) + more
 
 
+RECORDING_CUE_WEIGHT = 0.5  # cues observed in the recording count half as much as the user's own words
+
+
 def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: RecognizerConfig | None = None,
-            quality: list[str] | None = None) -> Answer:
+            quality: list[str] | None = None, recording_context: list[dict] | None = None, recording_cues: str = "",
+            vocal_types: list[dict] | None = None) -> Answer:
     cfg = config or RecognizerConfig()
     seen = [r for r in readings if r.score >= cfg.threshold(r.behavior) and (r.bouts or r.behavior == "vocalizing" or r.evidence.get("clip_level"))]
     seen_names = {r.behavior for r in seen}
@@ -89,12 +96,15 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: Re
         cands = []
         for c in e.candidates:
             s, words = cue_score(q.text, c.context_cues)
-            cands.append((s, c, words))
+            sr, rwords = cue_score(recording_cues, c.context_cues) if recording_cues else (0.0, [])
+            cands.append((s + RECORDING_CUE_WEIGHT * sr, c, (words, rwords)))
         cands.sort(key=lambda x: -x[0])
         groups: dict[str, list[dict]] = {}
-        for s, c, words in cands:
-            groups.setdefault(c.kind, []).append({"id": c.id, "explanation": c.text, "context_match": words, "context_score": round(s, 2),
-                                                  "sources": list(c.sources)})
+        for s, c, (words, rwords) in cands:
+            item = {"id": c.id, "explanation": c.text, "context_match": words, "context_score": round(s, 2), "sources": list(c.sources)}
+            if rwords:
+                item["recording_match"] = rwords
+            groups.setdefault(c.kind, []).append(item)
             for sid in c.sources:
                 sources_used[sid] = K.SOURCES[sid]
         request_implied = any(c.kind == "request" for _, c, _ in cands)
@@ -122,8 +132,19 @@ def compose(q: Query, readings: list[BehaviorReading], pattern: dict, config: Re
     if quality:
         unc += quality
     summary = _summary(q, seen, explained, pattern, by_name)
+    events = []
+    if recording_context is not None:
+        from .context import events_around
+
+        events = events_around(behaviors_seen, recording_context)
+        if recording_context:
+            unc.append("Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; "
+                       "it changes the order of the candidates only half as much as your description.")
+    if getattr(q, "context_behaviors", None):
+        unc.append("Read as context, not as the behaviour asked about: " + ", ".join(q.context_behaviors) + ".")
     return Answer(ANSWER_VERSION, q.species, q.scene, q.question, behaviors_seen, pattern, reported, explained, unc, observations[:8], urgent,
-                  [{"id": k, **v} for k, v in sources_used.items()], summary)
+                  [{"id": k, **v} for k, v in sources_used.items()], summary, recording_context=list(recording_context or []),
+                  vocal_types=list(vocal_types or []), events=events)
 
 
 def _summary(q: Query, seen: list[BehaviorReading], explained: list[dict], pattern: dict, by_name: dict) -> str:
@@ -168,10 +189,20 @@ def render_markdown(ans: dict, title: str = "") -> str:
                   f"{', '.join(dict.fromkeys(e['kind_order_by_context']))}):"]
         for kind, g in e["candidates_by_kind"].items():
             for c in g:
+                rec = f"; matched in the recording: {', '.join(c['recording_match'])}" if c.get("recording_match") else ""
                 lines.append(f"- [{kind}] {c['explanation']} (sources: {', '.join(c['sources']) or 'none'}; matched in your description: "
-                             f"{', '.join(c['context_match']) or '-'})")
+                             f"{', '.join(c['context_match']) or '-'}{rec})")
         lines.append(f"- request or intention possible: {'yes' if e['request_or_intention_possible'] else 'no'}"
                      + (f" - {e['no_request_note']}" if e["no_request_note"] else ""))
+    if ans.get("recording_context"):
+        lines += ["", "**Context observed in the recording (automatic, can be wrong):**"]
+        lines += [f"- {c['what']} ({c['from']}, score {c['score']}{'; ' + str(c['times_s'][:3]) + ' s' if c['times_s'] else ''})" for c in ans["recording_context"]]
+    if ans.get("vocal_types"):
+        lines += ["", "**Sounds of the animal:** " + ", ".join(f"{v['type']} ({v['score']}, from {v['first_s']} s)" for v in ans["vocal_types"])]
+    if ans.get("events"):
+        lines += ["", "**Before and after:**"]
+        lines += [f"- {e['behavior']} {e['bout_s'][0]:.1f}-{e['bout_s'][1]:.1f} s: before - {', '.join(e['before']) or 'nothing recognized'}; "
+                  f"after - {', '.join(e['after']) or 'nothing recognized'}" for e in ans["events"]]
     lines += ["", "**Would help tell them apart:**"] + [f"- {o}" for o in ans["observations_needed"]]
     if ans["urgent_signs"]:
         lines += ["", "**See a veterinarian promptly if:**"] + [f"- {u}" for u in ans["urgent_signs"]]

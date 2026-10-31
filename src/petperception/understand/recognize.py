@@ -198,3 +198,47 @@ def recognize(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None = N
         readings.append(BehaviorReading("vocalizing", round(vmax, 4), vb, {"yamnet_max_vocal_score": round(vmax, 4)}))
     readings.sort(key=lambda r: -r.score)
     return readings, pattern
+
+
+THREAT_SOUNDS = ("Hiss", "Growling")
+
+
+def recognize_v2(z, species: str, zs: ZeroShot, yamnet_labels: list[str] | None = None, config: RecognizerConfig | None = None,
+                 circling=None) -> tuple[list[BehaviorReading], dict]:
+    """E32 recognizer: zero-shot readings, the turning-in-place model for tail chasing (feature version 2), and sound evidence for
+    threat displays (YAMNet hiss / growl) next to the visual reading."""
+    from . import temporal as TM
+
+    readings, pattern = recognize(z, species, zs, yamnet_labels, None, config)
+    by = {r.behavior: r for r in readings}
+    if circling is not None and "box" in z.files and "emb" in z.files:
+        p, names = zs.frame_probs(z["emb"].astype(np.float32), species) if len(z["emb"]) else (np.zeros((0, 1)), ["neutral"])
+        zf = (z["emb_t"], p[:, names.index("tail_chasing")], p[:, names.index("neutral")]) if len(z["emb"]) else None
+        st, X = TM.window_features(z, zf)
+        wp = circling.window_probs(X)
+        sc = circling.clip_score(wp)
+        bouts = [Bout(a, b, v) for a, b, v in circling.bouts(st, wp)]
+        old = by.get("tail_chasing")
+        ev = {"turning_in_place_model": round(sc, 4), "windows_above_threshold": int((wp >= circling.threshold).sum()), "windows": int(len(wp))}
+        if old is not None:
+            ev["zero_shot_top_quartile_mean"] = old.evidence.get("zero_shot_top_quartile_mean")
+        new = BehaviorReading("tail_chasing", round(sc, 4), bouts, ev)
+        readings = [new if r.behavior == "tail_chasing" else r for r in readings]
+        if old is None:
+            readings.append(new)
+    if yamnet_labels is not None and "a_scores" in z.files:
+        cols = [yamnet_labels.index(n) for n in THREAT_SOUNDS if n in yamnet_labels]
+        v = z["a_scores"].astype(np.float32)[:, cols].max(axis=1)
+        if len(v) and float(v.max()) >= VOCAL_HEARD:
+            ab = [Bout(float(t), float(t) + 0.96, float(x)) for t, x in zip(z["a_t"], v) if x >= VOCAL_HEARD]
+            vis = next((r for r in readings if r.behavior == "threat_display"), None)
+            ev = {"sound_hiss_or_growl": round(float(v.max()), 4), "channels": ["sound"] + (["vision"] if vis is not None and vis.bouts else [])}
+            if vis is not None:
+                ev["zero_shot_top_quartile_mean"] = vis.evidence.get("zero_shot_top_quartile_mean")
+            score = max(float(v.max()), vis.score if vis is not None else 0.0)
+            new = BehaviorReading("threat_display", round(score, 4), (vis.bouts if vis is not None else []) + ab, ev)
+            readings = [new if r.behavior == "threat_display" else r for r in readings]
+            if vis is None:
+                readings.append(new)
+    readings.sort(key=lambda r: -r.score)
+    return readings, pattern
