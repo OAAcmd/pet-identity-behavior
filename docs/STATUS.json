@@ -105,7 +105,7 @@
    "evaluation": "results/e27, results/e28, results/intent"
   },
   "G1b": {
-   "status": "run B (g1b_warm_cat2_cop3d) finished 2026-10-20; run A (g1b_warm_cat2) resumed in this milestone from its signal checkpoints (steps 1,086 and 2,181 of 6,978; paused while E33 trained), running in the background at 2 threads; selection with three candidates follows the fixed rule when it finishes",
+   "status": "run B (g1b_warm_cat2_cop3d) finished 2026-10-20; run A (g1b_warm_cat2) finished 2026-10-31 after three resumes (OI dev AP50 cat 0.767 / dog 0.809; models/g1/g1b_warm_cat2/); three-candidate selection: run A fails the CoP3D dog constraint (0.264), run B stays the winner (results/g1/g1b_selection_3candidates.json)",
    "selection": "development data only: run B over G1a (OI dev AP50 cat 0.774 / dog 0.821 vs 0.741 / 0.765; CoP3D dev dog frames only a cat 0.086 vs 0.154)",
    "acceptance_1": "met: E4 with own verifier at per-class points cat 0.852, dog 0.7481 (threshold 0.748), specificity intervals overlap M3's",
    "e20": "home video vs phone build + verifier: cat found 0.766 vs 0.697, dog 0.762 vs 0.598, dog frames only a cat 0.072 vs 0.137",
@@ -227,7 +227,8 @@
   "intent_heads": "artifacts/intent/ (JSON heads with temperature and abstention thresholds; 3.7 MB)",
   "behavior_explanation": "artifacts/understand/recognizer.json (E31 zero-shot thresholds, default system), recognizer_v2.json and circling_v1.json (E32 system); knowledge bases src/petperception/understand/knowledge.py (v2) and understand/e31/knowledge.py (v1, frozen); benchmarks/behavior_questions.json (E31), behavior_questions_v2.json (E32), parser_dev.json; annotations/behavior_clips.json (assistant frame review, E31 + E32)",
   "g1b_detector": "models/g1/g1b_warm_cat2_cop3d/ (checkpoint and exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check_g1b.json)",
-  "behavior_student": "models/student/e33_mnv3l/ (research and non-commercial: CoP3D frames in training)"
+  "behavior_student": "models/student/e33_mnv3l/ (research and non-commercial: CoP3D frames in training)",
+  "g1b_run_a": "models/g1/g1b_warm_cat2/ (checkpoint ckpt-24 with optimizer state, exports, MANIFEST.json; not selected)"
  },
  "experiments_latest": {
   "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31",

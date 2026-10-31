@@ -371,7 +371,22 @@ STATUS.json):* run A was resumed in the E32 milestone with the same command
 (it restored its signal checkpoints at steps 106 and 1,086; 2 threads,
 nice 15); when it finishes, the selection is re-run with the three
 candidates under the same rule, and a different winner would be scored once
-on acceptance 1 and E20.
+on acceptance 1 and E20. *Done 2026-10-31:* run A finished after resumes at
+steps 106, 1,086 and 2,181 (paused once while E33 trained; about 2.4 h of
+training in this milestone; published to `models/g1/g1b_warm_cat2/`): OI
+development AP50 cat 0.767, dog 0.809, mAP50 0.482. Three-candidate
+selection (`results/g1/g1b_selection_3candidates.json`,
+`python -m petperception.eval.g1b_select3`): G1a and run B reproduce the
+two-candidate numbers exactly; **run A fails the CoP3D constraint** (dog
+frames with only a cat 0.264 against G1a's 0.154 + 0.02; without CoP3D
+frames the cat oversampling turns home-video dogs into cats), so **run B
+stays the winner** and its acceptance results stand.
+
+| Candidate | OI dev AP50 cat / dog | CoP3D dev cat found / only a dog | CoP3D dev dog found / only a cat | Constraints |
+| --- | --- | --- | --- | --- |
+| G1a | 0.741 / 0.765 | 0.998 / 0.000 | 0.807 / 0.154 | - |
+| G1b run B (cat x2 + CoP3D) | 0.774 / 0.821 | 0.931 / 0.027 | 0.839 / 0.086 | both met |
+| G1b run A (cat x2) | 0.767 / 0.809 | 0.935 / 0.020 | 0.631 / **0.264** | dog constraint failed |
 
 Selection on development data (`results/g1/g1b_selection.json`,
 `src/petperception/eval/g1_select.py`):
