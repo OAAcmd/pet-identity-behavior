@@ -215,7 +215,10 @@
   "A Kaggle API token for CatFLW / DogFLW (cat and dog facial landmarks, research)",
   "Annotators for G2 (70-100 h for 2,000 cats + 2,000 dogs), or a per-image licence check of the AwA2 cat and dog images used by E24",
   "Household recordings: participants and a data controller (docs/household/CONSENT_AND_PRIVACY.md)",
-  "An HTTPS host with header control for the installed-app track (only after track A)"
+  "An HTTPS host with header control for the installed-app track (only after track A)",
+  "Owner-written questions about their own recordings (with consent) for the behaviour-explanation benchmark: the assistant-written E31/E32 questions flattered the parser (E32 C1 0.48 on fresh paraphrases)",
+  "Behaviour-rich cat and dog video with terms that allow training (drinking, kneading, grooming, tail chasing) to distil a phone-sized behaviour encoder; E33/E34 show generic photos are not enough",
+  "Cat video frames for the next detector candidate: G1b gains dogs on real video but not cats (acceptance 2)"
  ],
  "artifacts_in_repository": {
   "g1_detector_full_run": "models/g1/g1a_full_mnv2_sb4096/ (checkpoint ckpt-27 with optimizer state, float32/float16/int8 exports, MANIFEST.json); restore verified from GitHub (results/g1/github_restore_check.json)",
