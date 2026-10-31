@@ -8,7 +8,7 @@
   "software_correctness": {
    "status": "met_in_automated_environments",
    "evidence": {
-    "python_tests": 205,
+    "python_tests": 206,
     "typescript_unit_tests": 40,
     "e2e_tests": 17,
     "phone_test_page_desktop_chromium": "all steps passed (licence-stated detector bundle)",
