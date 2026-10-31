@@ -38,7 +38,9 @@ interpretation, E21), EfficientDet-Lite0 (cats, dogs, people, furniture),
 EfficientNet-Lite0 features and small heads trained here (false-positive
 verifier, posture, person-pet interaction, pet on furniture); rule-based
 tracking, behavior segments and fusion. A pet-and-household detector trained
-here on CC BY images (G1) is in training. Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
+here (G1b) met acceptance 1 and finds far more dogs in real video, but not
+more cats (acceptance 2 not met), so the phone detector is unchanged
+([docs/TRAINING_PROGRAM.md](docs/TRAINING_PROGRAM.md)). Details: [docs/ON_DEVICE.md](docs/ON_DEVICE.md).
 
 Behaviour / intent layer (`src/petperception/intent/`, optional `intent.enabled`):
 trained channels on frozen encoders (situation from synchronized audio and video,
@@ -62,7 +64,10 @@ The default is the E31 system; `--system-version 2` runs the E32 system
 of the fresh E32 test but did not meet the pre-registered bar to become the
 default. Measured on 37 real-clip questions in E31 and 37 fresh ones in E32;
 what it can and cannot answer:
-[docs/BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md).
+[docs/BEHAVIOR_EXPLANATION.md](docs/BEHAVIOR_EXPLANATION.md). It does not run
+on the phone: phone-sized encoders tested so far (a distilled 4-15 MB
+student, E33; TinyCLIP, E34) keep too little of the zero-shot behaviour
+recognition.
 
 ## Documents
 
