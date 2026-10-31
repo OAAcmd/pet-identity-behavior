@@ -56,7 +56,7 @@ def score_cloud(ans: dict | None, row: dict) -> dict:
 def run(settings: Settings, out_dir: Path, call_cloud: bool) -> dict:
     from ..understand import cloud as CL
     from ..understand import dataset as D
-    from ..understand.run import Explainer, _Z
+    from ..understand.run import _Z, Explainer
     from .e36_tail_chasing_scenario import SCENARIO
 
     sc = json.loads(SCENARIO.read_text())
