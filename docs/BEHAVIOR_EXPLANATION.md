@@ -290,9 +290,9 @@ rule; "v2" is `--system-version 2`.
 | Question type | Answerable? | Evidence |
 | --- | --- | --- |
 | "What could this behaviour mean?" when the parser finds the behaviour | **yes, from the user's description**: candidates by kind with cited sources, ordered by the description, with distinguishing questions and urgent signs; never a stated cause | E31 C2-C9 met; E32 C3 31/33, C6-C9 33/33 (v2); expert interpretation covered 6/7 (v2) vs 3/7 (default) |
-| Neurological look-alikes: head bobbing, sleep twitching, sudden collapse, one-directional circling with a head tilt; catnip rolling | **v2 only** (knowledge base v2): the expert's medical reading was the first candidate in 5 of 7 expert cases (default: 1 of 7) | E32 C5 |
+| Neurological look-alikes: head bobbing, sleep twitching, sudden collapse, one-directional circling with a head tilt; catnip rolling | **v2 only** (knowledge base v2): the expert's reading was the first candidate in 5 of 7 expert cases (default: 1 of 7) - but these entries were added knowing the test topics, so this is coverage by construction, not a test of generalization | E32 C5; `posthoc.json` |
 | "Is it asking for something?" | **yes, as a separated candidate kind**; the end-to-end check fails when the behaviour is neither parsed nor recognized (then nothing is explained) | E31 C4 33/34; E32 C4 28/33 v2, 25/33 default (target 0.9 not met by either) |
-| Questions in everyday paraphrase ("races after his ball", "rolls over so I can rub his belly", "laps at the water bowl") | **often not**: the parser missed the asked behaviour entirely in 13 of 33 fresh questions (v2; default 18) and added an unasked one in 6 (default 1) | E32 C1 16/33 v2, 13/33 default (target 0.9 not met) |
+| Questions in everyday paraphrase ("races after his ball", "rolls over so I can rub his belly", "laps at the water bowl") | **often not**: the parser missed the asked behaviour entirely in 13 of 33 fresh questions (v2; default 18) and added an unasked one in 6 (default 1); outside the five topic-matched questions parser v2 is no better than the keyword parser (13/28 each) | E32 C1 16/33 v2, 13/33 default (target 0.9 not met) |
 | "Does the recording show it?" | **partly**: eating, being petted, resting, object play usually; tail chasing in both fresh tail-chasing clips by v2 (1 of 2 by the default) but one of them by a margin of 0.001, with one false alarm (a dog running in snow); head tremor reported in 7 clips without it (v2) | E32 B1 24/33 v2, 21/33 default; §11 |
 | Recording context (person near, place, sounds) | **v2 only, unreliable**: a person was reported in 12 of 22 clips where the frame review saw none (no misses); place agreed in 13 of 24 | E32 X_person 23/35, X_place 13/24 |
 | When and how long | **yes for recognized behaviours**: bouts overlap the frame-review bouts in 23/24 (v2) and 20/21 (default) cases | E32 B3 |
@@ -335,9 +335,9 @@ rule; "v2" is `--system-version 2`.
 
 ## 10. Version 2 (E32, 2026-10-30): what changed and why
 
-Each change answers a measured E31 failure; everything was developed on the
-E31 collection only, then frozen before the fresh E32 test material was
-labelled.
+Each change except the last answers a measured E31 failure; everything was
+developed on the E31 collection only, then frozen before the fresh E32 test
+material was labelled (the last change was made knowing the test topics).
 
 | E31 finding | v2 change | Where |
 | --- | --- | --- |
@@ -346,7 +346,7 @@ labelled.
 | Context only from the user's words | context observed in the recording - a person close to the animal, bowls and toys, furniture, bathroom fittings, place (scene prompts), laughter, people talking, doorbell - listed with instrument and score, and allowed to reorder candidates with half the weight of the user's words (laughter matches the "owners laugh, which can reinforce it" candidate of Burn 2011) | `understand/context.py` |
 | No temporal relation between events | "before and after": other recognized behaviours and recording context within 5 s of each bout | `context.events_around` |
 | Parsing 27/34; "after eating" read as a reported behaviour | after / before / until phrases become context; each clause may add its best paraphrase match from a frozen sentence encoder (threshold and margin chosen on a separate development question set) | `understand/question.py`, `benchmarks/parser_dev.json` |
-| Gaps: neurological circling, head bobbing, sleep twitching, collapse, rolling and rubbing | knowledge base v2 entries with sources independent of the E32 test papers (Merck, dvm360, Veterinary Partner, MSPCA-Angell, AKC, VCA, Vet Times, Bol 2017) | `understand/knowledge.py` (33 sources) |
+| Not covered by knowledge base v1: neurological circling, head bobbing, sleep twitching, collapse, rolling and rubbing (not E31 findings: chosen because the selected E32 test papers show these conditions, see §11) | knowledge base v2 entries with sources independent of the E32 test papers (Merck, dvm360, Veterinary Partner, MSPCA-Angell, AKC, VCA, Vet Times, Bol 2017) | `understand/knowledge.py` (33 sources) |
 
 Development results (E31 collection only; `results/e32/development.json`):
 the turning-in-place window model alone reached an out-of-fold clip AP of
@@ -388,8 +388,8 @@ system (commit 0c1f7c5, run from a git worktree), v2 = the E32 system.
 | Gap questions handled (no unrelated explanation forced) | 4/4 | 4/4 | descriptive |
 | Recording context: person agreement / place agreement | - | 23/35 = 0.66 / 13/24 | person 0.8: **not met** |
 
-**Decision (pre-registered rule): v2 does not become the default.** v2 is
-better than v1 on every paired measure (an asked behaviour was recognized
+**Decision (pre-registered rule): v2 does not become the default.** Over
+all 37 questions v2 is better than v1 on every paired measure (an asked behaviour was recognized
 only by v2 in 5 questions and only by v1 in 2; parsing passed only for v2 in
 5 questions and only for v1 in 2; expert coverage +3; ranking +4),
 but the rule also required C2-C4 and C6-C9 to reach 0.9 for v2, and C4 is
@@ -402,6 +402,23 @@ available with `--system-version 2`. The C4 failures are all questions in
 which the asked behaviour was neither parsed nor recognized, so nothing was
 explained (t08 sleep movements, o13 drinking, o20, o21 running, o23 ball in
 the river).
+
+**Where v2's advantage comes from (post hoc, `posthoc.json`
+"without_topic_matched_questions").** Knowledge base v2 added behaviours and
+candidates (head tremor, sleep movements, collapse, rolling / rubbing, the
+neurological-circling candidate) for conditions that the chosen test papers
+cover: the test material and the new entries were registered together
+(300eab5) before development, so the topics - not the clips or the
+questions - were known. The sources are independent of the test papers,
+but the five questions on those conditions (t03, t06, t08, t09, t12) favour
+v2 by construction; the circling candidate's cue words ("to the left",
+"can't be distracted") also match the hamartoma question's wording. **On
+the other 32 questions the two systems tie on every explanation check**
+(parse 13/28 each, request separation 24/28 each, expert coverage 2/2
+each) **and v2 recognizes 20 vs 21 of 28 asked behaviours** (tail chasing
++1, staring and resting -1 each). E32 therefore shows a coverage gain for
+the conditions added on purpose, not that parser v2, recording context or
+the window model improve answers in general.
 
 **Tail chasing (pre-registered criterion met, not established as reliable).**
 v2 recognized both fresh tail-chasing clips (the Internet Archive cat, score

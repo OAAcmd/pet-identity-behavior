@@ -451,6 +451,21 @@ def posthoc(settings: Settings, out_dir: Path) -> dict:
                 "combined score (circling_v1.json); counterfactual only, nothing is changed",
         "seen": tc, "development_threshold_for_combined_score": circ["threshold"],
         "seen_at_development_threshold": [t["id"] for t in tc if t["score"] >= circ["threshold"]]}
+    # Knowledge base v2 added behaviours and candidates for conditions that the chosen test papers cover (the test material and the
+    # new entries were registered together in 300eab5, before development): those questions favour v2 by construction.
+    topic = {"t03": "neurological circling candidate", "t06": "head_tremor", "t08": "sleep_movements", "t09": "collapse", "t12": "rolling_rubbing"}
+    sens = {"questions_excluded": topic, "note": "the same measures on the questions whose behaviour or candidate was not added for the test topics"}
+    for s in ("v1", "v2"):
+        rows = [r for r in m["per_question"][s] if r["id"] not in topic]
+        ng = [r for r in rows if not r["gap"]]
+        ex = [r for r in rows if r.get("C5_authority") == "expert"]
+        sens[s] = {**{c: f"{sum(bool(r[c]) for r in ng)}/{len(ng)}" for c in EXPLAINED_CHECKS},
+                   "asked_present_recognized": f"{sum(len(r['asked_present_seen']) for r in rows)}/{sum(len(r['asked_present']) for r in rows)}",
+                   "confusers_rejected": f"{sum(len(r['must_not']) - len(r['must_not_seen']) for r in rows)}/{sum(len(r['must_not']) for r in rows)}",
+                   "C5_coverage_expert": f"{sum(bool(r['C5_coverage']) for r in ex)}/{len(ex)}",
+                   "C5_ranking_expert": f"{sum(bool(r.get('C5_ranking')) for r in ex)}/{len(ex)}",
+                   "outcomes": dict(Counter(r["outcome"] for r in rows))}
+    out["without_topic_matched_questions"] = sens
     write_json(out_dir / "posthoc.json", out)
     return out
 

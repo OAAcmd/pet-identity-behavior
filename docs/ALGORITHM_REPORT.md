@@ -1383,7 +1383,7 @@ benchmark recognition 23/36 and 19/36 against 22/36 (tail chasing 3/8, 1/8,
 3/8). Better localization does not help recognition; at the stricter
 per-class points fast spinning drops out of the track.
 
-### E32 - Behaviour explanation v2 on fresh recordings, paired with the E31 system - COMPLETED (v2 better on every paired measure; not adopted as default by the pre-registered rule)
+### E32 - Behaviour explanation v2 on fresh recordings, paired with the E31 system - COMPLETED (v2 better overall, only through topic-matched knowledge entries; not adopted as default by the pre-registered rule)
 
 Development on the E31 collection only (`results/e32/development.json`):
 turning-in-place window model over feature version 2 (out-of-fold clip AP
@@ -1411,7 +1411,11 @@ Mixkit stock clips, 1 Internet Archive clip), both systems on the same text:
 Decision: v2 missed the absolute bar C4 >= 0.9, so by the fixed rule the
 default stays the E31 system (kept verbatim in `understand/e31/`, verified
 to reproduce the tested answers, `results/e32/default_v1_check.json`); v2 is
-available with `--system-version 2`. Post-hoc (descriptive): fresh,
+available with `--system-version 2`. Post hoc, the advantage is confined
+to the five questions on conditions that knowledge base v2 was extended for
+after the test papers were chosen (topics known, clips and questions not):
+on the other 32 questions both systems tie on every explanation check and
+v2 recognizes 20 vs 21 of 28 asked behaviours. Further post-hoc findings (descriptive): fresh,
 independently phrased questions defeat the parser far more often than the
 E31 questions did; new behaviours at the fixed 0.30 threshold fire on
 unrelated clips (head tremor 7 false alarms); the person-near rule
@@ -1529,4 +1533,5 @@ design, data, results and gaps: [BEHAVIOR_EXPLANATION.md](BEHAVIOR_EXPLANATION.m
   turning-in-place window model for tail chasing, hiss / growl as threat
   evidence, recording context with half the weight of the user's words,
   before/after events, parser v2, knowledge base v2. Better than the E31
-  system on every paired E32 measure but not the default (E32 decision).
+  system over all E32 questions, but only through knowledge entries added
+  for the test topics; not the default (E32 decision).
