@@ -1,0 +1,3986 @@
+{
+  "experiment": "E32",
+  "created_at": "2026-10-31T01:07:27+00:00",
+  "code_commit": "0402c46ab07d1a36e29e07387c016f2348c76aa5",
+  "benchmark": "behavior-questions-v2",
+  "questions": 37,
+  "v1": {
+    "recognition": {
+      "B1_all": {
+        "k": 21,
+        "n": 33,
+        "rate": 0.6363636363636364,
+        "wilson95": [
+          0.46615872621534094,
+          0.7781303383204013
+        ]
+      },
+      "B1_tail_chasing": {
+        "k": 1,
+        "n": 3,
+        "rate": 0.3333333333333333,
+        "wilson95": [
+          0.0614903152761605,
+          0.7923450448735121
+        ]
+      },
+      "B1_tail_directed": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_self_directed": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_confuser": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "wilson95": [
+          0.20654329147389294,
+          1.0
+        ]
+      },
+      "B1_other": {
+        "k": 18,
+        "n": 24,
+        "rate": 0.75,
+        "wilson95": [
+          0.5510017468789357,
+          0.8800079652065766
+        ]
+      },
+      "B1_gap": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_behavior_tail_chasing": {
+        "k": 1,
+        "n": 2,
+        "rate": 0.5,
+        "wilson95": [
+          0.09452865480086614,
+          0.9054713451991339
+        ]
+      },
+      "B1_behavior_self_grooming": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "wilson95": [
+          0.20654329147389294,
+          1.0
+        ]
+      },
+      "B1_behavior_playing_object": {
+        "k": 4,
+        "n": 5,
+        "rate": 0.8,
+        "wilson95": [
+          0.3755282641185388,
+          0.9637768390302125
+        ]
+      },
+      "B1_behavior_social_play": {
+        "k": 0,
+        "n": 1,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.7934567085261071
+        ]
+      },
+      "B2_present_seen": {
+        "k": 24,
+        "n": 39,
+        "rate": 0.6153846153846154,
+        "wilson95": [
+          0.45898781310078474,
+          0.7510883745299295
+        ]
+      },
+      "B3_temporal_overlap": {
+        "k": 20,
+        "n": 21,
+        "rate": 0.9523809523809523,
+        "wilson95": [
+          0.7733018341376452,
+          0.9915442305280766
+        ]
+      },
+      "B4_confuser_rejection": {
+        "k": 2,
+        "n": 3,
+        "rate": 0.6666666666666666,
+        "wilson95": [
+          0.2076549551264879,
+          0.9385096847238394
+        ]
+      },
+      "B4_tail_chasing_rejection": {
+        "k": 1,
+        "n": 2,
+        "rate": 0.5,
+        "wilson95": [
+          0.09452865480086614,
+          0.9054713451991339
+        ]
+      }
+    },
+    "explanation": {
+      "C1_parse": {
+        "pass": 13,
+        "n": 33,
+        "rate": 0.3939393939393939,
+        "wilson95": [
+          0.24682882231508207,
+          0.5631685719348962
+        ],
+        "meets_target": false,
+        "failed": [
+          "t01",
+          "t03",
+          "t04",
+          "t05",
+          "t06",
+          "t07",
+          "t08",
+          "t09",
+          "t12",
+          "o02",
+          "o03",
+          "o05",
+          "o07",
+          "o13",
+          "o16",
+          "o19",
+          "o20",
+          "o21",
+          "o22",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C2_entry": {
+        "pass": 28,
+        "n": 33,
+        "rate": 0.8484848484848485,
+        "wilson95": [
+          0.6907978686153953,
+          0.9334964074203904
+        ],
+        "meets_target": false,
+        "failed": [
+          "t03",
+          "t06",
+          "t08",
+          "t09",
+          "t12"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C3_grounded": {
+        "pass": 30,
+        "n": 33,
+        "rate": 0.9090909090909091,
+        "wilson95": [
+          0.7642705646564897,
+          0.968596628950737
+        ],
+        "meets_target": true,
+        "failed": [
+          "t12",
+          "o20",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C4_separation": {
+        "pass": 25,
+        "n": 33,
+        "rate": 0.7575757575757576,
+        "wilson95": [
+          0.5897505131450971,
+          0.8716843865335271
+        ],
+        "meets_target": false,
+        "failed": [
+          "t06",
+          "t08",
+          "t09",
+          "t12",
+          "o13",
+          "o20",
+          "o21",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C6_observations": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C7_no_certainty": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C8_report_status": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C9_species": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C4_given_explained": {
+        "pass": 23,
+        "n": 23,
+        "note": "secondary: only behaviours the answer explained"
+      },
+      "C5_coverage_expert": {
+        "pass": 3,
+        "n": 7,
+        "rate": 0.42857142857142855,
+        "failed": [
+          "t06",
+          "t08",
+          "t09",
+          "t12"
+        ],
+        "meets_target": false
+      },
+      "C5_coverage_lay": {
+        "pass": 0,
+        "n": 0,
+        "rate": NaN,
+        "failed": []
+      },
+      "C5_ranking_expert": {
+        "pass": 1,
+        "n": 7,
+        "detail": {
+          "t02": "medical",
+          "t03": null,
+          "t06": null,
+          "t07": "medical",
+          "t08": null,
+          "t09": null,
+          "t12": null
+        }
+      }
+    },
+    "recognition_extra": {
+      "by_category": {
+        "circling_neuro": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "confuser": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "gap": {
+          "k": 0,
+          "n": 0,
+          "rate": NaN,
+          "wilson95": [
+            NaN,
+            NaN
+          ]
+        },
+        "medical_confuser": {
+          "k": 1,
+          "n": 4,
+          "rate": 0.25,
+          "wilson95": [
+            0.045586062644636216,
+            0.6993639475573634
+          ]
+        },
+        "other": {
+          "k": 18,
+          "n": 24,
+          "rate": 0.75,
+          "wilson95": [
+            0.5510017468789357,
+            0.8800079652065766
+          ]
+        },
+        "tail_chasing": {
+          "k": 1,
+          "n": 3,
+          "rate": 0.3333333333333333,
+          "wilson95": [
+            0.0614903152761605,
+            0.7923450448735121
+          ]
+        }
+      },
+      "by_behavior": {
+        "being_petted": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        "collapse": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "drinking": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "eating": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        "head_tremor": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.6576280471103807
+          ]
+        },
+        "locomotion": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.6576280471103807
+          ]
+        },
+        "playing_object": {
+          "k": 4,
+          "n": 5,
+          "rate": 0.8,
+          "wilson95": [
+            0.3755282641185388,
+            0.9637768390302125
+          ]
+        },
+        "resting": {
+          "k": 4,
+          "n": 4,
+          "rate": 1.0,
+          "wilson95": [
+            0.5100999795960008,
+            1.0
+          ]
+        },
+        "rolling_rubbing": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "self_grooming": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "sleep_movements": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "social_play": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "staring_snapping": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+            0.09452865480086614,
+            0.9054713451991339
+          ]
+        },
+        "tail_chasing": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+            0.09452865480086614,
+            0.9054713451991339
+          ]
+        }
+      }
+    },
+    "outcomes": {
+      "explained_and_seen": [
+        "o01",
+        "o04",
+        "o06",
+        "o08",
+        "o09",
+        "o10",
+        "o11",
+        "o12",
+        "o14",
+        "o15",
+        "o17"
+      ],
+      "explained_from_report": [
+        "t02",
+        "o18"
+      ],
+      "not_explained": [
+        "t01",
+        "t03",
+        "t04",
+        "t05",
+        "t06",
+        "t07",
+        "t08",
+        "t09",
+        "t12",
+        "o02",
+        "o03",
+        "o05",
+        "o07",
+        "o13",
+        "o16",
+        "o19",
+        "o20",
+        "o21",
+        "o22",
+        "o23"
+      ],
+      "gap_handled": [
+        "t10",
+        "t11",
+        "g01",
+        "g02"
+      ],
+      "gap_forced": []
+    }
+  },
+  "v2": {
+    "recognition": {
+      "B1_all": {
+        "k": 24,
+        "n": 33,
+        "rate": 0.7272727272727273,
+        "wilson95": [
+          0.5578211674561319,
+          0.849327273436772
+        ]
+      },
+      "B1_tail_chasing": {
+        "k": 2,
+        "n": 3,
+        "rate": 0.6666666666666666,
+        "wilson95": [
+          0.2076549551264879,
+          0.9385096847238394
+        ]
+      },
+      "B1_tail_directed": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_self_directed": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_confuser": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "wilson95": [
+          0.20654329147389294,
+          1.0
+        ]
+      },
+      "B1_other": {
+        "k": 18,
+        "n": 24,
+        "rate": 0.75,
+        "wilson95": [
+          0.5510017468789357,
+          0.8800079652065766
+        ]
+      },
+      "B1_gap": {
+        "k": 0,
+        "n": 0,
+        "rate": NaN,
+        "wilson95": [
+          NaN,
+          NaN
+        ]
+      },
+      "B1_behavior_tail_chasing": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0,
+        "wilson95": [
+          0.34237195288961925,
+          1.0
+        ]
+      },
+      "B1_behavior_self_grooming": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "wilson95": [
+          0.20654329147389294,
+          1.0
+        ]
+      },
+      "B1_behavior_playing_object": {
+        "k": 4,
+        "n": 5,
+        "rate": 0.8,
+        "wilson95": [
+          0.3755282641185388,
+          0.9637768390302125
+        ]
+      },
+      "B1_behavior_social_play": {
+        "k": 0,
+        "n": 1,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.7934567085261071
+        ]
+      },
+      "B2_present_seen": {
+        "k": 26,
+        "n": 39,
+        "rate": 0.6666666666666666,
+        "wilson95": [
+          0.5097710432024052,
+          0.7936723389308484
+        ]
+      },
+      "B3_temporal_overlap": {
+        "k": 23,
+        "n": 24,
+        "rate": 0.9583333333333334,
+        "wilson95": [
+          0.7975777375115778,
+          0.992606734645195
+        ]
+      },
+      "B4_confuser_rejection": {
+        "k": 3,
+        "n": 3,
+        "rate": 1.0,
+        "wilson95": [
+          0.43849391955098227,
+          1.0
+        ]
+      },
+      "B4_tail_chasing_rejection": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0,
+        "wilson95": [
+          0.34237195288961925,
+          1.0
+        ]
+      }
+    },
+    "explanation": {
+      "C1_parse": {
+        "pass": 16,
+        "n": 33,
+        "rate": 0.48484848484848486,
+        "wilson95": [
+          0.32503781646924224,
+          0.6478189541378976
+        ],
+        "meets_target": false,
+        "failed": [
+          "t01",
+          "t02",
+          "t03",
+          "t04",
+          "t05",
+          "t07",
+          "t08",
+          "o01",
+          "o02",
+          "o03",
+          "o05",
+          "o07",
+          "o13",
+          "o19",
+          "o20",
+          "o21",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C2_entry": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C3_grounded": {
+        "pass": 31,
+        "n": 33,
+        "rate": 0.9393939393939394,
+        "wilson95": [
+          0.8039341828220181,
+          0.9832194695709291
+        ],
+        "meets_target": true,
+        "failed": [
+          "o20",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C4_separation": {
+        "pass": 28,
+        "n": 33,
+        "rate": 0.8484848484848485,
+        "wilson95": [
+          0.6907978686153953,
+          0.9334964074203904
+        ],
+        "meets_target": false,
+        "failed": [
+          "t08",
+          "o13",
+          "o20",
+          "o21",
+          "o23"
+        ],
+        "gap_questions_pass": "4/4"
+      },
+      "C6_observations": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C7_no_certainty": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C8_report_status": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C9_species": {
+        "pass": 33,
+        "n": 33,
+        "rate": 1.0,
+        "wilson95": [
+          0.8957265699643882,
+          1.0
+        ],
+        "meets_target": true,
+        "failed": [],
+        "gap_questions_pass": "4/4"
+      },
+      "C4_given_explained": {
+        "pass": 26,
+        "n": 26,
+        "note": "secondary: only behaviours the answer explained"
+      },
+      "C5_coverage_expert": {
+        "pass": 6,
+        "n": 7,
+        "rate": 0.8571428571428571,
+        "failed": [
+          "t08"
+        ],
+        "meets_target": false
+      },
+      "C5_coverage_lay": {
+        "pass": 0,
+        "n": 0,
+        "rate": NaN,
+        "failed": []
+      },
+      "C5_ranking_expert": {
+        "pass": 5,
+        "n": 7,
+        "detail": {
+          "t02": "medical",
+          "t03": "medical",
+          "t06": "medical",
+          "t07": "medical",
+          "t08": null,
+          "t09": "medical",
+          "t12": "play_or_normal"
+        }
+      }
+    },
+    "recognition_extra": {
+      "by_category": {
+        "circling_neuro": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "confuser": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "gap": {
+          "k": 0,
+          "n": 0,
+          "rate": NaN,
+          "wilson95": [
+            NaN,
+            NaN
+          ]
+        },
+        "medical_confuser": {
+          "k": 2,
+          "n": 4,
+          "rate": 0.5,
+          "wilson95": [
+            0.15003570882017148,
+            0.8499642911798285
+          ]
+        },
+        "other": {
+          "k": 18,
+          "n": 24,
+          "rate": 0.75,
+          "wilson95": [
+            0.5510017468789357,
+            0.8800079652065766
+          ]
+        },
+        "tail_chasing": {
+          "k": 2,
+          "n": 3,
+          "rate": 0.6666666666666666,
+          "wilson95": [
+            0.2076549551264879,
+            0.9385096847238394
+          ]
+        }
+      },
+      "by_behavior": {
+        "being_petted": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        "collapse": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "drinking": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "eating": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        "head_tremor": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "wilson95": [
+            0.34237195288961925,
+            1.0
+          ]
+        },
+        "locomotion": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.6576280471103807
+          ]
+        },
+        "playing_object": {
+          "k": 4,
+          "n": 5,
+          "rate": 0.8,
+          "wilson95": [
+            0.3755282641185388,
+            0.9637768390302125
+          ]
+        },
+        "resting": {
+          "k": 3,
+          "n": 4,
+          "rate": 0.75,
+          "wilson95": [
+            0.3006360524426366,
+            0.9544139373553637
+          ]
+        },
+        "rolling_rubbing": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "self_grooming": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "wilson95": [
+            0.20654329147389294,
+            1.0
+          ]
+        },
+        "sleep_movements": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "social_play": {
+          "k": 0,
+          "n": 1,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.7934567085261071
+          ]
+        },
+        "staring_snapping": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.6576280471103807
+          ]
+        },
+        "tail_chasing": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "wilson95": [
+            0.34237195288961925,
+            1.0
+          ]
+        }
+      }
+    },
+    "outcomes": {
+      "explained_and_seen": [
+        "t06",
+        "t09",
+        "t12",
+        "o04",
+        "o06",
+        "o08",
+        "o09",
+        "o10",
+        "o11",
+        "o12",
+        "o14",
+        "o15",
+        "o17",
+        "o22"
+      ],
+      "explained_from_report": [
+        "o16",
+        "o18"
+      ],
+      "not_explained": [
+        "t01",
+        "t02",
+        "t03",
+        "t04",
+        "t05",
+        "t07",
+        "t08",
+        "o01",
+        "o02",
+        "o03",
+        "o05",
+        "o07",
+        "o13",
+        "o19",
+        "o20",
+        "o21",
+        "o23"
+      ],
+      "gap_handled": [
+        "t10",
+        "t11",
+        "g01",
+        "g02"
+      ],
+      "gap_forced": []
+    }
+  },
+  "paired": {
+    "asked_present_recognized": {
+      "n": 32,
+      "v1": 21,
+      "v2": 24,
+      "v2_only": 5,
+      "v1_only": 2
+    },
+    "confusers_rejected": {
+      "n": 3,
+      "v1": 2,
+      "v2": 3,
+      "v2_only": 1,
+      "v1_only": 0
+    },
+    "C1_parse": {
+      "n": 33,
+      "v1": 13,
+      "v2": 16,
+      "v2_only": 5,
+      "v1_only": 2
+    },
+    "C2_entry": {
+      "n": 33,
+      "v1": 28,
+      "v2": 33,
+      "v2_only": 5,
+      "v1_only": 0
+    },
+    "C5_coverage": {
+      "n": 7,
+      "v1": 3,
+      "v2": 6,
+      "v2_only": 3,
+      "v1_only": 0
+    },
+    "C5_ranking": {
+      "n": 7,
+      "v1": 1,
+      "v2": 5,
+      "v2_only": 4,
+      "v1_only": 0
+    }
+  },
+  "context_v2": {
+    "person": {
+      "agree": 23,
+      "n": 35
+    },
+    "place": {
+      "agree": 13,
+      "n": 24
+    }
+  },
+  "per_question": {
+    "v1": [
+      {
+        "id": "t01",
+        "category": "tail_chasing",
+        "gap": false,
+        "asked_present": [
+          "tail_chasing"
+        ],
+        "asked_present_seen": [
+          "tail_chasing"
+        ],
+        "present": [
+          "resting",
+          "tail_chasing"
+        ],
+        "present_seen": [
+          "tail_chasing"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "tail_chasing": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "scratching_self",
+          "tail_chasing"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t02",
+        "category": "tail_chasing",
+        "gap": false,
+        "asked_present": [
+          "staring_snapping",
+          "tail_chasing"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "staring_snapping",
+          "tail_chasing"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "tail_chasing",
+          "staring_snapping"
+        ],
+        "seen": [
+          "threat_display",
+          "vocalizing"
+        ],
+        "outcome": "explained_from_report"
+      },
+      {
+        "id": "t03",
+        "category": "circling_neuro",
+        "gap": false,
+        "asked_present": [
+          "head_tremor"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "head_tremor"
+        ],
+        "present_seen": [],
+        "must_not": [
+          "tail_chasing"
+        ],
+        "must_not_seen": [
+          "tail_chasing"
+        ],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": false,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "tail_chasing"
+        ],
+        "seen": [
+          "playing_object",
+          "tail_chasing"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t04",
+        "category": "confuser",
+        "gap": false,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [
+          "tail_chasing"
+        ],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t05",
+        "category": "confuser",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [
+          "threat_display"
+        ],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t06",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "head_tremor"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "being_petted",
+          "head_tremor"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": false,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C5_coverage": false,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted",
+          "self_grooming"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t07",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "staring_snapping"
+        ],
+        "asked_present_seen": [
+          "staring_snapping"
+        ],
+        "present": [
+          "staring_snapping"
+        ],
+        "present_seen": [
+          "staring_snapping"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "staring_snapping": false
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "staring_snapping",
+          "vocalizing"
+        ],
+        "seen": [
+          "staring_snapping",
+          "threat_display"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t08",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "sleep_movements"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "resting",
+          "sleep_movements"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": false,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C5_coverage": false,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t09",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "collapse"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "collapse"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": false,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C5_coverage": false,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t10",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object",
+          "self_biting"
+        ],
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "t11",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating",
+          "playing_object",
+          "self_grooming"
+        ],
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "t12",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "rolling_rubbing"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "rolling_rubbing"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": false,
+        "C3_grounded": false,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C5_coverage": false,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o01",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "self_grooming"
+        ],
+        "asked_present_seen": [
+          "self_grooming"
+        ],
+        "present": [
+          "self_grooming"
+        ],
+        "present_seen": [
+          "self_grooming"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "self_grooming": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "self_grooming"
+        ],
+        "seen": [
+          "scratching_self",
+          "self_grooming"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o02",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o03",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o04",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "being_petted"
+        ],
+        "seen": [
+          "being_petted"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o05",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "scratching_self"
+        ],
+        "seen": [
+          "being_petted"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o06",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "being_petted"
+        ],
+        "seen": [
+          "being_petted",
+          "resting"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o07",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted",
+          "self_biting"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o08",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o09",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o10",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o11",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o12",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o13",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "drinking"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "drinking"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "locomotion"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o14",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o15",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o16",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o17",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o18",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "social_play"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "social_play"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "social_play"
+        ],
+        "seen": [],
+        "outcome": "explained_from_report"
+      },
+      {
+        "id": "o19",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o20",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "locomotion"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": false,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o21",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "locomotion"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "tail_chasing"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o22",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "locomotion",
+          "playing_object"
+        ],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o23",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion",
+          "playing_object"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": false,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [],
+        "outcome": "not_explained"
+      },
+      {
+        "id": "g01",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "eating",
+          "self_grooming",
+          "staring_snapping"
+        ],
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "g02",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted",
+          "self_grooming",
+          "staring_snapping"
+        ],
+        "outcome": "gap_handled"
+      }
+    ],
+    "v2": [
+      {
+        "id": "t01",
+        "category": "tail_chasing",
+        "gap": false,
+        "asked_present": [
+          "tail_chasing"
+        ],
+        "asked_present_seen": [
+          "tail_chasing"
+        ],
+        "present": [
+          "resting",
+          "tail_chasing"
+        ],
+        "present_seen": [
+          "tail_chasing"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "tail_chasing": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "scratching_self",
+          "tail_chasing"
+        ],
+        "X_person": false,
+        "X_place": true,
+        "X_place_said": "living room",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t02",
+        "category": "tail_chasing",
+        "gap": false,
+        "asked_present": [
+          "staring_snapping",
+          "tail_chasing"
+        ],
+        "asked_present_seen": [
+          "tail_chasing"
+        ],
+        "present": [
+          "staring_snapping",
+          "tail_chasing"
+        ],
+        "present_seen": [
+          "tail_chasing"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "tail_chasing": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "tail_chasing",
+          "staring_snapping",
+          "head_tremor"
+        ],
+        "seen": [
+          "head_tremor",
+          "tail_chasing",
+          "vocalizing"
+        ],
+        "X_person": false,
+        "X_place": false,
+        "X_place_said": null,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t03",
+        "category": "circling_neuro",
+        "gap": false,
+        "asked_present": [
+          "head_tremor"
+        ],
+        "asked_present_seen": [
+          "head_tremor"
+        ],
+        "present": [
+          "head_tremor"
+        ],
+        "present_seen": [
+          "head_tremor"
+        ],
+        "must_not": [
+          "tail_chasing"
+        ],
+        "must_not_seen": [],
+        "temporal": {
+          "head_tremor": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "tail_chasing"
+        ],
+        "seen": [
+          "head_tremor",
+          "playing_object"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "veterinary clinic",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t04",
+        "category": "confuser",
+        "gap": false,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [
+          "tail_chasing"
+        ],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "head_tremor",
+          "playing_object"
+        ],
+        "X_place": false,
+        "X_place_said": null,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t05",
+        "category": "confuser",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [
+          "threat_display"
+        ],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "head_tremor"
+        ],
+        "seen": [
+          "playing_object"
+        ],
+        "X_person": false,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t06",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "head_tremor"
+        ],
+        "asked_present_seen": [
+          "head_tremor"
+        ],
+        "present": [
+          "being_petted",
+          "head_tremor"
+        ],
+        "present_seen": [
+          "being_petted",
+          "head_tremor"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "head_tremor": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "head_tremor"
+        ],
+        "seen": [
+          "being_petted",
+          "head_tremor"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": null,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "t07",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "staring_snapping"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "staring_snapping"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "staring_snapping",
+          "vocalizing",
+          "resting"
+        ],
+        "seen": [
+          "head_tremor"
+        ],
+        "X_person": false,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t08",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "sleep_movements"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "resting",
+          "sleep_movements"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C5_coverage": false,
+        "C5_authority": "expert",
+        "C5_first_kind": null,
+        "C5_ranking": false,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "collapse"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": null,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "t09",
+        "category": "medical_confuser",
+        "gap": false,
+        "asked_present": [
+          "collapse"
+        ],
+        "asked_present_seen": [
+          "collapse"
+        ],
+        "present": [
+          "collapse"
+        ],
+        "present_seen": [
+          "collapse"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "collapse": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "medical",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "collapse",
+          "resting"
+        ],
+        "seen": [
+          "collapse",
+          "head_tremor"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "veterinary clinic",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "t10",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object",
+          "self_biting"
+        ],
+        "X_person": false,
+        "X_place": true,
+        "X_place_said": "veterinary clinic",
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "t11",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating",
+          "head_tremor",
+          "self_grooming"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "veterinary clinic",
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "t12",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "rolling_rubbing"
+        ],
+        "asked_present_seen": [
+          "rolling_rubbing"
+        ],
+        "present": [
+          "rolling_rubbing"
+        ],
+        "present_seen": [
+          "rolling_rubbing"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "rolling_rubbing": false
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C5_coverage": true,
+        "C5_authority": "expert",
+        "C5_first_kind": "play_or_normal",
+        "C5_ranking": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "rolling_rubbing"
+        ],
+        "seen": [
+          "rolling_rubbing"
+        ],
+        "X_person": false,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o01",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "self_grooming"
+        ],
+        "asked_present_seen": [
+          "self_grooming"
+        ],
+        "present": [
+          "self_grooming"
+        ],
+        "present_seen": [
+          "self_grooming"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "self_grooming": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "self_grooming",
+          "rolling_rubbing"
+        ],
+        "seen": [
+          "scratching_self",
+          "self_grooming"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "garden or yard",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o02",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "playing_object"
+        ],
+        "X_person": false,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o03",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o04",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "being_petted"
+        ],
+        "seen": [
+          "being_petted"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o05",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "scratching_self",
+          "rolling_rubbing"
+        ],
+        "seen": [
+          "being_petted"
+        ],
+        "X_person": true,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o06",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "being_petted"
+        ],
+        "seen": [
+          "being_petted",
+          "resting"
+        ],
+        "X_person": true,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o07",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "being_petted"
+        ],
+        "asked_present_seen": [
+          "being_petted"
+        ],
+        "present": [
+          "being_petted"
+        ],
+        "present_seen": [
+          "being_petted"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "being_petted": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted",
+          "collapse",
+          "self_biting"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "garden or yard",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o08",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "X_person": true,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o09",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating",
+          "rolling_rubbing"
+        ],
+        "X_person": true,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o10",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "X_person": true,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o11",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o12",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "eating"
+        ],
+        "asked_present_seen": [
+          "eating"
+        ],
+        "present": [
+          "eating"
+        ],
+        "present_seen": [
+          "eating"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "eating": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "eating"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "garden or yard",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o13",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "drinking"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "drinking"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "locomotion"
+        ],
+        "seen": [
+          "eating"
+        ],
+        "X_person": false,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o14",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "living room",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o15",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o16",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [],
+        "X_person": false,
+        "outcome": "explained_from_report"
+      },
+      {
+        "id": "o17",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "resting"
+        ],
+        "asked_present_seen": [
+          "resting"
+        ],
+        "present": [
+          "resting"
+        ],
+        "present_seen": [
+          "resting"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "resting": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "resting"
+        ],
+        "X_person": true,
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o18",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "social_play"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "social_play"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "social_play"
+        ],
+        "seen": [],
+        "X_person": false,
+        "X_place": true,
+        "X_place_said": "garden or yard",
+        "outcome": "explained_from_report"
+      },
+      {
+        "id": "o19",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "resting"
+        ],
+        "seen": [
+          "playing_object"
+        ],
+        "X_person": true,
+        "X_place": true,
+        "X_place_said": "living room",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o20",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "locomotion"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": false,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [],
+        "X_place": true,
+        "X_place_said": "garden or yard",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o21",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "locomotion"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "head_tremor",
+          "tail_chasing"
+        ],
+        "X_person": false,
+        "X_place": false,
+        "X_place_said": "veterinary clinic",
+        "outcome": "not_explained"
+      },
+      {
+        "id": "o22",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [
+          "playing_object"
+        ],
+        "present": [
+          "playing_object"
+        ],
+        "present_seen": [
+          "playing_object"
+        ],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {
+          "playing_object": true
+        },
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": true,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [
+          "playing_object"
+        ],
+        "seen": [
+          "kneading",
+          "locomotion",
+          "playing_object"
+        ],
+        "X_person": false,
+        "X_place": true,
+        "X_place_said": "living room",
+        "outcome": "explained_and_seen"
+      },
+      {
+        "id": "o23",
+        "category": "other",
+        "gap": false,
+        "asked_present": [
+          "playing_object"
+        ],
+        "asked_present_seen": [],
+        "present": [
+          "locomotion",
+          "playing_object"
+        ],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": false,
+        "C2_entry": true,
+        "C3_grounded": false,
+        "C4_separation": false,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [],
+        "X_person": true,
+        "X_place": false,
+        "X_place_said": null,
+        "outcome": "not_explained"
+      },
+      {
+        "id": "g01",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "eating",
+          "head_tremor",
+          "self_grooming",
+          "staring_snapping"
+        ],
+        "X_person": true,
+        "outcome": "gap_handled"
+      },
+      {
+        "id": "g02",
+        "category": "gap",
+        "gap": true,
+        "asked_present": [],
+        "asked_present_seen": [],
+        "present": [],
+        "present_seen": [],
+        "must_not": [],
+        "must_not_seen": [],
+        "temporal": {},
+        "C1_parse": true,
+        "C2_entry": true,
+        "C3_grounded": true,
+        "C4_separation": true,
+        "C4_given_explained": null,
+        "C6_observations": true,
+        "C7_no_certainty": true,
+        "C7_phrases_found": [],
+        "C8_report_status": true,
+        "C9_species": true,
+        "parsed": [],
+        "seen": [
+          "being_petted",
+          "self_grooming",
+          "staring_snapping"
+        ],
+        "X_person": true,
+        "outcome": "gap_handled"
+      }
+    ]
+  },
+  "decision": {
+    "v2_stays_default": false,
+    "rules": {
+      "a_C1_not_below_v1": true,
+      "b_recognized_at_least_v1_minus_1": true,
+      "c_confusers_at_least_v1_minus_1": true,
+      "d_C5_expert_coverage_not_below_v1": true,
+      "e_C2_C3_C4_C6_to_C9_at_least_0.9": false
+    },
+    "parser_C1_v2_at_least_0.9": false,
+    "tail_chasing_recognized_from_recordings_v2": true,
+    "context_person_agreement_at_least_0.8": false
+  }
+}

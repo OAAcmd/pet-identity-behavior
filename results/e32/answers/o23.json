@@ -1,0 +1,90 @@
+{
+  "benchmark_item": {
+    "id": "o23",
+    "clip": "stock_mixkit_1494",
+    "species": "dog",
+    "scene": "At the river.",
+    "question": "My dog splashes into the river after his ball. Is he playing?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "playing_object"
+    ],
+    "asked_ok": [
+      "locomotion"
+    ],
+    "reference_present": [
+      "playing_object",
+      "locomotion"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "playing_object": true
+    },
+    "gap": null,
+    "frame_person": true,
+    "frame_place": [
+      "park or street",
+      "garden or yard"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "At the river.",
+    "question": "My dog splashes into the river after his ball. Is he playing?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 66,
+      "seconds": 11.0,
+      "animal_found_fraction": 0.6666666666666666,
+      "available": true,
+      "mean_speed_body_per_s": 0.1299,
+      "path_body_lengths": 1.5829999446868896,
+      "net_displacement_body_lengths": 0.7179999947547913,
+      "stays_in_place": true,
+      "turned_rad": -0.391,
+      "abs_turned_rad": 1.512,
+      "turning_consistency": 0.259,
+      "repetition_strength": 0.002,
+      "repetition_period_s": 2.83,
+      "detector_dog_vote": 0.318
+    },
+    "user_reported": [],
+    "explained_behaviors": [],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "The detector's species vote disagrees with the species you gave (dog); your answer is used, and the detector only locates the animal.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Movement: the animal stays roughly in place while moving. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.5,
+        "times_s": [
+          [
+            7.3,
+            7.7
+          ],
+          [
+            9.2,
+            9.7
+          ]
+        ]
+      }
+    ],
+    "vocal_types": [],
+    "events": []
+  }
+}

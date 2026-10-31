@@ -386,16 +386,105 @@ def test(settings: Settings, out_dir: Path, v1_answers: Path) -> dict:
     return res
 
 
+def posthoc(settings: Settings, out_dir: Path) -> dict:
+    """Descriptive analyses added after the single scoring run (not pre-registered; nothing is chosen from them).
+
+    References: the benchmark's reference_present plus the assistant frame review's behaviour list (machine-assisted labels)."""
+    from collections import Counter
+
+    from ..understand.features import CONTEXT_CLASSES
+
+    m = json.loads((out_dir / "metrics.json").read_text())
+    bench = {q["id"]: q for q in json.loads(BENCHMARK_V2.read_text())["questions"]}
+    ann = D.load_assistant()
+    out: dict = {"note": "post hoc, descriptive; added after the E32 scoring run; not used to change either system", "systems": {}}
+    for s in ("v1", "v2"):
+        fa, seen_n = Counter(), Counter()
+        tc_fp = []
+        parse = {"missed_all": [], "missed_some": [], "extra": []}
+        for r in m["per_question"][s]:
+            q = bench[r["id"]]
+            ref = set(q["reference_present"]) | set(ann.get(q["clip"], {}).get("behaviors", []))
+            for b in r["seen"]:
+                seen_n[b] += 1
+                if b not in ref:
+                    fa[b] += 1
+            if "tail_chasing" in r["seen"] and "tail_chasing" not in ref:
+                tc_fp.append(r["id"])
+            asked, parsed = set(q["asked"]), set(r["parsed"])
+            if asked and not parsed & asked:
+                parse["missed_all"].append(r["id"])
+            elif asked - parsed:
+                parse["missed_some"].append(r["id"])
+            if parsed - asked - set(q["asked_ok"]):
+                parse["extra"].append({r["id"]: sorted(parsed - asked - set(q["asked_ok"]))})
+        n_tc_neg = sum("tail_chasing" not in (set(q["reference_present"]) | set(ann.get(q["clip"], {}).get("behaviors", []))) for q in bench.values())
+        out["systems"][s] = {"seen_total": sum(seen_n.values()), "seen_not_in_reference": sum(fa.values()),
+                             "seen_not_in_reference_by_behavior": dict(fa.most_common()),
+                             "tail_chasing_seen_without_it": {"ids": tc_fp, "clips_without_tail_chasing": n_tc_neg}, "parse_errors": parse}
+    fdir = settings.paths.resolve("data_root").parent / "understand" / "features_v2"
+    j = CONTEXT_CLASSES.index("person")
+    person, place = [], Counter()
+    for r in m["per_question"]["v2"]:
+        q = bench[r["id"]]
+        if "X_person" in r:
+            z = np.load(fdir / f"{q['clip']}.npz", allow_pickle=False)
+            said = r["X_person"] == bool(q["frame_person"])
+            person.append({"id": r["id"], "frame_review": bool(q["frame_person"]), "reported": bool(q["frame_person"]) == said,
+                           "max_person_score": round(float(z["ctx"][:, j].max()), 2), "share_frames_person_ge_0.5": round(float((z["ctx"][:, j] >= 0.5).mean()), 2),
+                           "share_frames_near_ge_0.2": round(float((z["ctx_person_near"] >= 0.2).mean()), 2)})
+        if q.get("frame_place"):
+            place[f"{q['frame_place'][0]} -> {r.get('X_place_said')}"] += 1
+    out["person_v2"] = {"false_reports": [p for p in person if p["reported"] and not p["frame_review"]],
+                        "missed": [p for p in person if p["frame_review"] and not p["reported"]],
+                        "counts": dict(Counter(f"frame {p['frame_review']} / reported {p['reported']}" for p in person))}
+    out["place_v2"] = dict(sorted(place.items()))
+    write_json(out_dir / "posthoc.json", out)
+    return out
+
+
+def default_check(settings: Settings, out_dir: Path, v1_answers: Path) -> dict:
+    """After the decision: the default system of this code (``Explainer.load()``, version 1 = ``understand/e31``) must give the
+    answers the frozen v1 system gave in the test (same version-1 features). The E31 ``Explainer`` adds recording-quality notes
+    (no sound, no video) to the uncertainty list; the E31 evaluation and the E32 v1 runner call ``compose`` without them, so those
+    notes are the one expected difference (no check reads them)."""
+    from ..understand.run import DEFAULT_VERSION, Explainer
+
+    items = json.loads(BENCHMARK_V2.read_text())["questions"]
+    fdir = settings.paths.resolve("data_root").parent / "understand" / "features"
+    ex = Explainer.load(settings.runtime.num_threads)
+    ref = json.loads(Path(v1_answers).read_text())["answers"]
+    quality = ("No video frames could be decoded", "No usable sound in the recording", "The recording is silent")
+    exact, other = [], []
+    for it in items:
+        a = json.loads(json.dumps(ex.answer(np.load(fdir / f"{it['clip']}.npz", allow_pickle=False), it["species"], it["scene"],
+                                            it["question"]).to_dict()))
+        if a == ref[it["id"]]["answer"]:
+            exact.append(it["id"])
+        elif {**a, "uncertainty": [u for u in a["uncertainty"] if not u.startswith(quality)]} != ref[it["id"]]["answer"]:
+            other.append(it["id"])
+    res = {"created_at": utc_now().isoformat(timespec="seconds"), "default_version": DEFAULT_VERSION, "questions": len(items),
+           "identical_answers": len(exact), "identical_except_quality_notes": len(items) - len(exact) - len(other), "different": other}
+    write_json(out_dir / "default_v1_check.json", res)
+    return res
+
+
 def main() -> None:
     import argparse
 
     from ..config import load_settings
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["develop", "test"])
+    ap.add_argument("step", choices=["develop", "test", "posthoc", "default-check"])
     ap.add_argument("--v1-answers", default="var/understand/e32_v1_answers.json")
     a = ap.parse_args()
     s = load_settings()
+    if a.step == "default-check":
+        print(json.dumps(default_check(s, s.paths.resolve("results_root") / "e32", Path(a.v1_answers)), indent=1))
+        return
+    if a.step == "posthoc":
+        print(json.dumps(posthoc(s, s.paths.resolve("results_root") / "e32"), indent=1))
+        return
     if a.step == "test":
         r = test(s, s.paths.resolve("results_root") / "e32", Path(a.v1_answers))
         print(json.dumps({k: r[k] for k in ("paired", "context_v2", "decision")}, indent=1, default=str))

@@ -1,0 +1,222 @@
+{
+  "benchmark_item": {
+    "id": "t08",
+    "clip": "paper_sleep_movements_2016",
+    "species": "dog",
+    "scene": "Asleep on the rug in the living room.",
+    "question": "My retriever kicks and jerks his legs a lot while he sleeps on the rug. Is he just dreaming?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "medical_confuser",
+    "asked": [
+      "sleep_movements"
+    ],
+    "asked_ok": [
+      "resting"
+    ],
+    "reference_present": [
+      "sleep_movements",
+      "resting"
+    ],
+    "reference_basis": "expert + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "medical"
+      ],
+      "text": "REM sleep behaviour disorder with degenerative encephalopathy",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "sleep_movements": false
+    },
+    "gap": null,
+    "frame_person": false,
+    "frame_place": [
+      "living room",
+      "bedroom"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "Asleep on the rug in the living room.",
+    "question": "My retriever kicks and jerks his legs a lot while he sleeps on the rug. Is he just dreaming?",
+    "behaviors_seen": [
+      {
+        "behavior": "collapse",
+        "description": "suddenly going limp, falling over or collapsing",
+        "score": 0.7638,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            40.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.7638,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 241,
+      "seconds": 40.166666666666664,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0169,
+      "path_body_lengths": 3.8540000915527344,
+      "net_displacement_body_lengths": 0.09000000357627869,
+      "stays_in_place": false,
+      "turned_rad": -0.323,
+      "abs_turned_rad": 5.795,
+      "turning_consistency": 0.056,
+      "repetition_strength": 0.01,
+      "repetition_period_s": 2.33,
+      "detector_dog_vote": 0.888
+    },
+    "user_reported": [
+      {
+        "behavior": "resting",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.2765
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "resting",
+        "basis": "user report only",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "collapse",
+        "basis": "recording",
+        "summary": "Suddenly going limp, falling over or collapsing.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "co_cataplexy",
+              "explanation": "cataplexy (narcolepsy): sudden limp collapse triggered by excitement such as eating, playing or greeting, with the dog often still following with its eyes and a quick, complete return to normal",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vettimes_sleep",
+                "vca_narcolepsy"
+              ]
+            },
+            {
+              "id": "co_seizure_syncope",
+              "explanation": "a seizure or a fainting episode (heart), which sleep-related collapse can mimic; stiffness, paddling, drooling or confusion afterwards point away from cataplexy",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vettimes_sleep"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "What was the dog doing just before (eating, playing, greeting, exercising)?",
+      "Was it limp or stiff, and did it follow you with its eyes?",
+      "How fast was it back to normal?"
+    ],
+    "urgent_signs": [
+      "every first collapse",
+      "the dog cannot be roused, has trouble breathing or the episode lasts more than a few minutes"
+    ],
+    "sources": [
+      {
+        "id": "vettimes_sleep",
+        "tier": "clinical_review",
+        "citation": "Vet Times: Sleep disorders - differential diagnoses and treatment.",
+        "url": "https://www.vettimes.com/news/vets/small-animal-vets/sleep-disorders-differential-diagnoses-and-treatment",
+        "supports": "cataplexy: sudden flaccid collapse induced by excitement (food, greeting, play) with abrupt return to normal; REM sleep behaviour disorder: involuntary, sometimes violent movements in REM sleep that stop when the animal is aroused; both can mimic syncope or seizures"
+      },
+      {
+        "id": "vca_narcolepsy",
+        "tier": "veterinary_hospital",
+        "citation": "VCA Animal Hospitals: Narcolepsy in dogs.",
+        "url": "https://vcahospitals.com/know-your-pet/narcolepsy-in-dogs",
+        "supports": "cataplexy episodes last seconds to minutes and often occur when the dog is eating, playing or excited"
+      }
+    ],
+    "summary": "In the recording: suddenly going limp, falling over or collapsing (0.0-40.5 s). Lying down, resting or sleeping (user report only) is usually ordinary play or maintenance behaviour. No request is implied by it. Suddenly going limp, falling over or collapsing (recording) is usually discomfort, itch, pain or a neurological cause. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "people talking",
+        "from": "sound model (YAMNet)",
+        "score": 0.59,
+        "times_s": [
+          [
+            13.0,
+            13.9
+          ],
+          [
+            13.4,
+            14.4
+          ],
+          [
+            13.9,
+            14.9
+          ]
+        ]
+      },
+      {
+        "what": "TV or music",
+        "from": "sound model (YAMNet)",
+        "score": 0.5,
+        "times_s": [
+          [
+            1.4,
+            2.4
+          ]
+        ]
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "collapse",
+        "bout_s": [
+          0.0,
+          40.5
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "benchmark_item": {
+    "id": "o18",
+    "clip": "stock_mixkit_14184",
+    "species": "cat",
+    "scene": "In the garden among the leaves.",
+    "question": "Our kittens tumble and wrestle in the leaves in the garden. Are they fighting?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "social_play"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "social_play"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {},
+    "gap": null,
+    "frame_person": false,
+    "frame_place": [
+      "garden or yard",
+      "park or street"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "In the garden among the leaves.",
+    "question": "Our kittens tumble and wrestle in the leaves in the garden. Are they fighting?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 111,
+      "seconds": 18.5,
+      "animal_found_fraction": 0.9459459459459459,
+      "available": true,
+      "mean_speed_body_per_s": 0.0661,
+      "path_body_lengths": 6.920000076293945,
+      "net_displacement_body_lengths": 0.6159999966621399,
+      "stays_in_place": false,
+      "turned_rad": 1.162,
+      "abs_turned_rad": 3.818,
+      "turning_consistency": 0.304,
+      "repetition_strength": 0.004,
+      "repetition_period_s": 3.0,
+      "detector_dog_vote": 0.695
+    },
+    "user_reported": [
+      {
+        "behavior": "social_play",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.7214
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "social_play",
+        "basis": "user report only",
+        "summary": "Close-contact interaction with another cat.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sp_play",
+              "explanation": "rough-and-tumble play: wrestling with alternating roles and few vocalizations",
+              "context_match": [
+                "wrestl"
+              ],
+              "context_score": 0.8,
+              "sources": [
+                "gajdos2023"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "sp_agonistic",
+              "explanation": "an agonistic interaction (fighting): chasing in one direction and vocalizing (hissing, growling, yowling) go with fights",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "gajdos2023"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "The detector's species vote disagrees with the species you gave (cat); your answer is used, and the detector only locates the animal.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Do the cats take turns chasing and being on top?",
+      "Are there hisses, growls or yowls, and does one cat try to leave?"
+    ],
+    "urgent_signs": [
+      "injuries or one cat persistently hiding or avoiding the other"
+    ],
+    "sources": [
+      {
+        "id": "gajdos2023",
+        "tier": "peer_reviewed_study",
+        "citation": "Gajdos-Kmecova N et al. (2023) An ethological analysis of close-contact inter-cat interactions determining if cats are playing, fighting, or something in between. Sci Rep 13:92.",
+        "url": "https://doi.org/10.1038/s41598-022-26121-1",
+        "supports": "105 videos: wrestling went with play, vocalization and chasing with agonistic interactions; an intermediate group mixed both"
+      }
+    ],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Play fighting or wrestling with another animal (user report only) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; arousal, frustration or stress. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.45,
+        "times_s": [
+          [
+            8.5,
+            8.8
+          ]
+        ]
+      },
+      {
+        "what": "place: garden or yard",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.99,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": []
+  }
+}

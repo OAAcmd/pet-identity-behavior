@@ -1,0 +1,272 @@
+{
+  "benchmark_item": {
+    "id": "t05",
+    "clip": "stock_mixkit_50675",
+    "species": "dog",
+    "scene": "On the floor at home with his teddy bear.",
+    "question": "My pit bull puppy shakes and bites his teddy bear really hard. Is he being aggressive?",
+    "question_origin": "authored_from_source_title",
+    "category": "confuser",
+    "asked": [
+      "playing_object"
+    ],
+    "asked_ok": [
+      "threat_display",
+      "self_biting"
+    ],
+    "reference_present": [
+      "playing_object"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [
+      "threat_display"
+    ],
+    "source_interpretation": null,
+    "request_expected": {
+      "playing_object": true
+    },
+    "gap": null,
+    "frame_person": false
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "On the floor at home with his teddy bear.",
+    "question": "My pit bull puppy shakes and bites his teddy bear really hard. Is he being aggressive?",
+    "behaviors_seen": [
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.9597,
+        "threshold": 0.335587,
+        "bouts_s": [
+          [
+            0.0,
+            17.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9597,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 104,
+      "seconds": 17.333333333333332,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.2017,
+      "path_body_lengths": 3.9079999923706055,
+      "net_displacement_body_lengths": 0.23199999332427979,
+      "stays_in_place": true,
+      "turned_rad": 0.21,
+      "abs_turned_rad": 5.981,
+      "turning_consistency": 0.035,
+      "repetition_strength": 0.005,
+      "repetition_period_s": 1.67,
+      "detector_dog_vote": 0.923
+    },
+    "user_reported": [
+      {
+        "behavior": "head_tremor",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0346
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "head_tremor",
+        "basis": "user report only",
+        "summary": "Rhythmic bobbing, nodding or rotating of the head while the dog is awake.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ht_ear",
+              "explanation": "shaking the head to the side because of ear discomfort is a different movement (a vigorous shake, often with ear scratching)",
+              "context_match": [
+                "ear"
+              ],
+              "context_score": 1.5,
+              "sources": [
+                "vin_vestibular"
+              ],
+              "recording_match": [
+                "ear"
+              ]
+            },
+            {
+              "id": "ht_idiopathic",
+              "explanation": "idiopathic head tremor: episodes of head bobbing in an alert dog that usually stop when the dog is distracted (called, offered food or a toy); considered benign but diagnosed after other causes are excluded",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            },
+            {
+              "id": "ht_focal_seizure",
+              "explanation": "a focal seizure, the main alternative: it is not stopped by distraction and may come with drooling, unresponsiveness or other signs",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [],
+              "context_score": 0.3,
+              "sources": [
+                "ellis2013"
+              ],
+              "recording_match": [
+                "toy"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Does the dog stay alert, and does the movement stop when you call it or offer a treat?",
+      "Is it a small rhythmic bobbing (yes-yes, no-no) or a vigorous shake as if shaking off water or an ear problem?",
+      "How long do episodes last, and is the dog normal between them?",
+      "Does the animal bring the toy to a person or look at them between pounces?"
+    ],
+    "urgent_signs": [
+      "episodes with unresponsiveness, drooling, collapse or loss of bladder control",
+      "a first episode in an older dog"
+    ],
+    "sources": [
+      {
+        "id": "vin_vestibular",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+        "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and treatment"
+      },
+      {
+        "id": "mspca_ihts",
+        "tier": "veterinary_hospital",
+        "citation": "MSPCA-Angell: Idiopathic head tremor syndrome.",
+        "url": "https://www.mspca.org/clinical/idiopathic-head-tremor-syndrome/",
+        "supports": "most dogs (up to 87 %) can be distracted out of an episode; the dog stays alert; the primary differential is focal seizure activity, which distraction does not stop and which may show autonomic signs"
+      },
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: batting, pouncing on or chasing a toy or object (0.0-17.5 s). Movement: the animal stays roughly in place while moving. Rhythmic bobbing, nodding or rotating of the head while awake (user report only) is usually discomfort, itch, pain or a neurological cause. No request is implied by it. Batting, pouncing on or chasing a toy or object (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.55,
+        "times_s": [
+          [
+            0.3,
+            1.5
+          ],
+          [
+            9.2,
+            9.3
+          ],
+          [
+            10.5,
+            15.0
+          ],
+          [
+            16.7,
+            17.3
+          ]
+        ]
+      },
+      {
+        "what": "a soft toy",
+        "from": "detector",
+        "score": 0.64,
+        "times_s": [
+          [
+            4.5,
+            4.7
+          ],
+          [
+            5.8,
+            6.0
+          ],
+          [
+            15.2,
+            17.3
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.87,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "playing_object",
+        "bout_s": [
+          0.0,
+          17.5
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

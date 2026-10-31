@@ -1,0 +1,294 @@
+{
+  "benchmark_item": {
+    "id": "g02",
+    "clip": "stock_mixkit_50686",
+    "species": "dog",
+    "scene": "At home.",
+    "question": "My border collie puts his paw in my hand whenever I hold it out. Does he want a treat?",
+    "question_origin": "authored_from_source_title",
+    "category": "gap",
+    "asked": [],
+    "asked_ok": [
+      "being_petted"
+    ],
+    "reference_present": [],
+    "reference_basis": "assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {},
+    "gap": "giving a paw (a trained or attention behaviour) is not in the vocabulary",
+    "frame_person": true
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "At home.",
+    "question": "My border collie puts his paw in my hand whenever I hold it out. Does he want a treat?",
+    "behaviors_seen": [
+      {
+        "behavior": "staring_snapping",
+        "description": "staring fixedly or snapping at the air as if catching flies",
+        "score": 0.3988,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            2.5,
+            4.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3988,
+          "share_of_frames_most_likely": 0.13
+        }
+      },
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.3354,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            3.0,
+            3.5
+          ],
+          [
+            6.5,
+            7.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3354,
+          "share_of_frames_most_likely": 0.087
+        }
+      },
+      {
+        "behavior": "self_grooming",
+        "description": "licking or cleaning its own fur, paws or face",
+        "score": 0.3342,
+        "threshold": 0.241763,
+        "bouts_s": [
+          [
+            7.0,
+            8.0
+          ],
+          [
+            11.0,
+            11.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3342,
+          "share_of_frames_most_likely": 0.13
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 75,
+      "seconds": 12.5,
+      "animal_found_fraction": 0.9333333333333333,
+      "available": true,
+      "mean_speed_body_per_s": 0.0876,
+      "path_body_lengths": 1.3480000495910645,
+      "net_displacement_body_lengths": 0.07199999690055847,
+      "stays_in_place": true,
+      "turned_rad": 0.003,
+      "abs_turned_rad": 3.087,
+      "turning_consistency": 0.001,
+      "repetition_strength": 0.009,
+      "repetition_period_s": 2.67,
+      "detector_dog_vote": 0.771
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "staring_snapping",
+        "basis": "recording",
+        "summary": "Staring fixedly, or snapping at the air as if catching flies.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "ss_insect",
+              "explanation": "snapping at a real insect or reacting to something actually in view",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ],
+          "medical": [
+            {
+              "id": "ss_seizure",
+              "explanation": "focal (impaired-awareness) seizures: fly-catching, air snapping, staring and lip licking with reduced responsiveness, which can be mistaken for a behavioural problem",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "frontiers2026_focal"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "ss_compulsive",
+              "explanation": "a compulsive behaviour, the main non-medical explanation weighed for such episodes",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "frontiers2026_focal",
+                "tiira2012"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "being_petted",
+        "basis": "recording",
+        "summary": "Being touched or stroked by a person. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "being_petted_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Does the dog respond to its name or a touch during an episode?",
+      "Is anything actually there (an insect, a shadow, a light)?",
+      "How long do episodes last, and do they look the same each time?"
+    ],
+    "urgent_signs": [
+      "episodes of unresponsiveness, drooling, collapse or loss of bladder control (possible seizures)"
+    ],
+    "sources": [
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      }
+    ],
+    "summary": "In the recording: staring fixedly or snapping at the air as if catching flies (2.5-4.0 s); being touched or stroked by a person (3.0-3.5 s, 6.5-7.0 s); licking or cleaning its own fur, paws or face (7.0-8.0 s, 11.0-11.5 s). Movement: the animal stays roughly in place while moving. Staring fixedly or snapping at the air as if catching flies (recording) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; discomfort, itch, pain or a neurological cause; an abnormal repetitive (compulsive) pattern. No request is implied by it. Being touched or stroked by a person (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.45,
+        "times_s": [
+          [
+            3.3,
+            3.5
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.97,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "staring_snapping",
+        "bout_s": [
+          2.5,
+          4.0
+        ],
+        "before": [],
+        "after": [
+          "being_petted (6.5-7.0 s)",
+          "self_grooming (7.0-8.0 s)"
+        ]
+      },
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          3.0,
+          3.5
+        ],
+        "before": [
+          "a person close to the animal (3.3-3.5 s)"
+        ],
+        "after": [
+          "self_grooming (7.0-8.0 s)"
+        ]
+      },
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          6.5,
+          7.0
+        ],
+        "before": [
+          "a person close to the animal (3.3-3.5 s)",
+          "staring_snapping (2.5-4.0 s)"
+        ],
+        "after": [
+          "self_grooming (11.0-11.5 s)",
+          "self_grooming (7.0-8.0 s)"
+        ]
+      },
+      {
+        "behavior": "self_grooming",
+        "bout_s": [
+          7.0,
+          8.0
+        ],
+        "before": [
+          "a person close to the animal (3.3-3.5 s)",
+          "being_petted (3.0-3.5 s)",
+          "being_petted (6.5-7.0 s)",
+          "staring_snapping (2.5-4.0 s)"
+        ],
+        "after": []
+      },
+      {
+        "behavior": "self_grooming",
+        "bout_s": [
+          11.0,
+          11.5
+        ],
+        "before": [
+          "being_petted (6.5-7.0 s)"
+        ],
+        "after": []
+      }
+    ]
+  }
+}

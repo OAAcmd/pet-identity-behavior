@@ -1,0 +1,188 @@
+{
+  "benchmark_item": {
+    "id": "t12",
+    "clip": "paper_catnip_ethogram_2022",
+    "species": "cat",
+    "scene": "On the floor with a catnip toy.",
+    "question": "When I give my cat catnip she bites it and then rubs her head on the floor. Is that normal?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "other",
+    "asked": [
+      "rolling_rubbing"
+    ],
+    "asked_ok": [
+      "playing_object",
+      "eating"
+    ],
+    "reference_present": [
+      "rolling_rubbing"
+    ],
+    "reference_basis": "expert (overlays) + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "play_or_normal"
+      ],
+      "text": "the catnip response of domestic cats",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "rolling_rubbing": false
+    },
+    "gap": null,
+    "frame_person": false
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "On the floor with a catnip toy.",
+    "question": "When I give my cat catnip she bites it and then rubs her head on the floor. Is that normal?",
+    "behaviors_seen": [
+      {
+        "behavior": "rolling_rubbing",
+        "description": "rolling on the back or rubbing the face or body on objects",
+        "score": 0.3588,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            4.5,
+            5.5
+          ],
+          [
+            10.5,
+            11.0
+          ],
+          [
+            13.0,
+            13.5
+          ],
+          [
+            17.0,
+            19.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3588,
+          "share_of_frames_most_likely": 0.23
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.5,
+      "available": true,
+      "mean_speed_body_per_s": 0.0357,
+      "path_body_lengths": 2.624000072479248,
+      "net_displacement_body_lengths": 0.5299999713897705,
+      "stays_in_place": false,
+      "turned_rad": 0.272,
+      "abs_turned_rad": 3.186,
+      "turning_consistency": 0.085,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.472
+    },
+    "user_reported": [
+      {
+        "behavior": "rolling_rubbing",
+        "status": "also seen in the recording",
+        "recording_score": 0.3588
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "rolling_rubbing",
+        "basis": "recording and user report",
+        "summary": "Rolling on the back or rubbing the face, chin or body on objects.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "rr_plants",
+              "explanation": "a response to catnip or other cat-attracting plants (silver vine, honeysuckle, valerian): rolling, rubbing, licking and chewing; most cats respond to at least one of these plants",
+              "context_match": [
+                "catnip",
+                "toy"
+              ],
+              "context_score": 1.9,
+              "sources": [
+                "bol2017"
+              ]
+            },
+            {
+              "id": "rr_marking",
+              "explanation": "ordinary scent marking or greeting by rubbing the face on objects or people",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Was a plant, a catnip toy or a new object nearby?",
+      "Does the cat also lick or chew the object?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "bol2017",
+        "tier": "peer_reviewed_study",
+        "citation": "Bol S et al. (2017) Responsiveness of cats to silver vine, Tatarian honeysuckle, valerian and catnip. BMC Vet Res 13:70.",
+        "url": "https://doi.org/10.1186/s12917-017-0987-6",
+        "supports": "nearly all of 100 domestic cats responded to at least one plant; one in three did not respond to catnip, almost 80 % responded to silver vine"
+      }
+    ],
+    "summary": "In the recording: rolling on the back or rubbing the face or body on objects (4.5-5.5 s, 10.5-11.0 s, 13.0-13.5 s, 17.0-19.0 s). Rolling on the back or rubbing the face or body on objects (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person in view",
+        "from": "detector",
+        "score": 0.91,
+        "times_s": [
+          [
+            39.3,
+            60.0
+          ]
+        ]
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "rolling_rubbing",
+        "bout_s": [
+          4.5,
+          5.5
+        ],
+        "before": [],
+        "after": []
+      },
+      {
+        "behavior": "rolling_rubbing",
+        "bout_s": [
+          10.5,
+          11.0
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

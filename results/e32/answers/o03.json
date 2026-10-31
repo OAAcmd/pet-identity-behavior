@@ -1,0 +1,138 @@
+{
+  "benchmark_item": {
+    "id": "o03",
+    "clip": "stock_mixkit_1478",
+    "species": "dog",
+    "scene": "Outside, kneeling next to him.",
+    "question": "My golden retriever leans into me and pants while I rub his face. Does he like it?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "being_petted"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "being_petted"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "being_petted": false
+    },
+    "gap": null,
+    "frame_person": true,
+    "frame_place": [
+      "park or street",
+      "garden or yard"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "Outside, kneeling next to him.",
+    "question": "My golden retriever leans into me and pants while I rub his face. Does he like it?",
+    "behaviors_seen": [
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.8535,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            1.5,
+            15.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8535,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 92,
+      "seconds": 15.333333333333334,
+      "animal_found_fraction": 0.9239130434782609,
+      "available": true,
+      "mean_speed_body_per_s": 0.0597,
+      "path_body_lengths": 1.899999976158142,
+      "net_displacement_body_lengths": 0.0949999988079071,
+      "stays_in_place": false,
+      "turned_rad": -0.083,
+      "abs_turned_rad": 1.186,
+      "turning_consistency": 0.07,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.694
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "being_petted",
+        "basis": "recording",
+        "summary": "Being touched or stroked by a person. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "being_petted_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "In the recording: being touched or stroked by a person (1.5-15.5 s). Being touched or stroked by a person (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.53,
+        "times_s": [
+          [
+            1.2,
+            15.3
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.84,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          1.5,
+          15.5
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

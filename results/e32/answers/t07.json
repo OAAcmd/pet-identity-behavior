@@ -1,0 +1,367 @@
+{
+  "benchmark_item": {
+    "id": "t07",
+    "clip": "paper_epilepsy_survey_typeD_2025",
+    "species": "dog",
+    "scene": "At home in the living room.",
+    "question": "My dog sometimes stands completely still in the living room, staring at nothing, and doesn't react when I call him. Is he just thinking?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "medical_confuser",
+    "asked": [
+      "staring_snapping"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "staring_snapping"
+    ],
+    "reference_basis": "expert + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": {
+      "kinds": [
+        "medical"
+      ],
+      "text": "episode of impaired awareness (seizure category D)",
+      "authority": "expert"
+    },
+    "request_expected": {
+      "staring_snapping": false
+    },
+    "gap": null,
+    "frame_person": false,
+    "frame_place": [
+      "living room"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "At home in the living room.",
+    "question": "My dog sometimes stands completely still in the living room, staring at nothing, and doesn't react when I call him. Is he just thinking?",
+    "behaviors_seen": [
+      {
+        "behavior": "head_tremor",
+        "description": "rhythmic bobbing, nodding or rotating of the head while awake",
+        "score": 0.6606,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            5.0,
+            17.0
+          ],
+          [
+            23.0,
+            24.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.6606,
+          "share_of_frames_most_likely": 0.667
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 150,
+      "seconds": 25.0,
+      "animal_found_fraction": 0.7266666666666667,
+      "available": true,
+      "mean_speed_body_per_s": 0.0107,
+      "path_body_lengths": 2.002000093460083,
+      "net_displacement_body_lengths": 0.5479999780654907,
+      "stays_in_place": false,
+      "turned_rad": 0.692,
+      "abs_turned_rad": 1.651,
+      "turning_consistency": 0.419,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.55
+    },
+    "user_reported": [
+      {
+        "behavior": "staring_snapping",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.2991
+      },
+      {
+        "behavior": "vocalizing",
+        "status": "cannot be checked in this recording (no sound)",
+        "recording_score": null
+      },
+      {
+        "behavior": "resting",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.0135
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "staring_snapping",
+        "basis": "user report only",
+        "summary": "Staring fixedly, or snapping at the air as if catching flies.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ss_seizure",
+              "explanation": "focal (impaired-awareness) seizures: fly-catching, air snapping, staring and lip licking with reduced responsiveness, which can be mistaken for a behavioural problem",
+              "context_match": [
+                "staring",
+                "nothing"
+              ],
+              "context_score": 1.2,
+              "sources": [
+                "frontiers2026_focal"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "ss_insect",
+              "explanation": "snapping at a real insect or reacting to something actually in view",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "ss_compulsive",
+              "explanation": "a compulsive behaviour, the main non-medical explanation weighed for such episodes",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "frontiers2026_focal",
+                "tiira2012"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "vocalizing",
+        "basis": "user report only",
+        "summary": "Barking, whining or howling.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "arousal_or_stress": [
+            {
+              "id": "vd_disturbance",
+              "explanation": "alerting to a disturbance (a stranger, the doorbell)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "vd_isolation",
+              "explanation": "seeking contact when separated or isolated",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "vd_play",
+              "explanation": "play barking during games",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "yin2004"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "arousal_or_stress",
+          "request",
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "resting",
+        "basis": "user report only",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "head_tremor",
+        "basis": "recording",
+        "summary": "Rhythmic bobbing, nodding or rotating of the head while the dog is awake.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ht_ear",
+              "explanation": "shaking the head to the side because of ear discomfort is a different movement (a vigorous shake, often with ear scratching)",
+              "context_match": [],
+              "context_score": 0.5,
+              "sources": [
+                "vin_vestibular"
+              ],
+              "recording_match": [
+                "ear"
+              ]
+            },
+            {
+              "id": "ht_idiopathic",
+              "explanation": "idiopathic head tremor: episodes of head bobbing in an alert dog that usually stop when the dog is distracted (called, offered food or a toy); considered benign but diagnosed after other causes are excluded",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            },
+            {
+              "id": "ht_focal_seizure",
+              "explanation": "a focal seizure, the main alternative: it is not stopped by distraction and may come with drooling, unresponsiveness or other signs",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "The recording is silent, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Does the dog respond to its name or a touch during an episode?",
+      "Is anything actually there (an insect, a shadow, a light)?",
+      "How long do episodes last, and do they look the same each time?",
+      "What happens just before the barking (a sound outside, being left, a game)?",
+      "Does the dog stay alert, and does the movement stop when you call it or offer a treat?",
+      "Is it a small rhythmic bobbing (yes-yes, no-no) or a vigorous shake as if shaking off water or an ear problem?",
+      "How long do episodes last, and is the dog normal between them?"
+    ],
+    "urgent_signs": [
+      "episodes of unresponsiveness, drooling, collapse or loss of bladder control (possible seizures)",
+      "episodes with unresponsiveness, drooling, collapse or loss of bladder control",
+      "a first episode in an older dog"
+    ],
+    "sources": [
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      },
+      {
+        "id": "yin2004",
+        "tier": "peer_reviewed_study",
+        "citation": "Yin S, McCowan B (2004) Barking in domestic dogs: context specificity and individual identification. Anim Behav 68:343-355.",
+        "url": "https://doi.org/10.1016/j.anbehav.2003.07.016",
+        "supports": "barks differ acoustically between disturbance, isolation and play contexts"
+      },
+      {
+        "id": "vin_vestibular",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+        "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and treatment"
+      },
+      {
+        "id": "mspca_ihts",
+        "tier": "veterinary_hospital",
+        "citation": "MSPCA-Angell: Idiopathic head tremor syndrome.",
+        "url": "https://www.mspca.org/clinical/idiopathic-head-tremor-syndrome/",
+        "supports": "most dogs (up to 87 %) can be distracted out of an episode; the dog stays alert; the primary differential is focal seizure activity, which distraction does not stop and which may show autonomic signs"
+      }
+    ],
+    "summary": "In the recording: rhythmic bobbing, nodding or rotating of the head while awake (5.0-17.0 s, 23.0-24.0 s). Staring fixedly or snapping at the air as if catching flies (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; an abnormal repetitive (compulsive) pattern. No request is implied by it. Barking, whining, howling or growling (user report only) has several possible explanations, in order of fit to your description: arousal, frustration or stress; a request or intention directed at a person; ordinary play or maintenance behaviour. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.53,
+        "times_s": [
+          [
+            24.2,
+            24.3
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.69,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          5.0,
+          17.0
+        ],
+        "before": [],
+        "after": []
+      },
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          23.0,
+          24.0
+        ],
+        "before": [],
+        "after": [
+          "a person close to the animal (24.2-24.3 s)"
+        ]
+      }
+    ]
+  }
+}

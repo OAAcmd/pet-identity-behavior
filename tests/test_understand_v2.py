@@ -147,3 +147,26 @@ def test_e32_outcome_and_decision_rules():
     assert d["v2_stays_default"] and not d["tail_chasing_recognized_from_recordings_v2"] and d["context_person_agreement_at_least_0.8"]
     res["paired"]["asked_present_recognized"]["v2"] = 8  # two fewer than v1
     assert not E32.decide(res)["v2_stays_default"]
+
+
+def test_default_is_the_frozen_e31_system():
+    """E32's pre-registered decision keeps v1 as the default; its code must stay exactly as tested (understand/e31)."""
+    import hashlib
+    from pathlib import Path
+
+    from petperception.cli import build_parser
+    from petperception.understand import e31
+    from petperception.understand.e31 import explain as X1
+    from petperception.understand.e31 import knowledge as K1
+    from petperception.understand.e31 import vocab as V1
+    from petperception.understand.run import DEFAULT_VERSION
+
+    assert DEFAULT_VERSION == 1 and build_parser().parse_args(["explain", "x.mp4", "--species", "cat"]).system_version == 1
+    assert K1.KNOWLEDGE_VERSION == "behavior-kb-v1" and X1.ANSWER_VERSION == "behavior-answer-v1" and len(V1.BEHAVIORS) == 17
+    pinned = {"explain.py": "92efe868debdbd9b62465b299a201e9db514475954a336790b05c605f8d9a5c6",
+              "knowledge.py": "b65136ea4a70db846aea320e4073eab2c0c3fd4e3a2fa0cdc5294b3b22a86bc3",
+              "question.py": "33dccbf0bc08b6ba686e696d341c9bd23b9da76c02004b62d154576ac9e62a74",
+              "recognize.py": "af6fa7e4f663853d76e41b05996cac69297cc059c3ad0c46cfe35b203054110b",
+              "vocab.py": "e7ea371b7f5c2c1e00147b16d2481036e9cc362ec52c171fdbcd7c1286668159"}
+    root = Path(e31.__file__).parent
+    assert {f: hashlib.sha256((root / f).read_bytes()).hexdigest() for f in pinned} == pinned

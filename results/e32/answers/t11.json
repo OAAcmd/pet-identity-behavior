@@ -1,0 +1,440 @@
+{
+  "benchmark_item": {
+    "id": "t11",
+    "clip": "paper_eating_seizure_2020",
+    "species": "dog",
+    "scene": "At the vet clinic with his food bowl.",
+    "question": "A few bites into his meal my terrier stops eating, hunches over and starts trembling. Did he eat too fast?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "gap",
+    "asked": [],
+    "asked_ok": [
+      "eating"
+    ],
+    "reference_present": [
+      "eating"
+    ],
+    "reference_basis": "expert + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {},
+    "gap": "seizures triggered by eating are not in the knowledge base",
+    "frame_person": true,
+    "frame_place": [
+      "veterinary clinic"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "At the vet clinic with his food bowl.",
+    "question": "A few bites into his meal my terrier stops eating, hunches over and starts trembling. Did he eat too fast?",
+    "behaviors_seen": [
+      {
+        "behavior": "eating",
+        "description": "eating food",
+        "score": 0.5698,
+        "threshold": 0.044453,
+        "bouts_s": [
+          [
+            1.0,
+            8.0
+          ],
+          [
+            12.5,
+            14.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.5698,
+          "share_of_frames_most_likely": 0.203
+        }
+      },
+      {
+        "behavior": "head_tremor",
+        "description": "rhythmic bobbing, nodding or rotating of the head while awake",
+        "score": 0.5159,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            22.5,
+            23.0
+          ],
+          [
+            27.5,
+            28.0
+          ],
+          [
+            31.0,
+            31.5
+          ],
+          [
+            34.0,
+            36.5
+          ],
+          [
+            39.5,
+            49.5
+          ],
+          [
+            52.5,
+            58.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.5159,
+          "share_of_frames_most_likely": 0.432
+        }
+      },
+      {
+        "behavior": "self_grooming",
+        "description": "licking or cleaning its own fur, paws or face",
+        "score": 0.3364,
+        "threshold": 0.241763,
+        "bouts_s": [
+          [
+            38.5,
+            39.0
+          ],
+          [
+            46.0,
+            48.0
+          ],
+          [
+            50.0,
+            52.5
+          ],
+          [
+            56.0,
+            56.5
+          ],
+          [
+            59.5,
+            60.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3364,
+          "share_of_frames_most_likely": 0.127
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 360,
+      "seconds": 60.0,
+      "animal_found_fraction": 0.9833333333333333,
+      "available": true,
+      "mean_speed_body_per_s": 0.1054,
+      "path_body_lengths": 10.491999626159668,
+      "net_displacement_body_lengths": 0.03099999949336052,
+      "stays_in_place": true,
+      "turned_rad": -3.056,
+      "abs_turned_rad": 15.485,
+      "turning_consistency": 0.197,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.684
+    },
+    "user_reported": [
+      {
+        "behavior": "eating",
+        "status": "also seen in the recording",
+        "recording_score": 0.5698
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "eating",
+        "basis": "recording and user report",
+        "summary": "Eating. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "eating_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "head_tremor",
+        "basis": "recording",
+        "summary": "Rhythmic bobbing, nodding or rotating of the head while the dog is awake.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ht_ear",
+              "explanation": "shaking the head to the side because of ear discomfort is a different movement (a vigorous shake, often with ear scratching)",
+              "context_match": [],
+              "context_score": 0.5,
+              "sources": [
+                "vin_vestibular"
+              ],
+              "recording_match": [
+                "ear"
+              ]
+            },
+            {
+              "id": "ht_idiopathic",
+              "explanation": "idiopathic head tremor: episodes of head bobbing in an alert dog that usually stop when the dog is distracted (called, offered food or a toy); considered benign but diagnosed after other causes are excluded",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            },
+            {
+              "id": "ht_focal_seizure",
+              "explanation": "a focal seizure, the main alternative: it is not stopped by distraction and may come with drooling, unresponsiveness or other signs",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "self_grooming",
+        "basis": "recording",
+        "summary": "Licking or cleaning its own coat, paws or face.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "sg_normal",
+              "explanation": "ordinary coat care; cats spend a substantial part of their waking time grooming",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vin_pa"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "sg_displacement",
+              "explanation": "displacement grooming in conflict, anxiety or frustration (out of context, after a startle or a dispute)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "cliniciansbrief_pa",
+                "vin_pa"
+              ]
+            }
+          ],
+          "medical": [
+            {
+              "id": "sg_itch",
+              "explanation": "itch: when grooming is excessive or focused (hair loss, sores), a medical cause such as allergy or parasites is much more common than a purely behavioural one",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "waisglass2006",
+                "vin_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "The recording is silent, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Does the dog stay alert, and does the movement stop when you call it or offer a treat?",
+      "Is it a small rhythmic bobbing (yes-yes, no-no) or a vigorous shake as if shaking off water or an ear problem?",
+      "How long do episodes last, and is the dog normal between them?",
+      "Is there hair loss, short broken hairs or sores where it licks?",
+      "Has the amount of grooming changed recently?",
+      "Does grooming follow stressful events, or happen out of context?"
+    ],
+    "urgent_signs": [
+      "episodes with unresponsiveness, drooling, collapse or loss of bladder control",
+      "a first episode in an older dog",
+      "open sores or rapidly spreading hair loss",
+      "licking that cannot be interrupted"
+    ],
+    "sources": [
+      {
+        "id": "vin_vestibular",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+        "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and treatment"
+      },
+      {
+        "id": "mspca_ihts",
+        "tier": "veterinary_hospital",
+        "citation": "MSPCA-Angell: Idiopathic head tremor syndrome.",
+        "url": "https://www.mspca.org/clinical/idiopathic-head-tremor-syndrome/",
+        "supports": "most dogs (up to 87 %) can be distracted out of an episode; the dog stays alert; the primary differential is focal seizure activity, which distraction does not stop and which may show autonomic signs"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      }
+    ],
+    "summary": "In the recording: eating food (1.0-8.0 s, 12.5-14.5 s); rhythmic bobbing, nodding or rotating of the head while awake (22.5-23.0 s, 27.5-28.0 s, 31.0-31.5 s, 34.0-36.5 s and 2 more); licking or cleaning its own fur, paws or face (38.5-39.0 s, 46.0-48.0 s, 50.0-52.5 s, 56.0-56.5 s and 1 more). Movement: the animal stays roughly in place while moving. Eating food (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. Rhythmic bobbing, nodding or rotating of the head while awake (recording) is usually discomfort, itch, pain or a neurological cause. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.76,
+        "times_s": [
+          [
+            0.2,
+            3.5
+          ],
+          [
+            8.2,
+            13.7
+          ],
+          [
+            15.7,
+            17.0
+          ],
+          [
+            19.2,
+            19.8
+          ],
+          [
+            21.5,
+            22.5
+          ],
+          [
+            40.5,
+            59.5
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 1.0,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "eating",
+        "bout_s": [
+          1.0,
+          8.0
+        ],
+        "before": [],
+        "after": [
+          "a person close to the animal (8.2-13.7 s)"
+        ]
+      },
+      {
+        "behavior": "eating",
+        "bout_s": [
+          12.5,
+          14.5
+        ],
+        "before": [],
+        "after": [
+          "a person close to the animal (15.7-17.0 s)",
+          "a person close to the animal (19.2-19.8 s)"
+        ]
+      },
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          22.5,
+          23.0
+        ],
+        "before": [
+          "a person close to the animal (19.2-19.8 s)",
+          "a person close to the animal (21.5-22.5 s)"
+        ],
+        "after": []
+      },
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          27.5,
+          28.0
+        ],
+        "before": [
+          "a person close to the animal (21.5-22.5 s)"
+        ],
+        "after": []
+      },
+      {
+        "behavior": "self_grooming",
+        "bout_s": [
+          38.5,
+          39.0
+        ],
+        "before": [
+          "head_tremor (34.0-36.5 s)"
+        ],
+        "after": [
+          "a person close to the animal (40.5-59.5 s)",
+          "head_tremor (39.5-49.5 s)"
+        ]
+      },
+      {
+        "behavior": "self_grooming",
+        "bout_s": [
+          46.0,
+          48.0
+        ],
+        "before": [],
+        "after": [
+          "head_tremor (52.5-58.5 s)"
+        ]
+      }
+    ]
+  }
+}

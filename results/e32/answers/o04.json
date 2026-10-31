@@ -1,0 +1,144 @@
+{
+  "benchmark_item": {
+    "id": "o04",
+    "clip": "stock_mixkit_45842",
+    "species": "dog",
+    "scene": "In the garden.",
+    "question": "My pug stands still with his tongue out while I stroke his head. Is he asking for more?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "being_petted"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "being_petted"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "being_petted": false
+    },
+    "gap": null,
+    "frame_person": true,
+    "frame_place": [
+      "garden or yard",
+      "park or street"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "In the garden.",
+    "question": "My pug stands still with his tongue out while I stroke his head. Is he asking for more?",
+    "behaviors_seen": [
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.8189,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            1.0,
+            10.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.8189,
+          "share_of_frames_most_likely": 0.905
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 61,
+      "seconds": 10.166666666666666,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.059,
+      "path_body_lengths": 1.6970000267028809,
+      "net_displacement_body_lengths": 0.1289999932050705,
+      "stays_in_place": false,
+      "turned_rad": -0.05,
+      "abs_turned_rad": 2.273,
+      "turning_consistency": 0.022,
+      "repetition_strength": 0.012,
+      "repetition_period_s": 2.83,
+      "detector_dog_vote": 0.967
+    },
+    "user_reported": [
+      {
+        "behavior": "being_petted",
+        "status": "also seen in the recording",
+        "recording_score": 0.8189
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "being_petted",
+        "basis": "recording and user report",
+        "summary": "Being touched or stroked by a person. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "being_petted_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "In the recording: being touched or stroked by a person (1.0-10.5 s). Being touched or stroked by a person (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.58,
+        "times_s": [
+          [
+            0.7,
+            10.2
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.8,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          1.0,
+          10.5
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

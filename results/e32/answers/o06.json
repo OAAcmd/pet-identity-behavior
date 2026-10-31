@@ -1,0 +1,284 @@
+{
+  "benchmark_item": {
+    "id": "o06",
+    "clip": "stock_mixkit_38824",
+    "species": "cat",
+    "scene": "On my lap on the sofa.",
+    "question": "My cat lets me stroke her on my lap and then suddenly turns over and grabs at my hand. Why?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "being_petted"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "being_petted"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "being_petted": true
+    },
+    "gap": null,
+    "frame_person": true
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "On my lap on the sofa.",
+    "question": "My cat lets me stroke her on my lap and then suddenly turns over and grabs at my hand. Why?",
+    "behaviors_seen": [
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.7822,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            8.0
+          ],
+          [
+            11.5,
+            12.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.7822,
+          "share_of_frames_most_likely": 0.488
+        }
+      },
+      {
+        "behavior": "resting",
+        "description": "lying down, resting or sleeping",
+        "score": 0.429,
+        "threshold": 0.238901,
+        "bouts_s": [
+          [
+            8.5,
+            11.0
+          ],
+          [
+            15.0,
+            15.5
+          ],
+          [
+            20.0,
+            20.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.429,
+          "share_of_frames_most_likely": 0.293
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 123,
+      "seconds": 20.5,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0429,
+      "path_body_lengths": 3.0139999389648438,
+      "net_displacement_body_lengths": 0.14100000262260437,
+      "stays_in_place": false,
+      "turned_rad": -0.041,
+      "abs_turned_rad": 5.217,
+      "turning_consistency": 0.008,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.024
+    },
+    "user_reported": [
+      {
+        "behavior": "being_petted",
+        "status": "also seen in the recording",
+        "recording_score": 0.7822
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "being_petted",
+        "basis": "recording and user report",
+        "summary": "Being touched or stroked by a person.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "bp_pain",
+              "explanation": "pain at the place touched, when the cat reacts at one spot (a cat in pain may act aggressively to avoid touch)",
+              "context_match": [
+                "suddenly"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "cornell_aggression"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "bp_accepts",
+              "explanation": "the cat accepts or seeks the contact; many cats like being stroked on the head and neck",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ],
+          "request": [
+            {
+              "id": "bp_overstim",
+              "explanation": "a wish for the contact to stop when signs such as tail lashing, skin twitching, ears back or a direct stare appear (petting-induced aggression may follow)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "cornell_aggression",
+                "ahs_petting",
+                "merck_cat_behavior"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "resting",
+        "basis": "recording",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Where is the cat touched when it reacts, and what does its tail and ears do just before?",
+      "Does it seek contact again afterwards?"
+    ],
+    "urgent_signs": [
+      "sudden new sensitivity to touch at one place (possible pain)"
+    ],
+    "sources": [
+      {
+        "id": "cornell_aggression",
+        "tier": "veterinary_school",
+        "citation": "Cornell Feline Health Center: Feline behavior problems: aggression.",
+        "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression",
+        "supports": "petting-induced aggression (over-stimulation, the cat controlling when petting ends) is often preceded by dilated pupils, tail lashing and ears moved back; a relaxed cat holds its tail up with no flicking or twitching; seeing an outdoor cat through a window can trigger redirected aggression; cats in pain may act aggressively to avoid touch"
+      },
+      {
+        "id": "ahs_petting",
+        "tier": "animal_welfare_organization",
+        "citation": "Animal Humane Society: Petting-induced and play aggression in cats.",
+        "url": "https://www.animalhumanesociety.org/resource/petting-induced-and-play-aggression-cats",
+        "supports": "tail lashing or thumping, shifting body position, skin twitching and direct stares indicate the cat has had enough petting"
+      },
+      {
+        "id": "merck_cat_behavior",
+        "tier": "clinical_review",
+        "citation": "Kim SA (2025) Behavior problems of cats. Merck Veterinary Manual.",
+        "url": "https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats",
+        "supports": "petting-induced aggression from low tolerance of contact or over-stimulation; arousal can be redirected; some cats use threatening displays to remove a fear-evoking stimulus; medical problems must be ruled out before a problem is called behavioural"
+      }
+    ],
+    "summary": "In the recording: being touched or stroked by a person (0.0-8.0 s, 11.5-12.0 s); lying down, resting or sleeping (8.5-11.0 s, 15.0-15.5 s, 20.0-20.5 s). Being touched or stroked by a person (recording and user report) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; a request or intention directed at a person. Lying down, resting or sleeping (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.69,
+        "times_s": [
+          [
+            0.0,
+            20.5
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.73,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          0.0,
+          8.0
+        ],
+        "before": [],
+        "after": [
+          "resting (8.5-11.0 s)"
+        ]
+      },
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          11.5,
+          12.0
+        ],
+        "before": [
+          "resting (8.5-11.0 s)"
+        ],
+        "after": [
+          "resting (15.0-15.5 s)"
+        ]
+      },
+      {
+        "behavior": "resting",
+        "bout_s": [
+          8.5,
+          11.0
+        ],
+        "before": [
+          "being_petted (0.0-8.0 s)"
+        ],
+        "after": [
+          "being_petted (11.5-12.0 s)"
+        ]
+      },
+      {
+        "behavior": "resting",
+        "bout_s": [
+          15.0,
+          15.5
+        ],
+        "before": [
+          "being_petted (11.5-12.0 s)"
+        ],
+        "after": []
+      }
+    ]
+  }
+}

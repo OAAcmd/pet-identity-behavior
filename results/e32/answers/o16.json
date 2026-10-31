@@ -1,0 +1,111 @@
+{
+  "benchmark_item": {
+    "id": "o16",
+    "clip": "stock_mixkit_16619",
+    "species": "dog",
+    "scene": "In his bed at home.",
+    "question": "My puppy lies in his bed and watches me. Does he want to come out?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "resting"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "resting"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "resting": false
+    },
+    "gap": null,
+    "frame_person": false
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "In his bed at home.",
+    "question": "My puppy lies in his bed and watches me. Does he want to come out?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 64,
+      "seconds": 10.666666666666666,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.0272,
+      "path_body_lengths": 0.8899999856948853,
+      "net_displacement_body_lengths": 0.2879999876022339,
+      "stays_in_place": false,
+      "turned_rad": 0.014,
+      "abs_turned_rad": 0.198,
+      "turning_consistency": 0.07,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.656
+    },
+    "user_reported": [
+      {
+        "behavior": "resting",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.1538
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "resting",
+        "basis": "user report only",
+        "summary": "Lying down, resting or sleeping. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "resting_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Lying down, resting or sleeping (user report only) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.51,
+        "times_s": [
+          [
+            0.0,
+            1.2
+          ],
+          [
+            2.5,
+            4.8
+          ]
+        ]
+      }
+    ],
+    "vocal_types": [],
+    "events": []
+  }
+}

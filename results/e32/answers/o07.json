@@ -1,0 +1,315 @@
+{
+  "benchmark_item": {
+    "id": "o07",
+    "clip": "stock_mixkit_42736",
+    "species": "dog",
+    "scene": "On the lawn.",
+    "question": "My dog rolls onto his back on the lawn so I can rub his belly. Is he asking me to?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "being_petted"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "being_petted"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "being_petted": false
+    },
+    "gap": null,
+    "frame_person": true,
+    "frame_place": [
+      "garden or yard",
+      "park or street"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "On the lawn.",
+    "question": "My dog rolls onto his back on the lawn so I can rub his belly. Is he asking me to?",
+    "behaviors_seen": [
+      {
+        "behavior": "being_petted",
+        "description": "being touched or stroked by a person",
+        "score": 0.6569,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            0.0,
+            8.5
+          ],
+          [
+            11.0,
+            13.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.6569,
+          "share_of_frames_most_likely": 0.538
+        }
+      },
+      {
+        "behavior": "self_biting",
+        "description": "biting, sucking or chewing at its own flank, leg or body",
+        "score": 0.4373,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            3.5,
+            7.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.4373,
+          "share_of_frames_most_likely": 0.231
+        }
+      },
+      {
+        "behavior": "collapse",
+        "description": "suddenly going limp, falling over or collapsing",
+        "score": 0.3571,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            2.0,
+            2.5
+          ],
+          [
+            10.5,
+            12.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.3571,
+          "share_of_frames_most_likely": 0.192
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 76,
+      "seconds": 12.666666666666666,
+      "animal_found_fraction": 0.9605263157894737,
+      "available": true,
+      "mean_speed_body_per_s": 0.0683,
+      "path_body_lengths": 4.425000190734863,
+      "net_displacement_body_lengths": 0.12300000339746475,
+      "stays_in_place": false,
+      "turned_rad": -1.872,
+      "abs_turned_rad": 2.574,
+      "turning_consistency": 0.727,
+      "repetition_strength": 0.033,
+      "repetition_period_s": 1.33,
+      "detector_dog_vote": 0.411
+    },
+    "user_reported": [],
+    "explained_behaviors": [
+      {
+        "behavior": "being_petted",
+        "basis": "recording",
+        "summary": "Being touched or stroked by a person. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "being_petted_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "self_biting",
+        "basis": "recording",
+        "summary": "Biting, sucking or chewing at its own flank, leg or body.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "sb_neuropathic",
+              "explanation": "pain, including neuropathic pain after an injury or spinal surgery (in the published Dachshund case biting and licking at the flank followed a hemilaminectomy)",
+              "context_match": [
+                "back"
+              ],
+              "context_score": 0.5,
+              "sources": [
+                "frontiers2023_dachshund"
+              ]
+            },
+            {
+              "id": "sb_itch",
+              "explanation": "itch or skin disease at the place it bites (parasites, allergy)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vin_pa",
+                "waisglass2006"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "sb_behavioural",
+              "explanation": "a behavioural cause (a compulsive or attention-related pattern), the alternative the published case weighed against pain",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "frontiers2023_dachshund",
+                "cliniciansbrief_pa"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "compulsive"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "The detector's species vote disagrees with the species you gave (dog); your answer is used, and the detector only locates the animal.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Did it start after an injury, surgery or a change at home?",
+      "Is there hair loss, redness or a wound where it bites?",
+      "Does it stop when the animal is distracted, and does it happen when nobody is watching?"
+    ],
+    "urgent_signs": [
+      "open wounds, bleeding or the animal cannot be distracted from biting itself",
+      "biting at the body after spinal surgery or with weakness of the legs"
+    ],
+    "sources": [
+      {
+        "id": "frontiers2023_dachshund",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Case report: Neuropathic pain versus undesirable behavior in a Dachshund after hemilaminectomy. Front Vet Sci (2023).",
+        "url": "https://doi.org/10.3389/fvets.2023.1223800",
+        "supports": "barking and biting / licking / sucking at the flank after spinal surgery; neuropathic pain was a differential for a behaviour seen only at home"
+      },
+      {
+        "id": "vin_pa",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Psychogenic alopecia.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&catId=254060&id=11924460",
+        "supports": "itch is the most common sign of skin disease and leads to scratching, licking and biting; behavioural causes link to stress, frustration or conflict; diagnosis of exclusion"
+      },
+      {
+        "id": "waisglass2006",
+        "tier": "peer_reviewed_study",
+        "citation": "Waisglass SE et al. (2006) Underlying medical conditions in cats with presumptive psychogenic alopecia. J Am Vet Med Assoc 228(11):1705-1709.",
+        "url": "https://avmajournals.avma.org/view/journals/javma/228/11/javma.228.11.1705.xml",
+        "supports": "of 21 overgrooming cats presumed psychogenic, 16 had a medical cause of itch, 3 both, 2 a purely behavioural cause"
+      },
+      {
+        "id": "cliniciansbrief_pa",
+        "tier": "clinical_review",
+        "citation": "Moffat K. Psychogenic alopecia in cats. Clinician's Brief (2012).",
+        "url": "https://www.cliniciansbrief.com/article/psychogenic-alopecia-cats",
+        "supports": "grooming is a common displacement behaviour in conflict, anxiety or frustration; rewarding it with attention should be avoided"
+      }
+    ],
+    "summary": "In the recording: being touched or stroked by a person (0.0-8.5 s, 11.0-13.0 s); biting, sucking or chewing at its own flank, leg or body (3.5-7.0 s); suddenly going limp, falling over or collapsing (2.0-2.5 s, 10.5-12.5 s). Being touched or stroked by a person (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. Biting, sucking or chewing at its own flank, leg or body (recording) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; an abnormal repetitive (compulsive) pattern. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.8,
+        "times_s": [
+          [
+            0.0,
+            12.7
+          ]
+        ]
+      },
+      {
+        "what": "place: garden or yard",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.9,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          0.0,
+          8.5
+        ],
+        "before": [],
+        "after": [
+          "collapse (10.5-12.5 s)"
+        ]
+      },
+      {
+        "behavior": "being_petted",
+        "bout_s": [
+          11.0,
+          13.0
+        ],
+        "before": [
+          "self_biting (3.5-7.0 s)"
+        ],
+        "after": []
+      },
+      {
+        "behavior": "self_biting",
+        "bout_s": [
+          3.5,
+          7.0
+        ],
+        "before": [
+          "collapse (2.0-2.5 s)"
+        ],
+        "after": [
+          "being_petted (11.0-13.0 s)",
+          "collapse (10.5-12.5 s)"
+        ]
+      },
+      {
+        "behavior": "collapse",
+        "bout_s": [
+          2.0,
+          2.5
+        ],
+        "before": [],
+        "after": [
+          "self_biting (3.5-7.0 s)"
+        ]
+      },
+      {
+        "behavior": "collapse",
+        "bout_s": [
+          10.5,
+          12.5
+        ],
+        "before": [
+          "being_petted (0.0-8.5 s)",
+          "self_biting (3.5-7.0 s)"
+        ],
+        "after": []
+      }
+    ]
+  }
+}

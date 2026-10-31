@@ -1,0 +1,87 @@
+{
+  "benchmark_item": {
+    "id": "o20",
+    "clip": "stock_mixkit_45843",
+    "species": "dog",
+    "scene": "In the park.",
+    "question": "My pug runs across the park toward me. Is he happy?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "locomotion"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "locomotion"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "locomotion": false
+    },
+    "gap": null,
+    "frame_place": [
+      "park or street",
+      "garden or yard"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "In the park.",
+    "question": "My pug runs across the park toward me. Is he happy?",
+    "behaviors_seen": [],
+    "temporal_pattern": {
+      "frames": 31,
+      "seconds": 5.166666666666667,
+      "animal_found_fraction": 0.8709677419354839,
+      "available": true,
+      "mean_speed_body_per_s": 0.2827,
+      "path_body_lengths": 1.1139999628067017,
+      "net_displacement_body_lengths": 0.800000011920929,
+      "stays_in_place": true,
+      "turned_rad": 0.475,
+      "abs_turned_rad": 0.968,
+      "turning_consistency": 0.49,
+      "repetition_strength": 0.057,
+      "repetition_period_s": 1.5,
+      "detector_dog_vote": 0.778
+    },
+    "user_reported": [],
+    "explained_behaviors": [],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "No specific behaviour was recognized with confidence in the recording. Movement: the animal stays roughly in place while moving. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person in view",
+        "from": "detector",
+        "score": 0.73,
+        "times_s": [
+          [
+            0.0,
+            5.0
+          ]
+        ]
+      },
+      {
+        "what": "place: garden or yard",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.53,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": []
+  }
+}

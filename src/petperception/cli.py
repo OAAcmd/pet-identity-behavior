@@ -420,7 +420,7 @@ def cmd_explain(args: argparse.Namespace) -> int:
     from .understand.explain import render_markdown
     from .understand.run import Explainer
 
-    ans = Explainer.load(args.threads, args.detector).explain(Path(args.media), args.species, args.scene or "", args.question or "").to_dict()
+    ans = Explainer.load(args.threads, args.detector, version=args.system_version).explain(Path(args.media), args.species, args.scene or "", args.question or "").to_dict()
     js = json.dumps(ans, indent=2)
     if args.out:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -883,6 +883,8 @@ def build_parser() -> argparse.ArgumentParser:
     xp.add_argument("--question", help="your question, e.g. 'my cat keeps turning in circles while biting its tail - why?'")
     xp.add_argument("--detector", help="alternative detector .tflite (default: the configured phone detector)")
     xp.add_argument("--threads", type=int, default=2)
+    xp.add_argument("--system-version", type=int, choices=[1, 2], default=1,
+                    help="1 (default): E31 system; 2: E32 system with recording context and the turning-in-place model (results/e32)")
     xp.add_argument("--out", help="write the JSON answer here")
     xp.add_argument("--markdown", help="write a readable answer here")
     xp.set_defaults(func=cmd_explain)

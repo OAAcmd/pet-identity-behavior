@@ -1,0 +1,390 @@
+{
+  "benchmark_item": {
+    "id": "o22",
+    "clip": "stock_mixkit_6975",
+    "species": "cat",
+    "scene": "Under the couch, with a feather toy.",
+    "question": "My kitten reaches out from under the couch to grab the feather toy. Is she playing or scared?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "playing_object"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "playing_object"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "playing_object": true
+    },
+    "gap": null,
+    "frame_person": false,
+    "frame_place": [
+      "living room"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "Under the couch, with a feather toy.",
+    "question": "My kitten reaches out from under the couch to grab the feather toy. Is she playing or scared?",
+    "behaviors_seen": [
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.9811,
+        "threshold": 0.335587,
+        "bouts_s": [
+          [
+            2.0,
+            3.0
+          ],
+          [
+            5.0,
+            5.5
+          ],
+          [
+            9.0,
+            11.5
+          ],
+          [
+            13.5,
+            19.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9811,
+          "share_of_frames_most_likely": 0.471
+        }
+      },
+      {
+        "behavior": "locomotion",
+        "description": "walking or running across the scene",
+        "score": 0.7094,
+        "threshold": 0.438148,
+        "bouts_s": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            4.0,
+            6.0
+          ],
+          [
+            8.0,
+            9.0
+          ],
+          [
+            15.5,
+            16.0
+          ],
+          [
+            19.0,
+            19.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.7094,
+          "share_of_frames_most_likely": 0.294
+        }
+      },
+      {
+        "behavior": "kneading",
+        "description": "pushing the front paws alternately into a soft surface",
+        "score": 0.5341,
+        "threshold": 0.411921,
+        "bouts_s": [
+          [
+            1.0,
+            3.5
+          ],
+          [
+            6.0,
+            7.5
+          ],
+          [
+            17.5,
+            18.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.5341,
+          "share_of_frames_most_likely": 0.235
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 115,
+      "seconds": 19.166666666666668,
+      "animal_found_fraction": 0.8695652173913043,
+      "available": true,
+      "mean_speed_body_per_s": 0.2177,
+      "path_body_lengths": 10.913999557495117,
+      "net_displacement_body_lengths": 0.5669999718666077,
+      "stays_in_place": true,
+      "turned_rad": -0.432,
+      "abs_turned_rad": 5.599,
+      "turning_consistency": 0.077,
+      "repetition_strength": 0.024,
+      "repetition_period_s": 2.0,
+      "detector_dog_vote": 0.23
+    },
+    "user_reported": [
+      {
+        "behavior": "playing_object",
+        "status": "also seen in the recording",
+        "recording_score": 0.9811
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "playing_object",
+        "basis": "recording and user report",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [
+                "toy"
+              ],
+              "context_score": 0.6,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "locomotion",
+        "basis": "recording",
+        "summary": "Walking or running. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "locomotion_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "kneading",
+        "basis": "recording",
+        "summary": "Rhythmic alternate pushing of the front paws into a soft surface.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "kn_comfort",
+              "explanation": "comfort or contentment behaviour derived from nursing, often with purring, before resting",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "kn_soothing",
+              "explanation": "self-soothing when stressed or uncomfortable, if it is new or excessive",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "petmd_knead"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "arousal_or_stress"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "Does the animal bring the toy to a person or look at them between pounces?",
+      "Is the kneading new or more frequent than usual?",
+      "Does the cat purr and relax afterwards?"
+    ],
+    "urgent_signs": [],
+    "sources": [
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      },
+      {
+        "id": "petmd_knead",
+        "tier": "veterinarian_advice",
+        "citation": "PetMD: Why do cats knead?",
+        "url": "https://www.petmd.com/cat/behavior/why-do-cats-knead",
+        "supports": "kneading is usually associated with contentment, comfort or marking; it can be self-soothing when stressed or in pain; new or excessive kneading deserves a veterinary check"
+      }
+    ],
+    "summary": "In the recording: batting, pouncing on or chasing a toy or object (2.0-3.0 s, 5.0-5.5 s, 9.0-11.5 s, 13.5-19.0 s); walking or running across the scene (0.0-1.0 s, 4.0-6.0 s, 8.0-9.0 s, 15.5-16.0 s and 1 more); pushing the front paws alternately into a soft surface (1.0-3.5 s, 6.0-7.5 s, 17.5-18.0 s). Movement: the animal stays roughly in place while moving. Batting, pouncing on or chasing a toy or object (recording and user report) has several possible explanations, in order of fit to your description: ordinary play or maintenance behaviour; a request or intention directed at a person. Walking or running across the scene (recording) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 1.0,
+        "times_s": [
+          [
+            0.0,
+            10.5
+          ],
+          [
+            13.2,
+            19.0
+          ]
+        ]
+      },
+      {
+        "what": "place: living room",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.66,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "playing_object",
+        "bout_s": [
+          2.0,
+          3.0
+        ],
+        "before": [
+          "locomotion (0.0-1.0 s)"
+        ],
+        "after": [
+          "kneading (6.0-7.5 s)",
+          "locomotion (4.0-6.0 s)",
+          "locomotion (8.0-9.0 s)"
+        ]
+      },
+      {
+        "behavior": "playing_object",
+        "bout_s": [
+          5.0,
+          5.5
+        ],
+        "before": [
+          "kneading (1.0-3.5 s)",
+          "locomotion (0.0-1.0 s)"
+        ],
+        "after": [
+          "kneading (6.0-7.5 s)",
+          "locomotion (8.0-9.0 s)"
+        ]
+      },
+      {
+        "behavior": "locomotion",
+        "bout_s": [
+          0.0,
+          1.0
+        ],
+        "before": [],
+        "after": [
+          "kneading (1.0-3.5 s)",
+          "kneading (6.0-7.5 s)",
+          "playing_object (2.0-3.0 s)",
+          "playing_object (5.0-5.5 s)"
+        ]
+      },
+      {
+        "behavior": "locomotion",
+        "bout_s": [
+          4.0,
+          6.0
+        ],
+        "before": [
+          "kneading (1.0-3.5 s)",
+          "playing_object (2.0-3.0 s)"
+        ],
+        "after": [
+          "kneading (6.0-7.5 s)",
+          "playing_object (9.0-11.5 s)"
+        ]
+      },
+      {
+        "behavior": "kneading",
+        "bout_s": [
+          1.0,
+          3.5
+        ],
+        "before": [
+          "locomotion (0.0-1.0 s)"
+        ],
+        "after": [
+          "locomotion (4.0-6.0 s)",
+          "locomotion (8.0-9.0 s)",
+          "playing_object (5.0-5.5 s)"
+        ]
+      },
+      {
+        "behavior": "kneading",
+        "bout_s": [
+          6.0,
+          7.5
+        ],
+        "before": [
+          "locomotion (0.0-1.0 s)",
+          "locomotion (4.0-6.0 s)",
+          "playing_object (2.0-3.0 s)",
+          "playing_object (5.0-5.5 s)"
+        ],
+        "after": [
+          "locomotion (8.0-9.0 s)",
+          "playing_object (9.0-11.5 s)"
+        ]
+      }
+    ]
+  }
+}

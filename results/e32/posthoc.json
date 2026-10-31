@@ -1,0 +1,242 @@
+{
+  "note": "post hoc, descriptive; added after the E32 scoring run; not used to change either system",
+  "systems": {
+    "v1": {
+      "seen_total": 49,
+      "seen_not_in_reference": 24,
+      "seen_not_in_reference_by_behavior": {
+        "playing_object": 4,
+        "self_grooming": 4,
+        "scratching_self": 2,
+        "threat_display": 2,
+        "tail_chasing": 2,
+        "resting": 2,
+        "self_biting": 2,
+        "eating": 2,
+        "staring_snapping": 2,
+        "locomotion": 1,
+        "being_petted": 1
+      },
+      "tail_chasing_seen_without_it": {
+        "ids": [
+          "t03",
+          "o21"
+        ],
+        "clips_without_tail_chasing": 35
+      },
+      "parse_errors": {
+        "missed_all": [
+          "t01",
+          "t04",
+          "t05",
+          "t06",
+          "t08",
+          "t09",
+          "t12",
+          "o02",
+          "o03",
+          "o05",
+          "o07",
+          "o13",
+          "o16",
+          "o19",
+          "o20",
+          "o21",
+          "o22",
+          "o23"
+        ],
+        "missed_some": [
+          "t03"
+        ],
+        "extra": [
+          {
+            "t07": [
+              "vocalizing"
+            ]
+          }
+        ]
+      }
+    },
+    "v2": {
+      "seen_total": 56,
+      "seen_not_in_reference": 29,
+      "seen_not_in_reference_by_behavior": {
+        "head_tremor": 7,
+        "playing_object": 3,
+        "self_grooming": 3,
+        "scratching_self": 2,
+        "collapse": 2,
+        "self_biting": 2,
+        "eating": 2,
+        "staring_snapping": 2,
+        "resting": 1,
+        "rolling_rubbing": 1,
+        "tail_chasing": 1,
+        "kneading": 1,
+        "locomotion": 1,
+        "being_petted": 1
+      },
+      "tail_chasing_seen_without_it": {
+        "ids": [
+          "o21"
+        ],
+        "clips_without_tail_chasing": 35
+      },
+      "parse_errors": {
+        "missed_all": [
+          "t01",
+          "t04",
+          "t05",
+          "t08",
+          "o02",
+          "o03",
+          "o05",
+          "o07",
+          "o13",
+          "o19",
+          "o20",
+          "o21",
+          "o23"
+        ],
+        "missed_some": [
+          "t03"
+        ],
+        "extra": [
+          {
+            "t02": [
+              "head_tremor"
+            ]
+          },
+          {
+            "t05": [
+              "head_tremor"
+            ]
+          },
+          {
+            "t07": [
+              "resting",
+              "vocalizing"
+            ]
+          },
+          {
+            "o01": [
+              "rolling_rubbing"
+            ]
+          },
+          {
+            "o05": [
+              "rolling_rubbing"
+            ]
+          },
+          {
+            "o19": [
+              "resting"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "person_v2": {
+    "false_reports": [
+      {
+        "id": "t08",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o01",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o08",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o09",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o10",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o11",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o12",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o14",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o15",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      },
+      {
+        "id": "o17",
+        "frame_review": false,
+        "reported": true,
+        "max_person_score": 0.0,
+        "share_frames_person_ge_0.5": 0.0,
+        "share_frames_near_ge_0.2": 0.0
+      }
+    ],
+    "missed": [],
+    "counts": {
+      "frame False / reported False": 12,
+      "frame True / reported True": 13,
+      "frame False / reported True": 10
+    }
+  },
+  "place_v2": {
+    "garden or yard -> None": 1,
+    "garden or yard -> garden or yard": 4,
+    "garden or yard -> veterinary clinic": 1,
+    "living room -> None": 2,
+    "living room -> living room": 4,
+    "living room -> veterinary clinic": 2,
+    "park or street -> None": 2,
+    "park or street -> garden or yard": 1,
+    "park or street -> veterinary clinic": 3,
+    "veterinary clinic -> veterinary clinic": 4
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "benchmark_item": {
+    "id": "o11",
+    "clip": "stock_mixkit_31936",
+    "species": "cat",
+    "scene": "Outside our house.",
+    "question": "Stray kittens are eating scraps outside our house. Are they very hungry?",
+    "question_origin": "authored_from_source_title",
+    "category": "other",
+    "asked": [
+      "eating"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "eating"
+    ],
+    "reference_basis": "source title + assistant",
+    "must_not_recognize": [],
+    "source_interpretation": null,
+    "request_expected": {
+      "eating": false
+    },
+    "gap": null,
+    "frame_person": false,
+    "frame_place": [
+      "park or street",
+      "garden or yard"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "cat",
+    "scene": "Outside our house.",
+    "question": "Stray kittens are eating scraps outside our house. Are they very hungry?",
+    "behaviors_seen": [
+      {
+        "behavior": "eating",
+        "description": "eating food",
+        "score": 0.885,
+        "threshold": 0.044453,
+        "bouts_s": [
+          [
+            0.0,
+            16.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.885,
+          "share_of_frames_most_likely": 1.0
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 96,
+      "seconds": 16.0,
+      "animal_found_fraction": 1.0,
+      "available": true,
+      "mean_speed_body_per_s": 0.038,
+      "path_body_lengths": 3.306999921798706,
+      "net_displacement_body_lengths": 0.12800000607967377,
+      "stays_in_place": false,
+      "turned_rad": 0.196,
+      "abs_turned_rad": 3.14,
+      "turning_consistency": 0.062,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.031
+    },
+    "user_reported": [
+      {
+        "behavior": "eating",
+        "status": "also seen in the recording",
+        "recording_score": 0.885
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "eating",
+        "basis": "recording and user report",
+        "summary": "Eating. Ordinary activity; no request or problem is implied by the behaviour itself.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "eating_normal",
+              "explanation": "ordinary activity",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": []
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [],
+    "urgent_signs": [],
+    "sources": [],
+    "summary": "In the recording: eating food (0.0-16.0 s). Eating food (recording and user report) is usually ordinary play or maintenance behaviour. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.95,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "eating",
+        "bout_s": [
+          0.0,
+          16.0
+        ],
+        "before": [],
+        "after": []
+      }
+    ]
+  }
+}

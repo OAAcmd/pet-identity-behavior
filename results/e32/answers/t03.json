@@ -1,0 +1,476 @@
+{
+  "benchmark_item": {
+    "id": "t03",
+    "clip": "paper_hamartoma_circling_2025",
+    "species": "dog",
+    "scene": "At the vet clinic; she has had a head tilt to the left for months and loses her balance.",
+    "question": "My 7-month-old Schnauzer keeps turning her head to the left over and over and sometimes circles to the left. She can't be distracted out of it. What could be going on?",
+    "question_origin": "authored_from_expert_caption",
+    "category": "circling_neuro",
+    "asked": [
+      "head_tremor",
+      "tail_chasing"
+    ],
+    "asked_ok": [],
+    "reference_present": [
+      "head_tremor"
+    ],
+    "reference_basis": "expert + assistant (no circling in the first 42 s)",
+    "must_not_recognize": [
+      "tail_chasing"
+    ],
+    "source_interpretation": {
+      "kinds": [
+        "medical"
+      ],
+      "text": "neurological: presumptive hypothalamic hamartoma",
+      "authority": "expert"
+    },
+    "request_expected": {},
+    "gap": null,
+    "frame_person": true,
+    "frame_place": [
+      "veterinary clinic"
+    ]
+  },
+  "answer": {
+    "version": "behavior-answer-v2",
+    "species": "dog",
+    "scene": "At the vet clinic; she has had a head tilt to the left for months and loses her balance.",
+    "question": "My 7-month-old Schnauzer keeps turning her head to the left over and over and sometimes circles to the left. She can't be distracted out of it. What could be going on?",
+    "behaviors_seen": [
+      {
+        "behavior": "head_tremor",
+        "description": "rhythmic bobbing, nodding or rotating of the head while awake",
+        "score": 0.9688,
+        "threshold": 0.3,
+        "bouts_s": [
+          [
+            4.5,
+            14.0
+          ],
+          [
+            18.5,
+            19.0
+          ],
+          [
+            29.0,
+            36.5
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.9688,
+          "share_of_frames_most_likely": 0.522
+        }
+      },
+      {
+        "behavior": "playing_object",
+        "description": "batting, pouncing on or chasing a toy or object",
+        "score": 0.4545,
+        "threshold": 0.335587,
+        "bouts_s": [
+          [
+            4.0,
+            4.5
+          ],
+          [
+            15.0,
+            17.0
+          ],
+          [
+            19.0,
+            22.5
+          ],
+          [
+            26.0,
+            29.0
+          ]
+        ],
+        "evidence": {
+          "zero_shot_top_quartile_mean": 0.4545,
+          "share_of_frames_most_likely": 0.179
+        }
+      }
+    ],
+    "temporal_pattern": {
+      "frames": 255,
+      "seconds": 42.5,
+      "animal_found_fraction": 0.7803921568627451,
+      "available": true,
+      "mean_speed_body_per_s": 0.1224,
+      "path_body_lengths": 6.468999862670898,
+      "net_displacement_body_lengths": 0.3100000023841858,
+      "stays_in_place": true,
+      "turned_rad": 1.622,
+      "abs_turned_rad": 7.865,
+      "turning_consistency": 0.206,
+      "repetition_strength": 0.0,
+      "repetition_period_s": null,
+      "detector_dog_vote": 0.779
+    },
+    "user_reported": [
+      {
+        "behavior": "tail_chasing",
+        "status": "not recognized in the recording (it may be outside the clip, brief, or missed by the recognizer)",
+        "recording_score": 0.3721
+      }
+    ],
+    "explained_behaviors": [
+      {
+        "behavior": "tail_chasing",
+        "basis": "user report only",
+        "summary": "Turning in tight circles after the tail. Common, and usually brief; in some dogs it is habitual and hard to interrupt.",
+        "temporal_notes": "A bout is repeated whole-body turning in place; the number of turns, how long bouts last and whether they recur matter more than a single turn.",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "dog_tc_neuro_circling",
+              "explanation": "circling that is not tail chasing: tight circles always in the same direction, often with a head tilt or head turn, loss of balance or episodes that cannot be interrupted, point to a balance (vestibular) or brain problem",
+              "context_match": [
+                "to the left",
+                "head tilt",
+                "tilt",
+                "balance",
+                "can't be distracted"
+              ],
+              "context_score": 4.6,
+              "sources": [
+                "merck_neuro_exam",
+                "dvm360_vestibular",
+                "vin_vestibular"
+              ]
+            },
+            {
+              "id": "dog_tc_medical",
+              "explanation": "a physical cause near the tail or a neurological one: tail or anal-sac discomfort, skin itch, pain, or focal seizures; behaviour and medical causes can coexist",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "vanhaevermaet2026",
+                "frontiers2026_focal"
+              ]
+            }
+          ],
+          "play_or_normal": [
+            {
+              "id": "dog_tc_play",
+              "explanation": "self-directed play or excitement, especially in young dogs, when bouts are brief and the dog is easy to distract",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "dog_tc_attention",
+              "explanation": "a learned way to get attention: owners often laugh at or encourage tail chasing, which can reinforce it; some dogs start when nobody attends to them",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "burn2011",
+                "tiira2012"
+              ]
+            }
+          ],
+          "arousal_or_stress": [
+            {
+              "id": "dog_tc_frustration",
+              "explanation": "frustration or arousal in a waiting or conflict situation (for example waiting for food, or when the owner talks to other people)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "tiira2012"
+              ]
+            }
+          ],
+          "compulsive": [
+            {
+              "id": "dog_tc_compulsive",
+              "explanation": "canine compulsive disorder: habitual, perseverative chasing with lowered responsiveness, often with other repetitive behaviours (light chasing, freezing); more common in some breeds (bull terriers, German shepherds)",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "tiira2012",
+                "burn2011"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "play_or_normal",
+          "request",
+          "arousal_or_stress",
+          "compulsive",
+          "medical"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      },
+      {
+        "behavior": "head_tremor",
+        "basis": "recording",
+        "summary": "Rhythmic bobbing, nodding or rotating of the head while the dog is awake.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "medical": [
+            {
+              "id": "ht_idiopathic",
+              "explanation": "idiopathic head tremor: episodes of head bobbing in an alert dog that usually stop when the dog is distracted (called, offered food or a toy); considered benign but diagnosed after other causes are excluded",
+              "context_match": [
+                "distract"
+              ],
+              "context_score": 1.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            },
+            {
+              "id": "ht_ear",
+              "explanation": "shaking the head to the side because of ear discomfort is a different movement (a vigorous shake, often with ear scratching)",
+              "context_match": [],
+              "context_score": 0.5,
+              "sources": [
+                "vin_vestibular"
+              ],
+              "recording_match": [
+                "ear"
+              ]
+            },
+            {
+              "id": "ht_focal_seizure",
+              "explanation": "a focal seizure, the main alternative: it is not stopped by distraction and may come with drooling, unresponsiveness or other signs",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "mspca_ihts"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "medical",
+          "medical",
+          "medical"
+        ],
+        "request_or_intention_possible": false,
+        "no_request_note": "No request or intention is implied by this behaviour itself."
+      },
+      {
+        "behavior": "playing_object",
+        "basis": "recording",
+        "summary": "Batting, pouncing on, carrying or chasing a toy or object.",
+        "temporal_notes": "",
+        "candidates_by_kind": {
+          "play_or_normal": [
+            {
+              "id": "po_play",
+              "explanation": "predatory or object play; cats need opportunities for play and predatory behaviour",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ],
+          "request": [
+            {
+              "id": "po_invite",
+              "explanation": "an invitation for interactive play when the animal brings the toy to a person or looks back at them",
+              "context_match": [],
+              "context_score": 0.0,
+              "sources": [
+                "ellis2013"
+              ]
+            }
+          ]
+        },
+        "kind_order_by_context": [
+          "play_or_normal",
+          "request"
+        ],
+        "request_or_intention_possible": true,
+        "no_request_note": null
+      }
+    ],
+    "uncertainty": [
+      "The recording can show what the animal does and when; it cannot establish why. Candidate explanations come from the cited sources, ordered by how well your description matches them.",
+      "Behaviour recognition uses a general vision-language model (zero-shot); scores are relative, not probabilities, and its measured accuracy is in results/e31.",
+      "No usable sound in the recording, so vocalizations could not be checked.",
+      "Context taken from the recording (people, objects, sounds, place) comes from automatic detectors and can be wrong; it changes the order of the candidates only half as much as your description."
+    ],
+    "observations_needed": [
+      "How old was the dog when it started, and how often does it happen (occasionally or daily)?",
+      "Can you interrupt it by calling the dog or offering a toy, and does it respond to you during a bout?",
+      "In which situations does it start (waiting for food, when people talk to each other, when left alone, when excited)?",
+      "Does the dog bite or injure the tail, scoot, or show hair loss or sores near the tail base?",
+      "Are there other repetitive behaviours such as chasing lights or shadows, snapping at the air, freezing or staring?",
+      "Does it always circle in the same direction, with a head tilt or loss of balance, even without looking at its tail?",
+      "Does the dog stay alert, and does the movement stop when you call it or offer a treat?",
+      "Is it a small rhythmic bobbing (yes-yes, no-no) or a vigorous shake as if shaking off water or an ear problem?"
+    ],
+    "urgent_signs": [
+      "the tail is wounded or bleeding",
+      "bouts cannot be interrupted or interfere with eating or sleeping",
+      "episodes with staring, unresponsiveness or snapping at the air (possible seizures)",
+      "circling with a head tilt, falling or loss of balance",
+      "episodes with unresponsiveness, drooling, collapse or loss of bladder control",
+      "a first episode in an older dog"
+    ],
+    "sources": [
+      {
+        "id": "merck_neuro_exam",
+        "tier": "clinical_review",
+        "citation": "Merck Veterinary Manual: The neurologic examination of animals.",
+        "url": "https://www.merckvetmanual.com/nervous-system/the-neurologic-examination/the-neurologic-examination-of-animals",
+        "supports": "a head tilt usually indicates vestibular dysfunction; animals with forebrain lesions may turn their heads and circle in one direction"
+      },
+      {
+        "id": "dvm360_vestibular",
+        "tier": "clinical_review",
+        "citation": "dvm360: Vestibular disease in dogs and cats (proceedings).",
+        "url": "https://www.dvm360.com/view/vestibular-disease-dogs-and-cats-proceedings",
+        "supports": "vestibular disorders cause head tilt, falling, rolling, leaning, circling and abnormal eye movements; circling also occurs with focal forebrain lesions"
+      },
+      {
+        "id": "vin_vestibular",
+        "tier": "veterinarian_advice",
+        "citation": "Veterinary Partner (VIN): Vestibular disease in dogs and cats.",
+        "url": "https://veterinarypartner.vin.com/default.aspx?pid=19239&id=4951444",
+        "supports": "middle- and inner-ear problems are separate from brain problems; localizing the cause decides outlook and treatment"
+      },
+      {
+        "id": "burn2011",
+        "tier": "peer_reviewed_study",
+        "citation": "Burn CC (2011) A vicious cycle: a cross-sectional study of canine tail-chasing and human responses to it, using a free video-sharing website. PLoS ONE 6(11): e26553.",
+        "url": "https://doi.org/10.1371/journal.pone.0026553",
+        "supports": "400 online videos: about a third of tail-chasing dogs chased habitually or were hard to distract; perseverative dogs showed fewer play behaviours; laughter in 55 % and encouragement in 43 % of videos, so owner attention may reinforce it"
+      },
+      {
+        "id": "tiira2012",
+        "tier": "peer_reviewed_study",
+        "citation": "Tiira K et al. (2012) Environmental effects on compulsive tail chasing in dogs. PLoS ONE 7(7): e41684.",
+        "url": "https://doi.org/10.1371/journal.pone.0041684",
+        "supports": "questionnaire study of 368 dogs: early onset (3-6 months), lowered responsiveness during bouts in about half of tail chasers, co-occurring compulsions; supplementary videos describe chasing when waiting for food, when the owner talks to others, or when nobody pays attention"
+      },
+      {
+        "id": "vanhaevermaet2026",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Van Haevermaet et al. (2026) Tail chasing in a dog: false dichotomy between behavioural and medical problems. Veterinary Record Case Reports.",
+        "url": "https://doi.org/10.1002/vrc2.70334",
+        "supports": "tail chasing can combine behavioural and medical causes"
+      },
+      {
+        "id": "frontiers2026_focal",
+        "tier": "peer_reviewed_case_report",
+        "citation": "Behavioral and autonomic manifestations of suspected focal impaired awareness seizures supported by interictal EEG (three dogs). Front Vet Sci (2026).",
+        "url": "https://doi.org/10.3389/fvets.2026.1904889",
+        "supports": "fly-catching, air snapping, staring and lip licking with impaired awareness can be focal seizures mistaken for behavioural disorders"
+      },
+      {
+        "id": "mspca_ihts",
+        "tier": "veterinary_hospital",
+        "citation": "MSPCA-Angell: Idiopathic head tremor syndrome.",
+        "url": "https://www.mspca.org/clinical/idiopathic-head-tremor-syndrome/",
+        "supports": "most dogs (up to 87 %) can be distracted out of an episode; the dog stays alert; the primary differential is focal seizure activity, which distraction does not stop and which may show autonomic signs"
+      },
+      {
+        "id": "ellis2013",
+        "tier": "clinical_review",
+        "citation": "Ellis SLH et al. (2013) AAFP and ISFM feline environmental needs guidelines. J Feline Med Surg 15:219-230 (as summarized by Veterinary Partner).",
+        "url": "https://doi.org/10.1177/1098612X13477537",
+        "supports": "cats need opportunities for play and predatory behaviour and predictable interactions with people"
+      }
+    ],
+    "summary": "In the recording: rhythmic bobbing, nodding or rotating of the head while awake (4.5-14.0 s, 18.5-19.0 s, 29.0-36.5 s); batting, pouncing on or chasing a toy or object (4.0-4.5 s, 15.0-17.0 s, 19.0-22.5 s, 26.0-29.0 s). Movement: the animal stays roughly in place while moving. Turning in tight circles (after its own tail or not) (user report only) has several possible explanations, in order of fit to your description: discomfort, itch, pain or a neurological cause; ordinary play or maintenance behaviour; a request or intention directed at a person; arousal, frustration or stress; an abnormal repetitive (compulsive) pattern. Rhythmic bobbing, nodding or rotating of the head while awake (recording) is usually discomfort, itch, pain or a neurological cause. No request is implied by it. The cause is not established from the recording; the questions listed would help tell the candidates apart.",
+    "knowledge_version": "behavior-kb-v2",
+    "notes": [],
+    "recording_context": [
+      {
+        "what": "a person close to the animal",
+        "from": "detector (person box overlapping the animal)",
+        "score": 0.98,
+        "times_s": [
+          [
+            5.3,
+            5.7
+          ],
+          [
+            19.2,
+            27.2
+          ],
+          [
+            28.8,
+            36.2
+          ]
+        ]
+      },
+      {
+        "what": "place: veterinary clinic",
+        "from": "scene prompts (SigLIP)",
+        "score": 0.99,
+        "times_s": []
+      }
+    ],
+    "vocal_types": [],
+    "events": [
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          4.5,
+          14.0
+        ],
+        "before": [
+          "playing_object (4.0-4.5 s)"
+        ],
+        "after": [
+          "playing_object (15.0-17.0 s)",
+          "playing_object (19.0-22.5 s)"
+        ]
+      },
+      {
+        "behavior": "head_tremor",
+        "bout_s": [
+          18.5,
+          19.0
+        ],
+        "before": [
+          "playing_object (15.0-17.0 s)"
+        ],
+        "after": [
+          "a person close to the animal (19.2-27.2 s)",
+          "playing_object (19.0-22.5 s)"
+        ]
+      },
+      {
+        "behavior": "playing_object",
+        "bout_s": [
+          4.0,
+          4.5
+        ],
+        "before": [],
+        "after": [
+          "a person close to the animal (5.3-5.7 s)",
+          "head_tremor (4.5-14.0 s)"
+        ]
+      },
+      {
+        "behavior": "playing_object",
+        "bout_s": [
+          15.0,
+          17.0
+        ],
+        "before": [
+          "head_tremor (4.5-14.0 s)"
+        ],
+        "after": [
+          "a person close to the animal (19.2-27.2 s)",
+          "head_tremor (18.5-19.0 s)"
+        ]
+      }
+    ]
+  }
+}
