@@ -1,0 +1,12 @@
+{
+  "check": "E33 student, G1b run A and the G1b engine registration retrieved from GitHub",
+  "date": "2026-10-31 (machine clock)",
+  "source": "git clone --depth 1 --branch claude/dreamy-davinci-49d6ng https://github.com/OAAcmd/pet-identity-behavior.git (commit 6d5b07e)",
+  "first_attempt": "commit 7af3862: student_best.weights.h5 was missing from the clone (excluded by the *.h5 ignore rule); fixed in 6d5b07e (!models/**/*.weights.h5)",
+  "results": {
+    "tests_from_clone": "tests/test_e33_student.py, tests/test_operating_points.py, tests/test_understand_v2.py: 14 passed (exports match the run record, G1b resolves from the repository path, the engine loads G1b with its verifier)",
+    "student_reexport_from_cloned_weights": "float32 / float16 / int8 outputs identical to the committed exports (max abs diff 0.0 on 64 validation crops)",
+    "g1b_run_a_restore": "vault.py restore verified 8 files and rebuilt a resumable run directory at ckpt-24 (weights SHA-256 83309590...c95c, as recorded)"
+  },
+  "not_in_git": "crops, teacher embeddings and the student's optimizer-state checkpoint (var/student/); training images (var/training/g1/)"
+}
