@@ -1,0 +1,80 @@
+{
+  "experiment": "E34",
+  "created_at": "2026-10-31T04:33:14+00:00",
+  "clips": 278,
+  "crops": 14844,
+  "eligible": [
+    "drinking",
+    "eating",
+    "kneading",
+    "locomotion",
+    "playing_object",
+    "resting",
+    "self_grooming",
+    "social_play",
+    "tail_chasing"
+  ],
+  "chance_macro_ap": 0.0727418065547562,
+  "siglip_macro_ap": 0.4156189759960366,
+  "required": 0.34704354210778054,
+  "candidates": {
+    "tinyclip_8m16_yfcc": {
+      "repo": "wkcn/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M",
+      "revision": "a2a8c6eaa2549ad66eb7c31b85022bf58273a26c",
+      "image_tower_params": 8276992,
+      "macro_ap": 0.2670168479697685,
+      "macro_ap_ci95": [
+        0.2128469446630551,
+        0.34231192395159865
+      ],
+      "difference_to_siglip": -0.1486021280262681,
+      "difference_ci95": [
+        -0.21893668614732772,
+        -0.08160803174890696
+      ],
+      "per_behavior_ap": {
+        "drinking": 0.36131314010414006,
+        "eating": 0.4491658763280244,
+        "kneading": 0.42404718109346057,
+        "locomotion": 0.1585946944783721,
+        "playing_object": 0.37884322170063534,
+        "resting": 0.15898826672046662,
+        "self_grooming": 0.2424178698300405,
+        "social_play": 0.16731209269440603,
+        "tail_chasing": 0.06246928877837095
+      },
+      "clip_top_behavior_agreement": 0.4856115107913669,
+      "cpu_ms_per_crop_pytorch": 21.87,
+      "qualifies": false
+    },
+    "tinyclip_39m16_yfcc": {
+      "repo": "wkcn/TinyCLIP-ViT-39M-16-Text-19M-YFCC15M",
+      "revision": "07a4b0bc751cb64fecd2b661c048c1dd98d69444",
+      "image_tower_params": 38587392,
+      "macro_ap": 0.3076936459222465,
+      "macro_ap_ci95": [
+        0.24027356576855954,
+        0.3904617645977805
+      ],
+      "difference_to_siglip": -0.10792533007379007,
+      "difference_ci95": [
+        -0.16376886966252535,
+        -0.05297536437180434
+      ],
+      "per_behavior_ap": {
+        "drinking": 0.557020734228773,
+        "eating": 0.4718070778005554,
+        "kneading": 0.5158694375799637,
+        "locomotion": 0.17529226878680954,
+        "playing_object": 0.41219825398872373,
+        "resting": 0.24634718675621836,
+        "self_grooming": 0.12719100435269323,
+        "social_play": 0.20022706860003395,
+        "tail_chasing": 0.06328978120644788
+      },
+      "clip_top_behavior_agreement": 0.5611510791366906,
+      "cpu_ms_per_crop_pytorch": 86.63,
+      "qualifies": false
+    }
+  }
+}

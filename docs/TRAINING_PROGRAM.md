@@ -831,7 +831,9 @@ stays in `var/student/run_e33/`). Release: research and non-commercial only
 
 **Next.** Distillation on behaviour-rich video frames, a larger student, or
 per-behaviour heads on the student's embeddings, each evaluated with the
-same E31-pool protocol and bar.
+same E31-pool protocol and bar. E34 measured off-the-shelf TinyCLIP 8M and
+39M on the same protocol: 0.267 and 0.308 (bar 0.347), so a published small
+CLIP is not a shortcut either.
 
 ## Already-trained artifacts and how to reproduce them
 

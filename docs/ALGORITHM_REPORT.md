@@ -1444,6 +1444,14 @@ chasing, kneading and grooming lose most. Desktop CPU 4-9 ms per crop;
 desktop headless Chromium (LiteRT.js) bit-exact for float32 / float16, int8
 within 0.004, 15-48 ms per crop. Not a phone result.
 
+### E34 - Off-the-shelf small CLIP encoders as phone behaviour encoders - COMPLETED (neither qualifies)
+
+Same protocol and bar as E33 (`src/petperception/eval/e34_small_vlm.py`,
+committed before any score): TinyCLIP ViT-8M/16 0.267 [0.213, 0.342]
+(difference to SigLIP [-0.219, -0.082]), TinyCLIP ViT-39M/16 0.308 [0.240,
+0.390] ([-0.164, -0.053]); bar 0.347 not met by either; tail chasing AP 0.06
+for both. Desktop CPU (PyTorch, 2 threads): 22 and 87 ms per crop.
+
 ### On-device execution
 
 Model-level parity in the browser (LiteRT.js 2.5.3, headless Chromium):

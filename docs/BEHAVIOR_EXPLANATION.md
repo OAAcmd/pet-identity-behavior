@@ -508,3 +508,15 @@ videos with licences that allow it, never the evaluation clips), a larger
 student or a published small vision-language encoder, and per-behaviour
 heads trained on the student's embeddings. Until one meets the bar,
 behaviour explanation stays a server/desktop feature.
+
+**E34 (pre-registered, same protocol and bar): off-the-shelf small CLIP
+encoders** (`src/petperception/eval/e34_small_vlm.py`, `results/e34/`).
+TinyCLIP ViT-8M/16 (8.3 M image parameters, MIT) reaches 0.267 [0.213,
+0.342] and TinyCLIP ViT-39M/16 (38.6 M) 0.308 [0.240, 0.390] against
+SigLIP's 0.416; neither reaches 0.347. Both miss tail chasing almost
+entirely (AP 0.06). The E33 student (4 MB at int8) is on a par with the
+8M TinyCLIP and below the 39M one, which would not fit the 50 MB download
+budget at int8 anyway. No phone-sized encoder tested so far keeps enough of
+SigLIP's zero-shot behaviour recognition; local copies of the TinyCLIP
+weights were removed after the run (pinned revisions in the module restore
+them).

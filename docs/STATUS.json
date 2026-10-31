@@ -3,7 +3,7 @@
  "date": "2026-10-31",
  "branch": "claude/dreamy-davinci-49d6ng",
  "product_complete": false,
- "summary": "Milestone of 2026-10-30/31 (latest): behaviour explanation v2 (E32) and a phone-sized behaviour encoder (E33). E32 was developed on the E31 collection only and frozen (3f8eae9): feature version 2 (gap bridging, track holding, context detections), a turning-in-place window model for tail chasing, hiss/growl as threat evidence, recording context (person near, objects, sounds, place) with half the weight of the user's words, before/after events, parser v2 (after/before/until context phrases, MiniLM paraphrase matching), knowledge base v2 (21 behaviours, 33 sources incl. neurological look-alikes). Pre-registered test (0402c46) on 37 fresh clips and questions, scored once, paired with the frozen E31 system: v2 better over all questions (asked behaviours recognized 24 vs 21/33, parse 16 vs 13/33, request separation 28 vs 25/33, expert interpretation covered 6 vs 3/7, ranked first 5 vs 1/7; tail chasing 2/2 vs 1/2 with confusers 2/2), but post hoc only through the five questions on conditions knowledge base v2 was extended for after the test papers were chosen (on the other 32 the systems tie on every explanation check; recognition 20 vs 21 of 28) but parse (0.48) and request separation (0.85) stay below 0.9, so by the fixed rule the default stays the E31 system (kept verbatim in understand/e31, verified to reproduce the tested answers); v2 via --system-version 2. Post-hoc: fresh paraphrases defeat the parser; new behaviours at the fixed threshold fire on unrelated clips; the recording context over-reports people. E33 (pre-registered): a MobileNetV3-Large student distilled from SigLIP on 20k cat/dog crops reaches zero-shot macro AP 0.273 vs 0.416 on the E31 pool (retains 58 % above chance; bar 80 % not met; not adopted); its 4-15 MB exports run bit-exact (float) in desktop headless Chromium at 15-48 ms per crop. Previous milestone (2026-10-20): E31 explanation in context, G1b detector. Not on the phone; phones remain untested.",
+ "summary": "Milestone of 2026-10-30/31 (latest): behaviour explanation v2 (E32) and a phone-sized behaviour encoder (E33). E32 was developed on the E31 collection only and frozen (3f8eae9): feature version 2 (gap bridging, track holding, context detections), a turning-in-place window model for tail chasing, hiss/growl as threat evidence, recording context (person near, objects, sounds, place) with half the weight of the user's words, before/after events, parser v2 (after/before/until context phrases, MiniLM paraphrase matching), knowledge base v2 (21 behaviours, 33 sources incl. neurological look-alikes). Pre-registered test (0402c46) on 37 fresh clips and questions, scored once, paired with the frozen E31 system: v2 better over all questions (asked behaviours recognized 24 vs 21/33, parse 16 vs 13/33, request separation 28 vs 25/33, expert interpretation covered 6 vs 3/7, ranked first 5 vs 1/7; tail chasing 2/2 vs 1/2 with confusers 2/2), but post hoc only through the five questions on conditions knowledge base v2 was extended for after the test papers were chosen (on the other 32 the systems tie on every explanation check; recognition 20 vs 21 of 28) but parse (0.48) and request separation (0.85) stay below 0.9, so by the fixed rule the default stays the E31 system (kept verbatim in understand/e31, verified to reproduce the tested answers); v2 via --system-version 2. Post-hoc: fresh paraphrases defeat the parser; new behaviours at the fixed threshold fire on unrelated clips; the recording context over-reports people. E33 (pre-registered): a MobileNetV3-Large student distilled from SigLIP on 20k cat/dog crops reaches zero-shot macro AP 0.273 vs 0.416 on the E31 pool (retains 58 % above chance; bar 80 % not met; not adopted); its 4-15 MB exports run bit-exact (float) in desktop headless Chromium at 15-48 ms per crop. E34: off-the-shelf TinyCLIP 8M / 39M reach 0.267 / 0.308 (not adopted). Previous milestone (2026-10-20): E31 explanation in context, G1b detector. Not on the phone; phones remain untested.",
  "acceptance": {
   "software_correctness": {
    "status": "met_in_automated_environments",
@@ -197,6 +197,11 @@
    "date": "2026-10-31",
    "decision": "E33 student not adopted as the phone behaviour encoder; behaviour explanation stays server/desktop",
    "basis": "pre-registered: student zero-shot macro AP 0.273 [0.221, 0.353] vs teacher 0.416; required 0.347 (80 % of the above-chance AP); results/e33/metrics.json"
+  },
+  {
+   "date": "2026-10-31",
+   "decision": "E34: no off-the-shelf small CLIP encoder adopted for phone behaviour recognition",
+   "basis": "pre-registered, same bar as E33 (0.347): TinyCLIP ViT-8M/16 0.267, ViT-39M/16 0.308 (SigLIP 0.416); results/e34/metrics.json"
   }
  ],
  "resources_needed": [
@@ -218,7 +223,8 @@
  "experiments_latest": {
   "e31_behavior_questions": "zero-shot SigLIP kept (macro AP 0.416 vs head 0.248); benchmark: explanation checks met except parsing 27/34; tail chasing recognized 3/8 (target 0.7 not met); results/e31",
   "e32_behavior_v2": "v2 vs E31 system on 37 fresh questions (one run): recognized 24 vs 21/33, parse 16 vs 13/33, C4 28 vs 25/33, expert coverage 6 vs 3/7 (gain confined to topic-matched knowledge entries); default stays E31 system by the fixed rule; person context 23/35; results/e32",
-  "e33_phone_student": "student macro AP 0.273 vs teacher 0.416 (diff -0.143 [-0.194, -0.088]); float16/int8 same AP at 7.5/4.0 MB; browser parity bit-exact (float); not adopted; results/e33"
+  "e33_phone_student": "student macro AP 0.273 vs teacher 0.416 (diff -0.143 [-0.194, -0.088]); float16/int8 same AP at 7.5/4.0 MB; browser parity bit-exact (float); not adopted; results/e33",
+  "e34_small_vlm": "TinyCLIP ViT-8M/16 0.267, ViT-39M/16 0.308 vs SigLIP 0.416 on the E31 pool; neither reaches 0.347; results/e34"
  },
  "clock_note": "The machine clock was reset between milestones: commits and documents of the previous milestone are dated 2026-10-20, this milestone (E32) 2026-10-30/31. Dates are as the machine reported them."
 }
