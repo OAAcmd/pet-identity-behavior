@@ -5,7 +5,8 @@ was reset between the two milestones, see `docs/STATUS.json`). Code:
 `src/petperception/understand/`; command: `petperception explain`
 (default: the E31 system, `--system-version 2`: the E32 system); evaluations:
 E31 (`src/petperception/eval/e31_behavior_questions.py`, `results/e31/`) and
-E32 (`src/petperception/eval/e32_behavior_v2.py`, `results/e32/`; §10-11).
+E32 (`src/petperception/eval/e32_behavior_v2.py`, `results/e32/`; §10-11);
+phone-sized encoders: E33 and E34 (§12).
 
 ## 1. The task
 
