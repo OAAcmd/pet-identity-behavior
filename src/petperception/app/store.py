@@ -543,7 +543,15 @@ class Store:
             params.append(before)
         sql += " ORDER BY a.created_at DESC LIMIT ?"
         params.append(limit)
-        return [self._public(dict(r)) for r in self.db.query(sql, tuple(params))]
+        out = []
+        for r in self.db.query(sql, tuple(params)):
+            a = self._public(dict(r))
+            q = self.question(a["id"])
+            if q is not None:
+                a["behavior_question"] = {k: q[k] for k in ("species", "scene", "question", "understanding", "strategy", "status")} | {
+                    "retain_for_research": bool(q["retain_for_research"]), "answer": None}
+            out.append(a)
+        return out
 
     def cancel_analysis(self, user_id: str, analysis_id: str) -> dict:
         with self.db.tx() as c:
@@ -625,6 +633,10 @@ class Store:
         fid, ts = security.new_id(), now_iso()
         self.db.execute("INSERT INTO feedback (id, user_id, analysis_id, target_type, target_id, verdict, actual_behavior, note, consent_research_use, created_at) "
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (fid, user_id, analysis_id, target_type, target_id, verdict, actual_behavior, note, int(consent), ts))
+        # A correction on a recording the owner donated becomes an owner report on that research sample (never a reviewed label).
+        for r in self.db.query("SELECT id FROM research_samples WHERE analysis_id = ? AND user_id = ?", (analysis_id, user_id)):
+            self.annotate_sample(user_id, r["id"], "owner", {"kind": "correction", "target": target_type, "behavior": target_id, "verdict": verdict,
+                                                             "actual_behavior": actual_behavior, "note": note, "feedback_id": fid})
         return self.list_feedback(user_id, analysis_id)[-1]
 
     def list_feedback(self, user_id: str, analysis_id: str) -> list[dict]:

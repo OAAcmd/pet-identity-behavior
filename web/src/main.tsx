@@ -7,6 +7,7 @@ import { navigate, useRoute } from "./lib/router";
 import type { Me } from "./lib/types";
 import { AboutPage } from "./pages/About";
 import { AnalysisPage } from "./pages/Analysis";
+import { AskPage } from "./pages/Ask";
 import { AuthPage } from "./pages/Auth";
 import { CapturePage } from "./pages/Capture";
 import { DeviceCheckPage } from "./pages/DeviceCheck";
@@ -21,6 +22,7 @@ import "./styles.css";
 
 const NAV = [
   { name: "home", path: "/", label: "Home", icon: "⌂" },
+  { name: "ask", path: "/ask", label: "Ask", icon: "?" },
   { name: "capture", path: "/capture", label: "Record", icon: "●" },
   { name: "history", path: "/history", label: "History", icon: "☰" },
   { name: "pets", path: "/pets", label: "Pets", icon: "♥" },
@@ -57,6 +59,7 @@ function Shell() {
   switch (route.name) {
     case "home": page = <HomePage />; break;
     case "capture": page = <CapturePage />; break;
+    case "ask": page = <AskPage />; break;
     case "analysis": page = <AnalysisPage id={route.params.id} />; break;
     case "local": page = <LocalAnalysisPage id={route.params.id} />; break;
     case "device": page = <DeviceCheckPage />; break;

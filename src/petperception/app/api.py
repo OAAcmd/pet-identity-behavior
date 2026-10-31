@@ -5,6 +5,7 @@ from __future__ import annotations
 import hmac
 import io
 import json
+import os
 import re
 from typing import Any, Literal
 
@@ -234,7 +235,11 @@ def build_router(store: Store, engine_caps, readiness) -> APIRouter:
                           "max_duration_s": s.limits.max_duration_s, "url_fetching": False, "resumable": True}
         caps["retention"] = {"max_retain_media_days": st.max_retain_media_days, "default_retain_media_days": 0}
         caps["registration"] = s.app.auth.registration
-        caps["behavior_question"] = {"cloud_available": s.cloud.enabled, "strategies": ["full_frames", "local_preprocessed", "features_only"],
+        from ..understand.e31 import vocab as V1
+
+        caps["behavior_question"] = {"cloud_available": s.cloud.enabled and bool(os.environ.get(s.cloud.api_key_env)),
+                                     "behaviors": [{"name": n, "label": b.description, "species": list(b.species)} for n, b in V1.BEHAVIORS.items()],
+                                     "strategies": ["full_frames", "local_preprocessed", "features_only"],
                                      "default_strategy": s.cloud.default_strategy, "research_consent_version": RESEARCH_CONSENT_VERSION}
         return caps
 

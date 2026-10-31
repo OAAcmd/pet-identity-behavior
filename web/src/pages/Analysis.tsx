@@ -12,7 +12,7 @@ import { useApp } from "../state";
 
 const STAGE_TEXT: Record<string, string> = {
   queued: "Waiting in the queue", starting: "Starting", probe: "Checking the file", audio: "Listening for sounds", video: "Looking for animals",
-  fusion: "Combining observations", done: "Done",
+  fusion: "Combining observations", question: "Answering your question", done: "Done",
 };
 
 export function AnalysisPage({ id }: { id: string }) {
@@ -21,6 +21,7 @@ export function AnalysisPage({ id }: { id: string }) {
   const [error, setError] = useState<unknown>(null);
   const [confirm, setConfirm] = useState<null | "delete" | "media">(null);
   const failures = useRef(0);
+  const player = useRef<HTMLVideoElement>(null);
   const lastStatus = useRef(0);
 
   const load = async () => {
@@ -85,11 +86,11 @@ export function AnalysisPage({ id }: { id: string }) {
 
   return (
     <section>
-      <h1 tabIndex={-1} class="truncate">{a.original_filename}</h1>
-      <p class="muted">{fmtDate(a.created_at)} - {subjectText(a, pets)}{a.note ? ` - "${a.note}"` : ""}</p>
+      <h1 tabIndex={-1} class="truncate">{a.behavior_question ? "Answer" : a.original_filename}</h1>
+      <p class="muted">{fmtDate(a.created_at)}{a.behavior_question ? "" : ` - ${subjectText(a, pets)}${a.note ? ` - "${a.note}"` : ""}`}</p>
       <ErrorBanner error={error} onRetry={load} />
 
-      {(a.status === "queued" || a.status === "running") && (
+      {(a.status === "queued" || a.status === "running") && !a.behavior_question && (
         <div class="card" aria-live="polite">
           <ProgressBar value={a.progress} label={a.cancel_requested ? "Cancelling..." : STAGE_TEXT[a.stage ?? "queued"] ?? a.stage ?? "Processing"} />
           {a.error?.code === "worker_lost" && <p class="muted">A previous attempt was interrupted; retrying automatically.</p>}
@@ -117,8 +118,11 @@ export function AnalysisPage({ id }: { id: string }) {
         </InfoBanner>
       )}
 
-      {a.behavior_question && <BehaviorAnswerView q={a.behavior_question} />}
-      {a.status === "succeeded" && a.result && <ResultView feedback={serverFeedback(a.id)} result={a.result} mediaUrl={mediaUrl} mediaKind={mediaKind} />}
+      {a.behavior_question && mediaUrl && mediaKind === "video" && <video ref={player} class="preview" src={mediaUrl} controls playsInline />}
+      {a.behavior_question && <BehaviorAnswerView a={a} q={a.behavior_question} seek={(t) => { if (player.current) { player.current.currentTime = t; void player.current.play(); } }} />}
+      {a.status === "succeeded" && a.result && (a.behavior_question
+        ? <details class="card"><summary>All observations</summary><ResultView feedback={serverFeedback(a.id)} result={a.result} mediaUrl={null} mediaKind={mediaKind} /></details>
+        : <ResultView feedback={serverFeedback(a.id)} result={a.result} mediaUrl={mediaUrl} mediaKind={mediaKind} />)}
 
       <div class="card">
         <h2>Manage</h2>

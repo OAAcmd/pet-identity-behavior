@@ -105,6 +105,7 @@ export interface BehaviorAnswer {
     observations_needed: string[]; urgent_signs: string[];
     explained_behaviors: { behavior: string; basis: string; candidates_by_kind: Record<string, { explanation: string; sources: string[] }[]> }[] };
   packet?: { images: number; upload_bytes_base64: number };
+  question?: string;
   error?: string;
 }
 
@@ -253,5 +254,6 @@ export interface Capabilities {
   retention: { max_retain_media_days: number };
   registration: string;
   components: { name: string; state: string; reason: string | null }[];
-  behavior_question?: { cloud_available: boolean; strategies: string[]; default_strategy: string; research_consent_version: string };
+  behavior_question?: { cloud_available: boolean; strategies: string[]; default_strategy: string; research_consent_version: string;
+    behaviors: { name: string; label: string; species: string[] }[] };
 }

@@ -10,6 +10,7 @@ export interface Route {
 const PATTERNS: [string, RegExp, string[]][] = [
   ["home", /^\/?$/, []],
   ["capture", /^\/capture$/, []],
+  ["ask", /^\/ask$/, []],
   ["analysis", /^\/analyses\/([A-Za-z0-9]+)$/, ["id"]],
   ["local", /^\/local\/([A-Za-z0-9]+)$/, ["id"]],
   ["device", /^\/device-check$/, []],

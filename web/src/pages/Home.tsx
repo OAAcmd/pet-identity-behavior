@@ -20,8 +20,10 @@ export function HomePage() {
   return (
     <section>
       <h1 tabIndex={-1}>Hello, {me?.username}</h1>
+      <a class="btn btn-primary btn-hero" href="#/ask">Ask about my pet's behaviour</a>
+      <p class="hint">Describe what you noticed, add a short video, and get what the recording shows and what it could mean.</p>
       <div class="actions-grid">
-        <a class="action" href="#/capture"><span class="action-icon" aria-hidden="true">●</span>Record or upload a clip</a>
+        <a class="action" href="#/capture"><span class="action-icon" aria-hidden="true">●</span>Observe a clip (no question)</a>
         <a class="action" href="#/history"><span class="action-icon" aria-hidden="true">☰</span>Past analyses</a>
         <a class="action" href="#/pets"><span class="action-icon" aria-hidden="true">♥</span>{pets.length ? `${pets.length} pet profile(s)` : "Add your pets"}</a>
         <a class="action" href="#/places"><span class="action-icon" aria-hidden="true">▣</span>Mark places (bowl, door, bed)</a>
@@ -29,7 +31,7 @@ export function HomePage() {
 
       {pending.length > 0 && (
         <div class="card">
-          <h2>Uploads on this device</h2>
+          <h2>Unfinished on this device</h2>
           <ul class="list">
             {pending.map((p) => {
               const pr = progress[p.localId];

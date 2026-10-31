@@ -53,6 +53,7 @@ export function SettingsPage() {
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
 
+      <ResearchSamples />
       <div class="card">
         <h2>Your data</h2>
         <p>Download everything stored for your account (pets, places, results and feedback) as JSON.</p>
@@ -172,6 +173,31 @@ function OnDeviceCard() {
       </fieldset>
       <ConfirmDialog open={confirm} title="Remove on-device models?" body="Analysis on this device will need the models to be downloaded again. Your stored results are kept."
         confirmLabel="Remove" onCancel={() => setConfirm(false)} onConfirm={() => { setConfirm(false); void remove(); }} />
+    </div>
+  );
+}
+
+
+/** Recordings the owner chose to keep as research samples: list and delete (docs/RESEARCH_SAMPLES.md). */
+function ResearchSamples() {
+  const [items, setItems] = useState<{ id: string; question: string; created_at: string; annotations: { status: string }[] }[] | null>(null);
+  const [err, setErr] = useState<unknown>(null);
+  const load = () => api.get<typeof items>("/research-samples").then(setItems).catch(setErr);
+  useEffect(() => { void load(); }, []);
+  return (
+    <div class="card">
+      <h2>Research samples</h2>
+      <p class="hint">Recordings you chose to keep to help improve the app. Your notes are kept as your reports; nothing is used as a confirmed label until a person has reviewed it.</p>
+      <ErrorBanner error={err} onRetry={load} />
+      {items && items.length === 0 && <p class="muted">None.</p>}
+      <ul class="list">
+        {(items ?? []).map((x) => (
+          <li class="list-item row space">
+            <span>"{x.question}" <span class="muted">{x.created_at.slice(0, 10)} - {x.annotations.filter((a) => a.status === "owner_reported").length} note(s) from you</span></span>
+            <button type="button" class="btn btn-danger small" onClick={async () => { await api.del(`/research-samples/${x.id}`); void load(); }}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

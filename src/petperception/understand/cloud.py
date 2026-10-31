@@ -230,31 +230,65 @@ def available(cfg: CloudConfig) -> bool:
     return bool(os.environ.get(cfg.api_key_env))
 
 
+@dataclass
+class Completion:
+    status: str  # ok | unavailable | error
+    text: str = ""
+    usage: dict = field(default_factory=dict)  # input_tokens, output_tokens
+    model: str = ""
+    reason: str = ""
+    latency_s: float = 0.0
+
+
+class AnthropicProvider:
+    """Model-provider interface (``name``, ``available()``, ``complete()``): one class per provider, chosen by
+    ``cloud.provider``. Only this class knows the provider's request format and endpoint."""
+
+    name = "anthropic"
+
+    def __init__(self, cfg: CloudConfig):
+        self.cfg = cfg
+
+    def available(self) -> bool:
+        return bool(os.environ.get(self.cfg.api_key_env))
+
+    def complete(self, p: Packet) -> Completion:
+        key = os.environ.get(self.cfg.api_key_env)
+        if not key:
+            return Completion("unavailable", reason=f"no API key in {self.cfg.api_key_env} on the backend")
+        body = json.dumps(request_body(p, self.cfg.model, self.cfg.max_tokens)).encode()
+        req = urllib.request.Request(API_URL, data=body, method="POST",
+                                     headers={"x-api-key": key, "anthropic-version": API_VERSION, "content-type": "application/json"})
+        t0 = time.perf_counter()
+        try:
+            with urllib.request.urlopen(req, timeout=self.cfg.timeout_s) as r:
+                out = json.loads(r.read())
+        except urllib.error.HTTPError as exc:
+            return Completion("error", reason=f"HTTP {exc.code}", latency_s=round(time.perf_counter() - t0, 2))
+        except (urllib.error.URLError, TimeoutError) as exc:
+            return Completion("error", reason=type(exc).__name__, latency_s=round(time.perf_counter() - t0, 2))
+        text = "".join(b.get("text", "") for b in out.get("content", []) if b.get("type") == "text")
+        return Completion("ok", text, out.get("usage", {}), out.get("model", self.cfg.model), latency_s=round(time.perf_counter() - t0, 2))
+
+
+PROVIDERS = {"anthropic": AnthropicProvider}
+
+
+def provider(cfg: CloudConfig):
+    return PROVIDERS[cfg.provider](cfg)
+
+
 def call(p: Packet, cfg: CloudConfig) -> dict:
-    """One request; returns {"status", "answer", "problems", "usage", "latency_s", "cost_usd"}. The key is read from the
-    backend's environment and never logged or returned."""
-    key = os.environ.get(cfg.api_key_env)
-    if not key:
-        return {"status": "unavailable", "reason": f"no API key in {cfg.api_key_env} on the backend"}
-    body = json.dumps(request_body(p, cfg.model, cfg.max_tokens)).encode()
-    req = urllib.request.Request(API_URL, data=body, method="POST",
-                                 headers={"x-api-key": key, "anthropic-version": API_VERSION, "content-type": "application/json"})
-    t0 = time.perf_counter()
-    try:
-        with urllib.request.urlopen(req, timeout=cfg.timeout_s) as r:
-            out = json.loads(r.read())
-    except urllib.error.HTTPError as exc:
-        return {"status": "error", "reason": f"HTTP {exc.code}", "latency_s": round(time.perf_counter() - t0, 2)}
-    except (urllib.error.URLError, TimeoutError) as exc:
-        return {"status": "error", "reason": type(exc).__name__, "latency_s": round(time.perf_counter() - t0, 2)}
-    lat = time.perf_counter() - t0
-    text = "".join(b.get("text", "") for b in out.get("content", []) if b.get("type") == "text")
-    usage = out.get("usage", {})
-    cost = usage.get("input_tokens", 0) * cfg.price_in_per_mtok / 1e6 + usage.get("output_tokens", 0) * cfg.price_out_per_mtok / 1e6
-    ans = parse_answer(text)
-    return {"status": "ok" if ans is not None else "unparseable", "answer": ans, "raw_text": None if ans is not None else text[:2000],
-            "problems": validate_answer(ans, p.species) if ans is not None else ["no JSON object"], "usage": usage,
-            "latency_s": round(lat, 2), "cost_usd": round(cost, 5), "model": out.get("model", cfg.model), "prompt_version": PROMPT_VERSION}
+    """One request through the configured provider; returns {"status", "answer", "problems", "usage", "latency_s",
+    "cost_usd"}. Keys stay in the backend's environment and are never logged or returned."""
+    c = provider(cfg).complete(p)
+    if c.status != "ok":
+        return {"status": c.status, "reason": c.reason, **({"latency_s": c.latency_s} if c.latency_s else {})}
+    cost = c.usage.get("input_tokens", 0) * cfg.price_in_per_mtok / 1e6 + c.usage.get("output_tokens", 0) * cfg.price_out_per_mtok / 1e6
+    ans = parse_answer(c.text)
+    return {"status": "ok" if ans is not None else "unparseable", "answer": ans, "raw_text": None if ans is not None else c.text[:2000],
+            "problems": validate_answer(ans, p.species) if ans is not None else ["no JSON object"], "usage": c.usage,
+            "latency_s": c.latency_s, "cost_usd": round(cost, 5), "model": c.model, "provider": cfg.provider, "prompt_version": PROMPT_VERSION}
 
 
 def understand(media: Path, species: str, scene: str, question: str, explainer, strategy: str = "local_preprocessed",
